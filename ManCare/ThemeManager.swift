@@ -1,9 +1,8 @@
-//
 //  ThemeManager.swift
 //  ManCare
 //
-//  Created by Mehmet Ali Kısacık on 2.09.2025.
-//
+//  Option A: Non-isolated type + MainActor APIs
+//  Blue-centric palette (no green accents)
 
 import SwiftUI
 
@@ -31,10 +30,8 @@ extension Color {
         Scanner(string: hex).scanHexInt64(&int)
         let r, g, b: UInt64
         switch hex.count {
-        case 6:
-            (r, g, b) = ((int >> 16) & 0xFF, (int >> 8) & 0xFF, int & 0xFF)
-        default:
-            (r, g, b) = (28, 42, 68) // fallback to navy
+        case 6: (r, g, b) = ((int >> 16) & 0xFF, (int >> 8) & 0xFF, int & 0xFF)
+        default: (r, g, b) = (17, 26, 46) // fallback deep navy
         }
         self = Color(.sRGB,
                      red: Double(r) / 255,
@@ -48,9 +45,9 @@ extension Color {
 
 public struct ThemePalette: Equatable {
     // Core brand
-    public let primary: Color      // Navy
-    public let secondary: Color    // Aqua
-    public let accent: Color       // Orange CTA
+    public let primary: Color      // Deep Navy
+    public let secondary: Color    // Action Blue
+    public let accent: Color       // Electric/Royal Blue
 
     // Text
     public let textPrimary: Color
@@ -74,7 +71,6 @@ public struct ThemePalette: Equatable {
 // MARK: - Typography
 
 public struct ThemeTypography: Equatable {
-    // Use SF Pro by default (system), weights below are tuned for a “fitness/clean” vibe
     public let h1: Font
     public let h2: Font
     public let h3: Font
@@ -103,66 +99,68 @@ public struct Theme: Equatable {
     public let cardRadius: CGFloat = 20
     public let padding: CGFloat = 16
 
-    // Prebuilt themes
+    // Prebuilt themes (Blue-centric)
     public static let light = Theme(
         palette: ThemePalette(
-            primary: Color(hex: "#1C2A44"),
-            secondary: Color(hex: "#00BFA6"),
-            accent: Color(hex: "#FF7B54"),
-            textPrimary: Color(hex: "#0B1220"),
+            primary:      Color(hex: "#111A2E"),  // deep navy
+            secondary:    Color(hex: "#2F6FED"),  // action blue
+            accent:       Color(hex: "#6AA9FF"),  // electric highlight
+            textPrimary:   Color(hex: "#0B1120"),
             textSecondary: Color(hex: "#334155"),
-            textMuted: Color(hex: "#64748B"),
-            bg: Color(hex: "#F9FAFB"),
-            card: Color.white,
-            separator: Color(hex: "#E5E7EB"),
-            success: Color(hex: "#22C55E"),
-            warning: Color(hex: "#F59E0B"),
-            error: Color(hex: "#EF4444"),
-            shadow: Color.black.opacity(0.08)
+            textMuted:     Color(hex: "#64748B"),
+            bg:            Color(hex: "#F6F8FB"),  // light blue-gray
+            card:          Color.white,
+            separator:     Color(hex: "#E5E7EB"),
+            success:       Color(hex: "#16A34A"),
+            warning:       Color(hex: "#F59E0B"),
+            error:         Color(hex: "#EF4444"),
+            shadow:        Color.black.opacity(0.08)
         ),
         typo: .default
     )
 
     public static let dark = Theme(
         palette: ThemePalette(
-            primary: Color(hex: "#1C2A44"),
-            secondary: Color(hex: "#00BFA6"),
-            accent: Color(hex: "#FF7B54"),
-            textPrimary: Color(hex: "#E2E8F0"),
-            textSecondary: Color(hex: "#CBD5E1"),
-            textMuted: Color(hex: "#94A3B8"),
-            bg: Color(hex: "#0F172A"),
-            card: Color(hex: "#1E293B"),
-            separator: Color.white.opacity(0.06),
-            success: Color(hex: "#22C55E"),
-            warning: Color(hex: "#F59E0B"),
-            error: Color(hex: "#EF4444"),
-            shadow: Color.black.opacity(0.6)
+            primary:      Color(hex: "#111A2E"),
+            secondary:    Color(hex: "#2F6FED"),
+            accent:       Color(hex: "#6AA9FF"),
+            textPrimary:   Color(hex: "#E2E8F0"),
+            textSecondary: Color(hex: "#C7D2FE"), // subtle bluish secondary
+            textMuted:     Color(hex: "#9AA5B1"),
+            bg:            Color(hex: "#0B1220"),  // deep blue-black
+            card:          Color(hex: "#111827"),  // near-black with blue tint
+            separator:     Color.white.opacity(0.07),
+            success:       Color(hex: "#16A34A"),
+            warning:       Color(hex: "#F59E0B"),
+            error:         Color(hex: "#F43F5E"),
+            shadow:        Color.black.opacity(0.6)
         ),
         typo: .default
     )
 }
 
-// MARK: - ThemeManager
+// MARK: - ThemeManager (non-isolated type; UI APIs are MainActor)
 
-@MainActor
 public final class ThemeManager: ObservableObject {
     @AppStorage("app.theme.selection") private var storedSelection: String = AppTheme.system.rawValue
     @Published public private(set) var selection: AppTheme
     @Published public private(set) var theme: Theme
 
     public init(colorScheme: ColorScheme? = nil) {
-        let initial = AppTheme(rawValue: AppStorage("app.theme.selection").wrappedValue ?? AppTheme.system.rawValue) ?? .system
+        let storedValue = UserDefaults.standard.string(forKey: "app.theme.selection") ?? AppTheme.system.rawValue
+        let initial = AppTheme(rawValue: storedValue) ?? .system
         self.selection = initial
         self.theme = ThemeManager.resolveTheme(for: initial, colorScheme: colorScheme)
     }
 
+    @MainActor
     public func apply(_ selection: AppTheme, colorScheme: ColorScheme? = nil) {
         self.selection = selection
         self.storedSelection = selection.rawValue
         self.theme = Self.resolveTheme(for: selection, colorScheme: colorScheme)
     }
 
+    @MainActor
     public func refreshForSystemChange(_ colorScheme: ColorScheme?) {
         guard selection == .system else { return }
         self.theme = Self.resolveTheme(for: .system, colorScheme: colorScheme)
@@ -172,18 +170,16 @@ public final class ThemeManager: ObservableObject {
         switch selection {
         case .light:  return .light
         case .dark:   return .dark
-        case .system:
-            if colorScheme == .dark { return .dark } else { return .light }
+        case .system: return (colorScheme == .dark) ? .dark : .light
         }
     }
 }
 
 // MARK: - Environment Injection
 
-@MainActor
-@preconcurrency
-private struct ThemeManagerKey: @preconcurrency EnvironmentKey {
-    static let defaultValue = ThemeManager()
+private struct ThemeManagerKey: EnvironmentKey {
+    // Lazy creation is fine now that ThemeManager is not @MainActor
+    static var defaultValue: ThemeManager { ThemeManager() }
 }
 
 public extension EnvironmentValues {
@@ -230,9 +226,7 @@ public extension View {
 
 // MARK: - Buttons
 
-public protocol CommonButtonStyle: ButtonStyle {}
-
-public struct PrimaryButtonStyle: CommonButtonStyle {
+public struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.themeManager) private var tm
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -241,14 +235,14 @@ public struct PrimaryButtonStyle: CommonButtonStyle {
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
             .background(tm.theme.palette.secondary)
-            .opacity(configuration.isPressed ? 0.85 : 1.0)
+            .opacity(configuration.isPressed ? 0.88 : 1.0)
             .cornerRadius(tm.theme.cornerRadius)
             .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
-public struct GhostButtonStyle: CommonButtonStyle {
+public struct GhostButtonStyle: ButtonStyle {
     @Environment(\.themeManager) private var tm
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
