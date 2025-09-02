@@ -127,8 +127,9 @@ struct ConcernSelectionView: View {
         }
         .padding(20)
         .background(tm.theme.palette.bg.ignoresSafeArea())
-        .onAppear { tm.refreshForSystemChange(cs) }
-    }
+        .onChange(of: cs) { newScheme in
+            tm.refreshForSystemChange(newScheme)
+        }    }
 
     private func toggle(_ c: Concern) {
         if selections.contains(c) { selections.remove(c) } else { selections.insert(c) }

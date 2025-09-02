@@ -25,126 +25,118 @@ struct MainFlowView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Main content
-            Group {
-                switch currentStep {
-                case .skinType:
-                    SkinTypeSelectionView { skinType in
-                        print("DEBUG: Skin type selected: \(skinType)")
-                        selectedSkinType = skinType
+        ZStack {
+            switch currentStep {
+            case .skinType:
+                SkinTypeSelectionView { skinType in
+                    selectedSkinType = skinType
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        currentStep = .concerns
+                    }
+                }
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .concerns:
+                ConcernSelectionView(
+                    onContinue: { concerns in
+                        selectedConcerns = concerns
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .lifestyle
+                        }
+                    },
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .skinType
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .lifestyle:
+                LifestyleQuestionsView(
+                    onContinue: { answers in
+                        lifestyleAnswers = answers
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .loading
+                        }
+                    },
+                    onSkip: {
+                        lifestyleAnswers = nil
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .loading
+                        }
+                    },
+                    onBack: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .concerns
                         }
-                        print("DEBUG: Transitioned to concerns")
                     }
-                    
-                case .concerns:
-                    ConcernSelectionView(
-                        onContinue: { concerns in
-                            print("DEBUG: Concerns selected: \(concerns)")
-                            selectedConcerns = concerns
-                            print("DEBUG: About to transition to lifestyle")
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .lifestyle
-                            }
-                            print("DEBUG: Transitioned to lifestyle, currentStep: \(currentStep)")
-                        },
-                        onBack: {
-                            print("DEBUG: Going back to skin type")
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .skinType
-                            }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .loading:
+                LoadingView(
+                    statuses: [
+                        "Analyzing your skin type…",
+                        "Processing your concerns…",
+                        "Evaluating lifestyle factors…",
+                        "Preparing routine results…",
+                        "Selecting targeted tips…",
+                        "Optimizing for your goals…"
+                    ],
+                    stepInterval: 2.0,
+                    autoFinish: true,
+                    onFinished: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .results
                         }
-                    )
-                    
-                case .lifestyle:
-                    LifestyleQuestionsView(
-                        onContinue: { answers in
-                            print("DEBUG: Lifestyle answers received: \(answers)")
-                            lifestyleAnswers = answers
-                            print("DEBUG: About to transition to loading")
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .loading
-                            }
-                            print("DEBUG: Transitioned to loading, currentStep: \(currentStep)")
-                        },
-                        onSkip: {
-                            print("DEBUG: Skipping lifestyle questions")
+                    },
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .lifestyle
+                        }
+                    }
+                )
+                .transition(.opacity) // loading can just fade
+
+            case .results:
+                RoutineResultView(
+                    skinType: selectedSkinType ?? .normal,
+                    concerns: selectedConcerns,
+                    lifestyleAnswers: lifestyleAnswers,
+                    onRestart: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .skinType
+                            selectedSkinType = nil
+                            selectedConcerns = []
                             lifestyleAnswers = nil
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .loading
-                            }
-                        },
-                        onBack: {
-                            print("DEBUG: Going back to concerns")
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .concerns
-                            }
                         }
-                    )
-                    
-                case .loading:
-                    LoadingView(
-                        statuses: [
-                            "Analyzing your skin type…",
-                            "Processing your concerns…",
-                            "Evaluating lifestyle factors…",
-                            "Preparing routine results…",
-                            "Selecting targeted tips…",
-                            "Optimizing for your goals…"
-                        ],
-                        stepInterval: 2.0, // Make it slower so you can see it
-                        autoFinish: true,
-                        onFinished: {
-                            print("DEBUG: Loading finished, going to results")
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .results
-                            }
-                        },
-                        onBack: {
-                            print("DEBUG: Going back to lifestyle")
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .lifestyle
-                            }
+                    },
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .loading
                         }
-                    )
-                    
-                case .results:
-                    RoutineResultView(
-                        skinType: selectedSkinType ?? .normal,
-                        concerns: selectedConcerns,
-                        lifestyleAnswers: lifestyleAnswers,
-                        onRestart: {
-                            // Reset to start
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .skinType
-                                selectedSkinType = nil
-                                selectedConcerns = []
-                                lifestyleAnswers = nil
-                            }
-                        },
-                        onBack: {
-                            print("DEBUG: Going back to loading")
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                currentStep = .loading
-                            }
-                        }
-                    )
-                }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
             }
         }
-        .themed(tm)
-        .onAppear {
-            tm.refreshForSystemChange(cs)
-            print("DEBUG: MainFlowView appeared, currentStep: \(currentStep)")
-        }
-        .onChange(of: cs) { newScheme in
-            tm.refreshForSystemChange(newScheme)
-        }
-        .onChange(of: currentStep) { newStep in
-            print("DEBUG: Step changed to: \(newStep)")
-        }
+        .background(tm.theme.palette.bg.ignoresSafeArea()) // keep root bg painted
+        // Prevent theme changes from causing a flash:
+        .transaction { t in t.disablesAnimations = true } // disables implicit animations
+        .onChange(of: cs) { tm.refreshForSystemChange($0) }
     }
 }
 

@@ -101,7 +101,9 @@ struct SkinTypeSelectionView: View {
         }
         .padding(20)
         .background(tm.theme.palette.bg.ignoresSafeArea())
-        .onAppear { tm.refreshForSystemChange(cs) }
+        .onChange(of: cs) { newScheme in
+            tm.refreshForSystemChange(newScheme)
+        }
     }
 }
 
