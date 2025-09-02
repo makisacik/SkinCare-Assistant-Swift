@@ -10,12 +10,10 @@ import SwiftUI
 @main
 struct ManCareApp: App {
     @StateObject private var themeManager = ThemeManager()
-    let persistenceController = PersistenceController.shared
 
     var body: some Scene {
         WindowGroup {
-            ThemeDemoView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            MainFlowView()
                 .themed(themeManager)
         }
     }

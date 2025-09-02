@@ -47,6 +47,8 @@ struct ConcernSelectionView: View {
     @State private var selections: Set<Concern> = []
     /// Called when user taps Continue with current selections
     var onContinue: (Set<Concern>) -> Void = { _ in }
+    /// Called when user wants to go back to skin type selection
+    var onBack: (() -> Void)? = nil
 
     private let columns = [GridItem(.flexible(), spacing: 12),
                            GridItem(.flexible(), spacing: 12)]
@@ -54,7 +56,28 @@ struct ConcernSelectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
 
-            // Header
+            // Header with back button
+            HStack {
+                if let onBack = onBack {
+                    Button {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        onBack()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 16, weight: .semibold))
+                            Text("Back")
+                                .font(tm.theme.typo.body.weight(.medium))
+                        }
+                        .foregroundColor(tm.theme.palette.textSecondary)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                Spacer()
+            }
+            .padding(.top, 8)
+
+            // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("Select Your Concerns")
                     .font(tm.theme.typo.h1)
@@ -63,7 +86,6 @@ struct ConcernSelectionView: View {
                     .font(tm.theme.typo.sub)
                     .foregroundColor(tm.theme.palette.textSecondary)
             }
-            .padding(.top, 8)
 
             // Grid of concerns
             LazyVGrid(columns: columns, spacing: 12) {

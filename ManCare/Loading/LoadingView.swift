@@ -18,6 +18,7 @@ struct LoadingView: View {
     var autoFinish: Bool = true
     var onCancel: (() -> Void)? = nil
     var onFinished: (() -> Void)? = nil
+    var onBack: (() -> Void)? = nil
 
     // Internal state
     @State private var idx: Int = 0
@@ -76,15 +77,29 @@ struct LoadingView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
 
-                // (Optional) Cancel
-                if onCancel != nil {
-                    Button("Cancel") {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        stopTimer()
-                        onCancel?()
+                // Action buttons
+                VStack(spacing: 12) {
+                    // (Optional) Cancel
+                    if onCancel != nil {
+                        Button("Cancel") {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            stopTimer()
+                            onCancel?()
+                        }
+                        .buttonStyle(GhostButtonStyle())
+                        .frame(maxWidth: 280)
                     }
-                    .buttonStyle(GhostButtonStyle())
-                    .frame(maxWidth: 280)
+
+                    // (Optional) Back
+                    if onBack != nil {
+                        Button("Back") {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            stopTimer()
+                            onBack?()
+                        }
+                        .buttonStyle(GhostButtonStyle())
+                        .frame(maxWidth: 280)
+                    }
                 }
             }
             .padding(24)
@@ -224,7 +239,8 @@ private struct MorphingRing: Shape {
             "Selecting targeted tips…",
             "Optimizing for your goals…"
         ],
-        onFinished: {}
+        onFinished: {},
+        onBack: {}
     )
     .themed(tm)
     .preferredColorScheme(.light)
@@ -239,7 +255,8 @@ private struct MorphingRing: Shape {
             "Selecting targeted tips…",
             "Optimizing for your goals…"
         ],
-        onFinished: {}
+        onFinished: {},
+        onBack: {}
     )
     .themed(tm)
     .preferredColorScheme(.dark)
