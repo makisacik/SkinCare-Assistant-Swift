@@ -364,7 +364,7 @@ private struct SegmentedCard: View {
     }
 }
 
-// Simple flow layout for pills
+// Simple flow layout for pills using LazyVGrid
 private struct FlowLayout<Content: View>: View {
     let spacing: CGFloat
     let lineSpacing: CGFloat
@@ -377,46 +377,10 @@ private struct FlowLayout<Content: View>: View {
     }
 
     var body: some View {
-        return GeometryReader { geo in
-            ZStack(alignment: .topLeading) {
-                Color.clear
-                _FlowLayoutReader(width: geo.size.width, spacing: spacing, lineSpacing: lineSpacing) {
-                    content
-                }
-            }
-        }
-        .frame(minHeight: 10)
-    }
-}
-
-private struct _FlowLayoutReader<Content: View>: View {
-    let width: CGFloat
-    let spacing: CGFloat
-    let lineSpacing: CGFloat
-    let content: Content
-
-    init(width: CGFloat, spacing: CGFloat, lineSpacing: CGFloat, @ViewBuilder content: () -> Content) {
-        self.width = width; self.spacing = spacing; self.lineSpacing = lineSpacing; self.content = content()
-    }
-
-    var body: some View {
-        var x: CGFloat = 0
-        var y: CGFloat = 0
-        return ZStack(alignment: .topLeading) {
+        LazyVGrid(columns: [
+            GridItem(.adaptive(minimum: 100, maximum: .infinity), spacing: spacing)
+        ], spacing: lineSpacing) {
             content
-                .background(
-                    GeometryReader { itemGeo in
-                        Color.clear.onAppear {
-                            let item = itemGeo.size
-                            if x + item.width > width {
-                                x = 0
-                                y += item.height + lineSpacing
-                            }
-                            x += item.width + spacing
-                        }
-                    }
-                )
-                .offset(x: 0, y: y)
         }
     }
 }

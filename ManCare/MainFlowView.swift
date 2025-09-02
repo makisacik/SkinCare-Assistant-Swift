@@ -26,40 +26,6 @@ struct MainFlowView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Progress indicator
-            ProgressIndicator(currentStep: currentStep)
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
-            
-            // Debug info
-            Text("Current Step: \(String(describing: currentStep))")
-                .font(.caption)
-                .foregroundColor(.red)
-                .padding(.horizontal, 20)
-            
-            // Debug buttons for testing
-            HStack(spacing: 10) {
-                Button("Test Loading") {
-                    print("DEBUG: Test button - going to loading")
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .loading
-                    }
-                }
-                .buttonStyle(GhostButtonStyle())
-                .frame(maxWidth: .infinity)
-                
-                Button("Test Results") {
-                    print("DEBUG: Test button - going to results")
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .results
-                    }
-                }
-                .buttonStyle(GhostButtonStyle())
-                .frame(maxWidth: .infinity)
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 10)
-            
             // Main content
             Group {
                 switch currentStep {
