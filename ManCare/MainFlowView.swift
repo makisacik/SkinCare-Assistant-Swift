@@ -11,15 +11,18 @@ struct MainFlowView: View {
     @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme) private var cs
     
-    @State private var currentStep: FlowStep = .skinType
+    @State private var currentStep: FlowStep = .welcome
     @State private var selectedSkinType: SkinType?
     @State private var selectedConcerns: Set<Concern> = []
-    @State private var lifestyleAnswers: LifestyleAnswers?
+    @State private var selectedMainGoal: MainGoal?
+    @State private var selectedPreferences: Preferences?
     
     enum FlowStep {
+        case welcome
         case skinType
         case concerns
-        case lifestyle
+        case mainGoal
+        case preferences
         case loading
         case results
     }
@@ -27,6 +30,14 @@ struct MainFlowView: View {
     var body: some View {
         ZStack {
             switch currentStep {
+            case .welcome:
+                WelcomeView {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        currentStep = .skinType
+                    }
+                }
+                .transition(.opacity)
+
             case .skinType:
                 SkinTypeSelectionView { skinType in
                     selectedSkinType = skinType
@@ -44,7 +55,7 @@ struct MainFlowView: View {
                     onContinue: { concerns in
                         selectedConcerns = concerns
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .lifestyle
+                            currentStep = .mainGoal
                         }
                     },
                     onBack: {
@@ -58,18 +69,12 @@ struct MainFlowView: View {
                     removal:   .move(edge: .leading).combined(with: .opacity)
                 ))
 
-            case .lifestyle:
-                LifestyleQuestionsView(
-                    onContinue: { answers in
-                        lifestyleAnswers = answers
+            case .mainGoal:
+                MainGoalView(
+                    onContinue: { mainGoal in
+                        selectedMainGoal = mainGoal
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .loading
-                        }
-                    },
-                    onSkip: {
-                        lifestyleAnswers = nil
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .loading
+                            currentStep = .preferences
                         }
                     },
                     onBack: {
@@ -83,15 +88,40 @@ struct MainFlowView: View {
                     removal:   .move(edge: .leading).combined(with: .opacity)
                 ))
 
+            case .preferences:
+                PreferencesView(
+                    onContinue: { preferences in
+                        selectedPreferences = preferences
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .loading
+                        }
+                    },
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .mainGoal
+                        }
+                    },
+                    onSkip: {
+                        selectedPreferences = nil
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .loading
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
             case .loading:
                 LoadingView(
                     statuses: [
                         "Analyzing your skin type…",
                         "Processing your concerns…",
-                        "Evaluating lifestyle factors…",
+                        "Evaluating your main goal…",
                         "Preparing routine results…",
-                        "Selecting targeted tips…",
-                        "Optimizing for your goals…"
+                        "Selecting targeted products…",
+                        "Optimizing for your preferences…"
                     ],
                     stepInterval: 2.0,
                     autoFinish: true,
@@ -102,23 +132,25 @@ struct MainFlowView: View {
                     },
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .lifestyle
+                            currentStep = .preferences
                         }
                     }
                 )
                 .transition(.opacity) // loading can just fade
 
             case .results:
-                RoutineResultView(
+                NewRoutineResultView(
                     skinType: selectedSkinType ?? .normal,
                     concerns: selectedConcerns,
-                    lifestyleAnswers: lifestyleAnswers,
+                    mainGoal: selectedMainGoal ?? .healthierOverall,
+                    preferences: selectedPreferences,
                     onRestart: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .skinType
+                            currentStep = .welcome
                             selectedSkinType = nil
                             selectedConcerns = []
-                            lifestyleAnswers = nil
+                            selectedMainGoal = nil
+                            selectedPreferences = nil
                         }
                     },
                     onBack: {
@@ -148,19 +180,23 @@ private struct ProgressIndicator: View {
     
     private var stepNumber: Int {
         switch currentStep {
-        case .skinType: return 1
-        case .concerns: return 2
-        case .lifestyle: return 3
-        case .loading: return 4
-        case .results: return 5
+        case .welcome: return 1
+        case .skinType: return 2
+        case .concerns: return 3
+        case .mainGoal: return 4
+        case .preferences: return 5
+        case .loading: return 6
+        case .results: return 7
         }
     }
     
     private var stepTitle: String {
         switch currentStep {
+        case .welcome: return "Welcome"
         case .skinType: return "Skin Type"
         case .concerns: return "Concerns"
-        case .lifestyle: return "Lifestyle"
+        case .mainGoal: return "Main Goal"
+        case .preferences: return "Preferences"
         case .loading: return "Analyzing"
         case .results: return "Results"
         }
@@ -186,7 +222,7 @@ private struct ProgressIndicator: View {
             Spacer()
             
             // Progress text
-            Text("\(stepNumber) of 5")
+            Text("\(stepNumber) of 7")
                 .font(tm.theme.typo.caption)
                 .foregroundColor(tm.theme.palette.textMuted)
         }
@@ -198,217 +234,6 @@ private struct ProgressIndicator: View {
     }
 }
 
-// MARK: - Routine Result View
-
-struct RoutineResultView: View {
-    @Environment(\.themeManager) private var tm
-    let skinType: SkinType
-    let concerns: Set<Concern>
-    let lifestyleAnswers: LifestyleAnswers?
-    let onRestart: () -> Void
-    let onBack: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 24) {
-            // Header with back button
-            HStack {
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    onBack()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Back")
-                            .font(tm.theme.typo.body.weight(.medium))
-                    }
-                    .foregroundColor(tm.theme.palette.textSecondary)
-                }
-                .buttonStyle(PlainButtonStyle())
-                Spacer()
-            }
-            .padding(.top, 8)
-            
-            // Header
-            VStack(spacing: 8) {
-                Text("Your Personalized Routine")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
-                    .multilineTextAlignment(.center)
-                
-                Text("Based on your \(skinType.title.lowercased()) skin and selected concerns")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.top, 20)
-            
-            // Results content
-            ScrollView {
-                VStack(spacing: 16) {
-                    // Skin type summary
-                    ResultCard(
-                        title: "Skin Type: \(skinType.title)",
-                        subtitle: skinType.subtitle,
-                        iconName: skinType.iconName
-                    )
-                    
-                    // Selected concerns
-                    if !concerns.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Your Focus Areas")
-                                .font(tm.theme.typo.h3)
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                            
-                            ForEach(Array(concerns)) { concern in
-                                HStack(spacing: 12) {
-                                    Image(systemName: concern.iconName)
-                                        .foregroundColor(tm.theme.palette.secondary)
-                                        .frame(width: 24, height: 24)
-                                    
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(concern.title)
-                                            .font(tm.theme.typo.title)
-                                            .foregroundColor(tm.theme.palette.textPrimary)
-                                        Text(concern.subtitle)
-                                            .font(tm.theme.typo.caption)
-                                            .foregroundColor(tm.theme.palette.textMuted)
-                                    }
-                                    Spacer()
-                                }
-                                .padding(16)
-                                .background(tm.theme.palette.card)
-                                .cornerRadius(tm.theme.cardRadius)
-                            }
-                        }
-                    }
-                    
-                    // Lifestyle summary if available
-                    if let lifestyle = lifestyleAnswers {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Lifestyle Factors")
-                                .font(tm.theme.typo.h3)
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                            
-                            VStack(spacing: 8) {
-                                if let sleep = lifestyle.sleep {
-                                    LifestyleFactorRow(title: "Sleep Quality", value: sleep.label)
-                                }
-                                if let exercise = lifestyle.exercise {
-                                    LifestyleFactorRow(title: "Exercise", value: exercise.label)
-                                }
-                                if let budget = lifestyle.budget {
-                                    LifestyleFactorRow(title: "Budget", value: budget.label)
-                                }
-                                if let routineDepth = lifestyle.routineDepth {
-                                    LifestyleFactorRow(title: "Routine Depth", value: routineDepth.label)
-                                }
-                                if let sunResponse = lifestyle.sunResponse {
-                                    LifestyleFactorRow(title: "Sun Response", value: sunResponse.label)
-                                }
-                            }
-                        }
-                        .padding(16)
-                        .background(tm.theme.palette.card)
-                        .cornerRadius(tm.theme.cardRadius)
-                    }
-                    
-                    // Placeholder for routine recommendations
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Daily Routine")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
-                        
-                        Text("Your personalized routine recommendations will appear here. This is where you'd typically show product suggestions, application order, and timing.")
-                            .font(tm.theme.typo.body)
-                            .foregroundColor(tm.theme.palette.textSecondary)
-                            .padding(16)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(tm.theme.palette.card)
-                            .cornerRadius(tm.theme.cardRadius)
-                    }
-                }
-                .padding(20)
-            }
-            
-            Spacer()
-            
-            // Action buttons
-            VStack(spacing: 12) {
-                Button("Start Over") {
-                    onRestart()
-                }
-                .buttonStyle(PrimaryButtonStyle())
-                
-                Button("Save Routine") {
-                    // TODO: Implement save functionality
-                }
-                .buttonStyle(GhostButtonStyle())
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
-        }
-        .background(tm.theme.palette.bg.ignoresSafeArea())
-    }
-}
-
-// MARK: - Lifestyle Factor Row
-
-private struct LifestyleFactorRow: View {
-    @Environment(\.themeManager) private var tm
-    let title: String
-    let value: String
-    
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
-            Spacer()
-            Text(value)
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
-        }
-    }
-}
-
-// MARK: - Result Card
-
-private struct ResultCard: View {
-    @Environment(\.themeManager) private var tm
-    let title: String
-    let subtitle: String
-    let iconName: String
-    
-    var body: some View {
-        HStack(spacing: 16) {
-            ZStack {
-                Circle()
-                    .fill(tm.theme.palette.secondary.opacity(0.15))
-                    .frame(width: 48, height: 48)
-                Image(systemName: iconName)
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(tm.theme.palette.secondary)
-            }
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(tm.theme.typo.title)
-                    .foregroundColor(tm.theme.palette.textPrimary)
-                Text(subtitle)
-                    .font(tm.theme.typo.caption)
-                    .foregroundColor(tm.theme.palette.textMuted)
-            }
-            
-            Spacer()
-        }
-        .padding(16)
-        .background(tm.theme.palette.card)
-        .cornerRadius(tm.theme.cardRadius)
-        .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
-    }
-}
-
 // MARK: - Preview
 
 #Preview("Main Flow") {
@@ -417,10 +242,11 @@ private struct ResultCard: View {
 }
 
 #Preview("Routine Result") {
-    RoutineResultView(
+    NewRoutineResultView(
         skinType: .combination,
         concerns: [.acne, .redness],
-        lifestyleAnswers: LifestyleAnswers(),
+        mainGoal: .reduceBreakouts,
+        preferences: nil,
         onRestart: {},
         onBack: {}
     )

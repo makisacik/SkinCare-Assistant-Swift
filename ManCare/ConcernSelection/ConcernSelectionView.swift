@@ -7,23 +7,25 @@
 import SwiftUI
 
 enum Concern: String, CaseIterable, Identifiable, Codable {
-    case acne, redness, pores, postShaveIrritation
+    case acne, redness, blackheads, largePores, postShaveIrritation
     var id: String { rawValue }
 
     var title: String {
         switch self {
         case .acne:                return "Acne"
         case .redness:             return "Redness"
-        case .pores:               return "Large Pores"
+        case .blackheads:          return "Blackheads"
+        case .largePores:          return "Large Pores"
         case .postShaveIrritation: return "Post-Shave Irritation"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .acne:                return "Breakouts, blackheads"
+        case .acne:                return "Breakouts, whiteheads"
         case .redness:             return "Sensitivity, flushing"
-        case .pores:               return "Texture, oil build-up"
+        case .blackheads:          return "Clogged pores, oil build-up"
+        case .largePores:          return "Texture, visible pores"
         case .postShaveIrritation: return "Razor burn, ingrowns"
         }
     }
@@ -32,7 +34,8 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .acne:                return "circle.grid.cross.left.fill" // blemish vibe
         case .redness:             return "thermometer.sun"             // heat/redness
-        case .pores:               return "circle.dashed.inset.filled"  // texture/pores
+        case .blackheads:          return "circle.dashed.inset.filled"  // texture/pores
+        case .largePores:          return "circle.dashed.inset.filled"  // texture/pores
         case .postShaveIrritation: return "scissors"                       // SF Symbols 16+
         }
     }
@@ -79,7 +82,7 @@ struct ConcernSelectionView: View {
 
             // Title section
             VStack(alignment: .leading, spacing: 6) {
-                Text("Select Your Concerns")
+                Text("What concerns you most?")
                     .font(tm.theme.typo.h1)
                     .foregroundColor(tm.theme.palette.textPrimary)
                 Text("Pick what you want to focus on. You can change this anytime.")

@@ -23,16 +23,6 @@ struct LifestyleAnswers: Codable, Equatable {
             }
         }
     }
-    enum BudgetTier: String, CaseIterable, Identifiable, Codable { case affordable, mid, premium
-        var id: String { rawValue }
-        var label: String {
-            switch self {
-            case .affordable: return "Affordable"
-            case .mid:        return "Mid-range"
-            case .premium:    return "Premium"
-            }
-        }
-    }
     enum RoutineDepth: String, CaseIterable, Identifiable, Codable { case minimal, standard, detailed
         var id: String { rawValue }
         var label: String {
@@ -54,22 +44,17 @@ struct LifestyleAnswers: Codable, Equatable {
         }
     }
 
-    // Optional fields – leave nil if user skips or doesn’t know
+    // Optional fields – leave nil if user skips or doesn't know
     var sleep: SleepQuality? = nil
     var outdoorHours: Int? = nil           // per day
     var smokes: Bool? = nil
     var drinksAlcohol: Bool? = nil
     var exercise: ExerciseFreq? = nil
-    var currentRoutine: Bool? = nil
-    var faceWashPerDay: Int? = nil
     var fragranceFree: Bool? = nil
     var naturalPreference: Bool? = nil
-    var budget: BudgetTier? = nil
     var routineDepth: RoutineDepth? = nil
     var sensitiveSkin: Bool? = nil
     var sunResponse: SunResponse? = nil
-    var remindersEnabled: Bool? = nil
-    var reminderTime: Date? = nil
 }
 
 // MARK: - View
@@ -83,8 +68,7 @@ struct LifestyleQuestionsView: View {
     var onSkip: (() -> Void)? = nil
     var onBack: (() -> Void)? = nil
 
-    // For the reminder time default
-    @State private var reminderTime = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
+
 
     var body: some View {
         ScrollView {
@@ -152,13 +136,6 @@ struct LifestyleQuestionsView: View {
 
                 Group { // Skin habits & goals
                     SectionHeader(title: "Skin Habits & Goals")
-                    ToggleRow(title: "Do you already follow a routine?",
-                              value: Binding(get: { answers.currentRoutine ?? false },
-                                             set: { answers.currentRoutine = $0 }))
-                    StepRow(title: "Face wash per day",
-                            value: Binding(get: { answers.faceWashPerDay ?? 1 },
-                                           set: { answers.faceWashPerDay = $0 }),
-                            range: 0...3, step: 1)
                     SegmentedCard(title: "Desired Routine Depth",
                                   items: LifestyleAnswers.RoutineDepth.allCases.map(\.label),
                                   selectionIndex: bindingIndex(
@@ -176,12 +153,6 @@ struct LifestyleQuestionsView: View {
                     ToggleRow(title: "Prefer natural/clean formulas",
                               value: Binding(get: { answers.naturalPreference ?? false },
                                              set: { answers.naturalPreference = $0 }))
-                    SegmentedCard(title: "Budget",
-                                  items: LifestyleAnswers.BudgetTier.allCases.map(\.label),
-                                  selectionIndex: bindingIndex(
-                                    from: answers.budget,
-                                    allCases: LifestyleAnswers.BudgetTier.allCases
-                                  ) { answers.budget = $0 })
                 }
                 .themedCard()
 
@@ -196,24 +167,6 @@ struct LifestyleQuestionsView: View {
                                     from: answers.sunResponse,
                                     allCases: LifestyleAnswers.SunResponse.allCases
                                   ) { answers.sunResponse = $0 })
-                }
-                .themedCard()
-
-                Group { // Reminders
-                    SectionHeader(title: "Reminders")
-                    ToggleRow(title: "Enable daily reminders",
-                              value: Binding(get: { answers.remindersEnabled ?? false },
-                                             set: { answers.remindersEnabled = $0 }))
-                    if answers.remindersEnabled == true {
-                        DatePicker("Reminder time", selection: Binding(get: {
-                            answers.reminderTime ?? reminderTime
-                        }, set: { new in
-                            answers.reminderTime = new
-                        }), displayedComponents: .hourAndMinute)
-                        .datePickerStyle(.compact)
-                        .font(tm.theme.typo.body)
-                        .foregroundColor(tm.theme.palette.textPrimary)
-                    }
                 }
                 .themedCard()
 
