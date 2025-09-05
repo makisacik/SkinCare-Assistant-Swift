@@ -246,11 +246,11 @@ private struct BudgetBadge: View {
     private func budgetTitle(_ budget: Budget) -> String {
         switch budget {
         case .low:
-            return "$"
+            return "Budget"
         case .mid:
-            return "$$"
+            return "Mid"
         case .high:
-            return "$$$"
+            return "Premium"
         }
     }
     
@@ -286,6 +286,23 @@ private struct ConstraintItem: View {
         .padding(.vertical, 4)
         .background(tm.theme.palette.bg)
         .cornerRadius(6)
+        .help(tooltipText(for: item.title))
+    }
+    private func tooltipText(for title: String) -> String {
+        switch title {
+        case "Fragrance Free":
+            return "No artificial fragrances - minimal irritation risk"
+        case "Sensitive Safe":
+            return "Formulated for sensitive skin - minimal irritation risk"
+        case "Vegan":
+            return "No animal-derived ingredients"
+        case "Cruelty Free":
+            return "Not tested on animals"
+        case let spf where spf.hasPrefix("SPF"):
+            return "Sun Protection Factor - blocks UV rays"
+        default:
+            return title
+        }
     }
 }
 

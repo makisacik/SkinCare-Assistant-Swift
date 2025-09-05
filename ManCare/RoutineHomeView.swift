@@ -28,6 +28,17 @@ struct RoutineHomeView: View {
             // Tab Selector
             HomeTabSelector(selectedTab: $selectedTab)
             
+            // Progress Indicator (only show on routine tab)
+            if selectedTab == .routine {
+                ProgressIndicator(
+                    morningSteps: generateMorningRoutine(),
+                    eveningSteps: generateEveningRoutine(),
+                    completedSteps: $completedSteps
+                )
+                .padding(.horizontal, 20)
+                .padding(.bottom, 16)
+            }
+            
             // Content
             TabView(selection: $selectedTab) {
                 // Routine Tab
@@ -50,6 +61,9 @@ struct RoutineHomeView: View {
     private var routineTabContent: some View {
         ScrollView {
             LazyVStack(spacing: 20) {
+                // Coach Message
+                CoachMessageView(message: getCoachMessage())
+                
                 // Morning Routine
                 RoutineCalendarSection(
                     title: "Morning Routine",
@@ -110,7 +124,9 @@ struct RoutineHomeView: View {
                     description: "\(apiStep.why) - \(apiStep.how)",
                     iconName: iconNameForStepType(apiStep.step),
                     stepType: apiStep.step,
-                    timeOfDay: .morning
+                    timeOfDay: .morning,
+                    why: apiStep.why,
+                    how: apiStep.how
                 )
             }
         }
@@ -123,7 +139,9 @@ struct RoutineHomeView: View {
                 description: "Oil-free gel cleanser – reduces shine, clears pores",
                 iconName: "drop.fill",
                 stepType: .cleanser,
-                timeOfDay: .morning
+                timeOfDay: .morning,
+                why: "Removes overnight oil buildup and prepares skin for treatments",
+                how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
             ),
             RoutineStepDetail(
                 id: "morning_toner",
@@ -131,7 +149,9 @@ struct RoutineHomeView: View {
                 description: "Balances pH and prepares skin for next steps",
                 iconName: "drop.circle",
                 stepType: .treatment,
-                timeOfDay: .morning
+                timeOfDay: .morning,
+                why: "Restores skin's natural pH balance and enhances product absorption",
+                how: "Apply with cotton pad or hands, pat gently until absorbed"
             ),
             RoutineStepDetail(
                 id: "morning_moisturizer",
@@ -139,7 +159,9 @@ struct RoutineHomeView: View {
                 description: "Lightweight gel moisturizer – hydrates without greasiness",
                 iconName: "drop.circle.fill",
                 stepType: .moisturizer,
-                timeOfDay: .morning
+                timeOfDay: .morning,
+                why: "Provides essential hydration and creates a protective barrier",
+                how: "Apply a pea-sized amount, massage in upward circular motions"
             ),
             RoutineStepDetail(
                 id: "morning_sunscreen",
@@ -147,7 +169,9 @@ struct RoutineHomeView: View {
                 description: "SPF 30+ broad spectrum – protects against sun damage",
                 iconName: "sun.max.fill",
                 stepType: .sunscreen,
-                timeOfDay: .morning
+                timeOfDay: .morning,
+                why: "Prevents UV damage, premature aging, and skin cancer",
+                how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
             )
         ]
     }
@@ -161,7 +185,9 @@ struct RoutineHomeView: View {
                     description: "\(apiStep.why) - \(apiStep.how)",
                     iconName: iconNameForStepType(apiStep.step),
                     stepType: apiStep.step,
-                    timeOfDay: .evening
+                    timeOfDay: .evening,
+                    why: apiStep.why,
+                    how: apiStep.how
                 )
             }
         }
@@ -174,7 +200,9 @@ struct RoutineHomeView: View {
                 description: "Oil-free gel cleanser – removes daily buildup",
                 iconName: "drop.fill",
                 stepType: .cleanser,
-                timeOfDay: .evening
+                timeOfDay: .evening,
+                why: "Removes makeup, sunscreen, and daily pollutants",
+                how: "Apply to dry skin first, then add water and massage, rinse thoroughly"
             ),
             RoutineStepDetail(
                 id: "evening_serum",
@@ -182,7 +210,9 @@ struct RoutineHomeView: View {
                 description: "Targeted treatment for your skin concerns",
                 iconName: "star.fill",
                 stepType: .treatment,
-                timeOfDay: .evening
+                timeOfDay: .evening,
+                why: "Active ingredients work best overnight when skin is in repair mode",
+                how: "Apply 2-3 drops, pat gently until absorbed, avoid eye area"
             ),
             RoutineStepDetail(
                 id: "evening_moisturizer",
@@ -190,7 +220,9 @@ struct RoutineHomeView: View {
                 description: "Rich cream moisturizer – repairs while you sleep",
                 iconName: "moon.circle.fill",
                 stepType: .moisturizer,
-                timeOfDay: .evening
+                timeOfDay: .evening,
+                why: "Provides deep hydration and supports overnight skin repair",
+                how: "Apply generously, massage in upward motions, let absorb before bed"
             )
         ]
     }
@@ -208,8 +240,34 @@ struct RoutineHomeView: View {
                 description: "\(apiStep.why) - \(apiStep.how)",
                 iconName: iconNameForStepType(apiStep.step),
                 stepType: apiStep.step,
-                timeOfDay: .weekly
+                timeOfDay: .weekly,
+                why: apiStep.why,
+                how: apiStep.how
             )
+        }
+    }
+    
+    private func getCoachMessage() -> String {
+        let hour = Calendar.current.component(.hour, from: selectedDate)
+        
+        if hour < 12 {
+            // Morning messages
+            let morningMessages = [
+                "Today's focus: hydration — don't skip your moisturizer 💧",
+                "It's sunny outside, SPF is your best defense ☀️",
+                "Start your day with clean, refreshed skin ✨",
+                "Your morning routine sets the tone for the day 🌅"
+            ]
+            return morningMessages.randomElement() ?? morningMessages[0]
+        } else {
+            // Evening messages
+            let eveningMessages = [
+                "Time to unwind and treat your skin 🌙",
+                "Your skin repairs while you sleep — give it the best care 💤",
+                "Evening routine is your skin's recovery time 🛌",
+                "End the day with a relaxing skincare ritual 🧴"
+            ]
+            return eveningMessages.randomElement() ?? eveningMessages[0]
         }
     }
     
@@ -225,6 +283,21 @@ struct RoutineHomeView: View {
             return "sun.max.fill"
         case .optional:
             return "plus.circle.fill"
+        }
+    }
+    
+    private func colorForStepType(_ stepType: StepType) -> Color {
+        switch stepType {
+        case .cleanser:
+            return .blue
+        case .treatment:
+            return .purple
+        case .moisturizer:
+            return .green
+        case .sunscreen:
+            return .yellow
+        case .optional:
+            return .orange
         }
     }
     
@@ -346,6 +419,126 @@ struct RoutineHomeView: View {
     }
 }
 
+// MARK: - Progress Indicator
+
+private struct ProgressIndicator: View {
+    @Environment(\.themeManager) private var tm
+    let morningSteps: [RoutineStepDetail]
+    let eveningSteps: [RoutineStepDetail]
+    @Binding var completedSteps: Set<String>
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            // Morning Progress
+            ProgressRing(
+                title: "Morning",
+                completed: morningCompleted,
+                total: morningSteps.count,
+                color: .blue
+            )
+            
+            // Evening Progress
+            ProgressRing(
+                title: "Evening",
+                completed: eveningCompleted,
+                total: eveningSteps.count,
+                color: .purple
+            )
+        }
+    }
+    
+    private var morningCompleted: Int {
+        morningSteps.filter { completedSteps.contains($0.id) }.count
+    }
+    
+    private var eveningCompleted: Int {
+        eveningSteps.filter { completedSteps.contains($0.id) }.count
+    }
+}
+
+// MARK: - Progress Ring
+
+private struct ProgressRing: View {
+    @Environment(\.themeManager) private var tm
+    let title: String
+    let completed: Int
+    let total: Int
+    let color: Color
+    
+    private var progress: Double {
+        total > 0 ? Double(completed) / Double(total) : 0
+    }
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            ZStack {
+                // Background circle
+                Circle()
+                    .stroke(color.opacity(0.2), lineWidth: 6)
+                    .frame(width: 60, height: 60)
+                
+                // Progress circle
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(color, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                    .frame(width: 60, height: 60)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeInOut(duration: 0.5), value: progress)
+                
+                // Center text
+                VStack(spacing: 2) {
+                    Text("\(completed)")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(tm.theme.palette.textPrimary)
+                    Text("/\(total)")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(tm.theme.palette.textMuted)
+                }
+            }
+            
+            Text(title)
+                .font(tm.theme.typo.caption.weight(.semibold))
+                .foregroundColor(tm.theme.palette.textPrimary)
+            
+            if completed == total && total > 0 {
+                Text("✅")
+                    .font(.system(size: 12))
+            }
+        }
+    }
+}
+
+// MARK: - Coach Message View
+
+private struct CoachMessageView: View {
+    @Environment(\.themeManager) private var tm
+    let message: String
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "lightbulb.fill")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.yellow)
+            
+            Text(message)
+                .font(tm.theme.typo.body)
+                .foregroundColor(tm.theme.palette.textPrimary)
+                .multilineTextAlignment(.leading)
+            
+            Spacer()
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: tm.theme.cardRadius)
+                .fill(Color.yellow.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: tm.theme.cardRadius)
+                        .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+}
+
 // MARK: - Home Tab Selector
 
 private struct HomeTabSelector: View {
@@ -371,8 +564,8 @@ private struct HomeTabSelector: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
                     .background(
-                        selectedTab == tab ? 
-                        tm.theme.palette.secondary : 
+                        selectedTab == tab ?
+                        tm.theme.palette.secondary :
                         Color.clear
                     )
                     .cornerRadius(tm.theme.cardRadius)
@@ -507,29 +700,71 @@ private struct RoutineCalendarStepRow: View {
     let onTap: () -> Void
     let onToggle: () -> Void
     
+    @State private var showCheckmarkAnimation = false
+    @State private var showConfetti = false
+    @State private var isExpanded = false
+    
+    private var stepColor: Color {
+        switch step.stepType {
+        case .cleanser: return .blue
+        case .treatment: return .purple
+        case .moisturizer: return .green
+        case .sunscreen: return .yellow
+        case .optional: return .orange
+        }
+    }
+    
     var body: some View {
         HStack(spacing: 16) {
             // Checkbox
             Button {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 onToggle()
+                
+                // Trigger animations
+                if !isCompleted {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        showCheckmarkAnimation = true
+                    }
+                    
+                    // Check if this is the last step to show confetti
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        showConfetti = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            showConfetti = false
+                        }
+                    }
+                }
             } label: {
                 ZStack {
                     Circle()
-                        .stroke(tm.theme.palette.secondary.opacity(0.3), lineWidth: 2)
+                        .stroke(stepColor.opacity(0.3), lineWidth: 2)
                         .frame(width: 24, height: 24)
                     
                     if isCompleted {
                         Circle()
-                            .fill(tm.theme.palette.secondary)
+                            .fill(stepColor)
                             .frame(width: 24, height: 24)
+                            .scaleEffect(showCheckmarkAnimation ? 1.2 : 1.0)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
+                        
                         Image(systemName: "checkmark")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.white)
+                            .scaleEffect(showCheckmarkAnimation ? 1.3 : 1.0)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
                     }
                 }
             }
             .buttonStyle(PlainButtonStyle())
+            .onChange(of: isCompleted) { completed in
+                if completed {
+                    showCheckmarkAnimation = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        showCheckmarkAnimation = false
+                    }
+                }
+            }
             
             // Step content
             VStack(alignment: .leading, spacing: 4) {
@@ -541,22 +776,129 @@ private struct RoutineCalendarStepRow: View {
                 Text(step.description)
                     .font(tm.theme.typo.body)
                     .foregroundColor(tm.theme.palette.textSecondary)
-                    .lineLimit(2)
+                    .lineLimit(isExpanded ? nil : 2)
+                
+                // Expanded content
+                if isExpanded {
+                    VStack(alignment: .leading, spacing: 8) {
+                        if let why = step.why {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Why:")
+                                    .font(tm.theme.typo.caption.weight(.semibold))
+                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                Text(why)
+                                    .font(tm.theme.typo.caption)
+                                    .foregroundColor(tm.theme.palette.textSecondary)
+                            }
+                        }
+                        
+                        if let how = step.how {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("How:")
+                                    .font(tm.theme.typo.caption.weight(.semibold))
+                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                Text(how)
+                                    .font(tm.theme.typo.caption)
+                                    .foregroundColor(tm.theme.palette.textSecondary)
+                            }
+                        }
+                    }
+                    .padding(.top, 8)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                }
             }
             
             Spacer()
             
-            // Step icon
+            // Expand/Collapse button
+            Button {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    isExpanded.toggle()
+                }
+            } label: {
+                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(tm.theme.palette.textMuted)
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            // Step icon with color
             Image(systemName: step.iconName)
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(tm.theme.palette.secondary.opacity(0.7))
+                .foregroundColor(stepColor)
         }
         .padding(.vertical, 8)
         .contentShape(Rectangle())
         .onTapGesture {
             onTap()
         }
+        .overlay(
+            // Confetti animation
+            ConfettiView(isActive: $showConfetti)
+                .allowsHitTesting(false)
+        )
     }
+}
+
+// MARK: - Confetti View
+
+private struct ConfettiView: View {
+    @Binding var isActive: Bool
+    @State private var confettiPieces: [ConfettiPiece] = []
+    
+    var body: some View {
+        ZStack {
+            ForEach(confettiPieces, id: \.id) { piece in
+                Circle()
+                    .fill(piece.color)
+                    .frame(width: 4, height: 4)
+                    .position(piece.position)
+                    .opacity(piece.opacity)
+            }
+        }
+        .onChange(of: isActive) { active in
+            if active {
+                createConfetti()
+            }
+        }
+    }
+    
+    private func createConfetti() {
+        confettiPieces.removeAll()
+        
+        for i in 0..<20 {
+            let piece = ConfettiPiece(
+                id: i,
+                position: CGPoint(x: 100, y: 20),
+                color: [.red, .blue, .green, .yellow, .purple, .orange].randomElement() ?? .blue,
+                opacity: 1.0
+            )
+            confettiPieces.append(piece)
+            
+            // Animate confetti
+            withAnimation(.easeOut(duration: 1.0)) {
+                if let index = confettiPieces.firstIndex(where: { $0.id == i }) {
+                    confettiPieces[index].position = CGPoint(
+                        x: CGFloat.random(in: 50...150),
+                        y: CGFloat.random(in: 50...100)
+                    )
+                    confettiPieces[index].opacity = 0.0
+                }
+            }
+        }
+        
+        // Clean up after animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            confettiPieces.removeAll()
+        }
+    }
+}
+
+private struct ConfettiPiece {
+    let id: Int
+    var position: CGPoint
+    let color: Color
+    var opacity: Double
 }
 
 // MARK: - Models
@@ -568,6 +910,19 @@ struct RoutineStepDetail: Identifiable {
     let iconName: String
     let stepType: StepType
     let timeOfDay: TimeOfDay
+    let why: String?
+    let how: String?
+    
+    init(id: String, title: String, description: String, iconName: String, stepType: StepType, timeOfDay: TimeOfDay, why: String? = nil, how: String? = nil) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.iconName = iconName
+        self.stepType = stepType
+        self.timeOfDay = timeOfDay
+        self.why = why
+        self.how = how
+    }
 }
 
 enum TimeOfDay {
