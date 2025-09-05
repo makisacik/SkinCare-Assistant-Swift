@@ -20,7 +20,6 @@ class ProductService: ObservableObject {
     
     init() {
         loadUserProducts()
-        loadSampleProducts()
     }
     
     // MARK: - User Products Management
@@ -155,37 +154,6 @@ class ProductService: ObservableObject {
         }
     }
     
-    private func loadSampleProducts() {
-        // Load some sample products for demonstration
-        let sampleProducts = [
-            createProductFromName("Gentle Foaming Cleanser", brand: "CeraVe", budget: .mid, additionalInfo: [
-                "ingredients": ["ceramides", "hyaluronic acid"],
-                "claims": ["fragranceFree", "sensitiveSafe"],
-                "description": "Gentle daily cleanser for all skin types"
-            ]),
-            createProductFromName("Niacinamide Serum", brand: "The Ordinary", budget: .low, additionalInfo: [
-                "ingredients": ["niacinamide", "zinc"],
-                "claims": ["fragranceFree", "vegan"],
-                "description": "10% niacinamide serum for pore refinement"
-            ]),
-            createProductFromName("Daily Moisturizer", brand: "Neutrogena", budget: .mid, additionalInfo: [
-                "ingredients": ["glycerin", "dimethicone"],
-                "claims": ["fragranceFree"],
-                "description": "Lightweight daily moisturizer"
-            ]),
-            createProductFromName("SPF 50 Sunscreen", brand: "EltaMD", budget: .high, additionalInfo: [
-                "ingredients": ["zinc oxide", "titanium dioxide"],
-                "claims": ["fragranceFree", "sensitiveSafe"],
-                "description": "Broad spectrum mineral sunscreen"
-            ])
-        ]
-        
-        // Only add if we don't have any user products yet
-        if userProducts.isEmpty {
-            userProducts = sampleProducts
-            saveUserProducts()
-        }
-    }
     
     private func matchesConstraints(_ tagging: ProductTagging, constraints: Constraints) -> Bool {
         // Check SPF requirement

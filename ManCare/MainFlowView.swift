@@ -35,11 +35,24 @@ struct MainFlowView: View {
         ZStack {
             switch currentStep {
             case .welcome:
-                WelcomeView {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .skinType
+                WelcomeView(
+                    onGetStarted: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .skinType
+                        }
+                    },
+                    onSkipToHome: {
+                        // Set up sample data for testing
+                        selectedSkinType = .normal
+                        selectedConcerns = [.largePores]
+                        selectedMainGoal = .healthierOverall
+                        selectedPreferences = nil
+                        generatedRoutine = createMockRoutineResponse()
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .home
+                        }
                     }
-                }
+                )
                 .transition(.opacity)
 
             case .skinType:

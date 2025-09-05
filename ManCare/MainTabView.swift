@@ -43,7 +43,7 @@ struct MainTabView: View {
                 .tag(Tab.routines)
             
             // Products Tab
-            ProductSlotsView(productSlots: generatedRoutine?.productSlots ?? [])
+            ProductSlotsView()
                 .tabItem {
                     Image(systemName: Tab.products.iconName)
                     Text(Tab.products.rawValue)

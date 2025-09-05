@@ -35,14 +35,30 @@ struct AddProductView: View {
             ScrollView {
                 VStack(spacing: 24) {
                     // Header
-                    VStack(spacing: 8) {
-                        Text("Add New Product")
-                            .font(tm.theme.typo.h1)
-                            .foregroundColor(tm.theme.palette.textPrimary)
-                        
-                        Text("Add a product to your collection")
-                            .font(tm.theme.typo.sub)
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                    VStack(spacing: 12) {
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .fill(tm.theme.palette.secondary.opacity(0.15))
+                                    .frame(width: 60, height: 60)
+
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.system(size: 28, weight: .semibold))
+                                    .foregroundColor(tm.theme.palette.secondary)
+                            }
+
+                            Spacer()
+                        }
+
+                        VStack(spacing: 8) {
+                            Text("Add New Product")
+                                .font(tm.theme.typo.h1)
+                                .foregroundColor(tm.theme.palette.textPrimary)
+
+                            Text("Add a product to your collection")
+                                .font(tm.theme.typo.sub)
+                                .foregroundColor(tm.theme.palette.textSecondary)
+                        }
                     }
                     .padding(.top, 20)
                     
@@ -76,15 +92,27 @@ struct AddProductView: View {
                         // Ingredients
                         ProductFormSection(title: "Ingredients") {
                             VStack(spacing: 16) {
-                                HStack {
+                                HStack(spacing: 12) {
                                     TextField("Add ingredient", text: $newIngredient)
-                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .font(tm.theme.typo.body)
+                                        .padding(.horizontal, 16)
+                                        .padding(.vertical, 12)
+                                        .background(tm.theme.palette.bg)
+                                        .cornerRadius(12)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                        )
                                     
-                                    Button("Add") {
+                                    Button {
                                         if !newIngredient.isEmpty {
                                             ingredients.append(newIngredient)
                                             newIngredient = ""
                                         }
+                                    } label: {
+                                        Image(systemName: "plus.circle.fill")
+                                            .font(.system(size: 20, weight: .semibold))
+                                            .foregroundColor(tm.theme.palette.secondary)
                                     }
                                     .disabled(newIngredient.isEmpty)
                                 }
@@ -126,12 +154,13 @@ struct AddProductView: View {
                                     .foregroundColor(tm.theme.palette.textPrimary)
                                 
                                 TextEditor(text: $description)
-                                    .frame(minHeight: 80)
-                                    .padding(8)
+                                    .font(tm.theme.typo.body)
+                                    .frame(minHeight: 100)
+                                    .padding(12)
                                     .background(tm.theme.palette.bg)
-                                    .cornerRadius(8)
+                                    .cornerRadius(12)
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
+                                        RoundedRectangle(cornerRadius: 12)
                                             .stroke(tm.theme.palette.separator, lineWidth: 1)
                                     )
                             }
@@ -144,17 +173,23 @@ struct AddProductView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Text("Cancel")
+                            .font(tm.theme.typo.body.weight(.medium))
+                            .foregroundColor(tm.theme.palette.textSecondary)
                     }
-                    .foregroundColor(tm.theme.palette.textSecondary)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button {
                         saveProduct()
+                    } label: {
+                        Text("Save")
+                            .font(tm.theme.typo.body.weight(.semibold))
+                            .foregroundColor(productName.isEmpty ? tm.theme.palette.textMuted : tm.theme.palette.secondary)
                     }
-                    .foregroundColor(tm.theme.palette.secondary)
                     .disabled(productName.isEmpty)
                 }
             }
@@ -244,7 +279,15 @@ private struct FormField: View {
                 .foregroundColor(tm.theme.palette.textPrimary)
             
             TextField(placeholder, text: $text)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .font(tm.theme.typo.body)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(tm.theme.palette.bg)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                )
         }
     }
 }
