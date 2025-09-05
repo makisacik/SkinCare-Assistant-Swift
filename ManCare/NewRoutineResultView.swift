@@ -16,6 +16,7 @@ struct NewRoutineResultView: View {
     let generatedRoutine: RoutineResponse?
     let onRestart: () -> Void
     let onBack: () -> Void
+    let onContinue: () -> Void
     
     var body: some View {
         VStack(spacing: 24) {
@@ -47,24 +48,46 @@ struct NewRoutineResultView: View {
                 .padding(20)
             }
             
-            // CTA Button
-            Button {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                // TODO: Implement reminders functionality
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "bell.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text("Turn on reminders")
-                        .font(tm.theme.typo.title.weight(.semibold))
+            // CTA Buttons
+            VStack(spacing: 12) {
+                // Continue Button
+                Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    onContinue()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Continue")
+                            .font(tm.theme.typo.title.weight(.semibold))
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(tm.theme.palette.secondary)
+                    .cornerRadius(tm.theme.cardRadius)
                 }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(tm.theme.palette.secondary)
-                .cornerRadius(tm.theme.cardRadius)
+                .buttonStyle(PlainButtonStyle())
+
+                // Reminders Button
+                Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    // TODO: Implement reminders functionality
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "bell.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Turn on reminders")
+                            .font(tm.theme.typo.title.weight(.semibold))
+                    }
+                    .foregroundColor(tm.theme.palette.secondary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(tm.theme.palette.secondary.opacity(0.1))
+                    .cornerRadius(tm.theme.cardRadius)
+                }
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
@@ -413,7 +436,8 @@ private struct RoutineResultHeader: View {
         preferences: nil,
         generatedRoutine: nil,
         onRestart: {},
-        onBack: {}
+        onBack: {},
+        onContinue: {}
     )
     .themed(ThemeManager())
 }

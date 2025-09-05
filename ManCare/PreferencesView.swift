@@ -10,17 +10,18 @@ import SwiftUI
 struct PreferencesView: View {
     @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme) private var cs
-    
+
     @State private var fragranceFreeOnly = false
     @State private var suitableForSensitiveSkin = false
     @State private var naturalIngredients = false
     @State private var crueltyFree = false
     @State private var veganFriendly = false
-    
+
     var onContinue: (Preferences) -> Void
     var onBack: () -> Void
     var onSkip: () -> Void
-    
+    var onContinueWithoutAPI: () -> Void
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             // Header with back button
@@ -41,7 +42,7 @@ struct PreferencesView: View {
                 Spacer()
             }
             .padding(.top, 8)
-            
+
             // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("Any preferences?")
@@ -51,7 +52,7 @@ struct PreferencesView: View {
                     .font(tm.theme.typo.sub)
                     .foregroundColor(tm.theme.palette.textSecondary)
             }
-            
+
             // Preferences toggles
             VStack(spacing: 16) {
                 PreferenceToggle(
@@ -60,28 +61,28 @@ struct PreferencesView: View {
                     iconName: "leaf.fill",
                     isOn: $fragranceFreeOnly
                 )
-                
+
                 PreferenceToggle(
                     title: "Suitable for sensitive skin",
                     subtitle: "Gentle, non-irritating formulas",
                     iconName: "heart.fill",
                     isOn: $suitableForSensitiveSkin
                 )
-                
+
                 PreferenceToggle(
                     title: "Natural ingredients",
                     subtitle: "Prefer plant-based and natural components",
                     iconName: "leaf.circle.fill",
                     isOn: $naturalIngredients
                 )
-                
+
                 PreferenceToggle(
                     title: "Cruelty-free",
                     subtitle: "No animal testing",
                     iconName: "pawprint.fill",
                     isOn: $crueltyFree
                 )
-                
+
                 PreferenceToggle(
                     title: "Vegan-friendly",
                     subtitle: "No animal-derived ingredients",
@@ -89,11 +90,29 @@ struct PreferencesView: View {
                     isOn: $veganFriendly
                 )
             }
-            
+
             Spacer(minLength: 8)
-            
+
             // Action buttons
             VStack(spacing: 12) {
+                Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    onContinueWithoutAPI()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Continue without API call")
+                            .font(tm.theme.typo.title.weight(.semibold))
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(tm.theme.palette.accent)
+                    .cornerRadius(tm.theme.cardRadius)
+                }
+                .buttonStyle(PlainButtonStyle())
+
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     let preferences = Preferences(
@@ -110,7 +129,7 @@ struct PreferencesView: View {
                         .frame(height: 56)
                 }
                 .buttonStyle(PrimaryButtonStyle())
-                
+
                 Button {
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     onSkip()
@@ -136,7 +155,7 @@ private struct PreferenceToggle: View {
     let subtitle: String
     let iconName: String
     @Binding var isOn: Bool
-    
+
     var body: some View {
         HStack(spacing: 16) {
             // Icon
@@ -148,7 +167,7 @@ private struct PreferenceToggle: View {
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(tm.theme.palette.secondary)
             }
-            
+
             // Text content
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
@@ -158,9 +177,9 @@ private struct PreferenceToggle: View {
                     .font(tm.theme.typo.caption)
                     .foregroundColor(tm.theme.palette.textMuted)
             }
-            
+
             Spacer()
-            
+
             // Toggle
             Toggle("", isOn: $isOn)
                 .toggleStyle(SwitchToggleStyle(tint: tm.theme.palette.secondary))
@@ -181,20 +200,20 @@ struct Preferences: Codable {
     let naturalIngredients: Bool
     let crueltyFree: Bool
     let veganFriendly: Bool
-    
+
     var hasAnyPreferences: Bool {
         fragranceFreeOnly || suitableForSensitiveSkin || naturalIngredients || crueltyFree || veganFriendly
     }
 }
 
 #Preview("PreferencesView - Light") {
-    PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {})
+    PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {}, onContinueWithoutAPI: {})
         .themed(ThemeManager())
         .preferredColorScheme(.light)
 }
 
 #Preview("PreferencesView - Dark") {
-    PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {})
+    PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {}, onContinueWithoutAPI: {})
         .themed(ThemeManager())
         .preferredColorScheme(.dark)
 }
