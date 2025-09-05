@@ -135,9 +135,9 @@ struct ProductSlot: Codable, Identifiable {
 
     var id: String { slotID }
 
-    /// Convert to new SlotType for forward compatibility
-    var slotType: SlotType {
-        return step.toSlotType()
+    /// Convert to new ProductType for forward compatibility
+    var productType: ProductType {
+        return step.toProductType()
     }
 
     enum CodingKeys: String, CodingKey {

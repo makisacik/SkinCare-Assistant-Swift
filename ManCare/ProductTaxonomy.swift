@@ -9,172 +9,299 @@ import Foundation
 
 // MARK: - Core Taxonomy
 
-/// Canonical slot types that define where products live in a routine (UI-facing, small enum)
-enum SlotType: String, Codable, CaseIterable, Identifiable {
+/// Comprehensive product types ordered from most used to least used
+enum ProductType: String, Codable, CaseIterable, Identifiable {
+    // Most commonly used (daily essentials)
     case cleanser
-    case toner
-    case treatment
     case moisturizer
     case sunscreen
-    case shave
+    case toner
+
+    // Treatment products
+    case faceSerum
+    case exfoliator
+    case faceMask
+    case facialOil
+
+    // Specialized products
+    case facialMist
+    case eyeCream
+    case spotTreatment
+    case retinol
+    case vitaminC
+    case niacinamide
+
+    // Sun protection variations
+    case faceSunscreen
+    case bodySunscreen
+    case lipBalm
+
+    // Shaving products
+    case shaveCream
     case aftershave
-    case mask
-    case faceOil
-    
+    case shaveGel
+
+    // Body care
+    case bodyLotion
+    case bodyWash
+    case handCream
+
+    // Hair care
+    case shampoo
+    case conditioner
+    case hairOil
+    case hairMask
+
+    // Specialized treatments
+    case chemicalPeel
+    case micellarWater
+    case makeupRemover
+    case faceWash
+    case cleansingOil
+    case cleansingBalm
+
     var id: String { rawValue }
-    
+
     /// Display name for UI
     var displayName: String {
         switch self {
+        // Most commonly used
         case .cleanser: return "Cleanser"
-        case .toner: return "Toner"
-        case .treatment: return "Treatment"
         case .moisturizer: return "Moisturizer"
         case .sunscreen: return "Sunscreen"
-        case .shave: return "Shave"
+        case .toner: return "Toner"
+
+        // Treatment products
+        case .faceSerum: return "Face Serum"
+        case .exfoliator: return "Exfoliator"
+        case .faceMask: return "Face Mask"
+        case .facialOil: return "Facial Oil"
+
+        // Specialized products
+        case .facialMist: return "Facial Mist & Sprays"
+        case .eyeCream: return "Eye Cream"
+        case .spotTreatment: return "Spot Treatment"
+        case .retinol: return "Retinol"
+        case .vitaminC: return "Vitamin C"
+        case .niacinamide: return "Niacinamide"
+
+        // Sun protection variations
+        case .faceSunscreen: return "Face Sunscreen"
+        case .bodySunscreen: return "Body Sunscreen"
+        case .lipBalm: return "Lip Balm"
+
+        // Shaving products
+        case .shaveCream: return "Shave Cream"
         case .aftershave: return "Aftershave"
-        case .mask: return "Mask"
-        case .faceOil: return "Face Oil"
+        case .shaveGel: return "Shave Gel"
+
+        // Body care
+        case .bodyLotion: return "Body Lotion"
+        case .bodyWash: return "Body Wash"
+        case .handCream: return "Hand Cream"
+
+        // Hair care
+        case .shampoo: return "Shampoo"
+        case .conditioner: return "Conditioner"
+        case .hairOil: return "Hair Oil"
+        case .hairMask: return "Hair Mask"
+
+        // Specialized treatments
+        case .chemicalPeel: return "Chemical Peel"
+        case .micellarWater: return "Micellar Water"
+        case .makeupRemover: return "Makeup Remover"
+        case .faceWash: return "Face Wash"
+        case .cleansingOil: return "Cleansing Oil"
+        case .cleansingBalm: return "Cleansing Balm"
         }
     }
-    
+
     /// Icon name for UI
     var iconName: String {
         switch self {
+        // Most commonly used
         case .cleanser: return "drop.fill"
-        case .toner: return "sparkles"
-        case .treatment: return "star.fill"
         case .moisturizer: return "drop.circle.fill"
         case .sunscreen: return "sun.max.fill"
-        case .shave: return "scissors"
+        case .toner: return "sparkles"
+
+        // Treatment products
+        case .faceSerum: return "star.fill"
+        case .exfoliator: return "sparkles.rectangle.stack"
+        case .faceMask: return "face.smiling"
+        case .facialOil: return "drop.triangle.fill"
+
+        // Specialized products
+        case .facialMist: return "cloud.drizzle.fill"
+        case .eyeCream: return "eye.fill"
+        case .spotTreatment: return "target"
+        case .retinol: return "leaf.fill"
+        case .vitaminC: return "sun.max.circle.fill"
+        case .niacinamide: return "pills.fill"
+
+        // Sun protection variations
+        case .faceSunscreen: return "sun.max.fill"
+        case .bodySunscreen: return "sun.max.circle"
+        case .lipBalm: return "lips.fill"
+
+        // Shaving products
+        case .shaveCream: return "scissors"
         case .aftershave: return "wind"
-        case .mask: return "face.smiling"
-        case .faceOil: return "drop.triangle.fill"
+        case .shaveGel: return "drop.circle"
+
+        // Body care
+        case .bodyLotion: return "figure.arms.open"
+        case .bodyWash: return "shower.fill"
+        case .handCream: return "hand.raised.fill"
+
+        // Hair care
+        case .shampoo: return "hair.and.eyebrow"
+        case .conditioner: return "hair.and.eyebrow"
+        case .hairOil: return "drop.circle"
+        case .hairMask: return "face.smiling"
+
+        // Specialized treatments
+        case .chemicalPeel: return "flask.fill"
+        case .micellarWater: return "drop.circle"
+        case .makeupRemover: return "eraser.fill"
+        case .faceWash: return "drop.fill"
+        case .cleansingOil: return "drop.triangle"
+        case .cleansingBalm: return "circle.fill"
         }
     }
-    
+
     /// Color for UI
     var color: String {
         switch self {
+        // Most commonly used
         case .cleanser: return "blue"
-        case .toner: return "purple"
-        case .treatment: return "indigo"
         case .moisturizer: return "green"
         case .sunscreen: return "yellow"
-        case .shave: return "gray"
-        case .aftershave: return "orange"
-        case .mask: return "pink"
-        case .faceOil: return "brown"
+        case .toner: return "purple"
+
+        // Treatment products
+        case .faceSerum: return "indigo"
+        case .exfoliator: return "orange"
+        case .faceMask: return "pink"
+        case .facialOil: return "brown"
+
+        // Specialized products
+        case .facialMist: return "cyan"
+        case .eyeCream: return "mint"
+        case .spotTreatment: return "red"
+        case .retinol: return "green"
+        case .vitaminC: return "yellow"
+        case .niacinamide: return "blue"
+
+        // Sun protection variations
+        case .faceSunscreen: return "yellow"
+        case .bodySunscreen: return "orange"
+        case .lipBalm: return "pink"
+
+        // Shaving products
+        case .shaveCream: return "gray"
+        case .aftershave: return "blue"
+        case .shaveGel: return "cyan"
+
+        // Body care
+        case .bodyLotion: return "green"
+        case .bodyWash: return "blue"
+        case .handCream: return "mint"
+
+        // Hair care
+        case .shampoo: return "brown"
+        case .conditioner: return "brown"
+        case .hairOil: return "yellow"
+        case .hairMask: return "brown"
+
+        // Specialized treatments
+        case .chemicalPeel: return "red"
+        case .micellarWater: return "blue"
+        case .makeupRemover: return "pink"
+        case .faceWash: return "blue"
+        case .cleansingOil: return "yellow"
+        case .cleansingBalm: return "gray"
         }
     }
-    
-    /// Whether this slot is optional in a routine
+
+    /// Whether this product type is optional in a routine
     var isOptional: Bool {
         switch self {
-        case .toner, .shave, .aftershave, .mask, .faceOil:
-            return true
-        case .cleanser, .treatment, .moisturizer, .sunscreen:
+        case .cleanser, .moisturizer, .sunscreen:
             return false
+        default:
+            return true
         }
     }
-    
-    /// Default frequency for this slot type
+
+    /// Default frequency for this product type
     var defaultFrequency: Frequency {
         switch self {
         case .cleanser, .moisturizer, .sunscreen:
             return .both
-        case .treatment, .toner:
+        case .toner, .faceSerum, .exfoliator, .retinol, .vitaminC, .niacinamide:
             return .dailyPM
-        case .shave, .aftershave:
+        case .shaveCream, .aftershave, .shaveGel:
             return .dailyAM
-        case .mask, .faceOil:
+        case .faceMask, .facialOil, .chemicalPeel, .hairMask:
             return .weekly(times: 1)
+        default:
+            return .both
+        }
+    }
+
+    /// Category for grouping in UI
+    var category: ProductCategory {
+        switch self {
+        case .cleanser, .faceWash, .cleansingOil, .cleansingBalm, .micellarWater, .makeupRemover:
+            return .cleansing
+        case .toner, .facialMist:
+            return .toning
+        case .faceSerum, .exfoliator, .spotTreatment, .retinol, .vitaminC, .niacinamide, .chemicalPeel:
+            return .treatment
+        case .moisturizer, .eyeCream, .facialOil:
+            return .moisturizing
+        case .sunscreen, .faceSunscreen, .bodySunscreen, .lipBalm:
+            return .sunProtection
+        case .faceMask, .hairMask:
+            return .masks
+        case .shaveCream, .aftershave, .shaveGel:
+            return .shaving
+        case .bodyLotion, .bodyWash, .handCream:
+            return .bodyCare
+        case .shampoo, .conditioner, .hairOil:
+            return .hairCare
         }
     }
 }
 
-/// More granular product subtypes for filtering and search
-enum ProductSubtype: String, Codable, CaseIterable, Identifiable {
-    // Treatments
-    case serum
-    case exfoliant
-    case spotTreatment
-    case retinoid
-    case vitaminC
-    case niacinamide
-    case aha
-    case bha
-    case pha
-    
-    // Shave products
-    case shaveCream
-    case shaveGel
-    case aftershaveLotion
-    case aftershaveBalm
-    
-    // Masks
-    case clayMask
-    case sheetMask
-    case sleepingMask
-    
-    // Base product types
-    case gelCleanser
-    case creamCleanser
-    case lotionMoisturizer
-    case gelMoisturizer
-    case mineralSPF
-    case chemicalSPF
-    
-    var id: String { rawValue }
-    
-    /// Display name for UI
-    var displayName: String {
+/// Product categories for UI grouping
+enum ProductCategory: String, CaseIterable {
+    case cleansing = "Cleansing"
+    case toning = "Toning"
+    case treatment = "Treatment"
+    case moisturizing = "Moisturizing"
+    case sunProtection = "Sun Protection"
+    case masks = "Masks"
+    case shaving = "Shaving"
+    case bodyCare = "Body Care"
+    case hairCare = "Hair Care"
+
+    var iconName: String {
         switch self {
-        case .serum: return "Serum"
-        case .exfoliant: return "Exfoliant"
-        case .spotTreatment: return "Spot Treatment"
-        case .retinoid: return "Retinoid"
-        case .vitaminC: return "Vitamin C"
-        case .niacinamide: return "Niacinamide"
-        case .aha: return "AHA"
-        case .bha: return "BHA"
-        case .pha: return "PHA"
-        case .shaveCream: return "Shave Cream"
-        case .shaveGel: return "Shave Gel"
-        case .aftershaveLotion: return "Aftershave Lotion"
-        case .aftershaveBalm: return "Aftershave Balm"
-        case .clayMask: return "Clay Mask"
-        case .sheetMask: return "Sheet Mask"
-        case .sleepingMask: return "Sleeping Mask"
-        case .gelCleanser: return "Gel Cleanser"
-        case .creamCleanser: return "Cream Cleanser"
-        case .lotionMoisturizer: return "Lotion Moisturizer"
-        case .gelMoisturizer: return "Gel Moisturizer"
-        case .mineralSPF: return "Mineral SPF"
-        case .chemicalSPF: return "Chemical SPF"
-        }
-    }
-    
-    /// Which slot type this subtype belongs to
-    var primarySlot: SlotType {
-        switch self {
-        case .serum, .exfoliant, .spotTreatment, .retinoid, .vitaminC, .niacinamide, .aha, .bha, .pha:
-            return .treatment
-        case .shaveCream, .shaveGel:
-            return .shave
-        case .aftershaveLotion, .aftershaveBalm:
-            return .aftershave
-        case .clayMask, .sheetMask, .sleepingMask:
-            return .mask
-        case .gelCleanser, .creamCleanser:
-            return .cleanser
-        case .lotionMoisturizer, .gelMoisturizer:
-            return .moisturizer
-        case .mineralSPF, .chemicalSPF:
-            return .sunscreen
+        case .cleansing: return "drop.fill"
+        case .toning: return "sparkles"
+        case .treatment: return "star.fill"
+        case .moisturizing: return "drop.circle.fill"
+        case .sunProtection: return "sun.max.fill"
+        case .masks: return "face.smiling"
+        case .shaving: return "scissors"
+        case .bodyCare: return "figure.arms.open"
+        case .hairCare: return "hair.and.eyebrow"
         }
     }
 }
+
 
 // MARK: - Frequency System
 
@@ -185,7 +312,7 @@ enum Frequency: Codable, Equatable {
     case both
     case weekly(times: Int)
     case custom([String]) // e.g., ["Mon","Wed","Fri"]
-    
+
     var displayName: String {
         switch self {
         case .dailyAM: return "Daily (AM)"
@@ -195,7 +322,7 @@ enum Frequency: Codable, Equatable {
         case .custom(let days): return "Custom (\(days.joined(separator: ", ")))"
         }
     }
-    
+
     var description: String {
         switch self {
         case .dailyAM: return "Use every morning"
@@ -211,15 +338,13 @@ enum Frequency: Codable, Equatable {
 
 /// Comprehensive tagging system for products
 struct ProductTagging: Codable, Equatable {
-    let slot: SlotType                 // primary slot
-    let subtypes: [ProductSubtype]     // granular hints (filtering/search)
-    let ingredients: [String]          // INCI hints (niacinamide, zinc PCA…)
+    let productType: ProductType       // primary product type
+    let ingredients: [String]          // INCI hints (niacinamide, zinc PCA, AHA, BHA, PHA…)
     let claims: [String]               // "fragranceFree", "vegan", "sensitiveSafe"
     let budget: Budget                 // low|mid|high
-    
-    init(slot: SlotType, subtypes: [ProductSubtype] = [], ingredients: [String] = [], claims: [String] = [], budget: Budget = .mid) {
-        self.slot = slot
-        self.subtypes = subtypes
+
+    init(productType: ProductType, ingredients: [String] = [], claims: [String] = [], budget: Budget = .mid) {
+        self.productType = productType
         self.ingredients = ingredients
         self.claims = claims
         self.budget = budget
@@ -228,99 +353,131 @@ struct ProductTagging: Codable, Equatable {
 
 // MARK: - Product Alias System
 
-/// Maps flexible product names to canonical slots
+/// Maps flexible product names to canonical product types
 struct ProductAliasMapping {
-    static let aliases: [String: (slot: SlotType, subtype: ProductSubtype?)] = [
-        // Treatment aliases
-        "essence": (.treatment, .serum),
-        "ampoule": (.treatment, .serum),
-        "peel": (.treatment, .exfoliant),
-        "chemical peel": (.treatment, .exfoliant),
-        "acne treatment": (.treatment, .spotTreatment),
-        "spot treatment": (.treatment, .spotTreatment),
-        "retinol": (.treatment, .retinoid),
-        "vitamin c": (.treatment, .vitaminC),
-        "ascorbic acid": (.treatment, .vitaminC),
-        "niacinamide": (.treatment, .niacinamide),
-        "glycolic acid": (.treatment, .aha),
-        "salicylic acid": (.treatment, .bha),
-        "lactic acid": (.treatment, .aha),
-        
+    static let aliases: [String: ProductType] = [
         // Cleanser aliases
-        "face wash": (.cleanser, .gelCleanser),
-        "facial cleanser": (.cleanser, .gelCleanser),
-        "cleansing gel": (.cleanser, .gelCleanser),
-        "cleansing cream": (.cleanser, .creamCleanser),
-        "milk cleanser": (.cleanser, .creamCleanser),
-        
+        "cleanser": .cleanser,
+        "face wash": .faceWash,
+        "facial cleanser": .cleanser,
+        "cleansing gel": .cleanser,
+        "cleansing cream": .cleanser,
+        "milk cleanser": .cleanser,
+        "cleansing oil": .cleansingOil,
+        "cleansing balm": .cleansingBalm,
+        "micellar water": .micellarWater,
+        "makeup remover": .makeupRemover,
+
         // Moisturizer aliases
-        "face cream": (.moisturizer, .lotionMoisturizer),
-        "face lotion": (.moisturizer, .lotionMoisturizer),
-        "moisturizing cream": (.moisturizer, .lotionMoisturizer),
-        "moisturizing gel": (.moisturizer, .gelMoisturizer),
-        "gel moisturizer": (.moisturizer, .gelMoisturizer),
-        
+        "moisturizer": .moisturizer,
+        "face cream": .moisturizer,
+        "face lotion": .moisturizer,
+        "moisturizing cream": .moisturizer,
+        "moisturizing gel": .moisturizer,
+        "gel moisturizer": .moisturizer,
+        "eye cream": .eyeCream,
+
         // Sunscreen aliases
-        "sunscreen": (.sunscreen, .chemicalSPF),
-        "spf": (.sunscreen, .chemicalSPF),
-        "sun protection": (.sunscreen, .chemicalSPF),
-        "mineral sunscreen": (.sunscreen, .mineralSPF),
-        "zinc oxide": (.sunscreen, .mineralSPF),
-        "titanium dioxide": (.sunscreen, .mineralSPF),
-        
-        // Shave aliases
-        "shaving cream": (.shave, .shaveCream),
-        "shaving gel": (.shave, .shaveGel),
-        "shave foam": (.shave, .shaveCream),
-        
-        // Aftershave aliases
-        "after shave": (.aftershave, .aftershaveLotion),
-        "aftershave": (.aftershave, .aftershaveLotion),
-        "post shave": (.aftershave, .aftershaveLotion),
-        "aftershave balm": (.aftershave, .aftershaveBalm),
-        "soothing balm": (.aftershave, .aftershaveBalm),
-        
+        "sunscreen": .sunscreen,
+        "spf": .sunscreen,
+        "sun protection": .sunscreen,
+        "face sunscreen": .faceSunscreen,
+        "body sunscreen": .bodySunscreen,
+        "lip balm": .lipBalm,
+
+        // Treatment aliases
+        "serum": .faceSerum,
+        "face serum": .faceSerum,
+        "essence": .faceSerum,
+        "ampoule": .faceSerum,
+        "exfoliator": .exfoliator,
+        "peel": .exfoliator,
+        "chemical peel": .chemicalPeel,
+        "spot treatment": .spotTreatment,
+        "acne treatment": .spotTreatment,
+        "retinol": .retinol,
+        "vitamin c": .vitaminC,
+        "ascorbic acid": .vitaminC,
+        "niacinamide": .niacinamide,
+
+        // Toner aliases
+        "toner": .toner,
+        "facial mist": .facialMist,
+        "face mist": .facialMist,
+        "facial spray": .facialMist,
+
         // Face oil aliases
-        "face oil": (.faceOil, nil),
-        "facial oil": (.faceOil, nil),
-        "oil": (.faceOil, nil),
-        
+        "face oil": .facialOil,
+        "facial oil": .facialOil,
+        "oil": .facialOil,
+
         // Mask aliases
-        "face mask": (.mask, .clayMask),
-        "clay mask": (.mask, .clayMask),
-        "sheet mask": (.mask, .sheetMask),
-        "sleeping mask": (.mask, .sleepingMask),
-        "overnight mask": (.mask, .sleepingMask)
+        "face mask": .faceMask,
+        "clay mask": .faceMask,
+        "sheet mask": .faceMask,
+        "sleeping mask": .faceMask,
+        "overnight mask": .faceMask,
+
+        // Shave aliases
+        "shave cream": .shaveCream,
+        "shaving cream": .shaveCream,
+        "shave gel": .shaveGel,
+        "shaving gel": .shaveGel,
+        "shave foam": .shaveCream,
+
+        // Aftershave aliases
+        "aftershave": .aftershave,
+        "after shave": .aftershave,
+        "post shave": .aftershave,
+        "aftershave balm": .aftershave,
+        "soothing balm": .aftershave,
+
+        // Body care aliases
+        "body lotion": .bodyLotion,
+        "body wash": .bodyWash,
+        "hand cream": .handCream,
+
+        // Hair care aliases
+        "shampoo": .shampoo,
+        "conditioner": .conditioner,
+        "hair oil": .hairOil,
+        "hair mask": .hairMask
     ]
-    
-    /// Normalize a product name to canonical slot and subtype
-    static func normalize(_ productName: String) -> (slot: SlotType, subtype: ProductSubtype?) {
+
+    /// Normalize a product name to canonical product type
+    static func normalize(_ productName: String) -> ProductType {
         let normalized = productName.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         // Direct match
-        if let mapping = aliases[normalized] {
-            return mapping
+        if let productType = aliases[normalized] {
+            return productType
         }
-        
+
         // Partial match - find the best match
-        for (alias, mapping) in aliases {
+        for (alias, productType) in aliases {
             if normalized.contains(alias) || alias.contains(normalized) {
-                return mapping
+                return productType
             }
         }
-        
+
         // Default fallback - try to infer from keywords
         if normalized.contains("cleanser") || normalized.contains("wash") {
-            return (.cleanser, .gelCleanser)
+            return .cleanser
         } else if normalized.contains("moisturizer") || normalized.contains("cream") || normalized.contains("lotion") {
-            return (.moisturizer, .lotionMoisturizer)
+            return .moisturizer
         } else if normalized.contains("serum") || normalized.contains("treatment") {
-            return (.treatment, .serum)
+            return .faceSerum
         } else if normalized.contains("sunscreen") || normalized.contains("spf") {
-            return (.sunscreen, .chemicalSPF)
+            return .sunscreen
+        } else if normalized.contains("toner") {
+            return .toner
+        } else if normalized.contains("oil") {
+            return .facialOil
+        } else if normalized.contains("mask") {
+            return .faceMask
         } else {
             // Ultimate fallback
-            return (.treatment, .serum)
+            return .faceSerum
         }
     }
 }
@@ -338,7 +495,7 @@ struct Product: Codable, Identifiable, Equatable {
     var price: Double?
     var size: String?
     var description: String?
-    
+
     init(id: String, displayName: String, tagging: ProductTagging, brand: String? = nil, link: URL? = nil, imageURL: URL? = nil, price: Double? = nil, size: String? = nil, description: String? = nil) {
         self.id = id
         self.displayName = displayName
@@ -350,13 +507,12 @@ struct Product: Codable, Identifiable, Equatable {
         self.size = size
         self.description = description
     }
-    
+
     /// Create a product from a product name with automatic tagging
     static func fromName(_ name: String, brand: String? = nil, budget: Budget = .mid) -> Product {
-        let (slot, subtype) = ProductAliasMapping.normalize(name)
-        let subtypes = subtype.map { [$0] } ?? []
-        let tagging = ProductTagging(slot: slot, subtypes: subtypes, budget: budget)
-        
+        let productType = ProductAliasMapping.normalize(name)
+        let tagging = ProductTagging(productType: productType, budget: budget)
+
         return Product(
             id: UUID().uuidString,
             displayName: name,
@@ -368,42 +524,38 @@ struct Product: Codable, Identifiable, Equatable {
 
 // MARK: - Updated Routine Step Model
 
-/// Updated routine step using SlotType
+/// Updated routine step using ProductType
 struct RoutineStep: Codable, Identifiable, Equatable {
     let id: String
-    let slot: SlotType
-    let subtypes: [ProductSubtype]?
+    let productType: ProductType
     let title: String           // UI: "Gentle Cleanser", "Niacinamide Serum"
     let instructions: String    // how/why
     let frequency: Frequency
     let constraints: Constraints
-    
-    init(slot: SlotType, subtypes: [ProductSubtype]? = nil, title: String, instructions: String, frequency: Frequency? = nil, constraints: Constraints = Constraints()) {
+
+    init(productType: ProductType, title: String, instructions: String, frequency: Frequency? = nil, constraints: Constraints = Constraints()) {
         self.id = UUID().uuidString
-        self.slot = slot
-        self.subtypes = subtypes
+        self.productType = productType
         self.title = title
         self.instructions = instructions
-        self.frequency = frequency ?? slot.defaultFrequency
+        self.frequency = frequency ?? productType.defaultFrequency
         self.constraints = constraints
     }
 }
 
 // MARK: - Product Slot Recommendation
 
-/// Recommendation for a product slot
-struct ProductSlotRecommendation: Codable, Identifiable, Equatable {
+/// Recommendation for a product type
+struct ProductTypeRecommendation: Codable, Identifiable, Equatable {
     let id: String
-    let slot: SlotType
-    let subtypes: [ProductSubtype]?
+    let productType: ProductType
     let notes: String?
     let constraints: Constraints
     let budget: Budget?
-    
-    init(slot: SlotType, subtypes: [ProductSubtype]? = nil, notes: String? = nil, constraints: Constraints = Constraints(), budget: Budget? = nil) {
+
+    init(productType: ProductType, notes: String? = nil, constraints: Constraints = Constraints(), budget: Budget? = nil) {
         self.id = UUID().uuidString
-        self.slot = slot
-        self.subtypes = subtypes
+        self.productType = productType
         self.notes = notes
         self.constraints = constraints
         self.budget = budget
@@ -412,25 +564,25 @@ struct ProductSlotRecommendation: Codable, Identifiable, Equatable {
 
 // MARK: - Migration Helpers
 
-/// Helper for migrating from old StepType to new SlotType
-extension SlotType {
+/// Helper for migrating from old StepType to new ProductType
+extension ProductType {
     /// Convert from old StepType
-    static func fromOldStepType(_ oldType: StepType) -> SlotType {
+    static func fromOldStepType(_ oldType: StepType) -> ProductType {
         switch oldType {
         case .cleanser: return .cleanser
-        case .treatment: return .treatment
+        case .treatment: return .faceSerum
         case .moisturizer: return .moisturizer
         case .sunscreen: return .sunscreen
-        case .optional: return .treatment // Map optional to treatment as default
+        case .optional: return .faceSerum // Map optional to face serum as default
         }
     }
 }
 
 /// Helper for migrating from old StepType
 extension StepType {
-    /// Convert to new SlotType
-    func toSlotType() -> SlotType {
-        return SlotType.fromOldStepType(self)
+    /// Convert to new ProductType
+    func toProductType() -> ProductType {
+        return ProductType.fromOldStepType(self)
     }
 }
 
@@ -440,6 +592,6 @@ extension StepType {
 struct TaxonomyVersion: Codable {
     let version: String
     let updatedAt: Date
-    
+
     static let current = TaxonomyVersion(version: "1.0.0", updatedAt: Date())
 }

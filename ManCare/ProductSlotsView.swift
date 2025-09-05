@@ -11,6 +11,7 @@ struct ProductSlotsView: View {
     @Environment(\.themeManager) private var tm
     @StateObject private var productService = ProductService()
     @State private var showingAddProduct = false
+
     var body: some View {
         VStack(spacing: 20) {
             // Header
@@ -29,7 +30,7 @@ struct ProductSlotsView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
-            
+
             // Simple list of user products
             List {
                 ForEach(productService.userProducts, id: \.id) { product in
@@ -73,10 +74,10 @@ struct ProductSlotsView: View {
 private struct SimpleProductRow: View {
     @Environment(\.themeManager) private var tm
     let product: Product
-    
+
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: product.tagging.slot.iconName)
+            Image(systemName: product.tagging.productType.iconName)
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(tm.theme.palette.secondary)
                 .frame(width: 24)
@@ -84,22 +85,22 @@ private struct SimpleProductRow: View {
                 Text(product.displayName)
                     .font(tm.theme.typo.body.weight(.medium))
                     .foregroundColor(tm.theme.palette.textPrimary)
-                
+
                 HStack(spacing: 8) {
                     if let brand = product.brand {
                         Text(brand)
                             .font(tm.theme.typo.caption)
                             .foregroundColor(tm.theme.palette.textMuted)
                     }
-                    
-                    Text(product.tagging.slot.displayName)
+
+                    Text(product.tagging.productType.displayName)
                         .font(tm.theme.typo.caption)
                         .foregroundColor(tm.theme.palette.textMuted)
                 }
             }
-            
+
             Spacer()
-            
+
             VStack(alignment: .trailing, spacing: 4) {
                 if let price = product.price {
                     Text("$\(String(format: "%.2f", price))")
@@ -117,7 +118,7 @@ private struct SimpleProductRow: View {
         }
         .padding(.vertical, 8)
     }
-    
+
     private func budgetTitle(_ budget: Budget) -> String {
         switch budget {
         case .low:
@@ -128,7 +129,7 @@ private struct SimpleProductRow: View {
             return "Premium"
         }
     }
-    
+
     private func budgetColor(_ budget: Budget) -> Color {
         switch budget {
         case .low:

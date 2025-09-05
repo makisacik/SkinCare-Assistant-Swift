@@ -99,7 +99,7 @@ struct NewRoutineResultView: View {
         if let routine = generatedRoutine {
             return routine.routine.morning.map { apiStep in
                 RoutineStep(
-                    slot: apiStep.step.toSlotType(),
+                    productType: apiStep.step.toProductType(),
                     title: apiStep.name,
                     instructions: "\(apiStep.why) - \(apiStep.how)"
                 )
@@ -111,7 +111,7 @@ struct NewRoutineResultView: View {
         
         // Always start with cleanser
         steps.append(RoutineStep(
-            slot: .cleanser,
+            productType: .cleanser,
             title: "Gentle Cleanser",
             instructions: "Oil-free gel cleanser – reduces shine, clears pores"
         ))
@@ -119,7 +119,7 @@ struct NewRoutineResultView: View {
         // Add treatment based on concerns
         if concerns.contains(.acne) {
             steps.append(RoutineStep(
-                slot: .treatment,
+                productType: .faceSerum,
                 title: "Acne Treatment",
                 instructions: "Salicylic acid serum – targets breakouts, prevents new ones"
             ))
@@ -127,7 +127,7 @@ struct NewRoutineResultView: View {
         
         if concerns.contains(.redness) {
             steps.append(RoutineStep(
-                slot: .treatment,
+                productType: .faceSerum,
                 title: "Soothing Serum",
                 instructions: "Centella serum – calms redness, reduces irritation"
             ))
@@ -135,13 +135,13 @@ struct NewRoutineResultView: View {
         
         // Always end with moisturizer and sunscreen
         steps.append(RoutineStep(
-            slot: .moisturizer,
+            productType: .moisturizer,
             title: "Moisturizer",
             instructions: "Lightweight gel moisturizer – hydrates without greasiness"
         ))
         
         steps.append(RoutineStep(
-            slot: .sunscreen,
+            productType: .sunscreen,
             title: "Sunscreen",
             instructions: "SPF 30+ broad spectrum – protects against sun damage"
         ))
@@ -154,7 +154,7 @@ struct NewRoutineResultView: View {
         if let routine = generatedRoutine {
             return routine.routine.evening.map { apiStep in
                 RoutineStep(
-                    slot: apiStep.step.toSlotType(),
+                    productType: apiStep.step.toProductType(),
                     title: apiStep.name,
                     instructions: "\(apiStep.why) - \(apiStep.how)"
                 )
@@ -166,7 +166,7 @@ struct NewRoutineResultView: View {
         
         // Always start with cleanser
         steps.append(RoutineStep(
-            slot: .cleanser,
+            productType: .cleanser,
             title: "Gentle Cleanser",
             instructions: "Oil-free gel cleanser – removes daily buildup"
         ))
@@ -175,25 +175,25 @@ struct NewRoutineResultView: View {
         switch mainGoal {
         case .reduceBreakouts:
             steps.append(RoutineStep(
-                slot: .treatment,
+                productType: .faceSerum,
                 title: "Retinol Treatment",
                 instructions: "Low-strength retinol – unclogs pores, reduces breakouts"
             ))
         case .sootheIrritation:
             steps.append(RoutineStep(
-                slot: .treatment,
+                productType: .faceSerum,
                 title: "Repair Serum",
                 instructions: "Ceramide serum – strengthens skin barrier"
             ))
         case .preventAging:
             steps.append(RoutineStep(
-                slot: .treatment,
+                productType: .faceSerum,
                 title: "Anti-aging Serum",
                 instructions: "Peptide serum – boosts collagen, reduces fine lines"
             ))
         default:
             steps.append(RoutineStep(
-                slot: .treatment,
+                productType: .faceSerum,
                 title: "Treatment Serum",
                 instructions: "Vitamin C serum – brightens, evens skin tone"
             ))
@@ -201,7 +201,7 @@ struct NewRoutineResultView: View {
         
         // Always end with moisturizer
         steps.append(RoutineStep(
-            slot: .moisturizer,
+            productType: .moisturizer,
             title: "Night Moisturizer",
             instructions: "Rich cream moisturizer – repairs while you sleep"
         ))
@@ -292,7 +292,7 @@ private struct RoutineStepRow: View {
             Spacer()
             
             // Step icon
-            Image(systemName: step.slot.iconName)
+            Image(systemName: step.productType.iconName)
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(tm.theme.palette.secondary.opacity(0.7))
         }

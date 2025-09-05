@@ -10,13 +10,12 @@ import SwiftUI
 struct AddProductView: View {
     @Environment(\.themeManager) private var tm
     @Environment(\.dismiss) private var dismiss
-    
+
     @StateObject private var productService = ProductService()
-    
+
     @State private var productName = ""
     @State private var brand = ""
-    @State private var selectedSlot: SlotType = .cleanser
-    @State private var selectedSubtypes: Set<ProductSubtype> = []
+    @State private var selectedProductType: ProductType = .cleanser
     @State private var selectedBudget: Budget = .mid
     @State private var ingredients: [String] = []
     @State private var claims: Set<String> = []
@@ -25,11 +24,12 @@ struct AddProductView: View {
     @State private var description = ""
     @State private var newIngredient = ""
     @State private var newClaim = ""
-    
+    @State private var showingProductTypeSelector = false
+
     let onProductAdded: (Product) -> Void
-    
+
     private let availableClaims = ["fragranceFree", "sensitiveSafe", "vegan", "crueltyFree", "dermatologistTested", "nonComedogenic"]
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -61,7 +61,7 @@ struct AddProductView: View {
                         }
                     }
                     .padding(.top, 20)
-                    
+
                     VStack(spacing: 20) {
                         // Basic Information
                         ProductFormSection(title: "Basic Information") {
@@ -72,23 +72,17 @@ struct AddProductView: View {
                                 FormField(title: "Size", text: $size, placeholder: "e.g., 150ml")
                             }
                         }
-                        
+
                         // Product Category
                         ProductFormSection(title: "Product Category") {
                             VStack(spacing: 16) {
-                                SlotTypeSelector(selectedSlot: $selectedSlot)
-                                
-                                if !selectedSlot.subtypes.isEmpty {
-                                    SubtypeSelector(
-                                        selectedSubtypes: $selectedSubtypes,
-                                        availableSubtypes: selectedSlot.subtypes
-                                    )
+                                ProductTypeSelectorButton(selectedProductType: $selectedProductType) {
+                                    showingProductTypeSelector = true
                                 }
-                                
                                 BudgetSelector(selectedBudget: $selectedBudget)
                             }
                         }
-                        
+
                         // Ingredients
                         ProductFormSection(title: "Ingredients") {
                             VStack(spacing: 16) {
@@ -103,7 +97,7 @@ struct AddProductView: View {
                                             RoundedRectangle(cornerRadius: 12)
                                                 .stroke(tm.theme.palette.separator, lineWidth: 1)
                                         )
-                                    
+
                                     Button {
                                         if !newIngredient.isEmpty {
                                             ingredients.append(newIngredient)
@@ -116,7 +110,7 @@ struct AddProductView: View {
                                     }
                                     .disabled(newIngredient.isEmpty)
                                 }
-                                
+
                                 if !ingredients.isEmpty {
                                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 8) {
                                         ForEach(ingredients, id: \.self) { ingredient in
@@ -128,7 +122,7 @@ struct AddProductView: View {
                                 }
                             }
                         }
-                        
+
                         // Claims
                         ProductFormSection(title: "Product Claims") {
                             VStack(spacing: 16) {
@@ -145,14 +139,14 @@ struct AddProductView: View {
                                 }
                             }
                         }
-                        
+
                         // Description
                         ProductFormSection(title: "Description") {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Product Description")
                                     .font(tm.theme.typo.body.weight(.semibold))
                                     .foregroundColor(tm.theme.palette.textPrimary)
-                                
+
                                 TextEditor(text: $description)
                                     .font(tm.theme.typo.body)
                                     .frame(minHeight: 100)
@@ -181,7 +175,7 @@ struct AddProductView: View {
                             .foregroundColor(tm.theme.palette.textSecondary)
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         saveProduct()
@@ -194,35 +188,29 @@ struct AddProductView: View {
                 }
             }
         }
+        .sheet(isPresented: $showingProductTypeSelector) {
+            ProductTypeSelectorSheet(selectedProductType: $selectedProductType)
+        }
         .onAppear {
-            // Auto-detect slot type from product name
+            // Auto-detect product type from product name
             if !productName.isEmpty {
-                let (detectedSlot, detectedSubtype) = ProductAliasMapping.normalize(productName)
-                selectedSlot = detectedSlot
-                if let subtype = detectedSubtype {
-                    selectedSubtypes = [subtype]
-                }
+                selectedProductType = ProductAliasMapping.normalize(productName)
             }
         }
         .onChange(of: productName) { newValue in
-            // Auto-detect slot type when product name changes
+            // Auto-detect product type when product name changes
             if !newValue.isEmpty {
-                let (detectedSlot, detectedSubtype) = ProductAliasMapping.normalize(newValue)
-                selectedSlot = detectedSlot
-                if let subtype = detectedSubtype {
-                    selectedSubtypes = [subtype]
-                }
+                selectedProductType = ProductAliasMapping.normalize(newValue)
             }
         }
     }
-    
+
     private func saveProduct() {
         let product = Product(
             id: UUID().uuidString,
             displayName: productName,
             tagging: ProductTagging(
-                slot: selectedSlot,
-                subtypes: Array(selectedSubtypes),
+                productType: selectedProductType,
                 ingredients: ingredients,
                 claims: Array(claims),
                 budget: selectedBudget
@@ -232,7 +220,7 @@ struct AddProductView: View {
             size: size.isEmpty ? nil : size,
             description: description.isEmpty ? nil : description
         )
-        
+
         productService.addUserProduct(product)
         onProductAdded(product)
         dismiss()
@@ -245,18 +233,18 @@ private struct ProductFormSection<Content: View>: View {
     @Environment(\.themeManager) private var tm
     let title: String
     let content: Content
-    
+
     init(title: String, @ViewBuilder content: () -> Content) {
         self.title = title
         self.content = content()
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(title)
                 .font(tm.theme.typo.title.weight(.semibold))
                 .foregroundColor(tm.theme.palette.textPrimary)
-            
+
             content
         }
         .padding(20)
@@ -271,13 +259,13 @@ private struct FormField: View {
     let title: String
     @Binding var text: String
     let placeholder: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(tm.theme.typo.body.weight(.semibold))
                 .foregroundColor(tm.theme.palette.textPrimary)
-            
+
             TextField(placeholder, text: $text)
                 .font(tm.theme.typo.body)
                 .padding(.horizontal, 16)
@@ -292,50 +280,84 @@ private struct FormField: View {
     }
 }
 
-private struct SlotTypeSelector: View {
+private struct ProductTypeSelectorButton: View {
     @Environment(\.themeManager) private var tm
-    @Binding var selectedSlot: SlotType
-    
+    @Binding var selectedProductType: ProductType
+    let onTap: () -> Void
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Product Type")
                 .font(tm.theme.typo.body.weight(.semibold))
                 .foregroundColor(tm.theme.palette.textPrimary)
-            
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 12) {
-                ForEach(SlotType.allCases) { slot in
-                    SlotTypeCard(slot: slot, isSelected: selectedSlot == slot) {
-                        selectedSlot = slot
+
+            Button(action: onTap) {
+                HStack(spacing: 16) {
+                    // Product Type Icon
+                    Image(systemName: selectedProductType.iconName)
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(tm.theme.palette.secondary)
+                        .frame(width: 32, height: 32)
+                        .background(tm.theme.palette.secondary.opacity(0.1))
+                        .cornerRadius(8)
+
+                    // Product Type Info
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(selectedProductType.displayName)
+                            .font(tm.theme.typo.body.weight(.semibold))
+                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .lineLimit(1)
+
+                        Text("Tap to change product type")
+                            .font(tm.theme.typo.caption)
+                            .foregroundColor(tm.theme.palette.textMuted)
                     }
+
+                    Spacer()
+
+                    // Chevron
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(tm.theme.palette.textMuted)
                 }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(tm.theme.palette.bg)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                )
             }
+            .buttonStyle(PlainButtonStyle())
         }
     }
 }
 
-private struct SlotTypeCard: View {
+private struct ProductTypeCard: View {
     @Environment(\.themeManager) private var tm
-    let slot: SlotType
+    let productType: ProductType
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: slot.iconName)
-                .font(.system(size: 24, weight: .medium))
+        VStack(spacing: 6) {
+            Image(systemName: productType.iconName)
+                .font(.system(size: 20, weight: .medium))
                 .foregroundColor(isSelected ? .white : tm.theme.palette.secondary)
-            
-            Text(slot.displayName)
+
+            Text(productType.displayName)
                 .font(tm.theme.typo.caption.weight(.medium))
                 .foregroundColor(isSelected ? .white : tm.theme.palette.textPrimary)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)
         }
-        .frame(height: 80)
+        .frame(height: 70)
         .frame(maxWidth: .infinity)
         .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.bg)
-        .cornerRadius(12)
+        .cornerRadius(10)
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 10)
                 .stroke(isSelected ? tm.theme.palette.secondary : tm.theme.palette.separator, lineWidth: 1)
         )
         .onTapGesture {
@@ -344,69 +366,17 @@ private struct SlotTypeCard: View {
     }
 }
 
-private struct SubtypeSelector: View {
-    @Environment(\.themeManager) private var tm
-    @Binding var selectedSubtypes: Set<ProductSubtype>
-    let availableSubtypes: [ProductSubtype]
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Subtype (Optional)")
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
-            
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 8) {
-                ForEach(availableSubtypes) { subtype in
-                    SubtypeToggle(
-                        subtype: subtype,
-                        isSelected: selectedSubtypes.contains(subtype)
-                    ) {
-                        if selectedSubtypes.contains(subtype) {
-                            selectedSubtypes.remove(subtype)
-                        } else {
-                            selectedSubtypes.insert(subtype)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-private struct SubtypeToggle: View {
-    @Environment(\.themeManager) private var tm
-    let subtype: ProductSubtype
-    let isSelected: Bool
-    let onTap: () -> Void
-    
-    var body: some View {
-        Text(subtype.displayName)
-            .font(tm.theme.typo.caption.weight(.medium))
-            .foregroundColor(isSelected ? .white : tm.theme.palette.textSecondary)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.bg)
-            .cornerRadius(16)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(isSelected ? tm.theme.palette.secondary : tm.theme.palette.separator, lineWidth: 1)
-            )
-            .onTapGesture {
-                onTap()
-            }
-    }
-}
 
 private struct BudgetSelector: View {
     @Environment(\.themeManager) private var tm
     @Binding var selectedBudget: Budget
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Budget Range")
                 .font(tm.theme.typo.body.weight(.semibold))
                 .foregroundColor(tm.theme.palette.textPrimary)
-            
+
             HStack(spacing: 12) {
                 ForEach(Budget.allCases, id: \.self) { budget in
                     BudgetCard(budget: budget, isSelected: selectedBudget == budget) {
@@ -423,13 +393,13 @@ private struct BudgetCard: View {
     let budget: Budget
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(budgetTitle(budget))
                 .font(tm.theme.typo.caption.weight(.semibold))
                 .foregroundColor(isSelected ? .white : budgetColor(budget))
-            
+
             Text(budgetDescription(budget))
                 .font(.system(size: 10))
                 .foregroundColor(isSelected ? .white.opacity(0.8) : tm.theme.palette.textMuted)
@@ -446,7 +416,7 @@ private struct BudgetCard: View {
             onTap()
         }
     }
-    
+
     private func budgetTitle(_ budget: Budget) -> String {
         switch budget {
         case .low: return "Budget"
@@ -454,7 +424,7 @@ private struct BudgetCard: View {
         case .high: return "Premium"
         }
     }
-    
+
     private func budgetDescription(_ budget: Budget) -> String {
         switch budget {
         case .low: return "$5-15"
@@ -462,7 +432,7 @@ private struct BudgetCard: View {
         case .high: return "$40+"
         }
     }
-    
+
     private func budgetColor(_ budget: Budget) -> Color {
         switch budget {
         case .low: return .green
@@ -476,13 +446,13 @@ private struct IngredientTag: View {
     @Environment(\.themeManager) private var tm
     let ingredient: String
     let onRemove: () -> Void
-    
+
     var body: some View {
         HStack(spacing: 4) {
             Text(ingredient)
                 .font(tm.theme.typo.caption)
                 .foregroundColor(tm.theme.palette.textPrimary)
-            
+
             Button(action: onRemove) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 12))
@@ -501,7 +471,7 @@ private struct ClaimToggle: View {
     let claim: String
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         Text(claimDisplayName(claim))
             .font(tm.theme.typo.caption.weight(.medium))
@@ -518,7 +488,7 @@ private struct ClaimToggle: View {
                 onTap()
             }
     }
-    
+
     private func claimDisplayName(_ claim: String) -> String {
         switch claim {
         case "fragranceFree": return "Fragrance Free"
@@ -532,14 +502,155 @@ private struct ClaimToggle: View {
     }
 }
 
-// MARK: - Extensions
+// MARK: - Product Type Selector Sheet
 
-extension SlotType {
-    /// Get available subtypes for this slot type
-    var subtypes: [ProductSubtype] {
-        return ProductSubtype.allCases.filter { $0.primarySlot == self }
+private struct ProductTypeSelectorSheet: View {
+    @Environment(\.themeManager) private var tm
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedProductType: ProductType
+    @State private var searchText = ""
+
+    var filteredProductTypes: [ProductType] {
+        if searchText.isEmpty {
+            return ProductType.allCases
+        } else {
+            return ProductType.allCases.filter { productType in
+                productType.displayName.localizedCaseInsensitiveContains(searchText) ||
+                productType.rawValue.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Header
+                VStack(spacing: 16) {
+                    HStack {
+                        Text("Select Product Type")
+                            .font(tm.theme.typo.h2)
+                            .foregroundColor(tm.theme.palette.textPrimary)
+
+                        Spacer()
+                    }
+
+                    // Search Bar
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(tm.theme.palette.textMuted)
+
+                        TextField("Search product types...", text: $searchText)
+                            .font(tm.theme.typo.body)
+                            .textFieldStyle(PlainTextFieldStyle())
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(tm.theme.palette.card)
+                    .cornerRadius(12)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 16)
+
+                // Product Types List
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(ProductCategory.allCases, id: \.self) { category in
+                            let categoryProducts = filteredProductTypes.filter { $0.category == category }
+                            if !categoryProducts.isEmpty {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    // Category Header
+                                    HStack {
+                                        Image(systemName: category.iconName)
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(tm.theme.palette.secondary)
+
+                                        Text(category.rawValue)
+                                            .font(tm.theme.typo.title.weight(.semibold))
+                                            .foregroundColor(tm.theme.palette.textPrimary)
+
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal, 20)
+
+                                    // Product Types in Category
+                                    VStack(spacing: 8) {
+                                        ForEach(categoryProducts) { productType in
+                                            ProductTypeRow(
+                                                productType: productType,
+                                                isSelected: selectedProductType == productType
+                                            ) {
+                                                selectedProductType = productType
+                                                dismiss()
+                                            }
+                                        }
+                                    }
+                                    .padding(.horizontal, 20)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.bottom, 20)
+                }
+            }
+            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .font(tm.theme.typo.body.weight(.semibold))
+                    .foregroundColor(tm.theme.palette.secondary)
+                }
+            }
+        }
     }
 }
+
+// MARK: - Product Type Row
+
+private struct ProductTypeRow: View {
+    @Environment(\.themeManager) private var tm
+    let productType: ProductType
+    let isSelected: Bool
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            HStack(spacing: 16) {
+                // Icon
+                Image(systemName: productType.iconName)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(isSelected ? .white : tm.theme.palette.secondary)
+                    .frame(width: 28, height: 28)
+                    .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.secondary.opacity(0.1))
+                    .cornerRadius(6)
+
+                // Name
+                Text(productType.displayName)
+                    .font(tm.theme.typo.body.weight(.medium))
+                    .foregroundColor(isSelected ? .white : tm.theme.palette.textPrimary)
+
+                Spacer()
+
+                // Selection Indicator
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(.white)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.card)
+            .cornerRadius(12)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// MARK: - Extensions
 
 // MARK: - Preview
 

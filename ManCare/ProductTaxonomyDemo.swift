@@ -15,17 +15,17 @@ class ProductTaxonomyDemo {
         print("=" * 50)
         
         // 1. Demonstrate slot type system
-        print("\n1. SLOT TYPES (Canonical routine positions)")
+        print("\n1. PRODUCT TYPES (Comprehensive product categories)")
         print("-" * 30)
-        for slot in SlotType.allCases {
-            print("• \(slot.displayName) (\(slot.rawValue))")
-            print("  Icon: \(slot.iconName)")
-            print("  Optional: \(slot.isOptional)")
-            print("  Default Frequency: \(slot.defaultFrequency.displayName)")
+        for productType in ProductType.allCases {
+            print("• \(productType.displayName) (\(productType.rawValue))")
+            print("  Icon: \(productType.iconName)")
+            print("  Optional: \(productType.isOptional)")
+            print("  Default Frequency: \(productType.defaultFrequency.displayName)")
         }
         
         // 2. Demonstrate product alias mapping
-        print("\n2. PRODUCT ALIAS MAPPING (Flexible names → Canonical slots)")
+        print("\n2. PRODUCT ALIAS MAPPING (Flexible names → Canonical product types)")
         print("-" * 30)
         let testNames = [
             "Gentle Foaming Cleanser",
@@ -39,9 +39,8 @@ class ProductTaxonomyDemo {
         ]
         
         for name in testNames {
-            let (slot, subtype) = ProductAliasMapping.normalize(name)
-            let subtypeText = subtype?.displayName ?? "None"
-            print("• '\(name)' → \(slot.displayName) (\(subtypeText))")
+            let productType = ProductAliasMapping.normalize(name)
+            print("• '\(name)' → \(productType.displayName)")
         }
         
         // 3. Demonstrate product creation
@@ -57,8 +56,8 @@ class ProductTaxonomyDemo {
         for product in products {
             print("• \(product.displayName)")
             print("  Brand: \(product.brand ?? "Unknown")")
-            print("  Slot: \(product.tagging.slot.displayName)")
-            print("  Subtypes: \(product.tagging.subtypes.map { $0.displayName }.joined(separator: ", "))")
+            print("  Product Type: \(product.tagging.productType.displayName)")
+            print("  Ingredients: \(product.tagging.ingredients.joined(separator: ", "))")
             print("  Budget: \(product.tagging.budget.rawValue)")
         }
         
@@ -83,8 +82,7 @@ class ProductTaxonomyDemo {
                 id: "1",
                 displayName: "Gentle Cleanser",
                 tagging: ProductTagging(
-                    slot: .cleanser,
-                    subtypes: [.gelCleanser],
+                    productType: .cleanser,
                     ingredients: ["ceramides", "hyaluronic acid"],
                     claims: ["fragranceFree", "sensitiveSafe"],
                     budget: .mid
@@ -95,8 +93,7 @@ class ProductTaxonomyDemo {
                 id: "2",
                 displayName: "Harsh Cleanser",
                 tagging: ProductTagging(
-                    slot: .cleanser,
-                    subtypes: [.gelCleanser],
+                    productType: .cleanser,
                     ingredients: ["alcohol", "fragrance"],
                     claims: [],
                     budget: .low
@@ -126,13 +123,13 @@ class ProductTaxonomyDemo {
         }
         
         // 6. Demonstrate backward compatibility
-        print("\n6. BACKWARD COMPATIBILITY (Old StepType → New SlotType)")
+        print("\n6. BACKWARD COMPATIBILITY (Old StepType → New ProductType)")
         print("-" * 30)
         let oldStepTypes: [StepType] = [.cleanser, .treatment, .moisturizer, .sunscreen, .optional]
         
         for oldType in oldStepTypes {
-            let newSlot = oldType.toSlotType()
-            print("• \(oldType.rawValue) → \(newSlot.displayName)")
+            let newProductType = oldType.toProductType()
+            print("• \(oldType.rawValue) → \(newProductType.displayName)")
         }
         
         print("\n" + "=" * 50)

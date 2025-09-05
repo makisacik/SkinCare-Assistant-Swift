@@ -44,9 +44,9 @@ class ProductService: ObservableObject {
         }
     }
     
-    /// Get user products for a specific slot
-    func getUserProducts(for slot: SlotType) -> [Product] {
-        return userProducts.filter { $0.tagging.slot == slot }
+    /// Get user products for a specific product type
+    func getUserProducts(for productType: ProductType) -> [Product] {
+        return userProducts.filter { $0.tagging.productType == productType }
     }
     
     /// Get user products matching constraints
@@ -68,14 +68,14 @@ class ProductService: ObservableObject {
         }
     }
     
-    /// Filter products by slot type
-    func filterProducts(by slot: SlotType) -> [Product] {
-        return userProducts.filter { $0.tagging.slot == slot }
+    /// Filter products by product type
+    func filterProducts(by productType: ProductType) -> [Product] {
+        return userProducts.filter { $0.tagging.productType == productType }
     }
     
-    /// Filter products by subtype
-    func filterProducts(by subtype: ProductSubtype) -> [Product] {
-        return userProducts.filter { $0.tagging.subtypes.contains(subtype) }
+    /// Filter products by category
+    func filterProducts(by category: ProductCategory) -> [Product] {
+        return userProducts.filter { $0.tagging.productType.category == category }
     }
     
     /// Filter products by budget
@@ -94,9 +94,9 @@ class ProductService: ObservableObject {
     
     // MARK: - Product Recommendations
     
-    /// Get product recommendations for a slot
-    func getRecommendations(for slot: SlotType, constraints: Constraints = Constraints(), budget: Budget? = nil) -> [Product] {
-        var candidates = userProducts.filter { $0.tagging.slot == slot }
+    /// Get product recommendations for a product type
+    func getRecommendations(for productType: ProductType, constraints: Constraints = Constraints(), budget: Budget? = nil) -> [Product] {
+        var candidates = userProducts.filter { $0.tagging.productType == productType }
         
         // Apply constraints
         candidates = candidates.filter { product in
@@ -113,16 +113,14 @@ class ProductService: ObservableObject {
     
     /// Create a product from a name with automatic tagging
     func createProductFromName(_ name: String, brand: String? = nil, budget: Budget = .mid, additionalInfo: [String: Any] = [:]) -> Product {
-        let (slot, subtype) = ProductAliasMapping.normalize(name)
-        let subtypes = subtype.map { [$0] } ?? []
+        let productType = ProductAliasMapping.normalize(name)
         
         // Extract ingredients and claims from additional info
         let ingredients = additionalInfo["ingredients"] as? [String] ?? []
         let claims = additionalInfo["claims"] as? [String] ?? []
         
         let tagging = ProductTagging(
-            slot: slot,
-            subtypes: subtypes,
+            productType: productType,
             ingredients: ingredients,
             claims: claims,
             budget: budget
@@ -160,7 +158,7 @@ class ProductService: ObservableObject {
         if let requiredSPF = constraints.spf, requiredSPF > 0 {
             // For now, assume all sunscreens meet SPF requirements
             // In a real app, you'd check the actual SPF value
-            if tagging.slot != .sunscreen {
+            if tagging.productType != .sunscreen && tagging.productType != .faceSunscreen && tagging.productType != .bodySunscreen {
                 return false
             }
         }
@@ -222,12 +220,12 @@ extension ProductService {
     /// Get statistics about user's product collection
     var productStats: ProductStats {
         let totalProducts = userProducts.count
-        let productsBySlot = Dictionary(grouping: userProducts, by: { $0.tagging.slot })
+        let productsByType = Dictionary(grouping: userProducts, by: { $0.tagging.productType })
         let productsByBudget = Dictionary(grouping: userProducts, by: { $0.tagging.budget })
         
         return ProductStats(
             totalProducts: totalProducts,
-            productsBySlot: productsBySlot,
+            productsByType: productsByType,
             productsByBudget: productsByBudget,
             averagePrice: userProducts.compactMap { $0.price }.reduce(0, +) / Double(max(userProducts.count, 1))
         )
@@ -236,7 +234,7 @@ extension ProductService {
 
 struct ProductStats {
     let totalProducts: Int
-    let productsBySlot: [SlotType: [Product]]
+    let productsByType: [ProductType: [Product]]
     let productsByBudget: [Budget: [Product]]
     let averagePrice: Double
 }
