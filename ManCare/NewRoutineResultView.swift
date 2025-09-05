@@ -13,6 +13,7 @@ struct NewRoutineResultView: View {
     let concerns: Set<Concern>
     let mainGoal: MainGoal
     let preferences: Preferences?
+    let generatedRoutine: RoutineResponse?
     let onRestart: () -> Void
     let onBack: () -> Void
     
@@ -71,6 +72,18 @@ struct NewRoutineResultView: View {
     }
     
     private func generateMorningRoutine() -> [RoutineStep] {
+        // Use generated routine if available
+        if let routine = generatedRoutine {
+            return routine.routine.morning.map { apiStep in
+                RoutineStep(
+                    title: apiStep.name,
+                    description: "\(apiStep.why) - \(apiStep.how)",
+                    iconName: iconNameForStepType(apiStep.step)
+                )
+            }
+        }
+
+        // Fallback to hardcoded routine
         var steps: [RoutineStep] = []
         
         // Always start with cleanser
@@ -114,6 +127,18 @@ struct NewRoutineResultView: View {
     }
     
     private func generateNightRoutine() -> [RoutineStep] {
+        // Use generated routine if available
+        if let routine = generatedRoutine {
+            return routine.routine.evening.map { apiStep in
+                RoutineStep(
+                    title: apiStep.name,
+                    description: "\(apiStep.why) - \(apiStep.how)",
+                    iconName: iconNameForStepType(apiStep.step)
+                )
+            }
+        }
+
+        // Fallback to hardcoded routine
         var steps: [RoutineStep] = []
         
         // Always start with cleanser
@@ -159,6 +184,23 @@ struct NewRoutineResultView: View {
         ))
         
         return steps
+    }
+
+    // MARK: - Helper Functions
+
+    private func iconNameForStepType(_ stepType: StepType) -> String {
+        switch stepType {
+        case .cleanser:
+            return "drop.fill"
+        case .treatment:
+            return "star.fill"
+        case .moisturizer:
+            return "drop.circle.fill"
+        case .sunscreen:
+            return "sun.max.fill"
+        case .optional:
+            return "plus.circle.fill"
+        }
     }
 }
 
@@ -369,6 +411,7 @@ private struct RoutineResultHeader: View {
         concerns: [.acne, .redness],
         mainGoal: .reduceBreakouts,
         preferences: nil,
+        generatedRoutine: nil,
         onRestart: {},
         onBack: {}
     )

@@ -16,6 +16,9 @@ struct MainFlowView: View {
     @State private var selectedConcerns: Set<Concern> = []
     @State private var selectedMainGoal: MainGoal?
     @State private var selectedPreferences: Preferences?
+    @State private var generatedRoutine: RoutineResponse?
+    @State private var isLoadingRoutine = false
+    @State private var routineError: Error?
     
     enum FlowStep {
         case welcome
@@ -124,8 +127,9 @@ struct MainFlowView: View {
                         "Optimizing for your preferences…"
                     ],
                     stepInterval: 2.0,
-                    autoFinish: true,
+                    autoFinish: false,
                     onFinished: {
+                        // This will be called when loading completes
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .results
                         }
@@ -137,6 +141,14 @@ struct MainFlowView: View {
                     }
                 )
                 .transition(.opacity) // loading can just fade
+                .onAppear {
+                    generateRoutine()
+                }
+                .onTapGesture {
+                    // Debug: Tap to retry routine generation
+                    print("🔄 Retrying routine generation...")
+                    generateRoutine()
+                }
 
             case .results:
                 NewRoutineResultView(
@@ -144,6 +156,7 @@ struct MainFlowView: View {
                     concerns: selectedConcerns,
                     mainGoal: selectedMainGoal ?? .healthierOverall,
                     preferences: selectedPreferences,
+                    generatedRoutine: generatedRoutine,
                     onRestart: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .welcome
@@ -151,6 +164,9 @@ struct MainFlowView: View {
                             selectedConcerns = []
                             selectedMainGoal = nil
                             selectedPreferences = nil
+                            generatedRoutine = nil
+                            routineError = nil
+                            isLoadingRoutine = false
                         }
                     },
                     onBack: {
@@ -170,6 +186,163 @@ struct MainFlowView: View {
         .transaction { t in t.disablesAnimations = true } // disables implicit animations
         .onChange(of: cs) { tm.refreshForSystemChange($0) }
     }
+
+    // MARK: - Routine Generation
+
+    private func generateRoutine() {
+        guard !isLoadingRoutine else { return }
+        guard let skinType = selectedSkinType,
+              let mainGoal = selectedMainGoal else {
+            routineError = GPTService.GPTServiceError.requestFailed(-1, "Missing required data")
+            return
+        }
+
+        guard Config.hasValidAPIKey else {
+            print("❌ API key not configured")
+            routineError = GPTService.GPTServiceError.requestFailed(-1, "API key not configured")
+            // Still transition to results to show fallback routine
+            withAnimation(.easeInOut(duration: 0.3)) {
+                currentStep = .results
+            }
+            return
+        }
+        
+        print("✅ API key is configured")
+
+        isLoadingRoutine = true
+        routineError = nil
+
+        Task {
+            do {
+                print("🚀 Starting routine generation...")
+                // Create GPTService instance
+                let gptService = GPTService(apiKey: Config.openAIAPIKey)
+
+                // Create the request using convenience method
+                let request = GPTService.createRequest(
+                    skinType: skinType,
+                    concerns: selectedConcerns,
+                    mainGoal: mainGoal,
+                    preferences: selectedPreferences,
+                    lifestyle: nil, // TODO: Add lifestyle collection
+                    locale: "en-US"
+                )
+
+                // Generate routine using GPTService with timeout
+                print("📡 Calling GPT API...")
+                print("📋 Request details:")
+                print("   - Skin Type: \(request.selectedSkinType)")
+                print("   - Concerns: \(request.selectedConcerns)")
+                print("   - Main Goal: \(request.selectedMainGoal)")
+                if let prefs = request.selectedPreferences {
+                    print("   - Preferences: fragranceFree=\(prefs.fragranceFreeOnly), sensitive=\(prefs.suitableForSensitiveSkin), natural=\(prefs.naturalIngredients), crueltyFree=\(prefs.crueltyFree), vegan=\(prefs.veganFriendly)")
+                } else {
+                    print("   - Preferences: None")
+                }
+                if let lifestyle = request.lifestyle {
+                    print("   - Lifestyle: sleep=\(lifestyle.sleepQuality ?? "nil"), exercise=\(lifestyle.exerciseFrequency ?? "nil"), depth=\(lifestyle.routineDepthPreference ?? "nil")")
+                } else {
+                    print("   - Lifestyle: None")
+                }
+                
+                let routine = try await withTimeout(seconds: 30) {
+                    try await gptService.generateRoutine(for: request)
+                }
+                
+                print("✅ Routine generated successfully!")
+                print("📄 API Response:")
+                print("   - Version: \(routine.version)")
+                print("   - Locale: \(routine.locale)")
+                print("   - Summary: \(routine.summary.title) - \(routine.summary.oneLiner)")
+                print("   - Routine Depth: \(routine.routine.depth)")
+                print("   - Morning Steps: \(routine.routine.morning.count)")
+                print("   - Evening Steps: \(routine.routine.evening.count)")
+                print("   - Weekly Steps: \(routine.routine.weekly?.count ?? 0)")
+                print("   - Product Slots: \(routine.productSlots.count)")
+                
+                // Print detailed routine steps
+                print("🌅 Morning Routine:")
+                for (index, step) in routine.routine.morning.enumerated() {
+                    print("   \(index + 1). \(step.name) (\(step.step.rawValue))")
+                    print("      Why: \(step.why)")
+                    print("      How: \(step.how)")
+                }
+                
+                print("🌙 Evening Routine:")
+                for (index, step) in routine.routine.evening.enumerated() {
+                    print("   \(index + 1). \(step.name) (\(step.step.rawValue))")
+                    print("      Why: \(step.why)")
+                    print("      How: \(step.how)")
+                }
+                
+                if let weeklySteps = routine.routine.weekly, !weeklySteps.isEmpty {
+                    print("📅 Weekly Routine:")
+                    for (index, step) in weeklySteps.enumerated() {
+                        print("   \(index + 1). \(step.name) (\(step.step.rawValue))")
+                        print("      Why: \(step.why)")
+                        print("      How: \(step.how)")
+                    }
+                }
+                
+                print("⚠️ Guardrails:")
+                print("   - Cautions: \(routine.guardrails.cautions)")
+                print("   - When to Stop: \(routine.guardrails.whenToStop)")
+                print("   - Sun Notes: \(routine.guardrails.sunNotes)")
+                
+                print("🎯 Adaptation:")
+                print("   - For Skin Type: \(routine.adaptation.forSkinType)")
+                print("   - For Concerns: \(routine.adaptation.forConcerns)")
+                print("   - For Preferences: \(routine.adaptation.forPreferences)")
+
+                await MainActor.run {
+                    self.generatedRoutine = routine
+                    self.isLoadingRoutine = false
+                    // Transition to results page
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        self.currentStep = .results
+                    }
+                }
+            } catch {
+                print("❌ Error generating routine: \(error)")
+                await MainActor.run {
+                    self.routineError = error
+                    self.isLoadingRoutine = false
+                    // Transition to results page even with error (fallback routine will be shown)
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        self.currentStep = .results
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Helper Functions
+    
+    private func withTimeout<T>(seconds: TimeInterval, operation: @escaping () async throws -> T) async throws -> T {
+        return try await withThrowingTaskGroup(of: T.self) { group in
+            group.addTask {
+                try await operation()
+            }
+            
+            group.addTask {
+                try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+                throw TimeoutError()
+            }
+            
+            guard let result = try await group.next() else {
+                throw TimeoutError()
+            }
+            
+            group.cancelAll()
+            return result
+        }
+    }
+}
+
+// MARK: - Timeout Error
+
+private struct TimeoutError: Error {
+    let message = "Request timed out"
 }
 
 // MARK: - Progress Indicator
@@ -247,6 +420,7 @@ private struct ProgressIndicator: View {
         concerns: [.acne, .redness],
         mainGoal: .reduceBreakouts,
         preferences: nil,
+        generatedRoutine: nil,
         onRestart: {},
         onBack: {}
     )
