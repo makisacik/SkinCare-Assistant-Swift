@@ -82,7 +82,7 @@ public final class GPTService {
     /// High-level call: builds system+user prompts and returns a typed RoutineResponse.
     func generateRoutine(for request: ManCareRoutineRequest,
                          routineDepthFallback: String? = nil,
-                         timeout: TimeInterval = 45) async throws -> RoutineResponse {
+                         timeout: TimeInterval = 60) async throws -> RoutineResponse {
         let system = Self.systemPrompt(schemaJSON: Self.schemaJSON)
         let user = Self.userPrompt(from: request, routineDepthFallback: routineDepthFallback)
         let json = try await completeJSON(systemPrompt: system, userPrompt: user, timeout: timeout)
@@ -90,8 +90,22 @@ public final class GPTService {
         do {
             let decoder = JSONDecoder()
             let data = Data(json.utf8)
-            return try decoder.decode(RoutineResponse.self, from: data)
+            let routine = try decoder.decode(RoutineResponse.self, from: data)
+            
+            // Validate the decoded response
+            print("✅ Successfully decoded RoutineResponse")
+            print("   - Version: \(routine.version)")
+            print("   - Locale: \(routine.locale)")
+            print("   - Summary: \(routine.summary.title)")
+            print("   - Morning steps: \(routine.routine.morning.count)")
+            print("   - Evening steps: \(routine.routine.evening.count)")
+            print("   - Weekly steps: \(routine.routine.weekly?.count ?? 0)")
+            
+            return routine
         } catch {
+            print("❌ Failed to decode RoutineResponse: \(error)")
+            print("📄 Raw JSON that failed to decode:")
+            print(json)
             throw GPTServiceError.decodingFailed(String(describing: error))
         }
     }
@@ -287,7 +301,7 @@ public final class GPTService {
 
     /// JSON Schema (exact structure your app expects).
     private static let schemaJSON: String = {
-        // Kept compact but exact; matches the `RoutineResponse` you decode into.
+        // Matches the `RoutineResponse` model exactly
         """
         {
           "version": "string",
@@ -298,48 +312,57 @@ public final class GPTService {
           },
           "routine": {
             "depth": "minimal|standard|detailed",
-            "morning": [ { "step": "cleanser|treatment|moisturizer|sunscreen|optional",
-                           "name": "string",
-                           "why": "string",
-                           "how": "string",
-                           "constraints": {
-                             "spf": 0,
-                             "fragrance_free": true,
-                             "sensitive_safe": true,
-                             "vegan": true,
-                             "cruelty_free": true,
-                             "avoid_ingredients": ["string"],
-                             "prefer_ingredients": ["string"]
-                           }
-            } ],
-            "evening": [ { "step": "cleanser|treatment|moisturizer|sunscreen|optional",
-                           "name": "string",
-                           "why": "string",
-                           "how": "string",
-                           "constraints": {
-                             "spf": 0,
-                             "fragrance_free": true,
-                             "sensitive_safe": true,
-                             "vegan": true,
-                             "cruelty_free": true,
-                             "avoid_ingredients": ["string"],
-                             "prefer_ingredients": ["string"]
-                           }
-            } ],
-            "weekly":  [ { "step": "optional",
-                           "name": "string",
-                           "why": "string",
-                           "how": "string",
-                           "constraints": {
-                             "spf": 0,
-                             "fragrance_free": true,
-                             "sensitive_safe": true,
-                             "vegan": true,
-                             "cruelty_free": true,
-                             "avoid_ingredients": ["string"],
-                             "prefer_ingredients": ["string"]
-                           }
-            } ]
+            "morning": [
+              {
+                "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+                "name": "string",
+                "why": "string",
+                "how": "string",
+                "constraints": {
+                  "spf": 0,
+                  "fragrance_free": true,
+                  "sensitive_safe": true,
+                  "vegan": true,
+                  "cruelty_free": true,
+                  "avoid_ingredients": ["string"],
+                  "prefer_ingredients": ["string"]
+                }
+              }
+            ],
+            "evening": [
+              {
+                "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+                "name": "string",
+                "why": "string",
+                "how": "string",
+                "constraints": {
+                  "spf": 0,
+                  "fragrance_free": true,
+                  "sensitive_safe": true,
+                  "vegan": true,
+                  "cruelty_free": true,
+                  "avoid_ingredients": ["string"],
+                  "prefer_ingredients": ["string"]
+                }
+              }
+            ],
+            "weekly": [
+              {
+                "step": "optional",
+                "name": "string",
+                "why": "string",
+                "how": "string",
+                "constraints": {
+                  "spf": 0,
+                  "fragrance_free": true,
+                  "sensitive_safe": true,
+                  "vegan": true,
+                  "cruelty_free": true,
+                  "avoid_ingredients": ["string"],
+                  "prefer_ingredients": ["string"]
+                }
+              }
+            ]
           },
           "guardrails": {
             "cautions": ["string"],

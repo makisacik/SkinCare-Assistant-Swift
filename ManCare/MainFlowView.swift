@@ -245,7 +245,7 @@ struct MainFlowView: View {
                     print("   - Lifestyle: None")
                 }
                 
-                let routine = try await withTimeout(seconds: 30) {
+                let routine = try await withTimeout(seconds: 60) {
                     try await gptService.generateRoutine(for: request)
                 }
                 
