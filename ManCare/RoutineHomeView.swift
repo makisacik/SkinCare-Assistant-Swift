@@ -10,39 +10,26 @@ import SwiftUI
 struct RoutineHomeView: View {
     @Environment(\.themeManager) private var tm
     let generatedRoutine: RoutineResponse?
-    let onBackToResults: () -> Void
 
     @StateObject private var routineTrackingService = RoutineTrackingService()
     @State private var selectedDate = Date()
     @State private var showingStepDetail: RoutineStepDetail?
-    @State private var selectedTab: HomeTab = .routine
+    @State private var showingEditRoutine = false
+    @State private var showingRoutineDetail: RoutineDetailData?
 
     var body: some View {
         VStack(spacing: 0) {
             // Header with greeting and user icon
             ModernHeaderView(
                 selectedDate: $selectedDate,
-                routineTrackingService: routineTrackingService,
-                onBackToResults: onBackToResults
+                routineTrackingService: routineTrackingService
             )
 
             // Calendar Strip
             CalendarStripView(selectedDate: $selectedDate, routineTrackingService: routineTrackingService)
 
-            // Tab Selector
-            HomeTabSelector(selectedTab: $selectedTab)
-
             // Content
-            TabView(selection: $selectedTab) {
-                // Routine Tab
-                routineTabContent
-                    .tag(HomeTab.routine)
-
-                // Products Tab
-                productsTabContent
-                    .tag(HomeTab.products)
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            routineTabContent
         }
         .background(
             LinearGradient(
@@ -58,6 +45,27 @@ struct RoutineHomeView: View {
         )
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
+        }
+        .sheet(isPresented: $showingEditRoutine) {
+            if let routine = generatedRoutine {
+                EditRoutineView(
+                    originalRoutine: routine,
+                    routineTrackingService: routineTrackingService
+                )
+            }
+        }
+        .sheet(item: $showingRoutineDetail) { routineData in
+            RoutineDetailView(
+                title: routineData.title,
+                iconName: routineData.iconName,
+                iconColor: routineData.iconColor,
+                steps: routineData.steps,
+                routineTrackingService: routineTrackingService,
+                selectedDate: selectedDate,
+                onStepTap: { step in
+                    showingStepDetail = step
+                }
+            )
         }
     }
 
@@ -75,7 +83,7 @@ struct RoutineHomeView: View {
                         Spacer()
 
                         Button {
-                            // TODO: Implement edit routines
+                            showingEditRoutine = true
                         } label: {
                             HStack(spacing: 4) {
                                 Text("Edit routines")
@@ -86,12 +94,6 @@ struct RoutineHomeView: View {
                                     .foregroundColor(.white.opacity(0.8))
                             }
                         }
-                        .overlay(
-                            Circle()
-                                .fill(Color.red)
-                                .frame(width: 8, height: 8)
-                                .offset(x: 8, y: -8)
-                        )
                     }
 
                     Text("Tap on a routine to complete")
@@ -110,6 +112,14 @@ struct RoutineHomeView: View {
                     steps: generateMorningRoutine(),
                     routineTrackingService: routineTrackingService,
                     selectedDate: selectedDate,
+                    onRoutineTap: {
+                        showingRoutineDetail = RoutineDetailData(
+                            title: "Morning routine",
+                            iconName: "sun.max.fill",
+                            iconColor: Color(red: 0.2, green: 0.6, blue: 0.9),
+                            steps: generateMorningRoutine()
+                        )
+                    },
                     onStepTap: { step in
                         showingStepDetail = step
                     }
@@ -127,6 +137,14 @@ struct RoutineHomeView: View {
                     steps: generateEveningRoutine(),
                     routineTrackingService: routineTrackingService,
                     selectedDate: selectedDate,
+                    onRoutineTap: {
+                        showingRoutineDetail = RoutineDetailData(
+                            title: "Evening routine",
+                            iconName: "moon.fill",
+                            iconColor: Color(red: 0.3, green: 0.4, blue: 0.8),
+                            steps: generateEveningRoutine()
+                        )
+                    },
                     onStepTap: { step in
                         showingStepDetail = step
                     }
@@ -145,6 +163,14 @@ struct RoutineHomeView: View {
                         steps: weeklySteps,
                         routineTrackingService: routineTrackingService,
                         selectedDate: selectedDate,
+                        onRoutineTap: {
+                            showingRoutineDetail = RoutineDetailData(
+                                title: "Weekly routine",
+                                iconName: "calendar",
+                                iconColor: Color(red: 0.4, green: 0.3, blue: 0.7),
+                                steps: weeklySteps
+                            )
+                        },
                         onStepTap: { step in
                             showingStepDetail = step
                         }
@@ -155,15 +181,6 @@ struct RoutineHomeView: View {
         }
     }
 
-    @ViewBuilder
-    private var productsTabContent: some View {
-        if let routine = generatedRoutine, !routine.productSlots.isEmpty {
-            ProductSlotsView(productSlots: routine.productSlots)
-        } else {
-            // Fallback product slots
-            ProductSlotsView(productSlots: generateFallbackProductSlots())
-        }
-    }
 
     // MARK: - Routine Generation
 
@@ -353,122 +370,6 @@ struct RoutineHomeView: View {
         }
     }
 
-    private func generateFallbackProductSlots() -> [ProductSlot] {
-        return [
-            ProductSlot(
-                slotID: "1",
-                step: .cleanser,
-                time: .AM,
-                constraints: Constraints(
-                    spf: 0,
-                    fragranceFree: true,
-                    sensitiveSafe: true,
-                    vegan: true,
-                    crueltyFree: true,
-                    avoidIngredients: [],
-                    preferIngredients: ["salicylic acid", "niacinamide"]
-                ),
-                budget: .mid,
-                notes: "Choose a gentle formula that suits your skin type."
-            ),
-            ProductSlot(
-                slotID: "2",
-                step: .treatment,
-                time: .AM,
-                constraints: Constraints(
-                    spf: 0,
-                    fragranceFree: true,
-                    sensitiveSafe: true,
-                    vegan: true,
-                    crueltyFree: true,
-                    avoidIngredients: [],
-                    preferIngredients: ["niacinamide"]
-                ),
-                budget: .mid,
-                notes: "Focus on ingredients that address your main concerns."
-            ),
-            ProductSlot(
-                slotID: "3",
-                step: .moisturizer,
-                time: .AM,
-                constraints: Constraints(
-                    spf: 0,
-                    fragranceFree: true,
-                    sensitiveSafe: true,
-                    vegan: true,
-                    crueltyFree: true,
-                    avoidIngredients: [],
-                    preferIngredients: ["hyaluronic acid"]
-                ),
-                budget: .mid,
-                notes: "Look for lightweight options that won't clog pores."
-            ),
-            ProductSlot(
-                slotID: "4",
-                step: .sunscreen,
-                time: .AM,
-                constraints: Constraints(
-                    spf: 30,
-                    fragranceFree: true,
-                    sensitiveSafe: true,
-                    vegan: true,
-                    crueltyFree: true,
-                    avoidIngredients: [],
-                    preferIngredients: []
-                ),
-                budget: .mid,
-                notes: "Ensure broad-spectrum protection for daily use."
-            ),
-            ProductSlot(
-                slotID: "5",
-                step: .cleanser,
-                time: .PM,
-                constraints: Constraints(
-                    spf: 0,
-                    fragranceFree: true,
-                    sensitiveSafe: true,
-                    vegan: true,
-                    crueltyFree: true,
-                    avoidIngredients: [],
-                    preferIngredients: ["salicylic acid", "niacinamide"]
-                ),
-                budget: .mid,
-                notes: "Use the same gentle cleanser as in the morning."
-            ),
-            ProductSlot(
-                slotID: "6",
-                step: .treatment,
-                time: .PM,
-                constraints: Constraints(
-                    spf: 0,
-                    fragranceFree: true,
-                    sensitiveSafe: true,
-                    vegan: true,
-                    crueltyFree: true,
-                    avoidIngredients: [],
-                    preferIngredients: ["retinol"]
-                ),
-                budget: .mid,
-                notes: "Retinol should be introduced gradually."
-            ),
-            ProductSlot(
-                slotID: "7",
-                step: .moisturizer,
-                time: .PM,
-                constraints: Constraints(
-                    spf: 0,
-                    fragranceFree: true,
-                    sensitiveSafe: true,
-                    vegan: true,
-                    crueltyFree: true,
-                    avoidIngredients: [],
-                    preferIngredients: ["peptides"]
-                ),
-                budget: .mid,
-                notes: "Opt for a nourishing night cream."
-            )
-        ]
-    }
 }
 
 
@@ -503,59 +404,12 @@ private struct CoachMessageView: View {
     }
 }
 
-// MARK: - Home Tab Selector
-
-private struct HomeTabSelector: View {
-    @Binding var selectedTab: HomeTab
-
-    var body: some View {
-        HStack(spacing: 0) {
-            ForEach(HomeTab.allCases, id: \.self) { tab in
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        selectedTab = tab
-                    }
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: tab.iconName)
-                            .font(.system(size: 16, weight: .semibold))
-                        Text(tab.title)
-                            .font(.system(size: 16, weight: .semibold))
-                    }
-                    .foregroundColor(selectedTab == tab ? .black : .white.opacity(0.7))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .background(
-                        selectedTab == tab ?
-                        Color.white :
-                        Color.clear
-                    )
-                    .cornerRadius(12)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white.opacity(0.08))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.15), lineWidth: 1)
-                )
-        )
-        .padding(.horizontal, 20)
-    }
-}
 
 // MARK: - Modern Header View
 
 private struct ModernHeaderView: View {
     @Binding var selectedDate: Date
     let routineTrackingService: RoutineTrackingService
-    let onBackToResults: () -> Void
 
     private var currentStreak: Int {
         routineTrackingService.getCurrentStreak()
@@ -563,24 +417,8 @@ private struct ModernHeaderView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            // Top bar with back button and date
+            // Top bar with streak and date
             HStack {
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    onBackToResults()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Back")
-                            .font(.system(size: 16, weight: .medium))
-                    }
-                    .foregroundColor(.white.opacity(0.8))
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Spacer()
-
                 // Streak display
                 if currentStreak > 0 {
                     HStack(spacing: 6) {
@@ -744,9 +582,8 @@ private struct ModernRoutineCard: View {
     let steps: [RoutineStepDetail]
     let routineTrackingService: RoutineTrackingService
     let selectedDate: Date
+    let onRoutineTap: () -> Void
     let onStepTap: (RoutineStepDetail) -> Void
-
-    @State private var isExpanded = false
 
     private var completedCount: Int {
         steps.filter { step in
@@ -760,102 +597,72 @@ private struct ModernRoutineCard: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            Button {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    isExpanded.toggle()
+        Button {
+            onRoutineTap()
+        } label: {
+            HStack(spacing: 16) {
+                // Icon with progress ring
+                ZStack {
+                    Circle()
+                        .fill(iconColor.opacity(0.2))
+                        .frame(width: 50, height: 50)
+
+                    // Progress ring
+                    Circle()
+                        .stroke(iconColor.opacity(0.3), lineWidth: 3)
+                        .frame(width: 50, height: 50)
+
+                    Circle()
+                        .trim(from: 0, to: progressPercentage)
+                        .stroke(iconColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                        .frame(width: 50, height: 50)
+                        .rotationEffect(.degrees(-90))
+                        .animation(.easeInOut(duration: 0.5), value: progressPercentage)
+
+                    Image(systemName: iconName)
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundColor(iconColor)
                 }
-            } label: {
-                HStack(spacing: 16) {
-                    // Icon with progress ring
-                    ZStack {
-                        Circle()
-                            .fill(iconColor.opacity(0.2))
-                            .frame(width: 50, height: 50)
 
-                        // Progress ring
-                        Circle()
-                            .stroke(iconColor.opacity(0.3), lineWidth: 3)
-                            .frame(width: 50, height: 50)
+                // Content
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.leading)
 
-                        Circle()
-                            .trim(from: 0, to: progressPercentage)
-                            .stroke(iconColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                            .frame(width: 50, height: 50)
-                            .rotationEffect(.degrees(-90))
-                            .animation(.easeInOut(duration: 0.5), value: progressPercentage)
+                    Text("\(completedCount)/\(productCount) completed")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white.opacity(0.6))
+                }
 
-                        Image(systemName: iconName)
-                            .font(.system(size: 24, weight: .semibold))
-                            .foregroundColor(iconColor)
-                    }
+                Spacer()
 
-                    // Content
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(title)
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-
-                        Text("\(completedCount)/\(productCount) completed")
-                            .font(.system(size: 14))
-                            .foregroundColor(.white.opacity(0.6))
-                    }
-
-                    Spacer()
-
-                    // Progress indicator
+                // Progress indicator and arrow
+                HStack(spacing: 8) {
                     VStack(spacing: 2) {
                         Text("\(Int(progressPercentage * 100))%")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(.white)
-
-                        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundColor(.white.opacity(0.6))
                     }
-                }
-                .padding(20)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.white.opacity(0.08))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.white.opacity(0.15), lineWidth: 1)
-                        )
-                )
-            }
-            .buttonStyle(PlainButtonStyle())
-            .padding(.horizontal, 20)
 
-            // Expanded content with steps
-            if isExpanded {
-                VStack(spacing: 12) {
-                    ForEach(steps) { step in
-                        RoutineStepRow(
-                            step: step,
-                            isCompleted: routineTrackingService.isStepCompleted(stepId: step.id, date: selectedDate),
-                            onToggle: {
-                                routineTrackingService.toggleStepCompletion(
-                                    stepId: step.id,
-                                    stepTitle: step.title,
-                                    stepType: step.stepType,
-                                    timeOfDay: step.timeOfDay,
-                                    date: selectedDate
-                                )
-                            },
-                            onTap: {
-                                onStepTap(step)
-                            }
-                        )
-                    }
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.white.opacity(0.6))
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .transition(.opacity.combined(with: .move(edge: .top)))
             }
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.white.opacity(0.08))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                    )
+            )
         }
+        .buttonStyle(PlainButtonStyle())
+        .padding(.horizontal, 20)
     }
 }
 
@@ -928,7 +735,7 @@ private struct RoutineStepRow: View {
                 Text(step.description)
                     .font(.system(size: 12))
                     .foregroundColor(.white.opacity(0.5))
-                    .lineLimit(2)
+                    .lineLimit(nil)
             }
 
             Spacer()
@@ -1094,31 +901,29 @@ struct RoutineStepDetail: Identifiable {
     }
 }
 
-enum TimeOfDay {
+enum TimeOfDay: String, Codable, CaseIterable {
     case morning, evening, weekly
-}
 
-enum HomeTab: CaseIterable {
-    case routine, products
-
-    var title: String {
+    var displayName: String {
         switch self {
-        case .routine:
-            return "Routine"
-        case .products:
-            return "Products"
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .routine:
-            return "calendar"
-        case .products:
-            return "shopping.cart"
+        case .morning:
+            return "Morning"
+        case .evening:
+            return "Evening"
+        case .weekly:
+            return "Weekly"
         }
     }
 }
+
+struct RoutineDetailData: Identifiable {
+    let id = UUID()
+    let title: String
+    let iconName: String
+    let iconColor: Color
+    let steps: [RoutineStepDetail]
+}
+
 
 // MARK: - Routine Step Detail View
 
@@ -1175,8 +980,7 @@ struct RoutineStepDetailView: View {
 
 #Preview("RoutineHomeView") {
     RoutineHomeView(
-        generatedRoutine: nil,
-        onBackToResults: {}
+        generatedRoutine: nil
     )
     .themed(ThemeManager())
 }

@@ -195,14 +195,8 @@ struct MainFlowView: View {
                 ))
 
             case .home:
-                RoutineHomeView(
-                    generatedRoutine: generatedRoutine,
-                    onBackToResults: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .results
-                        }
-                    }
-                )
+                MainTabView(generatedRoutine: generatedRoutine)
+                    .environment(\.themeManager, tm)
                 .transition(.asymmetric(
                     insertion: .move(edge: .trailing).combined(with: .opacity),
                     removal:   .move(edge: .leading).combined(with: .opacity)

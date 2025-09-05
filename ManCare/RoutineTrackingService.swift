@@ -199,29 +199,3 @@ struct CompletionStats {
 }
 
 // MARK: - Extensions
-
-extension TimeOfDay {
-    var rawValue: String {
-        switch self {
-        case .morning:
-            return "morning"
-        case .evening:
-            return "evening"
-        case .weekly:
-            return "weekly"
-        }
-    }
-    
-    init?(rawValue: String) {
-        switch rawValue {
-        case "morning":
-            self = .morning
-        case "evening":
-            self = .evening
-        case "weekly":
-            self = .weekly
-        default:
-            return nil
-        }
-    }
-}

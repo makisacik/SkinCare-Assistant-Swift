@@ -11,30 +11,65 @@ struct ProductSlotsView: View {
     @Environment(\.themeManager) private var tm
     let productSlots: [ProductSlot]
     
+    @State private var showingEditRoutine = false
+    @State private var selectedSlot: ProductSlot?
     var body: some View {
         VStack(spacing: 20) {
             // Header
             VStack(spacing: 8) {
-                Text("Product Recommendations")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
-                
-                Text("Based on your routine and preferences")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                HStack {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Product Recommendations")
+                            .font(tm.theme.typo.h1)
+                            .foregroundColor(tm.theme.palette.textPrimary)
+                        Text("Based on your routine and preferences")
+                            .font(tm.theme.typo.sub)
+                            .foregroundColor(tm.theme.palette.textSecondary)
+                    }
+
+                    Spacer()
+                    Button {
+                        showingEditRoutine = true
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "pencil")
+                                .font(.system(size: 14, weight: .semibold))
+                            Text("Edit Routine")
+                                .font(tm.theme.typo.body.weight(.medium))
+                        }
+                        .foregroundColor(tm.theme.palette.secondary)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(tm.theme.palette.secondary.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
             }
             .padding(.top, 20)
             
             ScrollView {
                 LazyVStack(spacing: 16) {
                     ForEach(productSlots, id: \.slotID) { slot in
-                        ProductSlotCard(slot: slot)
+                        ProductSlotCard(
+                            slot: slot,
+                            onEditStep: {
+                                selectedSlot = slot
+                            }
+                        )
                     }
                 }
                 .padding(20)
             }
         }
         .background(tm.theme.palette.bg.ignoresSafeArea())
+                            .sheet(isPresented: $showingEditRoutine) {
+                        // This would need the original routine - for now we'll show a placeholder
+                        Text("Edit Routine View")
+                    }
+        .sheet(item: $selectedSlot) { slot in
+            ProductSlotEditView(slot: slot)
+        }
     }
 }
 
@@ -43,6 +78,7 @@ struct ProductSlotsView: View {
 private struct ProductSlotCard: View {
     @Environment(\.themeManager) private var tm
     let slot: ProductSlot
+    let onEditStep: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -105,24 +141,46 @@ private struct ProductSlotCard: View {
                 }
             }
             
-            // Action button
-            Button {
-                // TODO: Implement product search/affiliate integration
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text("Find Products")
-                        .font(tm.theme.typo.body.weight(.semibold))
+            // Action buttons
+            HStack(spacing: 12) {
+                Button {
+                    onEditStep()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "pencil")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Edit Step")
+                            .font(tm.theme.typo.body.weight(.semibold))
+                    }
+                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(tm.theme.palette.bg)
+                    .cornerRadius(tm.theme.cardRadius)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: tm.theme.cardRadius)
+                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                    )
                 }
-                .foregroundColor(tm.theme.palette.secondary)
-                .frame(maxWidth: .infinity)
-                .frame(height: 44)
-                .background(tm.theme.palette.secondary.opacity(0.1))
-                .cornerRadius(tm.theme.cardRadius)
+                .buttonStyle(PlainButtonStyle())
+                Button {
+                    // TODO: Implement product search/affiliate integration
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Find Products")
+                            .font(tm.theme.typo.body.weight(.semibold))
+                    }
+                    .foregroundColor(tm.theme.palette.secondary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(tm.theme.palette.secondary.opacity(0.1))
+                    .cornerRadius(tm.theme.cardRadius)
+                }
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
         }
         .padding(20)
         .background(tm.theme.palette.card)

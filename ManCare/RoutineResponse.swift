@@ -59,7 +59,7 @@ struct APIRoutineStep: Codable {
     let constraints: Constraints
 }
 
-enum StepType: String, Codable { 
+enum StepType: String, Codable, CaseIterable { 
     case cleanser, treatment, moisturizer, sunscreen, optional 
 }
 
@@ -115,7 +115,7 @@ struct Adaptation: Codable {
 
 // MARK: - Product Slot
 
-struct ProductSlot: Codable {
+struct ProductSlot: Codable, Identifiable {
     let slotID: String
     let step: StepType
     let time: SlotTime
@@ -123,6 +123,7 @@ struct ProductSlot: Codable {
     let budget: Budget?
     let notes: String?
 
+    var id: String { slotID }
     enum CodingKeys: String, CodingKey {
         case slotID = "slot_id"
         case step

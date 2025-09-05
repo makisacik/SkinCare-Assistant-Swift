@@ -300,7 +300,7 @@ private struct RoutineStepRow: View {
                 Text(step.description)
                     .font(tm.theme.typo.body)
                     .foregroundColor(tm.theme.palette.textSecondary)
-                    .lineLimit(2)
+                    .lineLimit(nil)
             }
             
             Spacer()
