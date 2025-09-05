@@ -18,6 +18,9 @@ class ProductService: ObservableObject {
     private let userDefaults = UserDefaults.standard
     private let userProductsKey = "user_products"
     
+    // Shared instance for the entire app
+    static let shared = ProductService()
+
     init() {
         loadUserProducts()
     }
@@ -26,8 +29,18 @@ class ProductService: ObservableObject {
     
     /// Add a product to user's collection
     func addUserProduct(_ product: Product) {
+        print("📦 ProductService: Adding product to collection")
+        print("   Product ID: \(product.id)")
+        print("   Display Name: \(product.displayName)")
+        print("   Product Type: \(product.tagging.productType.displayName)")
+        print("   Brand: \(product.brand ?? "Unknown")")
+        print("   Current collection size: \(userProducts.count)")
+        
         userProducts.append(product)
         saveUserProducts()
+        
+        print("✅ ProductService: Product added successfully")
+        print("   New collection size: \(userProducts.count)")
     }
     
     /// Remove a product from user's collection
@@ -140,15 +153,23 @@ class ProductService: ObservableObject {
     // MARK: - Private Methods
     
     private func saveUserProducts() {
+        print("💾 ProductService: Saving \(userProducts.count) products to UserDefaults")
         if let data = try? JSONEncoder().encode(userProducts) {
             userDefaults.set(data, forKey: userProductsKey)
+            print("✅ ProductService: Products saved successfully")
+        } else {
+            print("❌ ProductService: Failed to encode products")
         }
     }
     
     private func loadUserProducts() {
+        print("📂 ProductService: Loading products from UserDefaults")
         if let data = userDefaults.data(forKey: userProductsKey),
            let products = try? JSONDecoder().decode([Product].self, from: data) {
             self.userProducts = products
+            print("✅ ProductService: Loaded \(products.count) products from storage")
+        } else {
+            print("ℹ️ ProductService: No saved products found, starting with empty collection")
         }
     }
     

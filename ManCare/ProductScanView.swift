@@ -15,6 +15,8 @@ struct ProductScanView: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var cameraManager = CameraManager()
+    @ObservedObject private var productService = ProductService.shared
+
     @State private var extractedText = ""
     @State private var isProcessing = false
     @State private var showingTextResult = false
@@ -22,6 +24,13 @@ struct ProductScanView: View {
     @State private var showingImagePicker = false
     @State private var isCapturing = false
     
+    // Auto-flow states
+    @State private var currentStep = ""
+    @State private var normalizedProduct: ProductNormalizationResponse?
+    @State private var createdProduct: Product?
+    @State private var processingError: String?
+    @State private var showingSuccess = false
+
     let onTextExtracted: (String) -> Void
     
     var body: some View {
@@ -225,17 +234,119 @@ struct ProductScanView: View {
                 
                 // Processing overlay
                 if isProcessing {
-                    Color.black.opacity(0.7)
+                    Color.black.opacity(0.8)
                         .ignoresSafeArea()
+                        .animation(.easeInOut(duration: 0.3), value: isProcessing)
                     
-                    VStack(spacing: 20) {
-                        ProgressView()
-                            .scaleEffect(1.5)
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    VStack(spacing: 24) {
+                        Spacer()
+
+                        VStack(spacing: 20) {
+                            ProgressView()
+                                .scaleEffect(1.8)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+
+                            VStack(spacing: 12) {
+                                Text(currentStep.isEmpty ? "Processing..." : currentStep)
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+
+                                if !extractedText.isEmpty {
+                                    Text("Extracted: \(extractedText)")
+                                        .font(.caption)
+                                        .foregroundColor(.white.opacity(0.8))
+                                        .multilineTextAlignment(.center)
+                                        .padding(.horizontal, 20)
+                                        .lineLimit(3)
+                                }
+                            }
+                        }
+                        .padding(30)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.black.opacity(0.6))
+                                .blur(radius: 1)
+                        )
+                        .padding(.horizontal, 40)
+
+                        Spacer()
+                    }
+                }
+
+                // Success overlay
+                if showingSuccess {
+                    Color.black.opacity(0.8)
+                        .ignoresSafeArea()
+                        .animation(.easeInOut(duration: 0.3), value: showingSuccess)
+
+                    VStack(spacing: 24) {
+                        Spacer()
                         
-                        Text("Processing image...")
+                        VStack(spacing: 20) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 80))
+                                .foregroundColor(.green)
+                                .scaleEffect(1.0)
+                                .animation(.spring(response: 0.6, dampingFraction: 0.8), value: showingSuccess)
+
+                            Text("Product Added Successfully!")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+
+                            if let product = createdProduct {
+                                VStack(spacing: 12) {
+                                    Text(product.displayName)
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.center)
+
+                                    Text(product.tagging.productType.displayName)
+                                        .font(.subheadline)
+                                        .foregroundColor(.white.opacity(0.8))
+
+                                    if let brand = product.brand {
+                                        Text("by \(brand)")
+                                            .font(.caption)
+                                            .foregroundColor(.white.opacity(0.6))
+                                    }
+                                }
+                                .padding(20)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(Color.white.opacity(0.15))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                        )
+                                )
+                            }
+
+                            Button("Done") {
+                                dismiss()
+                            }
                             .font(.headline)
+                            .fontWeight(.semibold)
                             .foregroundColor(.white)
+                            .padding(.horizontal, 40)
+                            .padding(.vertical, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .fill(Color.green)
+                            )
+                        }
+                        .padding(30)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.black.opacity(0.6))
+                                .blur(radius: 1)
+                        )
+                        .padding(.horizontal, 40)
+
+                        Spacer()
                     }
                 }
             }
@@ -252,6 +363,7 @@ struct ProductScanView: View {
                     showingTextResult = false
                     capturedImage = nil
                     extractedText = ""
+                    resetAutoFlow()
                 }
             )
         }
@@ -260,6 +372,9 @@ struct ProductScanView: View {
                 if let image = image {
                     print("✅ Image selected from gallery: \(image.size)")
                     capturedImage = image
+                    resetAutoFlow()
+                    print("🚀 Starting automatic processing flow from gallery...")
+                    startAutomaticFlow()
                 } else {
                     print("❌ No image selected from gallery")
                 }
@@ -285,6 +400,7 @@ struct ProductScanView: View {
         
         print("📸 Capturing photo...")
         isCapturing = true
+        resetAutoFlow()
         
         cameraManager.capturePhoto { image in
             DispatchQueue.main.async {
@@ -293,9 +409,9 @@ struct ProductScanView: View {
                     print("✅ Photo captured successfully")
                     self.capturedImage = image
                     print("🖼️ capturedImage set to: \(image.size)")
-                    print("🔍 Automatically starting OCR processing...")
-                    // Automatically process the image after capture
-                    self.processImage()
+                    print("🚀 Starting automatic processing flow...")
+                    // Start the automatic flow: OCR → GPT → Product Creation
+                    self.startAutomaticFlow()
                 } else {
                     print("❌ Failed to capture photo")
                 }
@@ -331,24 +447,26 @@ struct ProductScanView: View {
     }
     
     private func testOCR() {
-        print("🧪 Testing OCR with sample text image...")
+        print("🧪 Testing automatic flow with sample text image...")
         
         // Create a simple test image with text
         let testImage = createTestImage()
         capturedImage = testImage
+        resetAutoFlow()
         
-        // Process the test image
-        processImage()
+        // Start automatic flow
+        startAutomaticFlow()
     }
     
     private func testCameraCapture() {
-        print("🧪 Testing camera capture directly...")
+        print("🧪 Testing camera capture with automatic flow...")
         cameraManager.capturePhoto { image in
             if let image = image {
                 print("✅ Direct camera test successful: \(image.size)")
                 self.capturedImage = image
-                print("🔍 Automatically starting OCR processing...")
-                self.processImage()
+                self.resetAutoFlow()
+                print("🚀 Starting automatic processing flow...")
+                self.startAutomaticFlow()
             } else {
                 print("❌ Direct camera test failed")
             }
@@ -383,6 +501,115 @@ struct ProductScanView: View {
             
             attributedString.draw(in: textRect)
         }
+    }
+
+    // MARK: - Automatic Flow Functions
+
+    private func resetAutoFlow() {
+        currentStep = ""
+        normalizedProduct = nil
+        createdProduct = nil
+        processingError = nil
+        showingSuccess = false
+        extractedText = ""
+    }
+
+    private func startAutomaticFlow() {
+        guard let image = capturedImage else {
+            print("❌ No captured image to process")
+            return
+        }
+
+        print("🚀 Starting automatic processing flow...")
+        isProcessing = true
+        currentStep = "Step 1: Extracting text from image..."
+
+        // Step 1: OCR Text Extraction
+        OCRService.extractText(from: image) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let text):
+                    print("✅ Step 1 Complete - OCR Success!")
+                    print("   Extracted text: '\(text)'")
+                    self.extractedText = text
+                    self.currentStep = "Step 2: Normalizing with GPT..."
+
+                    // Step 2: GPT Normalization
+                    self.normalizeWithGPT()
+
+                case .failure(let error):
+                    print("❌ Step 1 Failed - OCR Error: \(error.localizedDescription)")
+                    self.processingError = "OCR failed: \(error.localizedDescription)"
+                    self.isProcessing = false
+                    self.currentStep = "OCR failed"
+                }
+            }
+        }
+    }
+
+    private func normalizeWithGPT() {
+        print("🔹 Step 2 — GPT normalization (cheap text call)")
+        print("Sending OCR text to GPT: '\(extractedText)'")
+
+        Task {
+            do {
+                let service = ProductNormalizationService()
+                let response = try await service.normalizeProduct(ocrText: extractedText)
+
+                await MainActor.run {
+                    print("✅ Step 2 Complete - GPT Normalization successful!")
+                    print("   Brand: \(response.brand ?? "Unknown")")
+                    print("   Product Name: \(response.productName)")
+                    print("   Product Type: \(response.productType)")
+                    print("   Confidence: \(response.confidence)")
+
+                    self.normalizedProduct = response
+                    self.currentStep = "Step 3: Creating and adding product..."
+
+                    // Step 3: Create and Add Product
+                    self.createAndAddProduct()
+                }
+
+            } catch {
+                await MainActor.run {
+                    print("❌ Step 2 Failed - GPT Normalization failed: \(error)")
+                    self.processingError = "GPT normalization failed: \(error.localizedDescription)"
+                    self.isProcessing = false
+                    self.currentStep = "GPT normalization failed"
+                }
+            }
+        }
+    }
+
+    private func createAndAddProduct() {
+        guard let normalized = normalizedProduct else {
+            print("❌ No normalized product data available")
+            processingError = "No normalized product data"
+            isProcessing = false
+            return
+        }
+
+        print("🔹 Step 3 — Creating and adding product")
+
+        // Create Product from normalized data
+        let product = normalized.toProduct(budget: .mid)
+
+        // Add to ProductService
+        productService.addUserProduct(product)
+
+        print("✅ Step 3 Complete - Product created and added!")
+        print("   Product ID: \(product.id)")
+        print("   Display Name: \(product.displayName)")
+        print("   Product Type: \(product.tagging.productType.displayName)")
+        print("   Brand: \(product.brand ?? "Unknown")")
+
+        // Show success
+        createdProduct = product
+        isProcessing = false
+        currentStep = "Product added successfully!"
+        showingSuccess = true
+
+        print("🎉 Automatic flow completed successfully!")
     }
 }
 

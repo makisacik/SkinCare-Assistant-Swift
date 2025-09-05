@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProductSlotsView: View {
     @Environment(\.themeManager) private var tm
-    @StateObject private var productService = ProductService()
+    @ObservedObject private var productService = ProductService.shared
     @State private var showingAddProduct = false
 
     var body: some View {
