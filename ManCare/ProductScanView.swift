@@ -504,7 +504,8 @@ struct TextResultView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 24) {
+            ScrollView {
+                VStack(spacing: 24) {
                 // Header
                 VStack(spacing: 12) {
                     Image(systemName: "text.viewfinder")
@@ -671,6 +672,7 @@ struct TextResultView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
+                }
             }
             .background(tm.theme.palette.bg.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)

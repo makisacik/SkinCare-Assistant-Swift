@@ -27,6 +27,13 @@ struct ProductNormalizationResponse: Codable {
     let productType: String
     let confidence: Double
     
+    enum CodingKeys: String, CodingKey {
+        case brand
+        case productName = "product_name"
+        case productType = "product_type"
+        case confidence
+    }
+
     /// Convert to ProductType enum
     func toProductType() -> ProductType {
         return ProductAliasMapping.normalize(productType)
