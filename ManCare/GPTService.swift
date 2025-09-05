@@ -136,7 +136,7 @@ public final class GPTService {
     }
 
     /// Sends a chat completion request forcing JSON output and returns the raw JSON string.
-    private func completeJSON(systemPrompt: String,
+    public func completeJSON(systemPrompt: String,
                               userPrompt: String,
                               timeout: TimeInterval) async throws -> String {
         let body = ChatRequest(

@@ -498,6 +498,10 @@ struct TextResultView: View {
     let onContinue: (String) -> Void
     let onRetake: () -> Void
     
+    @State private var isNormalizing = false
+    @State private var normalizedProduct: ProductNormalizationResponse?
+    @State private var normalizationError: String?
+
     var body: some View {
         NavigationView {
             VStack(spacing: 24) {
@@ -539,12 +543,106 @@ struct TextResultView: View {
                 
                 Spacer()
                 
+                // Normalized Product Results
+                if let normalized = normalizedProduct {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Normalized Product")
+                            .font(tm.theme.typo.title.weight(.semibold))
+                            .foregroundColor(tm.theme.palette.textPrimary)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Brand:")
+                                    .font(tm.theme.typo.body.weight(.medium))
+                                Text(normalized.brand ?? "Unknown")
+                                    .font(tm.theme.typo.body)
+                            }
+
+                            HStack {
+                                Text("Name:")
+                                    .font(tm.theme.typo.body.weight(.medium))
+                                Text(normalized.productName)
+                                    .font(tm.theme.typo.body)
+                            }
+
+                            HStack {
+                                Text("Type:")
+                                    .font(tm.theme.typo.body.weight(.medium))
+                                Text(normalized.productType)
+                                    .font(tm.theme.typo.body)
+                            }
+
+                            HStack {
+                                Text("Confidence:")
+                                    .font(tm.theme.typo.body.weight(.medium))
+                                Text(String(format: "%.1f%%", normalized.confidence * 100))
+                                    .font(tm.theme.typo.body)
+                                    .foregroundColor(normalized.confidence > 0.7 ? .green : .orange)
+                            }
+                        }
+                        .padding(16)
+                        .background(tm.theme.palette.card)
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                        )
+                    }
+                    .padding(.horizontal, 20)
+                }
+
+                // Error Message
+                if let error = normalizationError {
+                    Text("Normalization Error: \(error)")
+                        .font(tm.theme.typo.caption)
+                        .foregroundColor(.red)
+                        .padding(.horizontal, 20)
+                }
+
                 // Action Buttons
                 VStack(spacing: 12) {
+                    // GPT Normalization Button
+                    if normalizedProduct == nil && !isNormalizing {
+                        Button {
+                            normalizeWithGPT()
+                        } label: {
+                            HStack {
+                                Image(systemName: "brain.head.profile")
+                                Text("Normalize with GPT")
+                            }
+                            .font(tm.theme.typo.body.weight(.semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(Color.purple)
+                            .cornerRadius(12)
+                        }
+                    }
+
+                    // Processing indicator
+                    if isNormalizing {
+                        HStack {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                            Text("Normalizing with GPT...")
+                                .font(tm.theme.typo.body)
+                        }
+                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                    }
+
+                    // Continue with normalized or raw text
                     Button {
-                        onContinue(extractedText)
+                        if let normalized = normalizedProduct {
+                            // Use normalized product name
+                            onContinue(normalized.productName)
+                        } else {
+                            // Use raw OCR text
+                            onContinue(extractedText)
+                        }
                     } label: {
-                        Text("Continue with this text")
+                        Text(normalizedProduct != nil ? "Continue with Normalized Product" : "Continue with Raw Text")
                             .font(tm.theme.typo.body.weight(.semibold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -552,6 +650,7 @@ struct TextResultView: View {
                             .background(tm.theme.palette.secondary)
                             .cornerRadius(12)
                     }
+                    .disabled(isNormalizing)
                     
                     Button {
                         onRetake()
@@ -568,6 +667,7 @@ struct TextResultView: View {
                                     .stroke(tm.theme.palette.separator, lineWidth: 1)
                             )
                     }
+                    .disabled(isNormalizing)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
@@ -581,6 +681,39 @@ struct TextResultView: View {
                     }
                     .font(tm.theme.typo.body.weight(.medium))
                     .foregroundColor(tm.theme.palette.textSecondary)
+                }
+            }
+        }
+    }
+
+    private func normalizeWithGPT() {
+        print("🔹 Step 2 — GPT normalization (cheap text call)")
+        print("Sending OCR text to GPT: '\(extractedText)'")
+
+        isNormalizing = true
+        normalizationError = nil
+
+        Task {
+            do {
+                let service = ProductNormalizationService()
+                let response = try await service.normalizeProduct(ocrText: extractedText)
+
+                await MainActor.run {
+                    self.normalizedProduct = response
+                    self.isNormalizing = false
+
+                    print("✅ GPT Normalization successful:")
+                    print("   Brand: \(response.brand ?? "Unknown")")
+                    print("   Product Name: \(response.productName)")
+                    print("   Product Type: \(response.productType)")
+                    print("   Confidence: \(response.confidence)")
+                }
+
+            } catch {
+                await MainActor.run {
+                    self.normalizationError = error.localizedDescription
+                    self.isNormalizing = false
+                    print("❌ GPT Normalization failed: \(error)")
                 }
             }
         }
