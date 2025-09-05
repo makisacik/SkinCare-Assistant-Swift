@@ -3,7 +3,17 @@
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
+    <entity name="RoutineCompletion" representedClassName="RoutineCompletion" syncable="YES" codeGenerationType="class">
+        <attribute name="stepId" optional="NO" attributeType="String"/>
+        <attribute name="completionDate" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeOfDay" optional="NO" attributeType="String"/>
+        <attribute name="stepType" optional="NO" attributeType="String"/>
+        <attribute name="stepTitle" optional="NO" attributeType="String"/>
+        <attribute name="isCompleted" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <elements>
         <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
+        <element name="RoutineCompletion" positionX="-63" positionY="18" width="128" height="119"/>
     </elements>
 </model>
