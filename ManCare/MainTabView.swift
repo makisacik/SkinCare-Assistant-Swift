@@ -14,7 +14,7 @@ struct MainTabView: View {
     
     enum Tab: String, CaseIterable {
         case routines = "Routines"
-        case products = "Products"
+        case products = "My Products"
         case progress = "Progress"
         case profile = "Profile"
         
@@ -23,7 +23,7 @@ struct MainTabView: View {
             case .routines:
                 return "list.bullet.rectangle"
             case .products:
-                return "shopping.cart"
+                return "bag.fill"
             case .progress:
                 return "chart.line.uptrend.xyaxis"
             case .profile:

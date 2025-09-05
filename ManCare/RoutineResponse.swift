@@ -59,13 +59,13 @@ struct APIRoutineStep: Codable {
     let constraints: Constraints
 }
 
-enum StepType: String, Codable, CaseIterable { 
-    case cleanser, treatment, moisturizer, sunscreen, optional 
+enum StepType: String, Codable, CaseIterable {
+    case cleanser, treatment, moisturizer, sunscreen, optional
 }
 
 // MARK: - Constraints
 
-struct Constraints: Codable {
+struct Constraints: Codable, Equatable {
     let spf: Int?
     let fragranceFree: Bool?
     let sensitiveSafe: Bool?
@@ -73,6 +73,16 @@ struct Constraints: Codable {
     let crueltyFree: Bool?
     let avoidIngredients: [String]?
     let preferIngredients: [String]?
+
+    init(spf: Int? = nil, fragranceFree: Bool? = nil, sensitiveSafe: Bool? = nil, vegan: Bool? = nil, crueltyFree: Bool? = nil, avoidIngredients: [String]? = nil, preferIngredients: [String]? = nil) {
+        self.spf = spf
+        self.fragranceFree = fragranceFree
+        self.sensitiveSafe = sensitiveSafe
+        self.vegan = vegan
+        self.crueltyFree = crueltyFree
+        self.avoidIngredients = avoidIngredients
+        self.preferIngredients = preferIngredients
+    }
 
     enum CodingKeys: String, CodingKey {
         case spf
@@ -124,6 +134,12 @@ struct ProductSlot: Codable, Identifiable {
     let notes: String?
 
     var id: String { slotID }
+
+    /// Convert to new SlotType for forward compatibility
+    var slotType: SlotType {
+        return step.toSlotType()
+    }
+
     enum CodingKeys: String, CodingKey {
         case slotID = "slot_id"
         case step
@@ -138,6 +154,6 @@ enum SlotTime: String, Codable {
     case AM, PM, Weekly 
 }
 
-enum Budget: String, Codable { 
+enum Budget: String, Codable, CaseIterable { 
     case low, mid, high 
 }

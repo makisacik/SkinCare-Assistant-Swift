@@ -132,7 +132,7 @@ struct MainFlowView: View {
                         "Processing your concerns…",
                         "Evaluating your main goal…",
                         "Preparing routine results…",
-                        "Selecting targeted products…",
+                        "Creating product slots…",
                         "Optimizing for your preferences…"
                     ],
                     stepInterval: 2.0,

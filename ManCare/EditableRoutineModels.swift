@@ -33,6 +33,10 @@ struct EditableRoutineStep: Identifiable, Codable {
     var morningEnabled: Bool
     var eveningEnabled: Bool
     
+    /// Convert to new SlotType for forward compatibility
+    var slotType: SlotType {
+        return stepType.toSlotType()
+    }
     init(from apiStep: APIRoutineStep, timeOfDay: TimeOfDay, order: Int) {
         self.id = "\(timeOfDay.rawValue)_\(apiStep.name.replacingOccurrences(of: " ", with: "_"))"
         self.title = apiStep.name

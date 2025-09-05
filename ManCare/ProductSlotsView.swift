@@ -9,66 +9,43 @@ import SwiftUI
 
 struct ProductSlotsView: View {
     @Environment(\.themeManager) private var tm
+    @StateObject private var productService = ProductService()
+    @State private var showingAddProduct = false
     let productSlots: [ProductSlot]
-    
-    @State private var showingEditRoutine = false
-    @State private var selectedSlot: ProductSlot?
     var body: some View {
         VStack(spacing: 20) {
             // Header
             VStack(spacing: 8) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Product Recommendations")
-                            .font(tm.theme.typo.h1)
-                            .foregroundColor(tm.theme.palette.textPrimary)
-                        Text("Based on your routine and preferences")
-                            .font(tm.theme.typo.sub)
-                            .foregroundColor(tm.theme.palette.textSecondary)
-                    }
+                    Text("My Products")
+                        .font(tm.theme.typo.h1)
+                        .foregroundColor(tm.theme.palette.textPrimary)
 
                     Spacer()
-                    Button {
-                        showingEditRoutine = true
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "pencil")
-                                .font(.system(size: 14, weight: .semibold))
-                            Text("Edit Routine")
-                                .font(tm.theme.typo.body.weight(.medium))
-                        }
-                        .foregroundColor(tm.theme.palette.secondary)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(tm.theme.palette.secondary.opacity(0.1))
-                        .cornerRadius(8)
-                    }
-                    .buttonStyle(PlainButtonStyle())
                 }
+
+                Text("Store and manage your own products")
+                    .font(tm.theme.typo.sub)
+                    .foregroundColor(tm.theme.palette.textSecondary)
             }
+            .padding(.horizontal, 20)
             .padding(.top, 20)
             
             ScrollView {
                 LazyVStack(spacing: 16) {
                     ForEach(productSlots, id: \.slotID) { slot in
-                        ProductSlotCard(
-                            slot: slot,
-                            onEditStep: {
-                                selectedSlot = slot
-                            }
-                        )
+                        ProductSlotCard(slot: slot)
                     }
                 }
                 .padding(20)
             }
         }
         .background(tm.theme.palette.bg.ignoresSafeArea())
-                            .sheet(isPresented: $showingEditRoutine) {
-                        // This would need the original routine - for now we'll show a placeholder
-                        Text("Edit Routine View")
-                    }
-        .sheet(item: $selectedSlot) { slot in
-            ProductSlotEditView(slot: slot)
+        .sheet(isPresented: $showingAddProduct) {
+            AddProductView { product in
+                // Product added successfully
+                print("Added product: \(product.displayName)")
+            }
         }
     }
 }
@@ -77,8 +54,13 @@ struct ProductSlotsView: View {
 
 private struct ProductSlotCard: View {
     @Environment(\.themeManager) private var tm
+    @StateObject private var productService = ProductService()
+    @State private var showingAddProduct = false
     let slot: ProductSlot
-    let onEditStep: () -> Void
+
+    private var userProducts: [Product] {
+        productService.getUserProducts(for: slot.slotType)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -88,13 +70,13 @@ private struct ProductSlotCard: View {
                     Circle()
                         .fill(tm.theme.palette.secondary.opacity(0.15))
                         .frame(width: 32, height: 32)
-                    Image(systemName: iconNameForStepType(slot.step))
+                    Image(systemName: slot.slotType.iconName)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(tm.theme.palette.secondary)
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(stepTypeTitle(slot.step))
+                    Text(slot.slotType.displayName)
                         .font(tm.theme.typo.title)
                         .foregroundColor(tm.theme.palette.textPrimary)
                     
@@ -110,10 +92,10 @@ private struct ProductSlotCard: View {
                 }
             }
             
-            // Product hints
+            // Product category description
             if let notes = slot.notes {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Product Hints")
+                    Text("Product Category")
                         .font(tm.theme.typo.body.weight(.semibold))
                         .foregroundColor(tm.theme.palette.textPrimary)
                     
@@ -123,19 +105,26 @@ private struct ProductSlotCard: View {
                 }
             }
             
-            // Constraints
-            if hasConstraints(slot.constraints) {
+            // User products for this slot
+            if !userProducts.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Requirements")
+                    Text("Your Products (\(userProducts.count))")
                         .font(tm.theme.typo.body.weight(.semibold))
                         .foregroundColor(tm.theme.palette.textPrimary)
                     
-                    LazyVGrid(columns: [
-                        GridItem(.flexible()),
-                        GridItem(.flexible())
-                    ], spacing: 8) {
-                        ForEach(constraintItems(slot.constraints), id: \.title) { item in
-                            ConstraintItem(item: item)
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 8) {
+                        ForEach(userProducts.prefix(3)) { product in
+                            UserProductCard(product: product)
+                        }
+
+                        if userProducts.count > 3 {
+                            Text("+\(userProducts.count - 3) more")
+                                .font(tm.theme.typo.caption)
+                                .foregroundColor(tm.theme.palette.textMuted)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(tm.theme.palette.bg)
+                                .cornerRadius(8)
                         }
                     }
                 }
@@ -144,12 +133,31 @@ private struct ProductSlotCard: View {
             // Action buttons
             HStack(spacing: 12) {
                 Button {
-                    onEditStep()
+                    showingAddProduct = true
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 } label: {
                     HStack(spacing: 8) {
-                        Image(systemName: "pencil")
+                        Image(systemName: "plus.circle.fill")
                             .font(.system(size: 16, weight: .semibold))
-                        Text("Edit Step")
+                        Text("Add Product")
+                            .font(tm.theme.typo.body.weight(.semibold))
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(tm.theme.palette.secondary)
+                    .cornerRadius(tm.theme.cardRadius)
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                Button {
+                    // TODO: Implement view products functionality
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "list.bullet")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("View Products")
                             .font(tm.theme.typo.body.weight(.semibold))
                     }
                     .foregroundColor(tm.theme.palette.textSecondary)
@@ -163,60 +171,19 @@ private struct ProductSlotCard: View {
                     )
                 }
                 .buttonStyle(PlainButtonStyle())
-                Button {
-                    // TODO: Implement product search/affiliate integration
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "magnifyingglass")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Find Products")
-                            .font(tm.theme.typo.body.weight(.semibold))
-                    }
-                    .foregroundColor(tm.theme.palette.secondary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .background(tm.theme.palette.secondary.opacity(0.1))
-                    .cornerRadius(tm.theme.cardRadius)
-                }
-                .buttonStyle(PlainButtonStyle())
             }
         }
         .padding(20)
         .background(tm.theme.palette.card)
         .cornerRadius(tm.theme.cardRadius)
         .shadow(color: tm.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
-    }
-    
-    private func iconNameForStepType(_ stepType: StepType) -> String {
-        switch stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .treatment:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        case .optional:
-            return "plus.circle.fill"
+        .sheet(isPresented: $showingAddProduct) {
+            AddProductView { product in
+                productService.addUserProduct(product)
+            }
         }
     }
     
-    private func stepTypeTitle(_ stepType: StepType) -> String {
-        switch stepType {
-        case .cleanser:
-            return "Cleanser"
-        case .treatment:
-            return "Face Serum"
-        case .moisturizer:
-            return "Moisturizer"
-        case .sunscreen:
-            return "Sunscreen"
-        case .optional:
-            return "Optional Treatment"
-        }
-    }
     
     private func timeOfDayTitle(_ time: SlotTime) -> String {
         switch time {
@@ -229,59 +196,42 @@ private struct ProductSlotCard: View {
         }
     }
     
-    private func hasConstraints(_ constraints: Constraints) -> Bool {
-        return constraints.fragranceFree == true ||
-               constraints.sensitiveSafe == true ||
-               constraints.vegan == true ||
-               constraints.crueltyFree == true ||
-               !(constraints.avoidIngredients?.isEmpty ?? true) ||
-               !(constraints.preferIngredients?.isEmpty ?? true)
-    }
+}
+
+// MARK: - User Product Card
+
+private struct UserProductCard: View {
+    @Environment(\.themeManager) private var tm
+    let product: Product
     
-    private func constraintItems(_ constraints: Constraints) -> [ConstraintItemData] {
-        var items: [ConstraintItemData] = []
-        
-        if constraints.fragranceFree == true {
-            items.append(ConstraintItemData(
-                title: "Fragrance Free",
-                iconName: "leaf.fill",
-                color: .green
-            ))
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(product.displayName)
+                .font(tm.theme.typo.caption.weight(.medium))
+                .foregroundColor(tm.theme.palette.textPrimary)
+                .lineLimit(2)
+
+            if let brand = product.brand {
+                Text(brand)
+                    .font(.system(size: 10))
+                    .foregroundColor(tm.theme.palette.textMuted)
+                    .lineLimit(1)
+            }
+
+            if let price = product.price {
+                Text("$\(String(format: "%.2f", price))")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundColor(tm.theme.palette.secondary)
+            }
         }
-        
-        if constraints.sensitiveSafe == true {
-            items.append(ConstraintItemData(
-                title: "Sensitive Safe",
-                iconName: "heart.fill",
-                color: .pink
-            ))
-        }
-        
-        if constraints.vegan == true {
-            items.append(ConstraintItemData(
-                title: "Vegan",
-                iconName: "leaf.circle.fill",
-                color: .green
-            ))
-        }
-        
-        if constraints.crueltyFree == true {
-            items.append(ConstraintItemData(
-                title: "Cruelty Free",
-                iconName: "pawprint.fill",
-                color: .orange
-            ))
-        }
-        
-        if let spf = constraints.spf, spf > 0 {
-            items.append(ConstraintItemData(
-                title: "SPF \(spf)+",
-                iconName: "sun.max.fill",
-                color: .yellow
-            ))
-        }
-        
-        return items
+        .padding(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(tm.theme.palette.bg)
+        .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(tm.theme.palette.separator, lineWidth: 1)
+        )
     }
 }
 
@@ -324,53 +274,6 @@ private struct BudgetBadge: View {
     }
 }
 
-// MARK: - Constraint Item
-
-private struct ConstraintItem: View {
-    @Environment(\.themeManager) private var tm
-    let item: ConstraintItemData
-    
-    var body: some View {
-        HStack(spacing: 6) {
-            Image(systemName: item.iconName)
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(item.color)
-            
-            Text(item.title)
-                .font(tm.theme.typo.caption)
-                .foregroundColor(tm.theme.palette.textSecondary)
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(tm.theme.palette.bg)
-        .cornerRadius(6)
-        .help(tooltipText(for: item.title))
-    }
-    private func tooltipText(for title: String) -> String {
-        switch title {
-        case "Fragrance Free":
-            return "No artificial fragrances - minimal irritation risk"
-        case "Sensitive Safe":
-            return "Formulated for sensitive skin - minimal irritation risk"
-        case "Vegan":
-            return "No animal-derived ingredients"
-        case "Cruelty Free":
-            return "Not tested on animals"
-        case let spf where spf.hasPrefix("SPF"):
-            return "Sun Protection Factor - blocks UV rays"
-        default:
-            return title
-        }
-    }
-}
-
-// MARK: - Models
-
-struct ConstraintItemData {
-    let title: String
-    let iconName: String
-    let color: Color
-}
 
 // MARK: - Preview
 
@@ -382,15 +285,15 @@ struct ConstraintItemData {
             time: .AM,
             constraints: Constraints(
                 spf: 0,
-                fragranceFree: true,
-                sensitiveSafe: true,
-                vegan: true,
-                crueltyFree: true,
-                avoidIngredients: [],
-                preferIngredients: ["salicylic acid", "niacinamide"]
+                fragranceFree: nil,
+                sensitiveSafe: nil,
+                vegan: nil,
+                crueltyFree: nil,
+                avoidIngredients: nil,
+                preferIngredients: nil
             ),
             budget: .mid,
-            notes: "Choose a gentle formula that suits normal skin."
+            notes: "Store your cleanser products here"
         ),
         ProductSlot(
             slotID: "2",
@@ -398,15 +301,15 @@ struct ConstraintItemData {
             time: .AM,
             constraints: Constraints(
                 spf: 0,
-                fragranceFree: true,
-                sensitiveSafe: true,
-                vegan: true,
-                crueltyFree: true,
-                avoidIngredients: [],
-                preferIngredients: ["niacinamide"]
+                fragranceFree: nil,
+                sensitiveSafe: nil,
+                vegan: nil,
+                crueltyFree: nil,
+                avoidIngredients: nil,
+                preferIngredients: nil
             ),
             budget: .mid,
-            notes: "Focus on pore-minimizing ingredients."
+            notes: "Store your treatment products here"
         )
     ])
     .themed(ThemeManager())

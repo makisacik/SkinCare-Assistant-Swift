@@ -99,9 +99,9 @@ struct NewRoutineResultView: View {
         if let routine = generatedRoutine {
             return routine.routine.morning.map { apiStep in
                 RoutineStep(
+                    slot: apiStep.step.toSlotType(),
                     title: apiStep.name,
-                    description: "\(apiStep.why) - \(apiStep.how)",
-                    iconName: iconNameForStepType(apiStep.step)
+                    instructions: "\(apiStep.why) - \(apiStep.how)"
                 )
             }
         }
@@ -111,39 +111,39 @@ struct NewRoutineResultView: View {
         
         // Always start with cleanser
         steps.append(RoutineStep(
+            slot: .cleanser,
             title: "Gentle Cleanser",
-            description: "Oil-free gel cleanser – reduces shine, clears pores",
-            iconName: "drop.fill"
+            instructions: "Oil-free gel cleanser – reduces shine, clears pores"
         ))
         
         // Add treatment based on concerns
         if concerns.contains(.acne) {
             steps.append(RoutineStep(
+                slot: .treatment,
                 title: "Acne Treatment",
-                description: "Salicylic acid serum – targets breakouts, prevents new ones",
-                iconName: "circle.grid.cross.left.fill"
+                instructions: "Salicylic acid serum – targets breakouts, prevents new ones"
             ))
         }
         
         if concerns.contains(.redness) {
             steps.append(RoutineStep(
+                slot: .treatment,
                 title: "Soothing Serum",
-                description: "Centella serum – calms redness, reduces irritation",
-                iconName: "thermometer.snowflake"
+                instructions: "Centella serum – calms redness, reduces irritation"
             ))
         }
         
         // Always end with moisturizer and sunscreen
         steps.append(RoutineStep(
+            slot: .moisturizer,
             title: "Moisturizer",
-            description: "Lightweight gel moisturizer – hydrates without greasiness",
-            iconName: "drop.circle.fill"
+            instructions: "Lightweight gel moisturizer – hydrates without greasiness"
         ))
         
         steps.append(RoutineStep(
+            slot: .sunscreen,
             title: "Sunscreen",
-            description: "SPF 30+ broad spectrum – protects against sun damage",
-            iconName: "sun.max.fill"
+            instructions: "SPF 30+ broad spectrum – protects against sun damage"
         ))
         
         return steps
@@ -154,9 +154,9 @@ struct NewRoutineResultView: View {
         if let routine = generatedRoutine {
             return routine.routine.evening.map { apiStep in
                 RoutineStep(
+                    slot: apiStep.step.toSlotType(),
                     title: apiStep.name,
-                    description: "\(apiStep.why) - \(apiStep.how)",
-                    iconName: iconNameForStepType(apiStep.step)
+                    instructions: "\(apiStep.why) - \(apiStep.how)"
                 )
             }
         }
@@ -166,44 +166,44 @@ struct NewRoutineResultView: View {
         
         // Always start with cleanser
         steps.append(RoutineStep(
+            slot: .cleanser,
             title: "Gentle Cleanser",
-            description: "Oil-free gel cleanser – removes daily buildup",
-            iconName: "drop.fill"
+            instructions: "Oil-free gel cleanser – removes daily buildup"
         ))
         
         // Add treatment based on main goal
         switch mainGoal {
         case .reduceBreakouts:
             steps.append(RoutineStep(
+                slot: .treatment,
                 title: "Retinol Treatment",
-                description: "Low-strength retinol – unclogs pores, reduces breakouts",
-                iconName: "star.fill"
+                instructions: "Low-strength retinol – unclogs pores, reduces breakouts"
             ))
         case .sootheIrritation:
             steps.append(RoutineStep(
+                slot: .treatment,
                 title: "Repair Serum",
-                description: "Ceramide serum – strengthens skin barrier",
-                iconName: "shield.fill"
+                instructions: "Ceramide serum – strengthens skin barrier"
             ))
         case .preventAging:
             steps.append(RoutineStep(
+                slot: .treatment,
                 title: "Anti-aging Serum",
-                description: "Peptide serum – boosts collagen, reduces fine lines",
-                iconName: "sparkles"
+                instructions: "Peptide serum – boosts collagen, reduces fine lines"
             ))
         default:
             steps.append(RoutineStep(
+                slot: .treatment,
                 title: "Treatment Serum",
-                description: "Vitamin C serum – brightens, evens skin tone",
-                iconName: "sun.max.fill"
+                instructions: "Vitamin C serum – brightens, evens skin tone"
             ))
         }
         
         // Always end with moisturizer
         steps.append(RoutineStep(
+            slot: .moisturizer,
             title: "Night Moisturizer",
-            description: "Rich cream moisturizer – repairs while you sleep",
-            iconName: "moon.circle.fill"
+            instructions: "Rich cream moisturizer – repairs while you sleep"
         ))
         
         return steps
@@ -211,20 +211,6 @@ struct NewRoutineResultView: View {
 
     // MARK: - Helper Functions
 
-    private func iconNameForStepType(_ stepType: StepType) -> String {
-        switch stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .treatment:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        case .optional:
-            return "plus.circle.fill"
-        }
-    }
 }
 
 // MARK: - Routine Section
@@ -297,7 +283,7 @@ private struct RoutineStepRow: View {
                 Text(step.title)
                     .font(tm.theme.typo.title)
                     .foregroundColor(tm.theme.palette.textPrimary)
-                Text(step.description)
+                Text(step.instructions)
                     .font(tm.theme.typo.body)
                     .foregroundColor(tm.theme.palette.textSecondary)
                     .lineLimit(nil)
@@ -306,7 +292,7 @@ private struct RoutineStepRow: View {
             Spacer()
             
             // Step icon
-            Image(systemName: step.iconName)
+            Image(systemName: step.slot.iconName)
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(tm.theme.palette.secondary.opacity(0.7))
         }
@@ -378,11 +364,6 @@ private struct ProfileRow: View {
 
 // MARK: - Models
 
-struct RoutineStep {
-    let title: String
-    let description: String
-    let iconName: String
-}
 
 // MARK: - Routine Result Header
 
