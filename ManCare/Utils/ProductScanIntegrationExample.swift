@@ -184,8 +184,7 @@ struct ProductScanIntegrationView: View {
                 // Header
                 VStack(spacing: 8) {
                     Text("Product Scanner")
-                        .font(.title)
-                        .fontWeight(.bold)
+                        .font(.title.weight(.bold))
                     
                     Text("Scan product images to extract and normalize product data")
                         .font(.subheadline)

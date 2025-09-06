@@ -202,8 +202,7 @@ struct ProductNormalizationExampleView: View {
         NavigationView {
             VStack(spacing: 20) {
                 Text("Product Normalization Examples")
-                    .font(.title)
-                    .fontWeight(.bold)
+                    .font(.title.weight(.bold))
                 
                 Text("Test the GPT-powered product normalization system")
                     .font(.subheadline)

@@ -248,8 +248,7 @@ struct ProductScanView: View {
 
                             VStack(spacing: 12) {
                                 Text(currentStep.isEmpty ? "Processing..." : currentStep)
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
+                                    .font(.title2.weight(.semibold))
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.center)
 
@@ -292,15 +291,13 @@ struct ProductScanView: View {
                                 .animation(.spring(response: 0.6, dampingFraction: 0.8), value: showingSuccess)
 
                             Text("Product Added Successfully!")
-                                .font(.title2)
-                                .fontWeight(.bold)
+                                .font(.title2.weight(.bold))
                                 .foregroundColor(.white)
 
                             if let product = createdProduct {
                                 VStack(spacing: 12) {
                                     Text(product.displayName)
-                                        .font(.title3)
-                                        .fontWeight(.semibold)
+                                        .font(.title3.weight(.semibold))
                                         .foregroundColor(.white)
                                         .multilineTextAlignment(.center)
 
@@ -328,8 +325,7 @@ struct ProductScanView: View {
                             Button("Done") {
                                 dismiss()
                             }
-                            .font(.headline)
-                            .fontWeight(.semibold)
+                            .font(.headline.weight(.semibold))
                             .foregroundColor(.white)
                             .padding(.horizontal, 40)
                             .padding(.vertical, 16)
