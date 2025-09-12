@@ -163,18 +163,14 @@ private struct SkinTypeCard: View {
 // MARK: - Preview
 
 #Preview("SkinTypeSelectionView – Light") {
-    let tm = ThemeManager()
     SkinTypeSelectionView { _ in }
-        .themed(tm)
         .preferredColorScheme(.light)
         .frame(maxHeight: 640)
         .padding(.vertical, 8)
 }
 
 #Preview("SkinTypeSelectionView – Dark") {
-    let tm = ThemeManager()
     SkinTypeSelectionView { _ in }
-        .themed(tm)
         .preferredColorScheme(.dark)
         .frame(maxHeight: 640)
         .padding(.vertical, 8)

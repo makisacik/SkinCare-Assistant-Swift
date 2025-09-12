@@ -209,7 +209,6 @@ struct MainFlowView: View {
 
             case .home:
                 MainTabView(generatedRoutine: generatedRoutine)
-                    .environment(\.themeManager, tm)
                 .transition(.asymmetric(
                     insertion: .move(edge: .trailing).combined(with: .opacity),
                     removal:   .move(edge: .leading).combined(with: .opacity)
@@ -749,7 +748,6 @@ private struct ProgressIndicator: View {
 
 #Preview("Main Flow") {
     MainFlowView()
-        .themed(ThemeManager())
 }
 
 #Preview("Routine Result") {
@@ -763,5 +761,4 @@ private struct ProgressIndicator: View {
         onBack: {},
         onContinue: {}
     )
-    .themed(ThemeManager())
 }

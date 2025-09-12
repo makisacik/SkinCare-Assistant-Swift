@@ -560,5 +560,4 @@ private struct SummaryRow: View {
         onConfirm: {},
         onCancel: {}
     )
-    .themed(ThemeManager())
 }

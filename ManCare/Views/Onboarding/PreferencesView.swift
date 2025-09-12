@@ -208,12 +208,10 @@ struct Preferences: Codable {
 
 #Preview("PreferencesView - Light") {
     PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {}, onContinueWithoutAPI: {})
-        .themed(ThemeManager())
         .preferredColorScheme(.light)
 }
 
 #Preview("PreferencesView - Dark") {
     PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {}, onContinueWithoutAPI: {})
-        .themed(ThemeManager())
         .preferredColorScheme(.dark)
 }

@@ -420,5 +420,4 @@ private struct RoutineResultHeader: View {
         onBack: {},
         onContinue: {}
     )
-    .themed(ThemeManager())
 }

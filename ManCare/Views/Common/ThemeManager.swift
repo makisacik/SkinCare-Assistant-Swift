@@ -146,7 +146,10 @@ public final class ThemeManager: ObservableObject {
     @Published public private(set) var selection: AppTheme
     @Published public private(set) var theme: Theme
 
-    public init(colorScheme: ColorScheme? = nil) {
+    // Shared instance
+    public static let shared = ThemeManager()
+
+    private init(colorScheme: ColorScheme? = nil) {
         let storedValue = UserDefaults.standard.string(forKey: "app.theme.selection") ?? AppTheme.system.rawValue
         let initial = AppTheme(rawValue: storedValue) ?? .system
         self.selection = initial
@@ -178,8 +181,8 @@ public final class ThemeManager: ObservableObject {
 // MARK: - Environment Injection
 
 private struct ThemeManagerKey: EnvironmentKey {
-    // Lazy creation is fine now that ThemeManager is not @MainActor
-    static var defaultValue: ThemeManager { ThemeManager() }
+    // Use shared instance by default
+    static var defaultValue: ThemeManager { ThemeManager.shared }
 }
 
 public extension EnvironmentValues {

@@ -9,12 +9,10 @@ import SwiftUI
 
 @main
 struct ManCareApp: App {
-    @StateObject private var themeManager = ThemeManager()
-
     var body: some Scene {
         WindowGroup {
             MainFlowView()
-                .themed(themeManager)
+                .themed(ThemeManager.shared)
         }
     }
 }

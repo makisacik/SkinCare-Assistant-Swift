@@ -64,5 +64,4 @@ struct ProductSlotEditView: View {
             notes: "Choose a gentle formula that suits normal skin."
         )
     )
-    .themed(ThemeManager())
 }

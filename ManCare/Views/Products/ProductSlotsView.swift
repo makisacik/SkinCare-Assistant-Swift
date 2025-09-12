@@ -94,5 +94,4 @@ struct ProductSlotsView: View {
 
 #Preview("ProductSlotsView") {
     ProductSlotsView()
-        .themed(ThemeManager())
 }

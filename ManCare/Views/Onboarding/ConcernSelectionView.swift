@@ -195,18 +195,14 @@ private struct ConcernCard: View {
 // MARK: - Preview
 
 #Preview("ConcernSelection – Light") {
-    let tm = ThemeManager()
     ConcernSelectionView { _ in }
-        .themed(tm)
         .preferredColorScheme(.light)
         .frame(maxHeight: 640)
         .padding(.vertical, 8)
 }
 
 #Preview("ConcernSelection – Dark") {
-    let tm = ThemeManager()
     ConcernSelectionView { _ in }
-        .themed(tm)
         .preferredColorScheme(.dark)
         .frame(maxHeight: 640)
         .padding(.vertical, 8)

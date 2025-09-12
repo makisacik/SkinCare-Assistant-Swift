@@ -176,12 +176,10 @@ private struct MainGoalCard: View {
 
 #Preview("MainGoalView - Light") {
     MainGoalView(onContinue: { _ in }, onBack: {})
-        .themed(ThemeManager())
         .preferredColorScheme(.light)
 }
 
 #Preview("MainGoalView - Dark") {
     MainGoalView(onContinue: { _ in }, onBack: {})
-        .themed(ThemeManager())
         .preferredColorScheme(.dark)
 }

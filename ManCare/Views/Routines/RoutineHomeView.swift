@@ -982,5 +982,4 @@ struct RoutineStepDetailView: View {
     RoutineHomeView(
         generatedRoutine: nil
     )
-    .themed(ThemeManager())
 }

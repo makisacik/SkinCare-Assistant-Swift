@@ -150,5 +150,4 @@ struct ProductTypeRow: View {
         }
     }
     .padding()
-    .themed(ThemeManager())
 }

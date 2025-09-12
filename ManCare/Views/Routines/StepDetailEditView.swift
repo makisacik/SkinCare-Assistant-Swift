@@ -431,5 +431,4 @@ private struct TimeOfDaySelectionView: View {
             routineTrackingService: RoutineTrackingService()
         )
     )
-    .themed(ThemeManager())
 }

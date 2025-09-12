@@ -343,23 +343,19 @@ private struct FlowLayout<Content: View>: View {
 // MARK: - Previews
 
 #Preview("Lifestyle – Light") {
-    let tm = ThemeManager()
     LifestyleQuestionsView(
         onContinue: { _ in },
         onSkip: nil,
         onBack: {}
     )
-        .themed(tm)
         .preferredColorScheme(.light)
 }
 
 #Preview("Lifestyle – Dark") {
-    let tm = ThemeManager()
     LifestyleQuestionsView(
         onContinue: { _ in },
         onSkip: nil,
         onBack: {}
     )
-        .themed(tm)
         .preferredColorScheme(.dark)
 }

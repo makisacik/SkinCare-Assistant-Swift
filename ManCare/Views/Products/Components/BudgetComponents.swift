@@ -91,5 +91,4 @@ struct BudgetCard: View {
         BudgetSelector(selectedBudget: .constant(.mid))
     }
     .padding()
-    .themed(ThemeManager())
 }

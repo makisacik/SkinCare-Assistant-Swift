@@ -78,5 +78,4 @@ struct MainTabView: View {
 
 #Preview("Main Tab View") {
     MainTabView(generatedRoutine: nil)
-        .themed(ThemeManager())
 }

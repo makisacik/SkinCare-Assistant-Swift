@@ -362,5 +362,4 @@ private struct RoutineDetailStepCard: View {
         selectedDate: Date(),
         onStepTap: { _ in }
     )
-    .themed(ThemeManager())
 }

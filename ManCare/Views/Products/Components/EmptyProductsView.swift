@@ -39,5 +39,4 @@ struct EmptyProductsView: View {
 
 #Preview("EmptyProductsView") {
     EmptyProductsView()
-        .themed(ThemeManager())
 }

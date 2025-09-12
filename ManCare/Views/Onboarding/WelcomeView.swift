@@ -105,7 +105,6 @@ struct WelcomeView: View {
         onGetStarted: {},
         onSkipToHome: {}
     )
-    .themed(ThemeManager())
     .preferredColorScheme(.light)
 }
 
@@ -114,6 +113,5 @@ struct WelcomeView: View {
         onGetStarted: {},
         onSkipToHome: {}
     )
-    .themed(ThemeManager())
     .preferredColorScheme(.dark)
 }

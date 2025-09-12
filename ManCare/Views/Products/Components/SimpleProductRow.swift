@@ -96,5 +96,4 @@ struct SimpleProductRow: View {
     
     SimpleProductRow(product: sampleProduct)
         .padding()
-        .themed(ThemeManager())
 }

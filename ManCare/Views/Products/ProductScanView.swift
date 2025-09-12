@@ -993,5 +993,4 @@ struct ImagePicker: UIViewControllerRepresentable {
     ProductScanView { text in
         print("Extracted text: \(text)")
     }
-    .themed(ThemeManager())
 }

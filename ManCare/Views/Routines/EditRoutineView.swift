@@ -539,6 +539,5 @@ private struct EmptyRoutineState: View {
         originalRoutine: nil,
         routineTrackingService: RoutineTrackingService()
     )
-    .themed(ThemeManager())
 }
 

@@ -670,5 +670,4 @@ struct CustomInstructionsEditView: View {
         ),
         onTap: {}
     )
-    .themed(ThemeManager())
 }

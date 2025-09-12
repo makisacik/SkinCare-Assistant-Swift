@@ -466,5 +466,4 @@ private struct StepTypeCard: View {
             routineTrackingService: RoutineTrackingService()
         )
     )
-    .themed(ThemeManager())
 }

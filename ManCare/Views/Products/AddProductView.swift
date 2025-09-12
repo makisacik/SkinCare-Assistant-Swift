@@ -337,5 +337,4 @@ struct AddProductView: View {
     AddProductView(productService: ProductService.shared) { product in
         print("Added product: \(product.displayName)")
     }
-    .themed(ThemeManager())
 }

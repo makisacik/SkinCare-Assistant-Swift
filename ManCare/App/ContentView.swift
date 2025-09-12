@@ -15,5 +15,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .themed(ThemeManager())
 }

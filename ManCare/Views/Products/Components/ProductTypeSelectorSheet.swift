@@ -111,5 +111,4 @@ struct ProductTypeSelectorSheet: View {
 
 #Preview("ProductTypeSelectorSheet") {
     ProductTypeSelectorSheet(selectedProductType: .constant(.cleanser))
-        .themed(ThemeManager())
 }

@@ -41,5 +41,4 @@ struct IngredientTag: View {
         }
     }
     .padding()
-    .themed(ThemeManager())
 }

@@ -69,5 +69,4 @@ struct FormField: View {
         }
     }
     .padding()
-    .themed(ThemeManager())
 }

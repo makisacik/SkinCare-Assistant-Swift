@@ -231,7 +231,6 @@ private struct MorphingRing: Shape {
 // MARK: - Previews
 
 #Preview("Loading – Light") {
-    let tm = ThemeManager()
     LoadingView(
         statuses: [
             "Analyzing your skin type…",
@@ -242,12 +241,10 @@ private struct MorphingRing: Shape {
         onFinished: {},
         onBack: {}
     )
-    .themed(tm)
     .preferredColorScheme(.light)
 }
 
 #Preview("Loading – Dark") {
-    let tm = ThemeManager()
     LoadingView(
         statuses: [
             "Analyzing your skin type…",
@@ -258,6 +255,5 @@ private struct MorphingRing: Shape {
         onFinished: {},
         onBack: {}
     )
-    .themed(tm)
     .preferredColorScheme(.dark)
 }

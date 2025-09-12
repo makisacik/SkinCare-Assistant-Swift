@@ -56,5 +56,4 @@ struct ClaimToggle: View {
         }
     }
     .padding()
-    .themed(ThemeManager())
 }
