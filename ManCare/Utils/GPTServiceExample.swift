@@ -61,6 +61,9 @@ extension GPTService {
         skinType: SkinType,
         concerns: Set<Concern>,
         mainGoal: MainGoal,
+        fitzpatrickSkinTone: FitzpatrickSkinTone,
+        ageRange: AgeRange,
+        region: Region,
         preferences: Preferences?,
         lifestyle: LifestyleInfo? = nil,
         locale: String = "en-US"
@@ -95,6 +98,9 @@ extension GPTService {
             selectedSkinType: skinType.rawValue,
             selectedConcerns: concerns.map { $0.rawValue },
             selectedMainGoal: mainGoal.rawValue,
+            fitzpatrickSkinTone: fitzpatrickSkinTone.rawValue,
+            ageRange: ageRange.rawValue,
+            region: region.rawValue,
             selectedPreferences: preferencesPayload,
             lifestyle: lifestylePayload,
             locale: locale

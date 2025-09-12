@@ -15,6 +15,9 @@ struct MainFlowView: View {
     @State private var selectedSkinType: SkinType?
     @State private var selectedConcerns: Set<Concern> = []
     @State private var selectedMainGoal: MainGoal?
+    @State private var selectedFitzpatrickSkinTone: FitzpatrickSkinTone?
+    @State private var selectedAgeRange: AgeRange?
+    @State private var selectedRegion: Region?
     @State private var selectedPreferences: Preferences?
     @State private var generatedRoutine: RoutineResponse?
     @State private var isLoadingRoutine = false
@@ -25,6 +28,9 @@ struct MainFlowView: View {
         case skinType
         case concerns
         case mainGoal
+        case fitzpatrickSkinTone
+        case ageRange
+        case region
         case preferences
         case loading
         case results
@@ -46,6 +52,9 @@ struct MainFlowView: View {
                         selectedSkinType = .normal
                         selectedConcerns = [.largePores]
                         selectedMainGoal = .healthierOverall
+                        selectedFitzpatrickSkinTone = .type3
+                        selectedAgeRange = .thirties
+                        selectedRegion = .temperate
                         selectedPreferences = nil
                         generatedRoutine = createMockRoutineResponse()
                         withAnimation(.easeInOut(duration: 0.3)) {
@@ -91,12 +100,69 @@ struct MainFlowView: View {
                     onContinue: { mainGoal in
                         selectedMainGoal = mainGoal
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .preferences
+                            currentStep = .fitzpatrickSkinTone
                         }
                     },
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .concerns
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .fitzpatrickSkinTone:
+                FitzpatrickSkinToneView(
+                    onContinue: { skinTone in
+                        selectedFitzpatrickSkinTone = skinTone
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .ageRange
+                        }
+                    },
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .mainGoal
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .ageRange:
+                AgeRangeView(
+                    onContinue: { ageRange in
+                        selectedAgeRange = ageRange
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .region
+                        }
+                    },
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .fitzpatrickSkinTone
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .region:
+                RegionView(
+                    onContinue: { region in
+                        selectedRegion = region
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .preferences
+                        }
+                    },
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .ageRange
                         }
                     }
                 )
@@ -115,7 +181,7 @@ struct MainFlowView: View {
                     },
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .mainGoal
+                            currentStep = .region
                         }
                     },
                     onSkip: {
@@ -185,6 +251,9 @@ struct MainFlowView: View {
                             selectedSkinType = nil
                             selectedConcerns = []
                             selectedMainGoal = nil
+                            selectedFitzpatrickSkinTone = nil
+                            selectedAgeRange = nil
+                            selectedRegion = nil
                             selectedPreferences = nil
                             generatedRoutine = nil
                             routineError = nil
@@ -229,7 +298,10 @@ struct MainFlowView: View {
     private func generateRoutine() {
         guard !isLoadingRoutine else { return }
         guard let skinType = selectedSkinType,
-              let mainGoal = selectedMainGoal else {
+              let mainGoal = selectedMainGoal,
+              let fitzpatrickSkinTone = selectedFitzpatrickSkinTone,
+              let ageRange = selectedAgeRange,
+              let region = selectedRegion else {
             routineError = GPTService.GPTServiceError.requestFailed(-1, "Missing required data")
             return
         }
@@ -260,6 +332,9 @@ struct MainFlowView: View {
                     skinType: skinType,
                     concerns: selectedConcerns,
                     mainGoal: mainGoal,
+                    fitzpatrickSkinTone: fitzpatrickSkinTone,
+                    ageRange: ageRange,
+                    region: region,
                     preferences: selectedPreferences,
                     lifestyle: nil, // TODO: Add lifestyle collection
                     locale: "en-US"
@@ -271,6 +346,9 @@ struct MainFlowView: View {
                 print("   - Skin Type: \(request.selectedSkinType)")
                 print("   - Concerns: \(request.selectedConcerns)")
                 print("   - Main Goal: \(request.selectedMainGoal)")
+                print("   - Fitzpatrick Skin Tone: \(request.fitzpatrickSkinTone)")
+                print("   - Age Range: \(request.ageRange)")
+                print("   - Region: \(request.region)")
                 if let prefs = request.selectedPreferences {
                     print("   - Preferences: fragranceFree=\(prefs.fragranceFreeOnly), sensitive=\(prefs.suitableForSensitiveSkin), natural=\(prefs.naturalIngredients), crueltyFree=\(prefs.crueltyFree), vegan=\(prefs.veganFriendly)")
                 } else {
@@ -687,10 +765,13 @@ private struct ProgressIndicator: View {
         case .skinType: return 2
         case .concerns: return 3
         case .mainGoal: return 4
-        case .preferences: return 5
-        case .loading: return 6
-        case .results: return 7
-        case .home: return 8
+        case .fitzpatrickSkinTone: return 5
+        case .ageRange: return 6
+        case .region: return 7
+        case .preferences: return 8
+        case .loading: return 9
+        case .results: return 10
+        case .home: return 11
         }
     }
 
@@ -700,6 +781,9 @@ private struct ProgressIndicator: View {
         case .skinType: return "Skin Type"
         case .concerns: return "Concerns"
         case .mainGoal: return "Main Goal"
+        case .fitzpatrickSkinTone: return "Skin Tone"
+        case .ageRange: return "Age Range"
+        case .region: return "Region"
         case .preferences: return "Preferences"
         case .loading: return "Analyzing"
         case .results: return "Results"
@@ -727,7 +811,7 @@ private struct ProgressIndicator: View {
             Spacer()
 
             // Progress text
-            Text("\(stepNumber) of 8")
+            Text("\(stepNumber) of 11")
                 .font(tm.theme.typo.caption)
                 .foregroundColor(tm.theme.palette.textMuted)
         }

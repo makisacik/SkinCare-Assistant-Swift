@@ -1,5 +1,5 @@
 //
-//  MainGoalView.swift
+//  RegionView.swift
 //  ManCare
 //
 //  Created by Mehmet Ali Kısacık on 2.09.2025.
@@ -7,50 +7,12 @@
 
 import SwiftUI
 
-enum MainGoal: String, CaseIterable, Identifiable, Codable {
-    case healthierOverall, reduceBreakouts, sootheIrritation, preventAging, ageSlower, shinySkin
-    var id: String { rawValue }
-    
-    var title: String {
-        switch self {
-        case .healthierOverall: return "Healthier skin overall"
-        case .reduceBreakouts: return "Reduce breakouts"
-        case .sootheIrritation: return "Soothe irritation"
-        case .preventAging: return "Prevent aging / sun damage"
-        case .ageSlower: return "Age slower"
-        case .shinySkin: return "Shiny, glowing skin"
-        }
-    }
-    
-    var subtitle: String {
-        switch self {
-        case .healthierOverall: return "Build a solid foundation for better skin"
-        case .reduceBreakouts: return "Clear acne and prevent future breakouts"
-        case .sootheIrritation: return "Calm redness and sensitivity"
-        case .preventAging: return "Protect against sun damage and aging"
-        case .ageSlower: return "Slow down the aging process with targeted care"
-        case .shinySkin: return "Achieve a radiant, healthy glow"
-        }
-    }
-    
-    var iconName: String {
-        switch self {
-        case .healthierOverall: return "heart.fill"
-        case .reduceBreakouts: return "circle.grid.cross.left.fill"
-        case .sootheIrritation: return "thermometer.snowflake"
-        case .preventAging: return "sun.max.fill"
-        case .ageSlower: return "clock.arrow.circlepath"
-        case .shinySkin: return "sparkles"
-        }
-    }
-}
-
-struct MainGoalView: View {
+struct RegionView: View {
     @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme) private var cs
     
-    @State private var selection: MainGoal? = nil
-    var onContinue: (MainGoal) -> Void
+    @State private var selection: Region? = nil
+    var onContinue: (Region) -> Void
     var onBack: () -> Void
     
     private let columns = [GridItem(.flexible(), spacing: 12),
@@ -79,28 +41,28 @@ struct MainGoalView: View {
             
             // Title section
             VStack(alignment: .leading, spacing: 6) {
-                Text("What's your main goal?")
+                Text("Where do you spend most of your time?")
                     .font(tm.theme.typo.h1)
                     .foregroundColor(tm.theme.palette.textPrimary)
-                Text("Choose the primary focus for your skincare routine.")
+                Text("Climate affects your skin's needs for UV protection and hydration.")
                     .font(tm.theme.typo.sub)
                     .foregroundColor(tm.theme.palette.textSecondary)
             }
             
-            // Grid of goals
+            // Grid of regions
             LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(MainGoal.allCases) { goal in
-                    MainGoalCard(goal: goal, selected: selection == goal)
+                ForEach(Region.allCases) { region in
+                    RegionCard(region: region, selected: selection == region)
                         .onTapGesture {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
-                                selection = goal
+                                selection = region
                             }
                         }
                         .accessibilityElement(children: .ignore)
-                        .accessibilityLabel(Text(goal.title))
+                        .accessibilityLabel(Text(region.title))
                         .accessibilityHint(Text("Tap to select"))
-                        .accessibilityAddTraits(selection == goal ? .isSelected : [])
+                        .accessibilityAddTraits(selection == region ? .isSelected : [])
                 }
             }
             
@@ -128,9 +90,9 @@ struct MainGoalView: View {
 
 // MARK: - Card
 
-private struct MainGoalCard: View {
+private struct RegionCard: View {
     @Environment(\.themeManager) private var tm
-    let goal: MainGoal
+    let region: Region
     let selected: Bool
     
     var body: some View {
@@ -140,7 +102,7 @@ private struct MainGoalCard: View {
                     Circle()
                         .fill(tm.theme.palette.secondary.opacity(0.15))
                         .frame(width: 36, height: 36)
-                    Image(systemName: goal.iconName)
+                    Image(systemName: region.iconName)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(tm.theme.palette.secondary)
                 }
@@ -153,15 +115,35 @@ private struct MainGoalCard: View {
                 }
             }
             
-            Text(goal.title)
+            Text(region.title)
                 .font(tm.theme.typo.title)
                 .foregroundColor(tm.theme.palette.textPrimary)
                 .lineLimit(2)
             
-            Text(goal.subtitle)
+            Text(region.description)
                 .font(tm.theme.typo.caption)
                 .foregroundColor(tm.theme.palette.textMuted)
-                .lineLimit(3)
+                .lineLimit(2)
+            
+            // Climate info
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 4) {
+                    Image(systemName: "sun.max.fill")
+                        .font(.system(size: 10))
+                        .foregroundColor(tm.theme.palette.textMuted)
+                    Text(region.averageUVIndex)
+                        .font(tm.theme.typo.caption)
+                        .foregroundColor(tm.theme.palette.textMuted)
+                }
+                HStack(spacing: 4) {
+                    Image(systemName: "humidity.fill")
+                        .font(.system(size: 10))
+                        .foregroundColor(tm.theme.palette.textMuted)
+                    Text("Humidity: \(region.humidityLevel)")
+                        .font(tm.theme.typo.caption)
+                        .foregroundColor(tm.theme.palette.textMuted)
+                }
+            }
         }
         .padding(tm.theme.padding)
         .background(
@@ -180,12 +162,12 @@ private struct MainGoalCard: View {
     }
 }
 
-#Preview("MainGoalView - Light") {
-    MainGoalView(onContinue: { _ in }, onBack: {})
+#Preview("RegionView - Light") {
+    RegionView(onContinue: { _ in }, onBack: {})
         .preferredColorScheme(.light)
 }
 
-#Preview("MainGoalView - Dark") {
-    MainGoalView(onContinue: { _ in }, onBack: {})
+#Preview("RegionView - Dark") {
+    RegionView(onContinue: { _ in }, onBack: {})
         .preferredColorScheme(.dark)
 }

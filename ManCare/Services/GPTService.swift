@@ -11,7 +11,10 @@ import Foundation
 public struct ManCareRoutineRequest: Codable {
     public let selectedSkinType: String                // "oily" | "dry" | "combination" | "normal"
     public let selectedConcerns: [String]              // e.g. ["acne","blackheads"]
-    public let selectedMainGoal: String                // "healthierOverall" | "reduceBreakouts" | "sootheIrritation" | "preventAging"
+    public let selectedMainGoal: String                // "healthierOverall" | "reduceBreakouts" | "sootheIrritation" | "preventAging" | "ageSlower" | "shinySkin"
+    public let fitzpatrickSkinTone: String             // "type1" | "type2" | "type3" | "type4" | "type5" | "type6"
+    public let ageRange: String                        // "teens" | "twenties" | "thirties" | "forties" | "fifties" | "sixtiesPlus"
+    public let region: String                          // "tropical" | "subtropical" | "temperate" | "continental" | "mediterranean" | "arctic" | "desert" | "mountain"
     public let selectedPreferences: PreferencesPayload?
     public let lifestyle: LifestylePayload?
     public let locale: String                          // e.g. "en-US"
@@ -19,12 +22,18 @@ public struct ManCareRoutineRequest: Codable {
     public init(selectedSkinType: String,
                 selectedConcerns: [String],
                 selectedMainGoal: String,
+                fitzpatrickSkinTone: String,
+                ageRange: String,
+                region: String,
                 selectedPreferences: PreferencesPayload?,
                 lifestyle: LifestylePayload?,
                 locale: String = "en-US") {
         self.selectedSkinType = selectedSkinType
         self.selectedConcerns = selectedConcerns
         self.selectedMainGoal = selectedMainGoal
+        self.fitzpatrickSkinTone = fitzpatrickSkinTone
+        self.ageRange = ageRange
+        self.region = region
         self.selectedPreferences = selectedPreferences
         self.lifestyle = lifestyle
         self.locale = locale
@@ -238,7 +247,10 @@ public final class GPTService {
         Return ONLY valid JSON matching the schema exactly. No extra text.
         Rules:
         - Safe, realistic, concise.
-        - Align to skin type, concerns, main goal, preferences.
+        - Align to skin type, concerns, main goal, Fitzpatrick skin tone, age range, region, and preferences.
+        - Consider UV sensitivity based on Fitzpatrick type and regional climate.
+        - Age-appropriate recommendations (teens: gentle prevention, 30s+: anti-aging, 50s+: intensive care).
+        - Regional considerations: high UV areas need stronger SPF, dry climates need more hydration.
         - If info is missing, choose sensible defaults and note them.
         - No brand names or store links; use ingredient-level constraints.
         - Include guardrails (cautions, when_to_stop).
@@ -259,6 +271,9 @@ public final class GPTService {
         lines.append("selectedSkinType: \(req.selectedSkinType)")
         lines.append("selectedConcerns: \(req.selectedConcerns)")
         lines.append("selectedMainGoal: \(req.selectedMainGoal)")
+        lines.append("fitzpatrickSkinTone: \(req.fitzpatrickSkinTone)")
+        lines.append("ageRange: \(req.ageRange)")
+        lines.append("region: \(req.region)")
 
         if let prefs = req.selectedPreferences {
             lines.append("""

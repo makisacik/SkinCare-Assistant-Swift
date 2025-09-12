@@ -1,5 +1,5 @@
 //
-//  MainGoalView.swift
+//  AgeRangeView.swift
 //  ManCare
 //
 //  Created by Mehmet Ali Kısacık on 2.09.2025.
@@ -7,50 +7,12 @@
 
 import SwiftUI
 
-enum MainGoal: String, CaseIterable, Identifiable, Codable {
-    case healthierOverall, reduceBreakouts, sootheIrritation, preventAging, ageSlower, shinySkin
-    var id: String { rawValue }
-    
-    var title: String {
-        switch self {
-        case .healthierOverall: return "Healthier skin overall"
-        case .reduceBreakouts: return "Reduce breakouts"
-        case .sootheIrritation: return "Soothe irritation"
-        case .preventAging: return "Prevent aging / sun damage"
-        case .ageSlower: return "Age slower"
-        case .shinySkin: return "Shiny, glowing skin"
-        }
-    }
-    
-    var subtitle: String {
-        switch self {
-        case .healthierOverall: return "Build a solid foundation for better skin"
-        case .reduceBreakouts: return "Clear acne and prevent future breakouts"
-        case .sootheIrritation: return "Calm redness and sensitivity"
-        case .preventAging: return "Protect against sun damage and aging"
-        case .ageSlower: return "Slow down the aging process with targeted care"
-        case .shinySkin: return "Achieve a radiant, healthy glow"
-        }
-    }
-    
-    var iconName: String {
-        switch self {
-        case .healthierOverall: return "heart.fill"
-        case .reduceBreakouts: return "circle.grid.cross.left.fill"
-        case .sootheIrritation: return "thermometer.snowflake"
-        case .preventAging: return "sun.max.fill"
-        case .ageSlower: return "clock.arrow.circlepath"
-        case .shinySkin: return "sparkles"
-        }
-    }
-}
-
-struct MainGoalView: View {
+struct AgeRangeView: View {
     @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme) private var cs
     
-    @State private var selection: MainGoal? = nil
-    var onContinue: (MainGoal) -> Void
+    @State private var selection: AgeRange? = nil
+    var onContinue: (AgeRange) -> Void
     var onBack: () -> Void
     
     private let columns = [GridItem(.flexible(), spacing: 12),
@@ -79,28 +41,28 @@ struct MainGoalView: View {
             
             // Title section
             VStack(alignment: .leading, spacing: 6) {
-                Text("What's your main goal?")
+                Text("What's your age range?")
                     .font(tm.theme.typo.h1)
                     .foregroundColor(tm.theme.palette.textPrimary)
-                Text("Choose the primary focus for your skincare routine.")
+                Text("This helps us tailor the routine to your skin's current needs.")
                     .font(tm.theme.typo.sub)
                     .foregroundColor(tm.theme.palette.textSecondary)
             }
             
-            // Grid of goals
+            // Grid of age ranges
             LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(MainGoal.allCases) { goal in
-                    MainGoalCard(goal: goal, selected: selection == goal)
+                ForEach(AgeRange.allCases) { ageRange in
+                    AgeRangeCard(ageRange: ageRange, selected: selection == ageRange)
                         .onTapGesture {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
-                                selection = goal
+                                selection = ageRange
                             }
                         }
                         .accessibilityElement(children: .ignore)
-                        .accessibilityLabel(Text(goal.title))
+                        .accessibilityLabel(Text(ageRange.title))
                         .accessibilityHint(Text("Tap to select"))
-                        .accessibilityAddTraits(selection == goal ? .isSelected : [])
+                        .accessibilityAddTraits(selection == ageRange ? .isSelected : [])
                 }
             }
             
@@ -128,9 +90,9 @@ struct MainGoalView: View {
 
 // MARK: - Card
 
-private struct MainGoalCard: View {
+private struct AgeRangeCard: View {
     @Environment(\.themeManager) private var tm
-    let goal: MainGoal
+    let ageRange: AgeRange
     let selected: Bool
     
     var body: some View {
@@ -140,7 +102,7 @@ private struct MainGoalCard: View {
                     Circle()
                         .fill(tm.theme.palette.secondary.opacity(0.15))
                         .frame(width: 36, height: 36)
-                    Image(systemName: goal.iconName)
+                    Image(systemName: ageRange.iconName)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(tm.theme.palette.secondary)
                 }
@@ -153,12 +115,12 @@ private struct MainGoalCard: View {
                 }
             }
             
-            Text(goal.title)
+            Text(ageRange.title)
                 .font(tm.theme.typo.title)
                 .foregroundColor(tm.theme.palette.textPrimary)
                 .lineLimit(2)
             
-            Text(goal.subtitle)
+            Text(ageRange.description)
                 .font(tm.theme.typo.caption)
                 .foregroundColor(tm.theme.palette.textMuted)
                 .lineLimit(3)
@@ -180,12 +142,12 @@ private struct MainGoalCard: View {
     }
 }
 
-#Preview("MainGoalView - Light") {
-    MainGoalView(onContinue: { _ in }, onBack: {})
+#Preview("AgeRangeView - Light") {
+    AgeRangeView(onContinue: { _ in }, onBack: {})
         .preferredColorScheme(.light)
 }
 
-#Preview("MainGoalView - Dark") {
-    MainGoalView(onContinue: { _ in }, onBack: {})
+#Preview("AgeRangeView - Dark") {
+    AgeRangeView(onContinue: { _ in }, onBack: {})
         .preferredColorScheme(.dark)
 }
