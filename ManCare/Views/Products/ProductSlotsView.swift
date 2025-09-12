@@ -10,134 +10,81 @@ import SwiftUI
 struct ProductSlotsView: View {
     @Environment(\.themeManager) private var tm
     @ObservedObject private var productService = ProductService.shared
+
+    // ✅ Use a simple boolean for sheet presentation
     @State private var showingAddProduct = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            // Header
-            VStack(spacing: 8) {
-                HStack {
-                    Text("My Products")
-                        .font(tm.theme.typo.h1)
-                        .foregroundColor(tm.theme.palette.textPrimary)
-
-                    Spacer()
-                }
-
-                Text("Store and manage your own products")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-
-            // Simple list of user products
-            List {
-                ForEach(productService.userProducts, id: \.id) { product in
-                    SimpleProductRow(product: product)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                }
-
-                // Add Product Button
-                Button {
-                    showingAddProduct = true
-                } label: {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Header
+                VStack(spacing: 8) {
                     HStack {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(tm.theme.palette.secondary)
-                        Text("Add Product")
+                        Text("My Products")
+                            .font(tm.theme.typo.h1)
                             .foregroundColor(tm.theme.palette.textPrimary)
+
                         Spacer()
                     }
-                    .padding(.vertical, 8)
+
+                    Text("Store and manage your own products")
+                        .font(tm.theme.typo.sub)
+                        .foregroundColor(tm.theme.palette.textSecondary)
                 }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-            }
-            .listStyle(PlainListStyle())
-            .padding(.horizontal, 20)
-        }
-        .background(tm.theme.palette.bg.ignoresSafeArea())
-        .sheet(isPresented: $showingAddProduct) {
-            AddProductView { product in
-                // Product added successfully
-                productService.addUserProduct(product)
-                print("Added product: \(product.displayName)")
-            }
-        }
-    }
-}
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 16)
 
-// MARK: - Simple Product Row
-
-private struct SimpleProductRow: View {
-    @Environment(\.themeManager) private var tm
-    let product: Product
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: product.tagging.productType.iconName)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(tm.theme.palette.secondary)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(product.displayName)
-                    .font(tm.theme.typo.body.weight(.medium))
-                    .foregroundColor(tm.theme.palette.textPrimary)
-
-                HStack(spacing: 8) {
-                    if let brand = product.brand {
-                        Text(brand)
-                            .font(tm.theme.typo.caption)
-                            .foregroundColor(tm.theme.palette.textMuted)
+                // Products List
+                if productService.userProducts.isEmpty {
+                    EmptyProductsView()
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: 12) {
+                            ForEach(productService.userProducts, id: \.id) { product in
+                                SimpleProductRow(product: product)
+                            }
+                        }
+                        .padding(.horizontal, 20)
                     }
+                }
 
-                    Text(product.tagging.productType.displayName)
-                        .font(tm.theme.typo.caption)
-                        .foregroundColor(tm.theme.palette.textMuted)
+                Spacer()
+
+                // Add Product Button
+                VStack {
+                    Button {
+                        showingAddProduct = true
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 18, weight: .medium))
+
+                            Text("Add Product")
+                                .font(tm.theme.typo.body.weight(.semibold))
+
+                            Spacer()
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
+                        .background(tm.theme.palette.secondary)
+                        .cornerRadius(12)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
                 }
             }
-
-            Spacer()
-
-            VStack(alignment: .trailing, spacing: 4) {
-                if let price = product.price {
-                    Text("$\(String(format: "%.2f", price))")
-                        .font(tm.theme.typo.caption.weight(.semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
-                }
-                Text(budgetTitle(product.tagging.budget))
-                    .font(tm.theme.typo.caption.weight(.semibold))
-                    .foregroundColor(budgetColor(product.tagging.budget))
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(budgetColor(product.tagging.budget).opacity(0.1))
-                    .cornerRadius(6)
+            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showingAddProduct) {
+            AddProductView(productService: productService) { product in
+                // Product is already added in AddProductView.saveProduct(), no need to add again
+                print("Added product: \(product.displayName)")
+                showingAddProduct = false
             }
-        }
-        .padding(.vertical, 8)
-    }
-
-    private func budgetTitle(_ budget: Budget) -> String {
-        switch budget {
-        case .low:
-            return "Budget"
-        case .mid:
-            return "Mid"
-        case .high:
-            return "Premium"
-        }
-    }
-
-    private func budgetColor(_ budget: Budget) -> Color {
-        switch budget {
-        case .low:
-            return .green
-        case .mid:
-            return .orange
-        case .high:
-            return .red
         }
     }
 }

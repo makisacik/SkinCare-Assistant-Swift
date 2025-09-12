@@ -15,7 +15,7 @@ struct ProductScanView: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var cameraManager = CameraManager()
-    @ObservedObject private var productService = ProductService.shared
+    private let productService = ProductService.shared
 
     @State private var extractedText = ""
     @State private var isProcessing = false
