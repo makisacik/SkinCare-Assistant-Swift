@@ -198,6 +198,32 @@ enum Region: String, CaseIterable, Identifiable, Codable {
         case .mountain: return "mountain.2.fill"
         }
     }
+
+    var climateColor: Color {
+        switch self {
+        case .tropical: return Color(red: 0.2, green: 0.8, blue: 0.3) // Vibrant green
+        case .subtropical: return Color(red: 0.4, green: 0.9, blue: 0.2) // Bright green
+        case .temperate: return Color(red: 0.3, green: 0.6, blue: 0.9) // Blue
+        case .continental: return Color(red: 0.8, green: 0.4, blue: 0.2) // Orange
+        case .mediterranean: return Color(red: 1.0, green: 0.6, blue: 0.0) // Golden
+        case .arctic: return Color(red: 0.8, green: 0.9, blue: 1.0) // Light blue
+        case .desert: return Color(red: 0.9, green: 0.7, blue: 0.3) // Sandy
+        case .mountain: return Color(red: 0.5, green: 0.3, blue: 0.2) // Brown
+        }
+    }
+
+    var temperatureLevel: String {
+        switch self {
+        case .tropical: return "Hot & Humid"
+        case .subtropical: return "Warm & Humid"
+        case .temperate: return "Moderate"
+        case .continental: return "Hot/Cold"
+        case .mediterranean: return "Warm & Dry"
+        case .arctic: return "Very Cold"
+        case .desert: return "Hot & Dry"
+        case .mountain: return "Cool & Dry"
+        }
+    }
 }
 
 // MARK: - User Profile

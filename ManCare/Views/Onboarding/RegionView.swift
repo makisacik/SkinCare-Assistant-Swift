@@ -10,14 +10,14 @@ import SwiftUI
 struct RegionView: View {
     @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme) private var cs
-    
+
     @State private var selection: Region? = nil
+    @State private var selectedClimateIndex: Int = 0
     var onContinue: (Region) -> Void
     var onBack: () -> Void
-    
-    private let columns = [GridItem(.flexible(), spacing: 12),
-                           GridItem(.flexible(), spacing: 12)]
-    
+
+    private let regions = Region.allCases
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             // Header with back button
@@ -38,36 +38,31 @@ struct RegionView: View {
                 Spacer()
             }
             .padding(.top, 8)
-            
+
             // Title section
             VStack(alignment: .leading, spacing: 6) {
-                Text("Where do you spend most of your time?")
+                Text("What's your climate like?")
                     .font(tm.theme.typo.h1)
                     .foregroundColor(tm.theme.palette.textPrimary)
-                Text("Climate affects your skin's needs for UV protection and hydration.")
+                Text("Your environment affects your skin's UV exposure and hydration needs.")
                     .font(tm.theme.typo.sub)
                     .foregroundColor(tm.theme.palette.textSecondary)
             }
-            
-            // Grid of regions
-            LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(Region.allCases) { region in
-                    RegionCard(region: region, selected: selection == region)
-                        .onTapGesture {
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
-                                selection = region
-                            }
-                        }
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel(Text(region.title))
-                        .accessibilityHint(Text("Tap to select"))
-                        .accessibilityAddTraits(selection == region ? .isSelected : [])
+
+            // Climate visualization
+            VStack(spacing: 20) {
+                // Climate wheel/selector
+                ClimateWheel(regions: regions, selectedIndex: $selectedClimateIndex, selection: $selection)
+
+                // Climate details
+                if let selectedRegion = selection {
+                    ClimateDetailCard(region: selectedRegion)
+                        .transition(.scale.combined(with: .opacity))
                 }
             }
-            
+
             Spacer(minLength: 8)
-            
+
             // Continue button
             Button {
                 guard let picked = selection else { return }
@@ -85,80 +80,260 @@ struct RegionView: View {
         .padding(20)
         .background(tm.theme.palette.bg.ignoresSafeArea())
         .onChange(of: cs) { tm.refreshForSystemChange($0) }
+        .onAppear {
+            // Set initial selection to temperate
+            selection = .temperate
+            selectedClimateIndex = 2
+        }
     }
 }
 
-// MARK: - Card
+// MARK: - Climate Wheel
 
-private struct RegionCard: View {
+private struct ClimateWheel: View {
     @Environment(\.themeManager) private var tm
-    let region: Region
-    let selected: Bool
-    
+    let regions: [Region]
+    @Binding var selectedIndex: Int
+    @Binding var selection: Region?
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 10) {
-                ZStack {
-                    Circle()
-                        .fill(tm.theme.palette.secondary.opacity(0.15))
-                        .frame(width: 36, height: 36)
-                    Image(systemName: region.iconName)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
+        VStack(spacing: 16) {
+            // Climate wheel
+            ZStack {
+                // Background circle
+                Circle()
+                    .fill(tm.theme.palette.card.opacity(0.3))
+                    .frame(width: 280, height: 280)
+                    .overlay(
+                        Circle()
+                            .stroke(tm.theme.palette.separator, lineWidth: 2)
+                    )
+
+                // Climate segments
+                ForEach(Array(regions.enumerated()), id: \.offset) { index, region in
+                    ClimateSegment(
+                        region: region,
+                        index: index,
+                        totalCount: regions.count,
+                        isSelected: selectedIndex == index
+                    )
+                    .onTapGesture {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                            selectedIndex = index
+                            selection = region
+                        }
+                    }
                 }
-                Spacer()
-                if selected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(tm.theme.palette.accent)
-                        .font(.system(size: 20, weight: .semibold))
-                        .transition(.scale.combined(with: .opacity))
+
+                // Center info
+                VStack(spacing: 4) {
+                    if let selectedRegion = selection {
+                        Image(systemName: selectedRegion.iconName)
+                            .font(.system(size: 24, weight: .semibold))
+                            .foregroundColor(selectedRegion.climateColor)
+                        Text(selectedRegion.title)
+                            .font(tm.theme.typo.caption.weight(.semibold))
+                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .frame(width: 80, height: 80)
+                .background(
+                    Circle()
+                        .fill(tm.theme.palette.bg)
+                        .shadow(color: tm.theme.palette.shadow, radius: 4, x: 0, y: 2)
+                )
+            }
+
+            // Climate gradient bar
+            HStack(spacing: 0) {
+                ForEach(Array(regions.enumerated()), id: \.offset) { index, region in
+                    Rectangle()
+                        .fill(region.climateColor)
+                        .frame(maxWidth: .infinity)
+                        .overlay(
+                            VStack {
+                                Spacer()
+                                Text(region.title.prefix(3).uppercased())
+                                    .font(.system(size: 8, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
+                            }
+                            .padding(.bottom, 2)
+                        )
+                        .onTapGesture {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                selectedIndex = index
+                                selection = region
+                            }
+                        }
                 }
             }
-            
-            Text(region.title)
-                .font(tm.theme.typo.title)
-                .foregroundColor(tm.theme.palette.textPrimary)
-                .lineLimit(2)
-            
-            Text(region.description)
-                .font(tm.theme.typo.caption)
-                .foregroundColor(tm.theme.palette.textMuted)
-                .lineLimit(2)
-            
-            // Climate info
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 4) {
-                    Image(systemName: "sun.max.fill")
-                        .font(.system(size: 10))
-                        .foregroundColor(tm.theme.palette.textMuted)
-                    Text(region.averageUVIndex)
-                        .font(tm.theme.typo.caption)
-                        .foregroundColor(tm.theme.palette.textMuted)
+            .frame(height: 30)
+            .cornerRadius(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(tm.theme.palette.separator, lineWidth: 1)
+            )
+        }
+    }
+}
+
+// MARK: - Climate Segment
+
+private struct ClimateSegment: View {
+    @Environment(\.themeManager) private var tm
+    let region: Region
+    let index: Int
+    let totalCount: Int
+    let isSelected: Bool
+
+    private var angle: Double {
+        (Double(index) / Double(totalCount)) * 360
+    }
+
+    private var segmentAngle: Double {
+        360.0 / Double(totalCount)
+    }
+
+    var body: some View {
+        ZStack {
+            // Segment background
+            Circle()
+                .trim(from: angle / 360, to: (angle + segmentAngle) / 360)
+                .stroke(
+                    isSelected ? region.climateColor : region.climateColor.opacity(0.3),
+                    style: StrokeStyle(lineWidth: isSelected ? 8 : 4, lineCap: .round)
+                )
+                .frame(width: 240, height: 240)
+                .rotationEffect(.degrees(-90))
+
+            // Icon
+            GeometryReader { geometry in
+                Image(systemName: region.iconName)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(isSelected ? region.climateColor : region.climateColor.opacity(0.6))
+                    .position(
+                        x: geometry.size.width / 2 + cos((angle + segmentAngle / 2) * .pi / 180) * 100,
+                        y: geometry.size.height / 2 + sin((angle + segmentAngle / 2) * .pi / 180) * 100
+                    )
+            }
+            .frame(width: 240, height: 240)
+        }
+    }
+}
+
+// MARK: - Climate Detail Card
+
+private struct ClimateDetailCard: View {
+    @Environment(\.themeManager) private var tm
+    let region: Region
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Header
+            HStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(region.climateColor)
+                        .frame(width: 60, height: 60)
+                    Image(systemName: region.iconName)
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundColor(.white)
                 }
-                HStack(spacing: 4) {
-                    Image(systemName: "humidity.fill")
-                        .font(.system(size: 10))
-                        .foregroundColor(tm.theme.palette.textMuted)
-                    Text("Humidity: \(region.humidityLevel)")
-                        .font(tm.theme.typo.caption)
-                        .foregroundColor(tm.theme.palette.textMuted)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(region.title)
+                        .font(tm.theme.typo.title)
+                        .foregroundColor(tm.theme.palette.textPrimary)
+
+                    Text(region.temperatureLevel)
+                        .font(tm.theme.typo.caption.weight(.medium))
+                        .foregroundColor(region.climateColor)
                 }
+
+                Spacer()
+            }
+
+            // Climate info grid
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 12) {
+                ClimateInfoItem(
+                    icon: "sun.max.fill",
+                    title: "UV Index",
+                    value: region.averageUVIndex,
+                    color: .orange
+                )
+
+                ClimateInfoItem(
+                    icon: "humidity.fill",
+                    title: "Humidity",
+                    value: region.humidityLevel,
+                    color: .blue
+                )
+
+                ClimateInfoItem(
+                    icon: "thermometer",
+                    title: "Temperature",
+                    value: region.temperatureLevel,
+                    color: .red
+                )
+
+                ClimateInfoItem(
+                    icon: "shield.fill",
+                    title: "SPF Need",
+                    value: region.averageUVIndex.contains("High") ? "High" : "Moderate",
+                    color: .green
+                )
             }
         }
         .padding(tm.theme.padding)
         .background(
             RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
-                .fill(selected ? tm.theme.palette.card.opacity(0.98) : tm.theme.palette.card)
-                .shadow(color: selected ? tm.theme.palette.shadow.opacity(1.0)
-                                        : tm.theme.palette.shadow,
-                        radius: selected ? 14 : 10, x: 0, y: selected ? 8 : 6)
+                .fill(tm.theme.palette.card)
+                .shadow(color: tm.theme.palette.shadow, radius: 12, x: 0, y: 6)
                 .overlay(
                     RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                        .stroke(selected ? tm.theme.palette.secondary : tm.theme.palette.separator,
-                                lineWidth: selected ? 2 : 1)
+                        .stroke(region.climateColor.opacity(0.3), lineWidth: 2)
                 )
         )
-        .animation(.easeInOut(duration: 0.18), value: selected)
+    }
+}
+
+// MARK: - Climate Info Item
+
+private struct ClimateInfoItem: View {
+    @Environment(\.themeManager) private var tm
+    let icon: String
+    let title: String
+    let value: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(color)
+
+            Text(title)
+                .font(tm.theme.typo.caption)
+                .foregroundColor(tm.theme.palette.textSecondary)
+                .multilineTextAlignment(.center)
+
+            Text(value)
+                .font(tm.theme.typo.caption.weight(.semibold))
+                .foregroundColor(tm.theme.palette.textPrimary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(tm.theme.palette.bg.opacity(0.5))
+        )
     }
 }
 
