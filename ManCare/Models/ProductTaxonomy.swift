@@ -341,13 +341,11 @@ struct ProductTagging: Codable, Equatable {
     let productType: ProductType       // primary product type
     let ingredients: [String]          // INCI hints (niacinamide, zinc PCA, AHA, BHA, PHA…)
     let claims: [String]               // "fragranceFree", "vegan", "sensitiveSafe"
-    let budget: Budget                 // low|mid|high
 
-    init(productType: ProductType, ingredients: [String] = [], claims: [String] = [], budget: Budget = .mid) {
+    init(productType: ProductType, ingredients: [String] = [], claims: [String] = []) {
         self.productType = productType
         self.ingredients = ingredients
         self.claims = claims
-        self.budget = budget
     }
 }
 
@@ -492,26 +490,24 @@ struct Product: Codable, Identifiable, Equatable {
     var brand: String?
     var link: URL?
     var imageURL: URL?
-    var price: Double?
     var size: String?
     var description: String?
 
-    init(id: String, displayName: String, tagging: ProductTagging, brand: String? = nil, link: URL? = nil, imageURL: URL? = nil, price: Double? = nil, size: String? = nil, description: String? = nil) {
+    init(id: String, displayName: String, tagging: ProductTagging, brand: String? = nil, link: URL? = nil, imageURL: URL? = nil, size: String? = nil, description: String? = nil) {
         self.id = id
         self.displayName = displayName
         self.tagging = tagging
         self.brand = brand
         self.link = link
         self.imageURL = imageURL
-        self.price = price
         self.size = size
         self.description = description
     }
 
     /// Create a product from a product name with automatic tagging
-    static func fromName(_ name: String, brand: String? = nil, budget: Budget = .mid) -> Product {
+    static func fromName(_ name: String, brand: String? = nil) -> Product {
         let productType = ProductAliasMapping.normalize(name)
-        let tagging = ProductTagging(productType: productType, budget: budget)
+        let tagging = ProductTagging(productType: productType)
 
         return Product(
             id: UUID().uuidString,
@@ -551,40 +547,17 @@ struct ProductTypeRecommendation: Codable, Identifiable, Equatable {
     let productType: ProductType
     let notes: String?
     let constraints: Constraints
-    let budget: Budget?
 
-    init(productType: ProductType, notes: String? = nil, constraints: Constraints = Constraints(), budget: Budget? = nil) {
+    init(productType: ProductType, notes: String? = nil, constraints: Constraints = Constraints()) {
         self.id = UUID().uuidString
         self.productType = productType
         self.notes = notes
         self.constraints = constraints
-        self.budget = budget
     }
 }
 
 // MARK: - Migration Helpers
-
-/// Helper for migrating from old StepType to new ProductType
-extension ProductType {
-    /// Convert from old StepType
-    static func fromOldStepType(_ oldType: StepType) -> ProductType {
-        switch oldType {
-        case .cleanser: return .cleanser
-        case .treatment: return .faceSerum
-        case .moisturizer: return .moisturizer
-        case .sunscreen: return .sunscreen
-        case .optional: return .faceSerum // Map optional to face serum as default
-        }
-    }
-}
-
-/// Helper for migrating from old StepType
-extension StepType {
-    /// Convert to new ProductType
-    func toProductType() -> ProductType {
-        return ProductType.fromOldStepType(self)
-    }
-}
+// Removed per request: no migration helpers are needed.
 
 // MARK: - Taxonomy Versioning
 

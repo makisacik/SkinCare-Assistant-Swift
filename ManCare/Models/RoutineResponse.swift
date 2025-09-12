@@ -52,16 +52,14 @@ enum Depth: String, Codable {
 // MARK: - Routine Step
 
 struct APIRoutineStep: Codable {
-    let step: StepType
+    let step: ProductType
     let name: String
     let why: String
     let how: String
     let constraints: Constraints
 }
 
-enum StepType: String, Codable, CaseIterable {
-    case cleanser, treatment, moisturizer, sunscreen, optional
-}
+// Removed StepType. Use ProductType everywhere.
 
 // MARK: - Constraints
 
@@ -127,33 +125,22 @@ struct Adaptation: Codable {
 
 struct ProductSlot: Codable, Identifiable {
     let slotID: String
-    let step: StepType
+    let step: ProductType
     let time: SlotTime
     let constraints: Constraints
-    let budget: Budget?
     let notes: String?
 
     var id: String { slotID }
-
-    /// Convert to new ProductType for forward compatibility
-    var productType: ProductType {
-        return step.toProductType()
-    }
 
     enum CodingKeys: String, CodingKey {
         case slotID = "slot_id"
         case step
         case time
         case constraints
-        case budget
         case notes
     }
 }
 
 enum SlotTime: String, Codable { 
     case AM, PM, Weekly 
-}
-
-enum Budget: String, Codable, CaseIterable { 
-    case low, mid, high 
 }

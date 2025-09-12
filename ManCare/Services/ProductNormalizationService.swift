@@ -40,11 +40,10 @@ struct ProductNormalizationResponse: Codable {
     }
     
     /// Create a Product from the normalized data
-    func toProduct(budget: Budget = .mid) -> Product {
+    func toProduct() -> Product {
         let productType = toProductType()
         let tagging = ProductTagging(
-            productType: productType,
-            budget: budget
+            productType: productType
         )
         
         return Product(
@@ -293,8 +292,8 @@ extension ProductNormalizationService {
     }
     
     /// Normalize and create a Product directly
-    func normalizeToProduct(ocrText: String, budget: Budget = .mid) async throws -> Product {
+    func normalizeToProduct(ocrText: String) async throws -> Product {
         let response = try await normalizeProduct(ocrText: ocrText)
-        return response.toProduct(budget: budget)
+        return response.toProduct()
     }
 }

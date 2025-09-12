@@ -79,7 +79,7 @@ struct APIRequestBuilder {
    },
    "routine": {
      "depth": "minimal|standard|detailed",
-     "morning": [ { "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+     "morning": [ { "step": "cleanser|faceSerum|moisturizer|sunscreen|faceSunscreen",
                     "name": "string",
                     "why": "string",
                     "how": "string",
@@ -93,7 +93,7 @@ struct APIRequestBuilder {
                       "prefer_ingredients": ["string"]
                     }
      } ],
-     "evening": [ { "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+     "evening": [ { "step": "cleanser|faceSerum|moisturizer|sunscreen|faceSunscreen",
                     "name": "string",
                     "why": "string",
                     "how": "string",
@@ -107,7 +107,7 @@ struct APIRequestBuilder {
                       "prefer_ingredients": ["string"]
                     }
      } ],
-     "weekly":  [ { "step": "optional",
+     "weekly":  [ { "step": "faceSerum",
                     "name": "string",
                     "why": "string",
                     "how": "string",
@@ -135,7 +135,7 @@ struct APIRequestBuilder {
    "product_slots": [
      {
        "slot_id": "string",
-       "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+       "step": "cleanser|faceSerum|moisturizer|sunscreen|faceSunscreen",
        "time": "AM|PM|Weekly",
        "constraints": {
          "spf": 0,
@@ -146,7 +146,6 @@ struct APIRequestBuilder {
          "avoid_ingredients": ["string"],
          "prefer_ingredients": ["string"]
        },
-       "budget": "low|mid|high",
        "notes": "string"
      }
    ]
@@ -166,7 +165,7 @@ struct APIRequestBuilder {
  lifestyle: null
  locale: en-US
  📤 Full Request JSON:
- {"messages":[{"role":"system","content":"You are ManCare's skincare co-pilot for men.\nReturn ONLY valid JSON matching the schema exactly. No extra text.\nRules:\n- Safe, realistic, concise.\n- Align to skin type, concerns, main goal, preferences.\n- If info is missing, choose sensible defaults and note them.\n- No brand names or store links; use ingredient-level constraints.\n- Include guardrails (cautions, when_to_stop).\n- Keep language simple\/neutral.\n- Locale-aware where needed.\n\nSCHEMA:\n{\n  \"version\": \"string\",\n  \"locale\": \"string\",\n  \"summary\": {\n    \"title\": \"string\",\n    \"one_liner\": \"string\"\n  },\n  \"routine\": {\n    \"depth\": \"minimal|standard|detailed\",\n    \"morning\": [ { \"step\": \"cleanser|treatment|moisturizer|sunscreen|optional\",\n                   \"name\": \"string\",\n                   \"why\": \"string\",\n                   \"how\": \"string\",\n                   \"constraints\": {\n                     \"spf\": 0,\n                     \"fragrance_free\": true,\n                     \"sensitive_safe\": true,\n                     \"vegan\": true,\n                     \"cruelty_free\": true,\n                     \"avoid_ingredients\": [\"string\"],\n                     \"prefer_ingredients\": [\"string\"]\n                   }\n    } ],\n    \"evening\": [ { \"step\": \"cleanser|treatment|moisturizer|sunscreen|optional\",\n                   \"name\": \"string\",\n                   \"why\": \"string\",\n                   \"how\": \"string\",\n                   \"constraints\": {\n                     \"spf\": 0,\n                     \"fragrance_free\": true,\n                     \"sensitive_safe\": true,\n                     \"vegan\": true,\n                     \"cruelty_free\": true,\n                     \"avoid_ingredients\": [\"string\"],\n                     \"prefer_ingredients\": [\"string\"]\n                   }\n    } ],\n    \"weekly\":  [ { \"step\": \"optional\",\n                   \"name\": \"string\",\n                   \"why\": \"string\",\n                   \"how\": \"string\",\n                   \"constraints\": {\n                     \"spf\": 0,\n                     \"fragrance_free\": true,\n                     \"sensitive_safe\": true,\n                     \"vegan\": true,\n                     \"cruelty_free\": true,\n                     \"avoid_ingredients\": [\"string\"],\n                     \"prefer_ingredients\": [\"string\"]\n                   }\n    } ]\n  },\n  \"guardrails\": {\n    \"cautions\": [\"string\"],\n    \"when_to_stop\": [\"string\"],\n    \"sun_notes\": \"string\"\n  },\n  \"adaptation\": {\n    \"for_skin_type\": \"string\",\n    \"for_concerns\": [\"string\"],\n    \"for_preferences\": [\"string\"]\n  },\n  \"product_slots\": [\n    {\n      \"slot_id\": \"string\",\n      \"step\": \"cleanser|treatment|moisturizer|sunscreen|optional\",\n      \"time\": \"AM|PM|Weekly\",\n      \"constraints\": {\n        \"spf\": 0,\n        \"fragrance_free\": true,\n        \"sensitive_safe\": true,\n        \"vegan\": true,\n        \"cruelty_free\": true,\n        \"avoid_ingredients\": [\"string\"],\n        \"prefer_ingredients\": [\"string\"]\n      },\n      \"budget\": \"low|mid|high\",\n      \"notes\": \"string\"\n    }\n  ]\n}"},{"role":"user","content":"Generate a routine for this user in EXACT schema. Return JSON only.\n\nselectedSkinType: normal\nselectedConcerns: [\"blackheads\"]\nselectedMainGoal: healthierOverall\nselectedPreferences: {\n  fragranceFreeOnly: false,\n  suitableForSensitiveSkin: false,\n  naturalIngredients: false,\n  crueltyFree: true,\n  veganFriendly: false\n}\nlifestyle: null\nlocale: en-US"}],"response_format":{"type":"json_object"},"temperature":0.4,"model":"gpt-4o-mini"}
+ {"messages":[{"role":"system","content":"You are ManCare's skincare co-pilot for men.\nReturn ONLY valid JSON matching the schema exactly. No extra text.\nRules:\n- Safe, realistic, concise.\n- Align to skin type, concerns, main goal, preferences.\n- If info is missing, choose sensible defaults and note them.\n- No brand names or store links; use ingredient-level constraints.\n- Include guardrails (cautions, when_to_stop).\n- Keep language simple\/neutral.\n- Locale-aware where needed.\n\nSCHEMA:\n{\n  \"version\": \"string\",\n  \"locale\": \"string\",\n  \"summary\": {\n    \"title\": \"string\",\n    \"one_liner\": \"string\"\n  },\n  \"routine\": {\n    \"depth\": \"minimal|standard|detailed\",\n    \"morning\": [ { \"step\": \"cleanser|faceSerum|moisturizer|sunscreen|faceSunscreen\",\n                   \"name\": \"string\",\n                   \"why\": \"string\",\n                   \"how\": \"string\",\n                   \"constraints\": {\n                     \"spf\": 0,\n                     \"fragrance_free\": true,\n                     \"sensitive_safe\": true,\n                     \"vegan\": true,\n                     \"cruelty_free\": true,\n                     \"avoid_ingredients\": [\"string\"],\n                     \"prefer_ingredients\": [\"string\"]\n                   }\n    } ],\n    \"evening\": [ { \"step\": \"cleanser|faceSerum|moisturizer|sunscreen|faceSunscreen\",\n                   \"name\": \"string\",\n                   \"why\": \"string\",\n                   \"how\": \"string\",\n                   \"constraints\": {\n                     \"spf\": 0,\n                     \"fragrance_free\": true,\n                     \"sensitive_safe\": true,\n                     \"vegan\": true,\n                     \"cruelty_free\": true,\n                     \"avoid_ingredients\": [\"string\"],\n                     \"prefer_ingredients\": [\"string\"]\n                   }\n    } ],\n    \"weekly\":  [ { \"step\": \"faceSerum\",\n                   \"name\": \"string\",\n                   \"why\": \"string\",\n                   \"how\": \"string\",\n                   \"constraints\": {\n                     \"spf\": 0,\n                     \"fragrance_free\": true,\n                     \"sensitive_safe\": true,\n                     \"vegan\": true,\n                     \"cruelty_free\": true,\n                     \"avoid_ingredients\": [\"string\"],\n                     \"prefer_ingredients\": [\"string\"]\n                   }\n    } ]\n  },\n  \"guardrails\": {\n    \"cautions\": [\"string\"],\n    \"when_to_stop\": [\"string\"],\n    \"sun_notes\": \"string\"\n  },\n  \"adaptation\": {\n    \"for_skin_type\": \"string\",\n    \"for_concerns\": [\"string\"],\n    \"for_preferences\": [\"string\"]\n  },\n  \"product_slots\": [\n    {\n      \"slot_id\": \"string\",\n      \"step\": \"cleanser|faceSerum|moisturizer|sunscreen|faceSunscreen\",\n      \"time\": \"AM|PM|Weekly\",\n      \"constraints\": {\n        \"spf\": 0,\n        \"fragrance_free\": true,\n        \"sensitive_safe\": true,\n        \"vegan\": true,\n        \"cruelty_free\": true,\n        \"avoid_ingredients\": [\"string\"],\n        \"prefer_ingredients\": [\"string\"]\n      },\n\n      \"notes\": \"string\"\n    }\n  ]\n}"},{"role":"user","content":"Generate a routine for this user in EXACT schema. Return JSON only.\n\nselectedSkinType: normal\nselectedConcerns: [\"blackheads\"]\nselectedMainGoal: healthierOverall\nselectedPreferences: {\n  fragranceFreeOnly: false,\n  suitableForSensitiveSkin: false,\n  naturalIngredients: false,\n  crueltyFree: true,\n  veganFriendly: false\n}\nlifestyle: null\nlocale: en-US"}],"response_format":{"type":"json_object"},"temperature":0.4,"model":"gpt-4o-mini"}
  📤 End of Request JSON
  ❌ Error generating routine: TimeoutError(message: "Request timed out")
  nw_read_request_report [C1] Receive failed with error "Operation timed out"

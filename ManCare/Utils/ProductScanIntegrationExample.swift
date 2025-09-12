@@ -53,7 +53,7 @@ class ProductScanIntegrationExample: ObservableObject {
             }
             
             // Step 3: Create Product and add to service
-            let product = normalized.toProduct(budget: .mid)
+            let product = normalized.toProduct()
             productService.addUserProduct(product)
             
             await MainActor.run {
@@ -143,7 +143,7 @@ class ProductScanIntegrationExample: ObservableObject {
             currentStep = "Creating product..."
         }
         
-        let product = normalized.toProduct(budget: .mid)
+        let product = normalized.toProduct()
         productService.addUserProduct(product)
         
         await MainActor.run {
@@ -257,7 +257,6 @@ struct ProductScanIntegrationView: View {
                             Text("Display Name: \(product.displayName)")
                             Text("Brand: \(product.brand ?? "Unknown")")
                             Text("Type: \(product.tagging.productType.displayName)")
-                            Text("Budget: \(product.tagging.budget)")
                         }
                         .font(.system(.caption, design: .monospaced))
                         .padding()

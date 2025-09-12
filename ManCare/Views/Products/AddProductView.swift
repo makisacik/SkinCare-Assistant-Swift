@@ -17,10 +17,8 @@ struct AddProductView: View {
     @State private var productName = ""
     @State private var brand = ""
     @State private var selectedProductType: ProductType = .cleanser
-    @State private var selectedBudget: Budget = .mid
     @State private var ingredients: [String] = []
     @State private var claims: Set<String> = []
-    @State private var price = ""
     @State private var size = ""
     @State private var description = ""
     @State private var newIngredient = ""
@@ -37,30 +35,14 @@ struct AddProductView: View {
             ScrollView {
                 VStack(spacing: 24) {
                     // Header
-                    VStack(spacing: 12) {
-                        HStack {
-                            ZStack {
-                                Circle()
-                                    .fill(tm.theme.palette.secondary.opacity(0.15))
-                                    .frame(width: 60, height: 60)
+                    VStack(spacing: 8) {
+                        Text("Add New Product")
+                            .font(tm.theme.typo.h1)
+                            .foregroundColor(tm.theme.palette.textPrimary)
 
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 28, weight: .semibold))
-                                    .foregroundColor(tm.theme.palette.secondary)
-                            }
-
-                            Spacer()
-                        }
-
-                        VStack(spacing: 8) {
-                            Text("Add New Product")
-                                .font(tm.theme.typo.h1)
-                                .foregroundColor(tm.theme.palette.textPrimary)
-
-                            Text("Add a product to your collection")
-                                .font(tm.theme.typo.sub)
-                                .foregroundColor(tm.theme.palette.textSecondary)
-                        }
+                        Text("Add a product to your collection")
+                            .font(tm.theme.typo.sub)
+                            .foregroundColor(tm.theme.palette.textSecondary)
                     }
                     .padding(.top, 20)
 
@@ -105,7 +87,6 @@ struct AddProductView: View {
                             VStack(spacing: 16) {
                                 FormField(title: "Product Name", text: $productName, placeholder: "e.g., Gentle Foaming Cleanser")
                                 FormField(title: "Brand", text: $brand, placeholder: "e.g., CeraVe")
-                                FormField(title: "Price", text: $price, placeholder: "e.g., 12.99")
                                 FormField(title: "Size", text: $size, placeholder: "e.g., 150ml")
                             }
                         }
@@ -116,7 +97,6 @@ struct AddProductView: View {
                                 ProductTypeSelectorButton(selectedProductType: $selectedProductType) {
                                     showingProductTypeSelector = true
                                 }
-                                BudgetSelector(selectedBudget: $selectedBudget)
                             }
                         }
 
@@ -256,10 +236,8 @@ struct AddProductView: View {
                 productType: selectedProductType,
                 ingredients: ingredients,
                 claims: Array(claims),
-                budget: selectedBudget
             ),
             brand: brand.isEmpty ? nil : brand,
-            price: Double(price),
             size: size.isEmpty ? nil : size,
             description: description.isEmpty ? nil : description
         )
@@ -306,19 +284,6 @@ struct AddProductView: View {
             }
         }
 
-        // Try to extract price (look for $ or currency symbols)
-        if price.isEmpty {
-            for line in lines {
-                if line.contains("$") || line.contains("€") || line.contains("£") {
-                    // Extract just the number part
-                    let priceString = line.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression)
-                    if !priceString.isEmpty {
-                        price = priceString
-                        break
-                    }
-                }
-            }
-        }
 
         // Auto-detect product type from the extracted text
         selectedProductType = ProductAliasMapping.normalize(text)

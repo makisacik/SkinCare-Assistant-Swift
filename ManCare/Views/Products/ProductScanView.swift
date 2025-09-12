@@ -588,7 +588,7 @@ struct ProductScanView: View {
         print("🔹 Step 3 — Creating and adding product")
 
         // Create Product from normalized data
-        let product = normalized.toProduct(budget: .mid)
+        let product = normalized.toProduct()
 
         // Add to ProductService
         productService.addUserProduct(product)

@@ -91,7 +91,7 @@ class RoutineEditingService: ObservableObject {
     }
     
     /// Swap step type
-    func swapStepType(_ step: EditableRoutineStep, newType: StepType) {
+    func swapStepType(_ step: EditableRoutineStep, newType: ProductType) {
         let newTitle = getDefaultTitle(for: newType)
         let newDescription = getDefaultDescription(for: newType)
         let newIconName = iconNameForStepType(newType)
@@ -153,15 +153,15 @@ class RoutineEditingService: ObservableObject {
     }
     
     /// Add a new step
-    func addNewStep(type: StepType, timeOfDay: TimeOfDay) {
+    func addNewStep(type: ProductType, timeOfDay: TimeOfDay) {
         let newStep = createNewStep(type: type, timeOfDay: timeOfDay)
         editableRoutine.addStep(newStep)
         generateCoachMessageForNewStep(newStep)
     }
     
     /// Get available step types for swapping
-    func getAvailableStepTypes(excluding currentType: StepType) -> [StepType] {
-        return StepType.allCases.filter { $0 != currentType }
+    func getAvailableStepTypes(excluding currentType: ProductType) -> [ProductType] {
+        return ProductType.allCases.filter { $0 != currentType }
     }
     
     /// Clear all coach messages
@@ -208,10 +208,10 @@ class RoutineEditingService: ObservableObject {
                 message: "Moisturizer helps maintain skin hydration. Without it, your skin may feel dry. Consider a lighter gel option instead.",
                 actionTitle: "Swap to Gel",
                 action: {
-                    self.swapStepType(step, newType: .treatment)
+                    self.swapStepType(step, newType: .faceSerum)
                 }
             )
-        case .treatment:
+        case .faceSerum:
             message = CoachMessage(
                 type: .information,
                 title: "Removing Treatment",
@@ -219,11 +219,11 @@ class RoutineEditingService: ObservableObject {
                 actionTitle: nil,
                 action: nil
             )
-        case .optional:
+        default:
             message = CoachMessage(
                 type: .information,
-                title: "Removing Optional Step",
-                message: "This step is optional and can be safely removed without affecting your core routine.",
+                title: "Removing Step",
+                message: "This step can be safely removed without affecting your core routine.",
                 actionTitle: nil,
                 action: nil
             )
@@ -232,11 +232,11 @@ class RoutineEditingService: ObservableObject {
         coachMessages.append(message)
     }
     
-    private func generateCoachMessageForStepSwap(_ step: EditableRoutineStep, newType: StepType) {
+    private func generateCoachMessageForStepSwap(_ step: EditableRoutineStep, newType: ProductType) {
         let message: CoachMessage
         
         switch (step.stepType, newType) {
-        case (.moisturizer, .treatment):
+        case (.moisturizer, .faceSerum):
             message = CoachMessage(
                 type: .suggestion,
                 title: "Swapped to Treatment",
@@ -246,14 +246,14 @@ class RoutineEditingService: ObservableObject {
                     self.addNewStep(type: .moisturizer, timeOfDay: step.timeOfDay)
                 }
             )
-        case (.treatment, .moisturizer):
+        case (.faceSerum, .moisturizer):
             message = CoachMessage(
                 type: .suggestion,
                 title: "Swapped to Moisturizer",
                 message: "Good choice! Moisturizer provides essential hydration. Consider adding a treatment serum for targeted benefits.",
                 actionTitle: "Add Treatment",
                 action: {
-                    self.addNewStep(type: .treatment, timeOfDay: step.timeOfDay)
+                    self.addNewStep(type: .faceSerum, timeOfDay: step.timeOfDay)
                 }
             )
         default:
@@ -287,7 +287,7 @@ class RoutineEditingService: ObservableObject {
         let message: CoachMessage
         
         switch step.stepType {
-        case .treatment:
+        case .faceSerum:
             message = CoachMessage(
                 type: .suggestion,
                 title: "New Treatment Added",
@@ -318,7 +318,7 @@ class RoutineEditingService: ObservableObject {
         coachMessages.append(message)
     }
     
-    private func createNewStep(type: StepType, timeOfDay: TimeOfDay) -> EditableRoutineStep {
+    private func createNewStep(type: ProductType, timeOfDay: TimeOfDay) -> EditableRoutineStep {
         let existingSteps = editableRoutine.steps(for: timeOfDay)
         let nextOrder = existingSteps.count
         
@@ -342,89 +342,78 @@ class RoutineEditingService: ObservableObject {
         )
     }
     
-    private func getDefaultTitle(for stepType: StepType) -> String {
+    private func getDefaultTitle(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Gentle Cleanser"
-        case .treatment:
+        case .faceSerum:
             return "Face Serum"
         case .moisturizer:
             return "Moisturizer"
         case .sunscreen:
             return "Sunscreen SPF 30+"
-        case .optional:
-            return "Optional Treatment"
+        default:
+            return stepType.displayName
         }
     }
     
-    private func getDefaultDescription(for stepType: StepType) -> String {
+    private func getDefaultDescription(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Removes dirt, oil, and makeup without stripping skin"
-        case .treatment:
+        case .faceSerum:
             return "Targeted treatment for your specific skin concerns"
         case .moisturizer:
             return "Provides essential hydration and skin barrier support"
         case .sunscreen:
             return "Protects against UV damage and premature aging"
-        case .optional:
-            return "Additional treatment for enhanced results"
+        default:
+            return ""
         }
     }
     
-    private func getDefaultWhy(for stepType: StepType) -> String {
+    private func getDefaultWhy(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Essential for removing daily buildup and preparing skin for other products"
-        case .treatment:
+        case .faceSerum:
             return "Provides targeted benefits for your specific skin concerns"
         case .moisturizer:
             return "Maintains skin hydration and supports the skin barrier"
         case .sunscreen:
             return "Prevents UV damage, premature aging, and skin cancer"
-        case .optional:
-            return "Provides additional benefits beyond your core routine"
+        default:
+            return ""
         }
     }
     
-    private func getDefaultHow(for stepType: StepType) -> String {
+    private func getDefaultHow(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Apply to damp skin, massage gently for 30 seconds, rinse thoroughly"
-        case .treatment:
+        case .faceSerum:
             return "Apply 2-3 drops to clean skin, pat gently until absorbed"
         case .moisturizer:
             return "Apply a pea-sized amount, massage in upward circular motions"
         case .sunscreen:
             return "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
-        case .optional:
-            return "Follow product instructions for best results"
+        default:
+            return ""
         }
     }
 }
 
 // MARK: - Helper Functions
 
-private func iconNameForStepType(_ stepType: StepType) -> String {
-    switch stepType {
-    case .cleanser:
-        return "drop.fill"
-    case .treatment:
-        return "star.fill"
-    case .moisturizer:
-        return "drop.circle.fill"
-    case .sunscreen:
-        return "sun.max.fill"
-    case .optional:
-        return "plus.circle.fill"
-    }
+private func iconNameForStepType(_ stepType: ProductType) -> String {
+    return stepType.iconName
 }
 
-private func isStepTypeLocked(_ stepType: StepType) -> Bool {
+private func isStepTypeLocked(_ stepType: ProductType) -> Bool {
     switch stepType {
-    case .cleanser, .sunscreen:
+    case .cleanser, .sunscreen, .faceSunscreen:
         return true
-    case .treatment, .moisturizer, .optional:
+    default:
         return false
     }
 }

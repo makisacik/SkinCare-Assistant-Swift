@@ -21,7 +21,7 @@ class RoutineTrackingService: ObservableObject {
     // MARK: - Public Methods
     
     /// Toggle completion status for a routine step on a specific date
-    func toggleStepCompletion(stepId: String, stepTitle: String, stepType: StepType, timeOfDay: TimeOfDay, date: Date = Date()) {
+    func toggleStepCompletion(stepId: String, stepTitle: String, stepType: ProductType, timeOfDay: TimeOfDay, date: Date = Date()) {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         

@@ -383,7 +383,7 @@ struct MainFlowView: View {
                 }
               },
               {
-                "step": "treatment",
+                "step": "faceSerum",
                 "name": "Niacinamide Serum",
                 "why": "To minimize the appearance of pores and provide anti-aging benefits.",
                 "how": "Apply a few drops to clean skin and gently pat until absorbed.",
@@ -445,7 +445,7 @@ struct MainFlowView: View {
                 }
               },
               {
-                "step": "treatment",
+                "step": "faceSerum",
                 "name": "Retinol Treatment",
                 "why": "To promote cell turnover and reduce the signs of aging.",
                 "how": "Apply a small amount to clean skin, avoiding the eye area.",
@@ -477,7 +477,7 @@ struct MainFlowView: View {
             ],
             "weekly": [
               {
-                "step": "optional",
+                "step": "faceSerum",
                 "name": "Exfoliating Mask",
                 "why": "To remove dead skin cells and improve skin texture.",
                 "how": "Apply to clean skin, leave on for the recommended time, then rinse.",
@@ -517,12 +517,11 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": ["salicylic acid", "niacinamide"]
               },
-              "budget": "mid",
               "notes": "Choose a gentle formula that suits normal skin."
             },
             {
               "slot_id": "2",
-              "step": "treatment",
+              "step": "faceSerum",
               "time": "AM",
               "constraints": {
                 "spf": 0,
@@ -533,7 +532,6 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": ["niacinamide"]
               },
-              "budget": "mid",
               "notes": "Focus on pore-minimizing ingredients."
             },
             {
@@ -549,7 +547,6 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": ["hyaluronic acid"]
               },
-              "budget": "mid",
               "notes": "Look for lightweight options."
             },
             {
@@ -565,7 +562,6 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": []
               },
-              "budget": "mid",
               "notes": "Ensure broad-spectrum protection."
             },
             {
@@ -581,12 +577,11 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": ["salicylic acid", "niacinamide"]
               },
-              "budget": "mid",
               "notes": "Use the same gentle cleanser as in the morning."
             },
             {
               "slot_id": "6",
-              "step": "treatment",
+              "step": "faceSerum",
               "time": "PM",
               "constraints": {
                 "spf": 0,
@@ -597,7 +592,6 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": ["retinol"]
               },
-              "budget": "mid",
               "notes": "Retinol should be introduced gradually."
             },
             {
@@ -613,12 +607,11 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": ["peptides"]
               },
-              "budget": "mid",
               "notes": "Opt for a nourishing night cream."
             },
             {
               "slot_id": "8",
-              "step": "optional",
+              "step": "faceSerum",
               "time": "Weekly",
               "constraints": {
                 "spf": 0,
@@ -629,7 +622,6 @@ struct MainFlowView: View {
                 "avoid_ingredients": [],
                 "prefer_ingredients": ["AHA", "BHA"]
               },
-              "budget": "mid",
               "notes": "Use an exfoliating mask to enhance skin texture."
             }
           ]

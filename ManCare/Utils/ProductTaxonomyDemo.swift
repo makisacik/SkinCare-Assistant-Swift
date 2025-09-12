@@ -47,10 +47,10 @@ class ProductTaxonomyDemo {
         print("\n3. PRODUCT CREATION (Automatic tagging)")
         print("-" * 30)
         let products = [
-            Product.fromName("CeraVe Foaming Facial Cleanser", brand: "CeraVe", budget: .mid),
-            Product.fromName("The Ordinary Niacinamide 10% + Zinc 1%", brand: "The Ordinary", budget: .low),
-            Product.fromName("EltaMD UV Clear Broad-Spectrum SPF 46", brand: "EltaMD", budget: .high),
-            Product.fromName("Paula's Choice 2% BHA Liquid Exfoliant", brand: "Paula's Choice", budget: .mid)
+            Product.fromName("CeraVe Foaming Facial Cleanser", brand: "CeraVe"),
+            Product.fromName("The Ordinary Niacinamide 10% + Zinc 1%", brand: "The Ordinary"),
+            Product.fromName("EltaMD UV Clear Broad-Spectrum SPF 46", brand: "EltaMD"),
+            Product.fromName("Paula's Choice 2% BHA Liquid Exfoliant", brand: "Paula's Choice")
         ]
         
         for product in products {
@@ -58,7 +58,6 @@ class ProductTaxonomyDemo {
             print("  Brand: \(product.brand ?? "Unknown")")
             print("  Product Type: \(product.tagging.productType.displayName)")
             print("  Ingredients: \(product.tagging.ingredients.joined(separator: ", "))")
-            print("  Budget: \(product.tagging.budget.rawValue)")
         }
         
         // 4. Demonstrate constraint matching
@@ -85,7 +84,6 @@ class ProductTaxonomyDemo {
                     productType: .cleanser,
                     ingredients: ["ceramides", "hyaluronic acid"],
                     claims: ["fragranceFree", "sensitiveSafe"],
-                    budget: .mid
                 ),
                 brand: "Test Brand"
             ),
@@ -96,7 +94,6 @@ class ProductTaxonomyDemo {
                     productType: .cleanser,
                     ingredients: ["alcohol", "fragrance"],
                     claims: [],
-                    budget: .low
                 ),
                 brand: "Test Brand"
             )
@@ -122,16 +119,8 @@ class ProductTaxonomyDemo {
             print("• \(frequency.displayName): \(frequency.description)")
         }
         
-        // 6. Demonstrate backward compatibility
-        print("\n6. BACKWARD COMPATIBILITY (Old StepType → New ProductType)")
-        print("-" * 30)
-        let oldStepTypes: [StepType] = [.cleanser, .treatment, .moisturizer, .sunscreen, .optional]
-        
-        for oldType in oldStepTypes {
-            let newProductType = oldType.toProductType()
-            print("• \(oldType.rawValue) → \(newProductType.displayName)")
-        }
-        
+        // 6. Backward compatibility removed; using ProductType directly
+
         print("\n" + "=" * 50)
         print("✅ Demo completed! The new taxonomy system is working.")
     }

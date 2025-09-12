@@ -226,15 +226,7 @@ private struct RoutineDetailStepCard: View {
     
     @State private var showCheckmarkAnimation = false
     
-    private var stepColor: Color {
-        switch step.stepType {
-        case .cleanser: return .blue
-        case .treatment: return .purple
-        case .moisturizer: return .green
-        case .sunscreen: return .yellow
-        case .optional: return .orange
-        }
-    }
+    private var stepColor: Color { Color(step.stepType.color) }
     
     var body: some View {
         HStack(spacing: 16) {
@@ -352,7 +344,7 @@ private struct RoutineDetailStepCard: View {
                 title: "Toner",
                 description: "Balances pH and prepares skin for next steps",
                 iconName: "drop.circle",
-                stepType: .treatment,
+                stepType: .faceSerum,
                 timeOfDay: .morning,
                 why: "Restores skin's natural pH balance and enhances product absorption",
                 how: "Apply with cotton pad or hands, pat gently until absorbed"

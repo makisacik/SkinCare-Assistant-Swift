@@ -53,7 +53,7 @@ class ProductNormalizationExample {
             addResult("   Confidence: \(response.confidence)")
             
             // Convert to Product
-            let product = response.toProduct(budget: .mid)
+            let product = response.toProduct()
             addResult("   Created Product: \(product.displayName)")
             addResult("   Product Type: \(product.tagging.productType.displayName)")
             
@@ -118,14 +118,13 @@ class ProductNormalizationExample {
         let ocrText = "Kiehl's Ultra Facial Cream"
         
         do {
-            let product = try await normalizationService.normalizeToProduct(ocrText: ocrText, budget: .high)
+            let product = try await normalizationService.normalizeToProduct(ocrText: ocrText)
             
             addResult("✅ Direct product creation successful:")
             addResult("   Product ID: \(product.id)")
             addResult("   Display Name: \(product.displayName)")
             addResult("   Brand: \(product.brand ?? "Unknown")")
             addResult("   Product Type: \(product.tagging.productType.displayName)")
-            addResult("   Budget: \(product.tagging.budget)")
             
         } catch {
             addResult("❌ Direct product creation failed: \(error)")

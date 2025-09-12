@@ -229,34 +229,10 @@ private struct OriginalStepCard: View {
     let stepNumber: Int
     
     private var stepTypeColor: Color {
-        switch step.step {
-        case .cleanser:
-            return .blue
-        case .treatment:
-            return .purple
-        case .moisturizer:
-            return .green
-        case .sunscreen:
-            return .yellow
-        case .optional:
-            return .orange
-        }
+        Color(step.step.color)
     }
     
-    private var iconName: String {
-        switch step.step {
-        case .cleanser:
-            return "drop.fill"
-        case .treatment:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        case .optional:
-            return "plus.circle.fill"
-        }
-    }
+    private var iconName: String { step.step.iconName }
     
     var body: some View {
         HStack(spacing: 12) {
@@ -307,20 +283,7 @@ private struct EditedStepCard: View {
     @Environment(\.themeManager) private var tm
     let step: EditableRoutineStep
     
-    private var stepTypeColor: Color {
-        switch step.stepType {
-        case .cleanser:
-            return .blue
-        case .treatment:
-            return .purple
-        case .moisturizer:
-            return .green
-        case .sunscreen:
-            return .yellow
-        case .optional:
-            return .orange
-        }
-    }
+    private var stepTypeColor: Color { Color(step.stepType.color) }
     
     var body: some View {
         HStack(spacing: 12) {

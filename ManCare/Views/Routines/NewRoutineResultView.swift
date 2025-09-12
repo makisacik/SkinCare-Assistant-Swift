@@ -99,7 +99,7 @@ struct NewRoutineResultView: View {
         if let routine = generatedRoutine {
             return routine.routine.morning.map { apiStep in
                 RoutineStep(
-                    productType: apiStep.step.toProductType(),
+                    productType: apiStep.step,
                     title: apiStep.name,
                     instructions: "\(apiStep.why) - \(apiStep.how)"
                 )
@@ -154,7 +154,7 @@ struct NewRoutineResultView: View {
         if let routine = generatedRoutine {
             return routine.routine.evening.map { apiStep in
                 RoutineStep(
-                    productType: apiStep.step.toProductType(),
+                    productType: apiStep.step,
                     title: apiStep.name,
                     instructions: "\(apiStep.why) - \(apiStep.how)"
                 )

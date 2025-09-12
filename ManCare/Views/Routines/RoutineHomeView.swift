@@ -217,7 +217,7 @@ struct RoutineHomeView: View {
                 title: "Toner",
                 description: "Balances pH and prepares skin for next steps",
                 iconName: "drop.circle",
-                stepType: .treatment,
+                stepType: .faceSerum,
                 timeOfDay: .morning,
                 why: "Restores skin's natural pH balance and enhances product absorption",
                 how: "Apply with cotton pad or hands, pat gently until absorbed"
@@ -276,9 +276,9 @@ struct RoutineHomeView: View {
             RoutineStepDetail(
                 id: "evening_serum",
                 title: "Face Serum",
-                description: "Targeted treatment for your skin concerns",
+                description: "Targeted serum for your skin concerns",
                 iconName: "star.fill",
-                stepType: .treatment,
+                stepType: .faceSerum,
                 timeOfDay: .evening,
                 why: "Active ingredients work best overnight when skin is in repair mode",
                 how: "Apply 2-3 drops, pat gently until absorbed, avoid eye area"
@@ -340,33 +340,33 @@ struct RoutineHomeView: View {
         }
     }
 
-    private func iconNameForStepType(_ stepType: StepType) -> String {
+    private func iconNameForStepType(_ stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "drop.fill"
-        case .treatment:
+        case .faceSerum:
             return "star.fill"
         case .moisturizer:
             return "drop.circle.fill"
         case .sunscreen:
             return "sun.max.fill"
-        case .optional:
-            return "plus.circle.fill"
+        default:
+            return stepType.iconName
         }
     }
 
-    private func colorForStepType(_ stepType: StepType) -> Color {
+    private func colorForStepType(_ stepType: ProductType) -> Color {
         switch stepType {
         case .cleanser:
             return .blue
-        case .treatment:
+        case .faceSerum:
             return .purple
         case .moisturizer:
             return .green
         case .sunscreen:
             return .yellow
-        case .optional:
-            return .orange
+        default:
+            return Color(stepType.color)
         }
     }
 
@@ -679,10 +679,11 @@ private struct RoutineStepRow: View {
     private var stepColor: Color {
         switch step.stepType {
         case .cleanser: return .blue
-        case .treatment: return .purple
+        case .faceSerum: return .purple
         case .moisturizer: return .green
         case .sunscreen: return .yellow
-        case .optional: return .orange
+        case .faceSunscreen: return .orange
+        default: return .gray
         }
     }
 
@@ -884,12 +885,12 @@ struct RoutineStepDetail: Identifiable {
     let title: String
     let description: String
     let iconName: String
-    let stepType: StepType
+    let stepType: ProductType
     let timeOfDay: TimeOfDay
     let why: String?
     let how: String?
 
-    init(id: String, title: String, description: String, iconName: String, stepType: StepType, timeOfDay: TimeOfDay, why: String? = nil, how: String? = nil) {
+    init(id: String, title: String, description: String, iconName: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String? = nil, how: String? = nil) {
         self.id = id
         self.title = title
         self.description = description

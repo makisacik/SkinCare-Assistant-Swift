@@ -91,10 +91,6 @@ class ProductService: ObservableObject {
         return userProducts.filter { $0.tagging.productType.category == category }
     }
     
-    /// Filter products by budget
-    func filterProducts(by budget: Budget) -> [Product] {
-        return userProducts.filter { $0.tagging.budget == budget }
-    }
     
     /// Filter products by claims
     func filterProducts(by claims: [String]) -> [Product] {
@@ -108,7 +104,7 @@ class ProductService: ObservableObject {
     // MARK: - Product Recommendations
     
     /// Get product recommendations for a product type
-    func getRecommendations(for productType: ProductType, constraints: Constraints = Constraints(), budget: Budget? = nil) -> [Product] {
+    func getRecommendations(for productType: ProductType, constraints: Constraints = Constraints()) -> [Product] {
         var candidates = userProducts.filter { $0.tagging.productType == productType }
         
         // Apply constraints
@@ -116,16 +112,11 @@ class ProductService: ObservableObject {
             matchesConstraints(product.tagging, constraints: constraints)
         }
         
-        // Apply budget filter if specified
-        if let budget = budget {
-            candidates = candidates.filter { $0.tagging.budget == budget }
-        }
-        
         return candidates
     }
     
     /// Create a product from a name with automatic tagging
-    func createProductFromName(_ name: String, brand: String? = nil, budget: Budget = .mid, additionalInfo: [String: Any] = [:]) -> Product {
+    func createProductFromName(_ name: String, brand: String? = nil, additionalInfo: [String: Any] = [:]) -> Product {
         let productType = ProductAliasMapping.normalize(name)
         
         // Extract ingredients and claims from additional info
@@ -135,8 +126,7 @@ class ProductService: ObservableObject {
         let tagging = ProductTagging(
             productType: productType,
             ingredients: ingredients,
-            claims: claims,
-            budget: budget
+            claims: claims
         )
         
         return Product(
@@ -144,7 +134,6 @@ class ProductService: ObservableObject {
             displayName: name,
             tagging: tagging,
             brand: brand,
-            price: additionalInfo["price"] as? Double,
             size: additionalInfo["size"] as? String,
             description: additionalInfo["description"] as? String
         )
@@ -242,13 +231,10 @@ extension ProductService {
     var productStats: ProductStats {
         let totalProducts = userProducts.count
         let productsByType = Dictionary(grouping: userProducts, by: { $0.tagging.productType })
-        let productsByBudget = Dictionary(grouping: userProducts, by: { $0.tagging.budget })
         
         return ProductStats(
             totalProducts: totalProducts,
-            productsByType: productsByType,
-            productsByBudget: productsByBudget,
-            averagePrice: userProducts.compactMap { $0.price }.reduce(0, +) / Double(max(userProducts.count, 1))
+            productsByType: productsByType
         )
     }
 }
@@ -256,6 +242,4 @@ extension ProductService {
 struct ProductStats {
     let totalProducts: Int
     let productsByType: [ProductType: [Product]]
-    let productsByBudget: [Budget: [Product]]
-    let averagePrice: Double
 }

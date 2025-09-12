@@ -314,7 +314,7 @@ public final class GPTService {
             "depth": "minimal|standard|detailed",
             "morning": [
               {
-                "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+                "step": "cleanser|moisturizer|sunscreen|toner|faceSerum|exfoliator|faceMask|facialOil|facialMist|eyeCream|spotTreatment|retinol|vitaminC|niacinamide|faceSunscreen|bodySunscreen|lipBalm|shaveCream|aftershave|shaveGel|bodyLotion|bodyWash|handCream|shampoo|conditioner|hairOil|hairMask|chemicalPeel|micellarWater|makeupRemover|faceWash|cleansingOil|cleansingBalm",
                 "name": "string",
                 "why": "string",
                 "how": "string",
@@ -331,7 +331,7 @@ public final class GPTService {
             ],
             "evening": [
               {
-                "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+                "step": "cleanser|moisturizer|sunscreen|toner|faceSerum|exfoliator|faceMask|facialOil|facialMist|eyeCream|spotTreatment|retinol|vitaminC|niacinamide|faceSunscreen|bodySunscreen|lipBalm|shaveCream|aftershave|shaveGel|bodyLotion|bodyWash|handCream|shampoo|conditioner|hairOil|hairMask|chemicalPeel|micellarWater|makeupRemover|faceWash|cleansingOil|cleansingBalm",
                 "name": "string",
                 "why": "string",
                 "how": "string",
@@ -348,7 +348,7 @@ public final class GPTService {
             ],
             "weekly": [
               {
-                "step": "optional",
+                "step": "faceSerum",
                 "name": "string",
                 "why": "string",
                 "how": "string",
@@ -377,7 +377,7 @@ public final class GPTService {
           "product_slots": [
             {
               "slot_id": "string",
-              "step": "cleanser|treatment|moisturizer|sunscreen|optional",
+              "step": "cleanser|moisturizer|sunscreen|toner|faceSerum|exfoliator|faceMask|facialOil|facialMist|eyeCream|spotTreatment|retinol|vitaminC|niacinamide|faceSunscreen|bodySunscreen|lipBalm|shaveCream|aftershave|shaveGel|bodyLotion|bodyWash|handCream|shampoo|conditioner|hairOil|hairMask|chemicalPeel|micellarWater|makeupRemover|faceWash|cleansingOil|cleansingBalm",
               "time": "AM|PM|Weekly",
               "constraints": {
                 "spf": 0,
@@ -388,7 +388,6 @@ public final class GPTService {
                 "avoid_ingredients": ["string"],
                 "prefer_ingredients": ["string"]
               },
-              "budget": "low|mid|high",
               "notes": "string"
             }
           ]

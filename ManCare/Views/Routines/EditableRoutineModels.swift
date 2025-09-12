@@ -16,7 +16,7 @@ struct EditableRoutineStep: Identifiable, Codable {
     var title: String
     var description: String
     var iconName: String
-    var stepType: StepType
+    var stepType: ProductType
     var timeOfDay: TimeOfDay
     var why: String
     var how: String
@@ -33,15 +33,12 @@ struct EditableRoutineStep: Identifiable, Codable {
     var morningEnabled: Bool
     var eveningEnabled: Bool
     
-    /// Convert to new ProductType for forward compatibility
-    var productType: ProductType {
-        return stepType.toProductType()
-    }
+    // Removed migration helper usage; use ProductType directly where needed.
     init(from apiStep: APIRoutineStep, timeOfDay: TimeOfDay, order: Int) {
         self.id = "\(timeOfDay.rawValue)_\(apiStep.name.replacingOccurrences(of: " ", with: "_"))"
         self.title = apiStep.name
         self.description = "\(apiStep.why) - \(apiStep.how)"
-        self.iconName = iconNameForStepType(apiStep.step)
+        self.iconName = apiStep.step.iconName
         self.stepType = apiStep.step
         self.timeOfDay = timeOfDay
         self.why = apiStep.why
@@ -56,7 +53,7 @@ struct EditableRoutineStep: Identifiable, Codable {
         self.eveningEnabled = timeOfDay == .evening
     }
     
-    init(id: String, title: String, description: String, iconName: String, stepType: StepType, timeOfDay: TimeOfDay, why: String, how: String, isEnabled: Bool = true, frequency: StepFrequency = .daily, customInstructions: String? = nil, isLocked: Bool = false, originalStep: Bool = false, order: Int, morningEnabled: Bool, eveningEnabled: Bool) {
+    init(id: String, title: String, description: String, iconName: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String, how: String, isEnabled: Bool = true, frequency: StepFrequency = .daily, customInstructions: String? = nil, isLocked: Bool = false, originalStep: Bool = false, order: Int, morningEnabled: Bool, eveningEnabled: Bool) {
         self.id = id
         self.title = title
         self.description = description
@@ -282,7 +279,7 @@ struct CoachMessage: Identifiable {
 /// Step modification action
 enum StepModificationAction {
     case remove
-    case swap(StepType)
+    case swap(ProductType)
     case reorder(Int)
     case toggleEnabled
     case changeFrequency(StepFrequency)
@@ -300,27 +297,16 @@ enum RoutineEditingState {
 
 // MARK: - Helper Functions
 
-private func iconNameForStepType(_ stepType: StepType) -> String {
-    switch stepType {
-    case .cleanser:
-        return "drop.fill"
-    case .treatment:
-        return "star.fill"
-    case .moisturizer:
-        return "drop.circle.fill"
-    case .sunscreen:
-        return "sun.max.fill"
-    case .optional:
-        return "plus.circle.fill"
-    }
+private func iconNameForStepType(_ stepType: ProductType) -> String {
+    return stepType.iconName
 }
 
-private func isStepTypeLocked(_ stepType: StepType) -> Bool {
+private func isStepTypeLocked(_ stepType: ProductType) -> Bool {
     // Lock essential steps that shouldn't be easily removed
     switch stepType {
-    case .cleanser, .sunscreen:
+    case .cleanser, .sunscreen, .faceSunscreen:
         return true
-    case .treatment, .moisturizer, .optional:
+    default:
         return false
     }
 }
@@ -333,7 +319,7 @@ extension EditableRoutineStep {
         title: String? = nil,
         description: String? = nil,
         iconName: String? = nil,
-        stepType: StepType? = nil,
+        stepType: ProductType? = nil,
         timeOfDay: TimeOfDay? = nil,
         why: String? = nil,
         how: String? = nil,
@@ -368,33 +354,11 @@ extension EditableRoutineStep {
     
     /// Get display name for step type
     var stepTypeDisplayName: String {
-        switch stepType {
-        case .cleanser:
-            return "Cleanser"
-        case .treatment:
-            return "Treatment"
-        case .moisturizer:
-            return "Moisturizer"
-        case .sunscreen:
-            return "Sunscreen"
-        case .optional:
-            return "Optional"
-        }
+        return stepType.displayName
     }
     
     /// Get color for step type
     var stepTypeColor: Color {
-        switch stepType {
-        case .cleanser:
-            return .blue
-        case .treatment:
-            return .purple
-        case .moisturizer:
-            return .green
-        case .sunscreen:
-            return .yellow
-        case .optional:
-            return .orange
-        }
+        return Color(stepType.color)
     }
 }

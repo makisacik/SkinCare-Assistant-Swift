@@ -37,45 +37,10 @@ struct SimpleProductRow: View {
 
             Spacer()
 
-            VStack(alignment: .trailing, spacing: 4) {
-                if let price = product.price {
-                    Text("$\(String(format: "%.2f", price))")
-                        .font(tm.theme.typo.caption.weight(.semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
-                }
-                Text(budgetTitle(product.tagging.budget))
-                    .font(tm.theme.typo.caption.weight(.semibold))
-                    .foregroundColor(budgetColor(product.tagging.budget))
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(budgetColor(product.tagging.budget).opacity(0.1))
-                    .cornerRadius(6)
-            }
         }
         .padding(.vertical, 8)
     }
 
-    private func budgetTitle(_ budget: Budget) -> String {
-        switch budget {
-        case .low:
-            return "Budget"
-        case .mid:
-            return "Mid"
-        case .high:
-            return "Premium"
-        }
-    }
-
-    private func budgetColor(_ budget: Budget) -> Color {
-        switch budget {
-        case .low:
-            return .green
-        case .mid:
-            return .orange
-        case .high:
-            return .red
-        }
-    }
 }
 
 #Preview("SimpleProductRow") {
@@ -85,11 +50,9 @@ struct SimpleProductRow: View {
         tagging: ProductTagging(
             productType: .cleanser,
             ingredients: ["Hyaluronic Acid", "Ceramides"],
-            claims: ["fragranceFree", "sensitiveSafe"],
-            budget: .mid
+            claims: ["fragranceFree", "sensitiveSafe"]
         ),
         brand: "CeraVe",
-        price: 12.99,
         size: "150ml",
         description: "A gentle cleanser for sensitive skin"
     )

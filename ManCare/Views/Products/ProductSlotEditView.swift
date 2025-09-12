@@ -20,7 +20,7 @@ struct ProductSlotEditView: View {
                     .font(tm.theme.typo.h1)
                     .foregroundColor(tm.theme.palette.textPrimary)
                 
-                Text("This feature will allow you to edit the product slot: \(slot.step.rawValue)")
+                Text("This feature will allow you to edit the product slot: \(slot.step.displayName)")
                     .font(tm.theme.typo.body)
                     .foregroundColor(tm.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
@@ -60,7 +60,6 @@ struct ProductSlotEditView: View {
                 avoidIngredients: [],
                 preferIngredients: ["salicylic acid", "niacinamide"]
             ),
-            budget: .mid,
             notes: "Choose a gentle formula that suits normal skin."
         )
     )

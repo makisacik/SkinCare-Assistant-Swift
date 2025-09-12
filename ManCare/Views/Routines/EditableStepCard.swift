@@ -499,53 +499,14 @@ struct SwapStepView: View {
 
 private struct SwapOptionCard: View {
     @Environment(\.themeManager) private var tm
-    let stepType: StepType
+    let stepType: ProductType
     let onSelect: () -> Void
     
-    private var stepTypeColor: Color {
-        switch stepType {
-        case .cleanser:
-            return .blue
-        case .treatment:
-            return .purple
-        case .moisturizer:
-            return .green
-        case .sunscreen:
-            return .yellow
-        case .optional:
-            return .orange
-        }
-    }
+    private var stepTypeColor: Color { Color(stepType.color) }
     
-    private var iconName: String {
-        switch stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .treatment:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        case .optional:
-            return "plus.circle.fill"
-        }
-    }
+    private var iconName: String { stepType.iconName }
     
-    private var displayName: String {
-        switch stepType {
-        case .cleanser:
-            return "Cleanser"
-        case .treatment:
-            return "Treatment"
-        case .moisturizer:
-            return "Moisturizer"
-        case .sunscreen:
-            return "Sunscreen"
-        case .optional:
-            return "Optional"
-        }
-    }
+    private var displayName: String { stepType.displayName }
     
     var body: some View {
         Button {

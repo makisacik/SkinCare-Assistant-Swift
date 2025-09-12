@@ -14,7 +14,7 @@ struct AddStepView: View {
     let timeOfDay: TimeOfDay
     let editingService: RoutineEditingService
     
-    @State private var selectedStepType: StepType = .treatment
+    @State private var selectedStepType: ProductType = .faceSerum
     @State private var customTitle = ""
     @State private var customDescription = ""
     @State private var customInstructions = ""
@@ -49,7 +49,7 @@ struct AddStepView: View {
                             GridItem(.flexible()),
                             GridItem(.flexible())
                         ], spacing: 12) {
-                            ForEach(StepType.allCases, id: \.self) { stepType in
+                            ForEach(ProductType.allCases, id: \.self) { stepType in
                                 StepTypeCard(
                                     stepType: stepType,
                                     isSelected: selectedStepType == stepType,
@@ -254,7 +254,7 @@ struct AddStepView: View {
         }
     }
     
-    private func updateDefaultsForStepType(_ stepType: StepType) {
+    private func updateDefaultsForStepType(_ stepType: ProductType) {
         if customTitle.isEmpty {
             customTitle = getDefaultTitle(for: stepType)
         }
@@ -289,86 +289,75 @@ struct AddStepView: View {
     
     // MARK: - Helper Functions
     
-    private func getDefaultTitle(for stepType: StepType) -> String {
+    private func getDefaultTitle(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Gentle Cleanser"
-        case .treatment:
+        case .faceSerum:
             return "Face Serum"
         case .moisturizer:
             return "Moisturizer"
         case .sunscreen:
             return "Sunscreen SPF 30+"
-        case .optional:
-            return "Optional Treatment"
+        default:
+            return stepType.displayName
         }
     }
     
-    private func getDefaultDescription(for stepType: StepType) -> String {
+    private func getDefaultDescription(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Removes dirt, oil, and makeup without stripping skin"
-        case .treatment:
+        case .faceSerum:
             return "Targeted treatment for your specific skin concerns"
         case .moisturizer:
             return "Provides essential hydration and skin barrier support"
         case .sunscreen:
             return "Protects against UV damage and premature aging"
-        case .optional:
-            return "Additional treatment for enhanced results"
+        default:
+            return ""
         }
     }
     
-    private func getDefaultWhy(for stepType: StepType) -> String {
+    private func getDefaultWhy(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Essential for removing daily buildup and preparing skin for other products"
-        case .treatment:
+        case .faceSerum:
             return "Provides targeted benefits for your specific skin concerns"
         case .moisturizer:
             return "Maintains skin hydration and supports the skin barrier"
         case .sunscreen:
             return "Prevents UV damage, premature aging, and skin cancer"
-        case .optional:
-            return "Provides additional benefits beyond your core routine"
+        default:
+            return ""
         }
     }
     
-    private func getDefaultHow(for stepType: StepType) -> String {
+    private func getDefaultHow(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
             return "Apply to damp skin, massage gently for 30 seconds, rinse thoroughly"
-        case .treatment:
+        case .faceSerum:
             return "Apply 2-3 drops to clean skin, pat gently until absorbed"
         case .moisturizer:
             return "Apply a pea-sized amount, massage in upward circular motions"
         case .sunscreen:
             return "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
-        case .optional:
-            return "Follow product instructions for best results"
+        default:
+            return ""
         }
     }
     
-    private func iconNameForStepType(_ stepType: StepType) -> String {
-        switch stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .treatment:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        case .optional:
-            return "plus.circle.fill"
-        }
+    private func iconNameForStepType(_ stepType: ProductType) -> String {
+        return stepType.iconName
     }
     
-    private func isStepTypeLocked(_ stepType: StepType) -> Bool {
+    private func isStepTypeLocked(_ stepType: ProductType) -> Bool {
         switch stepType {
-        case .cleanser, .sunscreen:
+        case .cleanser, .sunscreen, .faceSunscreen:
             return true
-        case .treatment, .moisturizer, .optional:
+        default:
             return false
         }
     }
@@ -378,54 +367,15 @@ struct AddStepView: View {
 
 private struct StepTypeCard: View {
     @Environment(\.themeManager) private var tm
-    let stepType: StepType
+    let stepType: ProductType
     let isSelected: Bool
     let onSelect: () -> Void
     
-    private var stepTypeColor: Color {
-        switch stepType {
-        case .cleanser:
-            return .blue
-        case .treatment:
-            return .purple
-        case .moisturizer:
-            return .green
-        case .sunscreen:
-            return .yellow
-        case .optional:
-            return .orange
-        }
-    }
+    private var stepTypeColor: Color { Color(stepType.color) }
     
-    private var iconName: String {
-        switch stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .treatment:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        case .optional:
-            return "plus.circle.fill"
-        }
-    }
+    private var iconName: String { stepType.iconName }
     
-    private var displayName: String {
-        switch stepType {
-        case .cleanser:
-            return "Cleanser"
-        case .treatment:
-            return "Treatment"
-        case .moisturizer:
-            return "Moisturizer"
-        case .sunscreen:
-            return "Sunscreen"
-        case .optional:
-            return "Optional"
-        }
-    }
+    private var displayName: String { stepType.displayName }
     
     var body: some View {
         Button {
