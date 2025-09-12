@@ -10,6 +10,8 @@ import SwiftUI
 struct MainTabView: View {
     @Environment(\.themeManager) private var tm
     @State private var selectedTab: Tab = .routines
+    @State private var showingAddProduct = false
+    @State private var showingTestSheet = false
     let generatedRoutine: RoutineResponse?
     
     enum Tab: String, CaseIterable {
@@ -27,27 +29,54 @@ struct MainTabView: View {
     }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // Routines Tab
-            RoutineHomeView(generatedRoutine: generatedRoutine)
-                .tabItem {
-                    Image(systemName: Tab.routines.iconName)
-                    Text(Tab.routines.rawValue)
-                }
-                .tag(Tab.routines)
-            
-            // Products Tab
-            ProductSlotsView()
+        ZStack {
+            TabView(selection: $selectedTab) {
+                // Routines Tab
+                RoutineHomeView(generatedRoutine: generatedRoutine)
+                    .tabItem {
+                        Image(systemName: Tab.routines.iconName)
+                        Text(Tab.routines.rawValue)
+                    }
+                    .tag(Tab.routines)
+                
+                // Products Tab
+                ProductSlotsView(
+                    onAddProductTapped: { showingAddProduct = true },
+                    onTestSheetTapped: { showingTestSheet = true }
+                )
                 .tabItem {
                     Image(systemName: Tab.products.iconName)
                     Text(Tab.products.rawValue)
                 }
                 .tag(Tab.products)
+            }
+            .accentColor(tm.theme.palette.secondary)
+            .onAppear {
+                // Set up tab bar appearance
+                setupTabBarAppearance()
+            }
         }
-        .accentColor(tm.theme.palette.secondary)
-        .onAppear {
-            // Set up tab bar appearance
-            setupTabBarAppearance()
+        .fullScreenCover(isPresented: $showingAddProduct) {
+            AddProductView(productService: ProductService.shared) { product in
+                print("Added product: \(product.displayName)")
+            }
+        }
+        .fullScreenCover(isPresented: $showingTestSheet) {
+            VStack(spacing: 20) {
+                Text("Test Sheet")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Text("This is a simple test sheet to verify smooth presentation.")
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.secondary)
+                
+                Button("Dismiss") {
+                    showingTestSheet = false
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding(30)
         }
     }
     

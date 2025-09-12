@@ -10,82 +10,80 @@ import SwiftUI
 struct ProductSlotsView: View {
     @Environment(\.themeManager) private var tm
     @ObservedObject private var productService = ProductService.shared
-
-    // ✅ Use a simple boolean for sheet presentation
-    @State private var showingAddProduct = false
+    
+    // Callbacks for sheet presentation (handled at root level)
+    let onAddProductTapped: () -> Void
+    let onTestSheetTapped: () -> Void
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                // Header
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("My Products")
-                            .font(tm.theme.typo.h1)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+        VStack(spacing: 0) {
+            // Header
+            VStack(spacing: 8) {
+                HStack {
+                    Text("My Products")
+                        .font(tm.theme.typo.h1)
+                        .foregroundColor(tm.theme.palette.textPrimary)
 
-                        Spacer()
+                    Spacer()
+                    
+                    // Test Sheet Button
+                    Button("Test Sheet") {
+                        onTestSheetTapped()
                     }
-
-                    Text("Store and manage your own products")
-                        .font(tm.theme.typo.sub)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(.caption)
+                    .foregroundColor(tm.theme.palette.secondary)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
-                .padding(.bottom, 16)
 
-                // Products List
-                if productService.userProducts.isEmpty {
-                    EmptyProductsView()
-                } else {
-                    ScrollView {
-                        LazyVStack(spacing: 12) {
-                            ForEach(productService.userProducts, id: \.id) { product in
-                                SimpleProductRow(product: product)
-                            }
+                Text("Store and manage your own products")
+                    .font(tm.theme.typo.sub)
+                    .foregroundColor(tm.theme.palette.textSecondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .padding(.bottom, 16)
+
+            // Products List
+            if productService.userProducts.isEmpty {
+                EmptyProductsView()
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(productService.userProducts, id: \.id) { product in
+                            SimpleProductRow(product: product)
                         }
-                        .padding(.horizontal, 20)
                     }
+                    .padding(.horizontal, 20)
                 }
+            }
 
-                Spacer()
+            Spacer()
 
                 // Add Product Button
                 VStack {
                     Button {
-                        showingAddProduct = true
+                        onAddProductTapped()
                     } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 18, weight: .medium))
+                    HStack(spacing: 12) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.system(size: 18, weight: .medium))
 
-                            Text("Add Product")
-                                .font(tm.theme.typo.body.weight(.semibold))
+                        Text("Add Product")
+                            .font(tm.theme.typo.body.weight(.semibold))
 
-                            Spacer()
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 16)
-                        .background(tm.theme.palette.secondary)
-                        .cornerRadius(12)
+                        Spacer()
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .foregroundColor(.white)
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
+                    .padding(.vertical, 16)
+                    .background(tm.theme.palette.secondary)
+                    .cornerRadius(12)
                 }
-            }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
-            .navigationBarHidden(true)
-        }
-        .sheet(isPresented: $showingAddProduct) {
-            AddProductView(productService: productService) { product in
-                // Product is already added in AddProductView.saveProduct(), no need to add again
-                print("Added product: \(product.displayName)")
-                showingAddProduct = false
+                .buttonStyle(PlainButtonStyle())
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
             }
         }
+        .background(tm.theme.palette.bg.ignoresSafeArea())
     }
 }
 
@@ -93,5 +91,8 @@ struct ProductSlotsView: View {
 // MARK: - Preview
 
 #Preview("ProductSlotsView") {
-    ProductSlotsView()
+    ProductSlotsView(
+        onAddProductTapped: { print("Add product tapped") },
+        onTestSheetTapped: { print("Test sheet tapped") }
+    )
 }

@@ -216,9 +216,12 @@ struct MainFlowView: View {
             }
         }
         .background(tm.theme.palette.bg.ignoresSafeArea()) // keep root bg painted
-        // Prevent theme changes from causing a flash:
-        .transaction { t in t.disablesAnimations = true } // disables implicit animations
-        .onChange(of: cs) { tm.refreshForSystemChange($0) }
+        .onChange(of: cs) { newColorScheme in
+            // Only disable animations during theme changes to prevent flashing
+            withAnimation(.none) {
+                tm.refreshForSystemChange(newColorScheme) 
+            }
+        }
     }
 
     // MARK: - Routine Generation
