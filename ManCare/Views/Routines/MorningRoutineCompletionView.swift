@@ -70,6 +70,9 @@ struct MorningRoutineCompletionView: View {
                     editButton
                 }
             }
+            .onAppear {
+                setupNavigationBarAppearance()
+            }
         }
         .overlay(
             Group {
@@ -119,7 +122,7 @@ struct MorningRoutineCompletionView: View {
     
     private var headerView: some View {
         VStack(spacing: 0) {
-            // Pink header background
+            // Pink header background - extends into safe area
             ZStack {
                 // Pink gradient background
                 LinearGradient(
@@ -130,6 +133,7 @@ struct MorningRoutineCompletionView: View {
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
+                .ignoresSafeArea(.all, edges: .top) // Extend into safe area
                 
                 VStack(spacing: 16) {
                     // Title and decorations
@@ -319,6 +323,33 @@ struct MorningRoutineCompletionView: View {
     
     // MARK: - Helper Methods
     
+    private func setupNavigationBarAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+
+        // Create the same pink gradient as the header
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [
+            UIColor(red: 0.9, green: 0.3, blue: 0.6, alpha: 1.0).cgColor,
+            UIColor(red: 0.8, green: 0.2, blue: 0.5, alpha: 1.0).cgColor
+        ]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+
+        // Create a background image from the gradient
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
+        let backgroundImage = renderer.image { context in
+            gradientLayer.render(in: context.cgContext)
+        }
+
+        appearance.backgroundImage = backgroundImage
+        appearance.shadowImage = UIImage() // Remove shadow
+
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+    }
+
     private func toggleStepCompletion(_ stepId: String) {
         if completedSteps.contains(stepId) {
             completedSteps.remove(stepId)
