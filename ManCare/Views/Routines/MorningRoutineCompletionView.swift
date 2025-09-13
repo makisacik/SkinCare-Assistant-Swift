@@ -354,93 +354,67 @@ private struct DetailedStepRow: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 16) {
-                // Step number
-                Text("\(stepNumber)")
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(stepColor)
-                    .frame(width: 40)
-                
-                // Product image placeholder
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(stepColor.opacity(0.2))
-                    .frame(width: 60, height: 60)
-                    .overlay(
-                        Image(systemName: step.iconName)
-                            .font(.system(size: 24, weight: .medium))
-                            .foregroundColor(stepColor)
-                    )
-                
-                // Step title
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(step.title)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
+        HStack(spacing: 0) {
+            // Left content area
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(spacing: 16) {
+                    // Step number
+                    Text("\(stepNumber)")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(stepColor)
+                        .frame(width: 40)
                     
-                    Button {
-                        onAddProduct()
-                    } label: {
-                        Text("+ Add your own product")
-                            .font(.system(size: 12, weight: .medium))
+                    // Product image placeholder
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(stepColor.opacity(0.2))
+                        .frame(width: 60, height: 60)
+                        .overlay(
+                            Image(systemName: step.iconName)
+                                .font(.system(size: 24, weight: .medium))
+                                .foregroundColor(stepColor)
+                        )
+                    
+                    // Step title
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(step.title)
+                            .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.white)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(stepColor.opacity(0.3))
-                            )
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                
-                Spacer()
-                
-                // Completion button
-                Button {
-                    onToggle()
-                    
-                    if !isCompleted {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                            showCheckmarkAnimation = true
-                        }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            showCheckmarkAnimation = false
+                        Button {
+                            onAddProduct()
+                        } label: {
+                            Text("+ Add your own product")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(stepColor.opacity(0.3))
+                                )
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                } label: {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.white.opacity(0.3), lineWidth: 2)
-                            .frame(width: 28, height: 28)
-                        
-                        if isCompleted {
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 28, height: 28)
-                                .scaleEffect(showCheckmarkAnimation ? 1.2 : 1.0)
-                                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
-                            
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.black)
-                                .scaleEffect(showCheckmarkAnimation ? 1.3 : 1.0)
-                                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
-                        }
-                    }
+
+                    Spacer()
                 }
-                .buttonStyle(PlainButtonStyle())
+
+                // Step description
+                Text(step.description)
+                    .font(.system(size: 14))
+                    .foregroundColor(.white.opacity(0.8))
+                    .lineLimit(nil)
+                    .padding(.leading, 56) // Align with the content above
             }
-            
-            // Step description
-            Text(step.description)
-                .font(.system(size: 14))
-                .foregroundColor(.white.opacity(0.8))
-                .lineLimit(nil)
-                .padding(.leading, 56) // Align with the content above
+            .padding(20)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                onTap()
+            }
+
+            // Right completion area
+            completionArea
         }
-        .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white.opacity(0.05))
@@ -449,9 +423,64 @@ private struct DetailedStepRow: View {
                         .stroke(Color.white.opacity(0.1), lineWidth: 1)
                 )
         )
+    }
+
+    private var completionArea: some View {
+        VStack {
+            Spacer()
+
+            // Completion indicator
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.3), lineWidth: 2)
+                    .frame(width: 40, height: 40)
+
+                if isCompleted {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 40, height: 40)
+                        .scaleEffect(showCheckmarkAnimation ? 1.1 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
+
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.black)
+                        .scaleEffect(showCheckmarkAnimation ? 1.2 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
+                }
+            }
+
+            // Completion text
+            Text(isCompleted ? "Done" : "Tap to complete")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.white.opacity(0.7))
+                .padding(.top, 4)
+
+            Spacer()
+        }
+        .frame(width: 80)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white.opacity(0.02))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                )
+        )
+        .opacity(0.6) // Decreased opacity for visual distinction
         .contentShape(Rectangle())
         .onTapGesture {
-            onTap()
+            onToggle()
+
+            if !isCompleted {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    showCheckmarkAnimation = true
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showCheckmarkAnimation = false
+                }
+            }
         }
     }
 }
