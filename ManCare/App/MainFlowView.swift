@@ -284,7 +284,7 @@ struct MainFlowView: View {
                 ))
             }
         }
-        .background(tm.theme.palette.bg.ignoresSafeArea()) // keep root bg painted
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea()) // keep root bg painted
         .onChange(of: cs) { newColorScheme in
             // Only disable animations during theme changes to prevent flashing
             withAnimation(.none) {
@@ -800,7 +800,7 @@ private struct ProgressIndicator: View {
                     .frame(width: 32, height: 32)
                 Text("\(stepNumber)")
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color.white)
+                    .foregroundColor(tm.theme.palette.onPrimary)
             }
 
             // Step title
@@ -817,7 +817,7 @@ private struct ProgressIndicator: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        .background(tm.theme.palette.card)
+        .background(tm.theme.palette.cardBackground)
         .cornerRadius(tm.theme.cardRadius)
         .shadow(color: tm.theme.palette.shadow, radius: 4, x: 0, y: 2)
     }

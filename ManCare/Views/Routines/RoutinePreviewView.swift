@@ -87,7 +87,7 @@ struct RoutinePreviewView: View {
                             Text("Save Changes")
                                 .font(tm.theme.typo.title.weight(.semibold))
                         }
-                        .foregroundColor(Color.white)
+                        .foregroundColor(tm.theme.palette.onPrimary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
                         .background(tm.theme.palette.secondary)
@@ -107,7 +107,7 @@ struct RoutinePreviewView: View {
                         .foregroundColor(tm.theme.palette.textSecondary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(tm.theme.palette.bg)
+                        .background(tm.theme.palette.accentBackground)
                         .cornerRadius(tm.theme.cardRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: tm.theme.cardRadius)
@@ -119,7 +119,7 @@ struct RoutinePreviewView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
             }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarHidden(true)
         }
     }
@@ -171,7 +171,7 @@ private struct RoutineComparisonSection: View {
                     .padding(16)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(tm.theme.palette.card)
+                            .fill(tm.theme.palette.cardBackground)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -200,7 +200,7 @@ private struct RoutineComparisonSection: View {
                 .padding(16)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(tm.theme.palette.card)
+                        .fill(tm.theme.palette.cardBackground)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(tm.theme.palette.secondary.opacity(0.3), lineWidth: 2)
@@ -268,7 +268,7 @@ private struct OriginalStepCard: View {
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(tm.theme.palette.bg)
+                .fill(tm.theme.palette.accentBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -290,7 +290,7 @@ private struct EditedStepCard: View {
             // Step icon with status
             ZStack {
                 Circle()
-                    .fill(step.isEnabled ? stepTypeColor.opacity(0.2) : Color.gray.opacity(0.2))
+                    .fill(step.isEnabled ? stepTypeColor.opacity(0.2) : tm.theme.palette.textMuted.opacity(0.2))
                     .frame(width: 28, height: 28)
                 
                 if step.isEnabled {
@@ -300,7 +300,7 @@ private struct EditedStepCard: View {
                 } else {
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(Color.gray)
+                        .foregroundColor(tm.theme.palette.textMuted)
                 }
             }
             
@@ -317,19 +317,19 @@ private struct EditedStepCard: View {
                         if step.originalStep {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(Color.blue)
+                                .foregroundColor(tm.theme.palette.info)
                         }
                         
                         if !step.originalStep {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(Color.green)
+                                .foregroundColor(tm.theme.palette.success)
                         }
                         
                         if step.frequency != .daily {
                             Image(systemName: "clock")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(Color.orange)
+                                .foregroundColor(tm.theme.palette.warning)
                         }
                     }
                 }
@@ -345,36 +345,36 @@ private struct EditedStepCard: View {
                         if step.frequency != .daily {
                             Text(step.frequency.displayName)
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(Color.orange)
+                                .foregroundColor(tm.theme.palette.warning)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Color.orange.opacity(0.1))
+                                .background(tm.theme.palette.warning.opacity(0.1))
                                 .cornerRadius(4)
                         }
                         
                         if step.morningEnabled && step.eveningEnabled {
                             Text("AM & PM")
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(Color.blue)
+                                .foregroundColor(tm.theme.palette.info)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Color.blue.opacity(0.1))
+                                .background(tm.theme.palette.info.opacity(0.1))
                                 .cornerRadius(4)
                         } else if step.morningEnabled {
                             Text("AM")
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(Color.orange)
+                                .foregroundColor(tm.theme.palette.warning)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Color.orange.opacity(0.1))
+                                .background(tm.theme.palette.warning.opacity(0.1))
                                 .cornerRadius(4)
                         } else if step.eveningEnabled {
                             Text("PM")
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(Color.blue)
+                                .foregroundColor(tm.theme.palette.info)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Color.blue.opacity(0.1))
+                                .background(tm.theme.palette.info.opacity(0.1))
                                 .cornerRadius(4)
                         }
                     }
@@ -387,10 +387,10 @@ private struct EditedStepCard: View {
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(step.isEnabled ? tm.theme.palette.bg : tm.theme.palette.bg.opacity(0.5))
+                .fill(step.isEnabled ? tm.theme.palette.accentBackground : tm.theme.palette.accentBackground.opacity(0.5))
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(step.isEnabled ? tm.theme.palette.separator : Color.gray.opacity(0.3), lineWidth: 1)
+                        .stroke(step.isEnabled ? tm.theme.palette.separator : tm.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
                 )
         )
     }
@@ -416,14 +416,14 @@ private struct RoutineSummaryCard: View {
                     title: "Original steps",
                     value: "\(originalCount)",
                     iconName: "list.bullet",
-                    color: Color.blue
+                    color: tm.theme.palette.info
                 )
                 
                 SummaryRow(
                     title: "Active steps",
                     value: "\(editedCount)",
                     iconName: "checkmark.circle",
-                    color: Color.green
+                    color: tm.theme.palette.success
                 )
                 
                 if addedCount > 0 {
@@ -431,7 +431,7 @@ private struct RoutineSummaryCard: View {
                         title: "Added steps",
                         value: "\(addedCount)",
                         iconName: "plus.circle",
-                        color: Color.green
+                        color: tm.theme.palette.success
                     )
                 }
                 
@@ -440,7 +440,7 @@ private struct RoutineSummaryCard: View {
                         title: "Removed steps",
                         value: "\(removedCount)",
                         iconName: "minus.circle",
-                        color: Color.red
+                        color: tm.theme.palette.error
                     )
                 }
             }
@@ -448,7 +448,7 @@ private struct RoutineSummaryCard: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(tm.theme.palette.card)
+                .fill(tm.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(tm.theme.palette.separator, lineWidth: 1)

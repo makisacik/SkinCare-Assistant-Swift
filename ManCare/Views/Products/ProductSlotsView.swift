@@ -75,23 +75,23 @@ struct ProductSlotsView: View {
                         VStack(spacing: 8) {
                             Image(systemName: "camera.viewfinder")
                                 .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.onSecondary)
 
                             VStack(spacing: 2) {
                                 Text("Scan Product")
                                     .font(tm.theme.typo.body.weight(.semibold))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(tm.theme.palette.onSecondary)
 
                                 Text("Take a photo to automatically extract product information")
                                     .font(tm.theme.typo.caption)
-                                    .foregroundColor(Color.white.opacity(0.9))
+                                    .foregroundColor(tm.theme.palette.onSecondary.opacity(0.8))
                                     .multilineTextAlignment(.center)
                                     .lineLimit(2)
                             }
 
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.onSecondary)
                         }
                         .padding(12)
                         .frame(maxWidth: .infinity)
@@ -115,23 +115,23 @@ struct ProductSlotsView: View {
                         VStack(spacing: 8) {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.onSecondary)
 
                             VStack(spacing: 2) {
                                 Text("Add Manually")
                                     .font(tm.theme.typo.body.weight(.semibold))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(tm.theme.palette.onSecondary)
 
                                 Text("Enter product details manually")
                                     .font(tm.theme.typo.caption)
-                                    .foregroundColor(Color.white.opacity(0.9))
+                                    .foregroundColor(tm.theme.palette.onSecondary.opacity(0.8))
                                     .multilineTextAlignment(.center)
                                     .lineLimit(2)
                             }
 
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.onSecondary)
                         }
                         .padding(12)
                         .frame(maxWidth: .infinity)
@@ -144,7 +144,7 @@ struct ProductSlotsView: View {
             }
             .padding(.bottom, 20)
         }
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.background.ignoresSafeArea())
     }
 }
 

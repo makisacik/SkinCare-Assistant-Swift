@@ -190,7 +190,7 @@ struct LifestyleQuestionsView: View {
             }
             .padding(20)
         }
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.cardBackground.ignoresSafeArea())
         .onChange(of: cs) { newScheme in
             tm.refreshForSystemChange(newScheme)
         }
@@ -308,7 +308,7 @@ private struct SegmentedCard: View {
                             .padding(.horizontal, 14)
                             .padding(.vertical, 10)
                             .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.separator.opacity(0.35))
-                            .foregroundColor(isSelected ? .white : tm.theme.palette.textPrimary)
+                            .foregroundColor(isSelected ? tm.theme.palette.onSecondary : tm.theme.palette.textPrimary)
                             .cornerRadius(20)
                     }
                     .buttonStyle(.plain)

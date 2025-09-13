@@ -63,7 +63,7 @@ struct ProductSelectionView: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(tm.theme.palette.bg)
+                        .fill(tm.theme.palette.accentBackground)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -113,7 +113,7 @@ struct ProductSelectionView: View {
                                 Text("Attach \(selectedProduct.displayName)")
                                     .font(tm.theme.typo.body.weight(.semibold))
                             }
-                            .foregroundColor(Color.white)
+                            .foregroundColor(tm.theme.palette.onPrimary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
                             .background(tm.theme.palette.secondary)
@@ -142,7 +142,7 @@ struct ProductSelectionView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
             }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingAddProduct) {
@@ -198,7 +198,7 @@ private struct ProductSelectionCard: View {
                     HStack(spacing: 8) {
                         Text(product.tagging.productType.displayName)
                             .font(.system(size: 12, weight: .medium))
-                            .foregroundColor(Color.white)
+                            .foregroundColor(tm.theme.palette.onPrimary)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                             .background(Color(product.tagging.productType.color))
@@ -207,10 +207,10 @@ private struct ProductSelectionCard: View {
                         if product.tagging.productType == step.stepType {
                             Text("Perfect Match")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.onPrimary)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
-                                .background(Color.green)
+                                .background(tm.theme.palette.success)
                                 .cornerRadius(6)
                         }
                     }
@@ -226,7 +226,7 @@ private struct ProductSelectionCard: View {
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? tm.theme.palette.secondary.opacity(0.1) : tm.theme.palette.card)
+                    .fill(isSelected ? tm.theme.palette.secondary.opacity(0.1) : tm.theme.palette.cardBackground)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(isSelected ? tm.theme.palette.secondary : tm.theme.palette.separator, lineWidth: isSelected ? 2 : 1)
@@ -268,7 +268,7 @@ private struct EmptyProductsState: View {
                     Text("Add \(step.stepType.displayName)")
                         .font(tm.theme.typo.body.weight(.semibold))
                 }
-                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.onPrimary)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
                 .background(tm.theme.palette.secondary)
@@ -279,7 +279,7 @@ private struct EmptyProductsState: View {
         .padding(40)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(tm.theme.palette.card)
+                .fill(tm.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(tm.theme.palette.separator, lineWidth: 1)

@@ -52,11 +52,11 @@ struct EditableStepCard: View {
                         HStack(spacing: 6) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(Color.green)
+                                .foregroundColor(tm.theme.palette.success)
                             
                             Text(attachedProduct.displayName)
                                 .font(tm.theme.typo.caption.weight(.medium))
-                                .foregroundColor(Color.green)
+                                .foregroundColor(tm.theme.palette.success)
                         }
                     }
                 }
@@ -75,7 +75,7 @@ struct EditableStepCard: View {
                     } label: {
                         Image(systemName: step.hasAttachedProduct ? "link.badge.minus" : "link.badge.plus")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(step.hasAttachedProduct ? Color.red : tm.theme.palette.secondary)
+                            .foregroundColor(step.hasAttachedProduct ? tm.theme.palette.error : tm.theme.palette.secondary)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -86,7 +86,7 @@ struct EditableStepCard: View {
                         } label: {
                             Image(systemName: "trash")
                                 .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(Color.red)
+                                .foregroundColor(tm.theme.palette.error)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -95,7 +95,7 @@ struct EditableStepCard: View {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(tm.theme.palette.card)
+                    .fill(tm.theme.palette.cardBackground)
                     .overlay(
                         RoundedRectangle(cornerRadius: 16)
                             .stroke(tm.theme.palette.separator, lineWidth: 1)

@@ -89,11 +89,11 @@ struct FitzpatrickSkinToneView: View {
                        let selectedIndex = skinTones.firstIndex(of: selectedTone) {
                         GeometryReader { geometry in
                             Circle()
-                                .fill(tm.theme.palette.accent)
+                                .fill(tm.theme.palette.primary)
                                 .frame(width: 12, height: 12)
                                 .overlay(
                                     Circle()
-                                        .stroke(.white, lineWidth: 2)
+                                        .stroke(tm.theme.palette.primary, lineWidth: 2)
                                 )
                                 .position(
                                     x: (CGFloat(selectedIndex) + 0.5) * (geometry.size.width / 6),
@@ -108,7 +108,7 @@ struct FitzpatrickSkinToneView: View {
                 // Slider
                 VStack(spacing: 8) {
                     Slider(value: $sliderValue, in: 0...5, step: 1)
-                        .accentColor(tm.theme.palette.accent)
+                        .accentColor(tm.theme.palette.primary)
                         .onChange(of: sliderValue) { newValue in
                             let index = Int(newValue)
                             if index < skinTones.count {
@@ -155,7 +155,7 @@ struct FitzpatrickSkinToneView: View {
             .opacity(selection == nil ? 0.7 : 1.0)
         }
         .padding(20)
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { tm.refreshForSystemChange($0) }
         .onAppear {
             // Set initial selection to Type III (middle)
@@ -212,7 +212,7 @@ private struct FitzpatrickSkinToneDetailCard: View {
                         HStack(spacing: 6) {
                             Image(systemName: "sun.max.fill")
                                 .font(.system(size: 14))
-                                .foregroundColor(tm.theme.palette.accent)
+                                .foregroundColor(tm.theme.palette.primary)
                             Text("UV Sensitivity")
                                 .font(tm.theme.typo.caption.weight(.medium))
                                 .foregroundColor(tm.theme.palette.textSecondary)
@@ -231,28 +231,28 @@ private struct FitzpatrickSkinToneDetailCard: View {
                                 .foregroundColor(tm.theme.palette.textSecondary)
                             Image(systemName: "shield.fill")
                                 .font(.system(size: 14))
-                                .foregroundColor(tm.theme.palette.accent)
+                                .foregroundColor(tm.theme.palette.primary)
                         }
                         Text("SPF \(skinTone.recommendedSPF)+")
                             .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(tm.theme.palette.accent)
+                            .foregroundColor(tm.theme.palette.primary)
                     }
                 }
             }
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(tm.theme.palette.card.opacity(0.5))
+                    .fill(tm.theme.palette.cardBackground.opacity(0.5))
             )
         }
         .padding(tm.theme.padding)
         .background(
             RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
-                .fill(tm.theme.palette.card)
+                .fill(tm.theme.palette.cardBackground)
                 .shadow(color: tm.theme.palette.shadow, radius: 12, x: 0, y: 6)
                 .overlay(
                     RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                        .stroke(tm.theme.palette.accent.opacity(0.3), lineWidth: 2)
+                        .stroke(tm.theme.palette.primary.opacity(0.3), lineWidth: 2)
                 )
         )
     }

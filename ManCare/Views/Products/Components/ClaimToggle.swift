@@ -16,10 +16,10 @@ struct ClaimToggle: View {
     var body: some View {
         Text(claimDisplayName(claim))
             .font(tm.theme.typo.caption.weight(.medium))
-            .foregroundColor(isSelected ? .white : tm.theme.palette.textSecondary)
+            .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textSecondary)
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.bg)
+            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.accentBackground)
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)

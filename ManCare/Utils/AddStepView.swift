@@ -80,7 +80,7 @@ struct AddStepView: View {
                                 .padding(12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.bg)
+                                        .fill(tm.theme.palette.accentBackground)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
                                                 .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -100,7 +100,7 @@ struct AddStepView: View {
                                 .padding(12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.bg)
+                                        .fill(tm.theme.palette.accentBackground)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
                                                 .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -120,7 +120,7 @@ struct AddStepView: View {
                                 .padding(12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.bg)
+                                        .fill(tm.theme.palette.accentBackground)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
                                                 .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -142,7 +142,7 @@ struct AddStepView: View {
                                 } label: {
                                     Text(freq.displayName)
                                         .font(tm.theme.typo.caption.weight(.medium))
-                                        .foregroundColor(frequency == freq ? Color.white : tm.theme.palette.textSecondary)
+                                        .foregroundColor(frequency == freq ? tm.theme.palette.textInverse : tm.theme.palette.textSecondary)
                                         .padding(.horizontal, 8)
                                         .padding(.vertical, 4)
                                         .background(
@@ -176,7 +176,7 @@ struct AddStepView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "sun.max.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(morningEnabled ? Color.orange : Color.gray)
+                                            .foregroundColor(morningEnabled ? tm.theme.palette.warning : tm.theme.palette.textMuted)
                                         
                                         Text("Morning")
                                             .font(tm.theme.typo.body.weight(.medium))
@@ -186,10 +186,10 @@ struct AddStepView: View {
                                     .padding(.vertical, 8)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(morningEnabled ? Color.orange.opacity(0.1) : Color.clear)
+                                            .fill(morningEnabled ? tm.theme.palette.warning.opacity(0.1) : Color.clear)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(morningEnabled ? Color.orange : Color.gray.opacity(0.3), lineWidth: 1)
+                                                    .stroke(morningEnabled ? tm.theme.palette.warning : tm.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
                                             )
                                     )
                                 }
@@ -202,7 +202,7 @@ struct AddStepView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "moon.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(eveningEnabled ? Color.blue : Color.gray)
+                                            .foregroundColor(eveningEnabled ? tm.theme.palette.info : tm.theme.palette.textMuted)
                                         
                                         Text("Evening")
                                             .font(tm.theme.typo.body.weight(.medium))
@@ -212,10 +212,10 @@ struct AddStepView: View {
                                     .padding(.vertical, 8)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(eveningEnabled ? Color.blue.opacity(0.1) : Color.clear)
+                                            .fill(eveningEnabled ? tm.theme.palette.info.opacity(0.1) : Color.clear)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(eveningEnabled ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
+                                                    .stroke(eveningEnabled ? tm.theme.palette.info : tm.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
                                             )
                                     )
                                 }
@@ -386,11 +386,11 @@ private struct StepTypeCard: View {
             VStack(spacing: 12) {
                 Image(systemName: iconName)
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundColor(isSelected ? Color.white : stepTypeColor)
+                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : stepTypeColor)
                 
                 Text(displayName)
                     .font(tm.theme.typo.body.weight(.medium))
-                    .foregroundColor(isSelected ? Color.white : tm.theme.palette.textPrimary)
+                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)

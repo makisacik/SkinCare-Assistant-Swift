@@ -61,7 +61,7 @@ struct NewRoutineResultView: View {
                         Text("Continue")
                             .font(tm.theme.typo.title.weight(.semibold))
                     }
-                    .foregroundColor(Color.white)
+                    .foregroundColor(tm.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(tm.theme.palette.secondary)
@@ -91,7 +91,7 @@ struct NewRoutineResultView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
     }
     
     private func generateMorningRoutine() -> [RoutineStep] {
@@ -253,7 +253,7 @@ private struct RoutineSection: View {
             }
         }
         .padding(20)
-        .background(tm.theme.palette.card)
+        .background(tm.theme.palette.cardBackground)
         .cornerRadius(tm.theme.cardRadius)
         .shadow(color: tm.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
     }
@@ -328,7 +328,7 @@ private struct SummaryCard: View {
             }
         }
         .padding(20)
-        .background(tm.theme.palette.card)
+        .background(tm.theme.palette.cardBackground)
         .cornerRadius(tm.theme.cardRadius)
         .shadow(color: tm.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
     }

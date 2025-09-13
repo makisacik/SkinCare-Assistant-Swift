@@ -49,8 +49,8 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.system(size: 30))
-                                .foregroundColor(Color.white)
-                                .background(Color.black.opacity(0.3))
+                                .foregroundColor(tm.theme.palette.textInverse)
+                                .background(tm.theme.palette.textPrimary.opacity(0.3))
                                 .clipShape(Circle())
                         }
                         
@@ -58,10 +58,10 @@ struct ProductScanView: View {
                         
                         Text("Scan Product")
                             .font(.headline)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(tm.theme.palette.textInverse)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .background(Color.black.opacity(0.3))
+                            .background(tm.theme.palette.textPrimary.opacity(0.3))
                             .cornerRadius(20)
                         
                         Spacer()
@@ -72,8 +72,8 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: cameraManager.isFlashlightOn ? "flashlight.on.fill" : "flashlight.off.fill")
                                 .font(.system(size: 24))
-                                .foregroundColor(Color.white)
-                                .background(Color.black.opacity(0.3))
+                                .foregroundColor(tm.theme.palette.textInverse)
+                                .background(tm.theme.palette.textPrimary.opacity(0.3))
                                 .clipShape(Circle())
                         }
                         
@@ -83,8 +83,8 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "text.badge.checkmark")
                                 .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .background(Color.blue.opacity(0.7))
+                                .foregroundColor(tm.theme.palette.textInverse)
+                                .background(tm.theme.palette.info.opacity(0.7))
                                 .clipShape(Circle())
                         }
                         
@@ -94,8 +94,8 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "camera.badge.ellipsis")
                                 .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .background(Color.orange.opacity(0.7))
+                                .foregroundColor(tm.theme.palette.textInverse)
+                                .background(tm.theme.palette.warning.opacity(0.7))
                                 .clipShape(Circle())
                         }
                         
@@ -110,8 +110,8 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "text.magnifyingglass")
                                 .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .background(Color.purple.opacity(0.7))
+                                .foregroundColor(tm.theme.palette.textInverse)
+                                .background(tm.theme.palette.primary.opacity(0.7))
                                 .clipShape(Circle())
                         }
                     }
@@ -124,14 +124,14 @@ struct ProductScanView: View {
                     VStack(spacing: 20) {
                         Text("Position the product label within the frame")
                             .font(.subheadline)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(tm.theme.palette.textInverse)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 20)
                         
                         // Scanning frame overlay
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.white, lineWidth: 2)
+                                .stroke(tm.theme.palette.textInverse, lineWidth: 2)
                                 .frame(width: 280, height: 200)
                             
                             // Corner indicators
@@ -151,9 +151,9 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "photo.on.rectangle")
                                 .font(.system(size: 24))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.textInverse)
                                 .frame(width: 50, height: 50)
-                                .background(Color.black.opacity(0.3))
+                                .background(tm.theme.palette.textPrimary.opacity(0.3))
                                 .clipShape(Circle())
                         }
                         
@@ -163,11 +163,11 @@ struct ProductScanView: View {
                         } label: {
                             ZStack {
                                 Circle()
-                                    .fill(Color.white)
+                                    .fill(tm.theme.palette.textInverse)
                                     .frame(width: 70, height: 70)
                                 
                                 Circle()
-                                    .stroke(Color.black, lineWidth: 2)
+                                    .stroke(tm.theme.palette.textPrimary, lineWidth: 2)
                                     .frame(width: 60, height: 60)
                             }
                         }
@@ -181,7 +181,7 @@ struct ProductScanView: View {
                             } label: {
                                 Image(systemName: "text.viewfinder")
                                     .font(.system(size: 24))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(tm.theme.palette.textInverse)
                                     .frame(width: 50, height: 50)
                                     .background(tm.theme.palette.secondary)
                                     .clipShape(Circle())
@@ -212,15 +212,15 @@ struct ProductScanView: View {
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.white, lineWidth: 2)
+                                            .stroke(tm.theme.palette.textInverse, lineWidth: 2)
                                     )
                                 
                                 Text("Photo captured!")
                                     .font(.caption)
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(tm.theme.palette.textInverse)
                                     .padding(.horizontal, 8)
                                     .padding(.vertical, 4)
-                                    .background(Color.green)
+                                    .background(tm.theme.palette.success)
                                     .cornerRadius(8)
                             }
                             
@@ -229,12 +229,12 @@ struct ProductScanView: View {
                         
                         Spacer()
                     }
-                    .background(Color.black.opacity(0.3))
+                    .background(tm.theme.palette.textPrimary.opacity(0.3))
                 }
                 
                 // Processing overlay
                 if isProcessing {
-                    Color.black.opacity(0.8)
+                    tm.theme.palette.textPrimary.opacity(0.8)
                         .ignoresSafeArea()
                         .animation(.easeInOut(duration: 0.3), value: isProcessing)
                     
@@ -249,13 +249,13 @@ struct ProductScanView: View {
                             VStack(spacing: 12) {
                                 Text(currentStep.isEmpty ? "Processing..." : currentStep)
                                     .font(.title2.weight(.semibold))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(tm.theme.palette.textInverse)
                                     .multilineTextAlignment(.center)
 
                                 if !extractedText.isEmpty {
                                     Text("Extracted: \(extractedText)")
                                         .font(.caption)
-                                        .foregroundColor(.white.opacity(0.8))
+                                        .foregroundColor(tm.theme.palette.textInverse.opacity(0.8))
                                         .multilineTextAlignment(.center)
                                         .padding(.horizontal, 20)
                                         .lineLimit(3)
@@ -265,7 +265,7 @@ struct ProductScanView: View {
                         .padding(30)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.black.opacity(0.6))
+                                .fill(tm.theme.palette.textPrimary.opacity(0.6))
                                 .blur(radius: 1)
                         )
                         .padding(.horizontal, 40)
@@ -276,7 +276,7 @@ struct ProductScanView: View {
 
                 // Success overlay
                 if showingSuccess {
-                    Color.black.opacity(0.8)
+                    tm.theme.palette.textPrimary.opacity(0.8)
                         .ignoresSafeArea()
                         .animation(.easeInOut(duration: 0.3), value: showingSuccess)
 
@@ -286,38 +286,38 @@ struct ProductScanView: View {
                         VStack(spacing: 20) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 80))
-                                .foregroundColor(Color.green)
+                                .foregroundColor(tm.theme.palette.success)
                                 .scaleEffect(1.0)
                                 .animation(.spring(response: 0.6, dampingFraction: 0.8), value: showingSuccess)
 
                             Text("Product Added Successfully!")
                                 .font(.title2.weight(.bold))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.textInverse)
 
                             if let product = createdProduct {
                                 VStack(spacing: 12) {
                                     Text(product.displayName)
                                         .font(.title3.weight(.semibold))
-                                        .foregroundColor(Color.white)
+                                        .foregroundColor(tm.theme.palette.textInverse)
                                         .multilineTextAlignment(.center)
 
                                     Text(product.tagging.productType.displayName)
                                         .font(.subheadline)
-                                        .foregroundColor(.white.opacity(0.8))
+                                        .foregroundColor(tm.theme.palette.textInverse.opacity(0.8))
 
                                     if let brand = product.brand {
                                         Text("by \(brand)")
                                             .font(.caption)
-                                            .foregroundColor(.white.opacity(0.6))
+                                            .foregroundColor(tm.theme.palette.textInverse.opacity(0.6))
                                     }
                                 }
                                 .padding(20)
                                 .background(
                                     RoundedRectangle(cornerRadius: 16)
-                                        .fill(Color.white.opacity(0.15))
+                                        .fill(tm.theme.palette.textInverse.opacity(0.15))
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 16)
-                                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                                .stroke(tm.theme.palette.textInverse.opacity(0.2), lineWidth: 1)
                                         )
                                 )
                             }
@@ -326,18 +326,18 @@ struct ProductScanView: View {
                                 dismiss()
                             }
                             .font(.headline.weight(.semibold))
-                            .foregroundColor(Color.white)
+                            .foregroundColor(tm.theme.palette.textInverse)
                             .padding(.horizontal, 40)
                             .padding(.vertical, 16)
                             .background(
                                 RoundedRectangle(cornerRadius: 25)
-                                    .fill(Color.green)
+                                    .fill(tm.theme.palette.success)
                             )
                         }
                         .padding(30)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.black.opacity(0.6))
+                                .fill(tm.theme.palette.textPrimary.opacity(0.6))
                                 .blur(radius: 1)
                         )
                         .padding(.horizontal, 40)
@@ -626,6 +626,7 @@ struct CameraPreviewView: UIViewRepresentable {
 // MARK: - Corner Indicator
 
 struct CornerIndicator: View {
+    @Environment(\.themeManager) private var tm
     let corner: Int
     
     var body: some View {
@@ -637,13 +638,13 @@ struct CornerIndicator: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: size, height: lineWidth)
                     Spacer()
                 }
                 HStack(spacing: 0) {
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: lineWidth, height: size)
                     Spacer()
                 }
@@ -656,13 +657,13 @@ struct CornerIndicator: View {
                 HStack(spacing: 0) {
                     Spacer()
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: size, height: lineWidth)
                 }
                 HStack(spacing: 0) {
                     Spacer()
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: lineWidth, height: size)
                 }
             }
@@ -673,13 +674,13 @@ struct CornerIndicator: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: lineWidth, height: size)
                     Spacer()
                 }
                 HStack(spacing: 0) {
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: size, height: lineWidth)
                     Spacer()
                 }
@@ -692,13 +693,13 @@ struct CornerIndicator: View {
                 HStack(spacing: 0) {
                     Spacer()
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: lineWidth, height: size)
                 }
                 HStack(spacing: 0) {
                     Spacer()
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.textInverse)
                         .frame(width: size, height: lineWidth)
                 }
             }
@@ -756,7 +757,7 @@ struct TextResultView: View {
                         .font(tm.theme.typo.body)
                         .frame(minHeight: 200)
                         .padding(16)
-                        .background(tm.theme.palette.card)
+                        .background(tm.theme.palette.cardBackground)
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
@@ -801,11 +802,11 @@ struct TextResultView: View {
                                     .font(tm.theme.typo.body.weight(.medium))
                                 Text(String(format: "%.1f%%", normalized.confidence * 100))
                                     .font(tm.theme.typo.body)
-                                    .foregroundColor(normalized.confidence > 0.7 ? Color.green : Color.orange)
+                                    .foregroundColor(normalized.confidence > 0.7 ? tm.theme.palette.success : tm.theme.palette.warning)
                             }
                         }
                         .padding(16)
-                        .background(tm.theme.palette.card)
+                        .background(tm.theme.palette.cardBackground)
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
@@ -819,7 +820,7 @@ struct TextResultView: View {
                 if let error = normalizationError {
                     Text("Normalization Error: \(error)")
                         .font(tm.theme.typo.caption)
-                        .foregroundColor(Color.red)
+                        .foregroundColor(tm.theme.palette.error)
                         .padding(.horizontal, 20)
                 }
 
@@ -835,10 +836,10 @@ struct TextResultView: View {
                                 Text("Normalize with GPT")
                             }
                             .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(Color.white)
+                            .foregroundColor(tm.theme.palette.textInverse)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(Color.purple)
+                            .background(tm.theme.palette.primary)
                             .cornerRadius(12)
                         }
                     }
@@ -868,7 +869,7 @@ struct TextResultView: View {
                     } label: {
                         Text(normalizedProduct != nil ? "Continue with Normalized Product" : "Continue with Raw Text")
                             .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(Color.white)
+                            .foregroundColor(tm.theme.palette.textInverse)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
                             .background(tm.theme.palette.secondary)
@@ -884,7 +885,7 @@ struct TextResultView: View {
                             .foregroundColor(tm.theme.palette.textSecondary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(tm.theme.palette.bg)
+                            .background(tm.theme.palette.accentBackground)
                             .cornerRadius(12)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
@@ -897,7 +898,7 @@ struct TextResultView: View {
                 .padding(.bottom, 20)
                 }
             }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

@@ -254,13 +254,13 @@ enum CoachMessageType: String, CaseIterable {
     var color: Color {
         switch self {
         case .warning:
-            return Color.orange
+            return Color(hex: "#D8A44E")  // warning color
         case .suggestion:
-            return Color.yellow
+            return Color(hex: "#D8A44E")  // warning color
         case .information:
-            return Color.blue
+            return Color(hex: "#7A8CA8")  // info color
         case .encouragement:
-            return Color.pink
+            return Color(hex: "#9F5069")  // primary color
         }
     }
 }

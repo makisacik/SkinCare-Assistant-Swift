@@ -1,8 +1,7 @@
 //  ThemeManager.swift
 //  ManCare
 //
-//  Option A: Non-isolated type + MainActor APIs
-//  Blue-centric palette (no green accents)
+//  Simplified theme system with #7D5A5A color palette
 
 import SwiftUI
 
@@ -23,7 +22,7 @@ public enum AppTheme: String, CaseIterable, Identifiable, Codable {
 // MARK: - Color Helpers
 
 extension Color {
-    /// Hex like "#1C2A44" or "1C2A44"
+    /// Hex like "#7D5A5A" or "7D5A5A"
     init(hex: String, alpha: Double = 1.0) {
         let hex = hex.replacingOccurrences(of: "#", with: "")
         var int: UInt64 = 0
@@ -31,7 +30,7 @@ extension Color {
         let r, g, b: UInt64
         switch hex.count {
         case 6: (r, g, b) = ((int >> 16) & 0xFF, (int >> 8) & 0xFF, int & 0xFF)
-        default: (r, g, b) = (17, 26, 46) // fallback deep navy
+        default: (r, g, b) = (125, 90, 90) // fallback to base color
         }
         self = Color(.sRGB,
                      red: Double(r) / 255,
@@ -41,31 +40,54 @@ extension Color {
     }
 }
 
-// MARK: - Palette
+// MARK: - Simplified Palette
 
 public struct ThemePalette: Equatable {
-    // Core brand
-    public let primary: Color      // Deep Navy
-    public let secondary: Color    // Action Blue
-    public let accent: Color       // Electric/Royal Blue
+    // Primary Colors (based on #7D5A5A)
+    public let primary: Color              // #7D5A5A (main brand color)
+    public let primaryLight: Color         // #9A6B6B (lighter variant)
+    public let onPrimary: Color            // #FFFFFF
 
-    // Text
-    public let textPrimary: Color
-    public let textSecondary: Color
-    public let textMuted: Color
+    // Secondary Colors (complementary)
+    public let secondary: Color            // #5A7D6B (complementary green)
+    public let secondaryLight: Color       // #6B9A7A (lighter green)
+    public let onSecondary: Color          // #FFFFFF
 
-    // Backgrounds
-    public let bg: Color
-    public let card: Color
-    public let separator: Color
+    // Background Colors (neutral grays)
+    public let background: Color           // #F8F6F6 (very light neutral gray)
+    public let surface: Color              // #F0F0F0 (light neutral gray)
+    public let surfaceAlt: Color           // #E8E8E8 (medium neutral gray)
+    public let onBackground: Color         // #2C1E1E (dark text)
+    public let onSurface: Color            // #2C1E1E (dark text)
 
-    // States
-    public let success: Color
-    public let warning: Color
-    public let error: Color
+    // Border and Separator
+    public let border: Color               // #C0B8B8 (neutral gray border)
+    public let separator: Color            // #C0B8B8 (same as border)
 
-    // Shadows
-    public let shadow: Color
+    // Text Colors
+    public let textPrimary: Color          // #2C1E1E (dark brown)
+    public let textSecondary: Color        // #5A4A4A (medium brown)
+    public let textMuted: Color            // #8A7A7A (light brown)
+    public let textInverse: Color          // #FFFFFF
+
+    // Feedback Colors
+    public let success: Color              // #4A7D5A (green)
+    public let warning: Color              // #7D7D4A (yellow-brown)
+    public let error: Color                // #7D4A4A (red-brown)
+    public let info: Color                 // #4A5A7D (blue-brown)
+    public let onSuccess: Color            // #FFFFFF
+    public let onWarning: Color            // #2C1E1E
+    public let onError: Color              // #FFFFFF
+    public let onInfo: Color               // #FFFFFF
+
+    // Utility Colors
+    public let shadow: Color               // #0000003D (24% opacity)
+    public let disabledBg: Color           // #E0D8D8 (disabled background)
+    public let disabledText: Color         // #A8A19A (disabled text)
+
+    // Card and Component Colors
+    public let cardBackground: Color       // #F2F0F0 (card background)
+    public let accentBackground: Color     // #F5F3F3 (accent background)
 }
 
 // MARK: - Typography
@@ -99,44 +121,58 @@ public struct Theme: Equatable {
     public let cardRadius: CGFloat = 20
     public let padding: CGFloat = 16
 
-    // Prebuilt themes (Blue-centric)
+    // Simplified theme with #7D5A5A color palette
     public static let light = Theme(
         palette: ThemePalette(
-            primary:      Color(hex: "#111A2E"),  // deep navy
-            secondary:    Color(hex: "#2F6FED"),  // action blue
-            accent:       Color(hex: "#6AA9FF"),  // electric highlight
-            textPrimary:   Color(hex: "#0B1120"),
-            textSecondary: Color(hex: "#334155"),
-            textMuted:     Color(hex: "#64748B"),
-            bg:            Color(hex: "#F6F8FB"),  // light blue-gray
-            card:          Color.white,
-            separator:     Color(hex: "#E5E7EB"),
-            success:       Color(hex: "#16A34A"),
-            warning:       Color(hex: "#F59E0B"),
-            error:         Color(hex: "#EF4444"),
-            shadow:        Color.black.opacity(0.08)
+            // Primary Colors
+            primary: Color(hex: "#7D5A5A"),
+            primaryLight: Color(hex: "#9A6B6B"),
+            onPrimary: Color(hex: "#FFFFFF"),
+
+            // Secondary Colors
+            secondary: Color(hex: "#5A7D6B"),
+            secondaryLight: Color(hex: "#6B9A7A"),
+            onSecondary: Color(hex: "#FFFFFF"),
+
+            // Background Colors
+            background: Color(hex: "#F8F6F6"),
+            surface: Color(hex: "#F0F0F0"),
+            surfaceAlt: Color(hex: "#E8E8E8"),
+            onBackground: Color(hex: "#2C1E1E"),
+            onSurface: Color(hex: "#2C1E1E"),
+
+            // Border and Separator
+            border: Color(hex: "#C0B8B8"),
+            separator: Color(hex: "#C0B8B8"),
+
+            // Text Colors
+            textPrimary: Color(hex: "#2C1E1E"),
+            textSecondary: Color(hex: "#5A4A4A"),
+            textMuted: Color(hex: "#8A7A7A"),
+            textInverse: Color(hex: "#FFFFFF"),
+
+            // Feedback Colors
+            success: Color(hex: "#4A7D5A"),
+            warning: Color(hex: "#7D7D4A"),
+            error: Color(hex: "#7D4A4A"),
+            info: Color(hex: "#4A5A7D"),
+            onSuccess: Color(hex: "#FFFFFF"),
+            onWarning: Color(hex: "#2C1E1E"),
+            onError: Color(hex: "#FFFFFF"),
+            onInfo: Color(hex: "#FFFFFF"),
+
+            // Utility Colors
+            shadow: Color(hex: "#0000003D"),
+            disabledBg: Color(hex: "#E0D8D8"),
+            disabledText: Color(hex: "#A8A19A"),
+
+            // Card and Component Colors
+            cardBackground: Color(hex: "#F2F0F0"),
+            accentBackground: Color(hex: "#F5F3F3")
         ),
         typo: .default
     )
 
-    public static let dark = Theme(
-        palette: ThemePalette(
-            primary:      Color(hex: "#111A2E"),
-            secondary:    Color(hex: "#2F6FED"),
-            accent:       Color(hex: "#6AA9FF"),
-            textPrimary:   Color(hex: "#E2E8F0"),
-            textSecondary: Color(hex: "#C7D2FE"), // subtle bluish secondary
-            textMuted:     Color(hex: "#9AA5B1"),
-            bg:            Color(hex: "#0B1220"),  // deep blue-black
-            card:          Color(hex: "#111827"),  // near-black with blue tint
-            separator:     Color.white.opacity(0.07),
-            success:       Color(hex: "#16A34A"),
-            warning:       Color(hex: "#F59E0B"),
-            error:         Color(hex: "#F43F5E"),
-            shadow:        Color.black.opacity(0.6)
-        ),
-        typo: .default
-    )
 }
 
 // MARK: - ThemeManager (non-isolated type; UI APIs are MainActor)
@@ -170,11 +206,8 @@ public final class ThemeManager: ObservableObject {
     }
 
     private static func resolveTheme(for selection: AppTheme, colorScheme: ColorScheme?) -> Theme {
-        switch selection {
-        case .light:  return .light
-        case .dark:   return .dark
-        case .system: return (colorScheme == .dark) ? .dark : .light
-        }
+        // Always use light theme with #7D5A5A color palette
+        return .light
     }
 }
 
@@ -216,7 +249,7 @@ struct CardStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(tm.theme.padding)
-            .background(tm.theme.palette.card)
+            .background(tm.theme.palette.cardBackground)
             .cornerRadius(tm.theme.cardRadius)
             .shadow(color: tm.theme.palette.shadow, radius: 12, x: 0, y: 6)
     }
@@ -234,11 +267,10 @@ public struct PrimaryButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(tm.theme.typo.title)
-            .foregroundColor(Color.white)
+            .foregroundColor(tm.theme.palette.onPrimary)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
-            .background(tm.theme.palette.secondary)
-            .opacity(configuration.isPressed ? 0.88 : 1.0)
+            .background(configuration.isPressed ? tm.theme.palette.primaryLight : tm.theme.palette.primary)
             .cornerRadius(tm.theme.cornerRadius)
             .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
@@ -250,12 +282,156 @@ public struct GhostButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(tm.theme.typo.body.weight(.semibold))
-            .foregroundColor(tm.theme.palette.textPrimary)
+            .foregroundColor(tm.theme.palette.primary)
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity)
-            .background(tm.theme.palette.separator.opacity(0.35))
+            .background(configuration.isPressed ? tm.theme.palette.surface : Color.clear)
             .cornerRadius(tm.theme.cornerRadius)
-            .opacity(configuration.isPressed ? 0.9 : 1.0)
+            .overlay(
+                RoundedRectangle(cornerRadius: tm.theme.cornerRadius)
+                    .stroke(tm.theme.palette.border, lineWidth: 1)
+            )
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
+}
+
+public struct SecondaryButtonStyle: ButtonStyle {
+    @Environment(\.themeManager) private var tm
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(tm.theme.typo.title)
+            .foregroundColor(tm.theme.palette.onSecondary)
+            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity)
+            .background(configuration.isPressed ? tm.theme.palette.secondaryLight : tm.theme.palette.secondary)
+            .cornerRadius(tm.theme.cornerRadius)
+            .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
+public struct DestructiveButtonStyle: ButtonStyle {
+    @Environment(\.themeManager) private var tm
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(tm.theme.typo.title)
+            .foregroundColor(tm.theme.palette.onError)
+            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity)
+            .background(tm.theme.palette.error)
+            .cornerRadius(tm.theme.cornerRadius)
+            .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
+// MARK: - Component Color Extensions
+
+public extension ThemePalette {
+    // Navigation & Shell
+    var topAppBarBackground: Color { primary }
+    var topAppBarText: Color { onPrimary }
+    var tabBarBackground: Color { background }
+    var tabBarActiveIcon: Color { primary }
+    var tabBarInactiveIcon: Color { textSecondary }
+    var tabBarIndicator: Color { primary }
+
+    // Cards & Surfaces
+    var cardSurface: Color { surface }
+    var cardTitle: Color { textPrimary }
+    var cardBody: Color { textSecondary }
+    var cardBorder: Color { border }
+    var highlightedPanelBackground: Color { surfaceAlt }
+    var highlightedPanelText: Color { textPrimary }
+
+    // Input Fields
+    var fieldBackground: Color { textInverse }
+    var fieldText: Color { textPrimary }
+    var fieldPlaceholder: Color { textMuted }
+    var fieldStrokeDefault: Color { border }
+    var fieldStrokeFocus: Color { primary }
+    var fieldHelperError: Color { error }
+
+    // Lists & Rows
+    var rowBackground: Color { textInverse }
+    var rowSeparator: Color { border }
+    var swipeSelectionTint: Color { primary }
+
+    // Feedback & Overlays
+    var toastInfoBackground: Color { info }
+    var toastInfoText: Color { onInfo }
+    var toastSuccessBackground: Color { success }
+    var toastSuccessText: Color { onSuccess }
+    var toastWarningBackground: Color { warning }
+    var toastWarningText: Color { onWarning }
+    var toastErrorBackground: Color { error }
+    var toastErrorText: Color { onError }
+    var modalOverlay: Color { shadow }
+
+    // Progress & Charts
+    var progressActive: Color { secondary }
+    var progressTrack: Color { border }
+    var chartPrimary: Color { primary }
+    var chartSecondary: Color { primaryLight }
+    var chartPositive: Color { success }
+    var chartNegative: Color { error }
+
+    // Badges & Highlights
+    var badgeBackground: Color { primary }
+    var badgeText: Color { onPrimary }
+    var highlightPillBackground: Color { accentBackground }
+    var highlightPillText: Color { textPrimary }
+}
+
+// MARK: - Additional View Modifiers
+
+public struct InputFieldStyle: ViewModifier {
+    @Environment(\.themeManager) private var tm
+    @FocusState private var isFocused: Bool
+
+    public func body(content: Content) -> some View {
+        content
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(tm.theme.palette.fieldBackground)
+            .foregroundColor(tm.theme.palette.fieldText)
+            .overlay(
+                RoundedRectangle(cornerRadius: tm.theme.cornerRadius)
+                    .stroke(isFocused ? tm.theme.palette.fieldStrokeFocus : tm.theme.palette.fieldStrokeDefault, lineWidth: 1)
+            )
+            .cornerRadius(tm.theme.cornerRadius)
+            .focused($isFocused)
+    }
+}
+
+public struct BadgeStyle: ViewModifier {
+    @Environment(\.themeManager) private var tm
+    public func body(content: Content) -> some View {
+        content
+            .font(tm.theme.typo.caption)
+            .foregroundColor(tm.theme.palette.badgeText)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(tm.theme.palette.badgeBackground)
+            .cornerRadius(12)
+    }
+}
+
+public struct HighlightPillStyle: ViewModifier {
+    @Environment(\.themeManager) private var tm
+    public func body(content: Content) -> some View {
+        content
+            .font(tm.theme.typo.caption)
+            .foregroundColor(tm.theme.palette.highlightPillText)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(tm.theme.palette.highlightPillBackground)
+            .cornerRadius(16)
+    }
+}
+
+public extension View {
+    func inputFieldStyle() -> some View { modifier(InputFieldStyle()) }
+    func badgeStyle() -> some View { modifier(BadgeStyle()) }
+    func highlightPillStyle() -> some View { modifier(HighlightPillStyle()) }
 }

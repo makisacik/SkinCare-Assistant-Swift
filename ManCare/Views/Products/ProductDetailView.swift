@@ -99,7 +99,7 @@ struct ProductDetailView: View {
                     .padding(.horizontal, 20)
                 }
             }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -175,7 +175,7 @@ struct ProductDetailSection<Content: View>: View {
             content
         }
         .padding(16)
-        .background(tm.theme.palette.card)
+        .background(tm.theme.palette.cardBackground)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -284,7 +284,7 @@ struct EditProductView: View {
                                         .font(tm.theme.typo.body)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 12)
-                                        .background(tm.theme.palette.bg)
+                                        .background(tm.theme.palette.accentBackground)
                                         .cornerRadius(12)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
@@ -344,7 +344,7 @@ struct EditProductView: View {
                                     .font(tm.theme.typo.body)
                                     .frame(minHeight: 100)
                                     .padding(12)
-                                    .background(tm.theme.palette.bg)
+                                    .background(tm.theme.palette.accentBackground)
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
@@ -356,7 +356,7 @@ struct EditProductView: View {
                     .padding(.horizontal, 20)
                 }
             }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

@@ -51,7 +51,7 @@ struct ProductTypeSelectorButton: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-                .background(tm.theme.palette.bg)
+                .background(tm.theme.palette.accentBackground)
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
@@ -75,17 +75,17 @@ struct ProductTypeCard: View {
         VStack(spacing: 6) {
             Image(systemName: productType.iconName)
                 .font(.system(size: 20, weight: .medium))
-                .foregroundColor(isSelected ? .white : tm.theme.palette.secondary)
+                .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.secondary)
 
             Text(productType.displayName)
                 .font(tm.theme.typo.caption.weight(.medium))
-                .foregroundColor(isSelected ? .white : tm.theme.palette.textPrimary)
+                .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textPrimary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
         }
         .frame(height: 70)
         .frame(maxWidth: .infinity)
-        .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.bg)
+        .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.accentBackground)
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
@@ -111,7 +111,7 @@ struct ProductTypeRow: View {
                 // Icon
                 Image(systemName: productType.iconName)
                     .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(isSelected ? .white : tm.theme.palette.secondary)
+                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.secondary)
                     .frame(width: 28, height: 28)
                     .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.secondary.opacity(0.1))
                     .cornerRadius(6)
@@ -119,7 +119,7 @@ struct ProductTypeRow: View {
                 // Name
                 Text(productType.displayName)
                     .font(tm.theme.typo.body.weight(.medium))
-                    .foregroundColor(isSelected ? .white : tm.theme.palette.textPrimary)
+                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textPrimary)
 
                 Spacer()
 
@@ -127,12 +127,12 @@ struct ProductTypeRow: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(Color.white)
+                        .foregroundColor(tm.theme.palette.onPrimary)
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.card)
+            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.cardBackground)
             .cornerRadius(12)
         }
         .buttonStyle(PlainButtonStyle())

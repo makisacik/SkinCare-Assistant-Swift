@@ -129,7 +129,7 @@ struct ConcernSelectionView: View {
 
         }
         .padding(20)
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { newScheme in
             tm.refreshForSystemChange(newScheme)
         }    }
@@ -160,7 +160,7 @@ private struct ConcernCard: View {
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(tm.theme.palette.accent)
+                        .foregroundColor(tm.theme.palette.primary)
                         .font(.system(size: 20, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -178,7 +178,7 @@ private struct ConcernCard: View {
         .padding(tm.theme.padding)
         .background(
             RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
-                .fill(selected ? tm.theme.palette.card.opacity(0.98) : tm.theme.palette.card)
+                .fill(selected ? tm.theme.palette.cardBackground.opacity(0.98) : tm.theme.palette.cardBackground)
                 .shadow(color: selected ? tm.theme.palette.shadow.opacity(1.0)
                                         : tm.theme.palette.shadow,
                         radius: selected ? 14 : 10, x: 0, y: selected ? 8 : 6)

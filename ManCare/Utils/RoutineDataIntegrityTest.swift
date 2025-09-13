@@ -47,7 +47,7 @@ struct RoutineDataIntegrityTest: View {
                         Text(isRunningTest ? "Running Test..." : "Run Test")
                             .font(tm.theme.typo.body.weight(.semibold))
                     }
-                    .foregroundColor(Color.white)
+                    .foregroundColor(tm.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(tm.theme.palette.secondary)
@@ -69,7 +69,7 @@ struct RoutineDataIntegrityTest: View {
                                     HStack(alignment: .top, spacing: 8) {
                                         Image(systemName: result.contains("✅") ? "checkmark.circle.fill" : result.contains("❌") ? "xmark.circle.fill" : "info.circle.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(result.contains("✅") ? Color.green : result.contains("❌") ? Color.red : Color.blue)
+                                            .foregroundColor(result.contains("✅") ? tm.theme.palette.success : result.contains("❌") ? tm.theme.palette.error : tm.theme.palette.info)
                                         
                                         Text(result)
                                             .font(tm.theme.typo.body)
@@ -82,7 +82,7 @@ struct RoutineDataIntegrityTest: View {
                         .padding(16)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(tm.theme.palette.card)
+                                .fill(tm.theme.palette.cardBackground)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 12)
                                         .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -94,7 +94,7 @@ struct RoutineDataIntegrityTest: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
             .navigationTitle("Data Integrity Test")
             .navigationBarTitleDisplayMode(.inline)
         }

@@ -103,7 +103,7 @@ struct MainTabView: View {
     private func setupTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(tm.theme.palette.bg)
+        appearance.backgroundColor = UIColor(tm.theme.palette.accentBackground)
         
         // Normal state
         appearance.stackedLayoutAppearance.normal.iconColor = UIColor(tm.theme.palette.textMuted)

@@ -102,7 +102,7 @@ struct StepDetailEditView: View {
                             HStack {
                                 Image(systemName: "sun.max.fill")
                                     .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(Color.orange)
+                                    .foregroundColor(tm.theme.palette.warning)
                                 
                                 Text("Morning")
                                     .font(tm.theme.typo.body)
@@ -117,7 +117,7 @@ struct StepDetailEditView: View {
                             .padding(.vertical, 12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(tm.theme.palette.card)
+                                    .fill(tm.theme.palette.cardBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -128,7 +128,7 @@ struct StepDetailEditView: View {
                             HStack {
                                 Image(systemName: "moon.fill")
                                     .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(Color.blue)
+                                    .foregroundColor(tm.theme.palette.info)
                                 
                                 Text("Evening")
                                     .font(tm.theme.typo.body)
@@ -143,7 +143,7 @@ struct StepDetailEditView: View {
                             .padding(.vertical, 12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(tm.theme.palette.card)
+                                    .fill(tm.theme.palette.cardBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -179,7 +179,7 @@ struct StepDetailEditView: View {
                             .padding(12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(tm.theme.palette.card)
+                                    .fill(tm.theme.palette.cardBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(tm.theme.palette.separator, lineWidth: 1)
@@ -191,7 +191,7 @@ struct StepDetailEditView: View {
                     Spacer(minLength: 100)
                 }
             }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
             .navigationTitle("Edit Step")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

@@ -55,9 +55,9 @@ struct RoutineDetailView: View {
     private var backgroundGradient: some View {
         LinearGradient(
             gradient: Gradient(colors: [
-                Color(red: 0.05, green: 0.1, blue: 0.2),
-                Color(red: 0.08, green: 0.15, blue: 0.3),
-                Color(red: 0.12, green: 0.2, blue: 0.35)
+                tm.theme.palette.surface,              // Surface color
+                tm.theme.palette.cardBackground,        // Card background
+                tm.theme.palette.surfaceAlt             // Surface alt
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -114,17 +114,17 @@ struct RoutineDetailView: View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.system(size: 28, weight: .bold))
-                .foregroundColor(Color.white)
+                .foregroundColor(tm.theme.palette.onPrimary)
                 .multilineTextAlignment(.center)
             
             Text("\(completedCount) of \(steps.count) steps completed")
                 .font(.system(size: 16))
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(tm.theme.palette.textInverse.opacity(0.7))
             
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.white.opacity(0.2))
+                        .fill(tm.theme.palette.textInverse.opacity(0.2))
                         .frame(height: 8)
                     
                     RoundedRectangle(cornerRadius: 4)
@@ -138,10 +138,10 @@ struct RoutineDetailView: View {
     
     private var headerBackground: some View {
         RoundedRectangle(cornerRadius: 20)
-            .fill(Color.white.opacity(0.08))
+            .fill(tm.theme.palette.cardBackground)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                    .stroke(tm.theme.palette.border, lineWidth: 1)
             )
     }
     
@@ -176,24 +176,24 @@ struct RoutineDetailView: View {
             VStack(spacing: 12) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 48, weight: .semibold))
-                    .foregroundColor(Color.green)
+                    .foregroundColor(tm.theme.palette.success)
                 
                 Text("Routine Complete! 🎉")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(Color.white)
+                    .foregroundColor(tm.theme.palette.onPrimary)
                 
                 Text("Great job taking care of your skin today!")
                     .font(.system(size: 16))
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(tm.theme.palette.textInverse.opacity(0.7))
                     .multilineTextAlignment(.center)
             }
             .padding(24)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.green.opacity(0.1))
+                    .fill(tm.theme.palette.success.opacity(0.1))
                     .overlay(
                         RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.green.opacity(0.3), lineWidth: 1)
+                            .stroke(tm.theme.palette.success.opacity(0.3), lineWidth: 1)
                     )
             )
             .padding(.horizontal, 20)
@@ -210,7 +210,7 @@ struct RoutineDetailView: View {
                 Text("Back")
                     .font(.system(size: 16, weight: .medium))
             }
-            .foregroundColor(Color.white)
+            .foregroundColor(tm.theme.palette.onPrimary)
         }
     }
 }
@@ -218,6 +218,7 @@ struct RoutineDetailView: View {
 // MARK: - Routine Detail Step Card
 
 private struct RoutineDetailStepCard: View {
+    @Environment(\.themeManager) private var tm
     let step: RoutineStepDetail
     let stepNumber: Int
     let isCompleted: Bool
@@ -239,7 +240,7 @@ private struct RoutineDetailStepCard: View {
                 if isCompleted {
                     Image(systemName: "checkmark")
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(Color.white)
+                        .foregroundColor(tm.theme.palette.onPrimary)
                 } else {
                     Text("\(stepNumber)")
                         .font(.system(size: 14, weight: .bold))
@@ -251,12 +252,12 @@ private struct RoutineDetailStepCard: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(step.title)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(isCompleted ? .white.opacity(0.7) : .white)
+                    .foregroundColor(isCompleted ? tm.theme.palette.textInverse.opacity(0.7) : tm.theme.palette.textInverse)
                     .strikethrough(isCompleted)
                 
                 Text(step.description)
                     .font(.system(size: 14))
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(tm.theme.palette.textInverse.opacity(0.6))
                     .lineLimit(nil)
             }
             
@@ -296,7 +297,7 @@ private struct RoutineDetailStepCard: View {
                             
                             Image(systemName: "checkmark")
                                 .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.onPrimary)
                                 .scaleEffect(showCheckmarkAnimation ? 1.3 : 1.0)
                                 .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
                         }
@@ -308,10 +309,10 @@ private struct RoutineDetailStepCard: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.05))
+                .fill(tm.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(tm.theme.palette.textInverse.opacity(0.1), lineWidth: 1)
                 )
         )
         .contentShape(Rectangle())
@@ -327,7 +328,7 @@ private struct RoutineDetailStepCard: View {
     RoutineDetailView(
         title: "Morning Routine",
         iconName: "sun.max.fill",
-        iconColor: Color(red: 0.2, green: 0.6, blue: 0.9),
+        iconColor: Color(hex: "#7A8CA8"),
         steps: [
             RoutineStepDetail(
                 id: "morning_cleanser",

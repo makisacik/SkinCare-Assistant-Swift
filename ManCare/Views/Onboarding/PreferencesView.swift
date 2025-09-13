@@ -105,10 +105,10 @@ struct PreferencesView: View {
                         Text("Continue without API call")
                             .font(tm.theme.typo.title.weight(.semibold))
                     }
-                    .foregroundColor(Color.white)
+                    .foregroundColor(tm.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(tm.theme.palette.accent)
+                    .background(tm.theme.palette.primary)
                     .cornerRadius(tm.theme.cardRadius)
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -142,7 +142,7 @@ struct PreferencesView: View {
             }
         }
         .padding(20)
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { tm.refreshForSystemChange($0) }
     }
 }
@@ -186,7 +186,7 @@ private struct PreferenceToggle: View {
                 .labelsHidden()
         }
         .padding(16)
-        .background(tm.theme.palette.card)
+        .background(tm.theme.palette.cardBackground)
         .cornerRadius(tm.theme.cardRadius)
         .shadow(color: tm.theme.palette.shadow.opacity(0.5), radius: 4, x: 0, y: 2)
     }

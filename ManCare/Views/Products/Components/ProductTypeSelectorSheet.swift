@@ -47,7 +47,7 @@ struct ProductTypeSelectorSheet: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
-                    .background(tm.theme.palette.card)
+                    .background(tm.theme.palette.cardBackground)
                     .cornerRadius(12)
                 }
                 .padding(.horizontal, 20)
@@ -95,7 +95,7 @@ struct ProductTypeSelectorSheet: View {
                     .padding(.bottom, 20)
                 }
         }
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

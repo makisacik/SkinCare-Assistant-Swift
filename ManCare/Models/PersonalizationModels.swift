@@ -82,8 +82,8 @@ enum FitzpatrickSkinTone: String, CaseIterable, Identifiable, Codable {
     
     var textColor: Color {
         switch self {
-        case .type1, .type2, .type3: return Color.black
-        case .type4, .type5, .type6: return Color.white
+        case .type1, .type2, .type3: return Color.black  // Keep these as they're for skin tone representation
+        case .type4, .type5, .type6: return Color.white  // Keep these as they're for skin tone representation
         }
     }
 }

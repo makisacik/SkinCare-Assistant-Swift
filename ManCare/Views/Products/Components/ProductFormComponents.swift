@@ -28,7 +28,7 @@ struct ProductFormSection<Content: View>: View {
             content
         }
         .padding(20)
-        .background(tm.theme.palette.card)
+        .background(tm.theme.palette.cardBackground)
         .cornerRadius(tm.theme.cardRadius)
         .shadow(color: tm.theme.palette.shadow.opacity(0.3), radius: 4, x: 0, y: 2)
     }
@@ -52,7 +52,7 @@ struct FormField: View {
                 .font(tm.theme.typo.body)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-                .background(tm.theme.palette.bg)
+                .background(tm.theme.palette.accentBackground)
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)

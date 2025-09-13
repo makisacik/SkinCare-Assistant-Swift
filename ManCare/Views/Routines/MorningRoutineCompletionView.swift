@@ -54,19 +54,7 @@ struct MorningRoutineCompletionView: View {
                         .padding(.top, 20)
                         .padding(.bottom, 20)
                     }
-                    .background(
-                        // Extend the background gradient to cover bottom safe area
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color(red: 0.05, green: 0.1, blue: 0.2),
-                                Color(red: 0.08, green: 0.15, blue: 0.3),
-                                Color(red: 0.12, green: 0.2, blue: 0.35)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                        .ignoresSafeArea(.all, edges: .bottom)
-                    )
+                    .background(tm.theme.palette.background.ignoresSafeArea(.all, edges: .bottom))
                 }
             }
             .navigationTitle("")
@@ -116,16 +104,8 @@ struct MorningRoutineCompletionView: View {
     // MARK: - Background
     
     private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color(red: 0.05, green: 0.1, blue: 0.2),
-                Color(red: 0.08, green: 0.15, blue: 0.3),
-                Color(red: 0.12, green: 0.2, blue: 0.35)
-            ]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .ignoresSafeArea()
+        tm.theme.palette.background
+            .ignoresSafeArea()
     }
     
     // MARK: - Header
@@ -134,11 +114,12 @@ struct MorningRoutineCompletionView: View {
         VStack(spacing: 0) {
             // Pink header background - extends into safe area
             ZStack {
-                // Pink gradient background
+                // Deep accent gradient background for header
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color(red: 0.9, green: 0.3, blue: 0.6),
-                        Color(red: 0.8, green: 0.2, blue: 0.5)
+                        tm.theme.palette.primaryLight,     // Lighter primary
+                        tm.theme.palette.primary,          // Base primary
+                        tm.theme.palette.primaryLight      // Lighter primary
                     ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -150,8 +131,8 @@ struct MorningRoutineCompletionView: View {
                     HStack {
                         Text("MORNING ROUTINE")
                             .font(.system(size: 24, weight: .black))
-                            .foregroundColor(.white)
-                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                            .foregroundColor(tm.theme.palette.textInverse)
+                            .shadow(color: tm.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
                         
                         Spacer()
                         
@@ -159,12 +140,12 @@ struct MorningRoutineCompletionView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(tm.theme.palette.textInverse.opacity(0.8))
                             
                             Image(systemName: "star.fill")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.orange)
-                                .shadow(color: .yellow.opacity(0.5), radius: 2)
+                                .foregroundColor(tm.theme.palette.warning)
+                                .shadow(color: tm.theme.palette.warning.opacity(0.5), radius: 2)
                         }
                     }
                     .padding(.horizontal, 20)
@@ -184,7 +165,7 @@ struct MorningRoutineCompletionView: View {
             HStack(spacing: 8) {
                 ForEach(0..<totalSteps, id: \.self) { index in
                     Circle()
-                        .fill(index < completedStepsCount ? Color.white : Color.white.opacity(0.3))
+                        .fill(index < completedStepsCount ? tm.theme.palette.primary : tm.theme.palette.border)
                         .frame(width: 8, height: 8)
                         .scaleEffect(index < completedStepsCount ? 1.2 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: completedStepsCount)
@@ -196,7 +177,7 @@ struct MorningRoutineCompletionView: View {
             // Completion percentage
             Text("\(Int((Double(completedStepsCount) / Double(totalSteps)) * 100))%")
                 .font(.system(size: 14, weight: .bold))
-                .foregroundColor(.white)
+                .foregroundColor(tm.theme.palette.textPrimary)
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 16)
@@ -212,11 +193,11 @@ struct MorningRoutineCompletionView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Steps")
                         .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(tm.theme.palette.textPrimary)
                     
                     Text("\(totalSteps) products")
                         .font(.system(size: 16))
-                        .foregroundColor(.gray)
+                        .foregroundColor(tm.theme.palette.textMuted)
                 }
                 
                 Spacer()
@@ -226,12 +207,12 @@ struct MorningRoutineCompletionView: View {
                 } label: {
                     Text("Edit steps >")
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.white)
+                        .foregroundColor(tm.theme.palette.textSecondary)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.purple.opacity(0.3))
+                                .fill(tm.theme.palette.primary.opacity(0.3))
                         )
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -268,7 +249,7 @@ struct MorningRoutineCompletionView: View {
         } label: {
             Image(systemName: "chevron.left")
                 .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.white)
+                .foregroundColor(tm.theme.palette.textPrimary)
         }
     }
     
@@ -278,7 +259,7 @@ struct MorningRoutineCompletionView: View {
         } label: {
             Image(systemName: "pencil")
                 .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.white)
+                .foregroundColor(tm.theme.palette.textPrimary)
         }
     }
     
@@ -327,6 +308,7 @@ struct MorningRoutineCompletionView: View {
 // MARK: - Detailed Step Row
 
 private struct DetailedStepRow: View {
+    @Environment(\.themeManager) private var tm
     let step: RoutineStepDetail
     let stepNumber: Int
     let isCompleted: Bool
@@ -338,18 +320,18 @@ private struct DetailedStepRow: View {
     
     private var stepColor: Color {
         switch step.stepType.color {
-        case "blue": return .blue
-        case "green": return .green
-        case "yellow": return .yellow
-        case "orange": return .orange
-        case "purple": return .purple
-        case "red": return .red
-        case "pink": return .pink
-        case "teal": return .teal
-        case "indigo": return .indigo
-        case "brown": return .brown
-        case "gray": return .gray
-        default: return .purple
+        case "blue": return tm.theme.palette.info
+        case "green": return tm.theme.palette.success
+        case "yellow": return tm.theme.palette.warning
+        case "orange": return tm.theme.palette.warning
+        case "purple": return tm.theme.palette.primary
+        case "red": return tm.theme.palette.error
+        case "pink": return tm.theme.palette.primary
+        case "teal": return tm.theme.palette.info
+        case "indigo": return tm.theme.palette.info
+        case "brown": return tm.theme.palette.textMuted
+        case "gray": return tm.theme.palette.textMuted
+        default: return tm.theme.palette.primary
         }
     }
     
@@ -378,14 +360,14 @@ private struct DetailedStepRow: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(step.title)
                             .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(tm.theme.palette.textPrimary)
                         
                         Button {
                             onAddProduct()
                         } label: {
                             Text("+ Add your own product")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(.white)
+                                .foregroundColor(tm.theme.palette.textSecondary)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 5)
                                 .background(
@@ -402,7 +384,7 @@ private struct DetailedStepRow: View {
                 // Step description
                 Text(step.description)
                     .font(.system(size: 14))
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundColor(tm.theme.palette.textSecondary)
                     .lineLimit(nil)
                     .padding(.leading, 56) // Align with the content above
             }
@@ -417,10 +399,10 @@ private struct DetailedStepRow: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.05))
+                .fill(tm.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(tm.theme.palette.border, lineWidth: 1)
                 )
         )
     }
@@ -432,12 +414,12 @@ private struct DetailedStepRow: View {
             // Completion indicator
             ZStack {
                 Circle()
-                    .stroke(Color.white.opacity(0.3), lineWidth: 2)
+                    .stroke(tm.theme.palette.border, lineWidth: 2)
                     .frame(width: 40, height: 40)
 
                 if isCompleted {
                     Circle()
-                        .fill(Color.white)
+                        .fill(tm.theme.palette.primary)
                         .frame(width: 40, height: 40)
                         .scaleEffect(showCheckmarkAnimation ? 1.1 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
@@ -453,7 +435,7 @@ private struct DetailedStepRow: View {
             // Completion text
             Text(isCompleted ? "Done" : "Tap to complete")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(tm.theme.palette.textMuted)
                 .padding(.top, 4)
 
             Spacer()
@@ -461,10 +443,10 @@ private struct DetailedStepRow: View {
         .frame(width: 80)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.02))
+                .fill(tm.theme.palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                        .stroke(tm.theme.palette.border, lineWidth: 1)
                 )
         )
         .opacity(0.6) // Decreased opacity for visual distinction
@@ -489,6 +471,7 @@ private struct DetailedStepRow: View {
 
 private struct StepProductSelectionSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.themeManager) private var tm
     @ObservedObject private var productService = ProductService.shared
     let step: RoutineStepDetail
     let onDismiss: () -> Void
@@ -569,10 +552,10 @@ private struct StepProductSelectionSheet: View {
                             .padding(16)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.blue.opacity(0.1))
+                                    .fill(tm.theme.palette.info.opacity(0.1))
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                            .stroke(tm.theme.palette.info.opacity(0.3), lineWidth: 1)
                                     )
                             )
                         }
@@ -607,6 +590,7 @@ private struct StepProductSelectionSheet: View {
 // MARK: - Step Product Row
 
 private struct StepProductRow: View {
+    @Environment(\.themeManager) private var tm
     let product: Product
     let step: RoutineStepDetail
     let onSelect: () -> Void
@@ -660,18 +644,18 @@ private struct StepProductRow: View {
     
     private var productColor: Color {
         switch product.tagging.productType.color {
-        case "blue": return .blue
-        case "green": return .green
-        case "yellow": return .yellow
-        case "orange": return .orange
-        case "purple": return .purple
-        case "red": return .red
-        case "pink": return .pink
-        case "teal": return .teal
-        case "indigo": return .indigo
-        case "brown": return .brown
-        case "gray": return .gray
-        default: return .gray
+        case "blue": return tm.theme.palette.info
+        case "green": return tm.theme.palette.success
+        case "yellow": return tm.theme.palette.warning
+        case "orange": return tm.theme.palette.warning
+        case "purple": return tm.theme.palette.primary
+        case "red": return tm.theme.palette.error
+        case "pink": return tm.theme.palette.primary
+        case "teal": return tm.theme.palette.info
+        case "indigo": return tm.theme.palette.info
+        case "brown": return tm.theme.palette.textMuted
+        case "gray": return tm.theme.palette.textMuted
+        default: return tm.theme.palette.textMuted
         }
     }
     
@@ -683,23 +667,24 @@ private struct StepProductRow: View {
 // MARK: - Empty Product Type View
 
 private struct EmptyProductTypeView: View {
+    @Environment(\.themeManager) private var tm
     let productType: ProductType
     let onAddProduct: () -> Void
     
     private var productColor: Color {
         switch productType.color {
-        case "blue": return .blue
-        case "green": return .green
-        case "yellow": return .yellow
-        case "orange": return .orange
-        case "purple": return .purple
-        case "red": return .red
-        case "pink": return .pink
-        case "teal": return .teal
-        case "indigo": return .indigo
-        case "brown": return .brown
-        case "gray": return .gray
-        default: return .gray
+        case "blue": return tm.theme.palette.info
+        case "green": return tm.theme.palette.success
+        case "yellow": return tm.theme.palette.warning
+        case "orange": return tm.theme.palette.warning
+        case "purple": return tm.theme.palette.primary
+        case "red": return tm.theme.palette.error
+        case "pink": return tm.theme.palette.primary
+        case "teal": return tm.theme.palette.info
+        case "indigo": return tm.theme.palette.info
+        case "brown": return tm.theme.palette.textMuted
+        case "gray": return tm.theme.palette.textMuted
+        default: return tm.theme.palette.textMuted
         }
     }
     
@@ -740,23 +725,23 @@ private struct EmptyProductTypeView: View {
                         VStack(spacing: 6) {
                             Image(systemName: "camera.viewfinder")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.textInverse)
 
                             VStack(spacing: 2) {
                                 Text("Scan Product")
                                     .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(tm.theme.palette.textInverse)
 
                                 Text("Take a photo to automatically extract product information")
                                     .font(.system(size: 11))
-                                    .foregroundColor(Color.white.opacity(0.9))
+                                    .foregroundColor(tm.theme.palette.textInverse.opacity(0.9))
                                     .multilineTextAlignment(.center)
                                     .lineLimit(2)
                             }
 
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 11, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.textInverse)
                         }
                         .padding(10)
                         .frame(maxWidth: .infinity)
@@ -780,23 +765,23 @@ private struct EmptyProductTypeView: View {
                         VStack(spacing: 6) {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.textInverse)
 
                             VStack(spacing: 2) {
                                 Text("Add Manually")
                                     .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(tm.theme.palette.textInverse)
 
                                 Text("Enter product details manually")
                                     .font(.system(size: 11))
-                                    .foregroundColor(Color.white.opacity(0.9))
+                                    .foregroundColor(tm.theme.palette.textInverse.opacity(0.9))
                                     .multilineTextAlignment(.center)
                                     .lineLimit(2)
                             }
 
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 11, weight: .medium))
-                                .foregroundColor(Color.white)
+                                .foregroundColor(tm.theme.palette.textInverse)
                         }
                         .padding(10)
                         .frame(maxWidth: .infinity)
@@ -815,6 +800,7 @@ private struct EmptyProductTypeView: View {
 // MARK: - Half Screen Sheet
 
 struct HalfScreenSheet<Content: View>: View {
+    @Environment(\.themeManager) private var tm
     @Binding var isPresented: Bool
     let onDismiss: () -> Void
     let content: Content
@@ -833,7 +819,7 @@ struct HalfScreenSheet<Content: View>: View {
         GeometryReader { geometry in
             ZStack {
                 // Background overlay - covers entire screen including safe areas
-                Color.black.opacity(isPresented ? 0.3 : 0)
+                tm.theme.palette.textPrimary.opacity(isPresented ? 0.3 : 0)
                     .ignoresSafeArea(.all)
                     .frame(width: geometry.size.width, height: geometry.size.height)
                     .onTapGesture {
@@ -848,7 +834,7 @@ struct HalfScreenSheet<Content: View>: View {
                     VStack(spacing: 0) {
                         // Drag handle
                         RoundedRectangle(cornerRadius: 2.5)
-                            .fill(Color.gray.opacity(0.4))
+                            .fill(tm.theme.palette.textMuted.opacity(0.4))
                             .frame(width: 36, height: 5)
                             .padding(.top, 8)
                             .padding(.bottom, 16)
@@ -856,7 +842,7 @@ struct HalfScreenSheet<Content: View>: View {
                         // Content
                         content
                     }
-                    .background(Color(.systemBackground))
+                    .background(tm.theme.palette.fieldBackground)
                     .cornerRadius(20, corners: [.topLeft, .topRight])
                     .frame(maxHeight: geometry.size.height * 0.6)
                     .offset(y: sheetOffset + dragOffset)

@@ -60,7 +60,7 @@ struct WelcomeView: View {
                         Image(systemName: "arrow.right")
                             .font(.system(size: 16, weight: .semibold))
                     }
-                    .foregroundColor(Color.white)
+                    .foregroundColor(tm.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(tm.theme.palette.secondary)
@@ -82,7 +82,7 @@ struct WelcomeView: View {
                         .foregroundColor(tm.theme.palette.textSecondary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 44)
-                        .background(tm.theme.palette.bg)
+                        .background(tm.theme.palette.accentBackground)
                         .cornerRadius(tm.theme.cardRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: tm.theme.cardRadius)
@@ -95,7 +95,7 @@ struct WelcomeView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 40)
         }
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { tm.refreshForSystemChange($0) }
     }
 }

@@ -65,7 +65,7 @@ struct EditRoutineView: View {
                                 Text(timeOfDay.displayName)
                                     .font(.system(size: 12, weight: .medium))
                             }
-                            .foregroundColor(selectedTimeOfDay == timeOfDay ? .white : tm.theme.palette.textSecondary)
+                            .foregroundColor(selectedTimeOfDay == timeOfDay ? tm.theme.palette.textInverse : tm.theme.palette.textSecondary)
                             .frame(maxWidth: .infinity)
                             .frame(height: 60)
                             .background(
@@ -127,7 +127,7 @@ struct EditRoutineView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
-            .background(tm.theme.palette.bg.ignoresSafeArea())
+            .background(tm.theme.palette.cardBackground.ignoresSafeArea())
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingAddStep) {
@@ -255,7 +255,7 @@ private struct EmptyRoutineState: View {
                     Text("Add First Step")
                         .font(tm.theme.typo.body.weight(.semibold))
                 }
-                .foregroundColor(Color.white)
+                .foregroundColor(tm.theme.palette.onPrimary)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
                 .background(tm.theme.palette.secondary)
@@ -266,7 +266,7 @@ private struct EmptyRoutineState: View {
         .padding(40)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(tm.theme.palette.card)
+                .fill(tm.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(tm.theme.palette.separator, lineWidth: 1)

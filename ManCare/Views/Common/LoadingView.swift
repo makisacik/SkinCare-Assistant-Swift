@@ -45,9 +45,10 @@ struct LoadingView: View {
                         .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                         .fill(AngularGradient(
                             gradient: Gradient(colors: [
-                                tm.theme.palette.secondary,
-                                tm.theme.palette.accent,
-                                tm.theme.palette.secondary
+                                tm.theme.palette.secondaryLight,
+                                tm.theme.palette.primary,
+                                tm.theme.palette.secondaryLight,
+                                tm.theme.palette.primaryLight
                             ]),
                             center: .center
                         ))
@@ -176,9 +177,9 @@ private struct AnimatedGradientBackground: View {
     var body: some View {
         LinearGradient(
             colors: [
-                tm.theme.palette.bg,
-                tm.theme.palette.card,
-                tm.theme.palette.bg
+                tm.theme.palette.surface,                // Surface color
+                tm.theme.palette.surfaceAlt,             // Surface alt
+                tm.theme.palette.accentBackground        // Accent background
             ],
             startPoint: move ? .topLeading : .bottomTrailing,
             endPoint: move ? .bottomTrailing : .topLeading

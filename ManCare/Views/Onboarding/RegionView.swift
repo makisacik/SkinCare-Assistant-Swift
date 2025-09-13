@@ -79,7 +79,7 @@ struct RegionView: View {
             .opacity(selection == nil ? 0.7 : 1.0)
         }
         .padding(20)
-        .background(tm.theme.palette.bg.ignoresSafeArea())
+        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { tm.refreshForSystemChange($0) }
         .onAppear {
             // Set initial selection to temperate
@@ -103,7 +103,7 @@ private struct ClimateWheel: View {
             ZStack {
                 // Background circle
                 Circle()
-                    .fill(tm.theme.palette.card.opacity(0.3))
+                    .fill(tm.theme.palette.cardBackground.opacity(0.3))
                     .frame(width: 240, height: 240)
                     .overlay(
                         Circle()
@@ -142,7 +142,7 @@ private struct ClimateWheel: View {
                 .frame(width: 60, height: 60)
                 .background(
                     Circle()
-                        .fill(tm.theme.palette.bg)
+                        .fill(tm.theme.palette.accentBackground)
                         .shadow(color: tm.theme.palette.shadow, radius: 4, x: 0, y: 2)
                 )
             }
@@ -158,8 +158,8 @@ private struct ClimateWheel: View {
                                 Spacer()
                                 Text(region.title.prefix(3).uppercased())
                                     .font(.system(size: 8, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .shadow(color: Color.black.opacity(0.3), radius: 1, x: 0, y: 1)
+                                    .foregroundColor(tm.theme.palette.onPrimary)
+                                    .shadow(color: tm.theme.palette.textPrimary.opacity(0.3), radius: 1, x: 0, y: 1)
                             }
                             .padding(.bottom, 2)
                         )
@@ -242,7 +242,7 @@ private struct ClimateDetailCard: View {
                         .frame(width: 50, height: 50)
                     Image(systemName: region.iconName)
                         .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(Color.white)
+                        .foregroundColor(tm.theme.palette.onPrimary)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -267,35 +267,35 @@ private struct ClimateDetailCard: View {
                     icon: "sun.max.fill",
                     title: "UV Index",
                     value: region.averageUVIndex,
-                    color: Color.orange
+                    color: tm.theme.palette.warning
                 )
 
                 ClimateInfoItem(
                     icon: "humidity.fill",
                     title: "Humidity",
                     value: region.humidityLevel,
-                    color: Color.blue
+                    color: tm.theme.palette.info
                 )
 
                 ClimateInfoItem(
                     icon: "thermometer",
                     title: "Temperature",
                     value: region.temperatureLevel,
-                    color: Color.red
+                    color: tm.theme.palette.error
                 )
 
                 ClimateInfoItem(
                     icon: "shield.fill",
                     title: "SPF Need",
                     value: region.averageUVIndex.contains("High") ? "High" : "Moderate",
-                    color: Color.green
+                    color: tm.theme.palette.success
                 )
             }
         }
         .padding(12)
         .background(
             RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
-                .fill(tm.theme.palette.card)
+                .fill(tm.theme.palette.cardBackground)
                 .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
                 .overlay(
                     RoundedRectangle(cornerRadius: tm.theme.cardRadius)
@@ -334,7 +334,7 @@ private struct ClimateInfoItem: View {
         .padding(8)
         .background(
             RoundedRectangle(cornerRadius: 6)
-                .fill(tm.theme.palette.bg.opacity(0.5))
+                .fill(tm.theme.palette.accentBackground.opacity(0.5))
         )
     }
 }
