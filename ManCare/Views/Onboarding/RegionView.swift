@@ -50,18 +50,19 @@ struct RegionView: View {
             }
 
             // Climate visualization
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 // Climate wheel/selector
                 ClimateWheel(regions: regions, selectedIndex: $selectedClimateIndex, selection: $selection)
 
-                // Climate details
+                // Climate details - fixed height
                 if let selectedRegion = selection {
                     ClimateDetailCard(region: selectedRegion)
+                        .frame(maxHeight: 200)
                         .transition(.scale.combined(with: .opacity))
                 }
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: 16)
 
             // Continue button
             Button {
@@ -97,13 +98,13 @@ private struct ClimateWheel: View {
     @Binding var selection: Region?
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             // Climate wheel
             ZStack {
                 // Background circle
                 Circle()
                     .fill(tm.theme.palette.card.opacity(0.3))
-                    .frame(width: 280, height: 280)
+                    .frame(width: 240, height: 240)
                     .overlay(
                         Circle()
                             .stroke(tm.theme.palette.separator, lineWidth: 2)
@@ -138,7 +139,7 @@ private struct ClimateWheel: View {
                             .multilineTextAlignment(.center)
                     }
                 }
-                .frame(width: 80, height: 80)
+                .frame(width: 60, height: 60)
                 .background(
                     Circle()
                         .fill(tm.theme.palette.bg)
@@ -171,10 +172,10 @@ private struct ClimateWheel: View {
                         }
                 }
             }
-            .frame(height: 30)
-            .cornerRadius(15)
+            .frame(height: 24)
+            .cornerRadius(12)
             .overlay(
-                RoundedRectangle(cornerRadius: 15)
+                RoundedRectangle(cornerRadius: 12)
                     .stroke(tm.theme.palette.separator, lineWidth: 1)
             )
         }
@@ -207,20 +208,20 @@ private struct ClimateSegment: View {
                     isSelected ? region.climateColor : region.climateColor.opacity(0.3),
                     style: StrokeStyle(lineWidth: isSelected ? 8 : 4, lineCap: .round)
                 )
-                .frame(width: 240, height: 240)
+                .frame(width: 200, height: 200)
                 .rotationEffect(.degrees(-90))
 
             // Icon
             GeometryReader { geometry in
                 Image(systemName: region.iconName)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(isSelected ? region.climateColor : region.climateColor.opacity(0.6))
                     .position(
-                        x: geometry.size.width / 2 + cos((angle + segmentAngle / 2) * .pi / 180) * 100,
-                        y: geometry.size.height / 2 + sin((angle + segmentAngle / 2) * .pi / 180) * 100
+                        x: geometry.size.width / 2 + cos((angle + segmentAngle / 2) * .pi / 180) * 85,
+                        y: geometry.size.height / 2 + sin((angle + segmentAngle / 2) * .pi / 180) * 85
                     )
             }
-            .frame(width: 240, height: 240)
+            .frame(width: 200, height: 200)
         }
     }
 }
@@ -232,25 +233,25 @@ private struct ClimateDetailCard: View {
     let region: Region
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             // Header
-            HStack(spacing: 16) {
+            HStack(spacing: 12) {
                 ZStack {
                     Circle()
                         .fill(region.climateColor)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 50, height: 50)
                     Image(systemName: region.iconName)
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(.white)
                 }
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(region.title)
-                        .font(tm.theme.typo.title)
+                        .font(tm.theme.typo.body.weight(.semibold))
                         .foregroundColor(tm.theme.palette.textPrimary)
 
                     Text(region.temperatureLevel)
-                        .font(tm.theme.typo.caption.weight(.medium))
+                        .font(tm.theme.typo.caption)
                         .foregroundColor(region.climateColor)
                 }
 
@@ -261,7 +262,7 @@ private struct ClimateDetailCard: View {
             LazyVGrid(columns: [
                 GridItem(.flexible()),
                 GridItem(.flexible())
-            ], spacing: 12) {
+            ], spacing: 8) {
                 ClimateInfoItem(
                     icon: "sun.max.fill",
                     title: "UV Index",
@@ -291,14 +292,14 @@ private struct ClimateDetailCard: View {
                 )
             }
         }
-        .padding(tm.theme.padding)
+        .padding(12)
         .background(
             RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
                 .fill(tm.theme.palette.card)
-                .shadow(color: tm.theme.palette.shadow, radius: 12, x: 0, y: 6)
+                .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
                 .overlay(
                     RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                        .stroke(region.climateColor.opacity(0.3), lineWidth: 2)
+                        .stroke(region.climateColor.opacity(0.3), lineWidth: 1)
                 )
         )
     }
@@ -314,24 +315,25 @@ private struct ClimateInfoItem: View {
     let color: Color
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 4) {
             Image(systemName: icon)
-                .font(.system(size: 20, weight: .semibold))
+                .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(color)
 
             Text(title)
-                .font(tm.theme.typo.caption)
+                .font(.system(size: 10, weight: .medium))
                 .foregroundColor(tm.theme.palette.textSecondary)
                 .multilineTextAlignment(.center)
 
             Text(value)
-                .font(tm.theme.typo.caption.weight(.semibold))
+                .font(.system(size: 10, weight: .semibold))
                 .foregroundColor(tm.theme.palette.textPrimary)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)
         }
-        .padding(12)
+        .padding(8)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 6)
                 .fill(tm.theme.palette.bg.opacity(0.5))
         )
     }
