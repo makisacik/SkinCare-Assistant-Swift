@@ -18,7 +18,6 @@ struct MorningRoutineCompletionView: View {
     
     @State private var completedSteps: Set<String> = []
     @State private var showingStepDetail: RoutineStepDetail?
-    @State private var animateCompletion = false
     @State private var showingProductSelection: RoutineStepDetail?
     
     private var completedStepsCount: Int {
@@ -53,10 +52,21 @@ struct MorningRoutineCompletionView: View {
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 20)
+                        .padding(.bottom, 20)
                     }
-                    
-                    // Bottom Action Buttons
-                    bottomActionButtons
+                    .background(
+                        // Extend the background gradient to cover bottom safe area
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color(red: 0.05, green: 0.1, blue: 0.2),
+                                Color(red: 0.08, green: 0.15, blue: 0.3),
+                                Color(red: 0.12, green: 0.2, blue: 0.35)
+                            ]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                        .ignoresSafeArea(.all, edges: .bottom)
+                    )
                 }
             }
             .navigationTitle("")
@@ -249,55 +259,6 @@ struct MorningRoutineCompletionView: View {
         }
     }
     
-    // MARK: - Bottom Actions
-    
-    private var bottomActionButtons: some View {
-        VStack(spacing: 16) {
-            // Main completion button
-            Button {
-                if isRoutineComplete {
-                    completeRoutine()
-                }
-            } label: {
-                HStack {
-                    if isRoutineComplete {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 18, weight: .semibold))
-                    }
-                    
-                    Text(isRoutineComplete ? "COMPLETE ROUTINE" : "COMPLETE ROUTINE")
-                        .font(.system(size: 16, weight: .bold))
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(isRoutineComplete ? Color.green : Color.orange)
-                        .shadow(color: isRoutineComplete ? Color.green.opacity(0.3) : Color.orange.opacity(0.3), radius: 8, x: 0, y: 4)
-                )
-                .scaleEffect(animateCompletion ? 1.05 : 1.0)
-                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: animateCompletion)
-            }
-            .buttonStyle(PlainButtonStyle())
-            .disabled(!isRoutineComplete)
-            
-            // Skip button
-            Button("SKIP") {
-                dismiss()
-            }
-            .font(.system(size: 16, weight: .medium))
-            .foregroundColor(.gray)
-        }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 20)
-        .background(
-            // Blur background
-            Rectangle()
-                .fill(Color.black.opacity(0.1))
-                .background(.ultraThinMaterial)
-        )
-    }
     
     // MARK: - Navigation Buttons
     
@@ -358,38 +319,9 @@ struct MorningRoutineCompletionView: View {
             
             // Add haptic feedback
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            
-            // Animate completion
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                animateCompletion = true
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                animateCompletion = false
-            }
         }
     }
     
-    private func completeRoutine() {
-        // Save completion to tracking service
-        for step in routineSteps {
-            if completedSteps.contains(step.id) {
-                routineTrackingService.toggleStepCompletion(
-                    stepId: step.id,
-                    stepTitle: step.title,
-                    stepType: step.stepType,
-                    timeOfDay: step.timeOfDay,
-                    date: Date()
-                )
-            }
-        }
-        
-        // Call completion callback
-        onComplete()
-        
-        // Dismiss view
-        dismiss()
-    }
 }
 
 // MARK: - Detailed Step Row
