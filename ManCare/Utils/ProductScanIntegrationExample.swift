@@ -198,7 +198,7 @@ struct ProductScanIntegrationView: View {
                         Image(systemName: "camera.fill")
                         Text("Select Product Image")
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                     .padding()
                     .background(Color.blue)
                     .cornerRadius(8)
@@ -268,7 +268,7 @@ struct ProductScanIntegrationView: View {
                 // Error Message
                 if let error = scanner.errorMessage {
                     Text("Error: \(error)")
-                        .foregroundColor(.red)
+                        .foregroundColor(Color.red)
                         .font(.caption)
                         .padding()
                         .background(Color.red.opacity(0.1))

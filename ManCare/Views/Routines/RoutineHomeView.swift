@@ -78,7 +78,7 @@ struct RoutineHomeView: View {
                     HStack {
                         Text("Your daily routine")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
 
                         Spacer()
 
@@ -124,9 +124,6 @@ struct RoutineHomeView: View {
                         showingStepDetail = step
                     }
                 )
-
-                // Skin Diary Card
-                SkinDiaryCard()
 
                 // Evening Routine Card
                 ModernRoutineCard(
@@ -358,13 +355,13 @@ struct RoutineHomeView: View {
     private func colorForStepType(_ stepType: ProductType) -> Color {
         switch stepType {
         case .cleanser:
-            return .blue
+            return Color.blue
         case .faceSerum:
-            return .purple
+            return Color.purple
         case .moisturizer:
-            return .green
+            return Color.green
         case .sunscreen:
-            return .yellow
+            return Color.yellow
         default:
             return Color(stepType.color)
         }
@@ -383,7 +380,7 @@ private struct CoachMessageView: View {
         HStack(spacing: 12) {
             Image(systemName: "lightbulb.fill")
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.yellow)
+                .foregroundColor(Color.yellow)
 
             Text(message)
                 .font(tm.theme.typo.body)
@@ -424,11 +421,11 @@ private struct ModernHeaderView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "flame.fill")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(.orange)
+                            .foregroundColor(Color.orange)
 
                         Text("\(currentStreak) day streak")
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
@@ -448,7 +445,7 @@ private struct ModernHeaderView: View {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(selectedDate, style: .date)
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
 
                     Text("Today")
                         .font(.system(size: 12, weight: .medium))
@@ -628,7 +625,7 @@ private struct ModernRoutineCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                         .multilineTextAlignment(.leading)
 
                     Text("\(completedCount)/\(productCount) completed")
@@ -643,7 +640,7 @@ private struct ModernRoutineCard: View {
                     VStack(spacing: 2) {
                         Text("\(Int(progressPercentage * 100))%")
                             .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                     }
 
                     Image(systemName: "chevron.right")
@@ -678,12 +675,12 @@ private struct RoutineStepRow: View {
 
     private var stepColor: Color {
         switch step.stepType {
-        case .cleanser: return .blue
-        case .faceSerum: return .purple
-        case .moisturizer: return .green
-        case .sunscreen: return .yellow
-        case .faceSunscreen: return .orange
-        default: return .gray
+        case .cleanser: return Color.blue
+        case .faceSerum: return Color.purple
+        case .moisturizer: return Color.green
+        case .sunscreen: return Color.yellow
+        case .faceSunscreen: return Color.orange
+        default: return Color.gray
         }
     }
 
@@ -718,7 +715,7 @@ private struct RoutineStepRow: View {
 
                         Image(systemName: "checkmark")
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .scaleEffect(showCheckmarkAnimation ? 1.3 : 1.0)
                             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
                     }
@@ -763,58 +760,6 @@ private struct RoutineStepRow: View {
     }
 }
 
-// MARK: - Skin Diary Card
-
-private struct SkinDiaryCard: View {
-    var body: some View {
-        Button {
-            // TODO: Navigate to skin diary
-        } label: {
-            HStack(spacing: 16) {
-                // Icon
-                ZStack {
-                    Circle()
-                        .fill(Color(red: 0.2, green: 0.5, blue: 0.7).opacity(0.2))
-                        .frame(width: 50, height: 50)
-
-                    Image(systemName: "face.smiling")
-                        .font(.system(size: 24, weight: .semibold))
-                        .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.7))
-                }
-
-                // Content
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Skin diary log")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.leading)
-
-                    Text("How are you feeling today?")
-                        .font(.system(size: 14))
-                        .foregroundColor(.white.opacity(0.6))
-                }
-
-                Spacer()
-
-                // Arrow
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.white.opacity(0.6))
-            }
-            .padding(20)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.white.opacity(0.08))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.white.opacity(0.15), lineWidth: 1)
-                    )
-            )
-        }
-        .buttonStyle(PlainButtonStyle())
-        .padding(.horizontal, 20)
-    }
-}
 
 // MARK: - UV Index Card
 
@@ -825,7 +770,7 @@ private struct UVIndexCard: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Do you want to see daily UV index here?")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                         .multilineTextAlignment(.leading)
 
                     Text("See crucial information about the UV levels based on your location and skin characteristics.")
@@ -845,7 +790,7 @@ private struct UVIndexCard: View {
 
                 Text("Recommended 50 SPF")
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
 
                 Spacer()
             }

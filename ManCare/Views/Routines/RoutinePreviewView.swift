@@ -87,7 +87,7 @@ struct RoutinePreviewView: View {
                             Text("Save Changes")
                                 .font(tm.theme.typo.title.weight(.semibold))
                         }
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
                         .background(tm.theme.palette.secondary)
@@ -300,7 +300,7 @@ private struct EditedStepCard: View {
                 } else {
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color.gray)
                 }
             }
             
@@ -317,19 +317,19 @@ private struct EditedStepCard: View {
                         if step.originalStep {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(.blue)
+                                .foregroundColor(Color.blue)
                         }
                         
                         if !step.originalStep {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(.green)
+                                .foregroundColor(Color.green)
                         }
                         
                         if step.frequency != .daily {
                             Image(systemName: "clock")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(.orange)
+                                .foregroundColor(Color.orange)
                         }
                     }
                 }
@@ -345,7 +345,7 @@ private struct EditedStepCard: View {
                         if step.frequency != .daily {
                             Text(step.frequency.displayName)
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(.orange)
+                                .foregroundColor(Color.orange)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
                                 .background(Color.orange.opacity(0.1))
@@ -355,7 +355,7 @@ private struct EditedStepCard: View {
                         if step.morningEnabled && step.eveningEnabled {
                             Text("AM & PM")
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(Color.blue)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
                                 .background(Color.blue.opacity(0.1))
@@ -363,7 +363,7 @@ private struct EditedStepCard: View {
                         } else if step.morningEnabled {
                             Text("AM")
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(.orange)
+                                .foregroundColor(Color.orange)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
                                 .background(Color.orange.opacity(0.1))
@@ -371,7 +371,7 @@ private struct EditedStepCard: View {
                         } else if step.eveningEnabled {
                             Text("PM")
                                 .font(tm.theme.typo.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(Color.blue)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
                                 .background(Color.blue.opacity(0.1))
@@ -416,14 +416,14 @@ private struct RoutineSummaryCard: View {
                     title: "Original steps",
                     value: "\(originalCount)",
                     iconName: "list.bullet",
-                    color: .blue
+                    color: Color.blue
                 )
                 
                 SummaryRow(
                     title: "Active steps",
                     value: "\(editedCount)",
                     iconName: "checkmark.circle",
-                    color: .green
+                    color: Color.green
                 )
                 
                 if addedCount > 0 {
@@ -431,7 +431,7 @@ private struct RoutineSummaryCard: View {
                         title: "Added steps",
                         value: "\(addedCount)",
                         iconName: "plus.circle",
-                        color: .green
+                        color: Color.green
                     )
                 }
                 
@@ -440,7 +440,7 @@ private struct RoutineSummaryCard: View {
                         title: "Removed steps",
                         value: "\(removedCount)",
                         iconName: "minus.circle",
-                        color: .red
+                        color: Color.red
                     )
                 }
             }

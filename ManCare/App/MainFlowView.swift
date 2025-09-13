@@ -800,7 +800,7 @@ private struct ProgressIndicator: View {
                     .frame(width: 32, height: 32)
                 Text("\(stepNumber)")
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
             }
 
             // Step title

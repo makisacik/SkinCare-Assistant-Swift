@@ -60,7 +60,7 @@ struct WelcomeView: View {
                         Image(systemName: "arrow.right")
                             .font(.system(size: 16, weight: .semibold))
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(tm.theme.palette.secondary)

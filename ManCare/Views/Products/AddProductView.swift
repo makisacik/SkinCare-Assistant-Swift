@@ -24,7 +24,6 @@ struct AddProductView: View {
     @State private var newIngredient = ""
     @State private var newClaim = ""
     @State private var showingProductTypeSelector = false
-    @State private var showingProductScanner = false
 
     let onProductAdded: (Product) -> Void
 
@@ -47,41 +46,6 @@ struct AddProductView: View {
                     .padding(.top, 20)
 
                     VStack(spacing: 20) {
-                        // Scan Product Section
-                        ProductFormSection(title: "Quick Add") {
-                            VStack(spacing: 16) {
-                                Button {
-                                    showingProductScanner = true
-                                } label: {
-                                    HStack(spacing: 12) {
-                                        Image(systemName: "camera.viewfinder")
-                                            .font(.system(size: 20, weight: .medium))
-                                            .foregroundColor(.white)
-
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("Scan Product Label")
-                                                .font(tm.theme.typo.body.weight(.semibold))
-                                                .foregroundColor(.white)
-
-                                            Text("Take a photo to automatically extract product information")
-                                                .font(tm.theme.typo.caption)
-                                                .foregroundColor(.white.opacity(0.8))
-                                        }
-
-                                        Spacer()
-
-                                        Image(systemName: "arrow.right")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .foregroundColor(.white)
-                                    }
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 16)
-                                    .background(tm.theme.palette.secondary)
-                                    .cornerRadius(12)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            }
-                        }
                         // Basic Information
                         ProductFormSection(title: "Basic Information") {
                             VStack(spacing: 16) {
@@ -208,12 +172,6 @@ struct AddProductView: View {
         .sheet(isPresented: $showingProductTypeSelector) {
             ProductTypeSelectorSheet(selectedProductType: $selectedProductType)
         }
-        .sheet(isPresented: $showingProductScanner) {
-            ProductScanView { extractedText in
-                // Process the extracted text and populate form fields
-                processExtractedText(extractedText)
-            }
-        }
         .onAppear {
             // Auto-detect product type from product name
             if !productName.isEmpty {
@@ -247,52 +205,6 @@ struct AddProductView: View {
         dismiss()
     }
 
-    private func processExtractedText(_ text: String) {
-        // Print the extracted text as requested
-        print("🔹 Step 1 — OCR (front photo → raw text)")
-        print("Extracted text: \(text)")
-
-        // Basic text processing to extract product information
-        let lines = text.components(separatedBy: .newlines)
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-
-        // Try to extract product name (usually the first or largest text)
-        if productName.isEmpty && !lines.isEmpty {
-            // Use the first non-empty line as product name
-            productName = lines[0]
-        }
-
-        // Try to extract brand (look for common brand patterns)
-        if brand.isEmpty {
-            for line in lines {
-                // Look for lines that might be brand names (usually shorter, all caps, or title case)
-                if line.count < 20 && (line == line.uppercased() || line == line.capitalized) {
-                    brand = line
-                    break
-                }
-            }
-        }
-
-        // Try to extract size (look for volume/weight indicators)
-        if size.isEmpty {
-            for line in lines {
-                if line.contains("ml") || line.contains("oz") || line.contains("g") || line.contains("fl oz") {
-                    size = line
-                    break
-                }
-            }
-        }
-
-
-        // Auto-detect product type from the extracted text
-        selectedProductType = ProductAliasMapping.normalize(text)
-
-        // Store the full extracted text in description for reference
-        if description.isEmpty {
-            description = "Scanned text: \(text)"
-        }
-    }
 }
 
 

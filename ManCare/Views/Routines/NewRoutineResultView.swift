@@ -61,7 +61,7 @@ struct NewRoutineResultView: View {
                         Text("Continue")
                             .font(tm.theme.typo.title.weight(.semibold))
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(tm.theme.palette.secondary)

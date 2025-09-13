@@ -49,7 +49,7 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.system(size: 30))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .background(Color.black.opacity(0.3))
                                 .clipShape(Circle())
                         }
@@ -58,7 +58,7 @@ struct ProductScanView: View {
                         
                         Text("Scan Product")
                             .font(.headline)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
                             .background(Color.black.opacity(0.3))
@@ -72,7 +72,7 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: cameraManager.isFlashlightOn ? "flashlight.on.fill" : "flashlight.off.fill")
                                 .font(.system(size: 24))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .background(Color.black.opacity(0.3))
                                 .clipShape(Circle())
                         }
@@ -83,7 +83,7 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "text.badge.checkmark")
                                 .font(.system(size: 20))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .background(Color.blue.opacity(0.7))
                                 .clipShape(Circle())
                         }
@@ -94,7 +94,7 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "camera.badge.ellipsis")
                                 .font(.system(size: 20))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .background(Color.orange.opacity(0.7))
                                 .clipShape(Circle())
                         }
@@ -110,7 +110,7 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "text.magnifyingglass")
                                 .font(.system(size: 20))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .background(Color.purple.opacity(0.7))
                                 .clipShape(Circle())
                         }
@@ -124,7 +124,7 @@ struct ProductScanView: View {
                     VStack(spacing: 20) {
                         Text("Position the product label within the frame")
                             .font(.subheadline)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 20)
                         
@@ -151,7 +151,7 @@ struct ProductScanView: View {
                         } label: {
                             Image(systemName: "photo.on.rectangle")
                                 .font(.system(size: 24))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .frame(width: 50, height: 50)
                                 .background(Color.black.opacity(0.3))
                                 .clipShape(Circle())
@@ -181,7 +181,7 @@ struct ProductScanView: View {
                             } label: {
                                 Image(systemName: "text.viewfinder")
                                     .font(.system(size: 24))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .frame(width: 50, height: 50)
                                     .background(tm.theme.palette.secondary)
                                     .clipShape(Circle())
@@ -217,7 +217,7 @@ struct ProductScanView: View {
                                 
                                 Text("Photo captured!")
                                     .font(.caption)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .padding(.horizontal, 8)
                                     .padding(.vertical, 4)
                                     .background(Color.green)
@@ -249,7 +249,7 @@ struct ProductScanView: View {
                             VStack(spacing: 12) {
                                 Text(currentStep.isEmpty ? "Processing..." : currentStep)
                                     .font(.title2.weight(.semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
 
                                 if !extractedText.isEmpty {
@@ -286,19 +286,19 @@ struct ProductScanView: View {
                         VStack(spacing: 20) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 80))
-                                .foregroundColor(.green)
+                                .foregroundColor(Color.green)
                                 .scaleEffect(1.0)
                                 .animation(.spring(response: 0.6, dampingFraction: 0.8), value: showingSuccess)
 
                             Text("Product Added Successfully!")
                                 .font(.title2.weight(.bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
 
                             if let product = createdProduct {
                                 VStack(spacing: 12) {
                                     Text(product.displayName)
                                         .font(.title3.weight(.semibold))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color.white)
                                         .multilineTextAlignment(.center)
 
                                     Text(product.tagging.productType.displayName)
@@ -326,7 +326,7 @@ struct ProductScanView: View {
                                 dismiss()
                             }
                             .font(.headline.weight(.semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .padding(.horizontal, 40)
                             .padding(.vertical, 16)
                             .background(
@@ -801,7 +801,7 @@ struct TextResultView: View {
                                     .font(tm.theme.typo.body.weight(.medium))
                                 Text(String(format: "%.1f%%", normalized.confidence * 100))
                                     .font(tm.theme.typo.body)
-                                    .foregroundColor(normalized.confidence > 0.7 ? .green : .orange)
+                                    .foregroundColor(normalized.confidence > 0.7 ? Color.green : Color.orange)
                             }
                         }
                         .padding(16)
@@ -819,7 +819,7 @@ struct TextResultView: View {
                 if let error = normalizationError {
                     Text("Normalization Error: \(error)")
                         .font(tm.theme.typo.caption)
-                        .foregroundColor(.red)
+                        .foregroundColor(Color.red)
                         .padding(.horizontal, 20)
                 }
 
@@ -835,7 +835,7 @@ struct TextResultView: View {
                                 Text("Normalize with GPT")
                             }
                             .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
                             .background(Color.purple)
@@ -868,7 +868,7 @@ struct TextResultView: View {
                     } label: {
                         Text(normalizedProduct != nil ? "Continue with Normalized Product" : "Continue with Raw Text")
                             .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
                             .background(tm.theme.palette.secondary)

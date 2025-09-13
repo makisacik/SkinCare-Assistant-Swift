@@ -114,7 +114,7 @@ struct RoutineDetailView: View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.system(size: 28, weight: .bold))
-                .foregroundColor(.white)
+                .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
             
             Text("\(completedCount) of \(steps.count) steps completed")
@@ -176,11 +176,11 @@ struct RoutineDetailView: View {
             VStack(spacing: 12) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 48, weight: .semibold))
-                    .foregroundColor(.green)
+                    .foregroundColor(Color.green)
                 
                 Text("Routine Complete! 🎉")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                 
                 Text("Great job taking care of your skin today!")
                     .font(.system(size: 16))
@@ -210,7 +210,7 @@ struct RoutineDetailView: View {
                 Text("Back")
                     .font(.system(size: 16, weight: .medium))
             }
-            .foregroundColor(.white)
+            .foregroundColor(Color.white)
         }
     }
 }
@@ -239,7 +239,7 @@ private struct RoutineDetailStepCard: View {
                 if isCompleted {
                     Image(systemName: "checkmark")
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                 } else {
                     Text("\(stepNumber)")
                         .font(.system(size: 14, weight: .bold))
@@ -296,7 +296,7 @@ private struct RoutineDetailStepCard: View {
                             
                             Image(systemName: "checkmark")
                                 .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color.white)
                                 .scaleEffect(showCheckmarkAnimation ? 1.3 : 1.0)
                                 .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
                         }

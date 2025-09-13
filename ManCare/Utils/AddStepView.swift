@@ -142,7 +142,7 @@ struct AddStepView: View {
                                 } label: {
                                     Text(freq.displayName)
                                         .font(tm.theme.typo.caption.weight(.medium))
-                                        .foregroundColor(frequency == freq ? .white : tm.theme.palette.textSecondary)
+                                        .foregroundColor(frequency == freq ? Color.white : tm.theme.palette.textSecondary)
                                         .padding(.horizontal, 8)
                                         .padding(.vertical, 4)
                                         .background(
@@ -176,7 +176,7 @@ struct AddStepView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "sun.max.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(morningEnabled ? .orange : .gray)
+                                            .foregroundColor(morningEnabled ? Color.orange : Color.gray)
                                         
                                         Text("Morning")
                                             .font(tm.theme.typo.body.weight(.medium))
@@ -202,7 +202,7 @@ struct AddStepView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "moon.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(eveningEnabled ? .blue : .gray)
+                                            .foregroundColor(eveningEnabled ? Color.blue : Color.gray)
                                         
                                         Text("Evening")
                                             .font(tm.theme.typo.body.weight(.medium))
@@ -280,7 +280,9 @@ struct AddStepView: View {
             originalStep: false,
             order: editingService.editableRoutine.steps(for: timeOfDay).count,
             morningEnabled: morningEnabled,
-            eveningEnabled: eveningEnabled
+            eveningEnabled: eveningEnabled,
+            attachedProductId: nil,
+            productConstraints: nil
         )
         
         editingService.addNewStep(type: selectedStepType, timeOfDay: timeOfDay)
@@ -384,11 +386,11 @@ private struct StepTypeCard: View {
             VStack(spacing: 12) {
                 Image(systemName: iconName)
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundColor(isSelected ? .white : stepTypeColor)
+                    .foregroundColor(isSelected ? Color.white : stepTypeColor)
                 
                 Text(displayName)
                     .font(tm.theme.typo.body.weight(.medium))
-                    .foregroundColor(isSelected ? .white : tm.theme.palette.textPrimary)
+                    .foregroundColor(isSelected ? Color.white : tm.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)

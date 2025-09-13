@@ -127,7 +127,7 @@ struct ProductTypeRow: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                 }
             }
             .padding(.horizontal, 16)

@@ -235,7 +235,7 @@ struct ProductNormalizationExampleView: View {
                         Image(systemName: "play.fill")
                         Text("Run Examples")
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                     .padding()
                     .background(Color.blue)
                     .cornerRadius(8)

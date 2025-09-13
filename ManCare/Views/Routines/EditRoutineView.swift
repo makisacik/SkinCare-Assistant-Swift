@@ -15,7 +15,6 @@ struct EditRoutineView: View {
     @State private var selectedTimeOfDay: TimeOfDay = .morning
     @State private var showingAddStep = false
     @State private var showingStepDetail: EditableRoutineStep?
-    @State private var showingAdvancedOptions = false
     
     init(originalRoutine: RoutineResponse?, routineTrackingService: RoutineTrackingService) {
         self._editingService = StateObject(wrappedValue: RoutineEditingService(originalRoutine: originalRoutine, routineTrackingService: routineTrackingService))
@@ -24,40 +23,63 @@ struct EditRoutineView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Header
-                EditRoutineHeader(
-                    editingState: editingService.editingState,
-                    isCustomized: editingService.editableRoutine.isCustomized,
-                    onCancel: {
+                // Simple header
+                HStack {
+                    Button("Cancel") {
                         editingService.cancelEditing()
                         dismiss()
-                    },
-                    onSave: {
+                    }
+                    .foregroundColor(tm.theme.palette.textSecondary)
+                    
+                    Spacer()
+                    
+                    Text("Edit Routine")
+                        .font(tm.theme.typo.h2)
+                        .foregroundColor(tm.theme.palette.textPrimary)
+                    
+                    Spacer()
+                    
+                    Button("Save") {
                         Task {
                             await editingService.saveRoutine()
                             dismiss()
                         }
-                    },
-                    onPreview: {
-                        editingService.showPreview()
                     }
-                )
-                
-                // Coach Messages
-                if !editingService.coachMessages.isEmpty {
-                    CoachMessagesView(
-                        messages: editingService.coachMessages,
-                        onDismiss: {
-                            editingService.clearCoachMessages()
-                        }
-                    )
+                    .foregroundColor(tm.theme.palette.secondary)
+                    .font(.system(size: 16, weight: .semibold))
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
                 
                 // Time of Day Selector
-                TimeOfDaySelector(
-                    selectedTimeOfDay: $selectedTimeOfDay,
-                    editingState: editingService.editingState
-                )
+                HStack(spacing: 0) {
+                    ForEach(TimeOfDay.allCases, id: \.self) { timeOfDay in
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                selectedTimeOfDay = timeOfDay
+                            }
+                        } label: {
+                            VStack(spacing: 4) {
+                                Image(systemName: iconNameForTimeOfDay(timeOfDay))
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text(timeOfDay.displayName)
+                                    .font(.system(size: 12, weight: .medium))
+                            }
+                            .foregroundColor(selectedTimeOfDay == timeOfDay ? .white : tm.theme.palette.textSecondary)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
+                            .background(
+                                selectedTimeOfDay == timeOfDay ?
+                                tm.theme.palette.secondary :
+                                Color.clear
+                            )
+                            .cornerRadius(12)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 16)
                 
                 // Content
                 TabView(selection: $selectedTimeOfDay) {
@@ -120,268 +142,9 @@ struct EditRoutineView: View {
                 editingService: editingService
             )
         }
-        .sheet(isPresented: $editingService.showingPreview) {
-            RoutinePreviewView(
-                originalRoutine: editingService.editableRoutine.originalRoutine,
-                editedRoutine: editingService.editableRoutine,
-                onConfirm: {
-                    Task {
-                        await editingService.saveRoutine()
-                        dismiss()
-                    }
-                },
-                onCancel: {
-                    editingService.showingPreview = false
-                }
-            )
-        }
         .onAppear {
             editingService.startEditing()
         }
-    }
-}
-
-// MARK: - Edit Routine Header
-
-private struct EditRoutineHeader: View {
-    @Environment(\.themeManager) private var tm
-    let editingState: RoutineEditingState
-    let isCustomized: Bool
-    let onCancel: () -> Void
-    let onSave: () -> Void
-    let onPreview: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            // Top bar
-            HStack {
-                Button {
-                    onCancel()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Cancel")
-                            .font(tm.theme.typo.body.weight(.medium))
-                    }
-                    .foregroundColor(tm.theme.palette.textSecondary)
-                }
-                .buttonStyle(PlainButtonStyle())
-                
-                Spacer()
-                
-                // Customization indicator
-                if isCustomized {
-                    HStack(spacing: 6) {
-                        Image(systemName: "pencil.circle.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(.orange)
-                        Text("Customized")
-                            .font(tm.theme.typo.caption.weight(.medium))
-                            .foregroundColor(.orange)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.orange.opacity(0.1))
-                    .cornerRadius(8)
-                }
-                
-                Spacer()
-                
-                Button {
-                    onSave()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Save")
-                            .font(tm.theme.typo.body.weight(.semibold))
-                    }
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(tm.theme.palette.secondary)
-                    .cornerRadius(8)
-                }
-                .buttonStyle(PlainButtonStyle())
-                .disabled(editingState == .saving)
-            }
-            
-            // Title and subtitle
-            VStack(spacing: 8) {
-                Text("Edit Your Routine")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
-                    .multilineTextAlignment(.center)
-                
-                Text("Customize your skincare routine to fit your lifestyle")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-            
-            // Action buttons
-            if editingState == .editing {
-                HStack(spacing: 12) {
-                    Button {
-                        onPreview()
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "eye.fill")
-                                .font(.system(size: 14, weight: .semibold))
-                            Text("Preview Changes")
-                                .font(tm.theme.typo.body.weight(.medium))
-                        }
-                        .foregroundColor(tm.theme.palette.secondary)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(tm.theme.palette.secondary.opacity(0.1))
-                        .cornerRadius(8)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 20)
-    }
-}
-
-// MARK: - Coach Messages View
-
-private struct CoachMessagesView: View {
-    @Environment(\.themeManager) private var tm
-    let messages: [CoachMessage]
-    let onDismiss: () -> Void
-    
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
-                ForEach(messages) { message in
-                    CoachMessageCard(
-                        message: message,
-                        onDismiss: onDismiss
-                    )
-                }
-            }
-            .padding(.horizontal, 20)
-        }
-        .padding(.vertical, 12)
-    }
-}
-
-// MARK: - Coach Message Card
-
-private struct CoachMessageCard: View {
-    @Environment(\.themeManager) private var tm
-    let message: CoachMessage
-    let onDismiss: () -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header
-            HStack(spacing: 8) {
-                Image(systemName: message.type.iconName)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(message.type.color)
-                
-                Text(message.title)
-                    .font(tm.theme.typo.body.weight(.semibold))
-                    .foregroundColor(tm.theme.palette.textPrimary)
-                
-                Spacer()
-                
-                Button {
-                    onDismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.textSecondary)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            
-            // Message
-            Text(message.message)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
-                .multilineTextAlignment(.leading)
-            
-            // Action button
-            if let actionTitle = message.actionTitle, let action = message.action {
-                Button {
-                    action()
-                } label: {
-                    Text(actionTitle)
-                        .font(tm.theme.typo.body.weight(.medium))
-                        .foregroundColor(message.type.color)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(message.type.color.opacity(0.1))
-                        .cornerRadius(6)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(message.type.color.opacity(0.05))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(message.type.color.opacity(0.2), lineWidth: 1)
-                )
-        )
-        .frame(maxWidth: 300)
-    }
-}
-
-// MARK: - Time of Day Selector
-
-private struct TimeOfDaySelector: View {
-    @Environment(\.themeManager) private var tm
-    @Binding var selectedTimeOfDay: TimeOfDay
-    let editingState: RoutineEditingState
-    
-    var body: some View {
-        HStack(spacing: 0) {
-            ForEach(TimeOfDay.allCases, id: \.self) { timeOfDay in
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        selectedTimeOfDay = timeOfDay
-                    }
-                } label: {
-                    VStack(spacing: 4) {
-                        Image(systemName: iconNameForTimeOfDay(timeOfDay))
-                            .font(.system(size: 16, weight: .semibold))
-                        Text(timeOfDay.displayName)
-                            .font(.system(size: 12, weight: .medium))
-                    }
-                    .foregroundColor(selectedTimeOfDay == timeOfDay ? .white : tm.theme.palette.textSecondary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 60)
-                    .background(
-                        selectedTimeOfDay == timeOfDay ?
-                        tm.theme.palette.secondary :
-                        Color.clear
-                    )
-                    .cornerRadius(12)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(tm.theme.palette.card)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(tm.theme.palette.separator, lineWidth: 1)
-                )
-        )
-        .padding(.horizontal, 20)
     }
     
     private func iconNameForTimeOfDay(_ timeOfDay: TimeOfDay) -> String {
@@ -409,17 +172,11 @@ private struct EditableRoutineSection: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
-                // Section header
+                // Section header with add button
                 HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("\(timeOfDay.displayName) Routine")
-                            .font(tm.theme.typo.h2)
-                            .foregroundColor(tm.theme.palette.textPrimary)
-                        
-                        Text("\(steps.count) steps")
-                            .font(tm.theme.typo.caption)
-                            .foregroundColor(tm.theme.palette.textSecondary)
-                    }
+                    Text("\(timeOfDay.displayName) Routine")
+                        .font(tm.theme.typo.h2)
+                        .foregroundColor(tm.theme.palette.textPrimary)
                     
                     Spacer()
                     
@@ -498,7 +255,7 @@ private struct EmptyRoutineState: View {
                     Text("Add First Step")
                         .font(tm.theme.typo.body.weight(.semibold))
                 }
-                .foregroundColor(.white)
+                .foregroundColor(Color.white)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
                 .background(tm.theme.palette.secondary)
@@ -530,8 +287,6 @@ private struct EmptyRoutineState: View {
     }
 }
 
-// MARK: - Extensions
-
 // MARK: - Preview
 
 #Preview("EditRoutineView") {
@@ -540,4 +295,3 @@ private struct EmptyRoutineState: View {
         routineTrackingService: RoutineTrackingService()
     )
 }
-

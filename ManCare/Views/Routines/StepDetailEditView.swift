@@ -20,7 +20,6 @@ struct StepDetailEditView: View {
     @State private var frequency: StepFrequency
     @State private var morningEnabled: Bool
     @State private var eveningEnabled: Bool
-    @State private var isEnabled: Bool
     
     init(step: EditableRoutineStep, editingService: RoutineEditingService) {
         self.step = step
@@ -31,7 +30,6 @@ struct StepDetailEditView: View {
         self._frequency = State(initialValue: step.frequency)
         self._morningEnabled = State(initialValue: step.morningEnabled)
         self._eveningEnabled = State(initialValue: step.eveningEnabled)
-        self._isEnabled = State(initialValue: step.isEnabled)
     }
     
     var body: some View {
@@ -55,168 +53,145 @@ struct StepDetailEditView: View {
                                 .font(tm.theme.typo.h2)
                                 .foregroundColor(tm.theme.palette.textPrimary)
                             
-                            Text(step.timeOfDay.displayName)
+                            Text("Customize this step")
                                 .font(tm.theme.typo.body)
                                 .foregroundColor(tm.theme.palette.textSecondary)
                         }
                     }
                     .padding(.top, 20)
                     
-                    // Enable/disable toggle
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Step Status")
-                                .font(tm.theme.typo.h3)
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                            
-                            Spacer()
-                            
-                            Toggle("", isOn: $isEnabled)
-                                .toggleStyle(SwitchToggleStyle(tint: .green))
-                        }
-                        
-                        Text(isEnabled ? "This step is active in your routine" : "This step is disabled and won't appear in your routine")
-                            .font(tm.theme.typo.body)
-                            .foregroundColor(tm.theme.palette.textSecondary)
-                    }
-                    .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(tm.theme.palette.card)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(tm.theme.palette.separator, lineWidth: 1)
-                            )
-                    )
-                    
-                    // Step details
+                    // Basic Information
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("Step Details")
+                        Text("Basic Information")
                             .font(tm.theme.typo.h3)
                             .foregroundColor(tm.theme.palette.textPrimary)
                         
-                        // Title
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Step Name")
-                                .font(tm.theme.typo.body.weight(.semibold))
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                        VStack(spacing: 16) {
+                            // Title
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Title")
+                                    .font(tm.theme.typo.body.weight(.medium))
+                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                
+                                TextField("Step title", text: $title)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                            }
                             
-                            TextField("Enter step name", text: $title)
-                                .font(tm.theme.typo.body)
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                                .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.bg)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
-                                        )
-                                )
-                        }
-                        
-                        // Description
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Description")
-                                .font(tm.theme.typo.body.weight(.semibold))
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                            
-                            TextField("Enter description", text: $description)
-                                .font(tm.theme.typo.body)
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                                .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.bg)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
-                                        )
-                                )
-                        }
-                        
-                        // Custom instructions
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Custom Instructions")
-                                .font(tm.theme.typo.body.weight(.semibold))
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                            
-                            TextField("Add personal notes or instructions", text: $customInstructions)
-                                .font(tm.theme.typo.body)
-                                .foregroundColor(tm.theme.palette.textPrimary)
-                                .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.bg)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
-                                        )
-                                )
-                        }
-                    }
-                    .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(tm.theme.palette.card)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(tm.theme.palette.separator, lineWidth: 1)
-                            )
-                    )
-                    
-                    // Frequency selection
-                    FrequencySelectionView(
-                        frequency: $frequency,
-                        theme: tm.theme
-                    )
-                    
-                    // Time of day selection (only for non-weekly steps)
-                    if step.timeOfDay != .weekly {
-                        TimeOfDaySelectionView(
-                            morningEnabled: $morningEnabled,
-                            eveningEnabled: $eveningEnabled,
-                            theme: tm.theme
-                        )
-                    }
-                    
-                    // Step information
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Step Information")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
-                        
-                        VStack(alignment: .leading, spacing: 12) {
-                            InfoRow(
-                                title: "Why this step?",
-                                content: step.why
-                            )
-                            
-                            InfoRow(
-                                title: "How to apply",
-                                content: step.how
-                            )
-                            
-                            if step.originalStep {
-                                InfoRow(
-                                    title: "Source",
-                                    content: "Recommended by AI"
-                                )
+                            // Description
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Description")
+                                    .font(tm.theme.typo.body.weight(.medium))
+                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                
+                                TextField("Step description", text: $description)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .lineLimit(3)
                             }
                         }
                     }
-                    .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(tm.theme.palette.card)
-                            .overlay(
+                    .padding(.horizontal, 20)
+                    
+                    // Time of Day Settings
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("When to use")
+                            .font(tm.theme.typo.h3)
+                            .foregroundColor(tm.theme.palette.textPrimary)
+                        
+                        VStack(spacing: 12) {
+                            // Morning toggle
+                            HStack {
+                                Image(systemName: "sun.max.fill")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(Color.orange)
+                                
+                                Text("Morning")
+                                    .font(tm.theme.typo.body)
+                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                
+                                Spacer()
+                                
+                                Toggle("", isOn: $morningEnabled)
+                                    .labelsHidden()
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                    .fill(tm.theme.palette.card)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                    )
                             )
-                    )
+                            
+                            // Evening toggle
+                            HStack {
+                                Image(systemName: "moon.fill")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(Color.blue)
+                                
+                                Text("Evening")
+                                    .font(tm.theme.typo.body)
+                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                
+                                Spacer()
+                                
+                                Toggle("", isOn: $eveningEnabled)
+                                    .labelsHidden()
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(tm.theme.palette.card)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                    )
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    // Frequency
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Frequency")
+                            .font(tm.theme.typo.h3)
+                            .foregroundColor(tm.theme.palette.textPrimary)
+                        
+                        Picker("Frequency", selection: $frequency) {
+                            ForEach(StepFrequency.allCases, id: \.self) { freq in
+                                Text(freq.displayName).tag(freq)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    // Custom Instructions
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Custom Instructions")
+                            .font(tm.theme.typo.h3)
+                            .foregroundColor(tm.theme.palette.textPrimary)
+                        
+                        TextEditor(text: $customInstructions)
+                            .frame(minHeight: 100)
+                            .padding(12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(tm.theme.palette.card)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                    )
+                            )
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    Spacer(minLength: 100)
                 }
-                .padding(20)
             }
+            .background(tm.theme.palette.bg.ignoresSafeArea())
             .navigationTitle("Edit Step")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -227,10 +202,10 @@ struct StepDetailEditView: View {
                 .foregroundColor(tm.theme.palette.textSecondary),
                 trailing: Button("Save") {
                     saveChanges()
+                    dismiss()
                 }
                 .foregroundColor(tm.theme.palette.secondary)
                 .font(.system(size: 16, weight: .semibold))
-                .disabled(title.isEmpty || description.isEmpty)
             )
         }
     }
@@ -239,166 +214,12 @@ struct StepDetailEditView: View {
         let updatedStep = step.copy(
             title: title,
             description: description,
-            isEnabled: isEnabled,
             frequency: frequency,
             customInstructions: customInstructions.isEmpty ? nil : customInstructions,
             morningEnabled: morningEnabled,
             eveningEnabled: eveningEnabled
         )
-        
         editingService.editableRoutine.updateStep(updatedStep)
-        dismiss()
-    }
-}
-
-// MARK: - Info Row
-
-private struct InfoRow: View {
-    @Environment(\.themeManager) private var tm
-    let title: String
-    let content: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
-            
-            Text(content)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
-                .multilineTextAlignment(.leading)
-        }
-    }
-}
-
-// MARK: - Frequency Selection View
-
-private struct FrequencySelectionView: View {
-    @Binding var frequency: StepFrequency
-    let theme: Theme
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Frequency")
-                .font(theme.typo.h3)
-                .foregroundColor(theme.palette.textPrimary)
-            
-            HStack(spacing: 8) {
-                ForEach(StepFrequency.allCases, id: \.self) { freq in
-                    Button {
-                        frequency = freq
-                    } label: {
-                        Text(freq.displayName)
-                            .font(theme.typo.caption.weight(.medium))
-                            .foregroundColor(frequency == freq ? .white : theme.palette.textSecondary)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .fill(frequency == freq ? theme.palette.secondary : Color.clear)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .stroke(frequency == freq ? theme.palette.secondary : theme.palette.separator, lineWidth: 1)
-                                    )
-                            )
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                
-                Spacer()
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(theme.palette.card)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(theme.palette.separator, lineWidth: 1)
-                )
-        )
-    }
-}
-
-// MARK: - Time of Day Selection View
-
-private struct TimeOfDaySelectionView: View {
-    @Binding var morningEnabled: Bool
-    @Binding var eveningEnabled: Bool
-    let theme: Theme
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("When to Use")
-                .font(theme.typo.h3)
-                .foregroundColor(theme.palette.textPrimary)
-            
-            HStack(spacing: 16) {
-                // Morning toggle
-                Button {
-                    morningEnabled.toggle()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "sun.max.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(morningEnabled ? .orange : .gray)
-                        
-                        Text("Morning")
-                            .font(theme.typo.body.weight(.medium))
-                            .foregroundColor(morningEnabled ? theme.palette.textPrimary : theme.palette.textMuted)
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(morningEnabled ? Color.orange.opacity(0.1) : Color.clear)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(morningEnabled ? Color.orange : Color.gray.opacity(0.3), lineWidth: 1)
-                            )
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-                
-                // Evening toggle
-                Button {
-                    eveningEnabled.toggle()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "moon.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(eveningEnabled ? .blue : .gray)
-                        
-                        Text("Evening")
-                            .font(theme.typo.body.weight(.medium))
-                            .foregroundColor(eveningEnabled ? theme.palette.textPrimary : theme.palette.textMuted)
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(eveningEnabled ? Color.blue.opacity(0.1) : Color.clear)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(eveningEnabled ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
-                            )
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-                
-                Spacer()
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(theme.palette.card)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(theme.palette.separator, lineWidth: 1)
-                )
-        )
     }
 }
 
@@ -412,8 +233,8 @@ private struct TimeOfDaySelectionView: View {
         iconName: "drop.fill",
         stepType: .cleanser,
         timeOfDay: .morning,
-        why: "Essential for removing daily buildup and preparing skin for other products",
-        how: "Apply to damp skin, massage gently for 30 seconds, rinse thoroughly",
+        why: "Essential for removing daily buildup",
+        how: "Apply to damp skin, massage gently, rinse thoroughly",
         isEnabled: true,
         frequency: .daily,
         customInstructions: "Focus on T-zone area",
@@ -421,7 +242,9 @@ private struct TimeOfDaySelectionView: View {
         originalStep: true,
         order: 0,
         morningEnabled: true,
-        eveningEnabled: false
+        eveningEnabled: false,
+        attachedProductId: nil,
+        productConstraints: nil
     )
     
     StepDetailEditView(

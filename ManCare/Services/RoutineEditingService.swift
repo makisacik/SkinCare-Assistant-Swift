@@ -19,7 +19,10 @@ class RoutineEditingService: ObservableObject {
     private let persistenceController = PersistenceController.shared
     
     init(originalRoutine: RoutineResponse?, routineTrackingService: RoutineTrackingService) {
-        if let routine = originalRoutine {
+        // Try to load saved routine first, then fall back to original or empty
+        if let savedRoutine = Self.loadSavedRoutine() {
+            self.editableRoutine = savedRoutine
+        } else if let routine = originalRoutine {
             self.editableRoutine = EditableRoutine(from: routine)
         } else {
             // Create empty routine for preview/testing
@@ -121,6 +124,62 @@ class RoutineEditingService: ObservableObject {
         editableRoutine.updateSteps(reorderedSteps, for: timeOfDay)
     }
     
+    /// Reorder two specific steps by swapping their positions
+    func reorderSteps(draggedStepId: String, targetStepId: String) {
+        // Find the dragged step and target step from all time periods
+        var draggedStep: EditableRoutineStep?
+        var targetStep: EditableRoutineStep?
+        
+        // Search in morning steps
+        if draggedStep == nil {
+            draggedStep = editableRoutine.morningSteps.first(where: { $0.id == draggedStepId })
+        }
+        if targetStep == nil {
+            targetStep = editableRoutine.morningSteps.first(where: { $0.id == targetStepId })
+        }
+        
+        // Search in evening steps
+        if draggedStep == nil {
+            draggedStep = editableRoutine.eveningSteps.first(where: { $0.id == draggedStepId })
+        }
+        if targetStep == nil {
+            targetStep = editableRoutine.eveningSteps.first(where: { $0.id == targetStepId })
+        }
+        
+        // Search in weekly steps
+        if draggedStep == nil {
+            draggedStep = editableRoutine.weeklySteps.first(where: { $0.id == draggedStepId })
+        }
+        if targetStep == nil {
+            targetStep = editableRoutine.weeklySteps.first(where: { $0.id == targetStepId })
+        }
+        
+        guard let dragged = draggedStep, let target = targetStep else {
+            return
+        }
+        
+        // Get all steps for the same time of day
+        let timeOfDay = dragged.timeOfDay
+        var steps = editableRoutine.steps(for: timeOfDay)
+        
+        // Find indices of the steps to swap
+        guard let draggedIndex = steps.firstIndex(where: { $0.id == draggedStepId }),
+              let targetIndex = steps.firstIndex(where: { $0.id == targetStepId }) else {
+            return
+        }
+        
+        // Swap the steps
+        steps.swapAt(draggedIndex, targetIndex)
+        
+        // Update the order values
+        for (index, step) in steps.enumerated() {
+            steps[index] = step.copy(order: index)
+        }
+        
+        // Update the routine
+        editableRoutine.updateSteps(steps, for: timeOfDay)
+    }
+    
     /// Update step frequency
     func updateStepFrequency(_ step: EditableRoutineStep, frequency: StepFrequency) {
         let updatedStep = step.copy(frequency: frequency)
@@ -167,6 +226,51 @@ class RoutineEditingService: ObservableObject {
     /// Clear all coach messages
     func clearCoachMessages() {
         coachMessages.removeAll()
+    }
+    
+    /// Attach a product to a step
+    func attachProduct(_ product: Product, to step: EditableRoutineStep) {
+        let updatedStep = step.copy(attachedProductId: product.id)
+        editableRoutine.updateStep(updatedStep)
+        generateCoachMessageForProductAttachment(step, product: product)
+    }
+
+    /// Detach product from a step
+    func detachProduct(from step: EditableRoutineStep) {
+        let updatedStep = step.copy(attachedProductId: nil)
+        editableRoutine.updateStep(updatedStep)
+    }
+
+    /// Get compatible products for a step
+    func getCompatibleProducts(for step: EditableRoutineStep) -> [Product] {
+        return step.getCompatibleProducts(from: ProductService.shared)
+    }
+
+    /// Get attached product for a step
+    func getAttachedProduct(for step: EditableRoutineStep) -> Product? {
+        return step.getAttachedProduct(from: ProductService.shared)
+    }
+    
+    // MARK: - Static Methods
+    
+    /// Load saved routine from UserDefaults
+    static func loadSavedRoutine() -> EditableRoutine? {
+        guard let data = UserDefaults.standard.data(forKey: "customized_routine") else {
+            return nil
+        }
+        
+        do {
+            let routine = try JSONDecoder().decode(EditableRoutine.self, from: data)
+            return routine
+        } catch {
+            print("Error loading saved routine: \(error)")
+            return nil
+        }
+    }
+    
+    /// Check if there's a saved routine
+    static func hasSavedRoutine() -> Bool {
+        return UserDefaults.standard.data(forKey: "customized_routine") != nil
     }
     
     // MARK: - Private Methods
@@ -338,7 +442,9 @@ class RoutineEditingService: ObservableObject {
             originalStep: false,
             order: nextOrder,
             morningEnabled: timeOfDay == .morning,
-            eveningEnabled: timeOfDay == .evening
+            eveningEnabled: timeOfDay == .evening,
+            attachedProductId: nil,
+            productConstraints: nil
         )
     }
     
@@ -400,6 +506,33 @@ class RoutineEditingService: ObservableObject {
         default:
             return ""
         }
+    }
+    
+    private func generateCoachMessageForProductAttachment(_ step: EditableRoutineStep, product: Product) {
+        let message: CoachMessage
+
+        // Check if product matches step type
+        if product.tagging.productType == step.stepType {
+            message = CoachMessage(
+                type: .encouragement,
+                title: "Perfect Match!",
+                message: "Great choice! \(product.displayName) is a perfect match for your \(step.title) step.",
+                actionTitle: nil,
+                action: nil
+            )
+        } else {
+            message = CoachMessage(
+                type: .suggestion,
+                title: "Product Type Mismatch",
+                message: "\(product.displayName) is a \(product.tagging.productType.displayName), but this step is for \(step.stepType.displayName). Consider using a product that matches the step type.",
+                actionTitle: "Find Compatible Product",
+                action: {
+                    // This would open a product selection view
+                }
+            )
+        }
+
+        coachMessages.append(message)
     }
 }
 

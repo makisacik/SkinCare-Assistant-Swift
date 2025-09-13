@@ -234,7 +234,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(tm.theme.typo.title)
-            .foregroundColor(.white)
+            .foregroundColor(Color.white)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
             .background(tm.theme.palette.secondary)

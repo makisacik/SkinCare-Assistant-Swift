@@ -33,6 +33,9 @@ struct EditableRoutineStep: Identifiable, Codable {
     var morningEnabled: Bool
     var eveningEnabled: Bool
     
+    // Product attachment
+    var attachedProductId: String? // ID of the attached product
+    var productConstraints: Constraints? // Constraints for product selection
     // Removed migration helper usage; use ProductType directly where needed.
     init(from apiStep: APIRoutineStep, timeOfDay: TimeOfDay, order: Int) {
         self.id = "\(timeOfDay.rawValue)_\(apiStep.name.replacingOccurrences(of: " ", with: "_"))"
@@ -51,9 +54,11 @@ struct EditableRoutineStep: Identifiable, Codable {
         self.order = order
         self.morningEnabled = timeOfDay == .morning
         self.eveningEnabled = timeOfDay == .evening
+        self.attachedProductId = nil
+        self.productConstraints = apiStep.constraints
     }
     
-    init(id: String, title: String, description: String, iconName: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String, how: String, isEnabled: Bool = true, frequency: StepFrequency = .daily, customInstructions: String? = nil, isLocked: Bool = false, originalStep: Bool = false, order: Int, morningEnabled: Bool, eveningEnabled: Bool) {
+    init(id: String, title: String, description: String, iconName: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String, how: String, isEnabled: Bool = true, frequency: StepFrequency = .daily, customInstructions: String? = nil, isLocked: Bool = false, originalStep: Bool = false, order: Int, morningEnabled: Bool, eveningEnabled: Bool, attachedProductId: String? = nil, productConstraints: Constraints? = nil) {
         self.id = id
         self.title = title
         self.description = description
@@ -70,6 +75,8 @@ struct EditableRoutineStep: Identifiable, Codable {
         self.order = order
         self.morningEnabled = morningEnabled
         self.eveningEnabled = eveningEnabled
+        self.attachedProductId = attachedProductId
+        self.productConstraints = productConstraints
     }
 }
 
@@ -247,13 +254,13 @@ enum CoachMessageType: String, CaseIterable {
     var color: Color {
         switch self {
         case .warning:
-            return .orange
+            return Color.orange
         case .suggestion:
-            return .yellow
+            return Color.yellow
         case .information:
-            return .blue
+            return Color.blue
         case .encouragement:
-            return .pink
+            return Color.pink
         }
     }
 }
@@ -330,7 +337,9 @@ extension EditableRoutineStep {
         originalStep: Bool? = nil,
         order: Int? = nil,
         morningEnabled: Bool? = nil,
-        eveningEnabled: Bool? = nil
+        eveningEnabled: Bool? = nil,
+        attachedProductId: String? = nil,
+        productConstraints: Constraints? = nil
     ) -> EditableRoutineStep {
         return EditableRoutineStep(
             id: self.id,
@@ -348,7 +357,9 @@ extension EditableRoutineStep {
             originalStep: originalStep ?? self.originalStep,
             order: order ?? self.order,
             morningEnabled: morningEnabled ?? self.morningEnabled,
-            eveningEnabled: eveningEnabled ?? self.eveningEnabled
+            eveningEnabled: eveningEnabled ?? self.eveningEnabled,
+            attachedProductId: attachedProductId ?? self.attachedProductId,
+            productConstraints: productConstraints ?? self.productConstraints
         )
     }
     
@@ -360,5 +371,30 @@ extension EditableRoutineStep {
     /// Get color for step type
     var stepTypeColor: Color {
         return Color(stepType.color)
+    }
+    
+    /// Check if step has an attached product
+    var hasAttachedProduct: Bool {
+        return attachedProductId != nil
+    }
+
+    /// Get attached product from ProductService
+    func getAttachedProduct(from productService: ProductService) -> Product? {
+        guard let productId = attachedProductId else { return nil }
+        return productService.userProducts.first { $0.id == productId }
+    }
+
+    /// Get compatible products for this step
+    func getCompatibleProducts(from productService: ProductService) -> [Product] {
+        let compatibleProducts = productService.getUserProducts(for: stepType)
+
+        // Filter by constraints if available
+        if let constraints = productConstraints {
+            return compatibleProducts.filter { product in
+                productService.getUserProducts(matching: constraints).contains { $0.id == product.id }
+            }
+        }
+
+        return compatibleProducts
     }
 }

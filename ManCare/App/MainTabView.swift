@@ -11,7 +11,9 @@ struct MainTabView: View {
     @Environment(\.themeManager) private var tm
     @State private var selectedTab: Tab = .routines
     @State private var showingAddProduct = false
+    @State private var showingScanProduct = false
     @State private var showingTestSheet = false
+    @State private var selectedProduct: Product?
     let generatedRoutine: RoutineResponse?
     
     enum Tab: String, CaseIterable {
@@ -42,7 +44,9 @@ struct MainTabView: View {
                 // Products Tab
                 ProductSlotsView(
                     onAddProductTapped: { showingAddProduct = true },
-                    onTestSheetTapped: { showingTestSheet = true }
+                    onScanProductTapped: { showingScanProduct = true },
+                    onTestSheetTapped: { showingTestSheet = true },
+                    onProductTapped: { product in selectedProduct = product }
                 )
                 .tabItem {
                     Image(systemName: Tab.products.iconName)
@@ -60,6 +64,22 @@ struct MainTabView: View {
             AddProductView(productService: ProductService.shared) { product in
                 print("Added product: \(product.displayName)")
             }
+        }
+        .fullScreenCover(isPresented: $showingScanProduct) {
+            ProductScanView { text in
+                print("Scanned product text: \(text)")
+            }
+        }
+        .fullScreenCover(item: $selectedProduct) { product in
+            ProductDetailView(
+                product: product,
+                onEditProduct: { updatedProduct in
+                    ProductService.shared.updateUserProduct(updatedProduct)
+                },
+                onDeleteProduct: { productToDelete in
+                    ProductService.shared.removeUserProduct(withId: productToDelete.id)
+                }
+            )
         }
         .fullScreenCover(isPresented: $showingTestSheet) {
             VStack(spacing: 20) {

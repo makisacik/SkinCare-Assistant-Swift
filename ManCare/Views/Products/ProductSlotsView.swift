@@ -13,7 +13,9 @@ struct ProductSlotsView: View {
     
     // Callbacks for sheet presentation (handled at root level)
     let onAddProductTapped: () -> Void
+    let onScanProductTapped: () -> Void
     let onTestSheetTapped: () -> Void
+    let onProductTapped: (Product) -> Void
 
     var body: some View {
         VStack(spacing: 0) {
@@ -49,7 +51,12 @@ struct ProductSlotsView: View {
                 ScrollView {
                     LazyVStack(spacing: 12) {
                         ForEach(productService.userProducts, id: \.id) { product in
-                            SimpleProductRow(product: product)
+                            Button {
+                                onProductTapped(product)
+                            } label: {
+                                SimpleProductRow(product: product)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                     .padding(.horizontal, 20)
@@ -58,30 +65,84 @@ struct ProductSlotsView: View {
 
             Spacer()
 
-                // Add Product Button
-                VStack {
+            // Add Product Options - Two Cards
+            VStack(spacing: 16) {
+                HStack(spacing: 12) {
+                    // Scan Product Card
+                    Button {
+                        onScanProductTapped()
+                    } label: {
+                        VStack(spacing: 8) {
+                            Image(systemName: "camera.viewfinder")
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(Color.white)
+
+                            VStack(spacing: 2) {
+                                Text("Scan Product")
+                                    .font(tm.theme.typo.body.weight(.semibold))
+                                    .foregroundColor(Color.white)
+
+                                Text("Take a photo to automatically extract product information")
+                                    .font(tm.theme.typo.caption)
+                                    .foregroundColor(Color.white.opacity(0.9))
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(2)
+                            }
+
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color.white)
+                        }
+                        .padding(12)
+                        .frame(maxWidth: .infinity)
+                        .background(tm.theme.palette.secondary)
+                        .cornerRadius(12)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+
+                    // Or Text
+                    VStack {
+                        Text("Or")
+                            .font(tm.theme.typo.caption.weight(.medium))
+                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .padding(.vertical, 8)
+                    }
+
+                    // Add Manually Card
                     Button {
                         onAddProductTapped()
                     } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 18, weight: .medium))
+                        VStack(spacing: 8) {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(Color.white)
 
-                        Text("Add Product")
-                            .font(tm.theme.typo.body.weight(.semibold))
+                            VStack(spacing: 2) {
+                                Text("Add Manually")
+                                    .font(tm.theme.typo.body.weight(.semibold))
+                                    .foregroundColor(Color.white)
 
-                        Spacer()
+                                Text("Enter product details manually")
+                                    .font(tm.theme.typo.caption)
+                                    .foregroundColor(Color.white.opacity(0.9))
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(2)
+                            }
+
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color.white)
+                        }
+                        .padding(12)
+                        .frame(maxWidth: .infinity)
+                        .background(tm.theme.palette.secondary)
+                        .cornerRadius(12)
                     }
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 16)
-                    .background(tm.theme.palette.secondary)
-                    .cornerRadius(12)
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
                 .padding(.horizontal, 20)
-                .padding(.bottom, 20)
             }
+            .padding(.bottom, 20)
         }
         .background(tm.theme.palette.bg.ignoresSafeArea())
     }
@@ -93,6 +154,8 @@ struct ProductSlotsView: View {
 #Preview("ProductSlotsView") {
     ProductSlotsView(
         onAddProductTapped: { print("Add product tapped") },
-        onTestSheetTapped: { print("Test sheet tapped") }
+        onScanProductTapped: { print("Scan product tapped") },
+        onTestSheetTapped: { print("Test sheet tapped") },
+        onProductTapped: { product in print("Product tapped: \(product.displayName)") }
     )
 }

@@ -158,8 +158,8 @@ private struct ClimateWheel: View {
                                 Spacer()
                                 Text(region.title.prefix(3).uppercased())
                                     .font(.system(size: 8, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
+                                    .foregroundColor(Color.white)
+                                    .shadow(color: Color.black.opacity(0.3), radius: 1, x: 0, y: 1)
                             }
                             .padding(.bottom, 2)
                         )
@@ -242,7 +242,7 @@ private struct ClimateDetailCard: View {
                         .frame(width: 50, height: 50)
                     Image(systemName: region.iconName)
                         .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.white)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -267,28 +267,28 @@ private struct ClimateDetailCard: View {
                     icon: "sun.max.fill",
                     title: "UV Index",
                     value: region.averageUVIndex,
-                    color: .orange
+                    color: Color.orange
                 )
 
                 ClimateInfoItem(
                     icon: "humidity.fill",
                     title: "Humidity",
                     value: region.humidityLevel,
-                    color: .blue
+                    color: Color.blue
                 )
 
                 ClimateInfoItem(
                     icon: "thermometer",
                     title: "Temperature",
                     value: region.temperatureLevel,
-                    color: .red
+                    color: Color.red
                 )
 
                 ClimateInfoItem(
                     icon: "shield.fill",
                     title: "SPF Need",
                     value: region.averageUVIndex.contains("High") ? "High" : "Moderate",
-                    color: .green
+                    color: Color.green
                 )
             }
         }
