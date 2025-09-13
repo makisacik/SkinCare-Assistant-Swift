@@ -13,6 +13,7 @@ struct AddProductView: View {
 
     // ✅ Inject the existing ProductService instead of creating a new instance
     let productService: ProductService
+    let initialProductType: ProductType?
 
     @State private var productName = ""
     @State private var brand = ""
@@ -26,6 +27,12 @@ struct AddProductView: View {
     @State private var showingProductTypeSelector = false
 
     let onProductAdded: (Product) -> Void
+
+    init(productService: ProductService, initialProductType: ProductType? = nil, onProductAdded: @escaping (Product) -> Void) {
+        self.productService = productService
+        self.initialProductType = initialProductType
+        self.onProductAdded = onProductAdded
+    }
 
     private let availableClaims = ["fragranceFree", "sensitiveSafe", "vegan", "crueltyFree", "dermatologistTested", "nonComedogenic"]
 
@@ -173,8 +180,11 @@ struct AddProductView: View {
             ProductTypeSelectorSheet(selectedProductType: $selectedProductType)
         }
         .onAppear {
-            // Auto-detect product type from product name
-            if !productName.isEmpty {
+            // Set initial product type if provided
+            if let initialType = initialProductType {
+                selectedProductType = initialType
+            } else if !productName.isEmpty {
+                // Auto-detect product type from product name
                 selectedProductType = ProductAliasMapping.normalize(productName)
             }
         }
@@ -211,7 +221,7 @@ struct AddProductView: View {
 // MARK: - Preview
 
 #Preview("AddProductView") {
-    AddProductView(productService: ProductService.shared) { product in
+    AddProductView(productService: ProductService.shared, initialProductType: nil) { product in
         print("Added product: \(product.displayName)")
     }
 }

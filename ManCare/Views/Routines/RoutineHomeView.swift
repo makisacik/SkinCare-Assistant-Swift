@@ -16,6 +16,7 @@ struct RoutineHomeView: View {
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingEditRoutine = false
     @State private var showingRoutineDetail: RoutineDetailData?
+    @State private var showingMorningRoutineCompletion = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -67,6 +68,15 @@ struct RoutineHomeView: View {
                 }
             )
         }
+        .fullScreenCover(isPresented: $showingMorningRoutineCompletion) {
+            MorningRoutineCompletionView(
+                routineSteps: generateMorningRoutine(),
+                onComplete: {
+                    // Refresh the routine tracking
+                    routineTrackingService.objectWillChange.send()
+                }
+            )
+        }
     }
 
     @ViewBuilder
@@ -113,12 +123,7 @@ struct RoutineHomeView: View {
                     routineTrackingService: routineTrackingService,
                     selectedDate: selectedDate,
                     onRoutineTap: {
-                        showingRoutineDetail = RoutineDetailData(
-                            title: "Morning routine",
-                            iconName: "sun.max.fill",
-                            iconColor: Color(red: 0.2, green: 0.6, blue: 0.9),
-                            steps: generateMorningRoutine()
-                        )
+                        showingMorningRoutineCompletion = true
                     },
                     onStepTap: { step in
                         showingStepDetail = step
