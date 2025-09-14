@@ -260,7 +260,7 @@ struct MorningRoutineCompletionView: View {
         Button {
             dismiss()
         } label: {
-            Image(systemName: "chevron.left")
+            Image(systemName: "chevron.down")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
         }

@@ -24,8 +24,8 @@ struct RoutineHomeView: View {
             LinearGradient(
                 gradient: Gradient(colors: [
                     ThemeManager.shared.theme.palette.background,       // #F8F6F6 - main background
-                    ThemeManager.shared.theme.palette.background.opacity(0.85),
-                    ThemeManager.shared.theme.palette.background.opacity(0.6),
+                    ThemeManager.shared.theme.palette.background,
+                    ThemeManager.shared.theme.palette.background,
                 ]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -970,3 +970,4 @@ struct RoutineStepDetailView: View {
         generatedRoutine: nil
     )
 }
+
