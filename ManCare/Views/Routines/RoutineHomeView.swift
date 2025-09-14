@@ -18,6 +18,17 @@ struct RoutineHomeView: View {
     @State private var showingRoutineDetail: RoutineDetailData?
     @State private var showingMorningRoutineCompletion = false
     @State private var showingEveningRoutineCompletion = false
+    @State private var showingCompanionMode = false
+    @State private var companionRoutineType: TimeOfDay?
+    @State private var companionSteps: [CompanionStep] = []
+    @State private var companionLaunch: CompanionLaunch?
+
+    // Payload for item-based Companion presentation to ensure stable snapshot
+    private struct CompanionLaunch: Identifiable {
+        let id = UUID()
+        let routineType: TimeOfDay
+        let steps: [CompanionStep]
+    }
 
     var body: some View {
         ZStack {
@@ -109,6 +120,25 @@ struct RoutineHomeView: View {
                 routineTrackingService: routineTrackingService
             )
         }
+        .fullScreenCover(item: $companionLaunch) { launch in
+            CompanionSessionView(
+                routineId: "\(launch.routineType.rawValue)_routine",
+                routineName: "\(launch.routineType.displayName) Routine",
+                steps: launch.steps,
+                onComplete: {
+                    routineTrackingService.objectWillChange.send()
+                    companionLaunch = nil
+                    companionRoutineType = nil
+                    companionSteps = []
+                }
+            )
+            .onAppear {
+                print("🎭 Companion fullScreenCover appeared with payload")
+                print("📋 Routine type in cover: \(launch.routineType.rawValue)")
+                print("📝 Steps count in cover: \(launch.steps.count)")
+                print("📝 Steps: \(launch.steps.map { $0.title })")
+            }
+        }
     }
 
     @ViewBuilder
@@ -157,6 +187,15 @@ struct RoutineHomeView: View {
                     onRoutineTap: {
                         showingMorningRoutineCompletion = true
                     },
+                    onCompanionTap: {
+                        print("🌅 Morning companion tap triggered")
+                        companionRoutineType = .morning
+                        companionSteps = getCompanionSteps(for: .morning)
+                        print("🕐 companionRoutineType set to: \(companionRoutineType?.rawValue ?? "nil")")
+                        print("📝 companionSteps count: \(companionSteps.count)")
+                        companionLaunch = CompanionLaunch(routineType: .morning, steps: companionSteps)
+                        print("🚀 Set companionLaunch with \(companionSteps.count) steps")
+                    },
                     onStepTap: { step in
                         showingStepDetail = step
                     }
@@ -173,6 +212,15 @@ struct RoutineHomeView: View {
                     selectedDate: selectedDate,
                     onRoutineTap: {
                         showingEveningRoutineCompletion = true
+                    },
+                    onCompanionTap: {
+                        print("🌙 Evening companion tap triggered")
+                        companionRoutineType = .evening
+                        companionSteps = getCompanionSteps(for: .evening)
+                        print("🕐 companionRoutineType set to: \(companionRoutineType?.rawValue ?? "nil")")
+                        print("📝 companionSteps count: \(companionSteps.count)")
+                        companionLaunch = CompanionLaunch(routineType: .evening, steps: companionSteps)
+                        print("🚀 Set companionLaunch with \(companionSteps.count) steps")
                     },
                     onStepTap: { step in
                         showingStepDetail = step
@@ -199,6 +247,15 @@ struct RoutineHomeView: View {
                                 iconColor: ThemeManager.shared.theme.palette.secondary,
                                 steps: weeklySteps
                             )
+                        },
+                        onCompanionTap: {
+                            print("📅 Weekly companion tap triggered")
+                            companionRoutineType = .weekly
+                            companionSteps = getCompanionSteps(for: .weekly)
+                            print("🕐 companionRoutineType set to: \(companionRoutineType?.rawValue ?? "nil")")
+                            print("📝 companionSteps count: \(companionSteps.count)")
+                            companionLaunch = CompanionLaunch(routineType: .weekly, steps: companionSteps)
+                            print("🚀 Set companionLaunch with \(companionSteps.count) steps")
                         },
                         onStepTap: { step in
                             showingStepDetail = step
@@ -397,6 +454,28 @@ struct RoutineHomeView: View {
         default:
             return Color(stepType.color)
         }
+    }
+
+    private func getCompanionSteps(for timeOfDay: TimeOfDay) -> [CompanionStep] {
+        let routineSteps: [RoutineStepDetail]
+
+        switch timeOfDay {
+        case .morning:
+            routineSteps = generateMorningRoutine()
+        case .evening:
+            routineSteps = generateEveningRoutine()
+        case .weekly:
+            routineSteps = generateWeeklyRoutine() ?? []
+        }
+
+        let companionSteps = routineSteps.enumerated().map { index, step in
+            CompanionStep.from(routineStep: step, order: index)
+        }
+
+        print("Generated \(companionSteps.count) companion steps for \(timeOfDay.rawValue)")
+        print("Step titles: \(companionSteps.map { $0.title })")
+
+        return companionSteps
     }
 
 }
@@ -616,6 +695,7 @@ private struct RoutineCard: View {
     let routineTrackingService: RoutineTrackingService
     let selectedDate: Date
     let onRoutineTap: () -> Void
+    let onCompanionTap: () -> Void
     let onStepTap: (RoutineStepDetail) -> Void
 
     private var completedCount: Int {
@@ -630,81 +710,117 @@ private struct RoutineCard: View {
     }
 
     var body: some View {
-        Button {
-            onRoutineTap()
-        } label: {
-            HStack(spacing: 16) {
-                // Icon with progress ring
-                ZStack {
-                    Circle()
-                        .fill(iconColor.opacity(0.2))
-                        .frame(width: 50, height: 50)
+        VStack(spacing: 12) {
+            // Main routine card
+            Button {
+                onRoutineTap()
+            } label: {
+                HStack(spacing: 16) {
+                    // Icon with progress ring
+                    ZStack {
+                        Circle()
+                            .fill(iconColor.opacity(0.2))
+                            .frame(width: 50, height: 50)
 
-                    // Progress ring
-                    Circle()
-                        .stroke(iconColor.opacity(0.3), lineWidth: 3)
-                        .frame(width: 50, height: 50)
+                        // Progress ring
+                        Circle()
+                            .stroke(iconColor.opacity(0.3), lineWidth: 3)
+                            .frame(width: 50, height: 50)
 
-                    Circle()
-                        .trim(from: 0, to: progressPercentage)
-                        .stroke(iconColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                        .frame(width: 50, height: 50)
-                        .rotationEffect(.degrees(-90))
-                        .animation(.easeInOut(duration: 0.5), value: progressPercentage)
+                        Circle()
+                            .trim(from: 0, to: progressPercentage)
+                            .stroke(iconColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                            .frame(width: 50, height: 50)
+                            .rotationEffect(.degrees(-90))
+                            .animation(.easeInOut(duration: 0.5), value: progressPercentage)
 
-                    Image(systemName: iconName)
-                        .font(.system(size: 24, weight: .semibold))
-                        .foregroundColor(Color(hex: "#F5C26B"))
-                }
-
-                // Content
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        .multilineTextAlignment(.leading)
-
-                    Text("\(completedCount)/\(productCount) completed")
-                        .font(.system(size: 14))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                }
-
-                Spacer()
-
-                // Progress indicator and arrow
-                HStack(spacing: 8) {
-                    VStack(spacing: 2) {
-                        Text("\(Int(progressPercentage * 100))%")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        Image(systemName: iconName)
+                            .font(.system(size: 24, weight: .semibold))
+                            .foregroundColor(Color(hex: "#F5C26B"))
                     }
 
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    // Content
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .multilineTextAlignment(.leading)
+
+                        Text("\(completedCount)/\(productCount) completed")
+                            .font(.system(size: 14))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+
+                    Spacer()
+
+                    // Progress indicator and arrow
+                    HStack(spacing: 8) {
+                        VStack(spacing: 2) {
+                            Text("\(Int(progressPercentage * 100))%")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        }
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
                 }
-            }
-            .padding(20)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                ThemeManager.shared.theme.palette.background.opacity(0.2),              // Surface color
-                                ThemeManager.shared.theme.palette.background.opacity(0.2),
-                                ThemeManager.shared.theme.palette.background.opacity(0.2),
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
+                .padding(20)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    ThemeManager.shared.theme.palette.background.opacity(0.2),              // Surface color
+                                    ThemeManager.shared.theme.palette.background.opacity(0.2),
+                                    ThemeManager.shared.theme.palette.background.opacity(0.2),
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
                         )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1) // #C0B8B8 - Neutral gray border
-                    )
-            )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1) // #C0B8B8 - Neutral gray border
+                        )
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            // Companion mode button
+            Button {
+                print("🔥 Companion button tapped!")
+                onCompanionTap()
+            } label: {
+                HStack {
+                    Image(systemName: "play.circle.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+
+                    Text("Start Companion Mode")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+
+                    Spacer()
+
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(ThemeManager.shared.theme.palette.primary.opacity(0.1))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(ThemeManager.shared.theme.palette.primary.opacity(0.3), lineWidth: 1)
+                        )
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
         }
-        .buttonStyle(PlainButtonStyle())
         .padding(.horizontal, 20)
     }
 }
@@ -971,6 +1087,7 @@ struct RoutineStepDetailView: View {
 }
 
 // MARK: - Preview
+
 
 #Preview("RoutineHomeView") {
     RoutineHomeView(
