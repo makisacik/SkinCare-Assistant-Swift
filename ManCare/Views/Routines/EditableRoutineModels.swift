@@ -78,6 +78,17 @@ struct EditableRoutineStep: Identifiable, Codable {
         self.attachedProductId = attachedProductId
         self.productConstraints = productConstraints
     }
+    
+    /// Convert to APIRoutineStep for API compatibility
+    func toAPIRoutineStep() -> APIRoutineStep {
+        return APIRoutineStep(
+            step: stepType,
+            name: title,
+            why: why,
+            how: customInstructions ?? how,
+            constraints: productConstraints ?? Constraints()
+        )
+    }
 }
 
 /// Frequency options for routine steps
@@ -115,6 +126,22 @@ enum StepFrequency: String, CaseIterable, Codable {
             return "Use once per week"
         case .custom:
             return "Set custom frequency"
+        }
+    }
+    
+    /// Convert to API frequency format
+    func toAPIFrequency() -> Frequency {
+        switch self {
+        case .daily:
+            return .dailyAM
+        case .everyOtherDay:
+            return .dailyAM // Map to dailyAM as closest equivalent
+        case .twiceWeekly:
+            return .weekly(times: 2)
+        case .weekly:
+            return .weekly(times: 1)
+        case .custom:
+            return .dailyAM // Default to dailyAM for custom
         }
     }
 }
@@ -169,6 +196,34 @@ struct EditableRoutine: Codable {
     /// Get all enabled steps for a specific time of day
     func enabledSteps(for timeOfDay: TimeOfDay) -> [EditableRoutineStep] {
         return steps(for: timeOfDay).filter { $0.isEnabled }
+    }
+    
+    /// Convert back to RoutineResponse
+    func toRoutineResponse() -> RoutineResponse? {
+        guard let original = originalRoutine else { return nil }
+        
+        // Convert EditableRoutineStep back to APIRoutineStep
+        let morningSteps = morningSteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
+        let eveningSteps = eveningSteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
+        let weeklySteps = weeklySteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
+        
+        // Create new routine structure
+        let updatedRoutine = Routine(
+            depth: original.routine.depth,
+            morning: morningSteps,
+            evening: eveningSteps,
+            weekly: weeklySteps.isEmpty ? nil : weeklySteps
+        )
+        
+        return RoutineResponse(
+            version: original.version,
+            locale: original.locale,
+            summary: original.summary,
+            routine: updatedRoutine,
+            guardrails: original.guardrails,
+            adaptation: original.adaptation,
+            productSlots: original.productSlots
+        )
     }
     
     /// Update steps for a specific time of day

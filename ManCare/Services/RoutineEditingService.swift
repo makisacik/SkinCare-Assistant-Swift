@@ -49,7 +49,7 @@ class RoutineEditingService: ObservableObject {
     }
     
     /// Save the edited routine
-    func saveRoutine() async {
+    func saveRoutine() async -> RoutineResponse? {
         editingState = .saving
         
         // Save to UserDefaults for now (in a real app, you might save to Core Data)
@@ -62,9 +62,13 @@ class RoutineEditingService: ObservableObject {
             
             editingState = .viewing
             showingPreview = false
+            
+            // Return the updated routine converted back to RoutineResponse
+            return editableRoutine.toRoutineResponse()
         } catch {
             print("Error saving routine: \(error)")
             editingState = .editing
+            return nil
         }
     }
     

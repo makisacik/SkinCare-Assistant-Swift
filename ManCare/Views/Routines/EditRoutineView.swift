@@ -16,8 +16,11 @@ struct EditRoutineView: View {
     @State private var showingAddStep = false
     @State private var showingStepDetail: EditableRoutineStep?
     
-    init(originalRoutine: RoutineResponse?, routineTrackingService: RoutineTrackingService) {
+    let onRoutineUpdated: ((RoutineResponse) -> Void)?
+    
+    init(originalRoutine: RoutineResponse?, routineTrackingService: RoutineTrackingService, onRoutineUpdated: ((RoutineResponse) -> Void)? = nil) {
         self._editingService = StateObject(wrappedValue: RoutineEditingService(originalRoutine: originalRoutine, routineTrackingService: routineTrackingService))
+        self.onRoutineUpdated = onRoutineUpdated
     }
     
     var body: some View {
@@ -41,7 +44,9 @@ struct EditRoutineView: View {
                     
                     Button("Save") {
                         Task {
-                            await editingService.saveRoutine()
+                            if let updatedRoutine = await editingService.saveRoutine() {
+                                onRoutineUpdated?(updatedRoutine)
+                            }
                             dismiss()
                         }
                     }
@@ -292,6 +297,7 @@ private struct EmptyRoutineState: View {
 #Preview("EditRoutineView") {
     EditRoutineView(
         originalRoutine: nil,
-        routineTrackingService: RoutineTrackingService()
+        routineTrackingService: RoutineTrackingService(),
+        onRoutineUpdated: nil
     )
 }

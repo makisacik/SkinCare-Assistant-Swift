@@ -11,14 +11,23 @@ struct MorningRoutineCompletionView: View {
     @Environment(\.dismiss) private var dismiss
 
     @ObservedObject private var productService = ProductService.shared
-    @StateObject private var routineTrackingService = RoutineTrackingService()
+    @ObservedObject private var routineTrackingService: RoutineTrackingService
     
-    let routineSteps: [RoutineStepDetail]
+    @State private var routineSteps: [RoutineStepDetail]
     let onComplete: () -> Void
+    let originalRoutine: RoutineResponse?
+    
+    init(routineSteps: [RoutineStepDetail], onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?, routineTrackingService: RoutineTrackingService) {
+        self._routineSteps = State(initialValue: routineSteps)
+        self.onComplete = onComplete
+        self.originalRoutine = originalRoutine
+        self.routineTrackingService = routineTrackingService
+    }
     
     @State private var completedSteps: Set<String> = []
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingProductSelection: RoutineStepDetail?
+    @State private var showingEditRoutine = false
     
     private var completedStepsCount: Int {
         completedSteps.count
@@ -60,16 +69,14 @@ struct MorningRoutineCompletionView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    backButton
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    editButton
-                }
-            }
+            .navigationBarItems(leading: backButton, trailing: editButton)
             .onAppear {
                 setupNavigationBarAppearance()
+                // Load completion state from RoutineTrackingService
+                completedSteps = routineTrackingService.getCompletedSteps()
+            }
+            .onChange(of: routineTrackingService.completedSteps) { newValue in
+                completedSteps = newValue
             }
         }
         .overlay(
@@ -98,6 +105,17 @@ struct MorningRoutineCompletionView: View {
         )
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
+        }
+        .sheet(isPresented: $showingEditRoutine) {
+            if let routine = originalRoutine {
+                EditRoutineView(
+                    originalRoutine: routine,
+                    routineTrackingService: routineTrackingService
+                ) { updatedRoutine in
+                    // Update the routine steps when the routine is edited
+                    updateRoutineSteps(from: updatedRoutine)
+                }
+            }
         }
     }
     
@@ -141,11 +159,6 @@ struct MorningRoutineCompletionView: View {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
-                            
-                            Image(systemName: "star.fill")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.warning)
-                                .shadow(color: ThemeManager.shared.theme.palette.warning.opacity(0.5), radius: 2)
                         }
                     }
                     .padding(.horizontal, 20)
@@ -255,7 +268,7 @@ struct MorningRoutineCompletionView: View {
     
     private var editButton: some View {
         Button {
-            // Edit routine action
+            showingEditRoutine = true
         } label: {
             Image(systemName: "pencil")
                 .font(.system(size: 16, weight: .medium))
@@ -293,15 +306,62 @@ struct MorningRoutineCompletionView: View {
     }
 
     private func toggleStepCompletion(_ stepId: String) {
-        if completedSteps.contains(stepId) {
-            completedSteps.remove(stepId)
-        } else {
-            completedSteps.insert(stepId)
-            
-            // Add haptic feedback
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
+        // Find the step to get its details
+        guard let step = routineSteps.first(where: { $0.id == stepId }) else { return }
+        
+        // Use the RoutineTrackingService to persist the completion
+        routineTrackingService.toggleStepCompletion(
+            stepId: stepId,
+            stepTitle: step.title,
+            stepType: step.stepType,
+            timeOfDay: step.timeOfDay
+        )
+        
+        // Add haptic feedback
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
+    
+    private func updateRoutineSteps(from routine: RoutineResponse) {
+        // Store the current state before updating
+        let oldCompletedSteps = routineTrackingService.getCompletedSteps()
+        let oldRoutineSteps = routineSteps
+        
+        // Convert the updated routine to RoutineStepDetail array
+        routineSteps = routine.routine.morning.map { apiStep in
+            RoutineStepDetail(
+                id: "morning_\(apiStep.name)",
+                title: apiStep.name,
+                description: "\(apiStep.why) - \(apiStep.how)",
+                iconName: apiStep.step.iconName,
+                stepType: apiStep.step,
+                timeOfDay: .morning,
+                why: apiStep.why,
+                how: apiStep.how
+            )
+        }
+        
+        // Preserve completion state by mapping old step IDs to new ones
+        var newCompletedSteps: Set<String> = []
+        
+        // Try to match completed steps by title (since IDs might change)
+        for completedStepId in oldCompletedSteps {
+            // First try to find the old step to get its title
+            if let oldStep = oldRoutineSteps.first(where: { $0.id == completedStepId }) {
+                // If the step still exists with the same ID, keep it completed
+                if routineSteps.contains(where: { $0.id == completedStepId }) {
+                    newCompletedSteps.insert(completedStepId)
+                } else {
+                    // Try to find a matching step by title
+                    if let matchingStep = routineSteps.first(where: { $0.title == oldStep.title }) {
+                        newCompletedSteps.insert(matchingStep.id)
+                    }
+                }
+            }
+        }
+        
+        completedSteps = newCompletedSteps
+    }
+    
     
 }
 
@@ -974,6 +1034,8 @@ struct RoundedCorner: Shape {
                 how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
             )
         ],
-        onComplete: { print("Routine completed!") }
+        onComplete: { print("Routine completed!") },
+        originalRoutine: nil,
+        routineTrackingService: RoutineTrackingService()
     )
 }

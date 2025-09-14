@@ -68,7 +68,8 @@ struct RoutineHomeView: View {
             if let routine = generatedRoutine {
                 EditRoutineView(
                     originalRoutine: routine,
-                    routineTrackingService: routineTrackingService
+                    routineTrackingService: routineTrackingService,
+                    onRoutineUpdated: nil
                 )
             }
         }
@@ -90,7 +91,10 @@ struct RoutineHomeView: View {
                 routineSteps: generateMorningRoutine(),
                 onComplete: {
                     routineTrackingService.objectWillChange.send()
-                }
+                    showingMorningRoutineCompletion = false
+                },
+                originalRoutine: generatedRoutine,
+                routineTrackingService: routineTrackingService
             )
         }
     }

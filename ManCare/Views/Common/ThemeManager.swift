@@ -48,10 +48,10 @@ public struct ThemePalette: Equatable {
     public let primaryLight: Color         // #9A6B6B (lighter variant)
     public let onPrimary: Color            // #FFFFFF
 
-    // Secondary Colors (complementary)
-    public let secondary: Color            // #5A7D6B (complementary green)
-    public let secondaryLight: Color       // #6B9A7A (lighter green)
-    public let onSecondary: Color          // #FFFFFF
+    // Secondary Colors (calendar background)
+    public let secondary: Color            // #B5828C (calendar background)
+    public let secondaryLight: Color       // #C896A0 (lighter calendar background)
+    public let onSecondary: Color          // #FFFFFF (white text)
 
     // Background Colors (neutral grays)
     public let background: Color           // #F8F6F6 (very light neutral gray)
@@ -130,8 +130,8 @@ public struct Theme: Equatable {
             onPrimary: Color(hex: "#FFFFFF"),
 
             // Secondary Colors
-            secondary: Color(hex: "#5A7D6B"),
-            secondaryLight: Color(hex: "#6B9A7A"),
+            secondary: Color(hex: "#B5828C"),
+            secondaryLight: Color(hex: "#C896A0"),
             onSecondary: Color(hex: "#FFFFFF"),
 
             // Background Colors
