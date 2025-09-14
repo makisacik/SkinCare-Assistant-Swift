@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @Environment(\.themeManager) private var tm
     @State private var selectedTab: Tab = .routines
     @State private var showingAddProduct = false
     @State private var showingScanProduct = false
@@ -54,7 +53,7 @@ struct MainTabView: View {
                 }
                 .tag(Tab.products)
             }
-            .accentColor(tm.theme.palette.secondary)
+            .accentColor(ThemeManager.shared.theme.palette.secondary)
             .onAppear {
                 // Set up tab bar appearance
                 setupTabBarAppearance()
@@ -103,18 +102,18 @@ struct MainTabView: View {
     private func setupTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(tm.theme.palette.accentBackground)
+        appearance.backgroundColor = UIColor(ThemeManager.shared.theme.palette.accentBackground)
         
         // Normal state
-        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(tm.theme.palette.textMuted)
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(ThemeManager.shared.theme.palette.textMuted)
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: UIColor(tm.theme.palette.textMuted)
+            .foregroundColor: UIColor(ThemeManager.shared.theme.palette.textMuted)
         ]
         
         // Selected state
-        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(tm.theme.palette.secondary)
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(ThemeManager.shared.theme.palette.secondary)
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-            .foregroundColor: UIColor(tm.theme.palette.secondary)
+            .foregroundColor: UIColor(ThemeManager.shared.theme.palette.secondary)
         ]
         
         UITabBar.appearance().standardAppearance = appearance

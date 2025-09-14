@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductSlotEditView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     let slot: ProductSlot
@@ -17,12 +17,12 @@ struct ProductSlotEditView: View {
         NavigationView {
             VStack(spacing: 20) {
                 Text("Edit Product Slot")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
                 Text("This feature will allow you to edit the product slot: \(slot.step.displayName)")
-                    .font(tm.theme.typo.body)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
                 
                 Spacer()
@@ -36,7 +36,7 @@ struct ProductSlotEditView: View {
                     Button("Done") {
                         dismiss()
                     }
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
             }
         }

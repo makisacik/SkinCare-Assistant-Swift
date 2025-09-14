@@ -60,7 +60,7 @@ struct LifestyleAnswers: Codable, Equatable {
 // MARK: - View
 
 struct LifestyleQuestionsView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.colorScheme)  private var cs
 
     @State private var answers = LifestyleAnswers()
@@ -85,9 +85,9 @@ struct LifestyleQuestionsView: View {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 16, weight: .semibold))
                                 Text("Back")
-                                    .font(tm.theme.typo.body.weight(.medium))
+                                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                             }
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -98,11 +98,11 @@ struct LifestyleQuestionsView: View {
                 // Title section
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Lifestyle Questions")
-                        .font(tm.theme.typo.h1)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h1)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     Text("Help us understand your daily habits and preferences to create a more personalized routine.")
-                        .font(tm.theme.typo.sub)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.sub)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .padding(.top, 8)
 
@@ -190,9 +190,9 @@ struct LifestyleQuestionsView: View {
             }
             .padding(20)
         }
-        .background(tm.theme.palette.cardBackground.ignoresSafeArea())
+        .background(ThemeManager.shared.theme.palette.cardBackground.ignoresSafeArea())
         .onChange(of: cs) { newScheme in
-            tm.refreshForSystemChange(newScheme)
+            ThemeManager.shared.refreshForSystemChange(newScheme)
         }
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -220,26 +220,26 @@ struct LifestyleQuestionsView: View {
 // MARK: - Subviews
 
 private struct SectionHeader: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     var body: some View {
         Text(title)
-            .font(tm.theme.typo.h3)
-            .foregroundColor(tm.theme.palette.textPrimary)
+            .font(ThemeManager.shared.theme.typo.h3)
+            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             .padding(.bottom, 4)
             .accessibilityAddTraits(.isHeader)
     }
 }
 
 private struct ToggleRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     @Binding var value: Bool
     var body: some View {
         HStack {
             Text(title)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             Spacer()
             Toggle("", isOn: $value)
                 .labelsHidden()
@@ -249,7 +249,7 @@ private struct ToggleRow: View {
 }
 
 private struct StepRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     @Binding var value: Int
     let range: ClosedRange<Int>
@@ -258,12 +258,12 @@ private struct StepRow: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(title)
-                    .font(tm.theme.typo.body)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Spacer()
                 Text("\(value)")
-                    .font(tm.theme.typo.title)
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .font(ThemeManager.shared.theme.typo.title)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
             }
             Slider(value: Binding(get: {
                 Double(value)
@@ -276,7 +276,7 @@ private struct StepRow: View {
 }
 
 private struct SegmentedCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     let items: [String]
     @Binding var selectionIndex: Int?
@@ -290,8 +290,8 @@ private struct SegmentedCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
             // Pills
             FlowLayout(spacing: 8, lineSpacing: 8) {
@@ -304,11 +304,11 @@ private struct SegmentedCard: View {
                         }
                     } label: {
                         Text(items[i])
-                            .font(tm.theme.typo.sub.weight(.semibold))
+                            .font(ThemeManager.shared.theme.typo.sub.weight(.semibold))
                             .padding(.horizontal, 14)
                             .padding(.vertical, 10)
-                            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.separator.opacity(0.35))
-                            .foregroundColor(isSelected ? tm.theme.palette.onSecondary : tm.theme.palette.textPrimary)
+                            .background(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator.opacity(0.35))
+                            .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.onSecondary : ThemeManager.shared.theme.palette.textPrimary)
                             .cornerRadius(20)
                     }
                     .buttonStyle(.plain)

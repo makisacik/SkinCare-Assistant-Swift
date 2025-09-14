@@ -12,7 +12,6 @@ struct ManCareApp: App {
     var body: some Scene {
         WindowGroup {
             MainFlowView()
-                .themed(ThemeManager.shared)
         }
     }
 }

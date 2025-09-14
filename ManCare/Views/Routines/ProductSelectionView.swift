@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductSelectionView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     let step: EditableRoutineStep
@@ -38,12 +38,12 @@ struct ProductSelectionView: View {
                 // Header
                 VStack(spacing: 12) {
                     Text("Attach Product")
-                        .font(tm.theme.typo.h1)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h1)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
                     Text("Choose a product for your \(step.title) step")
-                        .font(tm.theme.typo.sub)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.sub)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 20)
@@ -53,20 +53,20 @@ struct ProductSelectionView: View {
                 // Search bar
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(tm.theme.palette.textMuted)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     
                     TextField("Search products...", text: $searchText)
-                        .font(tm.theme.typo.body)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(tm.theme.palette.accentBackground)
+                        .fill(ThemeManager.shared.theme.palette.accentBackground)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                         )
                 )
                 .padding(.horizontal, 20)
@@ -111,12 +111,12 @@ struct ProductSelectionView: View {
                                 Image(systemName: "link")
                                     .font(.system(size: 16, weight: .semibold))
                                 Text("Attach \(selectedProduct.displayName)")
-                                    .font(tm.theme.typo.body.weight(.semibold))
+                                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             }
-                            .foregroundColor(tm.theme.palette.onPrimary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(tm.theme.palette.secondary)
+                            .background(ThemeManager.shared.theme.palette.secondary)
                             .cornerRadius(12)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -129,12 +129,12 @@ struct ProductSelectionView: View {
                             Image(systemName: "plus")
                                 .font(.system(size: 16, weight: .semibold))
                             Text("Add New Product")
-                                .font(tm.theme.typo.body.weight(.medium))
+                                .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                         }
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
-                        .background(tm.theme.palette.secondary.opacity(0.1))
+                        .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                         .cornerRadius(12)
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -142,7 +142,7 @@ struct ProductSelectionView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
             }
-            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingAddProduct) {
@@ -159,7 +159,7 @@ struct ProductSelectionView: View {
 // MARK: - Product Selection Card
 
 private struct ProductSelectionCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let product: Product
     let step: EditableRoutineStep
     let isSelected: Bool
@@ -184,21 +184,21 @@ private struct ProductSelectionCard: View {
                 // Product info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(product.displayName)
-                        .font(tm.theme.typo.title)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.title)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.leading)
                     
                     if let brand = product.brand {
                         Text(brand)
-                            .font(tm.theme.typo.caption)
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.caption)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                     
                     // Product type and compatibility
                     HStack(spacing: 8) {
                         Text(product.tagging.productType.displayName)
                             .font(.system(size: 12, weight: .medium))
-                            .foregroundColor(tm.theme.palette.onPrimary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                             .background(Color(product.tagging.productType.color))
@@ -207,10 +207,10 @@ private struct ProductSelectionCard: View {
                         if product.tagging.productType == step.stepType {
                             Text("Perfect Match")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(tm.theme.palette.onPrimary)
+                                .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
-                                .background(tm.theme.palette.success)
+                                .background(ThemeManager.shared.theme.palette.success)
                                 .cornerRadius(6)
                         }
                     }
@@ -221,15 +221,15 @@ private struct ProductSelectionCard: View {
                 // Selection indicator
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundColor(isSelected ? tm.theme.palette.secondary : tm.theme.palette.textMuted)
+                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.textMuted)
             }
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? tm.theme.palette.secondary.opacity(0.1) : tm.theme.palette.cardBackground)
+                    .fill(isSelected ? ThemeManager.shared.theme.palette.secondary.opacity(0.1) : ThemeManager.shared.theme.palette.cardBackground)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(isSelected ? tm.theme.palette.secondary : tm.theme.palette.separator, lineWidth: isSelected ? 2 : 1)
+                            .stroke(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator, lineWidth: isSelected ? 2 : 1)
                     )
             )
         }
@@ -240,7 +240,7 @@ private struct ProductSelectionCard: View {
 // MARK: - Empty Products State
 
 private struct EmptyProductsState: View {
-    @Environment(\.themeManager) private var tm
+    
     let step: EditableRoutineStep
     let onAddProduct: () -> Void
     
@@ -248,15 +248,15 @@ private struct EmptyProductsState: View {
         VStack(spacing: 20) {
             Image(systemName: "tray")
                 .font(.system(size: 48, weight: .light))
-                .foregroundColor(tm.theme.palette.textMuted)
+                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
             Text("No Compatible Products")
-                .font(tm.theme.typo.h3)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.h3)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             Text("You don't have any \(step.stepType.displayName.lowercased()) products in your collection yet. Add one to attach it to this step.")
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .multilineTextAlignment(.center)
             
             Button {
@@ -266,12 +266,12 @@ private struct EmptyProductsState: View {
                     Image(systemName: "plus")
                         .font(.system(size: 16, weight: .semibold))
                     Text("Add \(step.stepType.displayName)")
-                        .font(tm.theme.typo.body.weight(.semibold))
+                        .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 }
-                                .foregroundColor(tm.theme.palette.onPrimary)
+                                .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
-                .background(tm.theme.palette.secondary)
+                .background(ThemeManager.shared.theme.palette.secondary)
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
@@ -279,10 +279,10 @@ private struct EmptyProductsState: View {
         .padding(40)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(tm.theme.palette.cardBackground)
+                .fill(ThemeManager.shared.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                 )
         )
         .padding(.horizontal, 20)

@@ -192,7 +192,7 @@ class ProductNormalizationExample {
 // MARK: - SwiftUI Preview
 
 struct ProductNormalizationExampleView: View {
-    @Environment(\.themeManager) private var tm
+    
     @State private var isRunning = false
     @State private var results: [String] = []
     
@@ -236,9 +236,9 @@ struct ProductNormalizationExampleView: View {
                         Image(systemName: "play.fill")
                         Text("Run Examples")
                     }
-                    .foregroundColor(tm.theme.palette.onPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                     .padding()
-                    .background(tm.theme.palette.info)
+                    .background(ThemeManager.shared.theme.palette.info)
                     .cornerRadius(8)
                 }
                 .disabled(isRunning)

@@ -174,7 +174,7 @@ class ProductScanIntegrationExample: ObservableObject {
 // MARK: - SwiftUI Integration View
 
 struct ProductScanIntegrationView: View {
-    @Environment(\.themeManager) private var tm
+    
     @StateObject private var scanner = ProductScanIntegrationExample()
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
@@ -199,9 +199,9 @@ struct ProductScanIntegrationView: View {
                         Image(systemName: "camera.fill")
                         Text("Select Product Image")
                     }
-                    .foregroundColor(tm.theme.palette.onPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                     .padding()
-                    .background(tm.theme.palette.info)
+                    .background(ThemeManager.shared.theme.palette.info)
                     .cornerRadius(8)
                 }
                 .disabled(scanner.isProcessing)
@@ -261,7 +261,7 @@ struct ProductScanIntegrationView: View {
                         }
                         .font(.system(.caption, design: .monospaced))
                         .padding()
-                        .background(tm.theme.palette.success.opacity(0.1))
+                        .background(ThemeManager.shared.theme.palette.success.opacity(0.1))
                         .cornerRadius(8)
                     }
                 }
@@ -269,10 +269,10 @@ struct ProductScanIntegrationView: View {
                 // Error Message
                 if let error = scanner.errorMessage {
                     Text("Error: \(error)")
-                        .foregroundColor(tm.theme.palette.error)
+                        .foregroundColor(ThemeManager.shared.theme.palette.error)
                         .font(.caption)
                         .padding()
-                        .background(tm.theme.palette.error.opacity(0.1))
+                        .background(ThemeManager.shared.theme.palette.error.opacity(0.1))
                         .cornerRadius(8)
                 }
                 

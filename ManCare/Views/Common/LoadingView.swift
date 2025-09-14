@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct LoadingView: View {
-    @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme)  private var cs
 
     // Public API
@@ -37,7 +36,7 @@ struct LoadingView: View {
                 ZStack {
                     // subtle halo
                     Circle()
-                        .fill(tm.theme.palette.secondary.opacity(0.15))
+                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 160, height: 160)
                         .blur(radius: 8)
 
@@ -45,21 +44,21 @@ struct LoadingView: View {
                         .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                         .fill(AngularGradient(
                             gradient: Gradient(colors: [
-                                tm.theme.palette.secondaryLight,
-                                tm.theme.palette.primary,
-                                tm.theme.palette.secondaryLight,
-                                tm.theme.palette.primaryLight
+                                ThemeManager.shared.theme.palette.secondaryLight,
+                                ThemeManager.shared.theme.palette.primary,
+                                ThemeManager.shared.theme.palette.secondaryLight,
+                                ThemeManager.shared.theme.palette.primaryLight
                             ]),
                             center: .center
                         ))
                         .frame(width: 140, height: 140)
                         .rotationEffect(.degrees(rotation))
                         .animation(.linear(duration: 1.2).repeatForever(autoreverses: false), value: rotation)
-                        .shadow(color: tm.theme.palette.secondary.opacity(0.35), radius: 12, x: 0, y: 8)
+                        .shadow(color: ThemeManager.shared.theme.palette.secondary.opacity(0.35), radius: 12, x: 0, y: 8)
 
                     // pulsing inner dot
                     Circle()
-                        .fill(tm.theme.palette.secondary)
+                        .fill(ThemeManager.shared.theme.palette.secondary)
                         .frame(width: pulse ? 14 : 10, height: pulse ? 14 : 10)
                         .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: pulse)
                 }
@@ -67,13 +66,13 @@ struct LoadingView: View {
                 // MARK: Status text
                 VStack(spacing: 6) {
                     Text(currentStatus)
-                        .font(tm.theme.typo.h3)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h3)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .transition(.opacity.combined(with: .move(edge: .top)))
 
                     Text(hintText)
-                        .font(tm.theme.typo.caption)
-                        .foregroundColor(tm.theme.palette.textMuted)
+                        .font(ThemeManager.shared.theme.typo.caption)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
@@ -106,7 +105,7 @@ struct LoadingView: View {
             .padding(24)
         }
         .onAppear {
-            tm.refreshForSystemChange(cs)
+            ThemeManager.shared.refreshForSystemChange(cs)
             start()
         }
         .onDisappear {
@@ -171,15 +170,14 @@ struct LoadingView: View {
 // MARK: - Animated Background
 
 private struct AnimatedGradientBackground: View {
-    @Environment(\.themeManager) private var tm
     @State private var move: Bool = false
 
     var body: some View {
         LinearGradient(
             colors: [
-                tm.theme.palette.surface,                // Surface color
-                tm.theme.palette.surfaceAlt,             // Surface alt
-                tm.theme.palette.accentBackground        // Accent background
+                ThemeManager.shared.theme.palette.surface,                // Surface color
+                ThemeManager.shared.theme.palette.surfaceAlt,             // Surface alt
+                ThemeManager.shared.theme.palette.accentBackground        // Accent background
             ],
             startPoint: move ? .topLeading : .bottomTrailing,
             endPoint: move ? .bottomTrailing : .topLeading
@@ -187,7 +185,7 @@ private struct AnimatedGradientBackground: View {
         .overlay(
             RadialGradient(
                 colors: [
-                    tm.theme.palette.secondary.opacity(0.25),
+                    ThemeManager.shared.theme.palette.secondary.opacity(0.25),
                     .clear
                 ],
                 center: .center,

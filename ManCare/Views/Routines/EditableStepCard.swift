@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditableStepCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let step: EditableRoutineStep
     let editingService: RoutineEditingService
     let onTap: () -> Void
@@ -22,7 +22,7 @@ struct EditableStepCard: View {
                 // Reorder handle
                 Image(systemName: "line.3.horizontal")
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(tm.theme.palette.textMuted)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     .frame(width: 20)
                 
                 // Step icon
@@ -39,12 +39,12 @@ struct EditableStepCard: View {
                 // Step info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(step.title)
-                        .font(tm.theme.typo.title)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.title)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
                     Text(step.description)
-                        .font(tm.theme.typo.body)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .lineLimit(2)
                     
                     // Attached product info
@@ -52,11 +52,11 @@ struct EditableStepCard: View {
                         HStack(spacing: 6) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(tm.theme.palette.success)
+                                .foregroundColor(ThemeManager.shared.theme.palette.success)
                             
                             Text(attachedProduct.displayName)
-                                .font(tm.theme.typo.caption.weight(.medium))
-                                .foregroundColor(tm.theme.palette.success)
+                                .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
+                                .foregroundColor(ThemeManager.shared.theme.palette.success)
                         }
                     }
                 }
@@ -75,7 +75,7 @@ struct EditableStepCard: View {
                     } label: {
                         Image(systemName: step.hasAttachedProduct ? "link.badge.minus" : "link.badge.plus")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(step.hasAttachedProduct ? tm.theme.palette.error : tm.theme.palette.secondary)
+                            .foregroundColor(step.hasAttachedProduct ? ThemeManager.shared.theme.palette.error : ThemeManager.shared.theme.palette.secondary)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -86,7 +86,7 @@ struct EditableStepCard: View {
                         } label: {
                             Image(systemName: "trash")
                                 .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(tm.theme.palette.error)
+                                .foregroundColor(ThemeManager.shared.theme.palette.error)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -95,10 +95,10 @@ struct EditableStepCard: View {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(tm.theme.palette.cardBackground)
+                    .fill(ThemeManager.shared.theme.palette.cardBackground)
                     .overlay(
                         RoundedRectangle(cornerRadius: 16)
-                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                     )
             )
         }

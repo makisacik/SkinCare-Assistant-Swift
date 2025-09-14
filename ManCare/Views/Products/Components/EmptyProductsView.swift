@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmptyProductsView: View {
-    @Environment(\.themeManager) private var tm
+    
 
     var body: some View {
         VStack(spacing: 20) {
@@ -17,16 +17,16 @@ struct EmptyProductsView: View {
             VStack(spacing: 16) {
                 Image(systemName: "bag")
                     .font(.system(size: 48, weight: .light))
-                    .foregroundColor(tm.theme.palette.textMuted)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
 
                 VStack(spacing: 8) {
                     Text("No Products Yet")
-                        .font(tm.theme.typo.h2)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h2)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                     Text("Add your first product to get started")
-                        .font(tm.theme.typo.body)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
                 }
             }

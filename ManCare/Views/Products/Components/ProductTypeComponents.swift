@@ -10,36 +10,36 @@ import SwiftUI
 // MARK: - Product Type Selector Button
 
 struct ProductTypeSelectorButton: View {
-    @Environment(\.themeManager) private var tm
+    
     @Binding var selectedProductType: ProductType
     let onTap: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Product Type")
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
             Button(action: onTap) {
                 HStack(spacing: 16) {
                     // Product Type Icon
                     Image(systemName: selectedProductType.iconName)
                         .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                         .frame(width: 32, height: 32)
-                        .background(tm.theme.palette.secondary.opacity(0.1))
+                        .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                         .cornerRadius(8)
 
                     // Product Type Info
                     VStack(alignment: .leading, spacing: 4) {
                         Text(selectedProductType.displayName)
-                            .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .lineLimit(1)
 
                         Text("Tap to change product type")
-                            .font(tm.theme.typo.caption)
-                            .foregroundColor(tm.theme.palette.textMuted)
+                            .font(ThemeManager.shared.theme.typo.caption)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
 
                     Spacer()
@@ -47,15 +47,15 @@ struct ProductTypeSelectorButton: View {
                     // Chevron
                     Image(systemName: "chevron.right")
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(tm.theme.palette.textMuted)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-                .background(tm.theme.palette.accentBackground)
+                .background(ThemeManager.shared.theme.palette.accentBackground)
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                 )
             }
             .buttonStyle(PlainButtonStyle())
@@ -66,7 +66,7 @@ struct ProductTypeSelectorButton: View {
 // MARK: - Product Type Card
 
 struct ProductTypeCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let productType: ProductType
     let isSelected: Bool
     let onTap: () -> Void
@@ -75,21 +75,21 @@ struct ProductTypeCard: View {
         VStack(spacing: 6) {
             Image(systemName: productType.iconName)
                 .font(.system(size: 20, weight: .medium))
-                .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.secondary)
+                .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.secondary)
 
             Text(productType.displayName)
-                .font(tm.theme.typo.caption.weight(.medium))
-                .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
+                .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textPrimary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
         }
         .frame(height: 70)
         .frame(maxWidth: .infinity)
-        .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.accentBackground)
+        .background(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.accentBackground)
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(isSelected ? tm.theme.palette.secondary : tm.theme.palette.separator, lineWidth: 1)
+                .stroke(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator, lineWidth: 1)
         )
         .onTapGesture {
             onTap()
@@ -100,7 +100,7 @@ struct ProductTypeCard: View {
 // MARK: - Product Type Row
 
 struct ProductTypeRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let productType: ProductType
     let isSelected: Bool
     let onTap: () -> Void
@@ -111,15 +111,15 @@ struct ProductTypeRow: View {
                 // Icon
                 Image(systemName: productType.iconName)
                     .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.secondary)
+                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.secondary)
                     .frame(width: 28, height: 28)
-                    .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.secondary.opacity(0.1))
+                    .background(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                     .cornerRadius(6)
 
                 // Name
                 Text(productType.displayName)
-                    .font(tm.theme.typo.body.weight(.medium))
-                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textPrimary)
 
                 Spacer()
 
@@ -127,12 +127,12 @@ struct ProductTypeRow: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(tm.theme.palette.onPrimary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(isSelected ? tm.theme.palette.secondary : tm.theme.palette.cardBackground)
+            .background(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.cardBackground)
             .cornerRadius(12)
         }
         .buttonStyle(PlainButtonStyle())

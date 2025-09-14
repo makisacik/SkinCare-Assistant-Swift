@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RegionView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.colorScheme) private var cs
 
     @State private var selection: Region? = nil
@@ -30,9 +30,9 @@ struct RegionView: View {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 16, weight: .semibold))
                         Text("Back")
-                            .font(tm.theme.typo.body.weight(.medium))
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                     }
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .buttonStyle(PlainButtonStyle())
                 Spacer()
@@ -42,11 +42,11 @@ struct RegionView: View {
             // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your climate like?")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text("Your environment affects your skin's UV exposure and hydration needs.")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.sub)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
 
             // Climate visualization
@@ -79,8 +79,8 @@ struct RegionView: View {
             .opacity(selection == nil ? 0.7 : 1.0)
         }
         .padding(20)
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
-        .onChange(of: cs) { tm.refreshForSystemChange($0) }
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
+        .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .onAppear {
             // Set initial selection to temperate
             selection = .temperate
@@ -92,7 +92,7 @@ struct RegionView: View {
 // MARK: - Climate Wheel
 
 private struct ClimateWheel: View {
-    @Environment(\.themeManager) private var tm
+    
     let regions: [Region]
     @Binding var selectedIndex: Int
     @Binding var selection: Region?
@@ -103,11 +103,11 @@ private struct ClimateWheel: View {
             ZStack {
                 // Background circle
                 Circle()
-                    .fill(tm.theme.palette.cardBackground.opacity(0.3))
+                    .fill(ThemeManager.shared.theme.palette.cardBackground.opacity(0.3))
                     .frame(width: 240, height: 240)
                     .overlay(
                         Circle()
-                            .stroke(tm.theme.palette.separator, lineWidth: 2)
+                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 2)
                     )
 
                 // Climate segments
@@ -134,16 +134,16 @@ private struct ClimateWheel: View {
                             .font(.system(size: 24, weight: .semibold))
                             .foregroundColor(selectedRegion.climateColor)
                         Text(selectedRegion.title)
-                            .font(tm.theme.typo.caption.weight(.semibold))
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .multilineTextAlignment(.center)
                     }
                 }
                 .frame(width: 60, height: 60)
                 .background(
                     Circle()
-                        .fill(tm.theme.palette.accentBackground)
-                        .shadow(color: tm.theme.palette.shadow, radius: 4, x: 0, y: 2)
+                        .fill(ThemeManager.shared.theme.palette.accentBackground)
+                        .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 4, x: 0, y: 2)
                 )
             }
 
@@ -158,8 +158,8 @@ private struct ClimateWheel: View {
                                 Spacer()
                                 Text(region.title.prefix(3).uppercased())
                                     .font(.system(size: 8, weight: .bold))
-                                    .foregroundColor(tm.theme.palette.onPrimary)
-                                    .shadow(color: tm.theme.palette.textPrimary.opacity(0.3), radius: 1, x: 0, y: 1)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
+                                    .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 1, x: 0, y: 1)
                             }
                             .padding(.bottom, 2)
                         )
@@ -176,7 +176,7 @@ private struct ClimateWheel: View {
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(tm.theme.palette.separator, lineWidth: 1)
+                    .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
             )
         }
     }
@@ -185,7 +185,7 @@ private struct ClimateWheel: View {
 // MARK: - Climate Segment
 
 private struct ClimateSegment: View {
-    @Environment(\.themeManager) private var tm
+    
     let region: Region
     let index: Int
     let totalCount: Int
@@ -229,7 +229,7 @@ private struct ClimateSegment: View {
 // MARK: - Climate Detail Card
 
 private struct ClimateDetailCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let region: Region
 
     var body: some View {
@@ -242,16 +242,16 @@ private struct ClimateDetailCard: View {
                         .frame(width: 50, height: 50)
                     Image(systemName: region.iconName)
                         .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.onPrimary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(region.title)
-                        .font(tm.theme.typo.body.weight(.semibold))
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                     Text(region.temperatureLevel)
-                        .font(tm.theme.typo.caption)
+                        .font(ThemeManager.shared.theme.typo.caption)
                         .foregroundColor(region.climateColor)
                 }
 
@@ -267,38 +267,38 @@ private struct ClimateDetailCard: View {
                     icon: "sun.max.fill",
                     title: "UV Index",
                     value: region.averageUVIndex,
-                    color: tm.theme.palette.warning
+                    color: ThemeManager.shared.theme.palette.warning
                 )
 
                 ClimateInfoItem(
                     icon: "humidity.fill",
                     title: "Humidity",
                     value: region.humidityLevel,
-                    color: tm.theme.palette.info
+                    color: ThemeManager.shared.theme.palette.info
                 )
 
                 ClimateInfoItem(
                     icon: "thermometer",
                     title: "Temperature",
                     value: region.temperatureLevel,
-                    color: tm.theme.palette.error
+                    color: ThemeManager.shared.theme.palette.error
                 )
 
                 ClimateInfoItem(
                     icon: "shield.fill",
                     title: "SPF Need",
                     value: region.averageUVIndex.contains("High") ? "High" : "Moderate",
-                    color: tm.theme.palette.success
+                    color: ThemeManager.shared.theme.palette.success
                 )
             }
         }
         .padding(12)
         .background(
-            RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
-                .fill(tm.theme.palette.cardBackground)
-                .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
+            RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
+                .fill(ThemeManager.shared.theme.palette.cardBackground)
+                .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 8, x: 0, y: 4)
                 .overlay(
-                    RoundedRectangle(cornerRadius: tm.theme.cardRadius)
+                    RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(region.climateColor.opacity(0.3), lineWidth: 1)
                 )
         )
@@ -308,7 +308,7 @@ private struct ClimateDetailCard: View {
 // MARK: - Climate Info Item
 
 private struct ClimateInfoItem: View {
-    @Environment(\.themeManager) private var tm
+    
     let icon: String
     let title: String
     let value: String
@@ -322,19 +322,19 @@ private struct ClimateInfoItem: View {
 
             Text(title)
                 .font(.system(size: 10, weight: .medium))
-                .foregroundColor(tm.theme.palette.textSecondary)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .multilineTextAlignment(.center)
 
             Text(value)
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
         }
         .padding(8)
         .background(
             RoundedRectangle(cornerRadius: 6)
-                .fill(tm.theme.palette.accentBackground.opacity(0.5))
+                .fill(ThemeManager.shared.theme.palette.accentBackground.opacity(0.5))
         )
     }
 }

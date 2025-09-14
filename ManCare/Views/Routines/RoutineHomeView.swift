@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RoutineHomeView: View {
-    @Environment(\.themeManager) private var tm
+    
     let generatedRoutine: RoutineResponse?
 
     @StateObject private var routineTrackingService = RoutineTrackingService()
@@ -23,9 +23,9 @@ struct RoutineHomeView: View {
             // Main background for content area
             LinearGradient(
                 gradient: Gradient(colors: [
-                    tm.theme.palette.background,       // #F8F6F6 - main background
-                    tm.theme.palette.surface,          // #F0F0F0 - surface color
-                    tm.theme.palette.surfaceAlt        // #E8E8E8 - surface alt
+                    ThemeManager.shared.theme.palette.background,       // #F8F6F6 - main background
+                    ThemeManager.shared.theme.palette.background.opacity(0.85),
+                    ThemeManager.shared.theme.palette.background.opacity(0.6),
                 ]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -47,9 +47,9 @@ struct RoutineHomeView: View {
                 .background(
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            tm.theme.palette.background,       // Main background
-                            tm.theme.palette.surface,          // Surface color
-                            tm.theme.palette.surfaceAlt        // Surface alt
+                            ThemeManager.shared.theme.palette.primaryLight,     // Lighter primary
+                            ThemeManager.shared.theme.palette.primary,          // Base primary
+                            ThemeManager.shared.theme.palette.primaryLight
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -89,7 +89,6 @@ struct RoutineHomeView: View {
             MorningRoutineCompletionView(
                 routineSteps: generateMorningRoutine(),
                 onComplete: {
-                    // Refresh the routine tracking
                     routineTrackingService.objectWillChange.send()
                 }
             )
@@ -105,7 +104,7 @@ struct RoutineHomeView: View {
                     HStack {
                         Text("Your daily routine")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         Spacer()
 
@@ -115,26 +114,26 @@ struct RoutineHomeView: View {
                             HStack(spacing: 4) {
                                 Text("Edit routines")
                                     .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(tm.theme.palette.textSecondary)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 Image(systemName: "chevron.right")
                                     .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(tm.theme.palette.textSecondary)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             }
                         }
                     }
 
                     Text("Tap on a routine to complete")
                         .font(.system(size: 14))
-                        .foregroundColor(tm.theme.palette.textMuted)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
 
                 // Morning Routine Card
-                ModernRoutineCard(
+                RoutineCard(
                     title: "Morning routine",
                     iconName: "sun.max.fill",
-                    iconColor: tm.theme.palette.info,
+                    iconColor: ThemeManager.shared.theme.palette.info,
                     productCount: generateMorningRoutine().count,
                     steps: generateMorningRoutine(),
                     routineTrackingService: routineTrackingService,
@@ -148,10 +147,10 @@ struct RoutineHomeView: View {
                 )
 
                 // Evening Routine Card
-                ModernRoutineCard(
+                RoutineCard(
                     title: "Evening routine",
                     iconName: "moon.fill",
-                    iconColor: tm.theme.palette.primary,
+                    iconColor: ThemeManager.shared.theme.palette.primary,
                     productCount: generateEveningRoutine().count,
                     steps: generateEveningRoutine(),
                     routineTrackingService: routineTrackingService,
@@ -160,7 +159,7 @@ struct RoutineHomeView: View {
                         showingRoutineDetail = RoutineDetailData(
                             title: "Evening routine",
                             iconName: "moon.fill",
-                            iconColor: tm.theme.palette.primary,
+                            iconColor: ThemeManager.shared.theme.palette.primary,
                             steps: generateEveningRoutine()
                         )
                     },
@@ -174,10 +173,10 @@ struct RoutineHomeView: View {
 
                 // Weekly Routine (if available)
                 if let weeklySteps = generateWeeklyRoutine(), !weeklySteps.isEmpty {
-                    ModernRoutineCard(
+                    RoutineCard(
                         title: "Weekly routine",
                         iconName: "calendar",
-                        iconColor: tm.theme.palette.secondary,
+                        iconColor: ThemeManager.shared.theme.palette.secondary,
                         productCount: weeklySteps.count,
                         steps: weeklySteps,
                         routineTrackingService: routineTrackingService,
@@ -186,7 +185,7 @@ struct RoutineHomeView: View {
                             showingRoutineDetail = RoutineDetailData(
                                 title: "Weekly routine",
                                 iconName: "calendar",
-                                iconColor: tm.theme.palette.secondary,
+                                iconColor: ThemeManager.shared.theme.palette.secondary,
                                 steps: weeklySteps
                             )
                         },
@@ -377,13 +376,13 @@ struct RoutineHomeView: View {
     private func colorForStepType(_ stepType: ProductType) -> Color {
         switch stepType {
         case .cleanser:
-            return tm.theme.palette.info
+            return ThemeManager.shared.theme.palette.info
         case .faceSerum:
-            return tm.theme.palette.primary
+            return ThemeManager.shared.theme.palette.primary
         case .moisturizer:
-            return tm.theme.palette.success
+            return ThemeManager.shared.theme.palette.success
         case .sunscreen:
-            return tm.theme.palette.warning
+            return ThemeManager.shared.theme.palette.warning
         default:
             return Color(stepType.color)
         }
@@ -395,29 +394,29 @@ struct RoutineHomeView: View {
 // MARK: - Coach Message View
 
 private struct CoachMessageView: View {
-    @Environment(\.themeManager) private var tm
+    
     let message: String
 
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "lightbulb.fill")
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(tm.theme.palette.warning)
+                .foregroundColor(ThemeManager.shared.theme.palette.warning)
 
             Text(message)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 .multilineTextAlignment(.leading)
 
             Spacer()
         }
         .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                .fill(tm.theme.palette.warning.opacity(0.1))
+            RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                .fill(ThemeManager.shared.theme.palette.warning.opacity(0.1))
                 .overlay(
-                    RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                        .stroke(tm.theme.palette.warning.opacity(0.3), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                        .stroke(ThemeManager.shared.theme.palette.warning.opacity(0.3), lineWidth: 1)
                 )
         )
     }
@@ -427,7 +426,7 @@ private struct CoachMessageView: View {
 // MARK: - Modern Header View
 
 private struct ModernHeaderView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Binding var selectedDate: Date
     let routineTrackingService: RoutineTrackingService
 
@@ -444,20 +443,20 @@ private struct ModernHeaderView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "flame.fill")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(tm.theme.palette.warning)
+                            .foregroundColor(ThemeManager.shared.theme.palette.warning)
 
                         Text("\(currentStreak) day streak")
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(tm.theme.palette.warning.opacity(0.2))
+                            .fill(ThemeManager.shared.theme.palette.warning.opacity(0.2))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(tm.theme.palette.warning.opacity(0.3), lineWidth: 1)
+                                    .stroke(ThemeManager.shared.theme.palette.warning.opacity(0.3), lineWidth: 1)
                             )
                     )
                 }
@@ -468,11 +467,11 @@ private struct ModernHeaderView: View {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(selectedDate, style: .date)
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                     Text("Today")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(tm.theme.palette.textMuted)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
             }
             .padding(.top, 8)
@@ -485,7 +484,7 @@ private struct ModernHeaderView: View {
 // MARK: - Calendar Strip View
 
 private struct CalendarStripView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Binding var selectedDate: Date
     let routineTrackingService: RoutineTrackingService
 
@@ -533,7 +532,7 @@ private struct CalendarStripView: View {
 // MARK: - Calendar Day View
 
 private struct CalendarDayView: View {
-    @Environment(\.themeManager) private var tm
+    
     let date: Date
     let isSelected: Bool
     let routineTrackingService: RoutineTrackingService
@@ -567,16 +566,16 @@ private struct CalendarDayView: View {
             VStack(spacing: 4) {
                 Text(dayFormatter.string(from: date))
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textSecondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
 
                 Text(dateFormatter.string(from: date))
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 // Completion indicator
                 if hasCompletions {
                     Circle()
-                        .fill(isSelected ? tm.theme.palette.success : tm.theme.palette.success.opacity(0.8))
+                        .fill(isSelected ? ThemeManager.shared.theme.palette.success : ThemeManager.shared.theme.palette.success.opacity(0.8))
                         .frame(width: 6, height: 6)
                 } else {
                     Circle()
@@ -587,7 +586,7 @@ private struct CalendarDayView: View {
             .frame(width: 40, height: 50)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? tm.theme.palette.textInverse : Color.clear)
+                    .fill(isSelected ? ThemeManager.shared.theme.palette.background : Color.clear)
             )
         }
         .buttonStyle(PlainButtonStyle())
@@ -596,8 +595,8 @@ private struct CalendarDayView: View {
 
 // MARK: - Modern Routine Card
 
-private struct ModernRoutineCard: View {
-    @Environment(\.themeManager) private var tm
+private struct RoutineCard: View {
+    
     let title: String
     let iconName: String
     let iconColor: Color
@@ -644,19 +643,19 @@ private struct ModernRoutineCard: View {
 
                     Image(systemName: iconName)
                         .font(.system(size: 24, weight: .semibold))
-                        .foregroundColor(iconColor)
+                        .foregroundColor(Color(hex: "#F5C26B"))
                 }
 
                 // Content
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.leading)
 
                     Text("\(completedCount)/\(productCount) completed")
                         .font(.system(size: 14))
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
 
                 Spacer()
@@ -666,12 +665,12 @@ private struct ModernRoutineCard: View {
                     VStack(spacing: 2) {
                         Text("\(Int(progressPercentage * 100))%")
                             .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     }
 
                     Image(systemName: "chevron.right")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
             }
             .padding(20)
@@ -680,9 +679,9 @@ private struct ModernRoutineCard: View {
                     .fill(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                tm.theme.palette.surface,              // Surface color
-                                tm.theme.palette.cardBackground,        // Card background
-                                tm.theme.palette.surfaceAlt             // Surface alt
+                                ThemeManager.shared.theme.palette.background.opacity(0.2),              // Surface color
+                                ThemeManager.shared.theme.palette.background.opacity(0.2),
+                                ThemeManager.shared.theme.palette.background.opacity(0.2),
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -690,7 +689,7 @@ private struct ModernRoutineCard: View {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 16)
-                            .stroke(tm.theme.palette.border, lineWidth: 1) // #C0B8B8 - Neutral gray border
+                            .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1) // #C0B8B8 - Neutral gray border
                     )
             )
         }
@@ -702,7 +701,7 @@ private struct ModernRoutineCard: View {
 // MARK: - Routine Step Row
 
 private struct RoutineStepRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let step: RoutineStepDetail
     let isCompleted: Bool
     let onToggle: () -> Void
@@ -712,12 +711,12 @@ private struct RoutineStepRow: View {
 
     private var stepColor: Color {
         switch step.stepType {
-        case .cleanser: return tm.theme.palette.info
-        case .faceSerum: return tm.theme.palette.primary
-        case .moisturizer: return tm.theme.palette.success
-        case .sunscreen: return tm.theme.palette.warning
-        case .faceSunscreen: return tm.theme.palette.warning
-        default: return tm.theme.palette.textMuted
+        case .cleanser: return ThemeManager.shared.theme.palette.info
+        case .faceSerum: return ThemeManager.shared.theme.palette.primary
+        case .moisturizer: return ThemeManager.shared.theme.palette.success
+        case .sunscreen: return ThemeManager.shared.theme.palette.warning
+        case .faceSunscreen: return ThemeManager.shared.theme.palette.warning
+        default: return ThemeManager.shared.theme.palette.textMuted
         }
     }
 
@@ -752,7 +751,7 @@ private struct RoutineStepRow: View {
 
                         Image(systemName: "checkmark")
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(tm.theme.palette.textInverse)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .scaleEffect(showCheckmarkAnimation ? 1.3 : 1.0)
                             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
                     }
@@ -764,12 +763,12 @@ private struct RoutineStepRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(step.title)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(isCompleted ? tm.theme.palette.textMuted : tm.theme.palette.textPrimary)
+                    .foregroundColor(isCompleted ? ThemeManager.shared.theme.palette.textMuted : ThemeManager.shared.theme.palette.textPrimary)
                     .strikethrough(isCompleted)
 
                 Text(step.description)
                     .font(.system(size: 12))
-                    .foregroundColor(tm.theme.palette.textMuted)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     .lineLimit(nil)
             }
 
@@ -784,10 +783,10 @@ private struct RoutineStepRow: View {
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(tm.theme.palette.textInverse.opacity(0.05))
+                .fill(ThemeManager.shared.theme.palette.textInverse.opacity(0.05))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(tm.theme.palette.textInverse.opacity(0.1), lineWidth: 1)
+                        .stroke(ThemeManager.shared.theme.palette.textInverse.opacity(0.1), lineWidth: 1)
                 )
         )
         .contentShape(Rectangle())
@@ -801,20 +800,18 @@ private struct RoutineStepRow: View {
 // MARK: - UV Index Card
 
 private struct UVIndexCard: View {
-    @Environment(\.themeManager) private var tm
-
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Do you want to see daily UV index here?")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.leading)
 
                     Text("See crucial information about the UV levels based on your location and skin characteristics.")
                         .font(.system(size: 14))
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.leading)
                 }
 
@@ -825,18 +822,18 @@ private struct UVIndexCard: View {
             HStack(spacing: 12) {
                 Image(systemName: "sun.max.fill")
                     .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(tm.theme.palette.info)
+                    .foregroundColor(ThemeManager.shared.theme.palette.info)
 
                 Text("Recommended 50 SPF")
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 Spacer()
             }
             .padding(12)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(tm.theme.palette.textInverse.opacity(0.08))
+                    .fill(ThemeManager.shared.theme.palette.textInverse.opacity(0.08))
             )
         }
         .padding(20)
@@ -845,9 +842,9 @@ private struct UVIndexCard: View {
                 .fill(
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            tm.theme.palette.surface,                // Surface color
-                            tm.theme.palette.accentBackground,        // Accent background
-                            tm.theme.palette.surfaceAlt               // Surface alt
+                            ThemeManager.shared.theme.palette.surface,                // Surface color
+                            ThemeManager.shared.theme.palette.surface,             // Accent background
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8),                 // Surface alt
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -855,7 +852,7 @@ private struct UVIndexCard: View {
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(tm.theme.palette.border, lineWidth: 1)
+                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
                 )
         )
         .padding(.horizontal, 20)
@@ -914,7 +911,7 @@ struct RoutineDetailData: Identifiable {
 // MARK: - Routine Step Detail View
 
 struct RoutineStepDetailView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     let stepDetail: RoutineStepDetail
 
@@ -924,23 +921,23 @@ struct RoutineStepDetailView: View {
                 // Icon
                 ZStack {
                     Circle()
-                        .fill(tm.theme.palette.secondary.opacity(0.15))
+                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 80, height: 80)
                     Image(systemName: stepDetail.iconName)
                         .font(.system(size: 32, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
 
                 // Title
                 Text(stepDetail.title)
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
 
                 // Description
                 Text(stepDetail.description)
-                    .font(tm.theme.typo.body)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
                     .lineLimit(nil)
 
@@ -955,7 +952,7 @@ struct RoutineStepDetailView: View {
                     Button("Done") {
                         dismiss()
                     }
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
             }
         }

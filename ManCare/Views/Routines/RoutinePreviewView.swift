@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RoutinePreviewView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     let originalRoutine: RoutineResponse?
@@ -24,13 +24,13 @@ struct RoutinePreviewView: View {
                 // Header
                 VStack(spacing: 16) {
                     Text("Preview Your Changes")
-                        .font(tm.theme.typo.h1)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h1)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.center)
                     
                     Text("Review your customized routine before saving")
-                        .font(tm.theme.typo.sub)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.sub)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 20)
@@ -85,13 +85,13 @@ struct RoutinePreviewView: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 16, weight: .semibold))
                             Text("Save Changes")
-                                .font(tm.theme.typo.title.weight(.semibold))
+                                .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                         }
-                        .foregroundColor(tm.theme.palette.onPrimary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(tm.theme.palette.secondary)
-                        .cornerRadius(tm.theme.cardRadius)
+                        .background(ThemeManager.shared.theme.palette.secondary)
+                        .cornerRadius(ThemeManager.shared.theme.cardRadius)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -102,16 +102,16 @@ struct RoutinePreviewView: View {
                             Image(systemName: "xmark.circle")
                                 .font(.system(size: 16, weight: .semibold))
                             Text("Cancel")
-                                .font(tm.theme.typo.title.weight(.semibold))
+                                .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                         }
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(tm.theme.palette.accentBackground)
-                        .cornerRadius(tm.theme.cardRadius)
+                        .background(ThemeManager.shared.theme.palette.accentBackground)
+                        .cornerRadius(ThemeManager.shared.theme.cardRadius)
                         .overlay(
-                            RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                         )
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -119,7 +119,7 @@ struct RoutinePreviewView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
             }
-            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarHidden(true)
         }
     }
@@ -128,7 +128,7 @@ struct RoutinePreviewView: View {
 // MARK: - Routine Comparison Section
 
 private struct RoutineComparisonSection: View {
-    @Environment(\.themeManager) private var tm
+    
     let timeOfDay: TimeOfDay
     let originalSteps: [APIRoutineStep]
     let editedSteps: [EditableRoutineStep]
@@ -140,12 +140,12 @@ private struct RoutineComparisonSection: View {
                 // Section header
                 VStack(spacing: 8) {
                     Text(title)
-                        .font(tm.theme.typo.h2)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h2)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
                     Text("Compare your changes")
-                        .font(tm.theme.typo.body)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .padding(.top, 20)
                 
@@ -154,14 +154,14 @@ private struct RoutineComparisonSection: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("Original Routine")
-                                .font(tm.theme.typo.h3)
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.h3)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
                             Spacer()
                             
                             Text("\(originalSteps.count) steps")
-                                .font(tm.theme.typo.caption)
-                                .foregroundColor(tm.theme.palette.textSecondary)
+                                .font(ThemeManager.shared.theme.typo.caption)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                         
                         ForEach(Array(originalSteps.enumerated()), id: \.offset) { index, step in
@@ -171,10 +171,10 @@ private struct RoutineComparisonSection: View {
                     .padding(16)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(tm.theme.palette.cardBackground)
+                            .fill(ThemeManager.shared.theme.palette.cardBackground)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                    .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                             )
                     )
                 }
@@ -183,14 +183,14 @@ private struct RoutineComparisonSection: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Your Customized Routine")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         Spacer()
                         
                         Text("\(editedSteps.filter { $0.isEnabled }.count) active steps")
-                            .font(tm.theme.typo.caption)
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.caption)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                     
                     ForEach(editedSteps.sorted { $0.order < $1.order }) { step in
@@ -200,10 +200,10 @@ private struct RoutineComparisonSection: View {
                 .padding(16)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(tm.theme.palette.cardBackground)
+                        .fill(ThemeManager.shared.theme.palette.cardBackground)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(tm.theme.palette.secondary.opacity(0.3), lineWidth: 2)
+                                .stroke(ThemeManager.shared.theme.palette.secondary.opacity(0.3), lineWidth: 2)
                         )
                 )
                 
@@ -224,7 +224,7 @@ private struct RoutineComparisonSection: View {
 // MARK: - Original Step Card
 
 private struct OriginalStepCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let step: APIRoutineStep
     let stepNumber: Int
     
@@ -249,11 +249,11 @@ private struct OriginalStepCard: View {
             // Step content
             VStack(alignment: .leading, spacing: 4) {
                 Text(step.name)
-                    .font(tm.theme.typo.title)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.title)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text(step.why)
-                    .font(tm.theme.typo.body)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .lineLimit(nil)
             }
             
@@ -268,10 +268,10 @@ private struct OriginalStepCard: View {
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(tm.theme.palette.accentBackground)
+                .fill(ThemeManager.shared.theme.palette.accentBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                 )
         )
     }
@@ -280,7 +280,7 @@ private struct OriginalStepCard: View {
 // MARK: - Edited Step Card
 
 private struct EditedStepCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let step: EditableRoutineStep
     
     private var stepTypeColor: Color { Color(step.stepType.color) }
@@ -290,7 +290,7 @@ private struct EditedStepCard: View {
             // Step icon with status
             ZStack {
                 Circle()
-                    .fill(step.isEnabled ? stepTypeColor.opacity(0.2) : tm.theme.palette.textMuted.opacity(0.2))
+                    .fill(step.isEnabled ? stepTypeColor.opacity(0.2) : ThemeManager.shared.theme.palette.textMuted.opacity(0.2))
                     .frame(width: 28, height: 28)
                 
                 if step.isEnabled {
@@ -300,7 +300,7 @@ private struct EditedStepCard: View {
                 } else {
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(tm.theme.palette.textMuted)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
             }
             
@@ -308,8 +308,8 @@ private struct EditedStepCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
                     Text(step.title)
-                        .font(tm.theme.typo.title)
-                        .foregroundColor(step.isEnabled ? tm.theme.palette.textPrimary : tm.theme.palette.textMuted)
+                        .font(ThemeManager.shared.theme.typo.title)
+                        .foregroundColor(step.isEnabled ? ThemeManager.shared.theme.palette.textPrimary : ThemeManager.shared.theme.palette.textMuted)
                         .strikethrough(!step.isEnabled)
                     
                     // Indicators
@@ -317,26 +317,26 @@ private struct EditedStepCard: View {
                         if step.originalStep {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(tm.theme.palette.info)
+                                .foregroundColor(ThemeManager.shared.theme.palette.info)
                         }
                         
                         if !step.originalStep {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(tm.theme.palette.success)
+                                .foregroundColor(ThemeManager.shared.theme.palette.success)
                         }
                         
                         if step.frequency != .daily {
                             Image(systemName: "clock")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(tm.theme.palette.warning)
+                                .foregroundColor(ThemeManager.shared.theme.palette.warning)
                         }
                     }
                 }
                 
                 Text(step.description)
-                    .font(tm.theme.typo.body)
-                    .foregroundColor(step.isEnabled ? tm.theme.palette.textSecondary : tm.theme.palette.textMuted)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(step.isEnabled ? ThemeManager.shared.theme.palette.textSecondary : ThemeManager.shared.theme.palette.textMuted)
                     .lineLimit(nil)
                 
                 // Frequency and timing info
@@ -344,37 +344,37 @@ private struct EditedStepCard: View {
                     HStack(spacing: 8) {
                         if step.frequency != .daily {
                             Text(step.frequency.displayName)
-                                .font(tm.theme.typo.caption)
-                                .foregroundColor(tm.theme.palette.warning)
+                                .font(ThemeManager.shared.theme.typo.caption)
+                                .foregroundColor(ThemeManager.shared.theme.palette.warning)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(tm.theme.palette.warning.opacity(0.1))
+                                .background(ThemeManager.shared.theme.palette.warning.opacity(0.1))
                                 .cornerRadius(4)
                         }
                         
                         if step.morningEnabled && step.eveningEnabled {
                             Text("AM & PM")
-                                .font(tm.theme.typo.caption)
-                                .foregroundColor(tm.theme.palette.info)
+                                .font(ThemeManager.shared.theme.typo.caption)
+                                .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(tm.theme.palette.info.opacity(0.1))
+                                .background(ThemeManager.shared.theme.palette.info.opacity(0.1))
                                 .cornerRadius(4)
                         } else if step.morningEnabled {
                             Text("AM")
-                                .font(tm.theme.typo.caption)
-                                .foregroundColor(tm.theme.palette.warning)
+                                .font(ThemeManager.shared.theme.typo.caption)
+                                .foregroundColor(ThemeManager.shared.theme.palette.warning)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(tm.theme.palette.warning.opacity(0.1))
+                                .background(ThemeManager.shared.theme.palette.warning.opacity(0.1))
                                 .cornerRadius(4)
                         } else if step.eveningEnabled {
                             Text("PM")
-                                .font(tm.theme.typo.caption)
-                                .foregroundColor(tm.theme.palette.info)
+                                .font(ThemeManager.shared.theme.typo.caption)
+                                .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(tm.theme.palette.info.opacity(0.1))
+                                .background(ThemeManager.shared.theme.palette.info.opacity(0.1))
                                 .cornerRadius(4)
                         }
                     }
@@ -387,10 +387,10 @@ private struct EditedStepCard: View {
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(step.isEnabled ? tm.theme.palette.accentBackground : tm.theme.palette.accentBackground.opacity(0.5))
+                .fill(step.isEnabled ? ThemeManager.shared.theme.palette.accentBackground : ThemeManager.shared.theme.palette.accentBackground.opacity(0.5))
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(step.isEnabled ? tm.theme.palette.separator : tm.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
+                        .stroke(step.isEnabled ? ThemeManager.shared.theme.palette.separator : ThemeManager.shared.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
                 )
         )
     }
@@ -399,7 +399,7 @@ private struct EditedStepCard: View {
 // MARK: - Routine Summary Card
 
 private struct RoutineSummaryCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let originalCount: Int
     let editedCount: Int
     let addedCount: Int
@@ -408,22 +408,22 @@ private struct RoutineSummaryCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Summary of Changes")
-                .font(tm.theme.typo.h3)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.h3)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             VStack(spacing: 12) {
                 SummaryRow(
                     title: "Original steps",
                     value: "\(originalCount)",
                     iconName: "list.bullet",
-                    color: tm.theme.palette.info
+                    color: ThemeManager.shared.theme.palette.info
                 )
                 
                 SummaryRow(
                     title: "Active steps",
                     value: "\(editedCount)",
                     iconName: "checkmark.circle",
-                    color: tm.theme.palette.success
+                    color: ThemeManager.shared.theme.palette.success
                 )
                 
                 if addedCount > 0 {
@@ -431,7 +431,7 @@ private struct RoutineSummaryCard: View {
                         title: "Added steps",
                         value: "\(addedCount)",
                         iconName: "plus.circle",
-                        color: tm.theme.palette.success
+                        color: ThemeManager.shared.theme.palette.success
                     )
                 }
                 
@@ -440,7 +440,7 @@ private struct RoutineSummaryCard: View {
                         title: "Removed steps",
                         value: "\(removedCount)",
                         iconName: "minus.circle",
-                        color: tm.theme.palette.error
+                        color: ThemeManager.shared.theme.palette.error
                     )
                 }
             }
@@ -448,10 +448,10 @@ private struct RoutineSummaryCard: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(tm.theme.palette.cardBackground)
+                .fill(ThemeManager.shared.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                 )
         )
     }
@@ -460,7 +460,7 @@ private struct RoutineSummaryCard: View {
 // MARK: - Summary Row
 
 private struct SummaryRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     let value: String
     let iconName: String
@@ -474,14 +474,14 @@ private struct SummaryRow: View {
                 .frame(width: 20)
             
             Text(title)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
             Spacer()
             
             Text(value)
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
         }
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductDetailView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     let product: Product
@@ -26,21 +26,21 @@ struct ProductDetailView: View {
                     VStack(spacing: 12) {
                         Image(systemName: product.tagging.productType.iconName)
                             .font(.system(size: 48, weight: .medium))
-                            .foregroundColor(tm.theme.palette.secondary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                             .frame(width: 80, height: 80)
-                            .background(tm.theme.palette.secondary.opacity(0.1))
+                            .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                             .clipShape(Circle())
                         
                         VStack(spacing: 4) {
                             Text(product.displayName)
-                                .font(tm.theme.typo.h2)
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.h2)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .multilineTextAlignment(.center)
                             
                             if let brand = product.brand {
                                 Text(brand)
-                                    .font(tm.theme.typo.title)
-                                    .foregroundColor(tm.theme.palette.textSecondary)
+                                    .font(ThemeManager.shared.theme.typo.title)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             }
                         }
                     }
@@ -59,12 +59,12 @@ struct ProductDetailView: View {
                                 if let description = product.description {
                                     VStack(alignment: .leading, spacing: 8) {
                                         Text("Description")
-                                            .font(tm.theme.typo.body.weight(.semibold))
-                                            .foregroundColor(tm.theme.palette.textPrimary)
+                                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                         
                                         Text(description)
-                                            .font(tm.theme.typo.body)
-                                            .foregroundColor(tm.theme.palette.textSecondary)
+                                            .font(ThemeManager.shared.theme.typo.body)
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     }
                                 }
                             }
@@ -99,7 +99,7 @@ struct ProductDetailView: View {
                     .padding(.horizontal, 20)
                 }
             }
-            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -107,8 +107,8 @@ struct ProductDetailView: View {
                         dismiss()
                     } label: {
                         Text("Close")
-                            .font(tm.theme.typo.body.weight(.medium))
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                 }
                 
@@ -128,7 +128,7 @@ struct ProductDetailView: View {
                     } label: {
                         Image(systemName: "ellipsis.circle")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     }
                 }
             }
@@ -157,7 +157,7 @@ struct ProductDetailView: View {
 // MARK: - Product Detail Section
 
 struct ProductDetailSection<Content: View>: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     let content: Content
     
@@ -169,17 +169,17 @@ struct ProductDetailSection<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
-                .font(tm.theme.typo.title.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             content
         }
         .padding(16)
-        .background(tm.theme.palette.cardBackground)
+        .background(ThemeManager.shared.theme.palette.cardBackground)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
         )
     }
 }
@@ -187,21 +187,21 @@ struct ProductDetailSection<Content: View>: View {
 // MARK: - Detail Row
 
 struct DetailRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let label: String
     let value: String
     
     var body: some View {
         HStack {
             Text(label)
-                .font(tm.theme.typo.body.weight(.medium))
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             Spacer()
             
             Text(value)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }
     }
 }
@@ -209,7 +209,7 @@ struct DetailRow: View {
 // MARK: - Edit Product View
 
 struct EditProductView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     let product: Product
@@ -248,12 +248,12 @@ struct EditProductView: View {
                     // Header
                     VStack(spacing: 8) {
                         Text("Edit Product")
-                            .font(tm.theme.typo.h1)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h1)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         Text("Update product information")
-                            .font(tm.theme.typo.sub)
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.sub)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                     .padding(.top, 20)
                     
@@ -281,14 +281,14 @@ struct EditProductView: View {
                             VStack(spacing: 16) {
                                 HStack(spacing: 12) {
                                     TextField("Add ingredient", text: $newIngredient)
-                                        .font(tm.theme.typo.body)
+                                        .font(ThemeManager.shared.theme.typo.body)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 12)
-                                        .background(tm.theme.palette.accentBackground)
+                                        .background(ThemeManager.shared.theme.palette.accentBackground)
                                         .cornerRadius(12)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                         )
                                     
                                     Button {
@@ -299,7 +299,7 @@ struct EditProductView: View {
                                     } label: {
                                         Image(systemName: "plus.circle.fill")
                                             .font(.system(size: 20, weight: .semibold))
-                                            .foregroundColor(tm.theme.palette.secondary)
+                                            .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                                     }
                                     .disabled(newIngredient.isEmpty)
                                 }
@@ -337,18 +337,18 @@ struct EditProductView: View {
                         ProductFormSection(title: "Description") {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Product Description")
-                                    .font(tm.theme.typo.body.weight(.semibold))
-                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
                                 TextEditor(text: $description)
-                                    .font(tm.theme.typo.body)
+                                    .font(ThemeManager.shared.theme.typo.body)
                                     .frame(minHeight: 100)
                                     .padding(12)
-                                    .background(tm.theme.palette.accentBackground)
+                                    .background(ThemeManager.shared.theme.palette.accentBackground)
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                     )
                             }
                         }
@@ -356,7 +356,7 @@ struct EditProductView: View {
                     .padding(.horizontal, 20)
                 }
             }
-            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -364,8 +364,8 @@ struct EditProductView: View {
                         dismiss()
                     } label: {
                         Text("Cancel")
-                            .font(tm.theme.typo.body.weight(.medium))
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                 }
                 
@@ -374,8 +374,8 @@ struct EditProductView: View {
                         saveProduct()
                     } label: {
                         Text("Save")
-                            .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(productName.isEmpty ? tm.theme.palette.textMuted : tm.theme.palette.secondary)
+                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                            .foregroundColor(productName.isEmpty ? ThemeManager.shared.theme.palette.textMuted : ThemeManager.shared.theme.palette.secondary)
                     }
                     .disabled(productName.isEmpty)
                 }

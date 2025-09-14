@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductTypeSelectorSheet: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     @Binding var selectedProductType: ProductType
     @State private var searchText = ""
@@ -30,8 +30,8 @@ struct ProductTypeSelectorSheet: View {
                 VStack(spacing: 16) {
                     HStack {
                         Text("Select Product Type")
-                            .font(tm.theme.typo.h2)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h2)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         Spacer()
                     }
@@ -39,15 +39,15 @@ struct ProductTypeSelectorSheet: View {
                     // Search Bar
                     HStack {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(tm.theme.palette.textMuted)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
 
                         TextField("Search product types...", text: $searchText)
-                            .font(tm.theme.typo.body)
+                            .font(ThemeManager.shared.theme.typo.body)
                             .textFieldStyle(PlainTextFieldStyle())
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
-                    .background(tm.theme.palette.cardBackground)
+                    .background(ThemeManager.shared.theme.palette.cardBackground)
                     .cornerRadius(12)
                 }
                 .padding(.horizontal, 20)
@@ -65,11 +65,11 @@ struct ProductTypeSelectorSheet: View {
                                     HStack {
                                         Image(systemName: category.iconName)
                                             .font(.system(size: 16, weight: .medium))
-                                            .foregroundColor(tm.theme.palette.secondary)
+                                            .foregroundColor(ThemeManager.shared.theme.palette.secondary)
 
                                         Text(category.rawValue)
-                                            .font(tm.theme.typo.title.weight(.semibold))
-                                            .foregroundColor(tm.theme.palette.textPrimary)
+                                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                                         Spacer()
                                     }
@@ -95,15 +95,15 @@ struct ProductTypeSelectorSheet: View {
                     .padding(.bottom, 20)
                 }
         }
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
                     dismiss()
                 }
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.secondary)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.secondary)
             }
         }
     }

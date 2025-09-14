@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StepDetailEditView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     let step: EditableRoutineStep
@@ -50,12 +50,12 @@ struct StepDetailEditView: View {
                         
                         VStack(spacing: 8) {
                             Text(step.stepTypeDisplayName)
-                                .font(tm.theme.typo.h2)
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.h2)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
                             Text("Customize this step")
-                                .font(tm.theme.typo.body)
-                                .foregroundColor(tm.theme.palette.textSecondary)
+                                .font(ThemeManager.shared.theme.typo.body)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                     }
                     .padding(.top, 20)
@@ -63,15 +63,15 @@ struct StepDetailEditView: View {
                     // Basic Information
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Basic Information")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         VStack(spacing: 16) {
                             // Title
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Title")
-                                    .font(tm.theme.typo.body.weight(.medium))
-                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
                                 TextField("Step title", text: $title)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -80,8 +80,8 @@ struct StepDetailEditView: View {
                             // Description
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Description")
-                                    .font(tm.theme.typo.body.weight(.medium))
-                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
                                 TextField("Step description", text: $description)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -94,19 +94,19 @@ struct StepDetailEditView: View {
                     // Time of Day Settings
                     VStack(alignment: .leading, spacing: 16) {
                         Text("When to use")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         VStack(spacing: 12) {
                             // Morning toggle
                             HStack {
                                 Image(systemName: "sun.max.fill")
                                     .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(tm.theme.palette.warning)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.warning)
                                 
                                 Text("Morning")
-                                    .font(tm.theme.typo.body)
-                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                    .font(ThemeManager.shared.theme.typo.body)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
                                 Spacer()
                                 
@@ -117,10 +117,10 @@ struct StepDetailEditView: View {
                             .padding(.vertical, 12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(tm.theme.palette.cardBackground)
+                                    .fill(ThemeManager.shared.theme.palette.cardBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                     )
                             )
                             
@@ -128,11 +128,11 @@ struct StepDetailEditView: View {
                             HStack {
                                 Image(systemName: "moon.fill")
                                     .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(tm.theme.palette.info)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 
                                 Text("Evening")
-                                    .font(tm.theme.typo.body)
-                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                    .font(ThemeManager.shared.theme.typo.body)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
                                 Spacer()
                                 
@@ -143,10 +143,10 @@ struct StepDetailEditView: View {
                             .padding(.vertical, 12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(tm.theme.palette.cardBackground)
+                                    .fill(ThemeManager.shared.theme.palette.cardBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                     )
                             )
                         }
@@ -156,8 +156,8 @@ struct StepDetailEditView: View {
                     // Frequency
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Frequency")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         Picker("Frequency", selection: $frequency) {
                             ForEach(StepFrequency.allCases, id: \.self) { freq in
@@ -171,18 +171,18 @@ struct StepDetailEditView: View {
                     // Custom Instructions
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Custom Instructions")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         TextEditor(text: $customInstructions)
                             .frame(minHeight: 100)
                             .padding(12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(tm.theme.palette.cardBackground)
+                                    .fill(ThemeManager.shared.theme.palette.cardBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                     )
                             )
                     }
@@ -191,7 +191,7 @@ struct StepDetailEditView: View {
                     Spacer(minLength: 100)
                 }
             }
-            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationTitle("Edit Step")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -199,12 +199,12 @@ struct StepDetailEditView: View {
                 leading: Button("Cancel") {
                     dismiss()
                 }
-                .foregroundColor(tm.theme.palette.textSecondary),
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary),
                 trailing: Button("Save") {
                     saveChanges()
                     dismiss()
                 }
-                .foregroundColor(tm.theme.palette.secondary)
+                .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 .font(.system(size: 16, weight: .semibold))
             )
         }

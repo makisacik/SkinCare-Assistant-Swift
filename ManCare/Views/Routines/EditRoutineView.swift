@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditRoutineView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var editingService: RoutineEditingService
@@ -29,13 +29,13 @@ struct EditRoutineView: View {
                         editingService.cancelEditing()
                         dismiss()
                     }
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     
                     Spacer()
                     
                     Text("Edit Routine")
-                        .font(tm.theme.typo.h2)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h2)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
                     Spacer()
                     
@@ -45,7 +45,7 @@ struct EditRoutineView: View {
                             dismiss()
                         }
                     }
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                     .font(.system(size: 16, weight: .semibold))
                 }
                 .padding(.horizontal, 20)
@@ -65,12 +65,12 @@ struct EditRoutineView: View {
                                 Text(timeOfDay.displayName)
                                     .font(.system(size: 12, weight: .medium))
                             }
-                            .foregroundColor(selectedTimeOfDay == timeOfDay ? tm.theme.palette.textInverse : tm.theme.palette.textSecondary)
+                            .foregroundColor(selectedTimeOfDay == timeOfDay ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
                             .frame(maxWidth: .infinity)
                             .frame(height: 60)
                             .background(
                                 selectedTimeOfDay == timeOfDay ?
-                                tm.theme.palette.secondary :
+                                ThemeManager.shared.theme.palette.secondary :
                                 Color.clear
                             )
                             .cornerRadius(12)
@@ -127,7 +127,7 @@ struct EditRoutineView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
-            .background(tm.theme.palette.cardBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.cardBackground.ignoresSafeArea())
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingAddStep) {
@@ -162,7 +162,7 @@ struct EditRoutineView: View {
 // MARK: - Editable Routine Section
 
 private struct EditableRoutineSection: View {
-    @Environment(\.themeManager) private var tm
+    
     let timeOfDay: TimeOfDay
     let steps: [EditableRoutineStep]
     let editingService: RoutineEditingService
@@ -175,8 +175,8 @@ private struct EditableRoutineSection: View {
                 // Section header with add button
                 HStack {
                     Text("\(timeOfDay.displayName) Routine")
-                        .font(tm.theme.typo.h2)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h2)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
                     Spacer()
                     
@@ -187,12 +187,12 @@ private struct EditableRoutineSection: View {
                             Image(systemName: "plus")
                                 .font(.system(size: 14, weight: .semibold))
                             Text("Add Step")
-                                .font(tm.theme.typo.body.weight(.medium))
+                                .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                         }
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
-                        .background(tm.theme.palette.secondary.opacity(0.1))
+                        .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                         .cornerRadius(8)
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -227,7 +227,7 @@ private struct EditableRoutineSection: View {
 // MARK: - Empty Routine State
 
 private struct EmptyRoutineState: View {
-    @Environment(\.themeManager) private var tm
+    
     let timeOfDay: TimeOfDay
     let onAddStep: () -> Void
     
@@ -235,15 +235,15 @@ private struct EmptyRoutineState: View {
         VStack(spacing: 16) {
             Image(systemName: iconNameForTimeOfDay(timeOfDay))
                 .font(.system(size: 48, weight: .light))
-                .foregroundColor(tm.theme.palette.textMuted)
+                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
             Text("No steps yet")
-                .font(tm.theme.typo.h3)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.h3)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             Text("Add your first step to build your \(timeOfDay.displayName.lowercased()) routine")
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .multilineTextAlignment(.center)
             
             Button {
@@ -253,12 +253,12 @@ private struct EmptyRoutineState: View {
                     Image(systemName: "plus")
                         .font(.system(size: 16, weight: .semibold))
                     Text("Add First Step")
-                        .font(tm.theme.typo.body.weight(.semibold))
+                        .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 }
-                .foregroundColor(tm.theme.palette.onPrimary)
+                .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
-                .background(tm.theme.palette.secondary)
+                .background(ThemeManager.shared.theme.palette.secondary)
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
@@ -266,10 +266,10 @@ private struct EmptyRoutineState: View {
         .padding(40)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(tm.theme.palette.cardBackground)
+                .fill(ThemeManager.shared.theme.palette.cardBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                 )
         )
         .padding(.horizontal, 20)

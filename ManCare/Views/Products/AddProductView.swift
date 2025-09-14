@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddProductView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
 
     // ✅ Inject the existing ProductService instead of creating a new instance
@@ -43,12 +43,12 @@ struct AddProductView: View {
                     // Header
                     VStack(spacing: 8) {
                         Text("Add New Product")
-                            .font(tm.theme.typo.h1)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h1)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         Text("Add a product to your collection")
-                            .font(tm.theme.typo.sub)
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.sub)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                     .padding(.top, 20)
 
@@ -76,14 +76,14 @@ struct AddProductView: View {
                             VStack(spacing: 16) {
                                 HStack(spacing: 12) {
                                     TextField("Add ingredient", text: $newIngredient)
-                                        .font(tm.theme.typo.body)
+                                        .font(ThemeManager.shared.theme.typo.body)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 12)
-                                        .background(tm.theme.palette.accentBackground)
+                                        .background(ThemeManager.shared.theme.palette.accentBackground)
                                         .cornerRadius(12)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                         )
 
                                     Button {
@@ -94,7 +94,7 @@ struct AddProductView: View {
                                     } label: {
                                         Image(systemName: "plus.circle.fill")
                                             .font(.system(size: 20, weight: .semibold))
-                                            .foregroundColor(tm.theme.palette.secondary)
+                                            .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                                     }
                                     .disabled(newIngredient.isEmpty)
                                 }
@@ -132,18 +132,18 @@ struct AddProductView: View {
                         ProductFormSection(title: "Description") {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Product Description")
-                                    .font(tm.theme.typo.body.weight(.semibold))
-                                    .foregroundColor(tm.theme.palette.textPrimary)
+                                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                                 TextEditor(text: $description)
-                                    .font(tm.theme.typo.body)
+                                    .font(ThemeManager.shared.theme.typo.body)
                                     .frame(minHeight: 100)
                                     .padding(12)
-                                    .background(tm.theme.palette.accentBackground)
+                                    .background(ThemeManager.shared.theme.palette.accentBackground)
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                     )
                             }
                         }
@@ -151,7 +151,7 @@ struct AddProductView: View {
                     .padding(.horizontal, 20)
                 }
             }
-            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -159,8 +159,8 @@ struct AddProductView: View {
                         dismiss()
                     } label: {
                         Text("Cancel")
-                            .font(tm.theme.typo.body.weight(.medium))
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                 }
 
@@ -169,8 +169,8 @@ struct AddProductView: View {
                         saveProduct()
                     } label: {
                         Text("Save")
-                            .font(tm.theme.typo.body.weight(.semibold))
-                            .foregroundColor(productName.isEmpty ? tm.theme.palette.textMuted : tm.theme.palette.secondary)
+                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                            .foregroundColor(productName.isEmpty ? ThemeManager.shared.theme.palette.textMuted : ThemeManager.shared.theme.palette.secondary)
                     }
                     .disabled(productName.isEmpty)
                 }

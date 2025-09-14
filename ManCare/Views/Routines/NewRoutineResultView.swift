@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewRoutineResultView: View {
-    @Environment(\.themeManager) private var tm
+    
     let skinType: SkinType
     let concerns: Set<Concern>
     let mainGoal: MainGoal
@@ -59,13 +59,13 @@ struct NewRoutineResultView: View {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.system(size: 16, weight: .semibold))
                         Text("Continue")
-                            .font(tm.theme.typo.title.weight(.semibold))
+                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                     }
-                    .foregroundColor(tm.theme.palette.onPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(tm.theme.palette.secondary)
-                    .cornerRadius(tm.theme.cardRadius)
+                    .background(ThemeManager.shared.theme.palette.secondary)
+                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
                 }
                 .buttonStyle(PlainButtonStyle())
 
@@ -78,20 +78,20 @@ struct NewRoutineResultView: View {
                         Image(systemName: "bell.fill")
                             .font(.system(size: 16, weight: .semibold))
                         Text("Turn on reminders")
-                            .font(tm.theme.typo.title.weight(.semibold))
+                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                     }
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(tm.theme.palette.secondary.opacity(0.1))
-                    .cornerRadius(tm.theme.cardRadius)
+                    .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
+                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
                 }
                 .buttonStyle(PlainButtonStyle())
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
     }
     
     private func generateMorningRoutine() -> [RoutineStep] {
@@ -216,7 +216,7 @@ struct NewRoutineResultView: View {
 // MARK: - Routine Section
 
 private struct RoutineSection: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     let steps: [RoutineStep]
     let iconName: String
@@ -227,22 +227,22 @@ private struct RoutineSection: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(tm.theme.palette.secondary.opacity(0.15))
+                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 32, height: 32)
                     Image(systemName: iconName)
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
                 
                 Text(title)
-                    .font(tm.theme.typo.h2)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h2)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
                 Spacer()
                 
                 Text("\(steps.count) steps")
-                    .font(tm.theme.typo.caption)
-                    .foregroundColor(tm.theme.palette.textMuted)
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             }
             
             // Steps
@@ -253,16 +253,16 @@ private struct RoutineSection: View {
             }
         }
         .padding(20)
-        .background(tm.theme.palette.cardBackground)
-        .cornerRadius(tm.theme.cardRadius)
-        .shadow(color: tm.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
+        .background(ThemeManager.shared.theme.palette.cardBackground)
+        .cornerRadius(ThemeManager.shared.theme.cardRadius)
+        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
     }
 }
 
 // MARK: - Routine Step Row
 
 private struct RoutineStepRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let step: RoutineStep
     let stepNumber: Int
     
@@ -271,21 +271,21 @@ private struct RoutineStepRow: View {
             // Step number
             ZStack {
                 Circle()
-                    .fill(tm.theme.palette.secondary.opacity(0.2))
+                    .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.2))
                     .frame(width: 28, height: 28)
                 Text("\(stepNumber)")
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
             }
             
             // Step content
             VStack(alignment: .leading, spacing: 4) {
                 Text(step.title)
-                    .font(tm.theme.typo.title)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.title)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text(step.instructions)
-                    .font(tm.theme.typo.body)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .lineLimit(nil)
             }
             
@@ -294,7 +294,7 @@ private struct RoutineStepRow: View {
             // Step icon
             Image(systemName: step.productType.iconName)
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(tm.theme.palette.secondary.opacity(0.7))
+                .foregroundColor(ThemeManager.shared.theme.palette.secondary.opacity(0.7))
         }
         .padding(.vertical, 8)
     }
@@ -303,7 +303,7 @@ private struct RoutineStepRow: View {
 // MARK: - Summary Card
 
 private struct SummaryCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let skinType: SkinType
     let concerns: Set<Concern>
     let mainGoal: MainGoal
@@ -311,8 +311,8 @@ private struct SummaryCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Your Profile Summary")
-                .font(tm.theme.typo.h3)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.h3)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             VStack(spacing: 12) {
                 ProfileRow(title: "Skin Type", value: skinType.title, iconName: skinType.iconName)
@@ -328,16 +328,16 @@ private struct SummaryCard: View {
             }
         }
         .padding(20)
-        .background(tm.theme.palette.cardBackground)
-        .cornerRadius(tm.theme.cardRadius)
-        .shadow(color: tm.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
+        .background(ThemeManager.shared.theme.palette.cardBackground)
+        .cornerRadius(ThemeManager.shared.theme.cardRadius)
+        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
     }
 }
 
 // MARK: - Profile Row
 
 private struct ProfileRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     let value: String
     let iconName: String
@@ -346,18 +346,18 @@ private struct ProfileRow: View {
         HStack(spacing: 12) {
             Image(systemName: iconName)
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(tm.theme.palette.secondary)
+                .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 .frame(width: 20)
             
             Text(title)
-                .font(tm.theme.typo.body)
-                .foregroundColor(tm.theme.palette.textSecondary)
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
             Spacer()
             
             Text(value)
-                .font(tm.theme.typo.body.weight(.semibold))
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
         }
     }
 }
@@ -368,7 +368,7 @@ private struct ProfileRow: View {
 // MARK: - Routine Result Header
 
 private struct RoutineResultHeader: View {
-    @Environment(\.themeManager) private var tm
+    
     let onBack: () -> Void
     
     var body: some View {
@@ -383,9 +383,9 @@ private struct RoutineResultHeader: View {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 16, weight: .semibold))
                         Text("Back")
-                            .font(tm.theme.typo.body.weight(.medium))
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                     }
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .buttonStyle(PlainButtonStyle())
                 Spacer()
@@ -395,13 +395,13 @@ private struct RoutineResultHeader: View {
             // Title
             VStack(spacing: 8) {
                 Text("Your personalized routine")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
                 
                 Text("Based on your skin type and selected concerns")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.sub)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
             }
             .padding(.top, 20)

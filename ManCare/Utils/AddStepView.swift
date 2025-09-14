@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddStepView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.dismiss) private var dismiss
     
     let timeOfDay: TimeOfDay
@@ -29,12 +29,12 @@ struct AddStepView: View {
                     // Header
                     VStack(spacing: 12) {
                         Text("Add New Step")
-                            .font(tm.theme.typo.h1)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h1)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         Text("Add a new step to your \(timeOfDay.displayName.lowercased()) routine")
-                            .font(tm.theme.typo.sub)
-                            .foregroundColor(tm.theme.palette.textSecondary)
+                            .font(ThemeManager.shared.theme.typo.sub)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             .multilineTextAlignment(.center)
                     }
                     .padding(.top, 20)
@@ -42,8 +42,8 @@ struct AddStepView: View {
                     // Step type selection
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Step Type")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         LazyVGrid(columns: [
                             GridItem(.flexible()),
@@ -65,25 +65,25 @@ struct AddStepView: View {
                     // Custom details
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Customize Details")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         // Title
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Step Name")
-                                .font(tm.theme.typo.body.weight(.semibold))
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
                             TextField("Enter step name", text: $customTitle)
-                                .font(tm.theme.typo.body)
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.body)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .padding(12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.accentBackground)
+                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                         )
                                 )
                         }
@@ -91,19 +91,19 @@ struct AddStepView: View {
                         // Description
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Description")
-                                .font(tm.theme.typo.body.weight(.semibold))
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
                             TextField("Enter description", text: $customDescription)
-                                .font(tm.theme.typo.body)
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.body)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .padding(12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.accentBackground)
+                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                         )
                                 )
                         }
@@ -111,19 +111,19 @@ struct AddStepView: View {
                         // Custom instructions
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Custom Instructions (Optional)")
-                                .font(tm.theme.typo.body.weight(.semibold))
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
                             TextField("Add personal notes or instructions", text: $customInstructions)
-                                .font(tm.theme.typo.body)
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.body)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .padding(12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(tm.theme.palette.accentBackground)
+                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
-                                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                         )
                                 )
                         }
@@ -132,8 +132,8 @@ struct AddStepView: View {
                     // Frequency selection
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Frequency")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         HStack(spacing: 8) {
                             ForEach(StepFrequency.allCases, id: \.self) { freq in
@@ -141,16 +141,16 @@ struct AddStepView: View {
                                     frequency = freq
                                 } label: {
                                     Text(freq.displayName)
-                                        .font(tm.theme.typo.caption.weight(.medium))
-                                        .foregroundColor(frequency == freq ? tm.theme.palette.textInverse : tm.theme.palette.textSecondary)
+                                        .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
+                                        .foregroundColor(frequency == freq ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
                                         .padding(.horizontal, 8)
                                         .padding(.vertical, 4)
                                         .background(
                                             RoundedRectangle(cornerRadius: 6)
-                                                .fill(frequency == freq ? tm.theme.palette.secondary : Color.clear)
+                                                .fill(frequency == freq ? ThemeManager.shared.theme.palette.secondary : Color.clear)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 6)
-                                                        .stroke(frequency == freq ? tm.theme.palette.secondary : tm.theme.palette.separator, lineWidth: 1)
+                                                        .stroke(frequency == freq ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                                 )
                                         )
                                 }
@@ -165,8 +165,8 @@ struct AddStepView: View {
                     if timeOfDay != .weekly {
                         VStack(alignment: .leading, spacing: 16) {
                             Text("When to Use")
-                                .font(tm.theme.typo.h3)
-                                .foregroundColor(tm.theme.palette.textPrimary)
+                                .font(ThemeManager.shared.theme.typo.h3)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
                             HStack(spacing: 16) {
                                 // Morning toggle
@@ -176,20 +176,20 @@ struct AddStepView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "sun.max.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(morningEnabled ? tm.theme.palette.warning : tm.theme.palette.textMuted)
+                                            .foregroundColor(morningEnabled ? ThemeManager.shared.theme.palette.warning : ThemeManager.shared.theme.palette.textMuted)
                                         
                                         Text("Morning")
-                                            .font(tm.theme.typo.body.weight(.medium))
-                                            .foregroundColor(morningEnabled ? tm.theme.palette.textPrimary : tm.theme.palette.textMuted)
+                                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                                            .foregroundColor(morningEnabled ? ThemeManager.shared.theme.palette.textPrimary : ThemeManager.shared.theme.palette.textMuted)
                                     }
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 8)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(morningEnabled ? tm.theme.palette.warning.opacity(0.1) : Color.clear)
+                                            .fill(morningEnabled ? ThemeManager.shared.theme.palette.warning.opacity(0.1) : Color.clear)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(morningEnabled ? tm.theme.palette.warning : tm.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
+                                                    .stroke(morningEnabled ? ThemeManager.shared.theme.palette.warning : ThemeManager.shared.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
                                             )
                                     )
                                 }
@@ -202,20 +202,20 @@ struct AddStepView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "moon.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(eveningEnabled ? tm.theme.palette.info : tm.theme.palette.textMuted)
+                                            .foregroundColor(eveningEnabled ? ThemeManager.shared.theme.palette.info : ThemeManager.shared.theme.palette.textMuted)
                                         
                                         Text("Evening")
-                                            .font(tm.theme.typo.body.weight(.medium))
-                                            .foregroundColor(eveningEnabled ? tm.theme.palette.textPrimary : tm.theme.palette.textMuted)
+                                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                                            .foregroundColor(eveningEnabled ? ThemeManager.shared.theme.palette.textPrimary : ThemeManager.shared.theme.palette.textMuted)
                                     }
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 8)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(eveningEnabled ? tm.theme.palette.info.opacity(0.1) : Color.clear)
+                                            .fill(eveningEnabled ? ThemeManager.shared.theme.palette.info.opacity(0.1) : Color.clear)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(eveningEnabled ? tm.theme.palette.info : tm.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
+                                                    .stroke(eveningEnabled ? ThemeManager.shared.theme.palette.info : ThemeManager.shared.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
                                             )
                                     )
                                 }
@@ -236,14 +236,14 @@ struct AddStepView: View {
                     Button("Cancel") {
                         dismiss()
                     }
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add") {
                         addStep()
                     }
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                     .font(.system(size: 16, weight: .semibold))
                     .disabled(customTitle.isEmpty || customDescription.isEmpty)
                 }
@@ -368,7 +368,7 @@ struct AddStepView: View {
 // MARK: - Step Type Card
 
 private struct StepTypeCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let stepType: ProductType
     let isSelected: Bool
     let onSelect: () -> Void
@@ -386,11 +386,11 @@ private struct StepTypeCard: View {
             VStack(spacing: 12) {
                 Image(systemName: iconName)
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : stepTypeColor)
+                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : stepTypeColor)
                 
                 Text(displayName)
-                    .font(tm.theme.typo.body.weight(.medium))
-                    .foregroundColor(isSelected ? tm.theme.palette.textInverse : tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)

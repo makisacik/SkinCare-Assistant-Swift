@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme) private var cs
     
     var onGetStarted: () -> Void
@@ -23,25 +22,25 @@ struct WelcomeView: View {
                 // App icon or logo placeholder
                 ZStack {
                     Circle()
-                        .fill(tm.theme.palette.secondary.opacity(0.15))
+                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 120, height: 120)
                     
                     Image(systemName: "drop.fill")
                         .font(.system(size: 48, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
                 
                 // Headline
                 Text("Simple skincare, made for men.")
                     .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
                     .lineLimit(nil)
                 
                 // Subtitle
                 Text("Start in just 3 steps.")
-                    .font(tm.theme.typo.h3)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.h3)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
             }
             
@@ -56,15 +55,15 @@ struct WelcomeView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Text("Get Started")
-                            .font(tm.theme.typo.title.weight(.semibold))
+                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                         Image(systemName: "arrow.right")
                             .font(.system(size: 16, weight: .semibold))
                     }
-                    .foregroundColor(tm.theme.palette.onPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(tm.theme.palette.secondary)
-                    .cornerRadius(tm.theme.cardRadius)
+                    .background(ThemeManager.shared.theme.palette.secondary)
+                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
                 }
                 .buttonStyle(PlainButtonStyle())
                 // Testing Button (only show if onSkipToHome is provided)
@@ -77,16 +76,16 @@ struct WelcomeView: View {
                             Image(systemName: "house.fill")
                                 .font(.system(size: 16, weight: .semibold))
                             Text("Skip to Home (Testing)")
-                                .font(tm.theme.typo.body.weight(.medium))
+                                .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                         }
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 44)
-                        .background(tm.theme.palette.accentBackground)
-                        .cornerRadius(tm.theme.cardRadius)
+                        .background(ThemeManager.shared.theme.palette.accentBackground)
+                        .cornerRadius(ThemeManager.shared.theme.cardRadius)
                         .overlay(
-                            RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                                .stroke(tm.theme.palette.separator, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                         )
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -95,8 +94,8 @@ struct WelcomeView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 40)
         }
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
-        .onChange(of: cs) { tm.refreshForSystemChange($0) }
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
+        .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
     }
 }
 

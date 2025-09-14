@@ -8,25 +8,25 @@
 import SwiftUI
 
 struct IngredientTag: View {
-    @Environment(\.themeManager) private var tm
+    
     let ingredient: String
     let onRemove: () -> Void
 
     var body: some View {
         HStack(spacing: 4) {
             Text(ingredient)
-                .font(tm.theme.typo.caption)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.caption)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
             Button(action: onRemove) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 12))
-                    .foregroundColor(tm.theme.palette.textMuted)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             }
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(tm.theme.palette.secondary.opacity(0.1))
+        .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
         .cornerRadius(12)
     }
 }

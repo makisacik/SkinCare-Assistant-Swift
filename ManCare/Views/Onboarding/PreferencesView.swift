@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.colorScheme) private var cs
 
     @State private var fragranceFreeOnly = false
@@ -34,9 +34,9 @@ struct PreferencesView: View {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 16, weight: .semibold))
                         Text("Back")
-                            .font(tm.theme.typo.body.weight(.medium))
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                     }
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .buttonStyle(PlainButtonStyle())
                 Spacer()
@@ -46,11 +46,11 @@ struct PreferencesView: View {
             // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("Any preferences?")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text("These are optional but help us personalize your routine better.")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.sub)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
 
             // Preferences toggles
@@ -103,13 +103,13 @@ struct PreferencesView: View {
                         Image(systemName: "bolt.fill")
                             .font(.system(size: 16, weight: .semibold))
                         Text("Continue without API call")
-                            .font(tm.theme.typo.title.weight(.semibold))
+                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                     }
-                    .foregroundColor(tm.theme.palette.onPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(tm.theme.palette.primary)
-                    .cornerRadius(tm.theme.cardRadius)
+                    .background(ThemeManager.shared.theme.palette.primary)
+                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
                 }
                 .buttonStyle(PlainButtonStyle())
 
@@ -142,15 +142,15 @@ struct PreferencesView: View {
             }
         }
         .padding(20)
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
-        .onChange(of: cs) { tm.refreshForSystemChange($0) }
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
+        .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
     }
 }
 
 // MARK: - Preference Toggle
 
 private struct PreferenceToggle: View {
-    @Environment(\.themeManager) private var tm
+    
     let title: String
     let subtitle: String
     let iconName: String
@@ -161,34 +161,34 @@ private struct PreferenceToggle: View {
             // Icon
             ZStack {
                 Circle()
-                    .fill(tm.theme.palette.secondary.opacity(0.15))
+                    .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                     .frame(width: 40, height: 40)
                 Image(systemName: iconName)
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(tm.theme.palette.secondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
             }
 
             // Text content
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(tm.theme.typo.title)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.title)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text(subtitle)
-                    .font(tm.theme.typo.caption)
-                    .foregroundColor(tm.theme.palette.textMuted)
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             }
 
             Spacer()
 
             // Toggle
             Toggle("", isOn: $isOn)
-                .toggleStyle(SwitchToggleStyle(tint: tm.theme.palette.secondary))
+                .toggleStyle(SwitchToggleStyle(tint: ThemeManager.shared.theme.palette.secondary))
                 .labelsHidden()
         }
         .padding(16)
-        .background(tm.theme.palette.cardBackground)
-        .cornerRadius(tm.theme.cardRadius)
-        .shadow(color: tm.theme.palette.shadow.opacity(0.5), radius: 4, x: 0, y: 2)
+        .background(ThemeManager.shared.theme.palette.cardBackground)
+        .cornerRadius(ThemeManager.shared.theme.cardRadius)
+        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.5), radius: 4, x: 0, y: 2)
     }
 }
 

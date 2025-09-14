@@ -46,7 +46,7 @@ enum MainGoal: String, CaseIterable, Identifiable, Codable {
 }
 
 struct MainGoalView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.colorScheme) private var cs
     
     @State private var selection: MainGoal? = nil
@@ -68,9 +68,9 @@ struct MainGoalView: View {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 16, weight: .semibold))
                         Text("Back")
-                            .font(tm.theme.typo.body.weight(.medium))
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                     }
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .buttonStyle(PlainButtonStyle())
                 Spacer()
@@ -80,11 +80,11 @@ struct MainGoalView: View {
             // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your main goal?")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text("Choose the primary focus for your skincare routine.")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.sub)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
             
             // Grid of goals
@@ -121,15 +121,15 @@ struct MainGoalView: View {
             .opacity(selection == nil ? 0.7 : 1.0)
         }
         .padding(20)
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
-        .onChange(of: cs) { tm.refreshForSystemChange($0) }
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
+        .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
     }
 }
 
 // MARK: - Card
 
 private struct MainGoalCard: View {
-    @Environment(\.themeManager) private var tm
+    
     let goal: MainGoal
     let selected: Bool
     
@@ -138,41 +138,41 @@ private struct MainGoalCard: View {
             HStack(spacing: 10) {
                 ZStack {
                     Circle()
-                        .fill(tm.theme.palette.secondary.opacity(0.15))
+                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 36, height: 36)
                     Image(systemName: goal.iconName)
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(tm.theme.palette.primary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
                         .font(.system(size: 20, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
             
             Text(goal.title)
-                .font(tm.theme.typo.title)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.title)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 .lineLimit(2)
             
             Text(goal.subtitle)
-                .font(tm.theme.typo.caption)
-                .foregroundColor(tm.theme.palette.textMuted)
+                .font(ThemeManager.shared.theme.typo.caption)
+                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 .lineLimit(3)
         }
-        .padding(tm.theme.padding)
+        .padding(ThemeManager.shared.theme.padding)
         .background(
-            RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
-                .fill(selected ? tm.theme.palette.cardBackground.opacity(0.98) : tm.theme.palette.cardBackground)
-                .shadow(color: selected ? tm.theme.palette.shadow.opacity(1.0)
-                                        : tm.theme.palette.shadow,
+            RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
+                .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
+                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(1.0)
+                                        : ThemeManager.shared.theme.palette.shadow,
                         radius: selected ? 14 : 10, x: 0, y: selected ? 8 : 6)
                 .overlay(
-                    RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                        .stroke(selected ? tm.theme.palette.secondary : tm.theme.palette.separator,
+                    RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                        .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,
                                 lineWidth: selected ? 2 : 1)
                 )
         )

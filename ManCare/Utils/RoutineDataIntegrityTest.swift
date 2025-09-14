@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RoutineDataIntegrityTest: View {
-    @Environment(\.themeManager) private var tm
+    
     @StateObject private var productService = ProductService.shared
     @StateObject private var routineTrackingService = RoutineTrackingService()
     
@@ -22,12 +22,12 @@ struct RoutineDataIntegrityTest: View {
                 // Header
                 VStack(spacing: 12) {
                     Text("Routine Data Integrity Test")
-                        .font(tm.theme.typo.h1)
-                        .foregroundColor(tm.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h1)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
                     Text("Test that 6+ products can be added to routine steps without data loss")
-                        .font(tm.theme.typo.sub)
-                        .foregroundColor(tm.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.sub)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.top, 20)
@@ -45,12 +45,12 @@ struct RoutineDataIntegrityTest: View {
                                 .font(.system(size: 16, weight: .semibold))
                         }
                         Text(isRunningTest ? "Running Test..." : "Run Test")
-                            .font(tm.theme.typo.body.weight(.semibold))
+                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     }
-                    .foregroundColor(tm.theme.palette.onPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(tm.theme.palette.secondary)
+                    .background(ThemeManager.shared.theme.palette.secondary)
                     .cornerRadius(12)
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -60,8 +60,8 @@ struct RoutineDataIntegrityTest: View {
                 if !testResults.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Test Results")
-                            .font(tm.theme.typo.h3)
-                            .foregroundColor(tm.theme.palette.textPrimary)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
                         ScrollView {
                             LazyVStack(alignment: .leading, spacing: 8) {
@@ -69,11 +69,11 @@ struct RoutineDataIntegrityTest: View {
                                     HStack(alignment: .top, spacing: 8) {
                                         Image(systemName: result.contains("✅") ? "checkmark.circle.fill" : result.contains("❌") ? "xmark.circle.fill" : "info.circle.fill")
                                             .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(result.contains("✅") ? tm.theme.palette.success : result.contains("❌") ? tm.theme.palette.error : tm.theme.palette.info)
+                                            .foregroundColor(result.contains("✅") ? ThemeManager.shared.theme.palette.success : result.contains("❌") ? ThemeManager.shared.theme.palette.error : ThemeManager.shared.theme.palette.info)
                                         
                                         Text(result)
-                                            .font(tm.theme.typo.body)
-                                            .foregroundColor(tm.theme.palette.textPrimary)
+                                            .font(ThemeManager.shared.theme.typo.body)
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                     }
                                 }
                             }
@@ -82,10 +82,10 @@ struct RoutineDataIntegrityTest: View {
                         .padding(16)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(tm.theme.palette.cardBackground)
+                                .fill(ThemeManager.shared.theme.palette.cardBackground)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .stroke(tm.theme.palette.separator, lineWidth: 1)
+                                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                 )
                         )
                     }
@@ -94,7 +94,7 @@ struct RoutineDataIntegrityTest: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationTitle("Data Integrity Test")
             .navigationBarTitleDisplayMode(.inline)
         }

@@ -8,30 +8,30 @@
 import SwiftUI
 
 struct SimpleProductRow: View {
-    @Environment(\.themeManager) private var tm
+    
     let product: Product
 
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: product.tagging.productType.iconName)
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(tm.theme.palette.secondary)
+                .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 .frame(width: 24)
             VStack(alignment: .leading, spacing: 2) {
                 Text(product.displayName)
-                    .font(tm.theme.typo.body.weight(.medium))
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 HStack(spacing: 8) {
                     if let brand = product.brand {
                         Text(brand)
-                            .font(tm.theme.typo.caption)
-                            .foregroundColor(tm.theme.palette.textMuted)
+                            .font(ThemeManager.shared.theme.typo.caption)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
 
                     Text(product.tagging.productType.displayName)
-                        .font(tm.theme.typo.caption)
-                        .foregroundColor(tm.theme.palette.textMuted)
+                        .font(ThemeManager.shared.theme.typo.caption)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
             }
 

@@ -125,8 +125,8 @@ public struct Theme: Equatable {
     public static let light = Theme(
         palette: ThemePalette(
             // Primary Colors
-            primary: Color(hex: "#7D5A5A"),
-            primaryLight: Color(hex: "#9A6B6B"),
+            primary: Color(hex: "#B5828C"),
+            primaryLight: Color(hex: "#B5828C"),
             onPrimary: Color(hex: "#FFFFFF"),
 
             // Secondary Colors
@@ -135,9 +135,9 @@ public struct Theme: Equatable {
             onSecondary: Color(hex: "#FFFFFF"),
 
             // Background Colors
-            background: Color(hex: "#F8F6F6"),
-            surface: Color(hex: "#F0F0F0"),
-            surfaceAlt: Color(hex: "#E8E8E8"),
+            background: Color(hex: "#F3E1E1"),
+            surface: Color(hex: "#F6EDF7"),
+            surfaceAlt: Color(hex: "#FDF3EF"),
             onBackground: Color(hex: "#2C1E1E"),
             onSurface: Color(hex: "#2C1E1E"),
 
@@ -211,47 +211,28 @@ public final class ThemeManager: ObservableObject {
     }
 }
 
-// MARK: - Environment Injection
+// MARK: - Direct Access (Singleton Pattern)
 
-private struct ThemeManagerKey: EnvironmentKey {
-    // Use shared instance by default
-    static var defaultValue: ThemeManager { ThemeManager.shared }
-}
-
-public extension EnvironmentValues {
-    var themeManager: ThemeManager {
-        get { self[ThemeManagerKey.self] }
-        set { self[ThemeManagerKey.self] = newValue }
-    }
-}
-
-// MARK: - View Sugar
-
-public extension View {
-    func themed(_ manager: ThemeManager) -> some View {
-        environment(\.themeManager, manager)
-    }
-}
+// ThemeManager is now accessed directly via ThemeManager.shared
+// No need for environment injection or themed() modifier
 
 // MARK: - Reusable Modifiers
 
 struct HeadlineStyle: ViewModifier {
-    @Environment(\.themeManager) private var tm
     func body(content: Content) -> some View {
         content
-            .font(tm.theme.typo.h2)
-            .foregroundColor(tm.theme.palette.textPrimary)
+            .font(ThemeManager.shared.theme.typo.h2)
+            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
     }
 }
 
 struct CardStyle: ViewModifier {
-    @Environment(\.themeManager) private var tm
     func body(content: Content) -> some View {
         content
-            .padding(tm.theme.padding)
-            .background(tm.theme.palette.cardBackground)
-            .cornerRadius(tm.theme.cardRadius)
-            .shadow(color: tm.theme.palette.shadow, radius: 12, x: 0, y: 6)
+            .padding(ThemeManager.shared.theme.padding)
+            .background(ThemeManager.shared.theme.palette.cardBackground)
+            .cornerRadius(ThemeManager.shared.theme.cardRadius)
+            .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 12, x: 0, y: 6)
     }
 }
 
@@ -263,64 +244,60 @@ public extension View {
 // MARK: - Buttons
 
 public struct PrimaryButtonStyle: ButtonStyle {
-    @Environment(\.themeManager) private var tm
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(tm.theme.typo.title)
-            .foregroundColor(tm.theme.palette.onPrimary)
+            .font(ThemeManager.shared.theme.typo.title)
+            .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
-            .background(configuration.isPressed ? tm.theme.palette.primaryLight : tm.theme.palette.primary)
-            .cornerRadius(tm.theme.cornerRadius)
-            .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
+            .background(configuration.isPressed ? ThemeManager.shared.theme.palette.primaryLight : ThemeManager.shared.theme.palette.primary)
+            .cornerRadius(ThemeManager.shared.theme.cornerRadius)
+            .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 8, x: 0, y: 4)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
 public struct GhostButtonStyle: ButtonStyle {
-    @Environment(\.themeManager) private var tm
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(tm.theme.typo.body.weight(.semibold))
-            .foregroundColor(tm.theme.palette.primary)
+            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+            .foregroundColor(ThemeManager.shared.theme.palette.primary)
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity)
-            .background(configuration.isPressed ? tm.theme.palette.surface : Color.clear)
-            .cornerRadius(tm.theme.cornerRadius)
+            .background(configuration.isPressed ? ThemeManager.shared.theme.palette.surface : Color.clear)
+            .cornerRadius(ThemeManager.shared.theme.cornerRadius)
             .overlay(
-                RoundedRectangle(cornerRadius: tm.theme.cornerRadius)
-                    .stroke(tm.theme.palette.border, lineWidth: 1)
+                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cornerRadius)
+                    .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
             )
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
 public struct SecondaryButtonStyle: ButtonStyle {
-    @Environment(\.themeManager) private var tm
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(tm.theme.typo.title)
-            .foregroundColor(tm.theme.palette.onSecondary)
+            .font(ThemeManager.shared.theme.typo.title)
+            .foregroundColor(ThemeManager.shared.theme.palette.onSecondary)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
-            .background(configuration.isPressed ? tm.theme.palette.secondaryLight : tm.theme.palette.secondary)
-            .cornerRadius(tm.theme.cornerRadius)
-            .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
+            .background(configuration.isPressed ? ThemeManager.shared.theme.palette.secondaryLight : ThemeManager.shared.theme.palette.secondary)
+            .cornerRadius(ThemeManager.shared.theme.cornerRadius)
+            .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 8, x: 0, y: 4)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
 public struct DestructiveButtonStyle: ButtonStyle {
-    @Environment(\.themeManager) private var tm
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(tm.theme.typo.title)
-            .foregroundColor(tm.theme.palette.onError)
+            .font(ThemeManager.shared.theme.typo.title)
+            .foregroundColor(ThemeManager.shared.theme.palette.onError)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
-            .background(tm.theme.palette.error)
-            .cornerRadius(tm.theme.cornerRadius)
-            .shadow(color: tm.theme.palette.shadow, radius: 8, x: 0, y: 4)
+            .background(ThemeManager.shared.theme.palette.error)
+            .cornerRadius(ThemeManager.shared.theme.cornerRadius)
+            .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 8, x: 0, y: 4)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
@@ -386,46 +363,43 @@ public extension ThemePalette {
 // MARK: - Additional View Modifiers
 
 public struct InputFieldStyle: ViewModifier {
-    @Environment(\.themeManager) private var tm
     @FocusState private var isFocused: Bool
 
     public func body(content: Content) -> some View {
         content
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(tm.theme.palette.fieldBackground)
-            .foregroundColor(tm.theme.palette.fieldText)
+            .background(ThemeManager.shared.theme.palette.fieldBackground)
+            .foregroundColor(ThemeManager.shared.theme.palette.fieldText)
             .overlay(
-                RoundedRectangle(cornerRadius: tm.theme.cornerRadius)
-                    .stroke(isFocused ? tm.theme.palette.fieldStrokeFocus : tm.theme.palette.fieldStrokeDefault, lineWidth: 1)
+                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cornerRadius)
+                    .stroke(isFocused ? ThemeManager.shared.theme.palette.fieldStrokeFocus : ThemeManager.shared.theme.palette.fieldStrokeDefault, lineWidth: 1)
             )
-            .cornerRadius(tm.theme.cornerRadius)
+            .cornerRadius(ThemeManager.shared.theme.cornerRadius)
             .focused($isFocused)
     }
 }
 
 public struct BadgeStyle: ViewModifier {
-    @Environment(\.themeManager) private var tm
     public func body(content: Content) -> some View {
         content
-            .font(tm.theme.typo.caption)
-            .foregroundColor(tm.theme.palette.badgeText)
+            .font(ThemeManager.shared.theme.typo.caption)
+            .foregroundColor(ThemeManager.shared.theme.palette.badgeText)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(tm.theme.palette.badgeBackground)
+            .background(ThemeManager.shared.theme.palette.badgeBackground)
             .cornerRadius(12)
     }
 }
 
 public struct HighlightPillStyle: ViewModifier {
-    @Environment(\.themeManager) private var tm
     public func body(content: Content) -> some View {
         content
-            .font(tm.theme.typo.caption)
-            .foregroundColor(tm.theme.palette.highlightPillText)
+            .font(ThemeManager.shared.theme.typo.caption)
+            .foregroundColor(ThemeManager.shared.theme.palette.highlightPillText)
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(tm.theme.palette.highlightPillBackground)
+            .background(ThemeManager.shared.theme.palette.highlightPillBackground)
             .cornerRadius(16)
     }
 }

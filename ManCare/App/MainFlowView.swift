@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainFlowView: View {
-    @Environment(\.themeManager) private var tm
     @Environment(\.colorScheme) private var cs
 
     @State private var currentStep: FlowStep = .welcome
@@ -284,11 +283,11 @@ struct MainFlowView: View {
                 ))
             }
         }
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea()) // keep root bg painted
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea()) // keep root bg painted
         .onChange(of: cs) { newColorScheme in
             // Only disable animations during theme changes to prevent flashing
             withAnimation(.none) {
-                tm.refreshForSystemChange(newColorScheme) 
+                ThemeManager.shared.refreshForSystemChange(newColorScheme)
             }
         }
     }
@@ -756,7 +755,6 @@ private struct TimeoutError: Error {
 // MARK: - Progress Indicator
 
 private struct ProgressIndicator: View {
-    @Environment(\.themeManager) private var tm
     let currentStep: MainFlowView.FlowStep
 
     private var stepNumber: Int {
@@ -796,30 +794,30 @@ private struct ProgressIndicator: View {
             // Step number
             ZStack {
                 Circle()
-                    .fill(tm.theme.palette.secondary)
+                    .fill(ThemeManager.shared.theme.palette.secondary)
                     .frame(width: 32, height: 32)
                 Text("\(stepNumber)")
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(tm.theme.palette.onPrimary)
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
             }
 
             // Step title
             Text(stepTitle)
-                .font(tm.theme.typo.title)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.title)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
             Spacer()
 
             // Progress text
             Text("\(stepNumber) of 11")
-                .font(tm.theme.typo.caption)
-                .foregroundColor(tm.theme.palette.textMuted)
+                .font(ThemeManager.shared.theme.typo.caption)
+                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        .background(tm.theme.palette.cardBackground)
-        .cornerRadius(tm.theme.cardRadius)
-        .shadow(color: tm.theme.palette.shadow, radius: 4, x: 0, y: 2)
+        .background(ThemeManager.shared.theme.palette.cardBackground)
+        .cornerRadius(ThemeManager.shared.theme.cardRadius)
+        .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 4, x: 0, y: 2)
     }
 }
 

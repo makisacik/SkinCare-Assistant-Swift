@@ -43,7 +43,7 @@ enum SkinType: String, CaseIterable, Identifiable, Codable {
 // MARK: - View
 
 struct SkinTypeSelectionView: View {
-    @Environment(\.themeManager) private var tm
+    
     @Environment(\.colorScheme)  private var cs
 
     @State private var selection: SkinType? = nil
@@ -58,11 +58,11 @@ struct SkinTypeSelectionView: View {
             // Başlık
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your skin type?")
-                    .font(tm.theme.typo.h1)
-                    .foregroundColor(tm.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text("Select your base type to build a simple routine.")
-                    .font(tm.theme.typo.sub)
-                    .foregroundColor(tm.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.sub)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
             .padding(.top, 8)
 
@@ -100,9 +100,9 @@ struct SkinTypeSelectionView: View {
 
         }
         .padding(20)
-        .background(tm.theme.palette.accentBackground.ignoresSafeArea())
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { newScheme in
-            tm.refreshForSystemChange(newScheme)
+            ThemeManager.shared.refreshForSystemChange(newScheme)
         }
     }
 }
@@ -110,7 +110,7 @@ struct SkinTypeSelectionView: View {
 // MARK: - Card
 
 private struct SkinTypeCard: View {
-    @Environment(\.themeManager) private var tm
+    
     var type: SkinType
     var selected: Bool
 
@@ -119,40 +119,40 @@ private struct SkinTypeCard: View {
             HStack(spacing: 10) {
                 ZStack {
                     Circle()
-                        .fill(tm.theme.palette.secondary.opacity(0.15))
+                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 36, height: 36)
                     Image(systemName: type.iconName)
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(tm.theme.palette.secondary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(tm.theme.palette.primary)
+                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
                         .font(.system(size: 20, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
 
             Text(type.title)
-                .font(tm.theme.typo.title)
-                .foregroundColor(tm.theme.palette.textPrimary)
+                .font(ThemeManager.shared.theme.typo.title)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
             Text(type.subtitle)
-                .font(tm.theme.typo.caption)
-                .foregroundColor(tm.theme.palette.textMuted)
+                .font(ThemeManager.shared.theme.typo.caption)
+                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 .lineLimit(2)
         }
-        .padding(tm.theme.padding)
+        .padding(ThemeManager.shared.theme.padding)
         .background(
-            RoundedRectangle(cornerRadius: tm.theme.cardRadius, style: .continuous)
-                .fill(selected ? tm.theme.palette.cardBackground.opacity(0.98) : tm.theme.palette.cardBackground)
-                .shadow(color: selected ? tm.theme.palette.shadow.opacity(1.0)
-                                        : tm.theme.palette.shadow,
+            RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
+                .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
+                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(1.0)
+                                        : ThemeManager.shared.theme.palette.shadow,
                         radius: selected ? 14 : 10, x: 0, y: selected ? 8 : 6)
                 .overlay(
-                    RoundedRectangle(cornerRadius: tm.theme.cardRadius)
-                        .stroke(selected ? tm.theme.palette.secondary : tm.theme.palette.separator,
+                    RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                        .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,
                                 lineWidth: selected ? 2 : 1)
                 )
         )
