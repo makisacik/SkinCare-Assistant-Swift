@@ -1,5 +1,5 @@
 //
-//  MorningRoutineCompletionView.swift
+//  EveningRoutineCompletionView.swift
 //  ManCare
 //
 //  Created by Mehmet Ali Kısacık on 2.09.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MorningRoutineCompletionView: View {
+struct EveningRoutineCompletionView: View {
     @Environment(\.dismiss) private var dismiss
 
     @ObservedObject private var productService = ProductService.shared
@@ -30,9 +30,9 @@ struct MorningRoutineCompletionView: View {
     @State private var showingEditRoutine = false
     
     private var completedStepsCount: Int {
-        // Filter completed steps to only include morning routine steps
-        let morningStepIds = Set(routineSteps.map { $0.id })
-        return completedSteps.intersection(morningStepIds).count
+        // Filter completed steps to only include evening routine steps
+        let eveningStepIds = Set(routineSteps.map { $0.id })
+        return completedSteps.intersection(eveningStepIds).count
     }
     
     private var totalSteps: Int {
@@ -132,7 +132,7 @@ struct MorningRoutineCompletionView: View {
     
     private var headerView: some View {
         VStack(spacing: 0) {
-            // Pink header background - extends into safe area
+            // Purple header background - extends into safe area
             ZStack {
                 // Deep accent gradient background for header
                 LinearGradient(
@@ -149,7 +149,7 @@ struct MorningRoutineCompletionView: View {
                 VStack(spacing: 16) {
                     // Title and decorations
                     HStack {
-                        Text("MORNING ROUTINE")
+                        Text("EVENING ROUTINE")
                             .font(.system(size: 24, weight: .black))
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
@@ -158,7 +158,7 @@ struct MorningRoutineCompletionView: View {
                         
                         // Decorative elements
                         HStack(spacing: 8) {
-                            Image(systemName: "sparkles")
+                            Image(systemName: "moon.stars.fill")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
                         }
@@ -284,11 +284,11 @@ struct MorningRoutineCompletionView: View {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
 
-        // Create the same pink gradient as the header
+        // Create the same purple gradient as the header
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [
-            UIColor(red: 0.9, green: 0.3, blue: 0.6, alpha: 1.0).cgColor,
-            UIColor(red: 0.8, green: 0.2, blue: 0.5, alpha: 1.0).cgColor
+            UIColor(red: 0.6, green: 0.3, blue: 0.8, alpha: 1.0).cgColor,
+            UIColor(red: 0.5, green: 0.2, blue: 0.7, alpha: 1.0).cgColor
         ]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
@@ -329,14 +329,14 @@ struct MorningRoutineCompletionView: View {
         let oldRoutineSteps = routineSteps
         
         // Convert the updated routine to RoutineStepDetail array
-        routineSteps = routine.routine.morning.map { apiStep in
+        routineSteps = routine.routine.evening.map { apiStep in
             RoutineStepDetail(
-                id: "morning_\(apiStep.name)",
+                id: "evening_\(apiStep.name)",
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
                 iconName: apiStep.step.iconName,
                 stepType: apiStep.step,
-                timeOfDay: .morning,
+                timeOfDay: .evening,
                 why: apiStep.why,
                 how: apiStep.how
             )
@@ -866,41 +866,41 @@ private struct EmptyProductTypeView: View {
 
 // MARK: - Preview
 
-#Preview("MorningRoutineCompletionView") {
-    MorningRoutineCompletionView(
+#Preview("EveningRoutineCompletionView") {
+    EveningRoutineCompletionView(
         routineSteps: [
             RoutineStepDetail(
-                id: "morning_cleanser",
+                id: "evening_cleanser",
                 title: "Gentle Cleanser",
-                description: "Oil-free gel cleanser – reduces shine, clears pores",
+                description: "Oil-free gel cleanser – removes daily buildup",
                 iconName: "drop.fill",
                 stepType: .cleanser,
-                timeOfDay: .morning,
-                why: "Removes overnight oil buildup and prepares skin for treatments",
-                how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
+                timeOfDay: .evening,
+                why: "Removes makeup, sunscreen, and daily pollutants",
+                how: "Apply to dry skin first, then add water and massage, rinse thoroughly"
             ),
             RoutineStepDetail(
-                id: "morning_moisturizer",
-                title: "Water-based Moisturizer",
-                description: "Lightweight gel moisturizer – hydrates without greasiness",
-                iconName: "drop.circle.fill",
+                id: "evening_serum",
+                title: "Face Serum",
+                description: "Targeted serum for your skin concerns",
+                iconName: "star.fill",
+                stepType: .faceSerum,
+                timeOfDay: .evening,
+                why: "Active ingredients work best overnight when skin is in repair mode",
+                how: "Apply 2-3 drops, pat gently until absorbed, avoid eye area"
+            ),
+            RoutineStepDetail(
+                id: "evening_moisturizer",
+                title: "Night Moisturizer",
+                description: "Rich cream moisturizer – repairs while you sleep",
+                iconName: "moon.circle.fill",
                 stepType: .moisturizer,
-                timeOfDay: .morning,
-                why: "Provides essential hydration and creates a protective barrier",
-                how: "Apply a pea-sized amount, massage in upward circular motions"
-            ),
-            RoutineStepDetail(
-                id: "morning_sunscreen",
-                title: "Sunscreen SPF 30+",
-                description: "SPF 30+ broad spectrum – protects against sun damage",
-                iconName: "sun.max.fill",
-                stepType: .sunscreen,
-                timeOfDay: .morning,
-                why: "Prevents UV damage, premature aging, and skin cancer",
-                how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
+                timeOfDay: .evening,
+                why: "Provides deep hydration and supports overnight skin repair",
+                how: "Apply generously, massage in upward motions, let absorb before bed"
             )
         ],
-        onComplete: { print("Routine completed!") },
+        onComplete: { print("Evening routine completed!") },
         originalRoutine: nil,
         routineTrackingService: RoutineTrackingService()
     )

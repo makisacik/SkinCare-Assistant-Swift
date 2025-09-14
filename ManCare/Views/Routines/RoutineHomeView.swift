@@ -17,6 +17,7 @@ struct RoutineHomeView: View {
     @State private var showingEditRoutine = false
     @State private var showingRoutineDetail: RoutineDetailData?
     @State private var showingMorningRoutineCompletion = false
+    @State private var showingEveningRoutineCompletion = false
 
     var body: some View {
         ZStack {
@@ -97,6 +98,17 @@ struct RoutineHomeView: View {
                 routineTrackingService: routineTrackingService
             )
         }
+        .fullScreenCover(isPresented: $showingEveningRoutineCompletion) {
+            EveningRoutineCompletionView(
+                routineSteps: generateEveningRoutine(),
+                onComplete: {
+                    routineTrackingService.objectWillChange.send()
+                    showingEveningRoutineCompletion = false
+                },
+                originalRoutine: generatedRoutine,
+                routineTrackingService: routineTrackingService
+            )
+        }
     }
 
     @ViewBuilder
@@ -160,12 +172,7 @@ struct RoutineHomeView: View {
                     routineTrackingService: routineTrackingService,
                     selectedDate: selectedDate,
                     onRoutineTap: {
-                        showingRoutineDetail = RoutineDetailData(
-                            title: "Evening routine",
-                            iconName: "moon.fill",
-                            iconColor: ThemeManager.shared.theme.palette.primary,
-                            steps: generateEveningRoutine()
-                        )
+                        showingEveningRoutineCompletion = true
                     },
                     onStepTap: { step in
                         showingStepDetail = step
@@ -447,7 +454,7 @@ private struct ModernHeaderView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "flame.fill")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.warning)
+                            .foregroundColor(ThemeManager.shared.theme.palette.error)
 
                         Text("\(currentStreak) day streak")
                             .font(.system(size: 14, weight: .medium))
