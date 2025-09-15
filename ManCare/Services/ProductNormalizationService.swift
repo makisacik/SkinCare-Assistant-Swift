@@ -26,12 +26,16 @@ struct ProductNormalizationResponse: Codable {
     let productName: String
     let productType: String
     let confidence: Double
+    let size: String?
+    let ingredients: [String]
     
     enum CodingKeys: String, CodingKey {
         case brand
         case productName = "product_name"
         case productType = "product_type"
         case confidence
+        case size
+        case ingredients
     }
 
     /// Convert to ProductType enum
@@ -43,14 +47,16 @@ struct ProductNormalizationResponse: Codable {
     func toProduct() -> Product {
         let productType = toProductType()
         let tagging = ProductTagging(
-            productType: productType
+            productType: productType,
+            ingredients: ingredients
         )
         
         return Product(
             id: UUID().uuidString,
             displayName: productName,
             tagging: tagging,
-            brand: brand
+            brand: brand,
+            size: size
         )
     }
 }
@@ -181,7 +187,9 @@ class ProductNormalizationService {
           "brand": "string or null",
           "product_name": "string",
           "product_type": "string",
-          "confidence": 0.0-1.0
+          "confidence": 0.0-1.0,
+          "size": "string or null",
+          "ingredients": ["string"]
         }
         
         Rules:
@@ -191,11 +199,14 @@ class ProductNormalizationService {
         4. Set confidence between 0.0-1.0 based on how certain you are about the classification
         5. If the product type is unclear, choose the most likely category
         6. Remove common OCR artifacts and normalize text
+        7. Extract size information (e.g., "150ml", "30ml", "1.7 fl oz") - return null if not found
+        8. Extract key active ingredients from the text (e.g., "Niacinamide", "Hyaluronic Acid", "Retinol") - return empty array if none found
         
         Examples:
-        - "CeraVe Foaming Facial Cleanser 16 fl oz" → {"brand": "CeraVe", "product_name": "Foaming Facial Cleanser", "product_type": "cleanser", "confidence": 0.95}
-        - "Neutrogena Ultra Sheer Dry-Touch Sunscreen SPF 55" → {"brand": "Neutrogena", "product_name": "Ultra Sheer Dry-Touch Sunscreen", "product_type": "sunscreen", "confidence": 0.9}
-        - "The Ordinary Niacinamide 10% + Zinc 1%" → {"brand": "The Ordinary", "product_name": "Niacinamide 10% + Zinc 1%", "product_type": "niacinamide", "confidence": 0.95}
+        - "CeraVe Foaming Facial Cleanser 16 fl oz" → {"brand": "CeraVe", "product_name": "Foaming Facial Cleanser", "product_type": "cleanser", "confidence": 0.95, "size": "16 fl oz", "ingredients": []}
+        - "Neutrogena Ultra Sheer Dry-Touch Sunscreen SPF 55" → {"brand": "Neutrogena", "product_name": "Ultra Sheer Dry-Touch Sunscreen", "product_type": "sunscreen", "confidence": 0.9, "size": null, "ingredients": []}
+        - "The Ordinary Niacinamide 10% + Zinc 1% 30ml" → {"brand": "The Ordinary", "product_name": "Niacinamide 10% + Zinc 1%", "product_type": "niacinamide", "confidence": 0.95, "size": "30ml", "ingredients": ["Niacinamide", "Zinc"]}
+        - "MIA KLINIKA RELAIC ACID SERUM NIACINAMIDE ZINC TEA TREE GLYCINE 30ML" → {"brand": "MIA KLINIKA", "product_name": "RELAIC ACID SERUM", "product_type": "faceSerum", "confidence": 0.85, "size": "30ML", "ingredients": ["Niacinamide", "Zinc", "Tea Tree", "Glycine"]}
         """
     }
     

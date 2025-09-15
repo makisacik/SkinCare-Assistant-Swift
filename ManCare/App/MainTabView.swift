@@ -13,6 +13,7 @@ struct MainTabView: View {
     @State private var showingScanProduct = false
     @State private var showingTestSheet = false
     @State private var selectedProduct: Product?
+    @StateObject private var scanManager = ProductScanManager.shared
     let generatedRoutine: RoutineResponse?
     
     enum Tab: String, CaseIterable {
@@ -41,12 +42,30 @@ struct MainTabView: View {
                     .tag(Tab.routines)
                 
                 // Products Tab
-                ProductSlotsView(
-                    onAddProductTapped: { showingAddProduct = true },
-                    onScanProductTapped: { showingScanProduct = true },
-                    onTestSheetTapped: { showingTestSheet = true },
-                    onProductTapped: { product in selectedProduct = product }
-                )
+                Group {
+                    if let scannedData = scanManager.scannedProductData {
+                        ProductSummaryView(
+                            extractedText: scannedData.extractedText,
+                            normalizedProduct: scannedData.normalizedProduct,
+                            productService: ProductService.shared,
+                            onProductAdded: { product in
+                                print("✅ Product added successfully: \(product.displayName)")
+                                scanManager.clearScannedProduct()
+                            },
+                            onCancel: {
+                                print("❌ User cancelled product addition")
+                                scanManager.clearScannedProduct()
+                            }
+                        )
+                    } else {
+                        ProductSlotsView(
+                            onAddProductTapped: { showingAddProduct = true },
+                            onScanProductTapped: { showingScanProduct = true },
+                            onTestSheetTapped: { showingTestSheet = true },
+                            onProductTapped: { product in selectedProduct = product }
+                        )
+                    }
+                }
                 .tabItem {
                     Image(systemName: Tab.products.iconName)
                     Text(Tab.products.rawValue)
@@ -57,6 +76,11 @@ struct MainTabView: View {
             .onAppear {
                 // Set up tab bar appearance
                 setupTabBarAppearance()
+            }
+            .onChange(of: scanManager.shouldNavigateToProducts) { shouldNavigate in
+                if shouldNavigate {
+                    selectedTab = .products
+                }
             }
         }
         .fullScreenCover(isPresented: $showingAddProduct) {
@@ -80,22 +104,31 @@ struct MainTabView: View {
                 }
             )
         }
-        .fullScreenCover(isPresented: $showingTestSheet) {
-            VStack(spacing: 20) {
-                Text("Test Sheet")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                Text("This is a simple test sheet to verify smooth presentation.")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                
-                Button("Dismiss") {
+        .sheet(isPresented: $showingTestSheet) {
+            // Mock product summary for UI testing - using real API response data
+            let mockExtractedText = "mia klinika RELAIC ACID SERUN NIACINAMION ZING TEA TREE GLYCINE"
+            let mockNormalizedProduct = ProductNormalizationResponse(
+                brand: "mia klinika",
+                productName: "RELAIC ACID SERUN",
+                productType: "faceSerum",
+                confidence: 0.85,
+                size: nil,
+                ingredients: ["Niacinamion", "Zing", "Tea Tree", "Glycine"]
+            )
+
+            ProductSummaryView(
+                extractedText: mockExtractedText,
+                normalizedProduct: mockNormalizedProduct,
+                productService: ProductService.shared,
+                onProductAdded: { product in
+                    print("✅ Mock product added successfully: \(product.displayName)")
+                    showingTestSheet = false
+                },
+                onCancel: {
+                    print("❌ Mock product cancelled")
                     showingTestSheet = false
                 }
-                .buttonStyle(.borderedProminent)
-            }
-            .padding(30)
+            )
         }
     }
     

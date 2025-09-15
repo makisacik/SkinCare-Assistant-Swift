@@ -48,17 +48,115 @@ struct FormField: View {
                 .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-            TextField(placeholder, text: $text)
-                .font(ThemeManager.shared.theme.typo.body)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(ThemeManager.shared.theme.palette.accentBackground)
-                .cornerRadius(12)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                )
+            ZStack(alignment: .leading) {
+                if text.isEmpty {
+                    Text(placeholder)
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                }
+
+                TextField("", text: $text)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .accentColor(ThemeManager.shared.theme.palette.secondary)
+            }
+            .background(ThemeManager.shared.theme.palette.accentBackground)
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+            )
         }
+    }
+}
+
+// MARK: - Size Field with Unit Toggle
+
+struct SizeField: View {
+
+    let title: String
+    @Binding var sizeValue: String
+    @Binding var selectedUnit: SizeUnit
+    let placeholder: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+            HStack(spacing: 0) {
+                // Size input field
+                ZStack(alignment: .leading) {
+                    if sizeValue.isEmpty {
+                        Text(placeholder)
+                            .font(ThemeManager.shared.theme.typo.body)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                    }
+
+                    TextField("", text: $sizeValue)
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        .keyboardType(.decimalPad)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .accentColor(ThemeManager.shared.theme.palette.secondary)
+                }
+                .background(ThemeManager.shared.theme.palette.accentBackground)
+
+                // Unit toggle
+                HStack(spacing: 8) {
+                    Button(action: {
+                        selectedUnit = .mL
+                    }) {
+                        Text("mL")
+                            .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
+                            .foregroundColor(selectedUnit == .mL ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(selectedUnit == .mL ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.accentBackground)
+                            .cornerRadius(8)
+                    }
+
+                    Button(action: {
+                        selectedUnit = .oz
+                    }) {
+                        Text("oz")
+                            .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
+                            .foregroundColor(selectedUnit == .oz ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(selectedUnit == .oz ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.accentBackground)
+                            .cornerRadius(8)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+            }
+            .background(ThemeManager.shared.theme.palette.accentBackground)
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+            )
+        }
+    }
+}
+
+// MARK: - Size Unit Enum
+
+enum SizeUnit: String, CaseIterable {
+    case mL = "mL"
+    case oz = "oz"
+
+    var displayName: String {
+        return rawValue
     }
 }
 

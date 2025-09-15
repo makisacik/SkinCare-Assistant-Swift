@@ -15,6 +15,7 @@ struct ProductScanView: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var cameraManager = CameraManager()
+    @StateObject private var scanManager = ProductScanManager.shared
     private let productService = ProductService.shared
 
     @State private var extractedText = ""
@@ -585,27 +586,18 @@ struct ProductScanView: View {
             return
         }
 
-        print("🔹 Step 3 — Creating and adding product")
+        print("🔹 Step 3 — Navigating to Products tab with summary")
 
-        // Create Product from normalized data
-        let product = normalized.toProduct()
+        // Set scanned product data and navigate to products tab
+        scanManager.setScannedProduct(extractedText: extractedText, normalizedProduct: normalized)
 
-        // Add to ProductService
-        productService.addUserProduct(product)
-
-        print("✅ Step 3 Complete - Product created and added!")
-        print("   Product ID: \(product.id)")
-        print("   Display Name: \(product.displayName)")
-        print("   Product Type: \(product.tagging.productType.displayName)")
-        print("   Brand: \(product.brand ?? "Unknown")")
-
-        // Show success
-        createdProduct = product
         isProcessing = false
-        currentStep = "Product added successfully!"
-        showingSuccess = true
+        currentStep = "Product information extracted successfully!"
 
-        print("🎉 Automatic flow completed successfully!")
+        // Dismiss the scan view
+        dismiss()
+
+        print("🎉 Automatic flow completed - navigating to Products tab!")
     }
 }
 
