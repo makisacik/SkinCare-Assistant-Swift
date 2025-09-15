@@ -15,12 +15,14 @@ struct CompanionSessionView: View {
     let routineId: String
     let routineName: String
     let steps: [CompanionStep]
+    let routineTrackingService: RoutineTrackingService?
     let onComplete: (() -> Void)?
     
-    init(routineId: String, routineName: String, steps: [CompanionStep], onComplete: (() -> Void)? = nil) {
+    init(routineId: String, routineName: String, steps: [CompanionStep], routineTrackingService: RoutineTrackingService? = nil, onComplete: (() -> Void)? = nil) {
         self.routineId = routineId
         self.routineName = routineName
         self.steps = steps
+        self.routineTrackingService = routineTrackingService
         self.onComplete = onComplete
     }
     
@@ -43,7 +45,23 @@ struct CompanionSessionView: View {
             print("📋 Steps: \(steps.map { $0.title })")
             print("🆔 Routine ID: \(routineId)")
             print("📝 Routine Name: \(routineName)")
-            sessionViewModel.startSession(routineId: routineId, routineName: routineName, steps: steps)
+
+            // Set the routine tracking service
+            if let trackingService = routineTrackingService {
+                sessionViewModel.setRoutineTrackingService(trackingService)
+            }
+            // Force resume any existing session first
+            sessionViewModel.resumeSession()
+            // Check if there's already an active session for this routine
+            if let existingSession = sessionViewModel.session,
+               existingSession.routineId == routineId &&
+               existingSession.status == .active {
+                print("📱 Resuming existing session with \(existingSession.stepsCompleted.count) completed steps")
+                // Session is already loaded and active, no need to start a new one
+            } else {
+                print("🆕 Starting new session")
+                sessionViewModel.startSession(routineId: routineId, routineName: routineName, steps: steps)
+            }
         }
         .onChange(of: sessionViewModel.currentState) { newState in
             print("🔄 State changed to: \(newState)")
@@ -81,9 +99,16 @@ struct CompanionSessionView: View {
                 // Progress indicator
                 if let session = sessionViewModel.session {
                     HStack(spacing: 8) {
-                        Text("\(session.currentStepIndex + 1) of \(session.steps.count)")
+                        let displayIndex = min(session.currentStepIndex + 1, session.steps.count)
+                        Text("\(displayIndex) of \(session.steps.count)")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .onAppear {
+                                print("📊 Display: \(displayIndex) of \(session.steps.count)")
+                                print("📊 Current step index: \(session.currentStepIndex)")
+                                print("📊 Steps count: \(session.steps.count)")
+                                print("📊 Steps: \(session.steps.map { $0.title })")
+                            }
                         
                         ProgressView(value: session.progress)
                             .progressViewStyle(LinearProgressViewStyle(tint: ThemeManager.shared.theme.palette.primary))
@@ -113,6 +138,17 @@ struct CompanionSessionView: View {
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
             .padding()
+
+        case .routineAlreadyCompleted:
+            RoutineAlreadyCompletedView(
+                routineName: routineName,
+                onStartAgain: {
+                    sessionViewModel.startRoutineAgain(routineId: routineId, routineName: routineName, steps: steps)
+                },
+                onDismiss: {
+                    dismiss()
+                }
+            )
 
         case .stepIntro(let index):
             if let session = sessionViewModel.session, index < session.steps.count {
@@ -194,12 +230,6 @@ struct CompanionSessionView: View {
                 )
             }
 
-        case .stepComplete:
-            if let session = sessionViewModel.session, let step = session.currentStep {
-                StepCompleteView(step: step) {
-                    sessionViewModel.nextStep()
-                }
-            }
 
         case .routineComplete:
             CompletionView(session: sessionViewModel.session) {
@@ -456,69 +486,6 @@ struct TimerView: View {
     }
 }
 
-// MARK: - Step Complete View
-
-struct StepCompleteView: View {
-    let step: CompanionStep
-    let onNext: () -> Void
-    
-    @State private var showCheckmark = false
-    
-    var body: some View {
-        VStack(spacing: 40) {
-            Spacer()
-            
-            // Checkmark animation
-            ZStack {
-                Circle()
-                    .fill(ThemeManager.shared.theme.palette.success.opacity(0.2))
-                    .frame(width: 120, height: 120)
-                    .scaleEffect(showCheckmark ? 1.2 : 1.0)
-                    .animation(.spring(response: 0.6, dampingFraction: 0.8), value: showCheckmark)
-                
-                Image(systemName: "checkmark")
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.success)
-                    .scaleEffect(showCheckmark ? 1.0 : 0.0)
-                    .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.2), value: showCheckmark)
-            }
-            
-            VStack(spacing: 16) {
-                Text("Step Complete!")
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                
-                Text(step.title)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
-            
-            Button {
-                onNext()
-            } label: {
-                HStack {
-                    Text("Next Step")
-                    Image(systemName: "arrow.right")
-                }
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(ThemeManager.shared.theme.palette.primary)
-                )
-            }
-            .buttonStyle(PlainButtonStyle())
-            .padding(.horizontal, 40)
-            
-            Spacer()
-        }
-        .onAppear {
-            showCheckmark = true
-        }
-    }
-}
 
 // MARK: - Completion View
 
@@ -631,6 +598,86 @@ struct StatRow: View {
     }
 }
 
+// MARK: - Routine Already Completed View
+
+struct RoutineAlreadyCompletedView: View {
+    let routineName: String
+    let onStartAgain: () -> Void
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(spacing: 40) {
+            Spacer()
+
+            // Checkmark icon
+            ZStack {
+                Circle()
+                    .fill(ThemeManager.shared.theme.palette.success.opacity(0.2))
+                    .frame(width: 120, height: 120)
+
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 48, weight: .bold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.success)
+            }
+
+            VStack(spacing: 16) {
+                Text("Routine Complete! 🎉")
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text("This routine is done for today")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    .multilineTextAlignment(.center)
+
+                Text("Wanna do again?")
+                    .font(.system(size: 16))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                    .multilineTextAlignment(.center)
+            }
+
+            VStack(spacing: 16) {
+                Button {
+                    onStartAgain()
+                } label: {
+                    HStack {
+                        Image(systemName: "arrow.clockwise")
+                        Text("Do Again")
+                    }
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(ThemeManager.shared.theme.palette.primary)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                Button {
+                    onDismiss()
+                } label: {
+                    Text("Done")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 2)
+                        )
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            .padding(.horizontal, 40)
+
+            Spacer()
+        }
+    }
+}
+
 // MARK: - Preview
 
 #Preview("CompanionSessionView") {
@@ -657,6 +704,7 @@ struct StatRow: View {
                 stepType: .moisturizer,
                 timeOfDay: .morning
             )
-        ]
+        ],
+        routineTrackingService: nil
     )
 }

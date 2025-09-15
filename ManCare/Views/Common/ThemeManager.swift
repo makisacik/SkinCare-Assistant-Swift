@@ -76,7 +76,7 @@ public struct ThemePalette: Equatable {
     public let error: Color                // #7D4A4A (red-brown)
     public let info: Color                 // #4A5A7D (blue-brown)
     public let onSuccess: Color            // #FFFFFF
-    public let onWarning: Color            // #2C1E1E
+    public let onWarning: Color            // #2C1E1E<<<
     public let onError: Color              // #FFFFFF
     public let onInfo: Color               // #FFFFFF
 

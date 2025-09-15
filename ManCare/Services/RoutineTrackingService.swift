@@ -17,6 +17,7 @@ class RoutineTrackingService: ObservableObject {
     }
     
     @Published var completedSteps: Set<String> = []
+    @Published var lastUpdateTime: Date = Date()
     
     // MARK: - Public Methods
     
@@ -44,6 +45,7 @@ class RoutineTrackingService: ObservableObject {
         
         saveContext()
         updateCompletedSteps(for: startOfDay)
+        lastUpdateTime = Date()
     }
     
     /// Get completion status for a specific step on a specific date

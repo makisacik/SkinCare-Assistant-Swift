@@ -95,18 +95,18 @@ enum StepType: String, Codable, CaseIterable {
 
 enum SessionState: Equatable {
     case idle
+    case routineAlreadyCompleted
     case stepIntro(Int)
     case timerIdle(Int)
     case timerRunning(Int)
     case timerPaused(Int)
-    case stepComplete(Int)
     case routineComplete
     
     var stepIndex: Int? {
         switch self {
-        case .stepIntro(let index), .timerIdle(let index), .timerRunning(let index), .timerPaused(let index), .stepComplete(let index):
+        case .stepIntro(let index), .timerIdle(let index), .timerRunning(let index), .timerPaused(let index):
             return index
-        case .idle, .routineComplete:
+        case .idle, .routineAlreadyCompleted, .routineComplete:
             return nil
         }
     }
@@ -210,7 +210,8 @@ extension CompanionSession {
     
     var progress: Double {
         guard !steps.isEmpty else { return 0 }
-        return Double(currentStepIndex) / Double(steps.count)
+        let clampedIndex = min(currentStepIndex, steps.count)
+        return Double(clampedIndex) / Double(steps.count)
     }
     
     var isComplete: Bool {
@@ -222,6 +223,11 @@ extension CompanionSession {
         stepsCompleted.append(step.id)
         currentStepIndex += 1
         remainingSeconds = nil
+
+        // Ensure currentStepIndex doesn't exceed bounds
+        if currentStepIndex > steps.count {
+            currentStepIndex = steps.count
+        }
     }
     
     mutating func skipCurrentStep() {
@@ -229,6 +235,11 @@ extension CompanionSession {
         skips += 1
         currentStepIndex += 1
         remainingSeconds = nil
+
+        // Ensure currentStepIndex doesn't exceed bounds
+        if currentStepIndex > steps.count {
+            currentStepIndex = steps.count
+        }
     }
     
     mutating func startTimer(for step: CompanionStep) {

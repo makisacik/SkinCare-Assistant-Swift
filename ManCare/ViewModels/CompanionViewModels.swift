@@ -22,13 +22,48 @@ class CompanionSessionViewModel: ObservableObject {
     private let hapticsService = HapticsService.shared
     private let notificationService = NotificationService.shared
     private let analyticsService = CompanionAnalyticsService.shared
+    private var routineTrackingService: RoutineTrackingService?
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
     
     init() {
         setupBindings()
+        resumeSession()
     }
     
+    func setRoutineTrackingService(_ service: RoutineTrackingService) {
+        self.routineTrackingService = service
+    }
+    func isRoutineCompletedForToday(steps: [CompanionStep]) -> Bool {
+        guard let trackingService = routineTrackingService else { return false }
+
+        let completedSteps = steps.filter { step in
+            trackingService.isStepCompleted(stepId: step.id)
+        }
+
+        return completedSteps.count == steps.count
+    }
+
+    func startRoutineAgain(routineId: String, routineName: String, steps: [CompanionStep]) {
+        print("🔄 Starting routine again - clearing completed steps")
+
+        // Clear completed steps for today
+        if let trackingService = routineTrackingService {
+            for step in steps {
+                if trackingService.isStepCompleted(stepId: step.id) {
+                    trackingService.toggleStepCompletion(
+                        stepId: step.id,
+                        stepTitle: step.title,
+                        stepType: step.stepType,
+                        timeOfDay: step.timeOfDay
+                    )
+                }
+            }
+        }
+
+        // Start new session
+        startSession(routineId: routineId, routineName: routineName, steps: steps)
+    }
     private func setupBindings() {
         // Listen for app lifecycle changes
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
@@ -48,20 +83,44 @@ class CompanionSessionViewModel: ObservableObject {
     
     func startSession(routineId: String, routineName: String, steps: [CompanionStep]) {
         print("🎯 Starting session with \(steps.count) steps")
+        // Check if routine is already completed for today
+        if isRoutineCompletedForToday(steps: steps) {
+            print("📊 Routine already completed for today")
+            currentState = .routineAlreadyCompleted
+            return
+        }
+
         sessionStore.startSession(routineId: routineId, routineName: routineName, steps: steps)
         session = sessionStore.currentSession
         print("📊 Session created: \(session?.id ?? "nil")")
         print("📈 Current step index: \(session?.currentStepIndex ?? -1)")
         currentState = .stepIntro(0)
         print("🔄 State set to: \(currentState)")
-        
+
         analyticsService.trackEvent(.companionStart(routineId: routineId, stepCount: steps.count))
     }
     
     func resumeSession() {
         if let existingSession = sessionStore.resumeSession() {
+            print("🔄 resumeSession: Resuming existing session")
+            print("📊 Session has \(existingSession.stepsCompleted.count) completed steps")
+            print("📊 Current step index: \(existingSession.currentStepIndex)")
+            print("📊 Steps count: \(existingSession.steps.count)")
+
             session = existingSession
-            currentState = .stepIntro(existingSession.currentStepIndex)
+
+            // Check if session is already complete
+            if existingSession.isComplete {
+                print("📊 Session is already complete, setting state to routineComplete")
+                currentState = .routineComplete
+            } else {
+                // Ensure currentStepIndex is within bounds
+                let safeIndex = min(existingSession.currentStepIndex, existingSession.steps.count - 1)
+                print("📊 Setting state to stepIntro with index: \(safeIndex)")
+                currentState = .stepIntro(safeIndex)
+            }
+        } else {
+            print("📭 resumeSession: No existing session to resume")
         }
     }
     
@@ -100,24 +159,53 @@ class CompanionSessionViewModel: ObservableObject {
     // MARK: - Step Navigation
     
     func nextStep() {
-        guard var session = session else { return }
+        guard var session = session else {
+            print("❌ nextStep: No session found")
+            return
+        }
         
+        print("🔄 nextStep: Completing step \(session.currentStepIndex) of \(session.steps.count)")
+        print("📊 Before completion - Steps completed: \(session.stepsCompleted.count)")
+
         if let currentStep = session.currentStep {
+            print("✅ Completing step: \(currentStep.title) (ID: \(currentStep.id))")
             analyticsService.trackEvent(.stepComplete(
                 stepId: currentStep.id,
                 actualWait: currentStep.waitSeconds ?? 0,
                 wasSkipped: false
             ))
         }
-        
+
         session.completeCurrentStep()
+        print("📊 After completion - Steps completed: \(session.stepsCompleted.count)")
+        print("📊 New current step index: \(session.currentStepIndex)")
+
+        // Integrate with RoutineTrackingService
+        if let completedStepId = session.stepsCompleted.last,
+           let completedStep = session.steps.first(where: { $0.id == completedStepId }),
+           let trackingService = routineTrackingService {
+            print("🔄 Marking step as completed in RoutineTrackingService: \(completedStep.title)")
+            trackingService.toggleStepCompletion(
+                stepId: completedStep.id,
+                stepTitle: completedStep.title,
+                stepType: completedStep.stepType,
+                timeOfDay: completedStep.timeOfDay
+            )
+        }
+
         sessionStore.updateSession(session)
         self.session = session
+
+        print("💾 Session updated in store")
         
         if session.isComplete {
+            print("🎉 Session complete!")
             completeSession()
         } else {
-            currentState = .stepIntro(session.currentStepIndex)
+            // Ensure we don't go out of bounds
+            let nextIndex = min(session.currentStepIndex, session.steps.count - 1)
+            print("➡️ Moving to next step: \(nextIndex)")
+            currentState = .stepIntro(nextIndex)
         }
     }
     
@@ -139,7 +227,9 @@ class CompanionSessionViewModel: ObservableObject {
         if session.isComplete {
             completeSession()
         } else {
-            currentState = .stepIntro(session.currentStepIndex)
+            // Ensure we don't go out of bounds
+            let nextIndex = min(session.currentStepIndex, session.steps.count - 1)
+            currentState = .stepIntro(nextIndex)
         }
     }
     
@@ -193,13 +283,22 @@ class CompanionSessionViewModel: ObservableObject {
         
         stopCountdown()
         timerState = TimerState()
-        currentState = .stepComplete(session?.currentStepIndex ?? 0)
+
+        // Go directly to next step
+        nextStep()
     }
     
     func adjustTimer(by seconds: Int) {
         let newSeconds = max(timerState.remainingSeconds + seconds, 10)
         let maxSeconds = session?.currentStep?.maxSeconds ?? 600
-        timerState.remainingSeconds = min(newSeconds, maxSeconds)
+        let adjustedSeconds = min(newSeconds, maxSeconds)
+
+        // Calculate how much time has already elapsed
+        let elapsedSeconds = timerState.totalSeconds - timerState.remainingSeconds
+
+        // Update both remaining and total seconds to maintain progress accuracy
+        timerState.remainingSeconds = adjustedSeconds
+        timerState.totalSeconds = elapsedSeconds + adjustedSeconds
     }
     
     // MARK: - Private Methods
@@ -232,10 +331,12 @@ class CompanionSessionViewModel: ObservableObject {
     private func timerComplete() {
         stopCountdown()
         timerState = TimerState()
-        currentState = .stepComplete(session?.currentStepIndex ?? 0)
         
         hapticsService.timerComplete()
         notificationService.cancelTimerNotifications()
+
+        // Go directly to next step
+        nextStep()
     }
     
     private func handleAppBackgrounding() {
@@ -380,7 +481,14 @@ class TimerViewModel: ObservableObject {
     
     func adjustTimer(by seconds: Int) {
         let newSeconds = max(timerState.remainingSeconds + seconds, 10)
-        timerState.remainingSeconds = min(newSeconds, 600) // Max 10 minutes
+        let adjustedSeconds = min(newSeconds, 600) // Max 10 minutes
+
+        // Calculate how much time has already elapsed
+        let elapsedSeconds = timerState.totalSeconds - timerState.remainingSeconds
+
+        // Update both remaining and total seconds to maintain progress accuracy
+        timerState.remainingSeconds = adjustedSeconds
+        timerState.totalSeconds = elapsedSeconds + adjustedSeconds
     }
     
     private func startCountdown() {

@@ -24,6 +24,7 @@ class SessionStore: ObservableObject {
     
     private init() {
         loadSessionHistory()
+        loadCurrentSession()
     }
     
     // MARK: - Session Management
@@ -39,8 +40,12 @@ class SessionStore: ObservableObject {
     }
     
     func updateSession(_ session: CompanionSession) {
+        print("🔄 updateSession: Updating session \(session.id)")
+        print("📊 Session has \(session.stepsCompleted.count) completed steps")
+        print("📊 Current step index: \(session.currentStepIndex)")
         currentSession = session
         saveCurrentSession()
+        print("💾 Session saved to UserDefaults")
     }
     
     func completeSession() {
@@ -76,6 +81,7 @@ class SessionStore: ObservableObject {
     
     private func saveCurrentSession() {
         guard let session = currentSession else {
+            print("🗑️ saveCurrentSession: No session to save, removing from UserDefaults")
             userDefaults.removeObject(forKey: sessionKey)
             return
         }
@@ -83,19 +89,27 @@ class SessionStore: ObservableObject {
         do {
             let data = try JSONEncoder().encode(session)
             userDefaults.set(data, forKey: sessionKey)
+            print("✅ saveCurrentSession: Session saved successfully")
+            print("📊 Saved session has \(session.stepsCompleted.count) completed steps")
         } catch {
-            print("Error saving current session: \(error)")
+            print("❌ Error saving current session: \(error)")
         }
     }
     
     private func loadCurrentSession() {
-        guard let data = userDefaults.data(forKey: sessionKey) else { return }
+        guard let data = userDefaults.data(forKey: sessionKey) else {
+            print("📭 loadCurrentSession: No saved session found in UserDefaults")
+            return
+        }
         
         do {
             let session = try JSONDecoder().decode(CompanionSession.self, from: data)
             currentSession = session
+            print("✅ loadCurrentSession: Session loaded successfully")
+            print("📊 Loaded session has \(session.stepsCompleted.count) completed steps")
+            print("📊 Current step index: \(session.currentStepIndex)")
         } catch {
-            print("Error loading current session: \(error)")
+            print("❌ Error loading current session: \(error)")
         }
     }
     

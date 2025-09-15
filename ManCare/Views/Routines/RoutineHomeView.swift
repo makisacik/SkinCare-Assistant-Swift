@@ -102,7 +102,6 @@ struct RoutineHomeView: View {
             MorningRoutineCompletionView(
                 routineSteps: generateMorningRoutine(),
                 onComplete: {
-                    routineTrackingService.objectWillChange.send()
                     showingMorningRoutineCompletion = false
                 },
                 originalRoutine: generatedRoutine,
@@ -113,7 +112,6 @@ struct RoutineHomeView: View {
             EveningRoutineCompletionView(
                 routineSteps: generateEveningRoutine(),
                 onComplete: {
-                    routineTrackingService.objectWillChange.send()
                     showingEveningRoutineCompletion = false
                 },
                 originalRoutine: generatedRoutine,
@@ -125,8 +123,8 @@ struct RoutineHomeView: View {
                 routineId: "\(launch.routineType.rawValue)_routine",
                 routineName: "\(launch.routineType.displayName) Routine",
                 steps: launch.steps,
+                routineTrackingService: routineTrackingService,
                 onComplete: {
-                    routineTrackingService.objectWillChange.send()
                     companionLaunch = nil
                     companionRoutineType = nil
                     companionSteps = []
@@ -699,7 +697,9 @@ private struct RoutineCard: View {
     let onStepTap: (RoutineStepDetail) -> Void
 
     private var completedCount: Int {
-        steps.filter { step in
+        // Use lastUpdateTime to trigger UI updates when steps are completed
+        let _ = routineTrackingService.lastUpdateTime
+        return steps.filter { step in
             routineTrackingService.isStepCompleted(stepId: step.id, date: selectedDate)
         }.count
     }
