@@ -207,6 +207,9 @@ struct CompanionSessionView: View {
                     onSkip: {
                         sessionViewModel.skipTimer()
                     },
+                    onComplete: {
+                        sessionViewModel.completeTimer()
+                    },
                     onAdjust: { delta in
                         sessionViewModel.adjustTimer(by: delta)
                     }
@@ -223,6 +226,9 @@ struct CompanionSessionView: View {
                     },
                     onSkip: {
                         sessionViewModel.skipTimer()
+                    },
+                    onComplete: {
+                        sessionViewModel.completeTimer()
                     },
                     onAdjust: { delta in
                         sessionViewModel.adjustTimer(by: delta)
@@ -383,106 +389,164 @@ struct TimerView: View {
     let timerState: TimerState
     let onPause: () -> Void
     let onSkip: () -> Void
+    let onComplete: () -> Void
     let onAdjust: (Int) -> Void
     
     var body: some View {
-        VStack(spacing: 40) {
-            // Timer circle
-            ZStack {
-                Circle()
-                    .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 8)
-                    .frame(width: 200, height: 200)
-                
-                Circle()
-                    .trim(from: 0, to: timerState.progress)
-                    .stroke(
-                        ThemeManager.shared.theme.palette.primary,
-                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
-                    )
-                    .frame(width: 200, height: 200)
-                    .rotationEffect(.degrees(-90))
-                    .animation(.linear(duration: 1), value: timerState.progress)
-                
-                VStack(spacing: 8) {
-                    Text(timerState.formattedTime)
-                        .font(.system(size: 36, weight: .bold, design: .monospaced))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                // Timer circle - give it more space at the top
+                VStack(spacing: 0) {
+                    Spacer()
+                        .frame(height: 20)
                     
-                    Text(step.title)
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        .multilineTextAlignment(.center)
-                }
-            }
-            
-            // Timer controls
-            VStack(spacing: 20) {
-                // Adjust buttons
-                HStack(spacing: 20) {
-                    Button {
-                        onAdjust(-15)
-                    } label: {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.system(size: 32))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
-                    
-                    Text("Adjust")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    
-                    Button {
-                        onAdjust(15)
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 32))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
-                }
-                
-                // Main control buttons
-                HStack(spacing: 20) {
-                    Button {
-                        onPause()
-                    } label: {
-                        HStack {
-                            Image(systemName: timerState.isPaused ? "play.fill" : "pause.fill")
-                            Text(timerState.isPaused ? "Resume" : "Pause")
+                    ZStack {
+                        Circle()
+                            .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 8)
+                            .frame(width: 180, height: 180)
+                        
+                        Circle()
+                            .trim(from: 0, to: timerState.progress)
+                            .stroke(
+                                ThemeManager.shared.theme.palette.primary,
+                                style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                            )
+                            .frame(width: 180, height: 180)
+                            .rotationEffect(.degrees(-90))
+                            .animation(.linear(duration: 1), value: timerState.progress)
+                        
+                        VStack(spacing: 6) {
+                            Text(timerState.formattedTime)
+                                .font(.system(size: 32, weight: .bold, design: .monospaced))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                            Text(step.title)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                .multilineTextAlignment(.center)
+                                .lineLimit(2)
                         }
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(ThemeManager.shared.theme.palette.primary)
-                        )
                     }
-                    .buttonStyle(PlainButtonStyle())
                     
-                    Button {
-                        onSkip()
-                    } label: {
-                        HStack {
-                            Image(systemName: "forward.fill")
-                            Text("Skip")
-                        }
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 2)
-                        )
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                    Spacer()
+                        .frame(height: 20)
                 }
+                .frame(height: geometry.size.height * 0.4) // Use 40% of screen height for timer
+                
+                // Product Tips Section
+                VStack(spacing: 12) {
+                    HStack {
+                        Image(systemName: "lightbulb.fill")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.warning)
+
+                        Text("Pro Tips")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                        Spacer()
+                    }
+
+                    CompactProductTipsView(productType: step.stepType)
+                }
+                .padding(.horizontal, 20)
+
+                Spacer()
+                    .frame(height: 20)
+
+                // Timer controls - positioned at bottom
+                VStack(spacing: 16) {
+                    // Adjust buttons - only show when timer is running
+                    if timerState.isRunning {
+                        HStack(spacing: 20) {
+                            Button {
+                                onAdjust(-15)
+                            } label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .font(.system(size: 28))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            }
+
+                            Text("Adjust")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+
+                            Button {
+                                onAdjust(15)
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.system(size: 28))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            }
+                        }
+                    }
+
+                    // Main control buttons - always show Done, Pause/Resume, and Skip
+                    HStack(spacing: 12) {
+                        // Done button
+                        Button {
+                            onComplete()
+                        } label: {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("Done")
+                            }
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(ThemeManager.shared.theme.palette.success)
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+
+                        // Pause/Resume button (only when timer is running)
+                        if timerState.isRunning {
+                            Button {
+                                onPause()
+                            } label: {
+                                HStack {
+                                    Image(systemName: timerState.isPaused ? "play.fill" : "pause.fill")
+                                    Text(timerState.isPaused ? "Resume" : "Pause")
+                                }
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(ThemeManager.shared.theme.palette.primary)
+                                )
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+
+                        // Skip button
+                        Button {
+                            onSkip()
+                        } label: {
+                            HStack {
+                                Image(systemName: "forward.fill")
+                                Text("Skip")
+                            }
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 2)
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
             }
-            
-            Spacer()
         }
-        .padding(.horizontal, 20)
     }
 }
 

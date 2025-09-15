@@ -22,6 +22,7 @@ class CompanionSessionViewModel: ObservableObject {
     private let hapticsService = HapticsService.shared
     private let notificationService = NotificationService.shared
     private let analyticsService = CompanionAnalyticsService.shared
+    private let tipsService = ProductTipsService.shared
     private var routineTrackingService: RoutineTrackingService?
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
@@ -262,6 +263,7 @@ class CompanionSessionViewModel: ObservableObject {
         currentState = .timerPaused(session?.currentStepIndex ?? 0)
         
         stopCountdown()
+        tipsService.pauseTips()
         
         if let step = session?.currentStep {
             analyticsService.trackEvent(.timerPause(stepId: step.id, remainingSeconds: timerState.remainingSeconds))
@@ -274,6 +276,7 @@ class CompanionSessionViewModel: ObservableObject {
         currentState = .timerRunning(session?.currentStepIndex ?? 0)
         
         startCountdown()
+        tipsService.resumeTips()
     }
     
     func skipTimer() {
@@ -285,6 +288,22 @@ class CompanionSessionViewModel: ObservableObject {
         timerState = TimerState()
 
         // Go directly to next step
+        nextStep()
+    }
+    
+    func completeTimer() {
+        guard let step = session?.currentStep else { return }
+
+        analyticsService.trackEvent(.stepComplete(
+            stepId: step.id,
+            actualWait: step.waitSeconds ?? 0,
+            wasSkipped: false
+        ))
+
+        stopCountdown()
+        timerState = TimerState()
+
+        // Go to next step
         nextStep()
     }
     
@@ -330,13 +349,13 @@ class CompanionSessionViewModel: ObservableObject {
     
     private func timerComplete() {
         stopCountdown()
-        timerState = TimerState()
+        timerState.remainingSeconds = 0
+        timerState.isRunning = false
         
         hapticsService.timerComplete()
         notificationService.cancelTimerNotifications()
 
-        // Go directly to next step
-        nextStep()
+        // Don't automatically go to next step - wait for user action
     }
     
     private func handleAppBackgrounding() {

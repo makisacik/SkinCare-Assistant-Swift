@@ -179,10 +179,8 @@ extension CompanionStep {
     
     private static func shouldHaveTimer(for stepType: ProductType) -> Bool {
         switch stepType {
-        case .cleanser, .faceSerum, .moisturizer:
+        case .cleanser, .faceSerum, .moisturizer, .sunscreen, .faceSunscreen:
             return true
-        case .sunscreen, .faceSunscreen:
-            return false // Sunscreen doesn't need wait time
         default:
             return false
         }
@@ -196,6 +194,8 @@ extension CompanionStep {
             return 60 // 1 minute for serum absorption
         case .moisturizer:
             return 45 // 45 seconds for moisturizer absorption
+        case .sunscreen, .faceSunscreen:
+            return 45 // 45 seconds for proper sunscreen application
         default:
             return 30
         }
