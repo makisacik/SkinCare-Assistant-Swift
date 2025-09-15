@@ -18,12 +18,15 @@ struct MainTabView: View {
     
     enum Tab: String, CaseIterable {
         case routines = "Routines"
+        case discover = "Discover"
         case products = "My Products"
         
         var iconName: String {
             switch self {
             case .routines:
                 return "list.bullet.rectangle"
+            case .discover:
+                return "sparkles"
             case .products:
                 return "bag.fill"
             }
@@ -34,13 +37,20 @@ struct MainTabView: View {
         ZStack {
             TabView(selection: $selectedTab) {
                 // Routines Tab
-                RoutineHomeView(generatedRoutine: generatedRoutine)
+                RoutineHomeView(generatedRoutine: generatedRoutine, selectedTab: $selectedTab)
                     .tabItem {
                         Image(systemName: Tab.routines.iconName)
                         Text(Tab.routines.rawValue)
                     }
                     .tag(Tab.routines)
                 
+                // Discover Tab
+                DiscoverView()
+                    .tabItem {
+                        Image(systemName: Tab.discover.iconName)
+                        Text(Tab.discover.rawValue)
+                    }
+                    .tag(Tab.discover)
                 // Products Tab
                 Group {
                     if let scannedData = scanManager.scannedProductData {

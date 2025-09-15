@@ -10,6 +10,7 @@ import SwiftUI
 struct RoutineHomeView: View {
     
     let generatedRoutine: RoutineResponse?
+    @Binding var selectedTab: MainTabView.Tab
 
     @StateObject private var routineTrackingService = RoutineTrackingService()
     @State private var selectedDate = Date()
@@ -226,7 +227,7 @@ struct RoutineHomeView: View {
                 )
 
                 // Explore Routine Library Card
-                ExploreRoutineLibraryCard()
+                ExploreRoutineLibraryCard(selectedTab: $selectedTab)
 
                 // UV Index Card
                 UVIndexCard()
@@ -930,8 +931,13 @@ private struct RoutineStepRow: View {
 // MARK: - Explore Routine Library Card
 
 private struct ExploreRoutineLibraryCard: View {
+    @Binding var selectedTab: MainTabView.Tab
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        Button(action: {
+            selectedTab = .discover
+        }) {
+            VStack(alignment: .leading, spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Explore Routine Library")
@@ -986,6 +992,8 @@ private struct ExploreRoutineLibraryCard: View {
                 )
         )
         .padding(.horizontal, 20)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -1156,7 +1164,8 @@ struct RoutineStepDetailView: View {
 
 #Preview("RoutineHomeView") {
     RoutineHomeView(
-        generatedRoutine: nil
+        generatedRoutine: nil,
+        selectedTab: .constant(.routines)
     )
 }
 
