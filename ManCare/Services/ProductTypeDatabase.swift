@@ -10,9 +10,9 @@ import Foundation
 // MARK: - Product Type Database
 
 struct ProductTypeDatabase {
-    
+
     // MARK: - Product Type Information
-    
+
     struct ProductTypeInfo {
         let name: String
         let description: String
@@ -21,9 +21,9 @@ struct ProductTypeDatabase {
         let how: String
         let timeOfDay: String
     }
-    
+
     // MARK: - Database
-    
+
     static let productTypes: [String: ProductTypeInfo] = [
         // Cleansers
         "gentle_cleanser": ProductTypeInfo(
@@ -98,7 +98,7 @@ struct ProductTypeDatabase {
             how: "Apply to dry skin, massage gently, add water to emulsify, rinse completely",
             timeOfDay: "evening"
         ),
-        
+
         // Toners
         "hydrating_toner": ProductTypeInfo(
             name: "Hydrating Toner",
@@ -148,7 +148,7 @@ struct ProductTypeDatabase {
             how: "Apply with cotton pad, avoid eye area, start with 2-3 times per week",
             timeOfDay: "both"
         ),
-        
+
         // Serums
         "niacinamide_serum": ProductTypeInfo(
             name: "Niacinamide Serum",
@@ -238,7 +238,7 @@ struct ProductTypeDatabase {
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
         ),
-        
+
         // Moisturizers
         "lightweight_moisturizer": ProductTypeInfo(
             name: "Lightweight Moisturizer",
@@ -304,7 +304,7 @@ struct ProductTypeDatabase {
             how: "Apply generously to face and neck, massage in upward motions",
             timeOfDay: "both"
         ),
-        
+
         // Sunscreens
         "daily_sunscreen": ProductTypeInfo(
             name: "Daily Sunscreen",
@@ -354,7 +354,7 @@ struct ProductTypeDatabase {
             how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
             timeOfDay: "morning"
         ),
-        
+
         // Treatments
         "spot_treatment": ProductTypeInfo(
             name: "Spot Treatment",
@@ -479,210 +479,520 @@ struct ProductTypeDatabase {
             timeOfDay: "both"
         )
     ]
-    
+
     // MARK: - Helper Methods
-    
+
+    // Create dynamic product info with the actual step name
+    private static func createDynamicProductInfo(
+        name: String,
+        category: String,
+        description: String,
+        iconName: String,
+        why: String,
+        how: String,
+        timeOfDay: String
+    ) -> ProductTypeInfo {
+        return ProductTypeInfo(
+            name: name,
+            description: description,
+            iconName: iconName,
+            why: why,
+            how: how,
+            timeOfDay: timeOfDay
+        )
+    }
+
+    // Cleanser helper functions
+    private static func getCleanserDescription(for stepName: String) -> String {
+        if stepName.contains("oil") {
+            return "Gentle oil-based cleanser for effective makeup and sunscreen removal"
+        } else if stepName.contains("water") && stepName.contains("based") {
+            return "Gentle water-based cleanser for second cleansing step"
+        } else if stepName.contains("foam") || stepName.contains("foaming") {
+            return "Lightweight foaming cleanser for deep pore cleansing"
+        } else if stepName.contains("gel") {
+            return "Lightweight gel cleanser that removes excess oil without over-drying"
+        } else if stepName.contains("cream") {
+            return "Gentle cream cleanser that cleanses without stripping moisture"
+        } else {
+            return "Gentle cleanser that removes impurities and prepares skin"
+        }
+    }
+
+    private static func getCleanserWhy(for stepName: String) -> String {
+        if stepName.contains("oil") {
+            return "Oil dissolves oil, making it perfect for removing waterproof makeup and sunscreen"
+        } else if stepName.contains("foam") || stepName.contains("foaming") {
+            return "Creates rich lather to remove excess oil and unclog pores without over-drying"
+        } else if stepName.contains("gel") {
+            return "Effectively removes oil and impurities while maintaining skin's natural balance"
+        } else if stepName.contains("cream") {
+            return "Provides gentle cleansing while maintaining skin's natural moisture barrier"
+        } else {
+            return "Removes dirt, oil, and makeup while maintaining skin's natural balance"
+        }
+    }
+
+    private static func getCleanserHow(for stepName: String) -> String {
+        if stepName.contains("oil") {
+            return "Apply to dry skin, massage gently, add water to emulsify, rinse completely"
+        } else if stepName.contains("foam") || stepName.contains("foaming") {
+            return "Wet face, apply cleanser, massage in circular motions, rinse thoroughly"
+        } else if stepName.contains("gel") {
+            return "Apply to wet skin, massage gently, rinse thoroughly"
+        } else if stepName.contains("cream") {
+            return "Apply to dry or damp skin, massage gently, rinse with lukewarm water"
+        } else {
+            return "Apply to damp skin, massage gently, rinse with lukewarm water"
+        }
+    }
+
+    private static func getCleanserTimeOfDay(for stepName: String) -> String {
+        if stepName.contains("oil") {
+            return "evening"
+        } else {
+            return "both"
+        }
+    }
+
+    // Toner helper functions
+    private static func getTonerDescription(for stepName: String) -> String {
+        if stepName.contains("salicylic") || stepName.contains("bha") {
+            return "BHA toner that unclogs pores and prevents breakouts"
+        } else if stepName.contains("soothing") {
+            return "Calming toner that reduces irritation and redness"
+        } else if stepName.contains("hydrating") {
+            return "Alcohol-free toner that balances pH and provides instant hydration"
+        } else if stepName.contains("exfoliating") {
+            return "Gentle exfoliating toner with AHA/BHA for smoother skin texture"
+        } else {
+            return "Balancing toner that prepares skin for next steps"
+        }
+    }
+
+    private static func getTonerWhy(for stepName: String) -> String {
+        if stepName.contains("salicylic") || stepName.contains("bha") {
+            return "Penetrates pores to remove dead skin cells and prevent acne"
+        } else if stepName.contains("soothing") {
+            return "Soothes sensitive skin and reduces inflammation and redness"
+        } else if stepName.contains("hydrating") {
+            return "Restores skin's natural pH balance and prepares skin for better product absorption"
+        } else if stepName.contains("exfoliating") {
+            return "Removes dead skin cells and unclogs pores for brighter, smoother skin"
+        } else {
+            return "Restores pH balance and enhances product absorption"
+        }
+    }
+
+    private static func getTonerHow(for stepName: String) -> String {
+        if stepName.contains("salicylic") || stepName.contains("bha") || stepName.contains("exfoliating") {
+            return "Apply with cotton pad, avoid eye area, use 2-3 times per week"
+        } else {
+            return "Apply with cotton pad or hands, pat gently until absorbed"
+        }
+    }
+
+    private static func getTonerTimeOfDay(for stepName: String) -> String {
+        if stepName.contains("exfoliating") {
+            return "evening"
+        } else {
+            return "both"
+        }
+    }
+
+    // Serum helper functions
+    private static func getSerumDescription(for stepName: String) -> String {
+        if stepName.contains("vitamin c") {
+            return "Antioxidant serum that brightens skin and protects against environmental damage"
+        } else if stepName.contains("hyaluronic") {
+            return "Intensive hydrating serum that plumps and smooths skin"
+        } else if stepName.contains("niacinamide") {
+            return "Vitamin B3 serum that minimizes pores and controls oil production"
+        } else if stepName.contains("peptide") {
+            return "Anti-aging serum with peptides for firmer, more youthful skin"
+        } else if stepName.contains("retinol") {
+            return "Anti-aging serum that promotes cell turnover and reduces signs of aging"
+        } else {
+            return "Concentrated treatment serum for targeted skin concerns"
+        }
+    }
+
+    private static func getSerumWhy(for stepName: String) -> String {
+        if stepName.contains("vitamin c") {
+            return "Neutralizes free radicals, brightens skin tone, and boosts collagen production"
+        } else if stepName.contains("hyaluronic") {
+            return "Attracts and retains moisture, plumping skin and reducing fine lines"
+        } else if stepName.contains("niacinamide") {
+            return "Reduces pore size, controls sebum production, and improves skin texture"
+        } else if stepName.contains("peptide") {
+            return "Stimulates collagen production and improves skin firmness and elasticity"
+        } else if stepName.contains("retinol") {
+            return "Stimulates collagen production, reduces fine lines, and improves skin texture"
+        } else {
+            return "Delivers active ingredients deep into skin for maximum effectiveness"
+        }
+    }
+
+    private static func getSerumHow(for stepName: String) -> String {
+        if stepName.contains("vitamin c") {
+            return "Apply 2-3 drops in the morning, pat gently, follow with sunscreen"
+        } else if stepName.contains("hyaluronic") {
+            return "Apply to damp skin, pat gently until absorbed, follow with moisturizer"
+        } else if stepName.contains("retinol") {
+            return "Start with 2-3 times per week, apply at night, avoid eye area"
+        } else {
+            return "Apply 2-3 drops to clean skin, pat gently until absorbed"
+        }
+    }
+
+    private static func getSerumTimeOfDay(for stepName: String) -> String {
+        if stepName.contains("vitamin c") {
+            return "morning"
+        } else if stepName.contains("retinol") {
+            return "evening"
+        } else {
+            return "both"
+        }
+    }
+
+    // Essence helper functions
+    private static func getEssenceDescription(for stepName: String) -> String {
+        if stepName.contains("treatment") {
+            return "Advanced essence with concentrated active ingredients"
+        } else {
+            return "Lightweight hydrating essence that preps skin for treatment"
+        }
+    }
+
+    private static func getEssenceWhy(for stepName: String) -> String {
+        if stepName.contains("treatment") {
+            return "Delivers high concentrations of beneficial ingredients in a lightweight format"
+        } else {
+            return "Provides lightweight hydration and enhances absorption of subsequent products"
+        }
+    }
+
+    private static func getEssenceHow(for stepName: String) -> String {
+        return "Apply with hands, pat gently until absorbed"
+    }
+
+    // Ampoule helper functions
+    private static func getAmpouleDescription(for stepName: String) -> String {
+        return "Highly concentrated treatment with maximum active ingredients"
+    }
+
+    private static func getAmpouleWhy(for stepName: String) -> String {
+        return "Provides intensive treatment with the highest concentration of active ingredients"
+    }
+
+    private static func getAmpouleHow(for stepName: String) -> String {
+        return "Apply 2-3 drops to clean skin, pat gently until absorbed"
+    }
+
+    // Moisturizer helper functions
+    private static func getMoisturizerDescription(for stepName: String) -> String {
+        if stepName.contains("heavy") {
+            return "Rich, intensive moisturizer for deep hydration"
+        } else if stepName.contains("rich") {
+            return "Nourishing cream moisturizer for deep hydration and skin repair"
+        } else if stepName.contains("lightweight") {
+            return "Oil-free gel moisturizer that hydrates without clogging pores"
+        } else if stepName.contains("night") {
+            return "Intensive night cream that repairs and rejuvenates while you sleep"
+        } else if stepName.contains("barrier") && stepName.contains("repair") {
+            return "Specialized cream that strengthens the skin's protective barrier"
+        } else {
+            return "Hydrating moisturizer that locks in moisture"
+        }
+    }
+
+    private static func getMoisturizerWhy(for stepName: String) -> String {
+        if stepName.contains("heavy") || stepName.contains("rich") {
+            return "Provides intensive hydration and supports overnight skin repair"
+        } else if stepName.contains("lightweight") {
+            return "Provides essential hydration while maintaining a matte finish"
+        } else if stepName.contains("night") {
+            return "Works with your skin's natural repair cycle to restore and rejuvenate"
+        } else if stepName.contains("barrier") && stepName.contains("repair") {
+            return "Repairs and strengthens the skin's natural protective barrier"
+        } else {
+            return "Provides essential hydration and creates a protective barrier"
+        }
+    }
+
+    private static func getMoisturizerHow(for stepName: String) -> String {
+        if stepName.contains("heavy") || stepName.contains("rich") {
+            return "Apply generously to face and neck, massage gently until absorbed"
+        } else if stepName.contains("night") {
+            return "Apply generously before bed, massage in upward motions"
+        } else {
+            return "Apply a pea-sized amount, massage in upward circular motions"
+        }
+    }
+
+    private static func getMoisturizerTimeOfDay(for stepName: String) -> String {
+        if stepName.contains("night") {
+            return "evening"
+        } else {
+            return "both"
+        }
+    }
+
+    // Sunscreen helper functions
+    private static func getSunscreenDescription(for stepName: String) -> String {
+        if stepName.contains("mineral") {
+            return "Physical sunscreen with zinc oxide for sensitive skin protection"
+        } else if stepName.contains("oil") && stepName.contains("free") {
+            return "Non-greasy sunscreen that won't clog pores"
+        } else if stepName.contains("broad") && stepName.contains("spectrum") {
+            return "Complete UV protection against UVA and UVB rays"
+        } else if stepName.contains("anti") && stepName.contains("aging") {
+            return "Sunscreen with additional anti-aging benefits"
+        } else {
+            return "Broad spectrum sunscreen for daily protection"
+        }
+    }
+
+    private static func getSunscreenWhy(for stepName: String) -> String {
+        if stepName.contains("mineral") {
+            return "Provides immediate protection and is gentle on sensitive skin"
+        } else if stepName.contains("oil") && stepName.contains("free") {
+            return "Provides protection without adding shine or clogging pores"
+        } else if stepName.contains("broad") && stepName.contains("spectrum") {
+            return "Protects against both aging UVA rays and burning UVB rays"
+        } else if stepName.contains("anti") && stepName.contains("aging") {
+            return "Provides UV protection while delivering anti-aging ingredients"
+        } else {
+            return "Protects against UVA/UVB rays, prevents premature aging and skin cancer"
+        }
+    }
+
+    private static func getSunscreenHow(for stepName: String) -> String {
+        if stepName.contains("mineral") {
+            return "Apply generously, blend well to avoid white cast"
+        } else if stepName.contains("oil") && stepName.contains("free") {
+            return "Apply generously, blend well, reapply every 2 hours"
+        } else {
+            return "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
+        }
+    }
+
+    // Mask helper functions
+    private static func getMaskDescription(for stepName: String) -> String {
+        if stepName.contains("sheet") {
+            return "Intensive treatment mask for deep hydration and nourishment"
+        } else if stepName.contains("clay") {
+            return "Purifying clay mask that draws out impurities and tightens pores"
+        } else if stepName.contains("hydrating") {
+            return "Intensive hydrating mask for plump, dewy skin"
+        } else if stepName.contains("exfoliating") {
+            return "Weekly mask that removes dead skin cells and improves texture"
+        } else {
+            return "Weekly treatment mask for enhanced skin care"
+        }
+    }
+
+    private static func getMaskWhy(for stepName: String) -> String {
+        if stepName.contains("sheet") {
+            return "Provides intensive treatment with concentrated serum for maximum benefits"
+        } else if stepName.contains("clay") {
+            return "Absorbs excess oil and unclogs pores for clearer, tighter skin"
+        } else if stepName.contains("hydrating") {
+            return "Provides deep hydration and improves skin's moisture retention"
+        } else if stepName.contains("exfoliating") {
+            return "Deep cleanses pores and reveals smoother, brighter skin"
+        } else {
+            return "Provides intensive treatment and addresses specific skin concerns"
+        }
+    }
+
+    private static func getMaskHow(for stepName: String) -> String {
+        if stepName.contains("sheet") {
+            return "Apply to clean skin, leave on for 15-20 minutes, remove and pat in remaining serum"
+        } else if stepName.contains("clay") {
+            return "Apply to clean skin, leave on until dry, rinse with warm water"
+        } else if stepName.contains("hydrating") {
+            return "Apply to clean skin, leave on for 15-20 minutes, rinse or remove"
+        } else {
+            return "Apply to clean skin, leave on for recommended time, rinse thoroughly"
+        }
+    }
+
+    // Exfoliant helper functions
+    private static func getExfoliantDescription(for stepName: String) -> String {
+        return "Gentle chemical exfoliant that removes dead skin cells"
+    }
+
+    private static func getExfoliantWhy(for stepName: String) -> String {
+        return "Removes dead skin cells and reveals brighter, smoother skin"
+    }
+
+    private static func getExfoliantHow(for stepName: String) -> String {
+        return "Apply to clean skin, avoid eye area, use 2-3 times per week"
+    }
+
+    // Eye cream helper functions
+    private static func getEyeCreamDescription(for stepName: String) -> String {
+        if stepName.contains("rich") {
+            return "Intensive eye cream for mature or dry eye area"
+        } else {
+            return "Specialized cream for the delicate eye area"
+        }
+    }
+
+    private static func getEyeCreamWhy(for stepName: String) -> String {
+        if stepName.contains("rich") {
+            return "Provides intensive hydration and anti-aging benefits for the eye area"
+        } else {
+            return "Targets fine lines, dark circles, and puffiness in the delicate eye area"
+        }
+    }
+
+    private static func getEyeCreamHow(for stepName: String) -> String {
+        return "Apply a small amount with ring finger, pat gently around eye area"
+    }
+
+    // Facial oil helper functions
+    private static func getFacialOilDescription(for stepName: String) -> String {
+        return "Nourishing facial oil for extra hydration and glow"
+    }
+
+    private static func getFacialOilWhy(for stepName: String) -> String {
+        return "Provides deep nourishment and creates a healthy glow"
+    }
+
+    private static func getFacialOilHow(for stepName: String) -> String {
+        return "Apply 2-3 drops to face and neck, massage gently until absorbed"
+    }
+
     static func getInfo(for stepName: String) -> ProductTypeInfo {
         let lowercased = stepName.lowercased()
-        
+
+        // Extract the main product name (before the dash)
+        let mainProductName = stepName.components(separatedBy: " - ").first ?? stepName
+
         // Try exact matches first
         if let info = productTypes[lowercased] {
             return info
         }
-        
-        // Try specific keyword matching first (more specific patterns)
-        if lowercased.contains("eye") && lowercased.contains("cream") {
-            if lowercased.contains("rich") {
-                return productTypes["rich_eye_cream"] ?? getDefaultInfo(for: "eye_cream")
-            } else {
-                return productTypes["eye_cream"] ?? getDefaultInfo(for: "eye_cream")
-            }
-        } else if lowercased.contains("sheet") && lowercased.contains("mask") {
-            return productTypes["sheet_mask"] ?? getDefaultInfo(for: "mask")
+
+        // Determine the main category and create a dynamic ProductTypeInfo
+        if lowercased.contains("cleanser") || lowercased.contains("cleanse") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "cleanser",
+                description: getCleanserDescription(for: lowercased),
+                iconName: "drop.fill",
+                why: getCleanserWhy(for: lowercased),
+                how: getCleanserHow(for: lowercased),
+                timeOfDay: getCleanserTimeOfDay(for: lowercased)
+            )
+        } else if lowercased.contains("toner") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "toner",
+                description: getTonerDescription(for: lowercased),
+                iconName: "drop.circle",
+                why: getTonerWhy(for: lowercased),
+                how: getTonerHow(for: lowercased),
+                timeOfDay: getTonerTimeOfDay(for: lowercased)
+            )
+        } else if lowercased.contains("serum") || lowercased.contains("treatment") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "serum",
+                description: getSerumDescription(for: lowercased),
+                iconName: "star.fill",
+                why: getSerumWhy(for: lowercased),
+                how: getSerumHow(for: lowercased),
+                timeOfDay: getSerumTimeOfDay(for: lowercased)
+            )
+        } else if lowercased.contains("essence") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "essence",
+                description: getEssenceDescription(for: lowercased),
+                iconName: "drop.circle",
+                why: getEssenceWhy(for: lowercased),
+                how: getEssenceHow(for: lowercased),
+                timeOfDay: "both"
+            )
+        } else if lowercased.contains("ampoule") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "ampoule",
+                description: getAmpouleDescription(for: lowercased),
+                iconName: "star.fill",
+                why: getAmpouleWhy(for: lowercased),
+                how: getAmpouleHow(for: lowercased),
+                timeOfDay: "both"
+            )
+        } else if lowercased.contains("eye") && lowercased.contains("cream") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "eye_cream",
+                description: getEyeCreamDescription(for: lowercased),
+                iconName: "eye.circle",
+                why: getEyeCreamWhy(for: lowercased),
+                how: getEyeCreamHow(for: lowercased),
+                timeOfDay: "both"
+            )
         } else if lowercased.contains("facial") && lowercased.contains("oil") {
-            return productTypes["facial_oil"] ?? getDefaultInfo(for: "facial_oil")
-        } else if lowercased.contains("zone") && lowercased.contains("specific") {
-            return productTypes["zone_specific_treatment"] ?? getDefaultInfo(for: "treatment")
-        } else if lowercased.contains("spot") || lowercased.contains("acne") {
-            return productTypes["spot_treatment"] ?? getDefaultInfo(for: "treatment")
-        } else if lowercased.contains("retinol") && lowercased.contains("treatment") {
-            return productTypes["retinol_treatment"] ?? getDefaultInfo(for: "treatment")
-        } else if lowercased.contains("peptide") && lowercased.contains("complex") {
-            return productTypes["peptide_complex"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("broad") && lowercased.contains("spectrum") {
-            return productTypes["broad_spectrum_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-        } else if lowercased.contains("oil") && lowercased.contains("free") && lowercased.contains("sunscreen") {
-            return productTypes["oil_free_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-        } else if lowercased.contains("anti") && lowercased.contains("aging") && lowercased.contains("sunscreen") {
-            return productTypes["anti_aging_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-        } else if lowercased.contains("barrier") && lowercased.contains("repair") {
-            return productTypes["barrier_repair_cream"] ?? getDefaultInfo(for: "moisturizer")
-        } else if lowercased.contains("water") && lowercased.contains("based") && lowercased.contains("cleanser") {
-            return productTypes["water_based_cleanser"] ?? getDefaultInfo(for: "cleanser")
-        } else if lowercased.contains("gentle") && lowercased.contains("foaming") {
-            return productTypes["gentle_foaming_cleanser"] ?? getDefaultInfo(for: "cleanser")
-        } else if lowercased.contains("oil") && lowercased.contains("cleanser") {
-            return productTypes["oil_cleanser"] ?? getDefaultInfo(for: "cleanser")
-        } else if lowercased.contains("salicylic") && lowercased.contains("acid") {
-            return productTypes["salicylic_acid_toner"] ?? getDefaultInfo(for: "toner")
-        } else if lowercased.contains("treatment") && lowercased.contains("essence") {
-            return productTypes["treatment_essence"] ?? getDefaultInfo(for: "essence")
-        } else if lowercased.contains("face") && lowercased.contains("serum") {
-            return productTypes["face_serum"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("vitamin c") || lowercased.contains("vitamin_c") {
-            return productTypes["vitamin_c_serum"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("hyaluronic") {
-            return productTypes["hyaluronic_acid"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("peptide") && lowercased.contains("serum") {
-            return productTypes["peptide_serum"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("retinol") && lowercased.contains("treatment") {
-            return productTypes["retinol_treatment"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("rich") && lowercased.contains("eye") {
-            return productTypes["rich_eye_cream"] ?? getDefaultInfo(for: "eye_cream")
-        } else if lowercased.contains("rich") && lowercased.contains("serum") {
-            return productTypes["rich_serum"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("rich") && lowercased.contains("moisturizer") {
-            return productTypes["rich_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-        } else if lowercased.contains("lightweight") && lowercased.contains("serum") {
-            return productTypes["lightweight_serum"] ?? getDefaultInfo(for: "serum")
-        } else if lowercased.contains("lightweight") && lowercased.contains("moisturizer") {
-            return productTypes["lightweight_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-        } else if lowercased.contains("heavy") && lowercased.contains("moisturizer") {
-            return productTypes["heavy_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-        } else if lowercased.contains("luxury") && lowercased.contains("moisturizer") {
-            return productTypes["luxury_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-        } else if lowercased.contains("adaptive") && lowercased.contains("moisturizer") {
-            return productTypes["adaptive_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-        } else if lowercased.contains("soothing") && lowercased.contains("toner") {
-            return productTypes["soothing_toner"] ?? getDefaultInfo(for: "toner")
-        } else if lowercased.contains("hydrating") && lowercased.contains("toner") {
-            return productTypes["hydrating_toner"] ?? getDefaultInfo(for: "toner")
-        } else if lowercased.contains("hydrating") && lowercased.contains("mask") {
-            return productTypes["hydrating_mask"] ?? getDefaultInfo(for: "mask")
-        } else if lowercased.contains("exfoliating") && lowercased.contains("toner") {
-            return productTypes["exfoliating_toner"] ?? getDefaultInfo(for: "toner")
-        } else if lowercased.contains("exfoliating") && lowercased.contains("mask") {
-            return productTypes["exfoliating_mask"] ?? getDefaultInfo(for: "mask")
-        } else if lowercased.contains("clay") && lowercased.contains("mask") {
-            return productTypes["clay_mask"] ?? getDefaultInfo(for: "mask")
-        } else if lowercased.contains("mineral") && lowercased.contains("sunscreen") {
-            return productTypes["mineral_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-        } else if lowercased.contains("daily") && lowercased.contains("sunscreen") {
-            return productTypes["daily_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-        } else if lowercased.contains("night") && lowercased.contains("cream") {
-            return productTypes["night_cream"] ?? getDefaultInfo(for: "moisturizer")
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "facial_oil",
+                description: getFacialOilDescription(for: lowercased),
+                iconName: "drop.triangle",
+                why: getFacialOilWhy(for: lowercased),
+                how: getFacialOilHow(for: lowercased),
+                timeOfDay: "evening"
+            )
+        } else if lowercased.contains("moisturizer") || lowercased.contains("moisturiser") || lowercased.contains("cream") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "moisturizer",
+                description: getMoisturizerDescription(for: lowercased),
+                iconName: "drop.circle.fill",
+                why: getMoisturizerWhy(for: lowercased),
+                how: getMoisturizerHow(for: lowercased),
+                timeOfDay: getMoisturizerTimeOfDay(for: lowercased)
+            )
+        } else if lowercased.contains("sunscreen") || lowercased.contains("spf") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "sunscreen",
+                description: getSunscreenDescription(for: lowercased),
+                iconName: "sun.max.fill",
+                why: getSunscreenWhy(for: lowercased),
+                how: getSunscreenHow(for: lowercased),
+                timeOfDay: "morning"
+            )
+        } else if lowercased.contains("mask") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "mask",
+                description: getMaskDescription(for: lowercased),
+                iconName: "face.smiling",
+                why: getMaskWhy(for: lowercased),
+                how: getMaskHow(for: lowercased),
+                timeOfDay: "weekly"
+            )
+        } else if lowercased.contains("exfoliant") {
+            return createDynamicProductInfo(
+                name: mainProductName,
+                category: "exfoliant",
+                description: getExfoliantDescription(for: lowercased),
+                iconName: "sparkles",
+                why: getExfoliantWhy(for: lowercased),
+                how: getExfoliantHow(for: lowercased),
+                timeOfDay: "evening"
+            )
         }
 
-        // Try partial matches (less specific)
-        for (key, info) in productTypes {
-            if lowercased.contains(key) || key.contains(lowercased) {
-                return info
-            }
-        }
-        
-        // Try keyword matching with improved logic
-        if lowercased.contains("cleanser") || lowercased.contains("cleanse") {
-            if lowercased.contains("water") && lowercased.contains("based") {
-                return productTypes["water_based_cleanser"] ?? getDefaultInfo(for: "cleanser")
-            } else if lowercased.contains("water") && !lowercased.contains("based") {
-                return productTypes["water_cleanser"] ?? getDefaultInfo(for: "cleanser")
-            } else if lowercased.contains("foam") || lowercased.contains("foaming") {
-                return productTypes["foaming_cleanser"] ?? getDefaultInfo(for: "cleanser")
-            } else if lowercased.contains("gel") {
-                return productTypes["gel_cleanser"] ?? getDefaultInfo(for: "cleanser")
-            } else if lowercased.contains("cream") {
-                return productTypes["cream_cleanser"] ?? getDefaultInfo(for: "cleanser")
-            } else if lowercased.contains("balancing") {
-                return productTypes["balancing_cleanser"] ?? getDefaultInfo(for: "cleanser")
-            } else {
-            return productTypes["gentle_cleanser"] ?? getDefaultInfo(for: "cleanser")
-            }
-        } else if lowercased.contains("toner") {
-            if lowercased.contains("salicylic") {
-                return productTypes["salicylic_acid_toner"] ?? getDefaultInfo(for: "toner")
-            } else if lowercased.contains("bha") {
-                return productTypes["bha_toner"] ?? getDefaultInfo(for: "toner")
-            } else if lowercased.contains("soothing") {
-                return productTypes["soothing_toner"] ?? getDefaultInfo(for: "toner")
-            } else if lowercased.contains("hydrating") {
-            return productTypes["hydrating_toner"] ?? getDefaultInfo(for: "toner")
-            } else {
-                return productTypes["toner"] ?? getDefaultInfo(for: "toner")
-            }
-        } else if lowercased.contains("essence") {
-            if lowercased.contains("treatment") {
-                return productTypes["treatment_essence"] ?? getDefaultInfo(for: "essence")
-            } else {
-                return productTypes["essence"] ?? getDefaultInfo(for: "essence")
-            }
-        } else if lowercased.contains("ampoule") {
-            return productTypes["ampoule"] ?? getDefaultInfo(for: "ampoule")
-        } else if lowercased.contains("serum") || lowercased.contains("treatment") {
-            if lowercased.contains("niacinamide") {
-                return productTypes["niacinamide_serum"] ?? getDefaultInfo(for: "serum")
-            } else if lowercased.contains("peptide") {
-                if lowercased.contains("complex") {
-                    return productTypes["peptide_complex"] ?? getDefaultInfo(for: "serum")
-                } else {
-                    return productTypes["peptide_serum"] ?? getDefaultInfo(for: "serum")
-                }
-            } else if lowercased.contains("rich") {
-                return productTypes["rich_serum"] ?? getDefaultInfo(for: "serum")
-            } else if lowercased.contains("lightweight") {
-                return productTypes["lightweight_serum"] ?? getDefaultInfo(for: "serum")
-            } else if lowercased.contains("face") {
-                return productTypes["face_serum"] ?? getDefaultInfo(for: "serum")
-            } else {
-                return productTypes["serum"] ?? getDefaultInfo(for: "serum")
-            }
-        } else if lowercased.contains("moisturizer") || lowercased.contains("moisturiser") || lowercased.contains("cream") {
-            if lowercased.contains("heavy") {
-                return productTypes["heavy_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-            } else if lowercased.contains("rich") {
-                return productTypes["rich_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-            } else if lowercased.contains("luxury") {
-                return productTypes["luxury_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-            } else if lowercased.contains("adaptive") {
-                return productTypes["adaptive_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-            } else if lowercased.contains("lightweight") {
-                return productTypes["lightweight_moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-            } else if lowercased.contains("night") {
-                return productTypes["night_cream"] ?? getDefaultInfo(for: "moisturizer")
-            } else if lowercased.contains("barrier") && lowercased.contains("repair") {
-                return productTypes["barrier_repair_cream"] ?? getDefaultInfo(for: "moisturizer")
-            } else {
-                return productTypes["moisturizer"] ?? getDefaultInfo(for: "moisturizer")
-            }
-        } else if lowercased.contains("sunscreen") || lowercased.contains("spf") {
-            if lowercased.contains("mineral") {
-                return productTypes["mineral_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-            } else if lowercased.contains("oil") && lowercased.contains("free") {
-                return productTypes["oil_free_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-            } else if lowercased.contains("broad") && lowercased.contains("spectrum") {
-                return productTypes["broad_spectrum_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-            } else if lowercased.contains("anti") && lowercased.contains("aging") {
-                return productTypes["anti_aging_sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-            } else {
-                return productTypes["sunscreen"] ?? getDefaultInfo(for: "sunscreen")
-            }
-        } else if lowercased.contains("mask") {
-            if lowercased.contains("clay") {
-                return productTypes["clay_mask"] ?? getDefaultInfo(for: "mask")
-            } else if lowercased.contains("hydrating") {
-                return productTypes["hydrating_mask"] ?? getDefaultInfo(for: "mask")
-            } else if lowercased.contains("exfoliating") {
-                return productTypes["exfoliating_mask"] ?? getDefaultInfo(for: "mask")
-            } else {
-                return productTypes["hydrating_mask"] ?? getDefaultInfo(for: "mask")
-            }
-        } else if lowercased.contains("exfoliant") {
-            return productTypes["exfoliant"] ?? getDefaultInfo(for: "exfoliant")
-        }
-        
         // Default fallback
         return getDefaultInfo(for: "serum")
     }
-    
+
     private static func getDefaultInfo(for type: String) -> ProductTypeInfo {
         switch type {
         case "cleanser":
@@ -1200,11 +1510,11 @@ struct ProductTypeDatabase {
             )
         }
     }
-    
+
     static func getIconName(for stepName: String) -> String {
         return getInfo(for: stepName).iconName
     }
-    
+
     static func getStepType(for stepName: String) -> String {
         let lowercased = stepName.lowercased()
         if lowercased.contains("cleanser") || lowercased.contains("cleanse") {
@@ -1221,13 +1531,13 @@ struct ProductTypeDatabase {
             return "faceSerum"
         }
     }
-    
+
     static func getTimeOfDay(for stepName: String, index: Int, totalSteps: Int) -> String {
         let info = getInfo(for: stepName)
         if info.timeOfDay != "both" {
             return info.timeOfDay
         }
-        
+
         // If it's a "both" product, determine based on position
         if index < totalSteps / 2 {
             return "morning"
