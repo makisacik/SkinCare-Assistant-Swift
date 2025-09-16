@@ -375,18 +375,20 @@ struct RoutineHomeView: View {
     private func generateMorningRoutine() -> [RoutineStepDetail] {
         // Use active routine from SavedRoutineService if available
         if let activeRoutine = savedRoutineService.activeRoutine {
-            return activeRoutine.steps.prefix(activeRoutine.steps.count / 2).enumerated().map { index, stepName in
+            let morningSteps = activeRoutine.stepDetails.filter { $0.timeOfDay == "morning" }
+            return morningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "morning_\(stepName)",
-                    title: stepName,
-                    description: "Step from your active routine",
-                    iconName: iconNameForStepName(stepName),
-                    stepType: stepTypeForStepName(stepName),
+                    id: "morning_\(stepDetail.title)",
+                    title: stepDetail.title,
+                    description: stepDetail.stepDescription,
+                    iconName: stepDetail.iconName,
+                    stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                     timeOfDay: .morning,
-                    why: "Part of your personalized routine",
-                    how: "Follow the routine as recommended"
+                    why: stepDetail.why,
+                    how: stepDetail.how
                 )
-            }}
+            }
+        }
 
         // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {
@@ -451,19 +453,20 @@ struct RoutineHomeView: View {
     private func generateEveningRoutine() -> [RoutineStepDetail] {
         // Use active routine from SavedRoutineService if available
         if let activeRoutine = savedRoutineService.activeRoutine {
-            let eveningSteps = activeRoutine.steps.suffix(activeRoutine.steps.count / 2)
-            return eveningSteps.enumerated().map { index, stepName in
+            let eveningSteps = activeRoutine.stepDetails.filter { $0.timeOfDay == "evening" }
+            return eveningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "evening_\(stepName)",
-                    title: stepName,
-                    description: "Step from your active routine",
-                    iconName: iconNameForStepName(stepName),
-                    stepType: stepTypeForStepName(stepName),
+                    id: "evening_\(stepDetail.title)",
+                    title: stepDetail.title,
+                    description: stepDetail.stepDescription,
+                    iconName: stepDetail.iconName,
+                    stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                     timeOfDay: .evening,
-                    why: "Part of your personalized routine",
-                    how: "Follow the routine as recommended"
+                    why: stepDetail.why,
+                    how: stepDetail.how
                 )
-            }}
+            }
+        }
 
         // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {

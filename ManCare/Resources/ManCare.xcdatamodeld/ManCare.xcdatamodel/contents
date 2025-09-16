@@ -28,10 +28,24 @@
         <attribute name="isPremium" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="savedDate" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isActive" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <relationship name="stepDetails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SavedStepDetailEntity" inverseName="routine" inverseEntity="SavedStepDetailEntity"/>
+    </entity>
+    <entity name="SavedStepDetailEntity" representedClassName="SavedStepDetailEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" optional="NO" attributeType="String"/>
+        <attribute name="stepDescription" optional="NO" attributeType="String"/>
+        <attribute name="iconName" optional="NO" attributeType="String"/>
+        <attribute name="stepType" optional="NO" attributeType="String"/>
+        <attribute name="timeOfDay" optional="NO" attributeType="String"/>
+        <attribute name="why" optional="YES" attributeType="String"/>
+        <attribute name="how" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="NO" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="routine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SavedRoutineEntity" inverseName="stepDetails" inverseEntity="SavedRoutineEntity"/>
     </entity>
     <elements>
         <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
         <element name="RoutineCompletion" positionX="-63" positionY="18" width="128" height="119"/>
         <element name="SavedRoutineEntity" positionX="-63" positionY="54" width="128" height="194"/>
+        <element name="SavedStepDetailEntity" positionX="-63" positionY="90" width="128" height="119"/>
     </elements>
 </model>

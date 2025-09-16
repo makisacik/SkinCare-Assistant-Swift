@@ -190,7 +190,7 @@ struct MorningRoutineCompletionView: View {
             Spacer()
             
             // Completion percentage
-            Text("\(Int((Double(completedStepsCount) / Double(totalSteps)) * 100))%")
+            Text("\(totalSteps > 0 ? Int((Double(completedStepsCount) / Double(totalSteps)) * 100) : 0)%")
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
         }

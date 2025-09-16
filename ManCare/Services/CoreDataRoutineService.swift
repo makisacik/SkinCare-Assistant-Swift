@@ -13,91 +13,125 @@ import CoreData
 
 class CoreDataRoutineService: ObservableObject {
     static let shared = CoreDataRoutineService()
-    
+
     @Published var savedRoutines: [SavedRoutineModel] = []
     @Published var activeRoutine: SavedRoutineModel?
-    
+
     private let persistenceController = PersistenceController.shared
     private var viewContext: NSManagedObjectContext {
         persistenceController.container.viewContext
     }
-    
+
     private init() {
         loadSavedRoutines()
         loadActiveRoutine()
     }
-    
+
     // MARK: - Public Methods
-    
+
     func saveRoutine(_ template: RoutineTemplate) {
         // Check if routine is already saved
         if savedRoutines.contains(where: { $0.templateId == template.id }) {
             return
         }
-        
+
         let savedRoutine = SavedRoutineModel(from: template)
         saveRoutineToCoreData(savedRoutine)
         loadSavedRoutines() // Refresh the published array
     }
-    
+
     func removeRoutine(_ routine: SavedRoutineModel) {
         // Find and delete from Core Data
         let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", routine.id as CVarArg)
-        
+
         do {
             let results = try viewContext.fetch(request)
             for savedRoutine in results {
                 viewContext.delete(savedRoutine)
             }
             try viewContext.save()
-            
+
             // If removing active routine, clear it
             if activeRoutine?.id == routine.id {
                 activeRoutine = nil
                 saveActiveRoutineToCoreData(nil)
             }
-            
+
             loadSavedRoutines() // Refresh the published array
         } catch {
             print("❌ Error removing routine: \(error)")
         }
     }
-    
+
     func setActiveRoutine(_ routine: SavedRoutineModel) {
         // Deactivate current active routine
         if let currentActive = activeRoutine {
             updateRoutineActiveStatus(currentActive.id, isActive: false)
         }
-        
+
         // Set new active routine
         updateRoutineActiveStatus(routine.id, isActive: true)
         activeRoutine = routine
         saveActiveRoutineToCoreData(routine)
     }
-    
+
     func isRoutineSaved(_ template: RoutineTemplate) -> Bool {
         return savedRoutines.contains { $0.templateId == template.id }
     }
-    
+
     func getSavedRoutine(for template: RoutineTemplate) -> SavedRoutineModel? {
         return savedRoutines.first { $0.templateId == template.id }
     }
-    
+
     func saveInitialRoutine(from routineResponse: RoutineResponse) {
         print("🔄 saveInitialRoutine called (Core Data)")
         print("📊 Current activeRoutine: \(activeRoutine?.title ?? "nil")")
         print("📊 Current savedRoutines count: \(savedRoutines.count)")
-        
+
         // Create a custom saved routine directly from the onboarding response
         let morningSteps = routineResponse.routine.morning.map { $0.name }
         let eveningSteps = routineResponse.routine.evening.map { $0.name }
         let allSteps = morningSteps + eveningSteps
-        
+
         print("📝 Morning steps: \(morningSteps)")
         print("📝 Evening steps: \(eveningSteps)")
         print("📝 Total steps: \(allSteps.count)")
-        
+
+        // Create step details from the routine response
+        var stepDetails: [SavedStepDetailModel] = []
+        var order = 0
+
+        // Add morning steps
+        for step in routineResponse.routine.morning {
+            stepDetails.append(SavedStepDetailModel(
+                title: step.name,
+                stepDescription: "\(step.why) - \(step.how)",
+                iconName: iconNameForStepType(step.step),
+                stepType: step.step.rawValue,
+                timeOfDay: "morning",
+                why: step.why,
+                how: step.how,
+                order: order
+            ))
+            order += 1
+        }
+
+        // Add evening steps
+        for step in routineResponse.routine.evening {
+            stepDetails.append(SavedStepDetailModel(
+                title: step.name,
+                stepDescription: "\(step.why) - \(step.how)",
+                iconName: iconNameForStepType(step.step),
+                stepType: step.step.rawValue,
+                timeOfDay: "evening",
+                why: step.why,
+                how: step.how,
+                order: order
+            ))
+            order += 1
+        }
+
         let initialRoutine = SavedRoutineModel(
             templateId: UUID(), // Generate new ID for custom routine
             title: "My First Routine",
@@ -112,14 +146,15 @@ class CoreDataRoutineService: ObservableObject {
             isFeatured: false,
             isPremium: false,
             savedDate: Date(),
-            isActive: true
+            isActive: true,
+            stepDetails: stepDetails
         )
-        
+
         print("✅ Created initialRoutine: \(initialRoutine.title)")
-        
+
         // Check if we already have a "My First Routine" to avoid duplicates
         let existingFirstRoutine = savedRoutines.first { $0.title == "My First Routine" }
-        
+
         if let existing = existingFirstRoutine {
             print("🔄 Updating existing 'My First Routine'")
             // Update the existing routine
@@ -133,32 +168,32 @@ class CoreDataRoutineService: ObservableObject {
             if let currentActive = activeRoutine {
                 updateRoutineActiveStatus(currentActive.id, isActive: false)
             }
-            
+
             // Add new routine and set as active
             saveRoutineToCoreData(initialRoutine)
             activeRoutine = initialRoutine
             saveActiveRoutineToCoreData(initialRoutine)
             print("✅ New routine saved and set as active")
         }
-        
+
         loadSavedRoutines() // Refresh the published array
         print("📊 Final savedRoutines count: \(savedRoutines.count)")
         print("📊 Final activeRoutine: \(activeRoutine?.title ?? "nil")")
         print("📊 All saved routine titles: \(savedRoutines.map { $0.title })")
     }
-    
+
     // Debug method to clear all routines
     func clearAllRoutines() {
         print("🗑️ Clearing all routines (Core Data)")
         let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
-        
+
         do {
             let results = try viewContext.fetch(request)
             for savedRoutine in results {
                 viewContext.delete(savedRoutine)
             }
             try viewContext.save()
-            
+
             savedRoutines.removeAll()
             activeRoutine = nil
             saveActiveRoutineToCoreData(nil)
@@ -167,14 +202,14 @@ class CoreDataRoutineService: ObservableObject {
             print("❌ Error clearing routines: \(error)")
         }
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func loadSavedRoutines() {
         print("📂 Loading saved routines from Core Data")
         let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \SavedRoutineEntity.savedDate, ascending: false)]
-        
+
         do {
             let results = try viewContext.fetch(request)
             savedRoutines = results.compactMap { SavedRoutineModel(from: $0) }
@@ -185,13 +220,13 @@ class CoreDataRoutineService: ObservableObject {
             savedRoutines = []
         }
     }
-    
+
     private func loadActiveRoutine() {
         print("📂 Loading active routine from Core Data")
         let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
         request.predicate = NSPredicate(format: "isActive == YES")
         request.fetchLimit = 1
-        
+
         do {
             let results = try viewContext.fetch(request)
             if let activeRoutineEntity = results.first {
@@ -206,11 +241,11 @@ class CoreDataRoutineService: ObservableObject {
             activeRoutine = nil
         }
     }
-    
+
     private func saveRoutineToCoreData(_ routine: SavedRoutineModel) {
         print("💾 Saving routine to Core Data: \(routine.title)")
         let savedRoutineEntity = SavedRoutineEntity(context: viewContext)
-        
+
         savedRoutineEntity.id = routine.id
         savedRoutineEntity.templateId = routine.templateId
         savedRoutineEntity.title = routine.title
@@ -226,7 +261,22 @@ class CoreDataRoutineService: ObservableObject {
         savedRoutineEntity.isPremium = routine.isPremium
         savedRoutineEntity.savedDate = routine.savedDate
         savedRoutineEntity.isActive = routine.isActive
-        
+
+        // Save step details
+        for stepDetail in routine.stepDetails {
+            let stepEntity = SavedStepDetailEntity(context: viewContext)
+            stepEntity.id = stepDetail.id
+            stepEntity.title = stepDetail.title
+            stepEntity.stepDescription = stepDetail.stepDescription
+            stepEntity.iconName = stepDetail.iconName
+            stepEntity.stepType = stepDetail.stepType
+            stepEntity.timeOfDay = stepDetail.timeOfDay
+            stepEntity.why = stepDetail.why
+            stepEntity.how = stepDetail.how
+            stepEntity.order = Int16(stepDetail.order)
+            stepEntity.routine = savedRoutineEntity
+        }
+
         do {
             try viewContext.save()
             print("✅ Successfully saved routine to Core Data")
@@ -234,11 +284,11 @@ class CoreDataRoutineService: ObservableObject {
             print("❌ Failed to save routine to Core Data: \(error)")
         }
     }
-    
+
     private func updateRoutineInCoreData(_ routineId: UUID, with newRoutine: SavedRoutineModel) {
         let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", routineId as CVarArg)
-        
+
         do {
             let results = try viewContext.fetch(request)
             if let savedRoutineEntity = results.first {
@@ -255,7 +305,29 @@ class CoreDataRoutineService: ObservableObject {
                 savedRoutineEntity.isPremium = newRoutine.isPremium
                 savedRoutineEntity.savedDate = newRoutine.savedDate
                 savedRoutineEntity.isActive = newRoutine.isActive
-                
+
+                // Delete existing step details
+                if let existingSteps = savedRoutineEntity.stepDetails as? Set<SavedStepDetailEntity> {
+                    for step in existingSteps {
+                        viewContext.delete(step)
+                    }
+                }
+
+                // Add new step details
+                for stepDetail in newRoutine.stepDetails {
+                    let stepEntity = SavedStepDetailEntity(context: viewContext)
+                    stepEntity.id = stepDetail.id
+                    stepEntity.title = stepDetail.title
+                    stepEntity.stepDescription = stepDetail.stepDescription
+                    stepEntity.iconName = stepDetail.iconName
+                    stepEntity.stepType = stepDetail.stepType
+                    stepEntity.timeOfDay = stepDetail.timeOfDay
+                    stepEntity.why = stepDetail.why
+                    stepEntity.how = stepDetail.how
+                    stepEntity.order = Int16(stepDetail.order)
+                    stepEntity.routine = savedRoutineEntity
+                }
+
                 try viewContext.save()
                 print("✅ Successfully updated routine in Core Data")
             }
@@ -263,11 +335,11 @@ class CoreDataRoutineService: ObservableObject {
             print("❌ Failed to update routine in Core Data: \(error)")
         }
     }
-    
+
     private func updateRoutineActiveStatus(_ routineId: UUID, isActive: Bool) {
         let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", routineId as CVarArg)
-        
+
         do {
             let results = try viewContext.fetch(request)
             if let savedRoutineEntity = results.first {
@@ -279,7 +351,7 @@ class CoreDataRoutineService: ObservableObject {
             print("❌ Failed to update routine active status: \(error)")
         }
     }
-    
+
     private func saveActiveRoutineToCoreData(_ routine: SavedRoutineModel?) {
         // Store active routine ID in UserDefaults for now (could be moved to Core Data later)
         if let routine = routine {
@@ -287,6 +359,61 @@ class CoreDataRoutineService: ObservableObject {
         } else {
             UserDefaults.standard.removeObject(forKey: "activeRoutineId")
         }
+    }
+
+    // MARK: - Helper Methods
+
+    private func iconNameForStepType(_ stepType: ProductType) -> String {
+        switch stepType {
+        case .cleanser:
+            return "drop.fill"
+        case .faceSerum:
+            return "star.fill"
+        case .moisturizer:
+            return "drop.circle.fill"
+        case .sunscreen:
+            return "sun.max.fill"
+        default:
+            return stepType.iconName
+        }
+    }
+}
+
+// MARK: - SavedStepDetailModel (Swift Model)
+
+struct SavedStepDetailModel: Identifiable, Codable {
+    let id: UUID
+    let title: String
+    let stepDescription: String
+    let iconName: String
+    let stepType: String
+    let timeOfDay: String
+    let why: String?
+    let how: String?
+    let order: Int
+
+    init(id: UUID = UUID(), title: String, stepDescription: String, iconName: String, stepType: String, timeOfDay: String, why: String? = nil, how: String? = nil, order: Int) {
+        self.id = id
+        self.title = title
+        self.stepDescription = stepDescription
+        self.iconName = iconName
+        self.stepType = stepType
+        self.timeOfDay = timeOfDay
+        self.why = why
+        self.how = how
+        self.order = order
+    }
+
+    init(from entity: SavedStepDetailEntity) {
+        self.id = entity.id ?? UUID()
+        self.title = entity.title ?? ""
+        self.stepDescription = entity.stepDescription ?? ""
+        self.iconName = entity.iconName ?? ""
+        self.stepType = entity.stepType ?? ""
+        self.timeOfDay = entity.timeOfDay ?? ""
+        self.why = entity.why
+        self.how = entity.how
+        self.order = Int(entity.order)
     }
 }
 
@@ -308,7 +435,8 @@ struct SavedRoutineModel: Identifiable, Codable {
     let isPremium: Bool
     let savedDate: Date
     let isActive: Bool
-    
+    let stepDetails: [SavedStepDetailModel]
+
     init(from template: RoutineTemplate, isActive: Bool = false) {
         self.id = UUID()
         self.templateId = template.id
@@ -325,9 +453,23 @@ struct SavedRoutineModel: Identifiable, Codable {
         self.isPremium = template.isPremium
         self.savedDate = Date()
         self.isActive = isActive
+        // Create step details from template steps using ProductTypeDatabase
+        self.stepDetails = template.steps.enumerated().map { index, stepName in
+            let productInfo = ProductTypeDatabase.getInfo(for: stepName)
+            return SavedStepDetailModel(
+                title: productInfo.name,
+                stepDescription: productInfo.description,
+                iconName: productInfo.iconName,
+                stepType: ProductTypeDatabase.getStepType(for: stepName),
+                timeOfDay: ProductTypeDatabase.getTimeOfDay(for: stepName, index: index, totalSteps: template.steps.count),
+                why: productInfo.why,
+                how: productInfo.how,
+                order: index
+            )
+        }
     }
-    
-    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], steps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool) {
+
+    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], steps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = []) {
         self.id = UUID()
         self.templateId = templateId
         self.title = title
@@ -343,8 +485,9 @@ struct SavedRoutineModel: Identifiable, Codable {
         self.isPremium = isPremium
         self.savedDate = savedDate
         self.isActive = isActive
+        self.stepDetails = stepDetails
     }
-    
+
     init(from entity: SavedRoutineEntity) {
         self.id = entity.id ?? UUID()
         self.templateId = entity.templateId ?? UUID()
@@ -361,5 +504,9 @@ struct SavedRoutineModel: Identifiable, Codable {
         self.isPremium = entity.isPremium
         self.savedDate = entity.savedDate ?? Date()
         self.isActive = entity.isActive
+        // Convert step details from Core Data entities
+        self.stepDetails = (entity.stepDetails as? Set<SavedStepDetailEntity>)?.compactMap { stepEntity in
+            SavedStepDetailModel(from: stepEntity)
+        }.sorted { $0.order < $1.order } ?? []
     }
 }

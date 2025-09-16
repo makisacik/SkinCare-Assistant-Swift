@@ -597,7 +597,7 @@ struct CompletionView: View {
                 VStack(spacing: 12) {
                     StatRow(title: "Total Time", value: formatDuration(session.totalDurationSeconds))
                     StatRow(title: "Steps Skipped", value: "\(session.skips)")
-                    StatRow(title: "Completion Rate", value: "\(Int((Double(session.stepsCompleted.count) / Double(session.steps.count)) * 100))%")
+                    StatRow(title: "Completion Rate", value: "\(session.steps.count > 0 ? Int((Double(session.stepsCompleted.count) / Double(session.steps.count)) * 100) : 0)%")
                 }
                 .padding(20)
                 .background(
