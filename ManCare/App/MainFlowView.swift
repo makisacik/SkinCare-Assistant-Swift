@@ -326,23 +326,23 @@ struct MainFlowView: View {
         routineError = nil
 
         Task {
+            // Create the request outside try-catch so it's accessible in error handling
+            let request = GPTService.createRequest(
+                skinType: skinType,
+                concerns: selectedConcerns,
+                mainGoal: mainGoal,
+                fitzpatrickSkinTone: fitzpatrickSkinTone,
+                ageRange: ageRange,
+                region: region,
+                preferences: selectedPreferences,
+                lifestyle: nil, // TODO: Add lifestyle collection
+                locale: "en-US"
+            )
+
             do {
                 print("🚀 Starting routine generation...")
                 // Create GPTService instance
                 let gptService = GPTService(apiKey: Config.openAIAPIKey)
-
-                // Create the request using convenience method
-                let request = GPTService.createRequest(
-                    skinType: skinType,
-                    concerns: selectedConcerns,
-                    mainGoal: mainGoal,
-                    fitzpatrickSkinTone: fitzpatrickSkinTone,
-                    ageRange: ageRange,
-                    region: region,
-                    preferences: selectedPreferences,
-                    lifestyle: nil, // TODO: Add lifestyle collection
-                    locale: "en-US"
-                )
 
                 // Generate routine using GPTService with timeout
                 print("📡 Calling GPT API...")
@@ -364,8 +364,8 @@ struct MainFlowView: View {
                     print("   - Lifestyle: None")
                 }
 
-                let routine = try await withTimeout(seconds: 60) {
-                    try await gptService.generateRoutine(for: request)
+                let routine = try await withTimeout(seconds: 30) {
+                    try await gptService.generateRoutine(for: request, enhanceWithProductInfo: false)
                 }
 
                 print("✅ Routine generated successfully!")
@@ -421,11 +421,26 @@ struct MainFlowView: View {
                         self.currentStep = .results
                     }
                 }
+
+                // Enhance routine with product info asynchronously in background
+                Task {
+                    let enhancedRoutine = await gptService.enhanceRoutineAsync(routine)
+                    await MainActor.run {
+                        self.generatedRoutine = enhancedRoutine
+                        print("✅ Routine enhanced with product information")
+                    }
+                }
             } catch {
                 print("❌ Error generating routine: \(error)")
                 await MainActor.run {
                     self.routineError = error
                     self.isLoadingRoutine = false
+
+                    // Create a fallback routine for better UX
+                    if self.generatedRoutine == nil {
+                        self.generatedRoutine = self.createFallbackRoutine(for: request)
+                    }
+
                     // Transition to results page even with error (fallback routine will be shown)
                     withAnimation(.easeInOut(duration: 0.3)) {
                         self.currentStep = .results
@@ -433,6 +448,101 @@ struct MainFlowView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Fallback Functions
+
+    private func createFallbackRoutine(for request: ManCareRoutineRequest) -> RoutineResponse {
+        // Create a simple fallback routine based on the request
+        let skinType = request.selectedSkinType
+        let concerns = request.selectedConcerns
+        let mainGoal = request.selectedMainGoal
+
+        // Basic routine based on skin type
+        var morningSteps: [APIRoutineStep] = []
+        var eveningSteps: [APIRoutineStep] = []
+
+        // Morning routine
+        morningSteps.append(APIRoutineStep(
+            step: .cleanser,
+            name: "Gentle Cleanser",
+            why: "Removes overnight oil buildup and prepares skin for the day",
+            how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water",
+            constraints: Constraints(spf: 0, fragranceFree: true, sensitiveSafe: true, vegan: true, crueltyFree: true, avoidIngredients: [], preferIngredients: [])
+        ))
+
+        if skinType == "dry" {
+            morningSteps.append(APIRoutineStep(
+                step: .moisturizer,
+                name: "Hydrating Moisturizer",
+                why: "Provides essential hydration for dry skin",
+                how: "Apply to face and neck, massage gently until absorbed",
+                constraints: Constraints(spf: 0, fragranceFree: true, sensitiveSafe: true, vegan: true, crueltyFree: true, avoidIngredients: [], preferIngredients: ["hyaluronic acid", "ceramides"])
+            ))
+        }
+
+        morningSteps.append(APIRoutineStep(
+            step: .sunscreen,
+            name: "Daily Sunscreen",
+            why: "Protects skin from harmful UV rays and prevents premature aging",
+            how: "Apply liberally to face and neck, reapply every 2 hours if outdoors",
+            constraints: Constraints(spf: 30, fragranceFree: true, sensitiveSafe: true, vegan: true, crueltyFree: true, avoidIngredients: [], preferIngredients: ["zinc oxide", "titanium dioxide"])
+        ))
+
+        // Evening routine
+        eveningSteps.append(APIRoutineStep(
+            step: .cleanser,
+            name: "Gentle Cleanser",
+            why: "Removes makeup, sunscreen, and daily pollutants",
+            how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water",
+            constraints: Constraints(spf: 0, fragranceFree: true, sensitiveSafe: true, vegan: true, crueltyFree: true, avoidIngredients: [], preferIngredients: [])
+        ))
+
+        if concerns.contains("largePores") {
+            eveningSteps.append(APIRoutineStep(
+                step: .faceSerum,
+                name: "Pore-Minimizing Serum",
+                why: "Helps reduce the appearance of large pores",
+                how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
+                constraints: Constraints(spf: 0, fragranceFree: true, sensitiveSafe: true, vegan: true, crueltyFree: true, avoidIngredients: [], preferIngredients: ["niacinamide", "salicylic acid"])
+            ))
+        }
+
+        eveningSteps.append(APIRoutineStep(
+            step: .moisturizer,
+            name: "Night Moisturizer",
+            why: "Provides overnight hydration and skin repair",
+            how: "Apply to face and neck, massage gently until absorbed",
+            constraints: Constraints(spf: 0, fragranceFree: true, sensitiveSafe: true, vegan: true, crueltyFree: true, avoidIngredients: [], preferIngredients: ["retinol", "peptides"])
+        ))
+
+        let routine = Routine(
+            depth: .standard,
+            morning: morningSteps,
+            evening: eveningSteps,
+            weekly: nil
+        )
+
+        return RoutineResponse(
+            version: "1.0",
+            locale: request.locale,
+            summary: Summary(
+                title: "Basic Skincare Routine",
+                oneLiner: "A simple, effective routine tailored to your skin type and concerns"
+            ),
+            routine: routine,
+            guardrails: Guardrails(
+                cautions: ["Start slowly with new products", "Patch test before full application"],
+                whenToStop: ["If you experience irritation or allergic reactions"],
+                sunNotes: "Always wear sunscreen during the day"
+            ),
+            adaptation: Adaptation(
+                forSkinType: "Tailored for \(skinType) skin",
+                forConcerns: concerns,
+                forPreferences: []
+            ),
+            productSlots: []
+        )
     }
 
     // MARK: - Mock Data Functions

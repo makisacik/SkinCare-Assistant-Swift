@@ -22,6 +22,11 @@ struct ProductTypeDatabase {
         let timeOfDay: String
     }
 
+    // MARK: - Caching
+
+    private static var cache: [String: ProductTypeInfo] = [:]
+    private static let cacheQueue = DispatchQueue(label: "com.mancare.producttypecache", attributes: .concurrent)
+
     // MARK: - Database
 
     static let productTypes: [String: ProductTypeInfo] = [
@@ -866,6 +871,19 @@ struct ProductTypeDatabase {
     }
 
     static func getInfo(for stepName: String) -> ProductTypeInfo {
+        // Check cache first
+        return cacheQueue.sync {
+            if let cached = cache[stepName] {
+                return cached
+            }
+
+            let result = computeProductInfo(for: stepName)
+            cache[stepName] = result
+            return result
+        }
+    }
+
+    private static func computeProductInfo(for stepName: String) -> ProductTypeInfo {
         let lowercased = stepName.lowercased()
 
         // Extract the main product name (before the dash)
@@ -991,6 +1009,20 @@ struct ProductTypeDatabase {
 
         // Default fallback
         return getDefaultInfo(for: "serum")
+    }
+
+    // MARK: - Cache Management
+
+    static func clearCache() {
+        cacheQueue.async(flags: .barrier) {
+            cache.removeAll()
+        }
+    }
+
+    static func getCacheSize() -> Int {
+        return cacheQueue.sync {
+            return cache.count
+        }
     }
 
     private static func getDefaultInfo(for type: String) -> ProductTypeInfo {
