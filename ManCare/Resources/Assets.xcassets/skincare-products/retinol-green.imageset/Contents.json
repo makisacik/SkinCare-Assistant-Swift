@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "toner-buttle-purple.png",
+      "filename" : "retinol-green.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "toner-buttle-purple@2x.png",
+      "filename" : "retinol-green@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "toner-buttle-purple@3x.png",
+      "filename" : "retinol-green@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

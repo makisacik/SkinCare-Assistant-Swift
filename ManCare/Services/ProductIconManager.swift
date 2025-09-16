@@ -13,43 +13,83 @@ import SwiftUI
 /// Manages custom product icons for different product types
 class ProductIconManager {
     
-    // MARK: - Available Custom Icons
+    // MARK: - Product Type to Asset Mapping
     
-    /// Available custom product icon assets
-    enum CustomIcon: String, CaseIterable {
-        case bottleCleanserBlue = "bottle-cleanser-blue"
-        case exfoliatorOrange = "exfoliator-orange"
-        case jarMoisturizerGreen = "jar-moisturizer-green"
-        case serumIndigo = "serum-indigo"
-        case sunScreenYellow = "sun-screen-yellow"
-        case tonerBottlePurple = "toner-buttle-purple" // Note: keeping original typo in asset name
-        
-        var displayName: String {
-            switch self {
-            case .bottleCleanserBlue: return "Cleanser Bottle"
-            case .exfoliatorOrange: return "Exfoliator"
-            case .jarMoisturizerGreen: return "Moisturizer Jar"
-            case .serumIndigo: return "Serum Bottle"
-            case .sunScreenYellow: return "Sunscreen"
-            case .tonerBottlePurple: return "Toner Bottle"
-            }
-        }
-    }
-    
+    /// Maps ProductType to specific asset names
+    private static let productTypeAssetMapping: [ProductType: String] = [
+        // Most commonly used (daily essentials)
+        .cleanser: "bottle-cleanser-blue",
+        .moisturizer: "jar-moisturizer-green",
+        .sunscreen: "sun-screen-yellow",
+        .toner: "toner-bottle-purple",
+
+        // Treatment products
+        .faceSerum: "serum-indigo",
+        .exfoliator: "exfoliator-orange",
+        .faceMask: "face-mask-jar-pink",
+        .facialOil: "facial-oil-brown",
+
+        // Specialized products
+        .facialMist: "facial-mist-cyan",
+        .eyeCream: "eye-cream-mint",
+        .spotTreatment: "spot-treatment-red",
+        .retinol: "retinol-green",
+        .vitaminC: "vitamic-c-yellow",
+        .niacinamide: "niacinamide-blue",
+
+        // Sun protection variations
+        .faceSunscreen: "face-sun-screen-yellow",
+        .bodySunscreen: "body-sun-screen-yellow",
+        .lipBalm: "lip-balm-pink",
+
+        // Shaving products
+        .shaveCream: "shaving-cream-gray",
+        .aftershave: "after-shave-blue",
+        .shaveGel: "shaving-gel-cyan",
+
+        // Body care
+        .bodyLotion: "body-lotion-green",
+        .bodyWash: "body-wash-blue",
+        .handCream: "hand-cream-mint",
+
+        // Hair care
+        .shampoo: "shampoo-gray",
+        .conditioner: "conditioner-brown",
+        .hairOil: "hair-oil-yellow",
+        .hairMask: "hair-mask-brown",
+
+        // Specialized treatments
+        .chemicalPeel: "chemical-peel-red",
+        .micellarWater: "micellar-cleansing-water-blue",
+        .makeupRemover: "make-up-remover-pink",
+        .faceWash: "face-wash-blue",
+        .cleansingOil: "cleansing-oil-yellow",
+        .cleansingBalm: "cleansing-balm-gray"
+    ]
+
+    /// Fallback asset name for unknown product types
+    private static let fallbackAsset = "after-shave-blue"
+
     // MARK: - Public Methods
-    
-    /// Get a consistent icon name for any product type or step name
+
+    /// Get icon name for a ProductType - uses specific asset mapping
+    static func getIconName(for productType: ProductType) -> String {
+        return productTypeAssetMapping[productType] ?? fallbackAsset
+    }
+
+    /// Get a consistent icon name for any string input (step names, etc.)
     /// Uses deterministic hashing to ensure the same input always gets the same icon
     static func getIconName(for input: String) -> String {
-        let icons = CustomIcon.allCases
+        // First try to match as a ProductType
+        if let productType = ProductType(rawValue: input) {
+            return getIconName(for: productType)
+        }
+
+        // For other inputs, use deterministic hashing with all available assets
+        let allAssets = Array(productTypeAssetMapping.values) + [fallbackAsset]
         let hash = input.hashValue
-        let index = abs(hash) % icons.count
-        return icons[index].rawValue
-    }
-    
-    /// Get icon name for a ProductType
-    static func getIconName(for productType: ProductType) -> String {
-        return getIconName(for: productType.rawValue)
+        let index = abs(hash) % allAssets.count
+        return allAssets[index]
     }
     
     /// Get icon name for a step name
@@ -62,14 +102,14 @@ class ProductIconManager {
         return getIconName(for: step)
     }
     
-    /// Get all available custom icons
-    static func getAllCustomIcons() -> [CustomIcon] {
-        return CustomIcon.allCases
+    /// Get all available asset names
+    static func getAllAssetNames() -> [String] {
+        return Array(productTypeAssetMapping.values) + [fallbackAsset]
     }
     
-    /// Get the fallback icon (exfoliator-orange)
+    /// Get the fallback icon
     static func getFallbackIcon() -> String {
-        return CustomIcon.exfoliatorOrange.rawValue
+        return fallbackAsset
     }
     
 }
@@ -89,7 +129,7 @@ extension Image {
         self.init(iconName)
     }
     
-    /// Create an Image for product/step icons - always uses one of the 6 available assets
+    /// Create an Image for product/step icons - uses specific assets for ProductTypes
     /// For system UI icons, use Image(systemName:) directly
     static func productIcon(for input: String) -> Image {
         // System icons that should stay as system icons
@@ -111,7 +151,7 @@ extension Image {
         if systemIcons.contains(input) {
             return Image(systemName: input)
         } else {
-            // For products/steps, use one of the 6 available assets
+            // For products/steps, use specific assets or fallback
             let iconName = ProductIconManager.getIconName(for: input)
             return Image(iconName)
         }
