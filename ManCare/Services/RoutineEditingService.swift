@@ -101,14 +101,14 @@ class RoutineEditingService: ObservableObject {
     func swapStepType(_ step: EditableRoutineStep, newType: ProductType) {
         let newTitle = getDefaultTitle(for: newType)
         let newDescription = getDefaultDescription(for: newType)
-        let newIconName = iconNameForStepType(newType)
+        // iconName is computed from stepType, not stored
         let newWhy = getDefaultWhy(for: newType)
         let newHow = getDefaultHow(for: newType)
         
         let updatedStep = step.copy(
             title: newTitle,
             description: newDescription,
-            iconName: newIconName,
+            // iconName is computed from stepType, not stored
             stepType: newType,
             why: newWhy,
             how: newHow,
@@ -434,7 +434,7 @@ class RoutineEditingService: ObservableObject {
             id: "\(timeOfDay.rawValue)_\(type.rawValue)_\(UUID().uuidString.prefix(8))",
             title: getDefaultTitle(for: type),
             description: getDefaultDescription(for: type),
-            iconName: iconNameForStepType(type),
+            // iconName is computed from stepType, not stored
             stepType: type,
             timeOfDay: timeOfDay,
             why: getDefaultWhy(for: type),
@@ -542,9 +542,7 @@ class RoutineEditingService: ObservableObject {
 
 // MARK: - Helper Functions
 
-private func iconNameForStepType(_ stepType: ProductType) -> String {
-    return stepType.iconName
-}
+// iconName is computed from stepType in the UI layer, not in services
 
 private func isStepTypeLocked(_ stepType: ProductType) -> Bool {
     switch stepType {

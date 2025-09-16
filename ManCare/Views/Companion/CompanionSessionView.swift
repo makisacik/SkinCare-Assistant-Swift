@@ -281,9 +281,8 @@ struct StepIntroView: View {
                             .fill(stepViewModel.stepColor.opacity(0.2))
                             .frame(width: 100, height: 100)
                         
-                        Image(systemName: stepViewModel.iconName)
-                            .font(.system(size: 40, weight: .semibold))
-                            .foregroundColor(stepViewModel.stepColor)
+                        Image(stepViewModel.iconName)
+                            .frame(width: 40, height: 40)
                     }
                     
                     Text(step.title)

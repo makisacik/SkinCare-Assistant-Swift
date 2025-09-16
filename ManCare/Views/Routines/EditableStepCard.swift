@@ -31,9 +31,10 @@ struct EditableStepCard: View {
                         .fill(step.stepTypeColor.opacity(0.15))
                         .frame(width: 50, height: 50)
                     
-                    Image(systemName: step.iconName)
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(step.stepTypeColor)
+                    Image(step.iconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 30, height: 30)
                 }
                 
                 // Step info
@@ -164,7 +165,6 @@ struct StepDropDelegate: DropDelegate {
         id: "test_step",
         title: "Gentle Cleanser",
         description: "Removes dirt, oil, and makeup without stripping skin",
-        iconName: "drop.fill",
         stepType: .cleanser,
         timeOfDay: .morning,
         why: "Essential for removing daily buildup",

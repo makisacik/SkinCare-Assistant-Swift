@@ -334,7 +334,6 @@ struct MorningRoutineCompletionView: View {
                 id: "morning_\(apiStep.name)",
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
-                iconName: apiStep.step.iconName,
                 stepType: apiStep.step,
                 timeOfDay: .morning,
                 why: apiStep.why,
@@ -409,15 +408,13 @@ private struct DetailedStepRow: View {
                         .foregroundColor(stepColor)
                         .frame(width: 40)
                     
-                    // Product image placeholder
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(stepColor.opacity(0.2))
+                    // Product image
+                    Image(step.iconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 60, height: 60)
-                        .overlay(
-                            Image(systemName: step.iconName)
-                                .font(.system(size: 24, weight: .medium))
-                                .foregroundColor(stepColor)
-                        )
+                        .clipped()
+                        .cornerRadius(8)
                     
                     // Step title (smaller font) - allow it to expand and wrap
                     Text(step.title)
@@ -671,9 +668,10 @@ private struct StepProductRow: View {
                     .fill(productColor.opacity(0.2))
                     .frame(width: 50, height: 50)
                     .overlay(
-                        Image(systemName: productIcon)
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(productColor)
+                        Image(productIcon)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20)
                     )
                 
                 // Product info
@@ -762,9 +760,10 @@ private struct EmptyProductTypeView: View {
                     .fill(productColor.opacity(0.1))
                     .frame(width: 60, height: 60)
                 
-                Image(systemName: productType.iconName)
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundColor(productColor)
+                Image(productType.iconName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 24, height: 24)
             }
             
             // Text
@@ -873,7 +872,6 @@ private struct EmptyProductTypeView: View {
                 id: "morning_cleanser",
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – reduces shine, clears pores",
-                iconName: "drop.fill",
                 stepType: .cleanser,
                 timeOfDay: .morning,
                 why: "Removes overnight oil buildup and prepares skin for treatments",
@@ -883,7 +881,6 @@ private struct EmptyProductTypeView: View {
                 id: "morning_moisturizer",
                 title: "Water-based Moisturizer",
                 description: "Lightweight gel moisturizer – hydrates without greasiness",
-                iconName: "drop.circle.fill",
                 stepType: .moisturizer,
                 timeOfDay: .morning,
                 why: "Provides essential hydration and creates a protective barrier",
@@ -893,7 +890,6 @@ private struct EmptyProductTypeView: View {
                 id: "morning_sunscreen",
                 title: "Sunscreen SPF 30+",
                 description: "SPF 30+ broad spectrum – protects against sun damage",
-                iconName: "sun.max.fill",
                 stepType: .sunscreen,
                 timeOfDay: .morning,
                 why: "Prevents UV damage, premature aging, and skin cancer",

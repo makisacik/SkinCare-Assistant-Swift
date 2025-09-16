@@ -107,7 +107,6 @@ class CoreDataRoutineService: ObservableObject {
             stepDetails.append(SavedStepDetailModel(
                 title: step.name,
                 stepDescription: "\(step.why) - \(step.how)",
-                iconName: iconNameForStepType(step.step),
                 stepType: step.step.rawValue,
                 timeOfDay: "morning",
                 why: step.why,
@@ -122,7 +121,6 @@ class CoreDataRoutineService: ObservableObject {
             stepDetails.append(SavedStepDetailModel(
                 title: step.name,
                 stepDescription: "\(step.why) - \(step.how)",
-                iconName: iconNameForStepType(step.step),
                 stepType: step.step.rawValue,
                 timeOfDay: "evening",
                 why: step.why,
@@ -269,7 +267,7 @@ class CoreDataRoutineService: ObservableObject {
             stepEntity.id = stepDetail.id
             stepEntity.title = stepDetail.title
             stepEntity.stepDescription = stepDetail.stepDescription
-            stepEntity.iconName = stepDetail.iconName
+            // iconName is computed from stepType, not stored
             stepEntity.stepType = stepDetail.stepType
             stepEntity.timeOfDay = stepDetail.timeOfDay
             stepEntity.why = stepDetail.why
@@ -320,7 +318,7 @@ class CoreDataRoutineService: ObservableObject {
                     stepEntity.id = stepDetail.id
                     stepEntity.title = stepDetail.title
                     stepEntity.stepDescription = stepDetail.stepDescription
-                    stepEntity.iconName = stepDetail.iconName
+                    // iconName is computed from stepType, not stored
                     stepEntity.stepType = stepDetail.stepType
                     stepEntity.timeOfDay = stepDetail.timeOfDay
                     stepEntity.why = stepDetail.why
@@ -365,18 +363,7 @@ class CoreDataRoutineService: ObservableObject {
     // MARK: - Helper Methods
 
     private func iconNameForStepType(_ stepType: ProductType) -> String {
-        switch stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .faceSerum:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        default:
-            return stepType.iconName
-        }
+        return ProductIconManager.getIconName(for: stepType)
     }
 }
 
@@ -386,18 +373,25 @@ struct SavedStepDetailModel: Identifiable, Codable {
     let id: UUID
     let title: String
     let stepDescription: String
-    let iconName: String
+    // iconName is computed from stepType, not stored
     let stepType: String
     let timeOfDay: String
     let why: String?
     let how: String?
     let order: Int
 
-    init(id: UUID = UUID(), title: String, stepDescription: String, iconName: String, stepType: String, timeOfDay: String, why: String? = nil, how: String? = nil, order: Int) {
+    // Computed property - iconName is derived from stepType, not stored
+    var iconName: String {
+        guard let productType = ProductType(rawValue: stepType) else {
+            return ProductIconManager.getFallbackIcon()
+        }
+        return ProductIconManager.getIconName(for: productType)
+    }
+
+    init(id: UUID = UUID(), title: String, stepDescription: String, stepType: String, timeOfDay: String, why: String? = nil, how: String? = nil, order: Int) {
         self.id = id
         self.title = title
         self.stepDescription = stepDescription
-        self.iconName = iconName
         self.stepType = stepType
         self.timeOfDay = timeOfDay
         self.why = why
@@ -409,7 +403,7 @@ struct SavedStepDetailModel: Identifiable, Codable {
         self.id = entity.id ?? UUID()
         self.title = entity.title ?? ""
         self.stepDescription = entity.stepDescription ?? ""
-        self.iconName = entity.iconName ?? ""
+        // iconName is computed from stepType, not stored
         self.stepType = entity.stepType ?? ""
         self.timeOfDay = entity.timeOfDay ?? ""
         self.why = entity.why
@@ -470,7 +464,6 @@ struct SavedRoutineModel: Identifiable, Codable {
             allStepDetails.append(SavedStepDetailModel(
                 title: productInfo.name,
                 stepDescription: productInfo.description,
-                iconName: productInfo.iconName,
                 stepType: ProductTypeDatabase.getStepType(for: stepName),
                 timeOfDay: "morning",
                 why: productInfo.why,
@@ -485,7 +478,6 @@ struct SavedRoutineModel: Identifiable, Codable {
             allStepDetails.append(SavedStepDetailModel(
                 title: productInfo.name,
                 stepDescription: productInfo.description,
-                iconName: productInfo.iconName,
                 stepType: ProductTypeDatabase.getStepType(for: stepName),
                 timeOfDay: "evening",
                 why: productInfo.why,

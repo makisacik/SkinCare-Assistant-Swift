@@ -232,7 +232,7 @@ private struct OriginalStepCard: View {
         Color(step.step.color)
     }
     
-    private var iconName: String { step.step.iconName }
+    private var iconName: String { ProductIconManager.getIconName(for: step.step) }
     
     var body: some View {
         HStack(spacing: 12) {
@@ -495,7 +495,6 @@ private struct SummaryRow: View {
                 id: "morning_cleanser",
                 title: "Gentle Cleanser",
                 description: "Removes dirt and oil",
-                iconName: "drop.fill",
                 stepType: .cleanser,
                 timeOfDay: .morning,
                 why: "Essential for cleaning",

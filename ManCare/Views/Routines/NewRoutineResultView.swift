@@ -229,9 +229,10 @@ private struct RoutineSection: View {
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 32, height: 32)
-                    Image(systemName: iconName)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                    Image(iconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 24, height: 24)
                 }
                 
                 Text(title)
@@ -292,9 +293,10 @@ private struct RoutineStepRow: View {
             Spacer()
             
             // Step icon
-            Image(systemName: step.productType.iconName)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(ThemeManager.shared.theme.palette.secondary.opacity(0.7))
+            Image(step.productType.iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 20, height: 20)
         }
         .padding(.vertical, 8)
     }
@@ -344,10 +346,10 @@ private struct ProfileRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: iconName)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                .frame(width: 20)
+            Image(iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 20, height: 20)
             
             Text(title)
                 .font(ThemeManager.shared.theme.typo.body)

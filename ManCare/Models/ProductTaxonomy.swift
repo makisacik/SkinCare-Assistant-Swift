@@ -116,58 +116,9 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
         }
     }
 
-    /// Icon name for UI
+    /// Icon name for UI - uses custom asset images for all product types
     var iconName: String {
-        switch self {
-        // Most commonly used
-        case .cleanser: return "drop.fill"
-        case .moisturizer: return "drop.circle.fill"
-        case .sunscreen: return "sun.max.fill"
-        case .toner: return "sparkles"
-
-        // Treatment products
-        case .faceSerum: return "star.fill"
-        case .exfoliator: return "sparkles.rectangle.stack"
-        case .faceMask: return "face.smiling"
-        case .facialOil: return "drop.triangle.fill"
-
-        // Specialized products
-        case .facialMist: return "cloud.drizzle.fill"
-        case .eyeCream: return "eye.fill"
-        case .spotTreatment: return "target"
-        case .retinol: return "leaf.fill"
-        case .vitaminC: return "sun.max.circle.fill"
-        case .niacinamide: return "pills.fill"
-
-        // Sun protection variations
-        case .faceSunscreen: return "sun.max.fill"
-        case .bodySunscreen: return "sun.max.circle"
-        case .lipBalm: return "lips.fill"
-
-        // Shaving products
-        case .shaveCream: return "scissors"
-        case .aftershave: return "wind"
-        case .shaveGel: return "drop.circle"
-
-        // Body care
-        case .bodyLotion: return "figure.arms.open"
-        case .bodyWash: return "shower.fill"
-        case .handCream: return "hand.raised.fill"
-
-        // Hair care
-        case .shampoo: return "hair.and.eyebrow"
-        case .conditioner: return "hair.and.eyebrow"
-        case .hairOil: return "drop.circle"
-        case .hairMask: return "face.smiling"
-
-        // Specialized treatments
-        case .chemicalPeel: return "flask.fill"
-        case .micellarWater: return "drop.circle"
-        case .makeupRemover: return "eraser.fill"
-        case .faceWash: return "drop.fill"
-        case .cleansingOil: return "drop.triangle"
-        case .cleansingBalm: return "circle.fill"
-        }
+        return ProductIconManager.getIconName(for: self)
     }
 
     /// Color for UI
@@ -289,15 +240,15 @@ enum ProductCategory: String, CaseIterable {
 
     var iconName: String {
         switch self {
-        case .cleansing: return "drop.fill"
-        case .toning: return "sparkles"
-        case .treatment: return "star.fill"
-        case .moisturizing: return "drop.circle.fill"
-        case .sunProtection: return "sun.max.fill"
-        case .masks: return "face.smiling"
-        case .shaving: return "scissors"
-        case .bodyCare: return "figure.arms.open"
-        case .hairCare: return "hair.and.eyebrow"
+        case .cleansing: return ProductIconManager.getIconName(for: .cleanser)
+        case .toning: return ProductIconManager.getIconName(for: .toner)
+        case .treatment: return ProductIconManager.getIconName(for: .faceSerum)
+        case .moisturizing: return ProductIconManager.getIconName(for: .moisturizer)
+        case .sunProtection: return ProductIconManager.getIconName(for: .sunscreen)
+        case .masks: return ProductIconManager.getIconName(for: .faceMask)
+        case .shaving: return ProductIconManager.getIconName(for: .shaveCream)
+        case .bodyCare: return ProductIconManager.getIconName(for: .bodyLotion)
+        case .hairCare: return ProductIconManager.getIconName(for: .shampoo)
         }
     }
 }

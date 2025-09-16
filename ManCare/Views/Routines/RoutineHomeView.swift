@@ -195,11 +195,6 @@ struct RoutineHomeView: View {
                     Text("Tap on a routine to complete")
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-
-                    // Debug info
-                    Text("Debug: Active: \(savedRoutineService.activeRoutine?.title ?? "nil"), Saved: \(savedRoutineService.savedRoutines.count)")
-                        .font(.system(size: 10))
-                        .foregroundColor(.red)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
@@ -306,7 +301,6 @@ struct RoutineHomeView: View {
                     id: "morning_\(stepDetail.title)",
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
-                    iconName: stepDetail.iconName,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                     timeOfDay: .morning,
                     why: stepDetail.why,
@@ -322,7 +316,6 @@ struct RoutineHomeView: View {
                     id: "morning_\(apiStep.name)",
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
-                    iconName: iconNameForStepType(apiStep.step),
                     stepType: apiStep.step,
                     timeOfDay: .morning,
                     why: apiStep.why,
@@ -336,7 +329,6 @@ struct RoutineHomeView: View {
                 id: "morning_cleanser",
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – reduces shine, clears pores",
-                iconName: "drop.fill",
                 stepType: .cleanser,
                 timeOfDay: .morning,
                 why: "Removes overnight oil buildup and prepares skin for treatments",
@@ -346,7 +338,6 @@ struct RoutineHomeView: View {
                 id: "morning_toner",
                 title: "Toner",
                 description: "Balances pH and prepares skin for next steps",
-                iconName: "drop.circle",
                 stepType: .faceSerum,
                 timeOfDay: .morning,
                 why: "Restores skin's natural pH balance and enhances product absorption",
@@ -356,7 +347,6 @@ struct RoutineHomeView: View {
                 id: "morning_moisturizer",
                 title: "Moisturizer",
                 description: "Lightweight gel moisturizer – hydrates without greasiness",
-                iconName: "drop.circle.fill",
                 stepType: .moisturizer,
                 timeOfDay: .morning,
                 why: "Provides essential hydration and creates a protective barrier",
@@ -366,7 +356,6 @@ struct RoutineHomeView: View {
                 id: "morning_sunscreen",
                 title: "Sunscreen",
                 description: "SPF 30+ broad spectrum – protects against sun damage",
-                iconName: "sun.max.fill",
                 stepType: .sunscreen,
                 timeOfDay: .morning,
                 why: "Prevents UV damage, premature aging, and skin cancer",
@@ -384,7 +373,6 @@ struct RoutineHomeView: View {
                     id: "evening_\(stepDetail.title)",
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
-                    iconName: stepDetail.iconName,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                     timeOfDay: .evening,
                     why: stepDetail.why,
@@ -400,7 +388,6 @@ struct RoutineHomeView: View {
                     id: "evening_\(apiStep.name)",
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
-                    iconName: iconNameForStepType(apiStep.step),
                     stepType: apiStep.step,
                     timeOfDay: .evening,
                     why: apiStep.why,
@@ -414,7 +401,6 @@ struct RoutineHomeView: View {
                 id: "evening_cleanser",
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – removes daily buildup",
-                iconName: "drop.fill",
                 stepType: .cleanser,
                 timeOfDay: .evening,
                 why: "Removes makeup, sunscreen, and daily pollutants",
@@ -424,7 +410,6 @@ struct RoutineHomeView: View {
                 id: "evening_serum",
                 title: "Face Serum",
                 description: "Targeted serum for your skin concerns",
-                iconName: "star.fill",
                 stepType: .faceSerum,
                 timeOfDay: .evening,
                 why: "Active ingredients work best overnight when skin is in repair mode",
@@ -434,7 +419,6 @@ struct RoutineHomeView: View {
                 id: "evening_moisturizer",
                 title: "Night Moisturizer",
                 description: "Rich cream moisturizer – repairs while you sleep",
-                iconName: "moon.circle.fill",
                 stepType: .moisturizer,
                 timeOfDay: .evening,
                 why: "Provides deep hydration and supports overnight skin repair",
@@ -454,7 +438,6 @@ struct RoutineHomeView: View {
                 id: "weekly_\(apiStep.name)",
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
-                iconName: iconNameForStepType(apiStep.step),
                 stepType: apiStep.step,
                 timeOfDay: .weekly,
                 why: apiStep.why,
@@ -485,37 +468,7 @@ struct RoutineHomeView: View {
             return eveningMessages.randomElement() ?? eveningMessages[0]
         }}
 
-    private func iconNameForStepType(_ stepType: ProductType) -> String {
-        switch stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .faceSerum:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen:
-            return "sun.max.fill"
-        default:
-            return stepType.iconName
-        }}
-
-    private func iconNameForStepName(_ stepName: String) -> String {
-        let lowercased = stepName.lowercased()
-        if lowercased.contains("cleanser") || lowercased.contains("cleanse") {
-            return "drop.fill"
-        } else if lowercased.contains("serum") || lowercased.contains("treatment") {
-            return "star.fill"
-        } else if lowercased.contains("moisturizer") || lowercased.contains("cream") {
-            return "drop.circle.fill"
-        } else if lowercased.contains("sunscreen") || lowercased.contains("spf") {
-            return "sun.max.fill"
-        } else if lowercased.contains("toner") {
-            return "drop.circle"
-        } else if lowercased.contains("mask") {
-            return "face.smiling"
-        } else {
-            return "star.fill"
-        }}
+    // iconName is computed from stepType in the model, not in helper functions
 
     private func stepTypeForStepName(_ stepName: String) -> ProductType {
         let lowercased = stepName.lowercased()
@@ -958,9 +911,10 @@ private struct RoutineStepRow: View {
             Spacer()
 
             // Step icon
-            Image(systemName: step.iconName)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(stepColor)
+            Image(step.iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 20, height: 20)
         }.padding(.vertical, 8)
         .padding(.horizontal, 12)
         .background(
@@ -1105,22 +1059,26 @@ struct RoutineStepDetail: Identifiable {
     let id: String
     let title: String
     let description: String
-    let iconName: String
     let stepType: ProductType
     let timeOfDay: TimeOfDay
     let why: String?
     let how: String?
 
-    init(id: String, title: String, description: String, iconName: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String? = nil, how: String? = nil) {
+    // Computed property - iconName is derived from stepType, not stored
+    var iconName: String {
+        return ProductIconManager.getIconName(for: stepType)
+    }
+
+    init(id: String, title: String, description: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String? = nil, how: String? = nil) {
         self.id = id
         self.title = title
         self.description = description
-        self.iconName = iconName
         self.stepType = stepType
         self.timeOfDay = timeOfDay
         self.why = why
         self.how = how
-                }    }
+    }
+}
 enum TimeOfDay: String, Codable, CaseIterable {
     case morning, evening, weekly
 
@@ -1157,9 +1115,10 @@ struct RoutineStepDetailView: View {
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                         .frame(width: 80, height: 80)
-                    Image(systemName: stepDetail.iconName)
-                        .font(.system(size: 32, weight: .semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                    Image(stepDetail.iconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 50, height: 50)
                 }
 
                 // Title

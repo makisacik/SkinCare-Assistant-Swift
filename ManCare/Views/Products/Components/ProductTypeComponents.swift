@@ -23,9 +23,9 @@ struct ProductTypeSelectorButton: View {
             Button(action: onTap) {
                 HStack(spacing: 16) {
                     // Product Type Icon
-                    Image(systemName: selectedProductType.iconName)
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                    Image(selectedProductType.iconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                         .frame(width: 32, height: 32)
                         .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                         .cornerRadius(8)
@@ -73,9 +73,10 @@ struct ProductTypeCard: View {
 
     var body: some View {
         VStack(spacing: 6) {
-            Image(systemName: productType.iconName)
-                .font(.system(size: 20, weight: .medium))
-                .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.secondary)
+            Image(productType.iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 20, height: 20)
 
             Text(productType.displayName)
                 .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
@@ -109,9 +110,9 @@ struct ProductTypeRow: View {
         Button(action: onTap) {
             HStack(spacing: 16) {
                 // Icon
-                Image(systemName: productType.iconName)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.secondary)
+                Image(productType.iconName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 28, height: 28)
                     .background(isSelected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                     .cornerRadius(6)

@@ -15,8 +15,12 @@ struct EditableRoutineStep: Identifiable, Codable {
     let id: String
     var title: String
     var description: String
-    var iconName: String
     var stepType: ProductType
+
+    // Computed property - iconName is derived from stepType, not stored
+    var iconName: String {
+        return ProductIconManager.getIconName(for: stepType)
+    }
     var timeOfDay: TimeOfDay
     var why: String
     var how: String
@@ -41,7 +45,6 @@ struct EditableRoutineStep: Identifiable, Codable {
         self.id = "\(timeOfDay.rawValue)_\(apiStep.name.replacingOccurrences(of: " ", with: "_"))"
         self.title = apiStep.name
         self.description = "\(apiStep.why) - \(apiStep.how)"
-        self.iconName = apiStep.step.iconName
         self.stepType = apiStep.step
         self.timeOfDay = timeOfDay
         self.why = apiStep.why
@@ -58,11 +61,10 @@ struct EditableRoutineStep: Identifiable, Codable {
         self.productConstraints = apiStep.constraints
     }
     
-    init(id: String, title: String, description: String, iconName: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String, how: String, isEnabled: Bool = true, frequency: StepFrequency = .daily, customInstructions: String? = nil, isLocked: Bool = false, originalStep: Bool = false, order: Int, morningEnabled: Bool, eveningEnabled: Bool, attachedProductId: String? = nil, productConstraints: Constraints? = nil) {
+    init(id: String, title: String, description: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String, how: String, isEnabled: Bool = true, frequency: StepFrequency = .daily, customInstructions: String? = nil, isLocked: Bool = false, originalStep: Bool = false, order: Int, morningEnabled: Bool, eveningEnabled: Bool, attachedProductId: String? = nil, productConstraints: Constraints? = nil) {
         self.id = id
         self.title = title
         self.description = description
-        self.iconName = iconName
         self.stepType = stepType
         self.timeOfDay = timeOfDay
         self.why = why
@@ -359,9 +361,7 @@ enum RoutineEditingState {
 
 // MARK: - Helper Functions
 
-private func iconNameForStepType(_ stepType: ProductType) -> String {
-    return stepType.iconName
-}
+// iconName is computed from stepType in the model, not in helper functions
 
 private func isStepTypeLocked(_ stepType: ProductType) -> Bool {
     // Lock essential steps that shouldn't be easily removed
@@ -380,7 +380,7 @@ extension EditableRoutineStep {
     func copy(
         title: String? = nil,
         description: String? = nil,
-        iconName: String? = nil,
+        // iconName is computed from stepType, not stored
         stepType: ProductType? = nil,
         timeOfDay: TimeOfDay? = nil,
         why: String? = nil,
@@ -400,7 +400,7 @@ extension EditableRoutineStep {
             id: self.id,
             title: title ?? self.title,
             description: description ?? self.description,
-            iconName: iconName ?? self.iconName,
+            // iconName is computed from stepType, not stored
             stepType: stepType ?? self.stepType,
             timeOfDay: timeOfDay ?? self.timeOfDay,
             why: why ?? self.why,

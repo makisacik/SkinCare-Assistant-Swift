@@ -268,7 +268,6 @@ struct AddStepView: View {
             id: "\(timeOfDay.rawValue)_\(selectedStepType.rawValue)_\(UUID().uuidString.prefix(8))",
             title: customTitle,
             description: customDescription,
-            iconName: iconNameForStepType(selectedStepType),
             stepType: selectedStepType,
             timeOfDay: timeOfDay,
             why: getDefaultWhy(for: selectedStepType),
@@ -351,9 +350,7 @@ struct AddStepView: View {
         }
     }
     
-    private func iconNameForStepType(_ stepType: ProductType) -> String {
-        return stepType.iconName
-    }
+    // iconName is computed from stepType in the model, not in helper functions
     
     private func isStepTypeLocked(_ stepType: ProductType) -> Bool {
         switch stepType {
@@ -375,7 +372,7 @@ private struct StepTypeCard: View {
     
     private var stepTypeColor: Color { Color(stepType.color) }
     
-    private var iconName: String { stepType.iconName }
+    private var iconName: String { ProductIconManager.getIconName(for: stepType) }
     
     private var displayName: String { stepType.displayName }
     

@@ -296,7 +296,6 @@ private struct EmptyProductsState: View {
         id: "test_step",
         title: "Gentle Cleanser",
         description: "Removes dirt, oil, and makeup without stripping skin",
-        iconName: "drop.fill",
         stepType: .cleanser,
         timeOfDay: .morning,
         why: "Essential for removing daily buildup",

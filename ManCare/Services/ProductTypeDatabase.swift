@@ -16,7 +16,6 @@ struct ProductTypeDatabase {
     struct ProductTypeInfo {
         let name: String
         let description: String
-        let iconName: String
         let why: String
         let how: String
         let timeOfDay: String
@@ -34,7 +33,6 @@ struct ProductTypeDatabase {
         "gentle_cleanser": ProductTypeInfo(
             name: "Gentle Cleanser",
             description: "Oil-free gel cleanser that removes impurities without stripping the skin",
-            iconName: "drop.fill",
             why: "Removes overnight oil buildup, makeup, and daily pollutants while maintaining skin's natural moisture barrier",
             how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water",
             timeOfDay: "both"
@@ -42,7 +40,6 @@ struct ProductTypeDatabase {
         "foaming_cleanser": ProductTypeInfo(
             name: "Foaming Cleanser",
             description: "Lightweight foaming cleanser for deep pore cleansing",
-            iconName: "drop.fill",
             why: "Creates rich lather to remove excess oil and unclog pores without over-drying",
             how: "Wet face, apply cleanser, massage in circular motions, rinse thoroughly",
             timeOfDay: "both"
@@ -50,7 +47,6 @@ struct ProductTypeDatabase {
         "gentle_foaming_cleanser": ProductTypeInfo(
             name: "Gentle Foaming Cleanser",
             description: "Gentle foaming cleanser that cleans without irritation",
-            iconName: "drop.fill",
             why: "Provides effective cleansing with a gentle formula that won't irritate sensitive skin",
             how: "Wet face, apply cleanser, massage gently in circular motions, rinse thoroughly",
             timeOfDay: "both"
@@ -58,7 +54,6 @@ struct ProductTypeDatabase {
         "water_based_cleanser": ProductTypeInfo(
             name: "Water-based Cleanser",
             description: "Gentle water-based cleanser for second cleansing step",
-            iconName: "drop.fill",
             why: "Removes remaining impurities and prepares skin for treatment products",
             how: "Apply to damp skin, massage gently, rinse with lukewarm water",
             timeOfDay: "both"
@@ -66,7 +61,6 @@ struct ProductTypeDatabase {
         "water_cleanser": ProductTypeInfo(
             name: "Water Cleanser",
             description: "Gentle water-based cleanser for second cleansing step",
-            iconName: "drop.fill",
             why: "Removes remaining impurities and prepares skin for treatment products",
             how: "Apply to damp skin, massage gently, rinse with lukewarm water",
             timeOfDay: "both"
@@ -74,7 +68,6 @@ struct ProductTypeDatabase {
         "gel_cleanser": ProductTypeInfo(
             name: "Gel Cleanser",
             description: "Lightweight gel cleanser that removes excess oil without over-drying",
-            iconName: "drop.fill",
             why: "Effectively removes oil and impurities while maintaining skin's natural balance",
             how: "Apply to wet skin, massage gently, rinse thoroughly",
             timeOfDay: "both"
@@ -82,7 +75,6 @@ struct ProductTypeDatabase {
         "cream_cleanser": ProductTypeInfo(
             name: "Cream Cleanser",
             description: "Gentle cream cleanser that cleanses without stripping moisture",
-            iconName: "drop.fill",
             why: "Provides gentle cleansing while maintaining skin's natural moisture barrier",
             how: "Apply to dry or damp skin, massage gently, rinse with lukewarm water",
             timeOfDay: "both"
@@ -90,7 +82,6 @@ struct ProductTypeDatabase {
         "balancing_cleanser": ProductTypeInfo(
             name: "Balancing Cleanser",
             description: "Multi-purpose cleanser that balances different skin zones",
-            iconName: "drop.fill",
             why: "Cleanses effectively without over-drying oily areas or stripping dry areas",
             how: "Apply to damp skin, massage gently, rinse thoroughly",
             timeOfDay: "both"
@@ -98,7 +89,6 @@ struct ProductTypeDatabase {
         "oil_cleanser": ProductTypeInfo(
             name: "Oil Cleanser",
             description: "Gentle oil-based cleanser for effective makeup and sunscreen removal",
-            iconName: "drop.fill",
             why: "Oil dissolves oil, making it perfect for removing waterproof makeup and sunscreen",
             how: "Apply to dry skin, massage gently, add water to emulsify, rinse completely",
             timeOfDay: "evening"
@@ -108,7 +98,6 @@ struct ProductTypeDatabase {
         "hydrating_toner": ProductTypeInfo(
             name: "Hydrating Toner",
             description: "Alcohol-free toner that balances pH and provides instant hydration",
-            iconName: "drop.circle",
             why: "Restores skin's natural pH balance and prepares skin for better product absorption",
             how: "Apply with cotton pad or hands, pat gently until absorbed",
             timeOfDay: "both"
@@ -116,7 +105,6 @@ struct ProductTypeDatabase {
         "exfoliating_toner": ProductTypeInfo(
             name: "Exfoliating Toner",
             description: "Gentle exfoliating toner with AHA/BHA for smoother skin texture",
-            iconName: "drop.circle",
             why: "Removes dead skin cells and unclogs pores for brighter, smoother skin",
             how: "Apply with cotton pad, avoid eye area, use 2-3 times per week",
             timeOfDay: "evening"
@@ -124,7 +112,6 @@ struct ProductTypeDatabase {
         "toner": ProductTypeInfo(
             name: "Toner",
             description: "Balancing toner that prepares skin for next steps",
-            iconName: "drop.circle",
             why: "Restores skin's natural pH balance and enhances product absorption",
             how: "Apply with cotton pad or hands, pat gently until absorbed",
             timeOfDay: "both"
@@ -132,7 +119,6 @@ struct ProductTypeDatabase {
         "soothing_toner": ProductTypeInfo(
             name: "Soothing Toner",
             description: "Calming toner that reduces irritation and redness",
-            iconName: "drop.circle",
             why: "Soothes sensitive skin and reduces inflammation and redness",
             how: "Apply with cotton pad or hands, pat gently until absorbed",
             timeOfDay: "both"
@@ -140,7 +126,6 @@ struct ProductTypeDatabase {
         "salicylic_acid_toner": ProductTypeInfo(
             name: "Salicylic Acid Toner",
             description: "BHA toner that unclogs pores and prevents breakouts",
-            iconName: "drop.circle",
             why: "Penetrates pores to remove dead skin cells and prevent acne",
             how: "Apply with cotton pad, avoid eye area, use daily or as directed",
             timeOfDay: "both"
@@ -148,7 +133,6 @@ struct ProductTypeDatabase {
         "bha_toner": ProductTypeInfo(
             name: "BHA Toner",
             description: "Beta hydroxy acid toner that unclogs pores and smooths texture",
-            iconName: "drop.circle",
             why: "Exfoliates inside pores to prevent breakouts and improve skin texture",
             how: "Apply with cotton pad, avoid eye area, start with 2-3 times per week",
             timeOfDay: "both"
@@ -158,7 +142,6 @@ struct ProductTypeDatabase {
         "niacinamide_serum": ProductTypeInfo(
             name: "Niacinamide Serum",
             description: "Vitamin B3 serum that minimizes pores and controls oil production",
-            iconName: "star.fill",
             why: "Reduces pore size, controls sebum production, and improves skin texture",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -166,7 +149,6 @@ struct ProductTypeDatabase {
         "vitamin_c_serum": ProductTypeInfo(
             name: "Vitamin C Serum",
             description: "Antioxidant serum that brightens skin and protects against environmental damage",
-            iconName: "star.fill",
             why: "Neutralizes free radicals, brightens skin tone, and boosts collagen production",
             how: "Apply 2-3 drops in the morning, pat gently, follow with sunscreen",
             timeOfDay: "morning"
@@ -174,7 +156,6 @@ struct ProductTypeDatabase {
         "hyaluronic_acid_serum": ProductTypeInfo(
             name: "Hyaluronic Acid Serum",
             description: "Intensive hydrating serum that plumps and smooths skin",
-            iconName: "star.fill",
             why: "Attracts and retains moisture, plumping skin and reducing fine lines",
             how: "Apply to damp skin, pat gently until absorbed, follow with moisturizer",
             timeOfDay: "both"
@@ -182,7 +163,6 @@ struct ProductTypeDatabase {
         "retinol_serum": ProductTypeInfo(
             name: "Retinol Serum",
             description: "Anti-aging serum that promotes cell turnover and reduces signs of aging",
-            iconName: "star.fill",
             why: "Stimulates collagen production, reduces fine lines, and improves skin texture",
             how: "Start with 2-3 times per week, apply at night, avoid eye area",
             timeOfDay: "evening"
@@ -190,7 +170,6 @@ struct ProductTypeDatabase {
         "peptide_serum": ProductTypeInfo(
             name: "Peptide Serum",
             description: "Anti-aging serum with peptides for firmer, more youthful skin",
-            iconName: "star.fill",
             why: "Stimulates collagen production and improves skin firmness and elasticity",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -198,7 +177,6 @@ struct ProductTypeDatabase {
         "serum": ProductTypeInfo(
             name: "Serum",
             description: "Concentrated treatment serum for targeted skin concerns",
-            iconName: "star.fill",
             why: "Delivers active ingredients deep into skin for maximum effectiveness",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -206,7 +184,6 @@ struct ProductTypeDatabase {
         "face_serum": ProductTypeInfo(
             name: "Face Serum",
             description: "Targeted serum for your specific skin concerns",
-            iconName: "star.fill",
             why: "Delivers active ingredients deep into skin for maximum effectiveness",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -214,7 +191,6 @@ struct ProductTypeDatabase {
         "hyaluronic_acid": ProductTypeInfo(
             name: "Hyaluronic Acid",
             description: "Intensive hydrating serum that plumps and smooths skin",
-            iconName: "star.fill",
             why: "Attracts and retains moisture, plumping skin and reducing fine lines",
             how: "Apply to damp skin, pat gently until absorbed, follow with moisturizer",
             timeOfDay: "both"
@@ -222,7 +198,6 @@ struct ProductTypeDatabase {
         "rich_serum": ProductTypeInfo(
             name: "Rich Serum",
             description: "Nourishing serum with concentrated active ingredients",
-            iconName: "star.fill",
             why: "Provides intensive treatment with high concentrations of beneficial ingredients",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -230,7 +205,6 @@ struct ProductTypeDatabase {
         "lightweight_serum": ProductTypeInfo(
             name: "Lightweight Serum",
             description: "Fast-absorbing serum that doesn't feel heavy on skin",
-            iconName: "star.fill",
             why: "Provides effective treatment without leaving a heavy or sticky feeling",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -238,7 +212,6 @@ struct ProductTypeDatabase {
         "peptide_complex": ProductTypeInfo(
             name: "Peptide Complex",
             description: "Advanced peptide treatment for skin structure support",
-            iconName: "star.fill",
             why: "Supports skin's natural structure and improves firmness and elasticity",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -248,7 +221,6 @@ struct ProductTypeDatabase {
         "lightweight_moisturizer": ProductTypeInfo(
             name: "Lightweight Moisturizer",
             description: "Oil-free gel moisturizer that hydrates without clogging pores",
-            iconName: "drop.circle.fill",
             why: "Provides essential hydration while maintaining a matte finish",
             how: "Apply a pea-sized amount, massage in upward circular motions",
             timeOfDay: "both"
@@ -256,7 +228,6 @@ struct ProductTypeDatabase {
         "rich_moisturizer": ProductTypeInfo(
             name: "Rich Moisturizer",
             description: "Nourishing cream moisturizer for deep hydration and skin repair",
-            iconName: "drop.circle.fill",
             why: "Provides intensive hydration and supports overnight skin repair",
             how: "Apply generously to face and neck, massage gently until absorbed",
             timeOfDay: "evening"
@@ -264,7 +235,6 @@ struct ProductTypeDatabase {
         "night_cream": ProductTypeInfo(
             name: "Night Cream",
             description: "Intensive night cream that repairs and rejuvenates while you sleep",
-            iconName: "moon.circle.fill",
             why: "Works with your skin's natural repair cycle to restore and rejuvenate",
             how: "Apply generously before bed, massage in upward motions",
             timeOfDay: "evening"
@@ -272,7 +242,6 @@ struct ProductTypeDatabase {
         "moisturizer": ProductTypeInfo(
             name: "Moisturizer",
             description: "Essential moisturizer that hydrates and protects skin",
-            iconName: "drop.circle.fill",
             why: "Maintains skin's moisture barrier and prevents water loss",
             how: "Apply a pea-sized amount, massage in upward circular motions",
             timeOfDay: "both"
@@ -280,7 +249,6 @@ struct ProductTypeDatabase {
         "heavy_moisturizer": ProductTypeInfo(
             name: "Heavy Moisturizer",
             description: "Rich, intensive moisturizer for deep hydration",
-            iconName: "drop.circle.fill",
             why: "Provides maximum hydration for dry or mature skin",
             how: "Apply generously to face and neck, massage gently until absorbed",
             timeOfDay: "both"
@@ -288,7 +256,6 @@ struct ProductTypeDatabase {
         "adaptive_moisturizer": ProductTypeInfo(
             name: "Adaptive Moisturizer",
             description: "Versatile moisturizer that adapts to different skin zones",
-            iconName: "drop.circle.fill",
             why: "Provides appropriate hydration for both oily and dry areas",
             how: "Apply more to dry areas, less to oily areas, massage gently",
             timeOfDay: "both"
@@ -296,7 +263,6 @@ struct ProductTypeDatabase {
         "barrier_repair_cream": ProductTypeInfo(
             name: "Barrier Repair Cream",
             description: "Specialized cream that strengthens the skin's protective barrier",
-            iconName: "drop.circle.fill",
             why: "Repairs and strengthens the skin's natural protective barrier",
             how: "Apply to clean skin, massage gently until absorbed",
             timeOfDay: "both"
@@ -304,7 +270,6 @@ struct ProductTypeDatabase {
         "luxury_moisturizer": ProductTypeInfo(
             name: "Luxury Moisturizer",
             description: "Premium moisturizer with advanced anti-aging ingredients",
-            iconName: "drop.circle.fill",
             why: "Provides luxurious hydration with high-end anti-aging benefits",
             how: "Apply generously to face and neck, massage in upward motions",
             timeOfDay: "both"
@@ -314,7 +279,6 @@ struct ProductTypeDatabase {
         "daily_sunscreen": ProductTypeInfo(
             name: "Daily Sunscreen",
             description: "Broad spectrum SPF 30+ sunscreen for daily protection",
-            iconName: "sun.max.fill",
             why: "Protects against UVA/UVB rays, prevents premature aging and skin cancer",
             how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
             timeOfDay: "morning"
@@ -322,7 +286,6 @@ struct ProductTypeDatabase {
         "mineral_sunscreen": ProductTypeInfo(
             name: "Mineral Sunscreen",
             description: "Physical sunscreen with zinc oxide for sensitive skin protection",
-            iconName: "sun.max.fill",
             why: "Provides immediate protection and is gentle on sensitive skin",
             how: "Apply generously, blend well to avoid white cast",
             timeOfDay: "morning"
@@ -330,7 +293,6 @@ struct ProductTypeDatabase {
         "sunscreen": ProductTypeInfo(
             name: "Sunscreen",
             description: "Essential daily sunscreen for UV protection",
-            iconName: "sun.max.fill",
             why: "Protects against harmful UV rays and prevents premature aging",
             how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
             timeOfDay: "morning"
@@ -338,7 +300,6 @@ struct ProductTypeDatabase {
         "oil_free_sunscreen": ProductTypeInfo(
             name: "Oil-free Sunscreen",
             description: "Non-greasy sunscreen that won't clog pores",
-            iconName: "sun.max.fill",
             why: "Provides protection without adding shine or clogging pores",
             how: "Apply generously, blend well, reapply every 2 hours",
             timeOfDay: "morning"
@@ -346,7 +307,6 @@ struct ProductTypeDatabase {
         "broad_spectrum_sunscreen": ProductTypeInfo(
             name: "Broad Spectrum Sunscreen",
             description: "Complete UV protection against UVA and UVB rays",
-            iconName: "sun.max.fill",
             why: "Protects against both aging UVA rays and burning UVB rays",
             how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
             timeOfDay: "morning"
@@ -354,7 +314,6 @@ struct ProductTypeDatabase {
         "anti_aging_sunscreen": ProductTypeInfo(
             name: "Anti-aging Sunscreen",
             description: "Sunscreen with additional anti-aging benefits",
-            iconName: "sun.max.fill",
             why: "Provides UV protection while delivering anti-aging ingredients",
             how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
             timeOfDay: "morning"
@@ -364,7 +323,6 @@ struct ProductTypeDatabase {
         "spot_treatment": ProductTypeInfo(
             name: "Spot Treatment",
             description: "Targeted treatment for blemishes and acne spots",
-            iconName: "target",
             why: "Reduces inflammation and speeds up healing of individual blemishes",
             how: "Apply a small amount directly to blemishes, avoid surrounding skin",
             timeOfDay: "evening"
@@ -372,7 +330,6 @@ struct ProductTypeDatabase {
         "exfoliating_mask": ProductTypeInfo(
             name: "Exfoliating Mask",
             description: "Weekly mask that removes dead skin cells and improves texture",
-            iconName: "face.smiling",
             why: "Deep cleanses pores and reveals smoother, brighter skin",
             how: "Apply to clean skin, leave on for recommended time, rinse thoroughly",
             timeOfDay: "weekly"
@@ -380,7 +337,6 @@ struct ProductTypeDatabase {
         "hydrating_mask": ProductTypeInfo(
             name: "Hydrating Mask",
             description: "Intensive hydrating mask for plump, dewy skin",
-            iconName: "face.smiling",
             why: "Provides deep hydration and improves skin's moisture retention",
             how: "Apply to clean skin, leave on for 15-20 minutes, rinse or remove",
             timeOfDay: "weekly"
@@ -388,7 +344,6 @@ struct ProductTypeDatabase {
         "clay_mask": ProductTypeInfo(
             name: "Clay Mask",
             description: "Purifying clay mask that draws out impurities and tightens pores",
-            iconName: "face.smiling",
             why: "Absorbs excess oil and unclogs pores for clearer, tighter skin",
             how: "Apply to clean skin, leave on until dry, rinse with warm water",
             timeOfDay: "weekly"
@@ -398,7 +353,6 @@ struct ProductTypeDatabase {
         "essence": ProductTypeInfo(
             name: "Essence",
             description: "Lightweight hydrating essence that preps skin for treatment",
-            iconName: "drop.circle",
             why: "Provides lightweight hydration and enhances absorption of subsequent products",
             how: "Apply with hands, pat gently until absorbed",
             timeOfDay: "both"
@@ -406,7 +360,6 @@ struct ProductTypeDatabase {
         "treatment_essence": ProductTypeInfo(
             name: "Treatment Essence",
             description: "Advanced essence with concentrated active ingredients",
-            iconName: "drop.circle",
             why: "Delivers high concentrations of beneficial ingredients in a lightweight format",
             how: "Apply with hands, pat gently until absorbed",
             timeOfDay: "both"
@@ -414,7 +367,6 @@ struct ProductTypeDatabase {
         "ampoule": ProductTypeInfo(
             name: "Ampoule",
             description: "Highly concentrated treatment with maximum active ingredients",
-            iconName: "star.fill",
             why: "Provides intensive treatment with the highest concentration of active ingredients",
             how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
             timeOfDay: "both"
@@ -422,7 +374,6 @@ struct ProductTypeDatabase {
         "sheet_mask": ProductTypeInfo(
             name: "Sheet Mask",
             description: "Intensive treatment mask for deep hydration and nourishment",
-            iconName: "face.smiling",
             why: "Provides intensive treatment with concentrated serum for maximum benefits",
             how: "Apply to clean skin, leave on for 15-20 minutes, remove and pat in remaining serum",
             timeOfDay: "weekly"
@@ -430,7 +381,6 @@ struct ProductTypeDatabase {
         "exfoliant": ProductTypeInfo(
             name: "Exfoliant",
             description: "Gentle chemical exfoliant that removes dead skin cells",
-            iconName: "sparkles",
             why: "Removes dead skin cells and reveals brighter, smoother skin",
             how: "Apply to clean skin, avoid eye area, use 2-3 times per week",
             timeOfDay: "evening"
@@ -440,7 +390,6 @@ struct ProductTypeDatabase {
         "eye_cream": ProductTypeInfo(
             name: "Eye Cream",
             description: "Specialized cream for the delicate eye area",
-            iconName: "eye.circle",
             why: "Targets fine lines, dark circles, and puffiness in the delicate eye area",
             how: "Apply a small amount with ring finger, pat gently around eye area",
             timeOfDay: "both"
@@ -448,7 +397,6 @@ struct ProductTypeDatabase {
         "rich_eye_cream": ProductTypeInfo(
             name: "Rich Eye Cream",
             description: "Intensive eye cream for mature or dry eye area",
-            iconName: "eye.circle",
             why: "Provides intensive hydration and anti-aging benefits for the eye area",
             how: "Apply a small amount with ring finger, pat gently around eye area",
             timeOfDay: "both"
@@ -458,7 +406,6 @@ struct ProductTypeDatabase {
         "facial_oil": ProductTypeInfo(
             name: "Facial Oil",
             description: "Nourishing facial oil for extra hydration and glow",
-            iconName: "drop.triangle",
             why: "Provides deep nourishment and creates a healthy glow",
             how: "Apply 2-3 drops to face and neck, massage gently until absorbed",
             timeOfDay: "evening"
@@ -468,7 +415,6 @@ struct ProductTypeDatabase {
         "retinol_treatment": ProductTypeInfo(
             name: "Retinol Treatment",
             description: "Anti-aging retinol treatment for skin renewal",
-            iconName: "star.fill",
             why: "Stimulates cell turnover and collagen production for younger-looking skin",
             how: "Start with 2-3 times per week, apply at night, avoid eye area",
             timeOfDay: "evening"
@@ -478,7 +424,6 @@ struct ProductTypeDatabase {
         "zone_specific_treatment": ProductTypeInfo(
             name: "Zone-specific Treatment",
             description: "Targeted treatment for different skin zones",
-            iconName: "target",
             why: "Addresses different concerns in different areas of the face",
             how: "Apply to specific areas as needed, follow product instructions",
             timeOfDay: "both"
@@ -492,7 +437,6 @@ struct ProductTypeDatabase {
         name: String,
         category: String,
         description: String,
-        iconName: String,
         why: String,
         how: String,
         timeOfDay: String
@@ -500,7 +444,6 @@ struct ProductTypeDatabase {
         return ProductTypeInfo(
             name: name,
             description: description,
-            iconName: iconName,
             why: why,
             how: how,
             timeOfDay: timeOfDay
@@ -900,7 +843,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "cleanser",
                 description: getCleanserDescription(for: lowercased),
-                iconName: "drop.fill",
                 why: getCleanserWhy(for: lowercased),
                 how: getCleanserHow(for: lowercased),
                 timeOfDay: getCleanserTimeOfDay(for: lowercased)
@@ -910,7 +852,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "toner",
                 description: getTonerDescription(for: lowercased),
-                iconName: "drop.circle",
                 why: getTonerWhy(for: lowercased),
                 how: getTonerHow(for: lowercased),
                 timeOfDay: getTonerTimeOfDay(for: lowercased)
@@ -920,7 +861,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "serum",
                 description: getSerumDescription(for: lowercased),
-                iconName: "star.fill",
                 why: getSerumWhy(for: lowercased),
                 how: getSerumHow(for: lowercased),
                 timeOfDay: getSerumTimeOfDay(for: lowercased)
@@ -930,7 +870,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "essence",
                 description: getEssenceDescription(for: lowercased),
-                iconName: "drop.circle",
                 why: getEssenceWhy(for: lowercased),
                 how: getEssenceHow(for: lowercased),
                 timeOfDay: "both"
@@ -940,7 +879,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "ampoule",
                 description: getAmpouleDescription(for: lowercased),
-                iconName: "star.fill",
                 why: getAmpouleWhy(for: lowercased),
                 how: getAmpouleHow(for: lowercased),
                 timeOfDay: "both"
@@ -950,7 +888,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "eye_cream",
                 description: getEyeCreamDescription(for: lowercased),
-                iconName: "eye.circle",
                 why: getEyeCreamWhy(for: lowercased),
                 how: getEyeCreamHow(for: lowercased),
                 timeOfDay: "both"
@@ -960,7 +897,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "facial_oil",
                 description: getFacialOilDescription(for: lowercased),
-                iconName: "drop.triangle",
                 why: getFacialOilWhy(for: lowercased),
                 how: getFacialOilHow(for: lowercased),
                 timeOfDay: "evening"
@@ -970,7 +906,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "moisturizer",
                 description: getMoisturizerDescription(for: lowercased),
-                iconName: "drop.circle.fill",
                 why: getMoisturizerWhy(for: lowercased),
                 how: getMoisturizerHow(for: lowercased),
                 timeOfDay: getMoisturizerTimeOfDay(for: lowercased)
@@ -980,7 +915,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "sunscreen",
                 description: getSunscreenDescription(for: lowercased),
-                iconName: "sun.max.fill",
                 why: getSunscreenWhy(for: lowercased),
                 how: getSunscreenHow(for: lowercased),
                 timeOfDay: "morning"
@@ -990,7 +924,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "mask",
                 description: getMaskDescription(for: lowercased),
-                iconName: "face.smiling",
                 why: getMaskWhy(for: lowercased),
                 how: getMaskHow(for: lowercased),
                 timeOfDay: "weekly"
@@ -1000,7 +933,6 @@ struct ProductTypeDatabase {
                 name: mainProductName,
                 category: "exfoliant",
                 description: getExfoliantDescription(for: lowercased),
-                iconName: "sparkles",
                 why: getExfoliantWhy(for: lowercased),
                 how: getExfoliantHow(for: lowercased),
                 timeOfDay: "evening"
@@ -1031,7 +963,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Cleanser",
                 description: "Gentle cleanser that removes impurities and prepares skin",
-                iconName: "drop.fill",
                 why: "Removes dirt, oil, and makeup while maintaining skin's natural balance",
                 how: "Apply to damp skin, massage gently, rinse with lukewarm water",
                 timeOfDay: "both"
@@ -1040,7 +971,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Toner",
                 description: "Balancing toner that prepares skin for next steps",
-                iconName: "drop.circle",
                 why: "Restores pH balance and enhances product absorption",
                 how: "Apply with cotton pad or hands, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1049,7 +979,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Face Serum",
                 description: "Targeted serum for your specific skin concerns",
-                iconName: "star.fill",
                 why: "Delivers active ingredients deep into the skin for maximum benefits",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1058,7 +987,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Face Serum",
                 description: "Targeted serum for your specific skin concerns",
-                iconName: "star.fill",
                 why: "Delivers active ingredients deep into the skin for maximum benefits",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1067,7 +995,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Moisturizer",
                 description: "Hydrating moisturizer that locks in moisture",
-                iconName: "drop.circle.fill",
                 why: "Provides essential hydration and creates a protective barrier",
                 how: "Apply a pea-sized amount, massage in upward circular motions",
                 timeOfDay: "both"
@@ -1076,7 +1003,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Sunscreen",
                 description: "Broad spectrum sunscreen for daily protection",
-                iconName: "sun.max.fill",
                 why: "Protects against UV damage and prevents premature aging",
                 how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
                 timeOfDay: "morning"
@@ -1085,7 +1011,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Face Mask",
                 description: "Weekly treatment mask for enhanced skin care",
-                iconName: "face.smiling",
                 why: "Provides intensive treatment and addresses specific skin concerns",
                 how: "Apply to clean skin, leave on for recommended time, rinse thoroughly",
                 timeOfDay: "weekly"
@@ -1094,7 +1019,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Essence",
                 description: "Lightweight hydrating essence that preps skin for treatment",
-                iconName: "drop.circle",
                 why: "Provides lightweight hydration and enhances absorption of subsequent products",
                 how: "Apply with hands, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1103,7 +1027,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Ampoule",
                 description: "Highly concentrated treatment with maximum active ingredients",
-                iconName: "star.fill",
                 why: "Provides intensive treatment with the highest concentration of active ingredients",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1112,7 +1035,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Exfoliant",
                 description: "Gentle chemical exfoliant that removes dead skin cells",
-                iconName: "sparkles",
                 why: "Removes dead skin cells and reveals brighter, smoother skin",
                 how: "Apply to clean skin, avoid eye area, use 2-3 times per week",
                 timeOfDay: "evening"
@@ -1121,7 +1043,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Eye Cream",
                 description: "Specialized cream for the delicate eye area",
-                iconName: "eye.circle",
                 why: "Targets fine lines, dark circles, and puffiness in the delicate eye area",
                 how: "Apply a small amount with ring finger, pat gently around eye area",
                 timeOfDay: "both"
@@ -1130,7 +1051,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Facial Oil",
                 description: "Nourishing facial oil for extra hydration and glow",
-                iconName: "drop.triangle",
                 why: "Provides deep nourishment and creates a healthy glow",
                 how: "Apply 2-3 drops to face and neck, massage gently until absorbed",
                 timeOfDay: "evening"
@@ -1139,7 +1059,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Treatment",
                 description: "Targeted treatment for specific skin concerns",
-                iconName: "target",
                 why: "Addresses specific skin concerns with concentrated active ingredients",
                 how: "Apply as directed, follow product instructions for best results",
                 timeOfDay: "both"
@@ -1148,7 +1067,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Water Cleanser",
                 description: "Gentle water-based cleanser for second cleansing step",
-                iconName: "drop.fill",
                 why: "Removes remaining impurities and prepares skin for treatment products",
                 how: "Apply to damp skin, massage gently, rinse with lukewarm water",
                 timeOfDay: "both"
@@ -1157,7 +1075,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Gel Cleanser",
                 description: "Lightweight gel cleanser that removes excess oil without over-drying",
-                iconName: "drop.fill",
                 why: "Effectively removes oil and impurities while maintaining skin's natural balance",
                 how: "Apply to wet skin, massage gently, rinse thoroughly",
                 timeOfDay: "both"
@@ -1166,7 +1083,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Cream Cleanser",
                 description: "Gentle cream cleanser that cleanses without stripping moisture",
-                iconName: "drop.fill",
                 why: "Provides gentle cleansing while maintaining skin's natural moisture barrier",
                 how: "Apply to dry or damp skin, massage gently, rinse with lukewarm water",
                 timeOfDay: "both"
@@ -1175,7 +1091,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Balancing Cleanser",
                 description: "Multi-purpose cleanser that balances different skin zones",
-                iconName: "drop.fill",
                 why: "Cleanses effectively without over-drying oily areas or stripping dry areas",
                 how: "Apply to damp skin, massage gently, rinse thoroughly",
                 timeOfDay: "both"
@@ -1184,7 +1099,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Soothing Toner",
                 description: "Calming toner that reduces irritation and redness",
-                iconName: "drop.circle",
                 why: "Soothes sensitive skin and reduces inflammation and redness",
                 how: "Apply with cotton pad or hands, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1193,7 +1107,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Salicylic Acid Toner",
                 description: "BHA toner that unclogs pores and prevents breakouts",
-                iconName: "drop.circle",
                 why: "Penetrates pores to remove dead skin cells and prevent acne",
                 how: "Apply with cotton pad, avoid eye area, use daily or as directed",
                 timeOfDay: "both"
@@ -1202,7 +1115,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "BHA Toner",
                 description: "Beta hydroxy acid toner that unclogs pores and smooths texture",
-                iconName: "drop.circle",
                 why: "Exfoliates inside pores to prevent breakouts and improve skin texture",
                 how: "Apply with cotton pad, avoid eye area, start with 2-3 times per week",
                 timeOfDay: "both"
@@ -1211,7 +1123,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Treatment Essence",
                 description: "Advanced essence with concentrated active ingredients",
-                iconName: "drop.circle",
                 why: "Delivers high concentrations of beneficial ingredients in a lightweight format",
                 how: "Apply with hands, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1220,7 +1131,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Rich Serum",
                 description: "Nourishing serum with concentrated active ingredients",
-                iconName: "star.fill",
                 why: "Provides intensive treatment with high concentrations of beneficial ingredients",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1229,7 +1139,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Lightweight Serum",
                 description: "Fast-absorbing serum that doesn't feel heavy on skin",
-                iconName: "star.fill",
                 why: "Provides effective treatment without leaving a heavy or sticky feeling",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1238,7 +1147,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Peptide Complex",
                 description: "Advanced peptide treatment for skin structure support",
-                iconName: "star.fill",
                 why: "Supports skin's natural structure and improves firmness and elasticity",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1247,7 +1155,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Heavy Moisturizer",
                 description: "Rich, intensive moisturizer for deep hydration",
-                iconName: "drop.circle.fill",
                 why: "Provides maximum hydration for dry or mature skin",
                 how: "Apply generously to face and neck, massage gently until absorbed",
                 timeOfDay: "both"
@@ -1256,7 +1163,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Adaptive Moisturizer",
                 description: "Versatile moisturizer that adapts to different skin zones",
-                iconName: "drop.circle.fill",
                 why: "Provides appropriate hydration for both oily and dry areas",
                 how: "Apply more to dry areas, less to oily areas, massage gently",
                 timeOfDay: "both"
@@ -1265,7 +1171,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Barrier Repair Cream",
                 description: "Specialized cream that strengthens the skin's protective barrier",
-                iconName: "drop.circle.fill",
                 why: "Repairs and strengthens the skin's natural protective barrier",
                 how: "Apply to clean skin, massage gently until absorbed",
                 timeOfDay: "both"
@@ -1274,7 +1179,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Luxury Moisturizer",
                 description: "Premium moisturizer with advanced anti-aging ingredients",
-                iconName: "drop.circle.fill",
                 why: "Provides luxurious hydration with high-end anti-aging benefits",
                 how: "Apply generously to face and neck, massage in upward motions",
                 timeOfDay: "both"
@@ -1283,7 +1187,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Oil-free Sunscreen",
                 description: "Non-greasy sunscreen that won't clog pores",
-                iconName: "sun.max.fill",
                 why: "Provides protection without adding shine or clogging pores",
                 how: "Apply generously, blend well, reapply every 2 hours",
                 timeOfDay: "morning"
@@ -1292,7 +1195,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Broad Spectrum Sunscreen",
                 description: "Complete UV protection against UVA and UVB rays",
-                iconName: "sun.max.fill",
                 why: "Protects against both aging UVA rays and burning UVB rays",
                 how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
                 timeOfDay: "morning"
@@ -1301,7 +1203,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Anti-aging Sunscreen",
                 description: "Sunscreen with additional anti-aging benefits",
-                iconName: "sun.max.fill",
                 why: "Provides UV protection while delivering anti-aging ingredients",
                 how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
                 timeOfDay: "morning"
@@ -1310,7 +1211,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Rich Eye Cream",
                 description: "Intensive eye cream for mature or dry eye area",
-                iconName: "eye.circle",
                 why: "Provides intensive hydration and anti-aging benefits for the eye area",
                 how: "Apply a small amount with ring finger, pat gently around eye area",
                 timeOfDay: "both"
@@ -1319,7 +1219,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Sheet Mask",
                 description: "Intensive treatment mask for deep hydration and nourishment",
-                iconName: "face.smiling",
                 why: "Provides intensive treatment with concentrated serum for maximum benefits",
                 how: "Apply to clean skin, leave on for 15-20 minutes, remove and pat in remaining serum",
                 timeOfDay: "weekly"
@@ -1328,7 +1227,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Retinol Treatment",
                 description: "Anti-aging retinol treatment for skin renewal",
-                iconName: "star.fill",
                 why: "Stimulates cell turnover and collagen production for younger-looking skin",
                 how: "Start with 2-3 times per week, apply at night, avoid eye area",
                 timeOfDay: "evening"
@@ -1337,7 +1235,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Zone-specific Treatment",
                 description: "Targeted treatment for different skin zones",
-                iconName: "target",
                 why: "Addresses different concerns in different areas of the face",
                 how: "Apply to specific areas as needed, follow product instructions",
                 timeOfDay: "both"
@@ -1346,7 +1243,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Gentle Cleanser",
                 description: "Oil-free gel cleanser that removes impurities without stripping the skin",
-                iconName: "drop.fill",
                 why: "Removes overnight oil buildup, makeup, and daily pollutants while maintaining skin's natural moisture barrier",
                 how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water",
                 timeOfDay: "both"
@@ -1355,7 +1251,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Foaming Cleanser",
                 description: "Lightweight foaming cleanser for deep pore cleansing",
-                iconName: "drop.fill",
                 why: "Creates rich lather to remove excess oil and unclog pores without over-drying",
                 how: "Wet face, apply cleanser, massage in circular motions, rinse thoroughly",
                 timeOfDay: "both"
@@ -1364,7 +1259,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Gentle Foaming Cleanser",
                 description: "Gentle foaming cleanser that cleans without irritation",
-                iconName: "drop.fill",
                 why: "Provides effective cleansing with a gentle formula that won't irritate sensitive skin",
                 how: "Wet face, apply cleanser, massage gently in circular motions, rinse thoroughly",
                 timeOfDay: "both"
@@ -1373,7 +1267,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Water-based Cleanser",
                 description: "Gentle water-based cleanser for second cleansing step",
-                iconName: "drop.fill",
                 why: "Removes remaining impurities and prepares skin for treatment products",
                 how: "Apply to damp skin, massage gently, rinse with lukewarm water",
                 timeOfDay: "both"
@@ -1382,7 +1275,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Oil Cleanser",
                 description: "Gentle oil-based cleanser for effective makeup and sunscreen removal",
-                iconName: "drop.fill",
                 why: "Oil dissolves oil, making it perfect for removing waterproof makeup and sunscreen",
                 how: "Apply to dry skin, massage gently, add water to emulsify, rinse completely",
                 timeOfDay: "evening"
@@ -1391,7 +1283,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Hydrating Toner",
                 description: "Alcohol-free toner that balances pH and provides instant hydration",
-                iconName: "drop.circle",
                 why: "Restores skin's natural pH balance and prepares skin for better product absorption",
                 how: "Apply with cotton pad or hands, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1400,7 +1291,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Exfoliating Toner",
                 description: "Gentle exfoliating toner with AHA/BHA for smoother skin texture",
-                iconName: "drop.circle",
                 why: "Removes dead skin cells and unclogs pores for brighter, smoother skin",
                 how: "Apply with cotton pad, avoid eye area, use 2-3 times per week",
                 timeOfDay: "evening"
@@ -1409,7 +1299,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Niacinamide Serum",
                 description: "Vitamin B3 serum that minimizes pores and controls oil production",
-                iconName: "star.fill",
                 why: "Reduces pore size, controls sebum production, and improves skin texture",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1418,7 +1307,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Vitamin C Serum",
                 description: "Antioxidant serum that brightens skin and protects against environmental damage",
-                iconName: "star.fill",
                 why: "Neutralizes free radicals, brightens skin tone, and boosts collagen production",
                 how: "Apply 2-3 drops in the morning, pat gently, follow with sunscreen",
                 timeOfDay: "morning"
@@ -1427,7 +1315,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Hyaluronic Acid Serum",
                 description: "Intensive hydrating serum that plumps and smooths skin",
-                iconName: "star.fill",
                 why: "Attracts and retains moisture, plumping skin and reducing fine lines",
                 how: "Apply to damp skin, pat gently until absorbed, follow with moisturizer",
                 timeOfDay: "both"
@@ -1436,7 +1323,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Retinol Serum",
                 description: "Anti-aging serum that promotes cell turnover and reduces signs of aging",
-                iconName: "star.fill",
                 why: "Stimulates collagen production, reduces fine lines, and improves skin texture",
                 how: "Start with 2-3 times per week, apply at night, avoid eye area",
                 timeOfDay: "evening"
@@ -1445,7 +1331,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Peptide Serum",
                 description: "Anti-aging serum with peptides for firmer, more youthful skin",
-                iconName: "star.fill",
                 why: "Stimulates collagen production and improves skin firmness and elasticity",
                 how: "Apply 2-3 drops to clean skin, pat gently until absorbed",
                 timeOfDay: "both"
@@ -1454,7 +1339,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Lightweight Moisturizer",
                 description: "Oil-free gel moisturizer that hydrates without clogging pores",
-                iconName: "drop.circle.fill",
                 why: "Provides essential hydration while maintaining a matte finish",
                 how: "Apply a pea-sized amount, massage in upward circular motions",
                 timeOfDay: "both"
@@ -1463,7 +1347,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Rich Moisturizer",
                 description: "Nourishing cream moisturizer for deep hydration and skin repair",
-                iconName: "drop.circle.fill",
                 why: "Provides intensive hydration and supports overnight skin repair",
                 how: "Apply generously to face and neck, massage gently until absorbed",
                 timeOfDay: "evening"
@@ -1472,7 +1355,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Night Cream",
                 description: "Intensive night cream that repairs and rejuvenates while you sleep",
-                iconName: "moon.circle.fill",
                 why: "Works with your skin's natural repair cycle to restore and rejuvenate",
                 how: "Apply generously before bed, massage in upward motions",
                 timeOfDay: "evening"
@@ -1481,7 +1363,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Daily Sunscreen",
                 description: "Broad spectrum SPF 30+ sunscreen for daily protection",
-                iconName: "sun.max.fill",
                 why: "Protects against UVA/UVB rays, prevents premature aging and skin cancer",
                 how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours",
                 timeOfDay: "morning"
@@ -1490,7 +1371,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Mineral Sunscreen",
                 description: "Physical sunscreen with zinc oxide for sensitive skin protection",
-                iconName: "sun.max.fill",
                 why: "Provides immediate protection and is gentle on sensitive skin",
                 how: "Apply generously, blend well to avoid white cast",
                 timeOfDay: "morning"
@@ -1499,7 +1379,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Spot Treatment",
                 description: "Targeted treatment for blemishes and acne spots",
-                iconName: "target",
                 why: "Reduces inflammation and speeds up healing of individual blemishes",
                 how: "Apply a small amount directly to blemishes, avoid surrounding skin",
                 timeOfDay: "evening"
@@ -1508,7 +1387,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Exfoliating Mask",
                 description: "Weekly mask that removes dead skin cells and improves texture",
-                iconName: "face.smiling",
                 why: "Deep cleanses pores and reveals smoother, brighter skin",
                 how: "Apply to clean skin, leave on for recommended time, rinse thoroughly",
                 timeOfDay: "weekly"
@@ -1517,7 +1395,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Hydrating Mask",
                 description: "Intensive hydrating mask for plump, dewy skin",
-                iconName: "face.smiling",
                 why: "Provides deep hydration and improves skin's moisture retention",
                 how: "Apply to clean skin, leave on for 15-20 minutes, rinse or remove",
                 timeOfDay: "weekly"
@@ -1526,7 +1403,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Clay Mask",
                 description: "Purifying clay mask that draws out impurities and tightens pores",
-                iconName: "face.smiling",
                 why: "Absorbs excess oil and unclogs pores for clearer, tighter skin",
                 how: "Apply to clean skin, leave on until dry, rinse with warm water",
                 timeOfDay: "weekly"
@@ -1535,7 +1411,6 @@ struct ProductTypeDatabase {
             return ProductTypeInfo(
                 name: "Skincare Step",
                 description: "Important step in your skincare routine",
-                iconName: "star.fill",
                 why: "Part of your personalized skincare routine",
                 how: "Follow the routine as recommended",
                 timeOfDay: "both"
@@ -1543,9 +1418,6 @@ struct ProductTypeDatabase {
         }
     }
 
-    static func getIconName(for stepName: String) -> String {
-        return getInfo(for: stepName).iconName
-    }
 
     static func getStepType(for stepName: String) -> String {
         let lowercased = stepName.lowercased()
