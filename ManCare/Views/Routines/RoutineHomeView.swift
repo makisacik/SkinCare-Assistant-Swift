@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct RoutineHomeView: View {
-    
+
     let generatedRoutine: RoutineResponse?
     @Binding var selectedTab: MainTabView.Tab
 
     @StateObject private var routineTrackingService = RoutineTrackingService()
+    @StateObject private var savedRoutineService = CoreDataRoutineService.shared
     @State private var selectedDate = Date()
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingEditRoutine = false
@@ -23,6 +24,7 @@ struct RoutineHomeView: View {
     @State private var companionRoutineType: TimeOfDay?
     @State private var companionSteps: [CompanionStep] = []
     @State private var companionLaunch: CompanionLaunch?
+    @State private var showingRoutineSwitcher = false
 
     // Payload for item-based Companion presentation to ensure stable snapshot
     private struct CompanionLaunch: Identifiable {
@@ -44,6 +46,20 @@ struct RoutineHomeView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
+            .onAppear {
+                print("🏠 RoutineHomeView onAppear")
+                print("📊 generatedRoutine: \(generatedRoutine != nil ? "exists" : "nil")")
+                print("📊 activeRoutine: \(savedRoutineService.activeRoutine?.title ?? "nil")")
+                print("📊 savedRoutines count: \(savedRoutineService.savedRoutines.count)")
+
+                // Auto-save initial routine if available and no active routine exists
+                if let routine = generatedRoutine, savedRoutineService.activeRoutine == nil {
+                    print("💾 Saving initial routine from generatedRoutine")
+                    savedRoutineService.saveInitialRoutine(from: routine)
+                } else {
+                    print("⚠️ Not saving routine - generatedRoutine: \(generatedRoutine != nil), activeRoutine: \(savedRoutineService.activeRoutine != nil)")
+                }
+            }
 
             VStack(spacing: 0) {
                 // Calendar section with its own background extending to top safe area
@@ -56,8 +72,7 @@ struct RoutineHomeView: View {
 
                     // Calendar Strip
                     CalendarStripView(selectedDate: $selectedDate, routineTrackingService: routineTrackingService)
-                }
-                .background(
+                }        .background(
                     LinearGradient(
                         gradient: Gradient(colors: [
                             ThemeManager.shared.theme.palette.primaryLight,     // Lighter primary
@@ -72,20 +87,17 @@ struct RoutineHomeView: View {
 
                 // Content
                 routineTabContent
-            }
-        }
+            }}
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
-        }
-        .sheet(isPresented: $showingEditRoutine) {
+        }.sheet(isPresented: $showingEditRoutine) {
             if let routine = generatedRoutine {
                 EditRoutineView(
                     originalRoutine: routine,
                     routineTrackingService: routineTrackingService,
                     onRoutineUpdated: nil
                 )
-            }
-        }
+            }}
         .sheet(item: $showingRoutineDetail) { routineData in
             RoutineDetailView(
                 title: routineData.title,
@@ -96,10 +108,8 @@ struct RoutineHomeView: View {
                 selectedDate: selectedDate,
                 onStepTap: { step in
                     showingStepDetail = step
-                }
-            )
-        }
-        .fullScreenCover(isPresented: $showingMorningRoutineCompletion) {
+                }    )
+        }.fullScreenCover(isPresented: $showingMorningRoutineCompletion) {
             MorningRoutineCompletionView(
                 routineSteps: generateMorningRoutine(),
                 onComplete: {
@@ -108,8 +118,7 @@ struct RoutineHomeView: View {
                 originalRoutine: generatedRoutine,
                 routineTrackingService: routineTrackingService
             )
-        }
-        .fullScreenCover(isPresented: $showingEveningRoutineCompletion) {
+        }.fullScreenCover(isPresented: $showingEveningRoutineCompletion) {
             EveningRoutineCompletionView(
                 routineSteps: generateEveningRoutine(),
                 onComplete: {
@@ -118,8 +127,7 @@ struct RoutineHomeView: View {
                 originalRoutine: generatedRoutine,
                 routineTrackingService: routineTrackingService
             )
-        }
-        .fullScreenCover(item: $companionLaunch) { launch in
+        }.fullScreenCover(item: $companionLaunch) { launch in
             CompanionSessionView(
                 routineId: "\(launch.routineType.rawValue)_routine",
                 routineName: "\(launch.routineType.displayName) Routine",
@@ -129,17 +137,21 @@ struct RoutineHomeView: View {
                     companionLaunch = nil
                     companionRoutineType = nil
                     companionSteps = []
-                }
-            )
+                }    )
             .onAppear {
                 print("🎭 Companion fullScreenCover appeared with payload")
                 print("📋 Routine type in cover: \(launch.routineType.rawValue)")
                 print("📝 Steps count in cover: \(launch.steps.count)")
                 print("📝 Steps: \(launch.steps.map { $0.title })")
-            }
-        }
-    }
-
+            }}
+        .sheet(isPresented: $showingRoutineSwitcher) {
+            if #available(iOS 16.0, *) {
+                RoutineSwitcherView(savedRoutineService: savedRoutineService)
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
+            } else {
+                RoutineSwitcherView(savedRoutineService: savedRoutineService)
+            }                }    }
     @ViewBuilder
     private var routineTabContent: some View {
         ScrollView {
@@ -153,26 +165,120 @@ struct RoutineHomeView: View {
 
                         Spacer()
 
-                        Button {
-                            showingEditRoutine = true
-                        } label: {
-                            HStack(spacing: 4) {
-                                Text("Edit routines")
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            }
-                        }
-                    }
+                        // Current Routine Display
+                        if let activeRoutine = savedRoutineService.activeRoutine {
+                            let _ = print("🎯 Displaying active routine: \(activeRoutine.title)")
+                            Button {
+                                showingRoutineSwitcher = true
+                            } label: {
+                                HStack(spacing: 8) {
+                                    VStack(alignment: .trailing, spacing: 2) {
+                                        Text(activeRoutine.title)
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                            .lineLimit(1)
+                                        Text(activeRoutine.category.title)
+                                            .font(.system(size: 12, weight: .medium))
+                                            .foregroundColor(activeRoutine.category.color)
+                                    }
+
+                                    Image(systemName: "chevron.down")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(ThemeManager.shared.theme.palette.surface)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                                        )
+                                )
+                            }                } else {
+                            Button {
+                                showingRoutineSwitcher = true
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Text("Choose routine")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                    Image(systemName: "chevron.down")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                }                    }                }            }
 
                     Text("Tap on a routine to complete")
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+
+                    // Debug info
+                    Text("Debug: Active: \(savedRoutineService.activeRoutine?.title ?? "nil"), Saved: \(savedRoutineService.savedRoutines.count)")
+                        .font(.system(size: 10))
+                        .foregroundColor(.red)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
+
+                // Current Routine Display
+                if let activeRoutine = savedRoutineService.activeRoutine {
+                    let _ = print("📋 Showing current routine card for: \(activeRoutine.title)")
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Current Routine")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                            Spacer()
+
+                            Text(activeRoutine.category.title)
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(activeRoutine.category.color)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(activeRoutine.category.color.opacity(0.1))
+                                )
+                        }
+
+                        Text(activeRoutine.title)
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                        Text(activeRoutine.description)
+                            .font(.system(size: 14))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            .lineLimit(2)
+
+                        HStack(spacing: 16) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "clock")
+                                    .font(.system(size: 12, weight: .medium))
+                                Text(activeRoutine.duration)
+                                    .font(.system(size: 12, weight: .medium))
+                            }                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+
+                            HStack(spacing: 4) {
+                                Image(systemName: "list.bullet")
+                                    .font(.system(size: 12, weight: .medium))
+                                Text("\(activeRoutine.stepCount) steps")
+                                    .font(.system(size: 12, weight: .medium))
+                            }                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+
+                            Spacer()
+                        }            }            .padding(16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(ThemeManager.shared.theme.palette.surface)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                            )
+                    )
+                    .padding(.horizontal, 20)
+                }
 
                 // Morning Routine Card
                 RoutineCard(
@@ -197,8 +303,7 @@ struct RoutineHomeView: View {
                     },
                     onStepTap: { step in
                         showingStepDetail = step
-                    }
-                )
+                    }        )
 
                 // Evening Routine Card
                 RoutineCard(
@@ -223,8 +328,7 @@ struct RoutineHomeView: View {
                     },
                     onStepTap: { step in
                         showingStepDetail = step
-                    }
-                )
+                    }        )
 
                 // Explore Routine Library Card
                 ExploreRoutineLibraryCard(selectedTab: $selectedTab)
@@ -261,18 +365,30 @@ struct RoutineHomeView: View {
                         },
                         onStepTap: { step in
                             showingStepDetail = step
-                        }
-                    )
-                }
-            }
-            .padding(.bottom, 100) // Space for bottom navigation
-        }
-    }
+                        }            )
+                }    }        .padding(.bottom, 100) // Space for bottom navigation
+        }}
 
 
     // MARK: - Routine Generation
 
     private func generateMorningRoutine() -> [RoutineStepDetail] {
+        // Use active routine from SavedRoutineService if available
+        if let activeRoutine = savedRoutineService.activeRoutine {
+            return activeRoutine.steps.prefix(activeRoutine.steps.count / 2).enumerated().map { index, stepName in
+                RoutineStepDetail(
+                    id: "morning_\(stepName)",
+                    title: stepName,
+                    description: "Step from your active routine",
+                    iconName: iconNameForStepName(stepName),
+                    stepType: stepTypeForStepName(stepName),
+                    timeOfDay: .morning,
+                    why: "Part of your personalized routine",
+                    how: "Follow the routine as recommended"
+                )
+            }}
+
+        // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {
             return routine.routine.morning.map { apiStep in
                 RoutineStepDetail(
@@ -285,8 +401,7 @@ struct RoutineHomeView: View {
                     why: apiStep.why,
                     how: apiStep.how
                 )
-            }
-        }
+            }}
 
         // Fallback routine
         return [
@@ -334,6 +449,23 @@ struct RoutineHomeView: View {
     }
 
     private func generateEveningRoutine() -> [RoutineStepDetail] {
+        // Use active routine from SavedRoutineService if available
+        if let activeRoutine = savedRoutineService.activeRoutine {
+            let eveningSteps = activeRoutine.steps.suffix(activeRoutine.steps.count / 2)
+            return eveningSteps.enumerated().map { index, stepName in
+                RoutineStepDetail(
+                    id: "evening_\(stepName)",
+                    title: stepName,
+                    description: "Step from your active routine",
+                    iconName: iconNameForStepName(stepName),
+                    stepType: stepTypeForStepName(stepName),
+                    timeOfDay: .evening,
+                    why: "Part of your personalized routine",
+                    how: "Follow the routine as recommended"
+                )
+            }}
+
+        // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {
             return routine.routine.evening.map { apiStep in
                 RoutineStepDetail(
@@ -346,8 +478,7 @@ struct RoutineHomeView: View {
                     why: apiStep.why,
                     how: apiStep.how
                 )
-            }
-        }
+            }}
 
         // Fallback routine
         return [
@@ -401,8 +532,7 @@ struct RoutineHomeView: View {
                 why: apiStep.why,
                 how: apiStep.how
             )
-        }
-    }
+        }}
 
     private func getCoachMessage() -> String {
         let hour = Calendar.current.component(.hour, from: selectedDate)
@@ -425,8 +555,7 @@ struct RoutineHomeView: View {
                 "End the day with a relaxing skincare ritual 🧴"
             ]
             return eveningMessages.randomElement() ?? eveningMessages[0]
-        }
-    }
+        }}
 
     private func iconNameForStepType(_ stepType: ProductType) -> String {
         switch stepType {
@@ -440,8 +569,39 @@ struct RoutineHomeView: View {
             return "sun.max.fill"
         default:
             return stepType.iconName
-        }
-    }
+        }}
+
+    private func iconNameForStepName(_ stepName: String) -> String {
+        let lowercased = stepName.lowercased()
+        if lowercased.contains("cleanser") || lowercased.contains("cleanse") {
+            return "drop.fill"
+        } else if lowercased.contains("serum") || lowercased.contains("treatment") {
+            return "star.fill"
+        } else if lowercased.contains("moisturizer") || lowercased.contains("cream") {
+            return "drop.circle.fill"
+        } else if lowercased.contains("sunscreen") || lowercased.contains("spf") {
+            return "sun.max.fill"
+        } else if lowercased.contains("toner") {
+            return "drop.circle"
+        } else if lowercased.contains("mask") {
+            return "face.smiling"
+        } else {
+            return "star.fill"
+        }}
+
+    private func stepTypeForStepName(_ stepName: String) -> ProductType {
+        let lowercased = stepName.lowercased()
+        if lowercased.contains("cleanser") || lowercased.contains("cleanse") {
+            return .cleanser
+        } else if lowercased.contains("serum") || lowercased.contains("treatment") {
+            return .faceSerum
+        } else if lowercased.contains("moisturizer") || lowercased.contains("cream") {
+            return .moisturizer
+        } else if lowercased.contains("sunscreen") || lowercased.contains("spf") {
+            return .sunscreen
+        } else {
+            return .faceSerum // Default fallback
+        }}
 
     private func colorForStepType(_ stepType: ProductType) -> Color {
         switch stepType {
@@ -455,8 +615,7 @@ struct RoutineHomeView: View {
             return ThemeManager.shared.theme.palette.warning
         default:
             return Color(stepType.color)
-        }
-    }
+        }}
 
     private func getCompanionSteps(for timeOfDay: TimeOfDay) -> [CompanionStep] {
         let routineSteps: [RoutineStepDetail]
@@ -486,7 +645,7 @@ struct RoutineHomeView: View {
 // MARK: - Coach Message View
 
 private struct CoachMessageView: View {
-    
+
     let message: String
 
     var body: some View {
@@ -501,8 +660,7 @@ private struct CoachMessageView: View {
                 .multilineTextAlignment(.leading)
 
             Spacer()
-        }
-        .padding(16)
+        }.padding(16)
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                 .fill(ThemeManager.shared.theme.palette.warning.opacity(0.1))
@@ -511,14 +669,12 @@ private struct CoachMessageView: View {
                         .stroke(ThemeManager.shared.theme.palette.warning.opacity(0.3), lineWidth: 1)
                 )
         )
-    }
-}
-
+                }    }
 
 // MARK: - Modern Header View
 
 private struct ModernHeaderView: View {
-    
+
     @Binding var selectedDate: Date
     let routineTrackingService: RoutineTrackingService
 
@@ -540,8 +696,7 @@ private struct ModernHeaderView: View {
                         Text("\(currentStreak) day streak")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    }
-                    .padding(.horizontal, 12)
+                    }            .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -564,19 +719,14 @@ private struct ModernHeaderView: View {
                     Text("Today")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                }
-            }
-            .padding(.top, 8)
-        }
-        .padding(.horizontal, 20)
+                }    }        .padding(.top, 8)
+        }.padding(.horizontal, 20)
         .padding(.bottom, 20)
-    }
-}
-
+                }    }
 // MARK: - Calendar Strip View
 
 private struct CalendarStripView: View {
-    
+
     @Binding var selectedDate: Date
     let routineTrackingService: RoutineTrackingService
 
@@ -603,12 +753,8 @@ private struct CalendarStripView: View {
                         routineTrackingService: routineTrackingService
                     ) {
                         selectedDate = date
-                    }
-                }
-            }
-            .padding(.horizontal, 20)
-        }
-        .padding(.vertical, 12)
+                    }        }    }        .padding(.horizontal, 20)
+        }.padding(.vertical, 12)
     }
 
     private func getWeekDates() -> [Date] {
@@ -617,14 +763,11 @@ private struct CalendarStripView: View {
 
         return (0..<7).compactMap { dayOffset in
             calendar.date(byAdding: .day, value: dayOffset, to: startOfWeek)
-        }
-    }
-}
-
+        }                }    }
 // MARK: - Calendar Day View
 
 private struct CalendarDayView: View {
-    
+
     let date: Date
     let isSelected: Bool
     let routineTrackingService: RoutineTrackingService
@@ -673,22 +816,17 @@ private struct CalendarDayView: View {
                     Circle()
                         .fill(Color.clear)
                         .frame(width: 6, height: 6)
-                }
-            }
-            .frame(width: 40, height: 50)
+                }    }        .frame(width: 40, height: 50)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(isSelected ? ThemeManager.shared.theme.palette.background : Color.clear)
             )
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
-
+        }.buttonStyle(PlainButtonStyle())
+                }    }
 // MARK: - Modern Routine Card
 
 private struct RoutineCard: View {
-    
+
     let title: String
     let iconName: String
     let iconColor: Color
@@ -768,9 +906,7 @@ private struct RoutineCard: View {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
-                }
-                .padding(20)
+                    }        }        .padding(20)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
                         .fill(
@@ -789,8 +925,7 @@ private struct RoutineCard: View {
                                 .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1) // #C0B8B8 - Neutral gray border
                         )
                 )
-            }
-            .buttonStyle(PlainButtonStyle())
+            }    .buttonStyle(PlainButtonStyle())
 
             // Companion mode button
             Button {
@@ -811,8 +946,7 @@ private struct RoutineCard: View {
                     Image(systemName: "arrow.right")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                }
-                .padding(.horizontal, 16)
+                }        .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
@@ -822,17 +956,13 @@ private struct RoutineCard: View {
                                 .stroke(ThemeManager.shared.theme.palette.primary.opacity(0.3), lineWidth: 1)
                         )
                 )
-            }
-            .buttonStyle(PlainButtonStyle())
-        }
-        .padding(.horizontal, 20)
-    }
-}
-
+            }    .buttonStyle(PlainButtonStyle())
+        }.padding(.horizontal, 20)
+                }    }
 // MARK: - Routine Step Row
 
 private struct RoutineStepRow: View {
-    
+
     let step: RoutineStepDetail
     let isCompleted: Bool
     let onToggle: () -> Void
@@ -848,8 +978,7 @@ private struct RoutineStepRow: View {
         case .sunscreen: return ThemeManager.shared.theme.palette.warning
         case .faceSunscreen: return ThemeManager.shared.theme.palette.warning
         default: return ThemeManager.shared.theme.palette.textMuted
-        }
-    }
+        }}
 
     var body: some View {
         HStack(spacing: 12) {
@@ -865,9 +994,7 @@ private struct RoutineStepRow: View {
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         showCheckmarkAnimation = false
-                    }
-                }
-            } label: {
+                    }        }    } label: {
                 ZStack {
                     Circle()
                         .stroke(stepColor.opacity(0.3), lineWidth: 2)
@@ -885,10 +1012,7 @@ private struct RoutineStepRow: View {
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .scaleEffect(showCheckmarkAnimation ? 1.3 : 1.0)
                             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
-                    }
-                }
-            }
-            .buttonStyle(PlainButtonStyle())
+                    }        }    }        .buttonStyle(PlainButtonStyle())
 
             // Step content
             VStack(alignment: .leading, spacing: 2) {
@@ -909,8 +1033,7 @@ private struct RoutineStepRow: View {
             Image(systemName: step.iconName)
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(stepColor)
-        }
-        .padding(.vertical, 8)
+        }.padding(.vertical, 8)
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 12)
@@ -923,10 +1046,7 @@ private struct RoutineStepRow: View {
         .contentShape(Rectangle())
         .onTapGesture {
             onTap()
-        }
-    }
-}
-
+        }                }    }
 
 // MARK: - Explore Routine Library Card
 
@@ -965,14 +1085,12 @@ private struct ExploreRoutineLibraryCard: View {
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 Spacer()
-            }
-            .padding(12)
+            }    .padding(12)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(ThemeManager.shared.theme.palette.primary.opacity(0.08))
             )
-        }
-        .padding(20)
+        }.padding(20)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(
@@ -992,11 +1110,8 @@ private struct ExploreRoutineLibraryCard: View {
                 )
         )
         .padding(.horizontal, 20)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
-
+        }.buttonStyle(PlainButtonStyle())
+                }    }
 // MARK: - UV Index Card
 
 private struct UVIndexCard: View {
@@ -1029,14 +1144,12 @@ private struct UVIndexCard: View {
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 Spacer()
-            }
-            .padding(12)
+            }    .padding(12)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(ThemeManager.shared.theme.palette.textInverse.opacity(0.08))
             )
-        }
-        .padding(20)
+        }.padding(20)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(
@@ -1056,9 +1169,7 @@ private struct UVIndexCard: View {
                 )
         )
         .padding(.horizontal, 20)
-    }
-}
-
+                }    }
 
 // MARK: - Models
 
@@ -1081,9 +1192,7 @@ struct RoutineStepDetail: Identifiable {
         self.timeOfDay = timeOfDay
         self.why = why
         self.how = how
-    }
-}
-
+                }    }
 enum TimeOfDay: String, Codable, CaseIterable {
     case morning, evening, weekly
 
@@ -1095,10 +1204,7 @@ enum TimeOfDay: String, Codable, CaseIterable {
             return "Evening"
         case .weekly:
             return "Weekly"
-        }
-    }
-}
-
+        }                }    }
 struct RoutineDetailData: Identifiable {
     let id = UUID()
     let title: String
@@ -1111,7 +1217,7 @@ struct RoutineDetailData: Identifiable {
 // MARK: - Routine Step Detail View
 
 struct RoutineStepDetailView: View {
-    
+
     @Environment(\.dismiss) private var dismiss
     let stepDetail: RoutineStepDetail
 
@@ -1142,8 +1248,7 @@ struct RoutineStepDetailView: View {
                     .lineLimit(nil)
 
                 Spacer()
-            }
-            .padding(24)
+            }    .padding(24)
             .navigationTitle("Step Details")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -1151,16 +1256,159 @@ struct RoutineStepDetailView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
-                    }
-                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                }
-            }
-        }
-    }
-}
-
+                    }            .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                }    }    }                }    }
 // MARK: - Preview
 
+
+// MARK: - Routine Switcher View
+
+struct RoutineSwitcherView: View {
+    @Environment(\.dismiss) private var dismiss
+    @ObservedObject var savedRoutineService: CoreDataRoutineService
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Choose Routine")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("Select your active routine")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                }
+
+                Spacer()
+
+                Button("Cancel") {
+                    dismiss()
+                }        .font(.system(size: 16, weight: .medium))
+                .foregroundColor(ThemeManager.shared.theme.palette.primary)
+            }    .padding(.horizontal, 20)
+            .padding(.bottom, 20)
+
+            // Routines List
+            if savedRoutineService.savedRoutines.isEmpty {
+                VStack(spacing: 16) {
+                    Image(systemName: "bookmark")
+                        .font(.system(size: 32, weight: .light))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+
+                    Text("No saved routines")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("Save routines from the Discover tab to see them here")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .multilineTextAlignment(.center)
+                }        .frame(maxWidth: .infinity)
+                .padding(.horizontal, 40)
+                .padding(.vertical, 40)
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 8) {
+                        ForEach(savedRoutineService.savedRoutines) { routine in
+                            RoutineSwitcherCard(
+                                routine: routine,
+                                isActive: savedRoutineService.activeRoutine?.id == routine.id,
+                                onSelect: {
+                                    savedRoutineService.setActiveRoutine(routine)
+                                    dismiss()
+                                }                    )
+                        }            }            .padding(.horizontal, 20)
+                }    }
+
+            Spacer(minLength: 20)
+        }.background(ThemeManager.shared.theme.palette.background)
+                }    }
+// MARK: - Routine Switcher Card
+
+private struct RoutineSwitcherCard: View {
+    let routine: SavedRoutineModel
+    let isActive: Bool
+    let onSelect: () -> Void
+
+    var body: some View {
+        Button(action: onSelect) {
+            HStack(spacing: 12) {
+                // Category Icon
+                ZStack {
+                    Circle()
+                        .fill(routine.category.color.opacity(0.2))
+                        .frame(width: 40, height: 40)
+
+                    Image(systemName: routine.category.iconName)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(routine.category.color)
+                }
+
+                // Content
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack {
+                        Text(routine.title)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(1)
+
+                        Spacer()
+
+                        if isActive {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.success)
+                        }            }
+
+                    Text(routine.description)
+                        .font(.system(size: 13))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(1)
+
+                    HStack(spacing: 8) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "clock")
+                                .font(.system(size: 10, weight: .medium))
+                            Text(routine.duration)
+                                .font(.system(size: 11, weight: .medium))
+                        }                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+
+                        HStack(spacing: 4) {
+                            Image(systemName: "list.bullet")
+                                .font(.system(size: 10, weight: .medium))
+                            Text("\(routine.stepCount) steps")
+                                .font(.system(size: 11, weight: .medium))
+                        }                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+
+                        Spacer()
+
+                        Text(routine.category.title)
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(routine.category.color)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(routine.category.color.opacity(0.1))
+                            )
+                    }        }    }        .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(ThemeManager.shared.theme.palette.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(
+                                isActive ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.border,
+                                lineWidth: isActive ? 2 : 1
+                            )
+                    )
+            )
+        }.buttonStyle(PlainButtonStyle())
+                }    }
 
 #Preview("RoutineHomeView") {
     RoutineHomeView(

@@ -56,6 +56,11 @@ struct MainFlowView: View {
                         selectedRegion = .temperate
                         selectedPreferences = nil
                         generatedRoutine = createMockRoutineResponse()
+
+                        // Save the routine immediately when skipping to home
+                        if let routine = generatedRoutine {
+                            CoreDataRoutineService.shared.saveInitialRoutine(from: routine)
+                        }
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .home
                         }

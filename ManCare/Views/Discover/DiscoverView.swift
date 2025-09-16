@@ -11,6 +11,7 @@ struct DiscoverView: View {
     @State private var searchText = ""
     @State private var selectedCategory: RoutineCategory = .all
     @State private var showingRoutineDetail: RoutineTemplate?
+    @StateObject private var savedRoutineService = CoreDataRoutineService.shared
     
     var body: some View {
         ZStack {
@@ -47,7 +48,7 @@ struct DiscoverView: View {
             }
         }
         .sheet(item: $showingRoutineDetail) { routine in
-            RoutineDetailSheet(routine: routine)
+            RoutineDetailSheet(routine: routine, savedRoutineService: savedRoutineService)
         }
     }
     
@@ -437,7 +438,9 @@ private struct RoutineGridCard: View {
 
 private struct RoutineDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var isStepsExpanded = false
     let routine: RoutineTemplate
+    let savedRoutineService: CoreDataRoutineService
     
     var body: some View {
         NavigationView {
@@ -484,7 +487,7 @@ private struct RoutineDetailSheet: View {
                         // Description
                         Text(routine.description)
                             .font(.system(size: 16))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .lineLimit(nil)
                         
                         // Tags
@@ -518,7 +521,8 @@ private struct RoutineDetailSheet: View {
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
-                            ForEach(Array(routine.steps.prefix(3).enumerated()), id: \.offset) { index, step in
+                            let stepsToShow = isStepsExpanded ? routine.steps : Array(routine.steps.prefix(3))
+                            ForEach(Array(stepsToShow.enumerated()), id: \.offset) { index, step in
                                 HStack(spacing: 12) {
                                     Text("\(index + 1)")
                                         .font(.system(size: 14, weight: .bold))
@@ -538,16 +542,27 @@ private struct RoutineDetailSheet: View {
                             }
                             
                             if routine.steps.count > 3 {
-                                Text("+ \(routine.steps.count - 3) more steps")
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                Button {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        isStepsExpanded.toggle()
+                                    }
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Text(isStepsExpanded ? "Show less" : "+ \(routine.steps.count - 3) more steps")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                        Image(systemName: isStepsExpanded ? "chevron.up" : "chevron.down")
+                                            .font(.system(size: 12, weight: .medium))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.primary)}
                                     .padding(.top, 4)
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
                         }
                         
                         // CTA Button
                         Button {
-                            // TODO: Implement routine adoption
+                            savedRoutineService.saveRoutine(routine)
                             dismiss()
                         } label: {
                             HStack {
@@ -568,8 +583,14 @@ private struct RoutineDetailSheet: View {
                         .padding(.top, 8)
                     }
                     .padding(.horizontal, 24)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(ThemeManager.shared.theme.palette.background)
+                    )
+                    .padding(.horizontal, 16)
                 }
             }
+            .background(ThemeManager.shared.theme.palette.background)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
