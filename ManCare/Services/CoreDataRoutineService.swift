@@ -141,7 +141,8 @@ class CoreDataRoutineService: ObservableObject {
             duration: "10-15 min",
             difficulty: .beginner,
             tags: ["Personalized", "Onboarding", "Custom"],
-            steps: allSteps,
+            morningSteps: morningSteps,
+            eveningSteps: eveningSteps,
             benefits: ["Personalized for your skin", "Based on your preferences", "Easy to follow"],
             isFeatured: false,
             isPremium: false,
@@ -429,7 +430,13 @@ struct SavedRoutineModel: Identifiable, Codable {
     let duration: String
     let difficulty: RoutineTemplate.Difficulty
     let tags: [String]
-    let steps: [String]
+    let morningSteps: [String]
+    let eveningSteps: [String]
+
+    // Computed property for backward compatibility
+    var steps: [String] {
+        return morningSteps + eveningSteps
+    }
     let benefits: [String]
     let isFeatured: Bool
     let isPremium: Bool
@@ -447,29 +454,50 @@ struct SavedRoutineModel: Identifiable, Codable {
         self.duration = template.duration
         self.difficulty = template.difficulty
         self.tags = template.tags
-        self.steps = template.steps
+        self.morningSteps = template.morningSteps
+        self.eveningSteps = template.eveningSteps
         self.benefits = template.benefits
         self.isFeatured = template.isFeatured
         self.isPremium = template.isPremium
         self.savedDate = Date()
         self.isActive = isActive
         // Create step details from template steps using ProductTypeDatabase
-        self.stepDetails = template.steps.enumerated().map { index, stepName in
+        var allStepDetails: [SavedStepDetailModel] = []
+
+        // Add morning steps
+        for (index, stepName) in template.morningSteps.enumerated() {
             let productInfo = ProductTypeDatabase.getInfo(for: stepName)
-            return SavedStepDetailModel(
+            allStepDetails.append(SavedStepDetailModel(
                 title: productInfo.name,
                 stepDescription: productInfo.description,
                 iconName: productInfo.iconName,
                 stepType: ProductTypeDatabase.getStepType(for: stepName),
-                timeOfDay: ProductTypeDatabase.getTimeOfDay(for: stepName, index: index, totalSteps: template.steps.count),
+                timeOfDay: "morning",
                 why: productInfo.why,
                 how: productInfo.how,
                 order: index
-            )
+            ))
         }
+
+        // Add evening steps
+        for (index, stepName) in template.eveningSteps.enumerated() {
+            let productInfo = ProductTypeDatabase.getInfo(for: stepName)
+            allStepDetails.append(SavedStepDetailModel(
+                title: productInfo.name,
+                stepDescription: productInfo.description,
+                iconName: productInfo.iconName,
+                stepType: ProductTypeDatabase.getStepType(for: stepName),
+                timeOfDay: "evening",
+                why: productInfo.why,
+                how: productInfo.how,
+                order: index + template.morningSteps.count
+            ))
+        }
+
+        self.stepDetails = allStepDetails
     }
 
-    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], steps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = []) {
+    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = []) {
         self.id = UUID()
         self.templateId = templateId
         self.title = title
@@ -479,7 +507,8 @@ struct SavedRoutineModel: Identifiable, Codable {
         self.duration = duration
         self.difficulty = difficulty
         self.tags = tags
-        self.steps = steps
+        self.morningSteps = morningSteps
+        self.eveningSteps = eveningSteps
         self.benefits = benefits
         self.isFeatured = isFeatured
         self.isPremium = isPremium
@@ -498,7 +527,11 @@ struct SavedRoutineModel: Identifiable, Codable {
         self.duration = entity.duration ?? ""
         self.difficulty = RoutineTemplate.Difficulty(rawValue: entity.difficulty ?? "beginner") ?? .beginner
         self.tags = entity.tags as? [String] ?? []
-        self.steps = entity.steps as? [String] ?? []
+        // For backward compatibility, we'll need to split the steps into morning/evening
+        // For now, we'll put all steps in morning and leave evening empty
+        let allSteps = entity.steps as? [String] ?? []
+        self.morningSteps = allSteps
+        self.eveningSteps = []
         self.benefits = entity.benefits as? [String] ?? []
         self.isFeatured = entity.isFeatured
         self.isPremium = entity.isPremium

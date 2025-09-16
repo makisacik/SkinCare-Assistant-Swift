@@ -516,28 +516,78 @@ private struct RoutineDetailSheet: View {
                         }
                         
                         // Steps Preview
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 16) {
                             Text("Routine Steps")
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
-                            let stepsToShow = isStepsExpanded ? routine.steps : Array(routine.steps.prefix(3))
-                            ForEach(Array(stepsToShow.enumerated()), id: \.offset) { index, step in
-                                HStack(spacing: 12) {
-                                    Text("\(index + 1)")
-                                        .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(.white)
-                                        .frame(width: 24, height: 24)
-                                        .background(
-                                            Circle()
-                                                .fill(ThemeManager.shared.theme.palette.primary)
-                                        )
-                                    
-                                    Text(step)
-                                        .font(.system(size: 14))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                    
-                                    Spacer()
+                            // Morning Steps
+                            if !routine.morningSteps.isEmpty {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "sun.max.fill")
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.warning)
+
+                                        Text("Morning")
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                    }
+
+                                    let morningStepsToShow = isStepsExpanded ? routine.morningSteps : Array(routine.morningSteps.prefix(2))
+                                    ForEach(Array(morningStepsToShow.enumerated()), id: \.offset) { index, step in
+                                        HStack(spacing: 12) {
+                                            Text("\(index + 1)")
+                                                .font(.system(size: 14, weight: .bold))
+                                                .foregroundColor(.white)
+                                                .frame(width: 24, height: 24)
+                                                .background(
+                                                    Circle()
+                                                        .fill(ThemeManager.shared.theme.palette.warning)
+                                                )
+
+                                            Text(step)
+                                                .font(.system(size: 14))
+                                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                                            Spacer()
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Evening Steps
+                            if !routine.eveningSteps.isEmpty {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "moon.fill")
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.primary)
+
+                                        Text("Evening")
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                    }
+
+                                    let eveningStepsToShow = isStepsExpanded ? routine.eveningSteps : Array(routine.eveningSteps.prefix(2))
+                                    ForEach(Array(eveningStepsToShow.enumerated()), id: \.offset) { index, step in
+                                        HStack(spacing: 12) {
+                                            Text("\(index + 1)")
+                                                .font(.system(size: 14, weight: .bold))
+                                                .foregroundColor(.white)
+                                                .frame(width: 24, height: 24)
+                                                .background(
+                                                    Circle()
+                                                        .fill(ThemeManager.shared.theme.palette.primary)
+                                                )
+
+                                            Text(step)
+                                                .font(.system(size: 14))
+                                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                                            Spacer()
+                                        }
+                                    }
                                 }
                             }
                             

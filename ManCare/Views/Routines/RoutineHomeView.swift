@@ -171,31 +171,14 @@ struct RoutineHomeView: View {
                             Button {
                                 showingRoutineSwitcher = true
                             } label: {
-                                HStack(spacing: 8) {
-                                    VStack(alignment: .trailing, spacing: 2) {
-                                        Text(activeRoutine.title)
-                                            .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                            .lineLimit(1)
-                                        Text(activeRoutine.category.title)
-                                            .font(.system(size: 12, weight: .medium))
-                                            .foregroundColor(activeRoutine.category.color)
-                                    }
-
-                                    Image(systemName: "chevron.down")
+                                HStack(spacing: 4) {
+                                    Text(activeRoutine.title)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    Image(systemName: "chevron.right")
                                         .font(.system(size: 12, weight: .medium))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(ThemeManager.shared.theme.palette.surface)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
-                                        )
-                                )
                             }                } else {
                             Button {
                                 showingRoutineSwitcher = true
@@ -203,10 +186,10 @@ struct RoutineHomeView: View {
                                 HStack(spacing: 4) {
                                     Text("Choose routine")
                                         .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                                    Image(systemName: "chevron.down")
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    Image(systemName: "chevron.right")
                                         .font(.system(size: 12, weight: .medium))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 }                    }                }            }
 
                     Text("Tap on a routine to complete")
@@ -221,64 +204,6 @@ struct RoutineHomeView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
 
-                // Current Routine Display
-                if let activeRoutine = savedRoutineService.activeRoutine {
-                    let _ = print("📋 Showing current routine card for: \(activeRoutine.title)")
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Current Routine")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                            Spacer()
-
-                            Text(activeRoutine.category.title)
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(activeRoutine.category.color)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(activeRoutine.category.color.opacity(0.1))
-                                )
-                        }
-
-                        Text(activeRoutine.title)
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                        Text(activeRoutine.description)
-                            .font(.system(size: 14))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            .lineLimit(2)
-
-                        HStack(spacing: 16) {
-                            HStack(spacing: 4) {
-                                Image(systemName: "clock")
-                                    .font(.system(size: 12, weight: .medium))
-                                Text(activeRoutine.duration)
-                                    .font(.system(size: 12, weight: .medium))
-                            }                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-
-                            HStack(spacing: 4) {
-                                Image(systemName: "list.bullet")
-                                    .font(.system(size: 12, weight: .medium))
-                                Text("\(activeRoutine.stepCount) steps")
-                                    .font(.system(size: 12, weight: .medium))
-                            }                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-
-                            Spacer()
-                        }            }            .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(ThemeManager.shared.theme.palette.surface)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
-                            )
-                    )
-                    .padding(.horizontal, 20)
-                }
 
                 // Morning Routine Card
                 RoutineCard(

@@ -89,11 +89,17 @@ struct RoutineTemplate: Identifiable, Codable {
     let duration: String
     let difficulty: Difficulty
     let tags: [String]
-    let steps: [String]
+    let morningSteps: [String]
+    let eveningSteps: [String]
     let benefits: [String]
     let isFeatured: Bool
     let isPremium: Bool
     
+    // Computed property for backward compatibility
+    var steps: [String] {
+        return morningSteps + eveningSteps
+    }
+
     enum Difficulty: String, CaseIterable, Codable {
         case beginner = "beginner"
         case intermediate = "intermediate"
@@ -129,17 +135,21 @@ extension RoutineTemplate {
             duration: "15-20 min",
             difficulty: .intermediate,
             tags: ["Hydration", "Glow", "Multi-step", "Popular"],
-            steps: [
-                "Oil Cleanser - Remove makeup and sunscreen",
+            morningSteps: [
                 "Water-based Cleanser - Deep clean pores",
-                "Exfoliant - Gentle chemical exfoliation",
                 "Toner - Balance pH and prep skin",
                 "Essence - Lightweight hydration layer",
                 "Serum - Targeted treatment",
+                "Moisturizer - Lock in hydration",
+                "Sunscreen - Daily protection"
+            ],
+            eveningSteps: [
+                "Oil Cleanser - Remove makeup and sunscreen",
+                "Water-based Cleanser - Deep clean pores",
+                "Exfoliant - Gentle chemical exfoliation",
                 "Sheet Mask - Intensive treatment (2-3x/week)",
                 "Eye Cream - Delicate eye area care",
-                "Moisturizer - Lock in hydration",
-                "Sunscreen - Daily protection (AM only)"
+                "Moisturizer - Lock in hydration"
             ],
             benefits: [
                 "Deep hydration",
@@ -158,13 +168,19 @@ extension RoutineTemplate {
             duration: "8-12 min",
             difficulty: .beginner,
             tags: ["Acne", "Salicylic Acid", "Gentle", "Effective"],
-            steps: [
+            morningSteps: [
                 "Gentle Cleanser - Remove dirt and oil",
                 "Salicylic Acid Toner - Unclog pores",
                 "Niacinamide Serum - Reduce inflammation",
                 "Lightweight Moisturizer - Hydrate without clogging",
-                "Spot Treatment - Target active breakouts",
                 "Sunscreen - Protect healing skin"
+            ],
+            eveningSteps: [
+                "Gentle Cleanser - Remove dirt and oil",
+                "Salicylic Acid Toner - Unclog pores",
+                "Niacinamide Serum - Reduce inflammation",
+                "Spot Treatment - Target active breakouts",
+                "Lightweight Moisturizer - Hydrate without clogging"
             ],
             benefits: [
                 "Reduces active breakouts",
@@ -183,14 +199,19 @@ extension RoutineTemplate {
             duration: "12-15 min",
             difficulty: .intermediate,
             tags: ["Retinol", "Vitamin C", "Anti-aging", "Firming"],
-            steps: [
+            morningSteps: [
                 "Gentle Cleanser - Remove daily buildup",
                 "Vitamin C Serum - Brighten and protect",
                 "Hyaluronic Acid - Plump and hydrate",
+                "Rich Moisturizer - Nourish and protect",
+                "Sunscreen - Protect from UV damage"
+            ],
+            eveningSteps: [
+                "Gentle Cleanser - Remove daily buildup",
                 "Retinol Treatment - Stimulate collagen",
                 "Peptide Serum - Support skin structure",
-                "Rich Moisturizer - Nourish and protect",
-                "Eye Cream - Target fine lines"
+                "Eye Cream - Target fine lines",
+                "Rich Moisturizer - Nourish and protect"
             ],
             benefits: [
                 "Reduces fine lines",
@@ -213,10 +234,14 @@ extension RoutineTemplate {
             duration: "3-5 min",
             difficulty: .beginner,
             tags: ["Quick", "Simple", "Essential", "Beginner"],
-            steps: [
+            morningSteps: [
                 "Gentle Cleanser - Clean skin",
                 "Moisturizer - Hydrate and protect",
-                "Sunscreen - Daily protection (AM only)"
+                "Sunscreen - Daily protection"
+            ],
+            eveningSteps: [
+                "Gentle Cleanser - Clean skin",
+                "Moisturizer - Hydrate and protect"
             ],
             benefits: [
                 "Quick and easy",
@@ -235,12 +260,18 @@ extension RoutineTemplate {
             duration: "6-8 min",
             difficulty: .beginner,
             tags: ["Gentle", "Calming", "Fragrance-free", "Sensitive"],
-            steps: [
+            morningSteps: [
                 "Cream Cleanser - Gentle cleansing",
                 "Soothing Toner - Calm irritation",
                 "Hyaluronic Acid - Gentle hydration",
                 "Barrier Repair Cream - Strengthen skin",
                 "Mineral Sunscreen - Gentle protection"
+            ],
+            eveningSteps: [
+                "Cream Cleanser - Gentle cleansing",
+                "Soothing Toner - Calm irritation",
+                "Hyaluronic Acid - Gentle hydration",
+                "Barrier Repair Cream - Strengthen skin"
             ],
             benefits: [
                 "Reduces irritation",
@@ -259,12 +290,18 @@ extension RoutineTemplate {
             duration: "8-10 min",
             difficulty: .beginner,
             tags: ["Oil Control", "Mattifying", "Pore Care", "Lightweight"],
-            steps: [
+            morningSteps: [
                 "Gel Cleanser - Remove excess oil",
                 "BHA Toner - Unclog pores",
                 "Niacinamide Serum - Control oil production",
                 "Lightweight Moisturizer - Hydrate without greasiness",
-                "Oil-free Sunscreen - Protect without shine",
+                "Oil-free Sunscreen - Protect without shine"
+            ],
+            eveningSteps: [
+                "Gel Cleanser - Remove excess oil",
+                "BHA Toner - Unclog pores",
+                "Niacinamide Serum - Control oil production",
+                "Lightweight Moisturizer - Hydrate without greasiness",
                 "Clay Mask - Weekly deep clean"
             ],
             benefits: [
@@ -284,14 +321,21 @@ extension RoutineTemplate {
             duration: "10-12 min",
             difficulty: .beginner,
             tags: ["Hydration", "Moisture", "Rich", "Nourishing"],
-            steps: [
+            morningSteps: [
                 "Cream Cleanser - Gentle, hydrating cleanse",
                 "Hydrating Toner - Prep for moisture",
                 "Hyaluronic Acid - Attract moisture",
                 "Rich Serum - Nourish deeply",
                 "Heavy Moisturizer - Lock in hydration",
-                "Facial Oil - Extra nourishment",
                 "Sunscreen - Protect and moisturize"
+            ],
+            eveningSteps: [
+                "Cream Cleanser - Gentle, hydrating cleanse",
+                "Hydrating Toner - Prep for moisture",
+                "Hyaluronic Acid - Attract moisture",
+                "Rich Serum - Nourish deeply",
+                "Heavy Moisturizer - Lock in hydration",
+                "Facial Oil - Extra nourishment"
             ],
             benefits: [
                 "Deep hydration",
@@ -310,13 +354,19 @@ extension RoutineTemplate {
             duration: "8-10 min",
             difficulty: .intermediate,
             tags: ["Balanced", "Multi-zone", "Adaptive", "Versatile"],
-            steps: [
+            morningSteps: [
+                "Balancing Cleanser - Clean without stripping",
+                "Toner - Balance different zones",
+                "Lightweight Serum - Even application",
+                "Adaptive Moisturizer - Light to medium weight",
+                "Broad Spectrum Sunscreen - All-over protection"
+            ],
+            eveningSteps: [
                 "Balancing Cleanser - Clean without stripping",
                 "Toner - Balance different zones",
                 "Lightweight Serum - Even application",
                 "Zone-specific Treatment - Different areas",
-                "Adaptive Moisturizer - Light to medium weight",
-                "Broad Spectrum Sunscreen - All-over protection"
+                "Adaptive Moisturizer - Light to medium weight"
             ],
             benefits: [
                 "Balances different zones",
@@ -335,7 +385,18 @@ extension RoutineTemplate {
             duration: "25-30 min",
             difficulty: .advanced,
             tags: ["Complete", "Luxury", "Comprehensive", "Advanced"],
-            steps: [
+            morningSteps: [
+                "Water Cleanser - Second cleanse",
+                "Toner - Balance and prep",
+                "Essence - Lightweight hydration",
+                "Treatment Essence - Advanced treatment",
+                "Serum - Targeted care",
+                "Ampoule - Concentrated treatment",
+                "Eye Cream - Delicate area",
+                "Moisturizer - Lock in everything",
+                "Sunscreen - Final protection"
+            ],
+            eveningSteps: [
                 "Oil Cleanser - First cleanse",
                 "Water Cleanser - Second cleanse",
                 "Exfoliant - Remove dead skin",
@@ -346,8 +407,7 @@ extension RoutineTemplate {
                 "Ampoule - Concentrated treatment",
                 "Sheet Mask - Intensive treatment",
                 "Eye Cream - Delicate area",
-                "Moisturizer - Lock in everything",
-                "Sunscreen - Final protection"
+                "Moisturizer - Lock in everything"
             ],
             benefits: [
                 "Complete skin transformation",
@@ -366,12 +426,17 @@ extension RoutineTemplate {
             duration: "6-8 min",
             difficulty: .beginner,
             tags: ["Teen", "Hormonal", "Gentle", "Preventive"],
-            steps: [
+            morningSteps: [
                 "Gentle Foaming Cleanser - Clean without irritation",
                 "Salicylic Acid Toner - Prevent breakouts",
                 "Lightweight Moisturizer - Hydrate without clogging",
-                "Spot Treatment - Target active pimples",
                 "Oil-free Sunscreen - Daily protection"
+            ],
+            eveningSteps: [
+                "Gentle Foaming Cleanser - Clean without irritation",
+                "Salicylic Acid Toner - Prevent breakouts",
+                "Lightweight Moisturizer - Hydrate without clogging",
+                "Spot Treatment - Target active pimples"
             ],
             benefits: [
                 "Prevents teen acne",
@@ -390,15 +455,21 @@ extension RoutineTemplate {
             duration: "15-18 min",
             difficulty: .advanced,
             tags: ["Mature", "Comprehensive", "Luxury", "Advanced"],
-            steps: [
+            morningSteps: [
                 "Gentle Cleanser - Respect mature skin",
                 "Vitamin C Serum - Brighten and protect",
-                "Retinol Treatment - Stimulate renewal",
-                "Peptide Complex - Support structure",
                 "Hyaluronic Acid - Plump and hydrate",
                 "Rich Eye Cream - Target eye area",
                 "Luxury Moisturizer - Nourish deeply",
                 "Anti-aging Sunscreen - Complete protection"
+            ],
+            eveningSteps: [
+                "Gentle Cleanser - Respect mature skin",
+                "Retinol Treatment - Stimulate renewal",
+                "Peptide Complex - Support structure",
+                "Hyaluronic Acid - Plump and hydrate",
+                "Rich Eye Cream - Target eye area",
+                "Luxury Moisturizer - Nourish deeply"
             ],
             benefits: [
                 "Targets multiple aging signs",
