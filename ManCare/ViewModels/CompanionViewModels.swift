@@ -35,14 +35,17 @@ class CompanionSessionViewModel: ObservableObject {
     func setRoutineManager(_ service: RoutineManager) {
         self.routineManager = service
     }
-    func isRoutineCompletedForToday(steps: [CompanionStep]) -> Bool {
+    func isRoutineCompletedForToday(steps: [CompanionStep]) async -> Bool {
         guard let trackingService = routineManager else { return false }
 
-        let completedSteps = steps.filter { step in
-            trackingService.isStepCompleted(stepId: step.id)
+        var completedCount = 0
+        for step in steps {
+            if await trackingService.isStepCompleted(stepId: step.id) {
+                completedCount += 1
+            }
         }
 
-        return completedSteps.count == steps.count
+        return completedCount == steps.count
     }
 
     func startRoutineAgain(routineId: String, routineName: String, steps: [CompanionStep]) {
@@ -50,14 +53,16 @@ class CompanionSessionViewModel: ObservableObject {
 
         // Clear completed steps for today
         if let trackingService = routineManager {
-            for step in steps {
-                if trackingService.isStepCompleted(stepId: step.id) {
-                    trackingService.toggleStepCompletion(
-                        stepId: step.id,
-                        stepTitle: step.title,
-                        stepType: step.stepType,
-                        timeOfDay: step.timeOfDay
-                    )
+            Task {
+                for step in steps {
+                    if await trackingService.isStepCompleted(stepId: step.id) {
+                        trackingService.toggleStepCompletion(
+                            stepId: step.id,
+                            stepTitle: step.title,
+                            stepType: step.stepType,
+                            timeOfDay: step.timeOfDay
+                        )
+                    }
                 }
             }
         }
@@ -85,20 +90,26 @@ class CompanionSessionViewModel: ObservableObject {
     func startSession(routineId: String, routineName: String, steps: [CompanionStep]) {
         print("🎯 Starting session with \(steps.count) steps")
         // Check if routine is already completed for today
-        if isRoutineCompletedForToday(steps: steps) {
-            print("📊 Routine already completed for today")
-            currentState = .routineAlreadyCompleted
-            return
+        Task {
+            if await isRoutineCompletedForToday(steps: steps) {
+                await MainActor.run {
+                    print("📊 Routine already completed for today")
+                    currentState = .routineAlreadyCompleted
+                }
+                return
+            }
+
+            await MainActor.run {
+                sessionStore.startSession(routineId: routineId, routineName: routineName, steps: steps)
+                session = sessionStore.currentSession
+                print("📊 Session created: \(session?.id ?? "nil")")
+                print("📈 Current step index: \(session?.currentStepIndex ?? -1)")
+                currentState = .stepIntro(0)
+                print("🔄 State set to: \(currentState)")
+                
+                analyticsService.trackEvent(.companionStart(routineId: routineId, stepCount: steps.count))
+            }
         }
-
-        sessionStore.startSession(routineId: routineId, routineName: routineName, steps: steps)
-        session = sessionStore.currentSession
-        print("📊 Session created: \(session?.id ?? "nil")")
-        print("📈 Current step index: \(session?.currentStepIndex ?? -1)")
-        currentState = .stepIntro(0)
-        print("🔄 State set to: \(currentState)")
-
-        analyticsService.trackEvent(.companionStart(routineId: routineId, stepCount: steps.count))
     }
     
     func resumeSession() {

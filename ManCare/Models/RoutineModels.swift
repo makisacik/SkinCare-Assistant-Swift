@@ -7,6 +7,25 @@
 
 import Foundation
 import CoreData
+import SwiftUI
+
+// MARK: - Time of Day Enum
+
+enum TimeOfDay: String, Codable, CaseIterable {
+    case morning, evening, weekly
+
+    var displayName: String {
+        switch self {
+        case .morning:
+            return "Morning"
+        case .evening:
+            return "Evening"
+        case .weekly:
+            return "Weekly"
+        }
+    }
+}
+
 
 // MARK: - SavedStepDetailModel (Swift Model)
 

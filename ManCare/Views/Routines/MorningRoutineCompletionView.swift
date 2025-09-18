@@ -74,10 +74,12 @@ struct MorningRoutineCompletionView: View {
             .onAppear {
                 setupNavigationBarAppearance()
                 // Load completion state from RoutineManager
-                completedSteps = routineManager.getCompletedSteps(for: Date())
+                Task {
+                    completedSteps = await routineManager.getCompletedSteps(for: Date())
+                }
             }
-            .onChange(of: routineManager.completedSteps) { newValue in
-                completedSteps = newValue
+            .onChange(of: routineManager.completedSteps) { newCompletedSteps in
+                completedSteps = newCompletedSteps
             }
         }
         .overlay(
@@ -324,7 +326,15 @@ struct MorningRoutineCompletionView: View {
     
     private func updateRoutineSteps(from routine: RoutineResponse) {
         // Store the current state before updating
-        let oldCompletedSteps = routineManager.getCompletedSteps(for: Date())
+        Task {
+            let oldCompletedSteps = await routineManager.getCompletedSteps(for: Date())
+            await MainActor.run {
+                self.updateRoutineStepsSync(from: routine, oldCompletedSteps: oldCompletedSteps)
+            }
+        }
+    }
+    
+    private func updateRoutineStepsSync(from routine: RoutineResponse, oldCompletedSteps: Set<String>) {
         let oldRoutineSteps = routineSteps
         
         // Convert the updated routine to RoutineStepDetail array

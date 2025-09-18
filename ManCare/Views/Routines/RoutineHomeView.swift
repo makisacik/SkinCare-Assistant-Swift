@@ -227,7 +227,7 @@ struct RoutineHomeView: View {
                     iconColor: ThemeManager.shared.theme.palette.info,
                     productCount: generateMorningRoutine().count,
                     steps: generateMorningRoutine(),
-                            routineManager: routineManager,
+                    routineManager: routineManager,
                     selectedDate: selectedDate,
                     onRoutineTap: {
                         showingMorningRoutineCompletion = true
@@ -252,7 +252,7 @@ struct RoutineHomeView: View {
                     iconColor: ThemeManager.shared.theme.palette.primary,
                     productCount: generateEveningRoutine().count,
                     steps: generateEveningRoutine(),
-                            routineManager: routineManager,
+                    routineManager: routineManager,
                     selectedDate: selectedDate,
                     onRoutineTap: {
                         showingEveningRoutineCompletion = true
@@ -284,7 +284,7 @@ struct RoutineHomeView: View {
                         iconColor: ThemeManager.shared.theme.palette.secondary,
                         productCount: weeklySteps.count,
                         steps: weeklySteps,
-                            routineManager: routineManager,
+                        routineManager: routineManager,
                         selectedDate: selectedDate,
                         onRoutineTap: {
                             showingRoutineDetail = RoutineDetailData(
@@ -322,7 +322,7 @@ struct RoutineHomeView: View {
             }
             return morningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: stepDetail.id.uuidString,
+                    id: "\(activeRoutine.id.uuidString)_morning_\(stepDetail.order)",
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -336,9 +336,9 @@ struct RoutineHomeView: View {
         // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {
             print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.morning.count) morning steps")
-            return routine.routine.morning.map { apiStep in
+            return routine.routine.morning.enumerated().map { (index, apiStep) in
                 RoutineStepDetail(
-                    id: UUID().uuidString,
+                    id: "generated_morning_\(apiStep.step.rawValue)_\(index)",
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
                     stepType: apiStep.step,
@@ -352,7 +352,7 @@ struct RoutineHomeView: View {
         print("🐛 DEBUG: Using hardcoded fallback morning routine")
         return [
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "fallback_morning_cleanser_0",
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – reduces shine, clears pores",
                 stepType: .cleanser,
@@ -361,7 +361,7 @@ struct RoutineHomeView: View {
                 how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
             ),
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "fallback_morning_toner_1",
                 title: "Toner",
                 description: "Balances pH and prepares skin for next steps",
                 stepType: .faceSerum,
@@ -370,7 +370,7 @@ struct RoutineHomeView: View {
                 how: "Apply with cotton pad or hands, pat gently until absorbed"
             ),
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "fallback_morning_moisturizer_2",
                 title: "Moisturizer",
                 description: "Lightweight gel moisturizer – hydrates without greasiness",
                 stepType: .moisturizer,
@@ -379,7 +379,7 @@ struct RoutineHomeView: View {
                 how: "Apply a pea-sized amount, massage in upward circular motions"
             ),
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "fallback_morning_sunscreen_3",
                 title: "Sunscreen",
                 description: "SPF 30+ broad spectrum – protects against sun damage",
                 stepType: .sunscreen,
@@ -400,7 +400,7 @@ struct RoutineHomeView: View {
             }
             return eveningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: stepDetail.id.uuidString,
+                    id: "\(activeRoutine.id.uuidString)_evening_\(stepDetail.order)",
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -414,9 +414,9 @@ struct RoutineHomeView: View {
         // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {
             print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.evening.count) evening steps")
-            return routine.routine.evening.map { apiStep in
+            return routine.routine.evening.enumerated().map { (index, apiStep) in
                 RoutineStepDetail(
-                    id: UUID().uuidString,
+                    id: "generated_evening_\(apiStep.step.rawValue)_\(index)",
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
                     stepType: apiStep.step,
@@ -430,7 +430,7 @@ struct RoutineHomeView: View {
         print("🐛 DEBUG: Using hardcoded fallback evening routine")
         return [
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "fallback_evening_cleanser_0",
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – removes daily buildup",
                 stepType: .cleanser,
@@ -439,7 +439,7 @@ struct RoutineHomeView: View {
                 how: "Apply to dry skin first, then add water and massage, rinse thoroughly"
             ),
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "fallback_evening_serum_1",
                 title: "Face Serum",
                 description: "Targeted serum for your skin concerns",
                 stepType: .faceSerum,
@@ -448,7 +448,7 @@ struct RoutineHomeView: View {
                 how: "Apply 2-3 drops, pat gently until absorbed, avoid eye area"
             ),
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "fallback_evening_moisturizer_2",
                 title: "Night Moisturizer",
                 description: "Rich cream moisturizer – repairs while you sleep",
                 stepType: .moisturizer,
@@ -465,9 +465,9 @@ struct RoutineHomeView: View {
             return nil
         }
 
-        return weeklySteps.map { apiStep in
+        return weeklySteps.enumerated().map { (index, apiStep) in
             RoutineStepDetail(
-                id: UUID().uuidString,
+                id: "generated_weekly_\(apiStep.step.rawValue)_\(index)",
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
                 stepType: apiStep.step,
@@ -589,11 +589,9 @@ private struct CoachMessageView: View {
 private struct ModernHeaderView: View {
 
     @Binding var selectedDate: Date
-    let routineManager: RoutineManager
+    @ObservedObject var routineManager: RoutineManager
 
-    private var currentStreak: Int {
-        routineManager.getCurrentStreak()
-    }
+    @State private var currentStreak: Int = 0
 
     var body: some View {
         VStack(spacing: 16) {
@@ -635,13 +633,18 @@ private struct ModernHeaderView: View {
                 }    }        .padding(.top, 8)
         }.padding(.horizontal, 20)
         .padding(.bottom, 20)
-                }    }
+        .onAppear {
+            Task {
+                currentStreak = await routineManager.getCurrentStreak()
+            }
+        }
+    }    }
 // MARK: - Calendar Strip View
 
 private struct CalendarStripView: View {
 
     @Binding var selectedDate: Date
-    let routineManager: RoutineManager
+    @ObservedObject var routineManager: RoutineManager
 
     private let calendar = Calendar.current
     private let dateFormatter: DateFormatter = {
@@ -683,7 +686,7 @@ private struct CalendarDayView: View {
 
     let date: Date
     let isSelected: Bool
-    let routineManager: RoutineManager
+    @ObservedObject var routineManager: RoutineManager
     let onTap: () -> Void
 
     private let dayFormatter: DateFormatter = {
@@ -699,14 +702,11 @@ private struct CalendarDayView: View {
     }()
 
     private var hasCompletions: Bool {
-        let completedSteps = routineManager.getCompletedSteps(for: date)
-        return !completedSteps.isEmpty
+        !routineManager.completedSteps.isEmpty
     }
-
+    
     private var completionRate: Double {
-        // This is a simplified version - in a real app you'd want to track total possible steps
-        let completedSteps = routineManager.getCompletedSteps(for: date)
-        return completedSteps.isEmpty ? 0.0 : 1.0 // For now, just show if any steps are completed
+        routineManager.completedSteps.isEmpty ? 0.0 : 1.0
     }
 
     var body: some View {
@@ -735,7 +735,9 @@ private struct CalendarDayView: View {
                     .fill(isSelected ? ThemeManager.shared.theme.palette.background : Color.clear)
             )
         }.buttonStyle(PlainButtonStyle())
-                }    }
+    }
+}
+
 // MARK: - Modern Routine Card
 
 private struct RoutineCard: View {
@@ -745,17 +747,15 @@ private struct RoutineCard: View {
     let iconColor: Color
     let productCount: Int
     let steps: [RoutineStepDetail]
-    let routineManager: RoutineManager
+    @ObservedObject var routineManager: RoutineManager
     let selectedDate: Date
     let onRoutineTap: () -> Void
     let onCompanionTap: () -> Void
     let onStepTap: (RoutineStepDetail) -> Void
 
     private var completedCount: Int {
-        // Use lastUpdateTime to trigger UI updates when steps are completed
-        let _ = routineManager.lastUpdateTime
-        return steps.filter { step in
-            routineManager.isStepCompleted(stepId: step.id, date: selectedDate)
+        steps.filter { step in
+            routineManager.completedSteps.contains(step.id)
         }.count
     }
 
@@ -871,7 +871,9 @@ private struct RoutineCard: View {
                 )
             }    .buttonStyle(PlainButtonStyle())
         }.padding(.horizontal, 20)
-                }    }
+    }
+}
+
 // MARK: - Routine Step Row
 
 private struct RoutineStepRow: View {
@@ -1111,18 +1113,6 @@ struct RoutineStepDetail: Identifiable {
         self.how = how
     }
 }
-enum TimeOfDay: String, Codable, CaseIterable {
-    case morning, evening, weekly
-
-    var displayName: String {
-        switch self {
-        case .morning:
-            return "Morning"
-        case .evening:
-            return "Evening"
-        case .weekly:
-            return "Weekly"
-        }                }    }
 struct RoutineDetailData: Identifiable {
     let id = UUID()
     let title: String

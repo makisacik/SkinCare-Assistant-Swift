@@ -9,8 +9,8 @@ import SwiftUI
 
 struct RoutineDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    
-    
+
+
     let title: String
     let iconName: String
     let iconColor: Color
@@ -18,20 +18,16 @@ struct RoutineDetailView: View {
     let routineManager: RoutineManager
     let selectedDate: Date
     let onStepTap: (RoutineStepDetail) -> Void
-    
+
     @State private var showingStepDetail: RoutineStepDetail?
-    
-    private var completedCount: Int {
-        steps.filter { step in
-            routineManager.isStepCompleted(stepId: step.id, date: selectedDate)
-        }.count
-    }
-    
+    @State private var completedCount: Int = 0
+    @State private var completedStepIds: Set<String> = []
+
     private var progressPercentage: Double {
         guard !steps.isEmpty else { return 0 }
         return Double(completedCount) / Double(steps.count)
     }
-    
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -47,11 +43,29 @@ struct RoutineDetailView: View {
                 }
             }
         }
+        .task {
+            await loadCompletionData()
+        }
+        .onChange(of: routineManager.completedSteps) { _ in
+            Task {
+                await loadCompletionData()
+            }
+        }
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
         }
     }
-    
+
+    private func loadCompletionData() async {
+        let completedSteps = await routineManager.getCompletedSteps(for: selectedDate)
+        let completed = steps.filter { completedSteps.contains($0.id) }
+
+        await MainActor.run {
+            self.completedStepIds = completedSteps
+            self.completedCount = completed.count
+        }
+    }
+
     private var backgroundGradient: some View {
         LinearGradient(
             gradient: Gradient(colors: [
@@ -64,7 +78,7 @@ struct RoutineDetailView: View {
         )
         .ignoresSafeArea()
     }
-    
+
     private var contentView: some View {
         ScrollView {
             VStack(spacing: 24) {
@@ -75,7 +89,7 @@ struct RoutineDetailView: View {
             }
         }
     }
-    
+
     private var headerCard: some View {
         VStack(spacing: 20) {
             progressIcon
@@ -86,47 +100,47 @@ struct RoutineDetailView: View {
         .padding(.horizontal, 20)
         .padding(.top, 20)
     }
-    
+
     private var progressIcon: some View {
         ZStack {
             Circle()
                 .fill(iconColor.opacity(0.2))
                 .frame(width: 80, height: 80)
-            
+
             Circle()
                 .stroke(iconColor.opacity(0.3), lineWidth: 4)
                 .frame(width: 80, height: 80)
-            
+
             Circle()
                 .trim(from: 0, to: progressPercentage)
                 .stroke(iconColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                 .frame(width: 80, height: 80)
                 .rotationEffect(.degrees(-90))
                 .animation(.easeInOut(duration: 0.8), value: progressPercentage)
-            
+
             Image(systemName: iconName)
                 .font(.system(size: 36, weight: .semibold))
                 .foregroundColor(iconColor)
         }
     }
-    
+
     private var titleAndProgress: some View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                 .multilineTextAlignment(.center)
-            
+
             Text("\(completedCount) of \(steps.count) steps completed")
                 .font(.system(size: 16))
                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.7))
-            
+
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(ThemeManager.shared.theme.palette.textInverse.opacity(0.2))
                         .frame(height: 8)
-                    
+
                     RoundedRectangle(cornerRadius: 4)
                         .fill(iconColor)
                         .frame(width: geometry.size.width * progressPercentage, height: 8)
@@ -135,7 +149,7 @@ struct RoutineDetailView: View {
             .frame(height: 8)
         }
     }
-    
+
     private var headerBackground: some View {
         RoundedRectangle(cornerRadius: 20)
             .fill(ThemeManager.shared.theme.palette.cardBackground)
@@ -144,14 +158,14 @@ struct RoutineDetailView: View {
                     .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
             )
     }
-    
+
     private var stepsList: some View {
         VStack(spacing: 16) {
             ForEach(Array(steps.enumerated()), id: \.element.id) { index, step in
                 RoutineDetailStepCard(
                     step: step,
                     stepNumber: index + 1,
-                    isCompleted: routineManager.isStepCompleted(stepId: step.id, date: selectedDate),
+                    isCompleted: completedStepIds.contains(step.id),
                     onToggle: {
                         routineManager.toggleStepCompletion(
                             stepId: step.id,
@@ -169,7 +183,7 @@ struct RoutineDetailView: View {
         }
         .padding(.horizontal, 20)
     }
-    
+
     @ViewBuilder
     private var completionMessage: some View {
         if completedCount == steps.count && !steps.isEmpty {
@@ -177,11 +191,11 @@ struct RoutineDetailView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 48, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.success)
-                
+
                 Text("Routine Complete! 🎉")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                
+
                 Text("Great job taking care of your skin today!")
                     .font(.system(size: 16))
                     .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.7))
@@ -199,7 +213,7 @@ struct RoutineDetailView: View {
             .padding(.horizontal, 20)
         }
     }
-    
+
     private var backButton: some View {
         Button {
             dismiss()
@@ -218,17 +232,17 @@ struct RoutineDetailView: View {
 // MARK: - Routine Detail Step Card
 
 private struct RoutineDetailStepCard: View {
-    
+
     let step: RoutineStepDetail
     let stepNumber: Int
     let isCompleted: Bool
     let onToggle: () -> Void
     let onTap: () -> Void
-    
+
     @State private var showCheckmarkAnimation = false
-    
+
     private var stepColor: Color { Color(step.stepType.color) }
-    
+
     var body: some View {
         HStack(spacing: 16) {
             // Step number
@@ -236,7 +250,7 @@ private struct RoutineDetailStepCard: View {
                 Circle()
                     .fill(isCompleted ? stepColor : stepColor.opacity(0.2))
                     .frame(width: 32, height: 32)
-                
+
                 if isCompleted {
                     Image(systemName: "checkmark")
                         .font(.system(size: 14, weight: .bold))
@@ -247,37 +261,37 @@ private struct RoutineDetailStepCard: View {
                         .foregroundColor(stepColor)
                 }
             }
-            
+
             // Step content
             VStack(alignment: .leading, spacing: 6) {
                 Text(step.title)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(isCompleted ? ThemeManager.shared.theme.palette.textInverse.opacity(0.7) : ThemeManager.shared.theme.palette.textInverse)
                     .strikethrough(isCompleted)
-                
+
                 Text(step.description)
                     .font(.system(size: 14))
                     .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.6))
                     .lineLimit(nil)
             }
-            
+
             Spacer()
-            
+
             // Step icon and completion button
             HStack(spacing: 12) {
                 Image(systemName: step.iconName)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(stepColor)
-                
+
                 Button {
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     onToggle()
-                    
+
                     if !isCompleted {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                             showCheckmarkAnimation = true
                         }
-                        
+
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             showCheckmarkAnimation = false
                         }
@@ -287,14 +301,14 @@ private struct RoutineDetailStepCard: View {
                         Circle()
                             .stroke(stepColor.opacity(0.3), lineWidth: 2)
                             .frame(width: 24, height: 24)
-                        
+
                         if isCompleted {
                             Circle()
                                 .fill(stepColor)
                                 .frame(width: 24, height: 24)
                                 .scaleEffect(showCheckmarkAnimation ? 1.2 : 1.0)
                                 .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
-                            
+
                             Image(systemName: "checkmark")
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
