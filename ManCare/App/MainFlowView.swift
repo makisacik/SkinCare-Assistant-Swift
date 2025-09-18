@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainFlowView: View {
     @Environment(\.colorScheme) private var cs
+    @EnvironmentObject var routineManager: RoutineManager
 
     @State private var currentStep: FlowStep = .welcome
     @State private var selectedSkinType: SkinType?
@@ -57,10 +58,7 @@ struct MainFlowView: View {
                         selectedPreferences = nil
                         generatedRoutine = createMockRoutineResponse()
 
-                        // Save the routine immediately when skipping to home
-                        if let routine = generatedRoutine {
-                            CoreDataRoutineService.shared.saveInitialRoutine(from: routine)
-                        }
+                        // Note: Routine saving is handled in RoutineHomeView.onAppear to avoid duplicates
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .home
                         }

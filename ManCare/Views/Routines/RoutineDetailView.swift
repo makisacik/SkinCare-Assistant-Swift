@@ -15,7 +15,7 @@ struct RoutineDetailView: View {
     let iconName: String
     let iconColor: Color
     let steps: [RoutineStepDetail]
-    let routineTrackingService: RoutineTrackingService
+    let routineManager: RoutineManager
     let selectedDate: Date
     let onStepTap: (RoutineStepDetail) -> Void
     
@@ -23,7 +23,7 @@ struct RoutineDetailView: View {
     
     private var completedCount: Int {
         steps.filter { step in
-            routineTrackingService.isStepCompleted(stepId: step.id, date: selectedDate)
+            routineManager.isStepCompleted(stepId: step.id, date: selectedDate)
         }.count
     }
     
@@ -151,9 +151,9 @@ struct RoutineDetailView: View {
                 RoutineDetailStepCard(
                     step: step,
                     stepNumber: index + 1,
-                    isCompleted: routineTrackingService.isStepCompleted(stepId: step.id, date: selectedDate),
+                    isCompleted: routineManager.isStepCompleted(stepId: step.id, date: selectedDate),
                     onToggle: {
-                        routineTrackingService.toggleStepCompletion(
+                        routineManager.toggleStepCompletion(
                             stepId: step.id,
                             stepTitle: step.title,
                             stepType: step.stepType,
@@ -349,7 +349,7 @@ private struct RoutineDetailStepCard: View {
                 how: "Apply with cotton pad or hands, pat gently until absorbed"
             )
         ],
-        routineTrackingService: RoutineTrackingService(),
+        routineManager: RoutineManager(),
         selectedDate: Date(),
         onStepTap: { _ in }
     )

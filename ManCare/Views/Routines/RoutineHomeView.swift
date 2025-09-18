@@ -12,8 +12,8 @@ struct RoutineHomeView: View {
     let generatedRoutine: RoutineResponse?
     @Binding var selectedTab: MainTabView.Tab
 
-    @StateObject private var routineTrackingService = RoutineTrackingService()
-    @StateObject private var savedRoutineService = CoreDataRoutineService.shared
+    @EnvironmentObject var routineManager: RoutineManager
+    @State private var routineViewModel: RoutineHomeViewModel?
     @State private var selectedDate = Date()
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingEditRoutine = false
@@ -47,17 +47,33 @@ struct RoutineHomeView: View {
             )
             .ignoresSafeArea()
             .onAppear {
+                // Initialize view model if needed
+                if routineViewModel == nil {
+                    routineViewModel = RoutineHomeViewModel(routineManager: routineManager)
+                }
                 print("🏠 RoutineHomeView onAppear")
                 print("📊 generatedRoutine: \(generatedRoutine != nil ? "exists" : "nil")")
-                print("📊 activeRoutine: \(savedRoutineService.activeRoutine?.title ?? "nil")")
-                print("📊 savedRoutines count: \(savedRoutineService.savedRoutines.count)")
+                print("📊 activeRoutine: \(routineViewModel?.activeRoutine?.title ?? "nil")")
+                print("📊 savedRoutines count: \(routineViewModel?.savedRoutines.count ?? 0)")
 
+                // Load routines first
+                routineViewModel?.onAppear()
+                // TEMPORARY DEBUG: Check for problematic active routine
+                if let activeRoutine = routineViewModel?.activeRoutine {
+                    let allStepIds = activeRoutine.stepDetails.map { $0.id.uuidString }
+                    let uniqueStepIds = Set(allStepIds)
+                    if allStepIds.count != uniqueStepIds.count {
+                        print("🚨 WARNING: Active routine '\(activeRoutine.title)' has duplicate step IDs!")
+                        print("🚨 Total steps: \(allStepIds.count), Unique IDs: \(uniqueStepIds.count)")
+                        print("🚨 Consider clearing the routine data to fix duplicates")
+                    }
+                }
                 // Auto-save initial routine if available and no active routine exists
-                if let routine = generatedRoutine, savedRoutineService.activeRoutine == nil {
+                if let routine = generatedRoutine, routineViewModel?.activeRoutine == nil {
                     print("💾 Saving initial routine from generatedRoutine")
-                    savedRoutineService.saveInitialRoutine(from: routine)
+                    routineViewModel?.saveInitialRoutine(from: routine)
                 } else {
-                    print("⚠️ Not saving routine - generatedRoutine: \(generatedRoutine != nil), activeRoutine: \(savedRoutineService.activeRoutine != nil)")
+                    print("⚠️ Not saving routine - generatedRoutine: \(generatedRoutine != nil), activeRoutine: \(routineViewModel?.activeRoutine != nil)")
                 }
             }
 
@@ -67,11 +83,11 @@ struct RoutineHomeView: View {
                     // Header with greeting and user icon
                     ModernHeaderView(
                         selectedDate: $selectedDate,
-                        routineTrackingService: routineTrackingService
+                            routineManager: routineManager
                     )
 
                     // Calendar Strip
-                    CalendarStripView(selectedDate: $selectedDate, routineTrackingService: routineTrackingService)
+                    CalendarStripView(selectedDate: $selectedDate, routineManager: routineManager)
                 }        .background(
                     LinearGradient(
                         gradient: Gradient(colors: [
@@ -87,14 +103,16 @@ struct RoutineHomeView: View {
 
                 // Content
                 routineTabContent
-            }}
+            }
+            .withModernRoutineLoading(routineViewModel?.isLoading ?? false)
+            .handleModernRoutineError(routineViewModel?.error)}
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
         }.sheet(isPresented: $showingEditRoutine) {
             if let routine = generatedRoutine {
                 EditRoutineView(
                     originalRoutine: routine,
-                    routineTrackingService: routineTrackingService,
+                            routineManager: routineManager,
                     onRoutineUpdated: nil
                 )
             }}
@@ -104,35 +122,33 @@ struct RoutineHomeView: View {
                 iconName: routineData.iconName,
                 iconColor: routineData.iconColor,
                 steps: routineData.steps,
-                routineTrackingService: routineTrackingService,
+                            routineManager: routineManager,
                 selectedDate: selectedDate,
                 onStepTap: { step in
                     showingStepDetail = step
                 }    )
-        }.fullScreenCover(isPresented: $showingMorningRoutineCompletion) {
+        }        .fullScreenCover(isPresented: $showingMorningRoutineCompletion) {
             MorningRoutineCompletionView(
                 routineSteps: generateMorningRoutine(),
                 onComplete: {
                     showingMorningRoutineCompletion = false
                 },
-                originalRoutine: generatedRoutine,
-                routineTrackingService: routineTrackingService
+                originalRoutine: generatedRoutine
             )
-        }.fullScreenCover(isPresented: $showingEveningRoutineCompletion) {
+        }        .fullScreenCover(isPresented: $showingEveningRoutineCompletion) {
             EveningRoutineCompletionView(
                 routineSteps: generateEveningRoutine(),
                 onComplete: {
                     showingEveningRoutineCompletion = false
                 },
-                originalRoutine: generatedRoutine,
-                routineTrackingService: routineTrackingService
+                originalRoutine: generatedRoutine
             )
         }.fullScreenCover(item: $companionLaunch) { launch in
             CompanionSessionView(
                 routineId: "\(launch.routineType.rawValue)_routine",
                 routineName: "\(launch.routineType.displayName) Routine",
                 steps: launch.steps,
-                routineTrackingService: routineTrackingService,
+                            routineManager: routineManager,
                 onComplete: {
                     companionLaunch = nil
                     companionRoutineType = nil
@@ -146,11 +162,15 @@ struct RoutineHomeView: View {
             }}
         .sheet(isPresented: $showingRoutineSwitcher) {
             if #available(iOS 16.0, *) {
-                RoutineSwitcherView(savedRoutineService: savedRoutineService)
-                    .presentationDetents([.medium])
-                    .presentationDragIndicator(.visible)
+                if let routineViewModel = routineViewModel {
+                    RoutineSwitcherView(routineViewModel: routineViewModel)
+                        .presentationDetents([.medium])
+                        .presentationDragIndicator(.visible)
+                }
             } else {
-                RoutineSwitcherView(savedRoutineService: savedRoutineService)
+                if let routineViewModel = routineViewModel {
+                    RoutineSwitcherView(routineViewModel: routineViewModel)
+                }
             }                }    }
     @ViewBuilder
     private var routineTabContent: some View {
@@ -166,7 +186,7 @@ struct RoutineHomeView: View {
                         Spacer()
 
                         // Current Routine Display
-                        if let activeRoutine = savedRoutineService.activeRoutine {
+                        if let activeRoutine = routineViewModel?.activeRoutine {
                             let _ = print("🎯 Displaying active routine: \(activeRoutine.title)")
                             Button {
                                 showingRoutineSwitcher = true
@@ -207,7 +227,7 @@ struct RoutineHomeView: View {
                     iconColor: ThemeManager.shared.theme.palette.info,
                     productCount: generateMorningRoutine().count,
                     steps: generateMorningRoutine(),
-                    routineTrackingService: routineTrackingService,
+                            routineManager: routineManager,
                     selectedDate: selectedDate,
                     onRoutineTap: {
                         showingMorningRoutineCompletion = true
@@ -232,7 +252,7 @@ struct RoutineHomeView: View {
                     iconColor: ThemeManager.shared.theme.palette.primary,
                     productCount: generateEveningRoutine().count,
                     steps: generateEveningRoutine(),
-                    routineTrackingService: routineTrackingService,
+                            routineManager: routineManager,
                     selectedDate: selectedDate,
                     onRoutineTap: {
                         showingEveningRoutineCompletion = true
@@ -264,7 +284,7 @@ struct RoutineHomeView: View {
                         iconColor: ThemeManager.shared.theme.palette.secondary,
                         productCount: weeklySteps.count,
                         steps: weeklySteps,
-                        routineTrackingService: routineTrackingService,
+                            routineManager: routineManager,
                         selectedDate: selectedDate,
                         onRoutineTap: {
                             showingRoutineDetail = RoutineDetailData(
@@ -293,12 +313,16 @@ struct RoutineHomeView: View {
     // MARK: - Routine Generation
 
     private func generateMorningRoutine() -> [RoutineStepDetail] {
-        // Use active routine from SavedRoutineService if available
-        if let activeRoutine = savedRoutineService.activeRoutine {
+        // Use active routine from RoutineViewModel if available
+        if let activeRoutine = routineViewModel?.activeRoutine {
             let morningSteps = activeRoutine.stepDetails.filter { $0.timeOfDay == "morning" }
+            print("🐛 DEBUG: Using active routine '\(activeRoutine.title)' with \(morningSteps.count) morning steps")
+            for step in morningSteps {
+                print("🐛 DEBUG: Morning step - ID: \(step.id), Title: '\(step.title)'")
+            }
             return morningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "morning_\(stepDetail.title)",
+                    id: stepDetail.id.uuidString,
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -311,9 +335,10 @@ struct RoutineHomeView: View {
 
         // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {
+            print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.morning.count) morning steps")
             return routine.routine.morning.map { apiStep in
                 RoutineStepDetail(
-                    id: "morning_\(apiStep.name)",
+                    id: UUID().uuidString,
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
                     stepType: apiStep.step,
@@ -324,9 +349,10 @@ struct RoutineHomeView: View {
             }}
 
         // Fallback routine
+        print("🐛 DEBUG: Using hardcoded fallback morning routine")
         return [
             RoutineStepDetail(
-                id: "morning_cleanser",
+                id: UUID().uuidString,
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – reduces shine, clears pores",
                 stepType: .cleanser,
@@ -335,7 +361,7 @@ struct RoutineHomeView: View {
                 how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
             ),
             RoutineStepDetail(
-                id: "morning_toner",
+                id: UUID().uuidString,
                 title: "Toner",
                 description: "Balances pH and prepares skin for next steps",
                 stepType: .faceSerum,
@@ -344,7 +370,7 @@ struct RoutineHomeView: View {
                 how: "Apply with cotton pad or hands, pat gently until absorbed"
             ),
             RoutineStepDetail(
-                id: "morning_moisturizer",
+                id: UUID().uuidString,
                 title: "Moisturizer",
                 description: "Lightweight gel moisturizer – hydrates without greasiness",
                 stepType: .moisturizer,
@@ -353,7 +379,7 @@ struct RoutineHomeView: View {
                 how: "Apply a pea-sized amount, massage in upward circular motions"
             ),
             RoutineStepDetail(
-                id: "morning_sunscreen",
+                id: UUID().uuidString,
                 title: "Sunscreen",
                 description: "SPF 30+ broad spectrum – protects against sun damage",
                 stepType: .sunscreen,
@@ -365,12 +391,16 @@ struct RoutineHomeView: View {
     }
 
     private func generateEveningRoutine() -> [RoutineStepDetail] {
-        // Use active routine from SavedRoutineService if available
-        if let activeRoutine = savedRoutineService.activeRoutine {
+        // Use active routine from RoutineViewModel if available
+        if let activeRoutine = routineViewModel?.activeRoutine {
             let eveningSteps = activeRoutine.stepDetails.filter { $0.timeOfDay == "evening" }
+            print("🐛 DEBUG: Using active routine '\(activeRoutine.title)' with \(eveningSteps.count) evening steps")
+            for step in eveningSteps {
+                print("🐛 DEBUG: Evening step - ID: \(step.id), Title: '\(step.title)'")
+            }
             return eveningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "evening_\(stepDetail.title)",
+                    id: stepDetail.id.uuidString,
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -383,9 +413,10 @@ struct RoutineHomeView: View {
 
         // Fallback to generated routine from onboarding
         if let routine = generatedRoutine {
+            print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.evening.count) evening steps")
             return routine.routine.evening.map { apiStep in
                 RoutineStepDetail(
-                    id: "evening_\(apiStep.name)",
+                    id: UUID().uuidString,
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
                     stepType: apiStep.step,
@@ -396,9 +427,10 @@ struct RoutineHomeView: View {
             }}
 
         // Fallback routine
+        print("🐛 DEBUG: Using hardcoded fallback evening routine")
         return [
             RoutineStepDetail(
-                id: "evening_cleanser",
+                id: UUID().uuidString,
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – removes daily buildup",
                 stepType: .cleanser,
@@ -407,7 +439,7 @@ struct RoutineHomeView: View {
                 how: "Apply to dry skin first, then add water and massage, rinse thoroughly"
             ),
             RoutineStepDetail(
-                id: "evening_serum",
+                id: UUID().uuidString,
                 title: "Face Serum",
                 description: "Targeted serum for your skin concerns",
                 stepType: .faceSerum,
@@ -416,7 +448,7 @@ struct RoutineHomeView: View {
                 how: "Apply 2-3 drops, pat gently until absorbed, avoid eye area"
             ),
             RoutineStepDetail(
-                id: "evening_moisturizer",
+                id: UUID().uuidString,
                 title: "Night Moisturizer",
                 description: "Rich cream moisturizer – repairs while you sleep",
                 stepType: .moisturizer,
@@ -435,7 +467,7 @@ struct RoutineHomeView: View {
 
         return weeklySteps.map { apiStep in
             RoutineStepDetail(
-                id: "weekly_\(apiStep.name)",
+                id: UUID().uuidString,
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
                 stepType: apiStep.step,
@@ -557,10 +589,10 @@ private struct CoachMessageView: View {
 private struct ModernHeaderView: View {
 
     @Binding var selectedDate: Date
-    let routineTrackingService: RoutineTrackingService
+    let routineManager: RoutineManager
 
     private var currentStreak: Int {
-        routineTrackingService.getCurrentStreak()
+        routineManager.getCurrentStreak()
     }
 
     var body: some View {
@@ -609,7 +641,7 @@ private struct ModernHeaderView: View {
 private struct CalendarStripView: View {
 
     @Binding var selectedDate: Date
-    let routineTrackingService: RoutineTrackingService
+    let routineManager: RoutineManager
 
     private let calendar = Calendar.current
     private let dateFormatter: DateFormatter = {
@@ -631,7 +663,7 @@ private struct CalendarStripView: View {
                     CalendarDayView(
                         date: date,
                         isSelected: calendar.isDate(date, inSameDayAs: selectedDate),
-                        routineTrackingService: routineTrackingService
+                            routineManager: routineManager
                     ) {
                         selectedDate = date
                     }        }    }        .padding(.horizontal, 20)
@@ -651,7 +683,7 @@ private struct CalendarDayView: View {
 
     let date: Date
     let isSelected: Bool
-    let routineTrackingService: RoutineTrackingService
+    let routineManager: RoutineManager
     let onTap: () -> Void
 
     private let dayFormatter: DateFormatter = {
@@ -667,13 +699,13 @@ private struct CalendarDayView: View {
     }()
 
     private var hasCompletions: Bool {
-        let completedSteps = routineTrackingService.getCompletedSteps(for: date)
+        let completedSteps = routineManager.getCompletedSteps(for: date)
         return !completedSteps.isEmpty
     }
 
     private var completionRate: Double {
         // This is a simplified version - in a real app you'd want to track total possible steps
-        let completedSteps = routineTrackingService.getCompletedSteps(for: date)
+        let completedSteps = routineManager.getCompletedSteps(for: date)
         return completedSteps.isEmpty ? 0.0 : 1.0 // For now, just show if any steps are completed
     }
 
@@ -713,7 +745,7 @@ private struct RoutineCard: View {
     let iconColor: Color
     let productCount: Int
     let steps: [RoutineStepDetail]
-    let routineTrackingService: RoutineTrackingService
+    let routineManager: RoutineManager
     let selectedDate: Date
     let onRoutineTap: () -> Void
     let onCompanionTap: () -> Void
@@ -721,9 +753,9 @@ private struct RoutineCard: View {
 
     private var completedCount: Int {
         // Use lastUpdateTime to trigger UI updates when steps are completed
-        let _ = routineTrackingService.lastUpdateTime
+        let _ = routineManager.lastUpdateTime
         return steps.filter { step in
-            routineTrackingService.isStepCompleted(stepId: step.id, date: selectedDate)
+            routineManager.isStepCompleted(stepId: step.id, date: selectedDate)
         }.count
     }
 
@@ -1152,7 +1184,7 @@ struct RoutineStepDetailView: View {
 
 struct RoutineSwitcherView: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject var savedRoutineService: CoreDataRoutineService
+    @ObservedObject var routineViewModel: RoutineHomeViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -1178,7 +1210,7 @@ struct RoutineSwitcherView: View {
             .padding(.bottom, 20)
 
             // Routines List
-            if savedRoutineService.savedRoutines.isEmpty {
+            if routineViewModel.savedRoutines.isEmpty {
                 VStack(spacing: 16) {
                     Image(systemName: "bookmark")
                         .font(.system(size: 32, weight: .light))
@@ -1198,12 +1230,12 @@ struct RoutineSwitcherView: View {
             } else {
                 ScrollView {
                     LazyVStack(spacing: 8) {
-                        ForEach(savedRoutineService.savedRoutines) { routine in
+                        ForEach(routineViewModel.savedRoutines) { routine in
                             RoutineSwitcherCard(
                                 routine: routine,
-                                isActive: savedRoutineService.activeRoutine?.id == routine.id,
+                                isActive: routineViewModel.activeRoutine?.id == routine.id,
                                 onSelect: {
-                                    savedRoutineService.setActiveRoutine(routine)
+                                    routineViewModel.setActiveRoutine(routine)
                                     dismiss()
                                 }                    )
                         }            }            .padding(.horizontal, 20)

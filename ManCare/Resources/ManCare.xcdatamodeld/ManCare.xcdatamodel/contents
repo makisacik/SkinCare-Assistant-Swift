@@ -34,7 +34,7 @@
         <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="NO" attributeType="String"/>
         <attribute name="stepDescription" optional="NO" attributeType="String"/>
-        <attribute name="iconName" optional="NO" attributeType="String"/>
+        <attribute name="iconName" optional="YES" attributeType="String"/>
         <attribute name="stepType" optional="NO" attributeType="String"/>
         <attribute name="timeOfDay" optional="NO" attributeType="String"/>
         <attribute name="why" optional="YES" attributeType="String"/>

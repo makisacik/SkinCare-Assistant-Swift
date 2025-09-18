@@ -23,7 +23,7 @@ class CompanionSessionViewModel: ObservableObject {
     private let notificationService = NotificationService.shared
     private let analyticsService = CompanionAnalyticsService.shared
     private let tipsService = ProductTipsService.shared
-    private var routineTrackingService: RoutineTrackingService?
+    private var routineManager: RoutineManager?
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
     
@@ -32,11 +32,11 @@ class CompanionSessionViewModel: ObservableObject {
         resumeSession()
     }
     
-    func setRoutineTrackingService(_ service: RoutineTrackingService) {
-        self.routineTrackingService = service
+    func setRoutineManager(_ service: RoutineManager) {
+        self.routineManager = service
     }
     func isRoutineCompletedForToday(steps: [CompanionStep]) -> Bool {
-        guard let trackingService = routineTrackingService else { return false }
+        guard let trackingService = routineManager else { return false }
 
         let completedSteps = steps.filter { step in
             trackingService.isStepCompleted(stepId: step.id)
@@ -49,7 +49,7 @@ class CompanionSessionViewModel: ObservableObject {
         print("🔄 Starting routine again - clearing completed steps")
 
         // Clear completed steps for today
-        if let trackingService = routineTrackingService {
+        if let trackingService = routineManager {
             for step in steps {
                 if trackingService.isStepCompleted(stepId: step.id) {
                     trackingService.toggleStepCompletion(
@@ -181,11 +181,11 @@ class CompanionSessionViewModel: ObservableObject {
         print("📊 After completion - Steps completed: \(session.stepsCompleted.count)")
         print("📊 New current step index: \(session.currentStepIndex)")
 
-        // Integrate with RoutineTrackingService
+        // Integrate with RoutineManager
         if let completedStepId = session.stepsCompleted.last,
            let completedStep = session.steps.first(where: { $0.id == completedStepId }),
-           let trackingService = routineTrackingService {
-            print("🔄 Marking step as completed in RoutineTrackingService: \(completedStep.title)")
+           let trackingService = routineManager {
+            print("🔄 Marking step as completed in RoutineManager: \(completedStep.title)")
             trackingService.toggleStepCompletion(
                 stepId: completedStep.id,
                 stepTitle: completedStep.title,

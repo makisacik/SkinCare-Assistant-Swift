@@ -15,14 +15,14 @@ struct CompanionSessionView: View {
     let routineId: String
     let routineName: String
     let steps: [CompanionStep]
-    let routineTrackingService: RoutineTrackingService?
+    let routineManager: RoutineManager?
     let onComplete: (() -> Void)?
     
-    init(routineId: String, routineName: String, steps: [CompanionStep], routineTrackingService: RoutineTrackingService? = nil, onComplete: (() -> Void)? = nil) {
+    init(routineId: String, routineName: String, steps: [CompanionStep], routineManager: RoutineManager? = nil, onComplete: (() -> Void)? = nil) {
         self.routineId = routineId
         self.routineName = routineName
         self.steps = steps
-        self.routineTrackingService = routineTrackingService
+        self.routineManager = routineManager
         self.onComplete = onComplete
     }
     
@@ -47,8 +47,8 @@ struct CompanionSessionView: View {
             print("📝 Routine Name: \(routineName)")
 
             // Set the routine tracking service
-            if let trackingService = routineTrackingService {
-                sessionViewModel.setRoutineTrackingService(trackingService)
+            if let trackingService = routineManager {
+                sessionViewModel.setRoutineManager(trackingService)
             }
             // Force resume any existing session first
             sessionViewModel.resumeSession()
@@ -768,6 +768,6 @@ struct RoutineAlreadyCompletedView: View {
                 timeOfDay: .morning
             )
         ],
-        routineTrackingService: nil
+        routineManager: nil
     )
 }

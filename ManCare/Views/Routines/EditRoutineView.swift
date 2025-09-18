@@ -18,8 +18,8 @@ struct EditRoutineView: View {
     
     let onRoutineUpdated: ((RoutineResponse) -> Void)?
     
-    init(originalRoutine: RoutineResponse?, routineTrackingService: RoutineTrackingService, onRoutineUpdated: ((RoutineResponse) -> Void)? = nil) {
-        self._editingService = StateObject(wrappedValue: RoutineEditingService(originalRoutine: originalRoutine, routineTrackingService: routineTrackingService))
+    init(originalRoutine: RoutineResponse?, routineManager: RoutineManager, onRoutineUpdated: ((RoutineResponse) -> Void)? = nil) {
+        self._editingService = StateObject(wrappedValue: RoutineEditingService(originalRoutine: originalRoutine, routineManager: routineManager))
         self.onRoutineUpdated = onRoutineUpdated
     }
     
@@ -297,7 +297,7 @@ private struct EmptyRoutineState: View {
 #Preview("EditRoutineView") {
     EditRoutineView(
         originalRoutine: nil,
-        routineTrackingService: RoutineTrackingService(),
+        routineManager: RoutineManager(),
         onRoutineUpdated: nil
     )
 }

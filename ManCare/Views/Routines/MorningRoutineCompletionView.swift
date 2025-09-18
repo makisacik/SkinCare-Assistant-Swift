@@ -9,19 +9,18 @@ import SwiftUI
 
 struct MorningRoutineCompletionView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var routineManager: RoutineManager
 
     @ObservedObject private var productService = ProductService.shared
-    @ObservedObject private var routineTrackingService: RoutineTrackingService
     
     @State private var routineSteps: [RoutineStepDetail]
     let onComplete: () -> Void
     let originalRoutine: RoutineResponse?
     
-    init(routineSteps: [RoutineStepDetail], onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?, routineTrackingService: RoutineTrackingService) {
+    init(routineSteps: [RoutineStepDetail], onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?) {
         self._routineSteps = State(initialValue: routineSteps)
         self.onComplete = onComplete
         self.originalRoutine = originalRoutine
-        self.routineTrackingService = routineTrackingService
     }
     
     @State private var completedSteps: Set<String> = []
@@ -74,10 +73,10 @@ struct MorningRoutineCompletionView: View {
             .navigationBarItems(leading: backButton, trailing: editButton)
             .onAppear {
                 setupNavigationBarAppearance()
-                // Load completion state from RoutineTrackingService
-                completedSteps = routineTrackingService.getCompletedSteps()
+                // Load completion state from RoutineManager
+                completedSteps = routineManager.getCompletedSteps(for: Date())
             }
-            .onChange(of: routineTrackingService.completedSteps) { newValue in
+            .onChange(of: routineManager.completedSteps) { newValue in
                 completedSteps = newValue
             }
         }
@@ -112,7 +111,7 @@ struct MorningRoutineCompletionView: View {
             if let routine = originalRoutine {
                 EditRoutineView(
                     originalRoutine: routine,
-                    routineTrackingService: routineTrackingService
+                    routineManager: routineManager
                 ) { updatedRoutine in
                     // Update the routine steps when the routine is edited
                     updateRoutineSteps(from: updatedRoutine)
@@ -311,8 +310,8 @@ struct MorningRoutineCompletionView: View {
         // Find the step to get its details
         guard let step = routineSteps.first(where: { $0.id == stepId }) else { return }
         
-        // Use the RoutineTrackingService to persist the completion
-        routineTrackingService.toggleStepCompletion(
+        // Use the RoutineManager to persist the completion
+        routineManager.toggleStepCompletion(
             stepId: stepId,
             stepTitle: step.title,
             stepType: step.stepType,
@@ -325,13 +324,13 @@ struct MorningRoutineCompletionView: View {
     
     private func updateRoutineSteps(from routine: RoutineResponse) {
         // Store the current state before updating
-        let oldCompletedSteps = routineTrackingService.getCompletedSteps()
+        let oldCompletedSteps = routineManager.getCompletedSteps(for: Date())
         let oldRoutineSteps = routineSteps
         
         // Convert the updated routine to RoutineStepDetail array
         routineSteps = routine.routine.morning.map { apiStep in
             RoutineStepDetail(
-                id: "morning_\(apiStep.name)",
+                id: UUID().uuidString, // Generate unique ID for each step
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
                 stepType: apiStep.step,
@@ -869,7 +868,7 @@ private struct EmptyProductTypeView: View {
     MorningRoutineCompletionView(
         routineSteps: [
             RoutineStepDetail(
-                id: "morning_cleanser",
+                id: UUID().uuidString,
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – reduces shine, clears pores",
                 stepType: .cleanser,
@@ -878,7 +877,7 @@ private struct EmptyProductTypeView: View {
                 how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
             ),
             RoutineStepDetail(
-                id: "morning_moisturizer",
+                id: UUID().uuidString,
                 title: "Water-based Moisturizer",
                 description: "Lightweight gel moisturizer – hydrates without greasiness",
                 stepType: .moisturizer,
@@ -887,7 +886,7 @@ private struct EmptyProductTypeView: View {
                 how: "Apply a pea-sized amount, massage in upward circular motions"
             ),
             RoutineStepDetail(
-                id: "morning_sunscreen",
+                id: UUID().uuidString,
                 title: "Sunscreen SPF 30+",
                 description: "SPF 30+ broad spectrum – protects against sun damage",
                 stepType: .sunscreen,
@@ -897,7 +896,7 @@ private struct EmptyProductTypeView: View {
             )
         ],
         onComplete: { print("Routine completed!") },
-        originalRoutine: nil,
-        routineTrackingService: RoutineTrackingService()
+        originalRoutine: nil
     )
+    .environmentObject(RoutineManager())
 }
