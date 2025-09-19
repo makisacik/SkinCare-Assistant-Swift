@@ -65,7 +65,7 @@ extension GPTService {
         ageRange: AgeRange,
         region: Region,
         preferences: Preferences?,
-        lifestyle: LifestyleInfo? = nil,
+        lifestyle: LifestyleAnswers? = nil,
         locale: String = "en-US"
     ) -> ManCareRoutineRequest {
         
@@ -81,9 +81,9 @@ extension GPTService {
         
         let lifestylePayload = lifestyle.map { ls in
             LifestylePayload(
-                sleepQuality: ls.sleepQuality?.rawValue,
-                exerciseFrequency: ls.exerciseFrequency?.rawValue,
-                routineDepthPreference: ls.routineDepthPreference?.rawValue,
+                sleepQuality: ls.sleep?.rawValue,
+                exerciseFrequency: ls.exercise?.rawValue,
+                routineDepthPreference: ls.routineDepth?.rawValue,
                 sunResponse: ls.sunResponse?.rawValue,
                 outdoorHours: ls.outdoorHours,
                 smokes: ls.smokes,

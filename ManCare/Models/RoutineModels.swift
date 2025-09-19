@@ -29,7 +29,7 @@ enum TimeOfDay: String, Codable, CaseIterable {
 
 // MARK: - SavedStepDetailModel (Swift Model)
 
-struct SavedStepDetailModel: Identifiable, Codable {
+struct SavedStepDetailModel: Identifiable, Codable, Equatable {
     let id: UUID
     let title: String
     let stepDescription: String
@@ -46,6 +46,15 @@ struct SavedStepDetailModel: Identifiable, Codable {
             return ProductIconManager.getFallbackIcon()
         }
         return ProductIconManager.getIconName(for: productType)
+    }
+    
+    // Computed properties for enum access
+    var stepTypeEnum: ProductType {
+        return ProductType(rawValue: stepType) ?? .cleanser
+    }
+    
+    var timeOfDayEnum: TimeOfDay {
+        return TimeOfDay(rawValue: timeOfDay) ?? .morning
     }
 
     init(id: UUID = UUID(), title: String, stepDescription: String, stepType: String, timeOfDay: String, why: String? = nil, how: String? = nil, order: Int) {
@@ -72,9 +81,10 @@ struct SavedStepDetailModel: Identifiable, Codable {
     }
 }
 
+
 // MARK: - SavedRoutineModel (Swift Model)
 
-struct SavedRoutineModel: Identifiable, Codable {
+struct SavedRoutineModel: Identifiable, Codable, Equatable {
     let id: UUID
     let templateId: UUID
     let title: String

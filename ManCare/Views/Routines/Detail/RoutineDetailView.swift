@@ -15,7 +15,7 @@ struct RoutineDetailView: View {
     let iconName: String
     let iconColor: Color
     let steps: [RoutineStepDetail]
-    let routineManager: RoutineManager
+    let completionViewModel: RoutineCompletionViewModel
     let selectedDate: Date
     let onStepTap: (RoutineStepDetail) -> Void
 
@@ -46,7 +46,7 @@ struct RoutineDetailView: View {
         .task {
             await loadCompletionData()
         }
-        .onChange(of: routineManager.completedSteps) { _ in
+        .onChange(of: completionViewModel.completedSteps) { _ in
             Task {
                 await loadCompletionData()
             }
@@ -57,7 +57,7 @@ struct RoutineDetailView: View {
     }
 
     private func loadCompletionData() async {
-        let completedSteps = await routineManager.getCompletedSteps(for: selectedDate)
+        let completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
         let completed = steps.filter { completedSteps.contains($0.id) }
 
         await MainActor.run {
@@ -167,7 +167,7 @@ struct RoutineDetailView: View {
                     stepNumber: index + 1,
                     isCompleted: completedStepIds.contains(step.id),
                     onToggle: {
-                        routineManager.toggleStepCompletion(
+                        completionViewModel.toggleStepCompletion(
                             stepId: step.id,
                             stepTitle: step.title,
                             stepType: step.stepType,
@@ -363,7 +363,7 @@ private struct RoutineDetailStepCard: View {
                 how: "Apply with cotton pad or hands, pat gently until absorbed"
             )
         ],
-        routineManager: RoutineManager(),
+        completionViewModel: RoutineCompletionViewModel.preview,
         selectedDate: Date(),
         onStepTap: { _ in }
     )

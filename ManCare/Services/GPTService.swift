@@ -71,6 +71,9 @@ public final class GPTService {
         case decodingFailed(String)
         case invalidJSON(String)
     }
+    
+    // Shared instance
+    public static let shared = GPTService(apiKey: Config.openAIAPIKey)
 
     private let apiKey: String
     private let model: String

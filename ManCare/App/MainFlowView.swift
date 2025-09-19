@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MainFlowView: View {
     @Environment(\.colorScheme) private var cs
-    @EnvironmentObject var routineManager: RoutineManager
 
     @State private var currentStep: FlowStep = .welcome
     @State private var selectedSkinType: SkinType?

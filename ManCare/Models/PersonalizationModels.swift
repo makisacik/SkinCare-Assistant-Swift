@@ -236,7 +236,7 @@ struct UserProfile: Codable {
     let ageRange: AgeRange
     let region: Region
     let preferences: Preferences?
-    let lifestyle: LifestyleInfo?
+    let lifestyle: LifestyleAnswers?
     
     init(skinType: SkinType,
          concerns: Set<Concern>,
@@ -245,7 +245,7 @@ struct UserProfile: Codable {
          ageRange: AgeRange,
          region: Region,
          preferences: Preferences? = nil,
-         lifestyle: LifestyleInfo? = nil) {
+         lifestyle: LifestyleAnswers? = nil) {
         self.skinType = skinType
         self.concerns = concerns
         self.mainGoal = mainGoal

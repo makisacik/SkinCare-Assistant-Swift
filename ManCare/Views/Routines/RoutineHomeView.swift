@@ -12,7 +12,6 @@ struct RoutineHomeView: View {
     let generatedRoutine: RoutineResponse?
     @Binding var selectedTab: MainTabView.Tab
 
-    @EnvironmentObject var routineManager: RoutineManager
     @StateObject private var routineViewModel: RoutineHomeViewModel
     @State private var selectedDate = Date()
     @State private var showingStepDetail: RoutineStepDetail?
@@ -39,8 +38,7 @@ struct RoutineHomeView: View {
         self.generatedRoutine = generatedRoutine
         self._selectedTab = selectedTab
 
-        // Initialize StateObject with empty RoutineManager
-        // It will be configured with the real one in onAppear
+        // Initialize StateObject with new architecture
         self._routineViewModel = StateObject(wrappedValue: RoutineHomeViewModel())
     }
 
@@ -58,9 +56,6 @@ struct RoutineHomeView: View {
             )
             .ignoresSafeArea()
             .onAppear {
-                // Configure the ViewModel with the RoutineManager from environment
-                routineViewModel.configure(with: routineManager)
-
                 print("🏠 RoutineHomeView onAppear")
                 print("📊 generatedRoutine: \(generatedRoutine != nil ? "exists" : "nil")")
                 print("📊 activeRoutine: \(routineViewModel.activeRoutine?.title ?? "nil")")
@@ -93,13 +88,13 @@ struct RoutineHomeView: View {
                 // Calendar section with its own background extending to top safe area
                 VStack(spacing: 0) {
                     // Header with greeting and user icon
-                    ModernHeaderView(
+                    RoutineHeaderView(
                         selectedDate: $selectedDate,
-                            routineManager: routineManager
+                        completionViewModel: routineViewModel.completionViewModel
                     )
 
                     // Calendar Strip
-                    CalendarStripView(selectedDate: $selectedDate, routineManager: routineManager)
+                    CalendarStripView(selectedDate: $selectedDate, completionViewModel: routineViewModel.completionViewModel)
                 }        .background(
                     LinearGradient(
                         gradient: Gradient(colors: [
@@ -116,15 +111,15 @@ struct RoutineHomeView: View {
                 // Content
                 routineTabContent
             }
-            .withModernRoutineLoading(routineViewModel.isLoading)
-            .handleModernRoutineError(routineViewModel.error)}
+            .withRoutineLoading(routineViewModel.isLoading)
+            .handleRoutineError(routineViewModel.error)}
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
         }.sheet(isPresented: $showingEditRoutine) {
             if let routine = generatedRoutine {
                 EditRoutineView(
                     originalRoutine: routine,
-                            routineManager: routineManager,
+                    completionViewModel: routineViewModel.completionViewModel,
                     onRoutineUpdated: nil
                 )
             }}
@@ -134,7 +129,7 @@ struct RoutineHomeView: View {
                 iconName: routineData.iconName,
                 iconColor: routineData.iconColor,
                 steps: routineData.steps,
-                            routineManager: routineManager,
+                completionViewModel: routineViewModel.completionViewModel,
                 selectedDate: selectedDate,
                 onStepTap: { step in
                     showingStepDetail = step
@@ -142,6 +137,8 @@ struct RoutineHomeView: View {
         }        .fullScreenCover(isPresented: $showingMorningRoutineCompletion) {
             MorningRoutineCompletionView(
                 routineSteps: generateMorningRoutine(),
+                selectedDate: selectedDate,
+                completionViewModel: routineViewModel.completionViewModel,
                 onComplete: {
                     showingMorningRoutineCompletion = false
                 },
@@ -150,6 +147,8 @@ struct RoutineHomeView: View {
         }        .fullScreenCover(isPresented: $showingEveningRoutineCompletion) {
             EveningRoutineCompletionView(
                 routineSteps: generateEveningRoutine(),
+                selectedDate: selectedDate,
+                completionViewModel: routineViewModel.completionViewModel,
                 onComplete: {
                     showingEveningRoutineCompletion = false
                 },
@@ -160,7 +159,7 @@ struct RoutineHomeView: View {
                 routineId: "\(launch.routineType.rawValue)_routine",
                 routineName: "\(launch.routineType.displayName) Routine",
                 steps: launch.steps,
-                            routineManager: routineManager,
+                completionViewModel: routineViewModel.completionViewModel,
                 onComplete: {
                     companionLaunch = nil
                     companionRoutineType = nil
@@ -235,7 +234,7 @@ struct RoutineHomeView: View {
                     iconColor: ThemeManager.shared.theme.palette.info,
                     productCount: generateMorningRoutine().count,
                     steps: generateMorningRoutine(),
-                    routineManager: routineManager,
+                    completionViewModel: routineViewModel.completionViewModel,
                     selectedDate: selectedDate,
                     onRoutineTap: {
                         showingMorningRoutineCompletion = true
@@ -260,7 +259,7 @@ struct RoutineHomeView: View {
                     iconColor: ThemeManager.shared.theme.palette.primary,
                     productCount: generateEveningRoutine().count,
                     steps: generateEveningRoutine(),
-                    routineManager: routineManager,
+                    completionViewModel: routineViewModel.completionViewModel,
                     selectedDate: selectedDate,
                     onRoutineTap: {
                         showingEveningRoutineCompletion = true
@@ -292,7 +291,7 @@ struct RoutineHomeView: View {
                         iconColor: ThemeManager.shared.theme.palette.secondary,
                         productCount: weeklySteps.count,
                         steps: weeklySteps,
-                        routineManager: routineManager,
+                        completionViewModel: routineViewModel.completionViewModel,
                         selectedDate: selectedDate,
                         onRoutineTap: {
                             showingRoutineDetail = RoutineDetailData(
@@ -330,7 +329,7 @@ struct RoutineHomeView: View {
             }
             return morningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "\(activeRoutine.id.uuidString)_morning_\(stepDetail.order)",
+                    id: stepDetail.id.uuidString,
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -408,7 +407,7 @@ struct RoutineHomeView: View {
             }
             return eveningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "\(activeRoutine.id.uuidString)_evening_\(stepDetail.order)",
+                    id: stepDetail.id.uuidString,
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -592,12 +591,12 @@ private struct CoachMessageView: View {
         )
                 }    }
 
-// MARK: - Modern Header View
+// MARK: - Routine Header View
 
-private struct ModernHeaderView: View {
+private struct RoutineHeaderView: View {
 
     @Binding var selectedDate: Date
-    @ObservedObject var routineManager: RoutineManager
+    @ObservedObject var completionViewModel: RoutineCompletionViewModel
 
     @State private var currentStreak: Int = 0
 
@@ -642,9 +641,7 @@ private struct ModernHeaderView: View {
         }.padding(.horizontal, 20)
         .padding(.bottom, 20)
         .onAppear {
-            Task {
-                currentStreak = await routineManager.getCurrentStreak()
-            }
+            currentStreak = completionViewModel.currentStreak
         }
     }    }
 // MARK: - Calendar Strip View
@@ -652,7 +649,7 @@ private struct ModernHeaderView: View {
 private struct CalendarStripView: View {
 
     @Binding var selectedDate: Date
-    @ObservedObject var routineManager: RoutineManager
+    @ObservedObject var completionViewModel: RoutineCompletionViewModel
 
     private let calendar = Calendar.current
     private let dateFormatter: DateFormatter = {
@@ -674,10 +671,14 @@ private struct CalendarStripView: View {
                     CalendarDayView(
                         date: date,
                         isSelected: calendar.isDate(date, inSameDayAs: selectedDate),
-                            routineManager: routineManager
-                    ) {
-                        selectedDate = date
-                    }        }    }        .padding(.horizontal, 20)
+                        completionViewModel: completionViewModel,
+                        onTap: {
+                            selectedDate = date
+                        }
+                    )
+                }
+            }
+            .padding(.horizontal, 20)
         }.padding(.vertical, 12)
     }
 
@@ -694,7 +695,7 @@ private struct CalendarDayView: View {
 
     let date: Date
     let isSelected: Bool
-    @ObservedObject var routineManager: RoutineManager
+    @ObservedObject var completionViewModel: RoutineCompletionViewModel
     let onTap: () -> Void
 
     private let dayFormatter: DateFormatter = {
@@ -710,11 +711,11 @@ private struct CalendarDayView: View {
     }()
 
     private var hasCompletions: Bool {
-        !routineManager.completedSteps.isEmpty
+        !completionViewModel.completedSteps.isEmpty
     }
     
     private var completionRate: Double {
-        routineManager.completedSteps.isEmpty ? 0.0 : 1.0
+        completionViewModel.completedSteps.isEmpty ? 0.0 : 1.0
     }
 
     var body: some View {
@@ -746,7 +747,7 @@ private struct CalendarDayView: View {
     }
 }
 
-// MARK: - Modern Routine Card
+// MARK: - Routine Card
 
 private struct RoutineCard: View {
 
@@ -755,15 +756,17 @@ private struct RoutineCard: View {
     let iconColor: Color
     let productCount: Int
     let steps: [RoutineStepDetail]
-    @ObservedObject var routineManager: RoutineManager
+    @ObservedObject var completionViewModel: RoutineCompletionViewModel
     let selectedDate: Date
     let onRoutineTap: () -> Void
     let onCompanionTap: () -> Void
     let onStepTap: (RoutineStepDetail) -> Void
 
+    @State private var completedStepsForDate: Set<String> = []
+    
     private var completedCount: Int {
         steps.filter { step in
-            routineManager.completedSteps.contains(step.id)
+            completedStepsForDate.contains(step.id)
         }.count
     }
 
@@ -879,6 +882,26 @@ private struct RoutineCard: View {
                 )
             }    .buttonStyle(PlainButtonStyle())
         }.padding(.horizontal, 20)
+        .onAppear {
+            loadCompletionsForSelectedDate()
+        }
+        .onChange(of: selectedDate) { _ in
+            loadCompletionsForSelectedDate()
+        }
+        .onChange(of: completionViewModel.completedSteps) { _ in
+            // Also update when global completions change (for real-time updates)
+            loadCompletionsForSelectedDate()
+        }
+    }
+    
+    private func loadCompletionsForSelectedDate() {
+        Task {
+            let completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
+            await MainActor.run {
+                self.completedStepsForDate = completedSteps
+                print("📊 Loaded \(completedSteps.count) completions for \(selectedDate): \(completedSteps)")
+            }
+        }
     }
 }
 

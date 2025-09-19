@@ -23,7 +23,7 @@ class CompanionSessionViewModel: ObservableObject {
     private let notificationService = NotificationService.shared
     private let analyticsService = CompanionAnalyticsService.shared
     private let tipsService = ProductTipsService.shared
-    private var routineManager: RoutineManager?
+    private let routineService: RoutineServiceProtocol = RoutineService.shared
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
     
@@ -32,16 +32,16 @@ class CompanionSessionViewModel: ObservableObject {
         resumeSession()
     }
     
-    func setRoutineManager(_ service: RoutineManager) {
-        self.routineManager = service
-    }
+    // No longer needed - using routineService directly
     func isRoutineCompletedForToday(steps: [CompanionStep]) async -> Bool {
-        guard let trackingService = routineManager else { return false }
-
         var completedCount = 0
         for step in steps {
-            if await trackingService.isStepCompleted(stepId: step.id) {
-                completedCount += 1
+            do {
+                if try await routineService.isStepCompleted(stepId: step.id, date: Date()) {
+                    completedCount += 1
+                }
+            } catch {
+                print("❌ Error checking step completion: \(error)")
             }
         }
 
@@ -52,17 +52,20 @@ class CompanionSessionViewModel: ObservableObject {
         print("🔄 Starting routine again - clearing completed steps")
 
         // Clear completed steps for today
-        if let trackingService = routineManager {
-            Task {
-                for step in steps {
-                    if await trackingService.isStepCompleted(stepId: step.id) {
-                        trackingService.toggleStepCompletion(
+        Task {
+            for step in steps {
+                do {
+                    if try await routineService.isStepCompleted(stepId: step.id, date: Date()) {
+                        try await routineService.toggleStepCompletion(
                             stepId: step.id,
                             stepTitle: step.title,
                             stepType: step.stepType,
-                            timeOfDay: step.timeOfDay
+                            timeOfDay: step.timeOfDay,
+                            date: Date()
                         )
                     }
+                } catch {
+                    print("❌ Error clearing step completion: \(error)")
                 }
             }
         }
@@ -192,17 +195,23 @@ class CompanionSessionViewModel: ObservableObject {
         print("📊 After completion - Steps completed: \(session.stepsCompleted.count)")
         print("📊 New current step index: \(session.currentStepIndex)")
 
-        // Integrate with RoutineManager
+        // Integrate with RoutineService
         if let completedStepId = session.stepsCompleted.last,
-           let completedStep = session.steps.first(where: { $0.id == completedStepId }),
-           let trackingService = routineManager {
-            print("🔄 Marking step as completed in RoutineManager: \(completedStep.title)")
-            trackingService.toggleStepCompletion(
-                stepId: completedStep.id,
-                stepTitle: completedStep.title,
-                stepType: completedStep.stepType,
-                timeOfDay: completedStep.timeOfDay
-            )
+           let completedStep = session.steps.first(where: { $0.id == completedStepId }) {
+            print("🔄 Marking step as completed in RoutineService: \(completedStep.title)")
+            Task {
+                do {
+                    try await routineService.toggleStepCompletion(
+                        stepId: completedStep.id,
+                        stepTitle: completedStep.title,
+                        stepType: completedStep.stepType,
+                        timeOfDay: completedStep.timeOfDay,
+                        date: Date()
+                    )
+                } catch {
+                    print("❌ Error marking step as completed: \(error)")
+                }
+            }
         }
 
         sessionStore.updateSession(session)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DiscoverView: View {
-    @EnvironmentObject var routineManager: RoutineManager
+    @StateObject private var listViewModel = RoutineListViewModel()
     @State private var searchText = ""
     @State private var selectedCategory: RoutineCategory = .all
     @State private var showingRoutineDetail: RoutineTemplate?
@@ -48,13 +48,13 @@ struct DiscoverView: View {
             }
         }
         .sheet(item: $showingRoutineDetail) { routine in
-            RoutineDetailSheet(routine: routine, routineManager: routineManager)
+            RoutineDetailSheet(routine: routine, listViewModel: listViewModel)
         }
         .onAppear {
-            routineManager.loadRoutines()
+            listViewModel.loadRoutines()
         }
-        .withModernRoutineLoading(routineManager.isLoading)
-        .handleModernRoutineError(routineManager.error)
+        .withRoutineLoading(listViewModel.isLoading)
+        .handleRoutineError(listViewModel.error)
     }
 
     // MARK: - Header Section
@@ -446,7 +446,7 @@ private struct RoutineDetailSheet: View {
     @State private var isStepsExpanded = false
 
     let routine: RoutineTemplate
-    let routineManager: RoutineManager
+    let listViewModel: RoutineListViewModel
 
     var body: some View {
         let palette = ThemeManager.shared.theme.palette
@@ -502,16 +502,8 @@ private struct RoutineDetailSheet: View {
                             title: "Add to My Routines",
                             palette: palette,
                             action: {
-                                Task {
-                                    do {
-                                        let _ = try await routineManager.saveRoutine(routine)
-                                        await MainActor.run {
-                                            dismiss()
-                                        }
-                                    } catch {
-                                        print("❌ Failed to save routine: \(error)")
-                                    }
-                                }
+                                listViewModel.saveRoutineTemplate(routine)
+                                dismiss()
                             }
                         )
                         .padding(.top, 8)
@@ -726,5 +718,4 @@ private struct CTAButton: View {
 
 #Preview("Discover View") {
     DiscoverView()
-        .environmentObject(RoutineManager())
 }

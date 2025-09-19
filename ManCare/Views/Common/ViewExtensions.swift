@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - View Extensions for State Management
 
 extension View {
-    func handleModernRoutineError(_ error: Error?) -> some View {
+    func handleRoutineError(_ error: Error?) -> some View {
         self.alert("Error", isPresented: .constant(error != nil)) {
             Button("OK") { }
         } message: {
@@ -18,7 +18,7 @@ extension View {
         }
     }
     
-    func withModernRoutineLoading(_ isLoading: Bool) -> some View {
+    func withRoutineLoading(_ isLoading: Bool) -> some View {
         self.overlay(
             Group {
                 if isLoading {

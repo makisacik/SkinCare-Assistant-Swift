@@ -185,7 +185,7 @@ struct StepDropDelegate: DropDelegate {
         step: mockStep,
         editingService: RoutineEditingService(
             originalRoutine: nil,
-            routineManager: RoutineManager()
+            completionViewModel: RoutineCompletionViewModel.preview
         ),
         onTap: {}
     )

@@ -250,7 +250,7 @@ struct StepDetailEditView: View {
         step: mockStep,
         editingService: RoutineEditingService(
             originalRoutine: nil,
-            routineManager: RoutineManager()
+            completionViewModel: RoutineCompletionViewModel.preview
         )
     )
 }

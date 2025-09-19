@@ -9,16 +9,19 @@ import SwiftUI
 
 struct MorningRoutineCompletionView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var routineManager: RoutineManager
+    @ObservedObject var completionViewModel: RoutineCompletionViewModel
 
     @ObservedObject private var productService = ProductService.shared
     
     @State private var routineSteps: [RoutineStepDetail]
+    let selectedDate: Date
     let onComplete: () -> Void
     let originalRoutine: RoutineResponse?
     
-    init(routineSteps: [RoutineStepDetail], onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?) {
+    init(routineSteps: [RoutineStepDetail], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?) {
         self._routineSteps = State(initialValue: routineSteps)
+        self.selectedDate = selectedDate
+        self.completionViewModel = completionViewModel
         self.onComplete = onComplete
         self.originalRoutine = originalRoutine
     }
@@ -75,10 +78,10 @@ struct MorningRoutineCompletionView: View {
                 setupNavigationBarAppearance()
                 // Load completion state from RoutineManager
                 Task {
-                    completedSteps = await routineManager.getCompletedSteps(for: Date())
+                    completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
                 }
             }
-            .onChange(of: routineManager.completedSteps) { newCompletedSteps in
+            .onChange(of: completionViewModel.completedSteps) { newCompletedSteps in
                 completedSteps = newCompletedSteps
             }
         }
@@ -113,11 +116,12 @@ struct MorningRoutineCompletionView: View {
             if let routine = originalRoutine {
                 EditRoutineView(
                     originalRoutine: routine,
-                    routineManager: routineManager
-                ) { updatedRoutine in
-                    // Update the routine steps when the routine is edited
-                    updateRoutineSteps(from: updatedRoutine)
-                }
+                    completionViewModel: completionViewModel,
+                    onRoutineUpdated: { updatedRoutine in
+                        // Update the routine steps when the routine is edited
+                        updateRoutineSteps(from: updatedRoutine)
+                    }
+                )
             }
         }
     }
@@ -313,11 +317,12 @@ struct MorningRoutineCompletionView: View {
         guard let step = routineSteps.first(where: { $0.id == stepId }) else { return }
         
         // Use the RoutineManager to persist the completion
-        routineManager.toggleStepCompletion(
+        completionViewModel.toggleStepCompletion(
             stepId: stepId,
             stepTitle: step.title,
             stepType: step.stepType,
-            timeOfDay: step.timeOfDay
+            timeOfDay: step.timeOfDay,
+            date: selectedDate
         )
         
         // Add haptic feedback
@@ -327,7 +332,7 @@ struct MorningRoutineCompletionView: View {
     private func updateRoutineSteps(from routine: RoutineResponse) {
         // Store the current state before updating
         Task {
-            let oldCompletedSteps = await routineManager.getCompletedSteps(for: Date())
+            let oldCompletedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
             await MainActor.run {
                 self.updateRoutineStepsSync(from: routine, oldCompletedSteps: oldCompletedSteps)
             }
@@ -905,8 +910,9 @@ private struct EmptyProductTypeView: View {
                 how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
             )
         ],
+        selectedDate: Date(),
+        completionViewModel: RoutineCompletionViewModel.preview,
         onComplete: { print("Routine completed!") },
         originalRoutine: nil
     )
-    .environmentObject(RoutineManager())
 }

@@ -15,10 +15,10 @@ class RoutineEditingService: ObservableObject {
     @Published var editingState: RoutineEditingState = .viewing
     @Published var showingPreview = false
     
-    private let routineManager: RoutineManager
+    private let completionViewModel: RoutineCompletionViewModel
     private let persistenceController = PersistenceController.shared
     
-    init(originalRoutine: RoutineResponse?, routineManager: RoutineManager) {
+    init(originalRoutine: RoutineResponse?, completionViewModel: RoutineCompletionViewModel) {
         // Try to load saved routine first, then fall back to original or empty
         if let savedRoutine = Self.loadSavedRoutine() {
             self.editableRoutine = savedRoutine
@@ -28,7 +28,7 @@ class RoutineEditingService: ObservableObject {
             // Create empty routine for preview/testing
             self.editableRoutine = EditableRoutine()
         }
-        self.routineManager = routineManager
+        self.completionViewModel = completionViewModel
     }
     
     // MARK: - Public Methods
