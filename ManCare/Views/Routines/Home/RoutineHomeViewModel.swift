@@ -53,13 +53,8 @@ class RoutineHomeViewModel: ObservableObject {
         error?.localizedDescription
     }
 
-    var completedSteps: Set<String> {
-        completionViewModel.completedSteps
-    }
-
-    var completionStats: RoutineCompletionStats? {
-        completionViewModel.completionStats
-    }
+    // Note: completedSteps and completionStats are now date-specific
+    // Use completionViewModel.getCompletedSteps(for: date) and getCompletionStats(for: date) instead
 
     // MARK: - Initialization
 
@@ -78,6 +73,15 @@ class RoutineHomeViewModel: ObservableObject {
         print("🏠 RoutineHome appeared")
         listViewModel.onAppear()
         completionViewModel.onAppear()
+        
+        // Add a safety timeout to prevent infinite loading
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            if self.isLoading {
+                print("⚠️ Loading timeout reached, force clearing loading state")
+                self.listViewModel.isLoading = false
+                self.completionViewModel.isLoading = false
+            }
+        }
     }
 
     func refresh() {

@@ -15,34 +15,35 @@ import Combine
 final class RoutineCompletionViewModel: ObservableObject {
     // MARK: - Published Properties (UI State Only)
     @Published var activeRoutine: SavedRoutineModel?
-    @Published var completedSteps: Set<String> = []
     @Published var isLoading = false
     @Published var error: Error?
     @Published var currentStreak = 0
-    
+
+    // Note: completedSteps removed from global state - each view fetches for its specific date
     // MARK: - Dependencies
     private let routineService: RoutineServiceProtocol
     private var cancellables = Set<AnyCancellable>()
-    
+
     // MARK: - Computed Properties
     var hasActiveRoutine: Bool {
         activeRoutine != nil
     }
-    
+
     var errorMessage: String? {
         error?.localizedDescription
     }
-    
-    // Completion statistics for active routine
-    var completionStats: RoutineCompletionStats? {
+
+    // Completion statistics for active routine (date-specific)
+    func getCompletionStats(for date: Date) async -> RoutineCompletionStats? {
         guard let routine = activeRoutine else { return nil }
-        
+
+        let completedSteps = await getCompletedSteps(for: date)
         let morningSteps = routine.stepDetails.filter { $0.timeOfDayEnum == .morning }
         let eveningSteps = routine.stepDetails.filter { $0.timeOfDayEnum == .evening }
-        
+
         let completedMorningSteps = morningSteps.filter { completedSteps.contains($0.id.uuidString) }
         let completedEveningSteps = eveningSteps.filter { completedSteps.contains($0.id.uuidString) }
-        
+
         return RoutineCompletionStats(
             morningTotal: morningSteps.count,
             morningCompleted: completedMorningSteps.count,
@@ -53,9 +54,9 @@ final class RoutineCompletionViewModel: ObservableObject {
             currentStreak: currentStreak
         )
     }
-    
+
     // MARK: - Initialization
-    
+
     init(routineService: RoutineServiceProtocol = RoutineService.shared) {
         self.routineService = routineService
         print("✅ RoutineCompletionViewModel initialized")
@@ -64,9 +65,9 @@ final class RoutineCompletionViewModel: ObservableObject {
             await loadStreak()
         }
     }
-    
+
     // MARK: - Stream Subscription
-    
+
     private func subscribeToRoutineStream() {
         routineService.routinesStream
             .receive(on: DispatchQueue.main)
@@ -74,27 +75,28 @@ final class RoutineCompletionViewModel: ObservableObject {
                 self?.updateFromState(state)
             }
             .store(in: &cancellables)
-        
+
         print("📡 RoutineCompletionViewModel subscribed to routine stream")
     }
-    
+
     private func updateFromState(_ state: RoutineServiceState) {
         activeRoutine = state.activeRoutine
-        completedSteps = state.completedSteps
-        print("✅ Updated completion state: \(completedSteps.count) completed steps")
+        isLoading = false // Clear loading state when data is received
+        error = nil // Clear any previous errors
+        print("✅ Updated completion state: active routine = \(state.activeRoutine?.title ?? "none"), loading cleared")
     }
-    
+
     // MARK: - Public Methods
-    
+
     func onAppear() {
         print("✅ RoutineCompletionViewModel appeared")
         refresh()
     }
-    
+
     func refresh() {
         isLoading = true
         error = nil
-        
+
         Task {
             do {
                 try await routineService.refreshData()
@@ -111,22 +113,25 @@ final class RoutineCompletionViewModel: ObservableObject {
             }
         }
     }
-    
+
     func toggleStepCompletion(stepId: String, stepTitle: String, stepType: ProductType, timeOfDay: TimeOfDay, date: Date = Date()) {
         Task {
             do {
+                // Normalize date to start of day for consistency
+                let calendar = Calendar.current
+                let normalizedDate = calendar.startOfDay(for: date)
                 try await routineService.toggleStepCompletion(
                     stepId: stepId,
                     stepTitle: stepTitle,
                     stepType: stepType,
                     timeOfDay: timeOfDay,
-                    date: date
+                    date: normalizedDate
                 )
-                
+
                 // Reload streak after completion change
                 await loadStreak()
-                
-                print("✅ Toggled step completion: \(stepTitle)")
+
+                print("✅ Successfully toggled step completion: \(stepTitle) (ID: \(stepId)) for date: \(normalizedDate)")
             } catch {
                 await MainActor.run {
                     self.error = error
@@ -135,31 +140,37 @@ final class RoutineCompletionViewModel: ObservableObject {
             }
         }
     }
-    
+
     func isStepCompleted(stepId: String, date: Date = Date()) async -> Bool {
         do {
-            return try await routineService.isStepCompleted(stepId: stepId, date: date)
+            // Normalize date to start of day for consistency
+            let calendar = Calendar.current
+            let normalizedDate = calendar.startOfDay(for: date)
+            return try await routineService.isStepCompleted(stepId: stepId, date: normalizedDate)
         } catch {
             print("❌ Failed to check step completion: \(error)")
             return false
         }
     }
-    
+
     func getCompletedSteps(for date: Date = Date()) async -> Set<String> {
         do {
-            let steps = try await routineService.getCompletedSteps(for: date)
-            print("📊 Retrieved \(steps.count) completed steps for \(date): \(steps)")
+            // Normalize date to start of day for consistency
+            let calendar = Calendar.current
+            let normalizedDate = calendar.startOfDay(for: date)
+            let steps = try await routineService.getCompletedSteps(for: normalizedDate)
+            print("📊 Retrieved \(steps.count) completed steps for \(normalizedDate): \(steps)")
             return steps
         } catch {
             print("❌ Failed to get completed steps: \(error)")
             return []
         }
     }
-    
+
     func clearAllCompletions() {
         isLoading = true
         error = nil
-        
+
         Task {
             do {
                 try await routineService.clearAllCompletions()
@@ -177,13 +188,13 @@ final class RoutineCompletionViewModel: ObservableObject {
             }
         }
     }
-    
+
     func clearError() {
         error = nil
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func loadStreak() async {
         do {
             let streak = try await routineService.getCurrentStreak()
@@ -192,25 +203,28 @@ final class RoutineCompletionViewModel: ObservableObject {
             print("❌ Failed to load streak: \(error)")
         }
     }
-    
+
     // MARK: - Helper Methods
-    
-    func completionPercentage(for timeOfDay: TimeOfDay) -> Double {
+
+    func completionPercentage(for timeOfDay: TimeOfDay, date: Date) async -> Double {
         guard let routine = activeRoutine else { return 0.0 }
-        
+
+        let completedSteps = await getCompletedSteps(for: date)
         let steps = routine.stepDetails.filter { $0.timeOfDayEnum == timeOfDay }
         let completedCount = steps.filter { completedSteps.contains($0.id.uuidString) }.count
-        
+
         guard steps.count > 0 else { return 0.0 }
         return Double(completedCount) / Double(steps.count)
     }
-    
-    func isRoutineCompleted(for timeOfDay: TimeOfDay) -> Bool {
-        completionPercentage(for: timeOfDay) == 1.0
+
+    func isRoutineCompleted(for timeOfDay: TimeOfDay, date: Date) async -> Bool {
+        let percentage = await completionPercentage(for: timeOfDay, date: date)
+        return percentage == 1.0
     }
-    
-    func isRoutineFullyCompleted() -> Bool {
+
+    func isRoutineFullyCompleted(for date: Date) async -> Bool {
         guard let routine = activeRoutine else { return false }
+        let completedSteps = await getCompletedSteps(for: date)
         return completedSteps.count == routine.stepDetails.count
     }
 }
@@ -225,30 +239,30 @@ struct RoutineCompletionStats {
     let overallTotal: Int
     let overallCompleted: Int
     let currentStreak: Int
-    
+
     var morningCompletionPercentage: Double {
         guard morningTotal > 0 else { return 0.0 }
         return Double(morningCompleted) / Double(morningTotal)
     }
-    
+
     var eveningCompletionPercentage: Double {
         guard eveningTotal > 0 else { return 0.0 }
         return Double(eveningCompleted) / Double(eveningTotal)
     }
-    
+
     var overallCompletionPercentage: Double {
         guard overallTotal > 0 else { return 0.0 }
         return Double(overallCompleted) / Double(overallTotal)
     }
-    
+
     var isMorningCompleted: Bool {
         morningTotal > 0 && morningCompleted == morningTotal
     }
-    
+
     var isEveningCompleted: Bool {
         eveningTotal > 0 && eveningCompleted == eveningTotal
     }
-    
+
     var isFullyCompleted: Bool {
         overallTotal > 0 && overallCompleted == overallTotal
     }

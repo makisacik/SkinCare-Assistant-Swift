@@ -46,10 +46,8 @@ struct RoutineDetailView: View {
         .task {
             await loadCompletionData()
         }
-        .onChange(of: completionViewModel.completedSteps) { _ in
-            Task {
-                await loadCompletionData()
-            }
+        .task(id: selectedDate) {
+            await loadCompletionData()
         }
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)

@@ -24,6 +24,7 @@ class CompanionSessionViewModel: ObservableObject {
     private let analyticsService = CompanionAnalyticsService.shared
     private let tipsService = ProductTipsService.shared
     private let routineService: RoutineServiceProtocol = RoutineService.shared
+    private var selectedDate: Date = Date()
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
     
@@ -32,12 +33,15 @@ class CompanionSessionViewModel: ObservableObject {
         resumeSession()
     }
     
-    // No longer needed - using routineService directly
+    func setSelectedDate(_ date: Date) {
+        self.selectedDate = date
+        print("📅 CompanionSessionViewModel selectedDate set to: \(date)")
+    }
     func isRoutineCompletedForToday(steps: [CompanionStep]) async -> Bool {
         var completedCount = 0
         for step in steps {
             do {
-                if try await routineService.isStepCompleted(stepId: step.id, date: Date()) {
+                if try await routineService.isStepCompleted(stepId: step.id, date: selectedDate) {
                     completedCount += 1
                 }
             } catch {
@@ -55,13 +59,13 @@ class CompanionSessionViewModel: ObservableObject {
         Task {
             for step in steps {
                 do {
-                    if try await routineService.isStepCompleted(stepId: step.id, date: Date()) {
+                    if try await routineService.isStepCompleted(stepId: step.id, date: selectedDate) {
                         try await routineService.toggleStepCompletion(
                             stepId: step.id,
                             stepTitle: step.title,
                             stepType: step.stepType,
                             timeOfDay: step.timeOfDay,
-                            date: Date()
+                            date: selectedDate
                         )
                     }
                 } catch {
@@ -206,7 +210,7 @@ class CompanionSessionViewModel: ObservableObject {
                         stepTitle: completedStep.title,
                         stepType: completedStep.stepType,
                         timeOfDay: completedStep.timeOfDay,
-                        date: Date()
+                        date: selectedDate
                     )
                 } catch {
                     print("❌ Error marking step as completed: \(error)")

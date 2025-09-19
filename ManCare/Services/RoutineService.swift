@@ -62,20 +62,17 @@ protocol RoutineServiceProtocol {
 struct RoutineServiceState: Equatable {
     let savedRoutines: [SavedRoutineModel]
     let activeRoutine: SavedRoutineModel?
-    let completedSteps: Set<String>
     let lastUpdated: Date
 
     static func == (lhs: RoutineServiceState, rhs: RoutineServiceState) -> Bool {
         return lhs.savedRoutines == rhs.savedRoutines &&
                lhs.activeRoutine == rhs.activeRoutine &&
-               lhs.completedSteps == rhs.completedSteps &&
                lhs.lastUpdated == rhs.lastUpdated
     }
 
     static let initial = RoutineServiceState(
         savedRoutines: [],
         activeRoutine: nil,
-        completedSteps: [],
         lastUpdated: Date()
     )
 }
@@ -87,9 +84,14 @@ final class RoutineService: RoutineServiceProtocol {
 
     // MARK: - Central Read Stream
     private let stateSubject = CurrentValueSubject<RoutineServiceState, Never>(.initial)
+    private let completionChangeSubject = PassthroughSubject<Date, Never>()
 
     var routinesStream: AnyPublisher<RoutineServiceState, Never> {
         stateSubject.eraseToAnyPublisher()
+    }
+    
+    var completionChangesStream: AnyPublisher<Date, Never> {
+        completionChangeSubject.eraseToAnyPublisher()
     }
 
     // Current state accessor
@@ -198,7 +200,7 @@ final class RoutineService: RoutineServiceProtocol {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
 
-        print("✅ Toggling step completion: \(stepTitle)")
+        print("🔄 RoutineService: Toggling step completion: \(stepTitle) (ID: \(stepId)) for date: \(startOfDay)")
 
         try await store.toggleStepCompletion(
             stepId: stepId,
@@ -208,7 +210,11 @@ final class RoutineService: RoutineServiceProtocol {
             date: startOfDay
         )
 
-        // Emit updated state (for completed steps)
+        print("📡 RoutineService: Emitting completion change notification for date: \(startOfDay)")
+        // Emit completion change notification for this date
+        completionChangeSubject.send(startOfDay)
+        
+        // Emit updated state (for routines and active routine)
         try await emitUpdatedState()
     }
 
@@ -233,6 +239,9 @@ final class RoutineService: RoutineServiceProtocol {
 
         try await store.clearAllCompletions()
 
+        // Emit completion change notification for today (affects all dates)
+        completionChangeSubject.send(Date())
+        
         // Emit updated state
         try await emitUpdatedState()
     }
@@ -281,21 +290,19 @@ final class RoutineService: RoutineServiceProtocol {
         // Fetch all data concurrently
         async let routinesResult = store.fetchSavedRoutines()
         async let activeRoutineResult = store.fetchActiveRoutine()
-        async let completedStepsResult = store.getCompletedSteps(for: Date())
 
-        let (routines, activeRoutine, completedSteps) = try await (routinesResult, activeRoutineResult, completedStepsResult)
+        let (routines, activeRoutine) = try await (routinesResult, activeRoutineResult)
 
         // Emit new state
         let newState = RoutineServiceState(
             savedRoutines: routines,
             activeRoutine: activeRoutine,
-            completedSteps: completedSteps,
             lastUpdated: Date()
         )
 
         stateSubject.send(newState)
 
-        print("✅ Refreshed: \(routines.count) routines, \(completedSteps.count) completed steps")
+        print("✅ Refreshed: \(routines.count) routines")
     }
 
     // MARK: - Private Helpers
@@ -318,8 +325,5 @@ extension RoutineService {
         currentState.activeRoutine
     }
 
-    /// Get current completed steps synchronously
-    var completedSteps: Set<String> {
-        currentState.completedSteps
-    }
+    // Note: completedSteps removed - use getCompletedSteps(for: date) for date-specific completions
 }

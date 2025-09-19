@@ -12,12 +12,12 @@ struct EveningRoutineCompletionView: View {
     @ObservedObject var completionViewModel: RoutineCompletionViewModel
 
     @ObservedObject private var productService = ProductService.shared
-    
+
     @State private var routineSteps: [RoutineStepDetail]
     let selectedDate: Date
     let onComplete: () -> Void
     let originalRoutine: RoutineResponse?
-    
+
     init(routineSteps: [RoutineStepDetail], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?) {
         self._routineSteps = State(initialValue: routineSteps)
         self.selectedDate = selectedDate
@@ -25,52 +25,44 @@ struct EveningRoutineCompletionView: View {
         self.onComplete = onComplete
         self.originalRoutine = originalRoutine
     }
-    
     @State private var completedSteps: Set<String> = []
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingProductSelection: RoutineStepDetail?
     @State private var showingEditRoutine = false
-    
+
     private var completedStepsCount: Int {
         // Filter completed steps to only include evening routine steps
         let eveningStepIds = Set(routineSteps.map { $0.id })
         return completedSteps.intersection(eveningStepIds).count
     }
-    
     private var totalSteps: Int {
         routineSteps.count
     }
-    
     private var isRoutineComplete: Bool {
         completedStepsCount == totalSteps
     }
-    
     var body: some View {
         NavigationView {
             ZStack {
                 // Background gradient
                 backgroundGradient
-                
+
                 VStack(spacing: 0) {
                     // Header
                     headerView
-                    
+
                     // Content
                     ScrollView {
                         VStack(spacing: 24) {
                             // Steps Section
                             stepsSection
-                            
+
                             Spacer(minLength: 120)
-                        }
-                        .padding(.horizontal, 20)
+                        }                    .padding(.horizontal, 20)
                         .padding(.top, 20)
                         .padding(.bottom, 20)
-                    }
-                    .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea(.all, edges: .bottom))
-                }
-            }
-            .navigationTitle("")
+                    }                .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea(.all, edges: .bottom))
+                }        }        .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: backButton, trailing: editButton)
@@ -81,8 +73,27 @@ struct EveningRoutineCompletionView: View {
                     completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
                 }
             }
-            .onChange(of: completionViewModel.completedSteps) { newCompletedSteps in
-                completedSteps = newCompletedSteps
+            .task(id: selectedDate) {
+                // Reload completions when selected date changes
+                completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
+            }
+            .onReceive(RoutineService.shared.completionChangesStream) { changedDate in
+                let calendar = Calendar.current
+                let normalizedSelectedDate = calendar.startOfDay(for: selectedDate)
+                let normalizedChangedDate = calendar.startOfDay(for: changedDate)
+                
+                if calendar.isDate(normalizedChangedDate, inSameDayAs: normalizedSelectedDate) {
+                    print("🌙 Evening completion view received completion change for \(normalizedChangedDate)")
+                    Task {
+                        let updatedCompletions = await completionViewModel.getCompletedSteps(for: normalizedSelectedDate)
+                        await MainActor.run {
+                            print("🔄 Updating evening completion view with \(updatedCompletions.count) completions: \(updatedCompletions)")
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                self.completedSteps = updatedCompletions
+                            }
+                        }
+                    }
+                }
             }
         }
         .overlay(
@@ -90,29 +101,21 @@ struct EveningRoutineCompletionView: View {
                 if let step = showingProductSelection {
                     HalfScreenSheet(
                         isPresented: .constant(true),
-                        onDismiss: { 
+                        onDismiss: {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                showingProductSelection = nil 
-                            }
-                        }
-                    ) {
+                                showingProductSelection = nil
+                            }                    }                ) {
                         StepProductSelectionSheet(
                             step: step,
-                            onDismiss: { 
+                            onDismiss: {
                                 withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                    showingProductSelection = nil 
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            .allowsHitTesting(showingProductSelection != nil)
+                                    showingProductSelection = nil
+                                }                        }                    )
+                    }            }        }        .allowsHitTesting(showingProductSelection != nil)
         )
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
-        }
-        .sheet(isPresented: $showingEditRoutine) {
+        }    .sheet(isPresented: $showingEditRoutine) {
             if let routine = originalRoutine {
                 EditRoutineView(
                     originalRoutine: routine,
@@ -120,21 +123,17 @@ struct EveningRoutineCompletionView: View {
                     onRoutineUpdated: { updatedRoutine in
                         // Update the routine steps when the routine is edited
                         updateRoutineSteps(from: updatedRoutine)
-                    }
-                )
-            }
-        }
-    }
-    
+                    }            )
+            }    }}
+
     // MARK: - Background
-    
+
     private var backgroundGradient: some View {
         ThemeManager.shared.theme.palette.background
             .ignoresSafeArea()
     }
-    
     // MARK: - Header
-    
+
     private var headerView: some View {
         VStack(spacing: 0) {
             // Purple header background - extends into safe area
@@ -150,7 +149,7 @@ struct EveningRoutineCompletionView: View {
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea(.all, edges: .top) // Extend into safe area
-                
+
                 VStack(spacing: 16) {
                     // Title and decorations
                     HStack {
@@ -158,27 +157,22 @@ struct EveningRoutineCompletionView: View {
                             .font(.system(size: 24, weight: .black))
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
-                        
+
                         Spacer()
-                        
+
                         // Decorative elements
                         HStack(spacing: 8) {
                             Image(systemName: "moon.stars.fill")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
-                        }
-                    }
-                    .padding(.horizontal, 20)
+                        }                }                .padding(.horizontal, 20)
                     .padding(.top, 8)
-                    
+
                     // Progress indicator
                     progressIndicator
-                }
-            }
-            .frame(height: 120)
-        }
-    }
-    
+                }        }        .frame(height: 120)
+        }}
+
     private var progressIndicator: some View {
         HStack(spacing: 12) {
             // Progress dots
@@ -189,23 +183,19 @@ struct EveningRoutineCompletionView: View {
                         .frame(width: 8, height: 8)
                         .scaleEffect(index < completedStepsCount ? 1.2 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: completedStepsCount)
-                }
-            }
-            
+                }        }
             Spacer()
-            
+
             // Completion percentage
             Text("\(totalSteps > 0 ? Int((Double(completedStepsCount) / Double(totalSteps)) * 100) : 0)%")
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-        }
-        .padding(.horizontal, 20)
+        }    .padding(.horizontal, 20)
         .padding(.bottom, 16)
     }
-    
-    
+
     // MARK: - Steps Section
-    
+
     private var stepsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Section header
@@ -214,14 +204,13 @@ struct EveningRoutineCompletionView: View {
                     Text("Steps")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
+
                     Text("\(totalSteps) products")
                         .font(.system(size: 16))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
-                
                 Spacer()
-                
+
                 Button {
                     // Edit steps action
                 } label: {
@@ -234,10 +223,8 @@ struct EveningRoutineCompletionView: View {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(ThemeManager.shared.theme.palette.primary.opacity(0.3))
                         )
-                }
-                .buttonStyle(PlainButtonStyle())
+                }            .buttonStyle(PlainButtonStyle())
             }
-            
             // Steps list
             VStack(spacing: 20) {
                 ForEach(Array(routineSteps.enumerated()), id: \.element.id) { index, step in
@@ -253,16 +240,12 @@ struct EveningRoutineCompletionView: View {
                         },
                         onTap: {
                             showingStepDetail = step
-                        }
-                    )
-                }
-            }
-        }
-    }
-    
-    
+                        }                )
+                }        }    }}
+
+
     // MARK: - Navigation Buttons
-    
+
     private var backButton: some View {
         Button {
             dismiss()
@@ -270,9 +253,8 @@ struct EveningRoutineCompletionView: View {
             Image(systemName: "chevron.down")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-        }
-    }
-    
+        }}
+
     private var editButton: some View {
         Button {
             showingEditRoutine = true
@@ -280,11 +262,10 @@ struct EveningRoutineCompletionView: View {
             Image(systemName: "pencil")
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-        }
-    }
-    
+        }}
+
     // MARK: - Helper Methods
-    
+
     private func setupNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
@@ -314,7 +295,24 @@ struct EveningRoutineCompletionView: View {
 
     private func toggleStepCompletion(_ stepId: String) {
         // Find the step to get its details
-        guard let step = routineSteps.first(where: { $0.id == stepId }) else { return }
+        guard let step = routineSteps.first(where: { $0.id == stepId }) else { 
+            print("❌ Step not found with ID: \(stepId)")
+            return 
+        }
+
+        print("🌙 Toggling step completion - ID: \(stepId), Title: \(step.title)")
+        
+        // Immediately update local state for responsive UI
+        let wasCompleted = completedSteps.contains(stepId)
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            if wasCompleted {
+                completedSteps.remove(stepId)
+                print("✅ Locally removed completion for: \(stepId)")
+            } else {
+                completedSteps.insert(stepId)
+                print("✅ Locally added completion for: \(stepId)")
+            }
+        }
         
         // Use the RoutineManager to persist the completion
         completionViewModel.toggleStepCompletion(
@@ -324,28 +322,28 @@ struct EveningRoutineCompletionView: View {
             timeOfDay: step.timeOfDay,
             date: selectedDate
         )
-        
+
         // Add haptic feedback
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        
+        print("📊 Current completed steps count: \(completedSteps.count)")
+        print("📊 Completed steps: \(completedSteps)")
     }
-    
     private func updateRoutineSteps(from routine: RoutineResponse) {
         // Store the current state before updating
         Task {
             let oldCompletedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
             await MainActor.run {
                 self.updateRoutineStepsSync(from: routine, oldCompletedSteps: oldCompletedSteps)
-            }
-        }
-    }
-    
+            }    }}
+
     private func updateRoutineStepsSync(from routine: RoutineResponse, oldCompletedSteps: Set<String>) {
         let oldRoutineSteps = routineSteps
-        
+
         // Convert the updated routine to RoutineStepDetail array
-        routineSteps = routine.routine.evening.map { apiStep in
+        routineSteps = routine.routine.evening.enumerated().map { (index, apiStep) in
             RoutineStepDetail(
-                id: UUID().uuidString, // Generate unique ID for each step
+                id: "evening_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
                 stepType: apiStep.step,
@@ -354,10 +352,9 @@ struct EveningRoutineCompletionView: View {
                 how: apiStep.how
             )
         }
-        
         // Preserve completion state by mapping old step IDs to new ones
         var newCompletedSteps: Set<String> = []
-        
+
         // Try to match completed steps by title (since IDs might change)
         for completedStepId in oldCompletedSteps {
             // First try to find the old step to get its title
@@ -369,15 +366,10 @@ struct EveningRoutineCompletionView: View {
                     // Try to find a matching step by title
                     if let matchingStep = routineSteps.first(where: { $0.title == oldStep.title }) {
                         newCompletedSteps.insert(matchingStep.id)
-                    }
-                }
-            }
-        }
-        
+                    }            }        }    }
         completedSteps = newCompletedSteps
     }
-    
-    
+
 }
 
 // MARK: - Detailed Step Row
@@ -390,9 +382,9 @@ private struct DetailedStepRow: View {
     let onToggle: () -> Void
     let onAddProduct: () -> Void
     let onTap: () -> Void
-    
+
     @State private var showCheckmarkAnimation = false
-    
+
     private var stepColor: Color {
         switch step.stepType.color {
         case "blue": return ThemeManager.shared.theme.palette.info
@@ -407,9 +399,8 @@ private struct DetailedStepRow: View {
         case "brown": return ThemeManager.shared.theme.palette.textMuted
         case "gray": return ThemeManager.shared.theme.palette.textMuted
         default: return ThemeManager.shared.theme.palette.primary
-        }
-    }
-    
+        }}
+
     var body: some View {
         HStack(spacing: 0) {
             // Left content area
@@ -421,7 +412,7 @@ private struct DetailedStepRow: View {
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(stepColor)
                         .frame(width: 40)
-                    
+
                     // Product image
                     Image(step.iconName)
                         .resizable()
@@ -429,7 +420,7 @@ private struct DetailedStepRow: View {
                         .frame(width: 60, height: 60)
                         .clipped()
                         .cornerRadius(8)
-                    
+
                     // Step title (smaller font) - allow it to expand and wrap
                     Text(step.title)
                         .font(.system(size: 16, weight: .semibold))
@@ -454,8 +445,7 @@ private struct DetailedStepRow: View {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(stepColor.opacity(0.3))
                         )
-                }
-                .buttonStyle(PlainButtonStyle())
+                }            .buttonStyle(PlainButtonStyle())
                 .padding(.leading, 56) // Align with the content above
 
                 // Step description
@@ -464,8 +454,7 @@ private struct DetailedStepRow: View {
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .lineLimit(nil)
                     .padding(.leading, 56) // Align with the content above
-            }
-            .padding(20)
+            }        .padding(20)
             .contentShape(Rectangle())
             .onTapGesture {
                 onTap()
@@ -473,8 +462,7 @@ private struct DetailedStepRow: View {
 
             // Right completion area
             completionArea
-        }
-        .background(
+        }    .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(ThemeManager.shared.theme.palette.surface)
                 .overlay(
@@ -506,8 +494,7 @@ private struct DetailedStepRow: View {
                         .foregroundColor(.black)
                         .scaleEffect(showCheckmarkAnimation ? 1.2 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: showCheckmarkAnimation)
-                }
-            }
+                }        }
 
             // Completion text
             Text(isCompleted ? "Done" : "Tap to complete")
@@ -516,8 +503,7 @@ private struct DetailedStepRow: View {
                 .padding(.top, 4)
 
             Spacer()
-        }
-        .frame(width: 70)
+        }    .frame(width: 70)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(ThemeManager.shared.theme.palette.surface)
@@ -538,10 +524,7 @@ private struct DetailedStepRow: View {
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     showCheckmarkAnimation = false
-                }
-            }
-        }
-    }
+                }        }    }}
 }
 
 // MARK: - Step Product Selection Sheet
@@ -552,10 +535,10 @@ private struct StepProductSelectionSheet: View {
     @ObservedObject private var productService = ProductService.shared
     let step: RoutineStepDetail
     let onDismiss: () -> Void
-    
+
     @State private var showingAddProduct = false
     @State private var selectedProductType: ProductType?
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header with close button
@@ -563,27 +546,25 @@ private struct StepProductSelectionSheet: View {
                 Text("Add Product to \(step.title)")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.primary)
-                
+
                 Spacer()
-                
+
                 Button {
                     onDismiss()
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 24))
                         .foregroundColor(.secondary)
-                }
-            }
-            .padding(.horizontal, 20)
+                }        }        .padding(.horizontal, 20)
             .padding(.top, 16)
             .padding(.bottom, 8)
-            
+
             Text("Choose from your products or add a new one")
                 .font(.system(size: 14))
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 16)
-            
+
             // Content
             if getMatchingProducts().isEmpty {
                 // Empty state - show add product options
@@ -592,8 +573,7 @@ private struct StepProductSelectionSheet: View {
                     onAddProduct: {
                         selectedProductType = step.stepType
                         showingAddProduct = true
-                    }
-                )
+                    }            )
             } else {
                 // Show existing products
                 ScrollView {
@@ -606,10 +586,8 @@ private struct StepProductSelectionSheet: View {
                                     // Here you would attach the product to the step
                                     // For now, just dismiss
                                     onDismiss()
-                                }
-                            )
+                                }                        )
                         }
-                        
                         // Add new product option
                         Button {
                             selectedProductType = step.stepType
@@ -619,14 +597,13 @@ private struct StepProductSelectionSheet: View {
                                 Image(systemName: "plus.circle.fill")
                                     .font(.system(size: 20, weight: .medium))
                                     .foregroundColor(.blue)
-                                
+
                                 Text("Add New \(step.stepType.displayName)")
                                     .font(.system(size: 16, weight: .medium))
                                     .foregroundColor(.blue)
-                                
+
                                 Spacer()
-                            }
-                            .padding(16)
+                            }                        .padding(16)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(ThemeManager.shared.theme.palette.info.opacity(0.1))
@@ -635,15 +612,10 @@ private struct StepProductSelectionSheet: View {
                                             .stroke(ThemeManager.shared.theme.palette.info.opacity(0.3), lineWidth: 1)
                                     )
                             )
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                    .padding(.horizontal, 20)
+                        }                    .buttonStyle(PlainButtonStyle())
+                    }                .padding(.horizontal, 20)
                     .padding(.bottom, 20)
-                }
-            }
-        }
-        .sheet(isPresented: $showingAddProduct) {
+                }        }    }    .sheet(isPresented: $showingAddProduct) {
             if let productType = selectedProductType {
                 AddProductView(
                     productService: productService,
@@ -652,16 +624,12 @@ private struct StepProductSelectionSheet: View {
                     // Product was added successfully
                     // The product list will be updated automatically via ProductService
                     showingAddProduct = false
-                }
-            }
-        }
-    }
-    
+                }        }    }}
+
     private func getMatchingProducts() -> [Product] {
         return productService.userProducts.filter { product in
             product.tagging.productType == step.stepType
-        }
-    }
+        }}
 }
 
 // MARK: - Step Product Row
@@ -671,7 +639,7 @@ private struct StepProductRow: View {
     let product: Product
     let step: RoutineStepDetail
     let onSelect: () -> Void
-    
+
     var body: some View {
         Button {
             onSelect()
@@ -687,27 +655,24 @@ private struct StepProductRow: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
                     )
-                
+
                 // Product info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(product.displayName)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.primary)
-                    
+
                     if let brand = product.brand {
                         Text(brand)
                             .font(.system(size: 14))
                             .foregroundColor(.secondary)
-                    }
-                }
-                
+                    }            }
                 Spacer()
-                
+
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.secondary)
-            }
-            .padding(16)
+            }        .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.systemBackground))
@@ -716,10 +681,8 @@ private struct StepProductRow: View {
                             .stroke(Color(.separator), lineWidth: 1)
                     )
             )
-        }
-        .buttonStyle(PlainButtonStyle())
+        }    .buttonStyle(PlainButtonStyle())
     }
-    
     private var productColor: Color {
         switch product.tagging.productType.color {
         case "blue": return ThemeManager.shared.theme.palette.info
@@ -734,9 +697,8 @@ private struct StepProductRow: View {
         case "brown": return ThemeManager.shared.theme.palette.textMuted
         case "gray": return ThemeManager.shared.theme.palette.textMuted
         default: return ThemeManager.shared.theme.palette.textMuted
-        }
-    }
-    
+        }}
+
     private var productIcon: String {
         product.tagging.productType.iconName
     }
@@ -748,7 +710,7 @@ private struct EmptyProductTypeView: View {
 
     let productType: ProductType
     let onAddProduct: () -> Void
-    
+
     private var productColor: Color {
         switch productType.color {
         case "blue": return ThemeManager.shared.theme.palette.info
@@ -763,9 +725,8 @@ private struct EmptyProductTypeView: View {
         case "brown": return ThemeManager.shared.theme.palette.textMuted
         case "gray": return ThemeManager.shared.theme.palette.textMuted
         default: return ThemeManager.shared.theme.palette.textMuted
-        }
-    }
-    
+        }}
+
     var body: some View {
         VStack(spacing: 20) {
             // Icon
@@ -773,26 +734,24 @@ private struct EmptyProductTypeView: View {
                 Circle()
                     .fill(productColor.opacity(0.1))
                     .frame(width: 60, height: 60)
-                
+
                 Image(productType.iconName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 24, height: 24)
             }
-            
             // Text
             VStack(spacing: 6) {
                 Text("No \(productType.displayName) Added")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.primary)
-                
+
                 Text("You don't have any \(productType.displayName.lowercased()) products yet. Add one to get started!")
                     .font(.system(size: 14))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
             }
-            
             // Add Product Options
             VStack(spacing: 12) {
                 HStack(spacing: 12) {
@@ -821,13 +780,11 @@ private struct EmptyProductTypeView: View {
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 11, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-                        }
-                        .padding(10)
+                        }                    .padding(10)
                         .frame(maxWidth: .infinity)
                         .background(productColor)
                         .cornerRadius(10)
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                    }                .buttonStyle(PlainButtonStyle())
 
                     // Or Text
                     VStack {
@@ -861,18 +818,13 @@ private struct EmptyProductTypeView: View {
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 11, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-                        }
-                        .padding(10)
+                        }                    .padding(10)
                         .frame(maxWidth: .infinity)
                         .background(productColor)
                         .cornerRadius(10)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                .padding(.horizontal, 20)
-            }
-        }
-        .padding(.vertical, 20)
+                    }                .buttonStyle(PlainButtonStyle())
+                }            .padding(.horizontal, 20)
+            }    }    .padding(.vertical, 20)
     }
 }
 

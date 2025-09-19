@@ -30,6 +30,7 @@ struct RoutineHomeView: View {
         let id = UUID()
         let routineType: TimeOfDay
         let steps: [CompanionStep]
+        let selectedDate: Date
     }
 
     // MARK: - Initialization
@@ -72,8 +73,7 @@ struct RoutineHomeView: View {
                         print("🚨 WARNING: Active routine '\(activeRoutine.title)' has duplicate step IDs!")
                         print("🚨 Total steps: \(allStepIds.count), Unique IDs: \(uniqueStepIds.count)")
                         print("🚨 Consider clearing the routine data to fix duplicates")
-                    }
-                }
+                    }    }
 
                 // Auto-save initial routine if available and no active routine exists
                 if let routine = generatedRoutine, routineViewModel.activeRoutine == nil {
@@ -81,8 +81,7 @@ struct RoutineHomeView: View {
                     routineViewModel.saveInitialRoutine(from: routine)
                 } else {
                     print("⚠️ Not saving routine - generatedRoutine: \(generatedRoutine != nil), activeRoutine: \(routineViewModel.activeRoutine != nil)")
-                }
-            }
+                }}
 
             VStack(spacing: 0) {
                 // Calendar section with its own background extending to top safe area
@@ -110,8 +109,7 @@ struct RoutineHomeView: View {
 
                 // Content
                 routineTabContent
-            }
-            .withRoutineLoading(routineViewModel.isLoading)
+            }.withRoutineLoading(routineViewModel.isLoading)
             .handleRoutineError(routineViewModel.error)}
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
@@ -159,6 +157,7 @@ struct RoutineHomeView: View {
                 routineId: "\(launch.routineType.rawValue)_routine",
                 routineName: "\(launch.routineType.displayName) Routine",
                 steps: launch.steps,
+                selectedDate: launch.selectedDate,
                 completionViewModel: routineViewModel.completionViewModel,
                 onComplete: {
                     companionLaunch = nil
@@ -178,7 +177,9 @@ struct RoutineHomeView: View {
                     .presentationDragIndicator(.visible)
             } else {
                 RoutineSwitcherView(routineViewModel: routineViewModel)
-            }                }    }
+            }
+        }
+    }
     @ViewBuilder
     private var routineTabContent: some View {
         ScrollView {
@@ -206,7 +207,8 @@ struct RoutineHomeView: View {
                                         .font(.system(size: 12, weight: .medium))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 }
-                            }                } else {
+                        }
+                } else {
                             Button {
                                 showingRoutineSwitcher = true
                             } label: {
@@ -217,7 +219,10 @@ struct RoutineHomeView: View {
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 12, weight: .medium))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                }                    }                }            }
+                                }
+                            }
+                        }
+                    }
 
                     Text("Tap on a routine to complete")
                         .font(.system(size: 14))
@@ -232,8 +237,8 @@ struct RoutineHomeView: View {
                     title: "Morning routine",
                     iconName: "sun.max.fill",
                     iconColor: ThemeManager.shared.theme.palette.info,
-                    productCount: generateMorningRoutine().count,
-                    steps: generateMorningRoutine(),
+                    timeOfDay: .morning,
+                    routineViewModel: routineViewModel,
                     completionViewModel: routineViewModel.completionViewModel,
                     selectedDate: selectedDate,
                     onRoutineTap: {
@@ -245,20 +250,21 @@ struct RoutineHomeView: View {
                         companionSteps = getCompanionSteps(for: .morning)
                         print("🕐 companionRoutineType set to: \(companionRoutineType?.rawValue ?? "nil")")
                         print("📝 companionSteps count: \(companionSteps.count)")
-                        companionLaunch = CompanionLaunch(routineType: .morning, steps: companionSteps)
+                        companionLaunch = CompanionLaunch(routineType: .morning, steps: companionSteps, selectedDate: selectedDate)
                         print("🚀 Set companionLaunch with \(companionSteps.count) steps")
                     },
                     onStepTap: { step in
                         showingStepDetail = step
-                    }        )
+                    }
+                )
 
                 // Evening Routine Card
                 RoutineCard(
                     title: "Evening routine",
                     iconName: "moon.fill",
                     iconColor: ThemeManager.shared.theme.palette.primary,
-                    productCount: generateEveningRoutine().count,
-                    steps: generateEveningRoutine(),
+                    timeOfDay: .evening,
+                    routineViewModel: routineViewModel,
                     completionViewModel: routineViewModel.completionViewModel,
                     selectedDate: selectedDate,
                     onRoutineTap: {
@@ -270,12 +276,13 @@ struct RoutineHomeView: View {
                         companionSteps = getCompanionSteps(for: .evening)
                         print("🕐 companionRoutineType set to: \(companionRoutineType?.rawValue ?? "nil")")
                         print("📝 companionSteps count: \(companionSteps.count)")
-                        companionLaunch = CompanionLaunch(routineType: .evening, steps: companionSteps)
+                        companionLaunch = CompanionLaunch(routineType: .evening, steps: companionSteps, selectedDate: selectedDate)
                         print("🚀 Set companionLaunch with \(companionSteps.count) steps")
                     },
                     onStepTap: { step in
                         showingStepDetail = step
-                    }        )
+                    }
+                )
 
                 // Explore Routine Library Card
                 ExploreRoutineLibraryCard(selectedTab: $selectedTab)
@@ -289,8 +296,8 @@ struct RoutineHomeView: View {
                         title: "Weekly routine",
                         iconName: "calendar",
                         iconColor: ThemeManager.shared.theme.palette.secondary,
-                        productCount: weeklySteps.count,
-                        steps: weeklySteps,
+                        timeOfDay: .weekly,
+                        routineViewModel: routineViewModel,
                         completionViewModel: routineViewModel.completionViewModel,
                         selectedDate: selectedDate,
                         onRoutineTap: {
@@ -307,12 +314,13 @@ struct RoutineHomeView: View {
                             companionSteps = getCompanionSteps(for: .weekly)
                             print("🕐 companionRoutineType set to: \(companionRoutineType?.rawValue ?? "nil")")
                             print("📝 companionSteps count: \(companionSteps.count)")
-                            companionLaunch = CompanionLaunch(routineType: .weekly, steps: companionSteps)
+                            companionLaunch = CompanionLaunch(routineType: .weekly, steps: companionSteps, selectedDate: selectedDate)
                             print("🚀 Set companionLaunch with \(companionSteps.count) steps")
                         },
                         onStepTap: { step in
                             showingStepDetail = step
-                        }            )
+                        }
+                    )
                 }    }        .padding(.bottom, 100) // Space for bottom navigation
         }}
 
@@ -327,9 +335,9 @@ struct RoutineHomeView: View {
             for step in morningSteps {
                 print("🐛 DEBUG: Morning step - ID: \(step.id), Title: '\(step.title)'")
             }
-            return morningSteps.map { stepDetail in
+            return morningSteps.enumerated().map { (index, stepDetail) in
                 RoutineStepDetail(
-                    id: stepDetail.id.uuidString,
+                    id: "morning_\(stepDetail.stepType)_\(index)", // Use consistent deterministic ID
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -345,7 +353,7 @@ struct RoutineHomeView: View {
             print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.morning.count) morning steps")
             return routine.routine.morning.enumerated().map { (index, apiStep) in
                 RoutineStepDetail(
-                    id: "generated_morning_\(apiStep.step.rawValue)_\(index)",
+                    id: "morning_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
                     stepType: apiStep.step,
@@ -359,7 +367,7 @@ struct RoutineHomeView: View {
         print("🐛 DEBUG: Using hardcoded fallback morning routine")
         return [
             RoutineStepDetail(
-                id: "fallback_morning_cleanser_0",
+                id: "morning_cleanser_0",
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – reduces shine, clears pores",
                 stepType: .cleanser,
@@ -368,7 +376,7 @@ struct RoutineHomeView: View {
                 how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
             ),
             RoutineStepDetail(
-                id: "fallback_morning_toner_1",
+                id: "morning_faceSerum_1",
                 title: "Toner",
                 description: "Balances pH and prepares skin for next steps",
                 stepType: .faceSerum,
@@ -377,7 +385,7 @@ struct RoutineHomeView: View {
                 how: "Apply with cotton pad or hands, pat gently until absorbed"
             ),
             RoutineStepDetail(
-                id: "fallback_morning_moisturizer_2",
+                id: "morning_moisturizer_2",
                 title: "Moisturizer",
                 description: "Lightweight gel moisturizer – hydrates without greasiness",
                 stepType: .moisturizer,
@@ -386,7 +394,7 @@ struct RoutineHomeView: View {
                 how: "Apply a pea-sized amount, massage in upward circular motions"
             ),
             RoutineStepDetail(
-                id: "fallback_morning_sunscreen_3",
+                id: "morning_sunscreen_3",
                 title: "Sunscreen",
                 description: "SPF 30+ broad spectrum – protects against sun damage",
                 stepType: .sunscreen,
@@ -405,9 +413,9 @@ struct RoutineHomeView: View {
             for step in eveningSteps {
                 print("🐛 DEBUG: Evening step - ID: \(step.id), Title: '\(step.title)'")
             }
-            return eveningSteps.map { stepDetail in
+            return eveningSteps.enumerated().map { (index, stepDetail) in
                 RoutineStepDetail(
-                    id: stepDetail.id.uuidString,
+                    id: "evening_\(stepDetail.stepType)_\(index)", // Use consistent deterministic ID
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -423,7 +431,7 @@ struct RoutineHomeView: View {
             print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.evening.count) evening steps")
             return routine.routine.evening.enumerated().map { (index, apiStep) in
                 RoutineStepDetail(
-                    id: "generated_evening_\(apiStep.step.rawValue)_\(index)",
+                    id: "evening_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
                     title: apiStep.name,
                     description: "\(apiStep.why) - \(apiStep.how)",
                     stepType: apiStep.step,
@@ -437,7 +445,7 @@ struct RoutineHomeView: View {
         print("🐛 DEBUG: Using hardcoded fallback evening routine")
         return [
             RoutineStepDetail(
-                id: "fallback_evening_cleanser_0",
+                id: "evening_cleanser_0",
                 title: "Gentle Cleanser",
                 description: "Oil-free gel cleanser – removes daily buildup",
                 stepType: .cleanser,
@@ -446,7 +454,7 @@ struct RoutineHomeView: View {
                 how: "Apply to dry skin first, then add water and massage, rinse thoroughly"
             ),
             RoutineStepDetail(
-                id: "fallback_evening_serum_1",
+                id: "evening_faceSerum_1",
                 title: "Face Serum",
                 description: "Targeted serum for your skin concerns",
                 stepType: .faceSerum,
@@ -455,7 +463,7 @@ struct RoutineHomeView: View {
                 how: "Apply 2-3 drops, pat gently until absorbed, avoid eye area"
             ),
             RoutineStepDetail(
-                id: "fallback_evening_moisturizer_2",
+                id: "evening_moisturizer_2",
                 title: "Night Moisturizer",
                 description: "Rich cream moisturizer – repairs while you sleep",
                 stepType: .moisturizer,
@@ -474,7 +482,7 @@ struct RoutineHomeView: View {
 
         return weeklySteps.enumerated().map { (index, apiStep) in
             RoutineStepDetail(
-                id: "generated_weekly_\(apiStep.step.rawValue)_\(index)",
+                id: "weekly_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
                 title: apiStep.name,
                 description: "\(apiStep.why) - \(apiStep.how)",
                 stepType: apiStep.step,
@@ -674,10 +682,8 @@ private struct CalendarStripView: View {
                         completionViewModel: completionViewModel,
                         onTap: {
                             selectedDate = date
-                        }
-                    )
-                }
-            }
+                        })
+                }}
             .padding(.horizontal, 20)
         }.padding(.vertical, 12)
     }
@@ -710,12 +716,20 @@ private struct CalendarDayView: View {
         return formatter
     }()
 
-    private var hasCompletions: Bool {
-        !completionViewModel.completedSteps.isEmpty
-    }
+    @State private var hasCompletions: Bool = false
+    @State private var completionRate: Double = 0.0
     
-    private var completionRate: Double {
-        completionViewModel.completedSteps.isEmpty ? 0.0 : 1.0
+    private var indicatorColor: Color {
+        if completionRate >= 1.0 {
+            // Fully completed
+            return ThemeManager.shared.theme.palette.success
+        } else if completionRate >= 0.5 {
+            // Partially completed (50% or more)
+            return ThemeManager.shared.theme.palette.warning
+        } else {
+            // Started but low completion
+            return ThemeManager.shared.theme.palette.info
+        }
     }
 
     var body: some View {
@@ -729,21 +743,67 @@ private struct CalendarDayView: View {
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                // Completion indicator
+                // Completion indicator with different states
                 if hasCompletions {
                     Circle()
-                        .fill(isSelected ? ThemeManager.shared.theme.palette.success : ThemeManager.shared.theme.palette.success.opacity(0.8))
+                        .fill(isSelected ? indicatorColor : indicatorColor.opacity(0.8))
                         .frame(width: 6, height: 6)
+                        .scaleEffect(completionRate >= 1.0 ? 1.2 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: completionRate)
                 } else {
                     Circle()
                         .fill(Color.clear)
                         .frame(width: 6, height: 6)
-                }    }        .frame(width: 40, height: 50)
-            .background(
+                }
+            }
+        }
+        .frame(width: 40, height: 50)
+        .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(isSelected ? ThemeManager.shared.theme.palette.background : Color.clear)
             )
-        }.buttonStyle(PlainButtonStyle())
+        .buttonStyle(PlainButtonStyle())
+        .onAppear {
+            loadCompletionsForDate()
+        }
+        .task(id: date) {
+            loadCompletionsForDate()
+        }
+        .onReceive(RoutineService.shared.completionChangesStream) { changedDate in
+            let calendar = Calendar.current
+            if calendar.isDate(changedDate, inSameDayAs: date) {
+                print("📅 Calendar day received completion change for \(changedDate)")
+                loadCompletionsForDate()
+            }
+        }
+    }
+
+    private func loadCompletionsForDate() {
+        Task {
+            // Normalize date to start of day for consistency
+            let calendar = Calendar.current
+            let normalizedDate = calendar.startOfDay(for: date)
+
+            let completedSteps = await completionViewModel.getCompletedSteps(for: normalizedDate)
+
+            // Calculate completion rate based on active routine
+            var calculatedCompletionRate: Double = 0.0
+            var hasAnyCompletions = false
+            if let activeRoutine = completionViewModel.activeRoutine {
+                let totalSteps = activeRoutine.stepDetails.count
+                if totalSteps > 0 {
+                    calculatedCompletionRate = Double(completedSteps.count) / Double(totalSteps)
+                }
+                hasAnyCompletions = !completedSteps.isEmpty
+            } else {
+                hasAnyCompletions = !completedSteps.isEmpty
+                calculatedCompletionRate = hasAnyCompletions ? 1.0 : 0.0
+            }
+            await MainActor.run {
+                self.hasCompletions = hasAnyCompletions
+                self.completionRate = calculatedCompletionRate
+            }
+        }
     }
 }
 
@@ -754,8 +814,8 @@ private struct RoutineCard: View {
     let title: String
     let iconName: String
     let iconColor: Color
-    let productCount: Int
-    let steps: [RoutineStepDetail]
+    let timeOfDay: TimeOfDay
+    @ObservedObject var routineViewModel: RoutineHomeViewModel
     @ObservedObject var completionViewModel: RoutineCompletionViewModel
     let selectedDate: Date
     let onRoutineTap: () -> Void
@@ -763,6 +823,38 @@ private struct RoutineCard: View {
     let onStepTap: (RoutineStepDetail) -> Void
 
     @State private var completedStepsForDate: Set<String> = []
+    
+    private var steps: [RoutineStepDetail] {
+        // Compute steps based on current routine and time of day
+        guard let activeRoutine = routineViewModel.activeRoutine else { 
+            print("🏠 RoutineCard (\(title)): No active routine, returning empty steps")
+            return [] 
+        }
+        
+        let routineSteps = activeRoutine.stepDetails.filter { step in
+            step.timeOfDay == timeOfDay.rawValue
+        }
+        
+        print("🏠 RoutineCard (\(title)): Computing \(routineSteps.count) steps for \(timeOfDay.rawValue) from routine '\(activeRoutine.title)'")
+        
+        return routineSteps.enumerated().map { (index, stepDetail) in
+            RoutineStepDetail(
+                id: "\(timeOfDay.rawValue)_\(stepDetail.stepType)_\(index)",
+                title: stepDetail.title,
+                description: stepDetail.stepDescription,
+                stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
+                timeOfDay: timeOfDay,
+                why: stepDetail.why,
+                how: stepDetail.how
+            )
+        }
+    }
+    
+    private var productCount: Int {
+        let count = steps.count
+        print("🏠 RoutineCard (\(title)): Product count = \(count)")
+        return count
+    }
     
     private var completedCount: Int {
         steps.filter { step in
@@ -882,25 +974,33 @@ private struct RoutineCard: View {
                 )
             }    .buttonStyle(PlainButtonStyle())
         }.padding(.horizontal, 20)
-        .onAppear {
-            loadCompletionsForSelectedDate()
+        .task(id: selectedDate) {
+            // Load completions when date changes
+            await loadCompletionsForDate()
         }
-        .onChange(of: selectedDate) { _ in
-            loadCompletionsForSelectedDate()
-        }
-        .onChange(of: completionViewModel.completedSteps) { _ in
-            // Also update when global completions change (for real-time updates)
-            loadCompletionsForSelectedDate()
+        .onReceive(RoutineService.shared.completionChangesStream) { changedDate in
+            let calendar = Calendar.current
+            let normalizedSelectedDate = calendar.startOfDay(for: selectedDate)
+            let normalizedChangedDate = calendar.startOfDay(for: changedDate)
+            
+            if calendar.isDate(normalizedChangedDate, inSameDayAs: normalizedSelectedDate) {
+                print("🏠 RoutineCard: Received completion change notification for \(normalizedChangedDate)")
+                Task {
+                    await loadCompletionsForDate()
+                }
+            }
         }
     }
-    
-    private func loadCompletionsForSelectedDate() {
-        Task {
-            let completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
-            await MainActor.run {
-                self.completedStepsForDate = completedSteps
-                print("📊 Loaded \(completedSteps.count) completions for \(selectedDate): \(completedSteps)")
-            }
+
+    private func loadCompletionsForDate() async {
+        // Normalize date to start of day for consistency
+        let calendar = Calendar.current
+        let normalizedDate = calendar.startOfDay(for: selectedDate)
+        
+        let completedSteps = await completionViewModel.getCompletedSteps(for: normalizedDate)
+        await MainActor.run {
+            self.completedStepsForDate = completedSteps
+            print("🏠 RoutineCard: Loaded \(completedSteps.count) completions for \(normalizedDate): \(completedSteps)")
         }
     }
 }
@@ -940,7 +1040,9 @@ private struct RoutineStepRow: View {
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         showCheckmarkAnimation = false
-                    }        }    } label: {
+                    }
+                }
+            } label: {
                 ZStack {
                     Circle()
                         .stroke(stepColor.opacity(0.3), lineWidth: 2)

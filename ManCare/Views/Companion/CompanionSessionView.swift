@@ -15,13 +15,15 @@ struct CompanionSessionView: View {
     let routineId: String
     let routineName: String
     let steps: [CompanionStep]
+    let selectedDate: Date
     let completionViewModel: RoutineCompletionViewModel
     let onComplete: (() -> Void)?
     
-    init(routineId: String, routineName: String, steps: [CompanionStep], completionViewModel: RoutineCompletionViewModel, onComplete: (() -> Void)? = nil) {
+    init(routineId: String, routineName: String, steps: [CompanionStep], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, onComplete: (() -> Void)? = nil) {
         self.routineId = routineId
         self.routineName = routineName
         self.steps = steps
+        self.selectedDate = selectedDate
         self.completionViewModel = completionViewModel
         self.onComplete = onComplete
     }
@@ -46,7 +48,8 @@ struct CompanionSessionView: View {
             print("🆔 Routine ID: \(routineId)")
             print("📝 Routine Name: \(routineName)")
 
-            // The sessionViewModel now uses RoutineService directly
+            // Configure the session view model with the selected date
+            sessionViewModel.setSelectedDate(selectedDate)
             // Force resume any existing session first
             sessionViewModel.resumeSession()
             // Check if there's already an active session for this routine
@@ -765,6 +768,7 @@ struct RoutineAlreadyCompletedView: View {
                 timeOfDay: .morning
             )
         ],
+        selectedDate: Date(),
         completionViewModel: RoutineCompletionViewModel.preview
     )
 }

@@ -56,7 +56,9 @@ final class RoutineListViewModel: ObservableObject {
     private func updateFromState(_ state: RoutineServiceState) {
         savedRoutines = state.savedRoutines
         activeRoutine = state.activeRoutine
-        print("📋 Updated with \(savedRoutines.count) routines")
+        isLoading = false // Clear loading state when data is received
+        error = nil // Clear any previous errors
+        print("📋 Updated with \(savedRoutines.count) routines, loading cleared")
     }
     
     // MARK: - Public Methods
