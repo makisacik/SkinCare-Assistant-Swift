@@ -12,7 +12,6 @@ struct DiscoverView: View {
     @State private var searchText = ""
     @State private var selectedCategory: RoutineCategory = .all
     @State private var showingRoutineDetail: RoutineTemplate?
-    @State private var discoverViewModel: DiscoverViewModel?
 
     var body: some View {
         ZStack {
@@ -49,18 +48,13 @@ struct DiscoverView: View {
             }
         }
         .sheet(item: $showingRoutineDetail) { routine in
-            if let discoverViewModel = discoverViewModel {
-                RoutineDetailSheet(routine: routine, discoverViewModel: discoverViewModel)
-            }
+            RoutineDetailSheet(routine: routine, routineManager: routineManager)
         }
         .onAppear {
-            if discoverViewModel == nil {
-                discoverViewModel = DiscoverViewModel(routineManager: routineManager)
-            }
-            discoverViewModel?.onAppear()
+            routineManager.loadRoutines()
         }
-        .withModernRoutineLoading(discoverViewModel?.isLoading ?? false)
-        .handleModernRoutineError(discoverViewModel?.error)
+        .withModernRoutineLoading(routineManager.isLoading)
+        .handleModernRoutineError(routineManager.error)
     }
 
     // MARK: - Header Section
@@ -452,7 +446,7 @@ private struct RoutineDetailSheet: View {
     @State private var isStepsExpanded = false
 
     let routine: RoutineTemplate
-    let discoverViewModel: DiscoverViewModel
+    let routineManager: RoutineManager
 
     var body: some View {
         let palette = ThemeManager.shared.theme.palette
@@ -508,8 +502,16 @@ private struct RoutineDetailSheet: View {
                             title: "Add to My Routines",
                             palette: palette,
                             action: {
-                                discoverViewModel.saveRoutine(routine)
-                                dismiss()
+                                Task {
+                                    do {
+                                        let _ = try await routineManager.saveRoutine(routine)
+                                        await MainActor.run {
+                                            dismiss()
+                                        }
+                                    } catch {
+                                        print("❌ Failed to save routine: \(error)")
+                                    }
+                                }
                             }
                         )
                         .padding(.top, 8)

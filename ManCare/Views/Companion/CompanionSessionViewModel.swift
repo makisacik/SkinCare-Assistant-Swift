@@ -1,8 +1,8 @@
 //
-//  CompanionViewModels.swift
+//  CompanionSessionViewModel.swift
 //  ManCare
 //
-//  Created by Mehmet Ali Kısacık on 2.09.2025.
+//  Created by Mehmet Ali Kısacık on 19.09.2025.
 //
 
 import Foundation

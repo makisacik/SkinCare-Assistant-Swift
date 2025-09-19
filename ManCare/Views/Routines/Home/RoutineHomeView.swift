@@ -13,7 +13,7 @@ struct RoutineHomeView: View {
     @Binding var selectedTab: MainTabView.Tab
 
     @EnvironmentObject var routineManager: RoutineManager
-    @State private var routineViewModel: RoutineHomeViewModel?
+    @StateObject private var routineViewModel: RoutineHomeViewModel
     @State private var selectedDate = Date()
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingEditRoutine = false
@@ -33,6 +33,17 @@ struct RoutineHomeView: View {
         let steps: [CompanionStep]
     }
 
+    // MARK: - Initialization
+
+    init(generatedRoutine: RoutineResponse?, selectedTab: Binding<MainTabView.Tab>) {
+        self.generatedRoutine = generatedRoutine
+        self._selectedTab = selectedTab
+
+        // Initialize StateObject with empty RoutineManager
+        // It will be configured with the real one in onAppear
+        self._routineViewModel = StateObject(wrappedValue: RoutineHomeViewModel())
+    }
+
     var body: some View {
         ZStack {
             // Main background for content area
@@ -47,19 +58,19 @@ struct RoutineHomeView: View {
             )
             .ignoresSafeArea()
             .onAppear {
-                // Initialize view model if needed
-                if routineViewModel == nil {
-                    routineViewModel = RoutineHomeViewModel(routineManager: routineManager)
-                }
+                // Configure the ViewModel with the RoutineManager from environment
+                routineViewModel.configure(with: routineManager)
+
                 print("🏠 RoutineHomeView onAppear")
                 print("📊 generatedRoutine: \(generatedRoutine != nil ? "exists" : "nil")")
-                print("📊 activeRoutine: \(routineViewModel?.activeRoutine?.title ?? "nil")")
-                print("📊 savedRoutines count: \(routineViewModel?.savedRoutines.count ?? 0)")
+                print("📊 activeRoutine: \(routineViewModel.activeRoutine?.title ?? "nil")")
+                print("📊 savedRoutines count: \(routineViewModel.savedRoutines.count)")
 
                 // Load routines first
-                routineViewModel?.onAppear()
+                routineViewModel.onAppear()
+
                 // TEMPORARY DEBUG: Check for problematic active routine
-                if let activeRoutine = routineViewModel?.activeRoutine {
+                if let activeRoutine = routineViewModel.activeRoutine {
                     let allStepIds = activeRoutine.stepDetails.map { $0.id.uuidString }
                     let uniqueStepIds = Set(allStepIds)
                     if allStepIds.count != uniqueStepIds.count {
@@ -68,12 +79,13 @@ struct RoutineHomeView: View {
                         print("🚨 Consider clearing the routine data to fix duplicates")
                     }
                 }
+
                 // Auto-save initial routine if available and no active routine exists
-                if let routine = generatedRoutine, routineViewModel?.activeRoutine == nil {
+                if let routine = generatedRoutine, routineViewModel.activeRoutine == nil {
                     print("💾 Saving initial routine from generatedRoutine")
-                    routineViewModel?.saveInitialRoutine(from: routine)
+                    routineViewModel.saveInitialRoutine(from: routine)
                 } else {
-                    print("⚠️ Not saving routine - generatedRoutine: \(generatedRoutine != nil), activeRoutine: \(routineViewModel?.activeRoutine != nil)")
+                    print("⚠️ Not saving routine - generatedRoutine: \(generatedRoutine != nil), activeRoutine: \(routineViewModel.activeRoutine != nil)")
                 }
             }
 
@@ -104,8 +116,8 @@ struct RoutineHomeView: View {
                 // Content
                 routineTabContent
             }
-            .withModernRoutineLoading(routineViewModel?.isLoading ?? false)
-            .handleModernRoutineError(routineViewModel?.error)}
+            .withModernRoutineLoading(routineViewModel.isLoading)
+            .handleModernRoutineError(routineViewModel.error)}
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
         }.sheet(isPresented: $showingEditRoutine) {
@@ -162,15 +174,11 @@ struct RoutineHomeView: View {
             }}
         .sheet(isPresented: $showingRoutineSwitcher) {
             if #available(iOS 16.0, *) {
-                if let routineViewModel = routineViewModel {
-                    RoutineSwitcherView(routineViewModel: routineViewModel)
-                        .presentationDetents([.medium])
-                        .presentationDragIndicator(.visible)
-                }
+                RoutineSwitcherView(routineViewModel: routineViewModel)
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
             } else {
-                if let routineViewModel = routineViewModel {
-                    RoutineSwitcherView(routineViewModel: routineViewModel)
-                }
+                RoutineSwitcherView(routineViewModel: routineViewModel)
             }                }    }
     @ViewBuilder
     private var routineTabContent: some View {
@@ -186,7 +194,7 @@ struct RoutineHomeView: View {
                         Spacer()
 
                         // Current Routine Display
-                        if let activeRoutine = routineViewModel?.activeRoutine {
+                        if let activeRoutine = routineViewModel.activeRoutine {
                             let _ = print("🎯 Displaying active routine: \(activeRoutine.title)")
                             Button {
                                 showingRoutineSwitcher = true
@@ -314,7 +322,7 @@ struct RoutineHomeView: View {
 
     private func generateMorningRoutine() -> [RoutineStepDetail] {
         // Use active routine from RoutineViewModel if available
-        if let activeRoutine = routineViewModel?.activeRoutine {
+        if let activeRoutine = routineViewModel.activeRoutine {
             let morningSteps = activeRoutine.stepDetails.filter { $0.timeOfDay == "morning" }
             print("🐛 DEBUG: Using active routine '\(activeRoutine.title)' with \(morningSteps.count) morning steps")
             for step in morningSteps {
@@ -392,7 +400,7 @@ struct RoutineHomeView: View {
 
     private func generateEveningRoutine() -> [RoutineStepDetail] {
         // Use active routine from RoutineViewModel if available
-        if let activeRoutine = routineViewModel?.activeRoutine {
+        if let activeRoutine = routineViewModel.activeRoutine {
             let eveningSteps = activeRoutine.stepDetails.filter { $0.timeOfDay == "evening" }
             print("🐛 DEBUG: Using active routine '\(activeRoutine.title)' with \(eveningSteps.count) evening steps")
             for step in eveningSteps {

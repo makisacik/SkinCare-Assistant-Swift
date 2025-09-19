@@ -120,7 +120,11 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
     ) async throws -> RoutineResponse {
         // This runs on background thread - good for API calls
         isLoading = true
-        defer { isLoading = false }
+        error = nil // Clear previous errors
+
+        defer {
+            isLoading = false
+        }
 
         do {
             let routine = try await routineService.generateRoutine(
@@ -133,7 +137,6 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
             )
 
             print("✅ Routine generated successfully")
-            error = nil
             return routine
         } catch {
             print("❌ Failed to generate routine: \(error)")
@@ -146,6 +149,8 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
     func saveRoutine(_ template: RoutineTemplate) async throws -> SavedRoutineModel {
         isLoading = true
+        error = nil // Clear previous errors
+
         defer { isLoading = false }
 
         do {
@@ -153,8 +158,6 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
             // Update UI state on main thread
             try? await refreshRoutines()
-            error = nil
-
             return savedRoutine
         } catch {
             self.error = error
@@ -164,6 +167,8 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel {
         isLoading = true
+        error = nil // Clear previous errors
+
         defer { isLoading = false }
 
         do {
@@ -171,8 +176,6 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
             // Update UI state on main thread
             try? await refreshRoutines()
-            error = nil
-
             return savedRoutine
         } catch {
             self.error = error
@@ -182,6 +185,8 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
     func removeRoutine(_ routine: SavedRoutineModel) async throws {
         isLoading = true
+        error = nil // Clear previous errors
+
         defer { isLoading = false }
 
         do {
@@ -189,7 +194,6 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
             // Update UI state on main thread
             try? await refreshRoutines()
-            error = nil
         } catch {
             self.error = error
             throw error
@@ -198,6 +202,8 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
     func setActiveRoutine(_ routine: SavedRoutineModel) async throws {
         isLoading = true
+        error = nil // Clear previous errors
+
         defer { isLoading = false }
 
         do {
@@ -205,7 +211,6 @@ final class RoutineManager: ObservableObject, RoutineManagerProtocol {
 
             // Update UI state on main thread
             try? await refreshRoutines()
-            error = nil
         } catch {
             self.error = error
             throw error
@@ -287,6 +292,8 @@ extension RoutineManager {
         lifestyle: LifestyleInfo? = nil
     ) async throws -> SavedRoutineModel {
         isLoading = true
+        error = nil // Clear previous errors
+
         defer { isLoading = false }
 
         do {
@@ -302,7 +309,6 @@ extension RoutineManager {
             // Save routine (background)
             let savedRoutine = try await saveInitialRoutine(from: routineResponse)
 
-            error = nil
             return savedRoutine
         } catch {
             self.error = error
