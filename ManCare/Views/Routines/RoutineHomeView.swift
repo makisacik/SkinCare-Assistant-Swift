@@ -11,9 +11,17 @@ struct RoutineHomeView: View {
 
     let generatedRoutine: RoutineResponse?
     @Binding var selectedTab: MainTabView.Tab
+    let routineService: RoutineServiceProtocol
 
     @StateObject private var routineViewModel: RoutineHomeViewModel
     @State private var selectedDate = Date()
+    
+    init(generatedRoutine: RoutineResponse?, selectedTab: Binding<MainTabView.Tab>, routineService: RoutineServiceProtocol) {
+        self.generatedRoutine = generatedRoutine
+        self._selectedTab = selectedTab
+        self.routineService = routineService
+        self._routineViewModel = StateObject(wrappedValue: RoutineHomeViewModel(routineService: routineService))
+    }
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingEditRoutine = false
     @State private var showingRoutineDetail: RoutineDetailData?
@@ -35,13 +43,6 @@ struct RoutineHomeView: View {
 
     // MARK: - Initialization
 
-    init(generatedRoutine: RoutineResponse?, selectedTab: Binding<MainTabView.Tab>) {
-        self.generatedRoutine = generatedRoutine
-        self._selectedTab = selectedTab
-
-        // Initialize StateObject with new architecture
-        self._routineViewModel = StateObject(wrappedValue: RoutineHomeViewModel())
-    }
 
     var body: some View {
         ZStack {
@@ -769,7 +770,7 @@ private struct CalendarDayView: View {
         .task(id: date) {
             loadCompletionsForDate()
         }
-        .onReceive(RoutineService.shared.completionChangesStream) { changedDate in
+        .onReceive(completionViewModel.completionChangesStream) { changedDate in
             let calendar = Calendar.current
             if calendar.isDate(changedDate, inSameDayAs: date) {
                 print("📅 Calendar day received completion change for \(changedDate)")
@@ -978,7 +979,7 @@ private struct RoutineCard: View {
             // Load completions when date changes
             await loadCompletionsForDate()
         }
-        .onReceive(RoutineService.shared.completionChangesStream) { changedDate in
+        .onReceive(completionViewModel.completionChangesStream) { changedDate in
             let calendar = Calendar.current
             let normalizedSelectedDate = calendar.startOfDay(for: selectedDate)
             let normalizedChangedDate = calendar.startOfDay(for: changedDate)
@@ -1455,7 +1456,8 @@ private struct RoutineSwitcherCard: View {
 #Preview("RoutineHomeView") {
     RoutineHomeView(
         generatedRoutine: nil,
-        selectedTab: .constant(.routines)
+        selectedTab: .constant(.routines),
+        routineService: ServiceFactory.shared.createMockRoutineService()
     )
 }
 

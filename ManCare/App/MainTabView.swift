@@ -37,7 +37,11 @@ struct MainTabView: View {
         ZStack {
             TabView(selection: $selectedTab) {
                 // Routines Tab
-                RoutineHomeView(generatedRoutine: generatedRoutine, selectedTab: $selectedTab)
+                RoutineHomeView(
+                    generatedRoutine: generatedRoutine, 
+                    selectedTab: $selectedTab,
+                    routineService: ServiceFactory.shared.createRoutineService()
+                )
                     .tabItem {
                         Image(systemName: Tab.routines.iconName)
                         Text(Tab.routines.rawValue)

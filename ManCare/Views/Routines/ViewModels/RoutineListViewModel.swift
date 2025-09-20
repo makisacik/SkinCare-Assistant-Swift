@@ -34,7 +34,7 @@ final class RoutineListViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    init(routineService: RoutineServiceProtocol = RoutineService.shared) {
+    init(routineService: RoutineServiceProtocol) {
         self.routineService = routineService
         print("📋 RoutineListViewModel initialized")
         subscribeToRoutineStream()
@@ -197,7 +197,8 @@ final class RoutineListViewModel: ObservableObject {
 #if DEBUG
 extension RoutineListViewModel {
     static let preview: RoutineListViewModel = {
-        let vm = RoutineListViewModel()
+        let mockService = ServiceFactory.shared.createMockRoutineService()
+        let vm = RoutineListViewModel(routineService: mockService)
         // Add mock data for previews
         return vm
     }()

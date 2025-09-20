@@ -14,6 +14,7 @@ import SwiftUI
 protocol RoutineServiceProtocol {
     // Read Stream - Central Source of Truth
     var routinesStream: AnyPublisher<RoutineServiceState, Never> { get }
+    var completionChangesStream: AnyPublisher<Date, Never> { get }
 
     // Write Operations (Stateless)
     func generateRoutine(
@@ -80,8 +81,6 @@ struct RoutineServiceState: Equatable {
 // MARK: - Routine Service Implementation
 
 final class RoutineService: RoutineServiceProtocol {
-    static let shared = RoutineService()
-
     // MARK: - Central Read Stream
     private let stateSubject = CurrentValueSubject<RoutineServiceState, Never>(.initial)
     private let completionChangeSubject = PassthroughSubject<Date, Never>()
@@ -106,8 +105,8 @@ final class RoutineService: RoutineServiceProtocol {
     // MARK: - Initialization
 
     init(
-        gptService: GPTService = GPTService.shared,
-        store: RoutineStoreProtocol = RoutineStore()
+        gptService: GPTService,
+        store: RoutineStoreProtocol
     ) {
         self.gptService = gptService
         self.store = store
@@ -212,7 +211,9 @@ final class RoutineService: RoutineServiceProtocol {
 
         print("📡 RoutineService: Emitting completion change notification for date: \(startOfDay)")
         // Emit completion change notification for this date
-        completionChangeSubject.send(startOfDay)
+        DispatchQueue.main.async {
+            self.completionChangeSubject.send(startOfDay)
+        }
         
         // Emit updated state (for routines and active routine)
         try await emitUpdatedState()
@@ -240,7 +241,9 @@ final class RoutineService: RoutineServiceProtocol {
         try await store.clearAllCompletions()
 
         // Emit completion change notification for today (affects all dates)
-        completionChangeSubject.send(Date())
+        DispatchQueue.main.async {
+            self.completionChangeSubject.send(Date())
+        }
         
         // Emit updated state
         try await emitUpdatedState()
@@ -300,7 +303,9 @@ final class RoutineService: RoutineServiceProtocol {
             lastUpdated: Date()
         )
 
-        stateSubject.send(newState)
+        DispatchQueue.main.async {
+            self.stateSubject.send(newState)
+        }
 
         print("✅ Refreshed: \(routines.count) routines")
     }

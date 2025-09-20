@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DiscoverView: View {
-    @StateObject private var listViewModel = RoutineListViewModel()
+    @StateObject private var listViewModel = RoutineListViewModel(routineService: ServiceFactory.shared.createRoutineService())
     @State private var searchText = ""
     @State private var selectedCategory: RoutineCategory = .all
     @State private var showingRoutineDetail: RoutineTemplate?

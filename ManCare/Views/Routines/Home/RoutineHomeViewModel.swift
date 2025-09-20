@@ -58,7 +58,7 @@ class RoutineHomeViewModel: ObservableObject {
 
     // MARK: - Initialization
 
-    init(routineService: RoutineServiceProtocol = RoutineService.shared) {
+    init(routineService: RoutineServiceProtocol) {
         self.routineService = routineService
         self.listViewModel = RoutineListViewModel(routineService: routineService)
         self.completionViewModel = RoutineCompletionViewModel(routineService: routineService)

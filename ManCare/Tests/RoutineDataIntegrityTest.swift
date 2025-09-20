@@ -10,7 +10,7 @@ import SwiftUI
 struct RoutineDataIntegrityTest: View {
     
     @StateObject private var productService = ProductService.shared
-    @StateObject private var listViewModel = RoutineListViewModel()
+    @StateObject private var listViewModel = RoutineListViewModel(routineService: ServiceFactory.shared.createMockRoutineService())
     
     @State private var testResults: [String] = []
     @State private var isRunningTest = false
@@ -119,7 +119,9 @@ struct RoutineDataIntegrityTest: View {
             
             // Test 3: Attach products to steps
             results.append("🧪 Attaching products to steps...")
-            let editingService = RoutineEditingService(originalRoutine: nil, completionViewModel: RoutineCompletionViewModel())
+            let mockService = ServiceFactory.shared.createMockRoutineService()
+            let completionViewModel = RoutineCompletionViewModel(routineService: mockService)
+            let editingService = RoutineEditingService(originalRoutine: nil, completionViewModel: completionViewModel)
             editingService.editableRoutine = routine
             
             var attachedCount = 0

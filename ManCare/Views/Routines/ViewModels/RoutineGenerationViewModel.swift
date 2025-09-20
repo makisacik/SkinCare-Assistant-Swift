@@ -39,7 +39,7 @@ final class RoutineGenerationViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    init(routineService: RoutineServiceProtocol = RoutineService.shared) {
+    init(routineService: RoutineServiceProtocol) {
         self.routineService = routineService
         print("🤖 RoutineGenerationViewModel initialized")
     }
@@ -303,7 +303,8 @@ enum RoutineGenerationError: LocalizedError {
 #if DEBUG
 extension RoutineGenerationViewModel {
     static let preview: RoutineGenerationViewModel = {
-        let vm = RoutineGenerationViewModel()
+        let mockService = ServiceFactory.shared.createMockRoutineService()
+        let vm = RoutineGenerationViewModel(routineService: mockService)
         // Add mock data for previews
         return vm
     }()

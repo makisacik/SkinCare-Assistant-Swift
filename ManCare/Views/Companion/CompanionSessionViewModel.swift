@@ -23,12 +23,13 @@ class CompanionSessionViewModel: ObservableObject {
     private let notificationService = NotificationService.shared
     private let analyticsService = CompanionAnalyticsService.shared
     private let tipsService = ProductTipsService.shared
-    private let routineService: RoutineServiceProtocol = RoutineService.shared
+    private let routineService: RoutineServiceProtocol
     private var selectedDate: Date = Date()
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
+    init(routineService: RoutineServiceProtocol) {
+        self.routineService = routineService
         setupBindings()
         resumeSession()
     }

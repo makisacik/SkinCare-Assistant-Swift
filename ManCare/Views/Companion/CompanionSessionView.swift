@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CompanionSessionView: View {
-    @StateObject private var sessionViewModel = CompanionSessionViewModel()
+    @StateObject private var sessionViewModel = CompanionSessionViewModel(routineService: ServiceFactory.shared.createRoutineService())
     @StateObject private var stepViewModel = StepViewModel()
     @Environment(\.dismiss) private var dismiss
     

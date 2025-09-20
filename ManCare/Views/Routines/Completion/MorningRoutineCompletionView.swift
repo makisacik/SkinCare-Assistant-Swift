@@ -77,7 +77,7 @@ struct MorningRoutineCompletionView: View {
                 // Reload completions when selected date changes
                 completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
             }
-            .onReceive(RoutineService.shared.completionChangesStream) { changedDate in
+            .onReceive(completionViewModel.completionChangesStream) { changedDate in
                 let calendar = Calendar.current
                 let normalizedSelectedDate = calendar.startOfDay(for: selectedDate)
                 let normalizedChangedDate = calendar.startOfDay(for: changedDate)

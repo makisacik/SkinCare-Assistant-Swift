@@ -32,6 +32,10 @@ final class RoutineCompletionViewModel: ObservableObject {
     var errorMessage: String? {
         error?.localizedDescription
     }
+    
+    var completionChangesStream: AnyPublisher<Date, Never> {
+        routineService.completionChangesStream
+    }
 
     // Completion statistics for active routine (date-specific)
     func getCompletionStats(for date: Date) async -> RoutineCompletionStats? {
@@ -57,7 +61,7 @@ final class RoutineCompletionViewModel: ObservableObject {
 
     // MARK: - Initialization
 
-    init(routineService: RoutineServiceProtocol = RoutineService.shared) {
+    init(routineService: RoutineServiceProtocol) {
         self.routineService = routineService
         print("✅ RoutineCompletionViewModel initialized")
         subscribeToRoutineStream()
@@ -273,7 +277,8 @@ struct RoutineCompletionStats {
 #if DEBUG
 extension RoutineCompletionViewModel {
     static let preview: RoutineCompletionViewModel = {
-        let vm = RoutineCompletionViewModel()
+        let mockService = ServiceFactory.shared.createMockRoutineService()
+        let vm = RoutineCompletionViewModel(routineService: mockService)
         // Add mock data for previews
         return vm
     }()
