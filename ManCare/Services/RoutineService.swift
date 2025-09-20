@@ -211,7 +211,7 @@ final class RoutineService: RoutineServiceProtocol {
 
         print("📡 RoutineService: Emitting completion change notification for date: \(startOfDay)")
         // Emit completion change notification for this date
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.completionChangeSubject.send(startOfDay)
         }
         
@@ -241,7 +241,7 @@ final class RoutineService: RoutineServiceProtocol {
         try await store.clearAllCompletions()
 
         // Emit completion change notification for today (affects all dates)
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.completionChangeSubject.send(Date())
         }
         
@@ -303,7 +303,7 @@ final class RoutineService: RoutineServiceProtocol {
             lastUpdated: Date()
         )
 
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.stateSubject.send(newState)
         }
 
