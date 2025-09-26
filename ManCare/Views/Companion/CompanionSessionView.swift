@@ -276,14 +276,15 @@ struct StepIntroView: View {
             VStack(spacing: 32) {
                 // Step icon and title
                 VStack(spacing: 16) {
-                    ZStack {
-                        Circle()
-                            .fill(stepViewModel.stepColor.opacity(0.2))
-                            .frame(width: 100, height: 100)
-                        
-                        Image(stepViewModel.iconName)
-                            .frame(width: 40, height: 40)
-                    }
+                    Image(stepViewModel.iconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .fill(stepViewModel.stepColor.opacity(0.2))
+                        )
                     
                     Text(step.title)
                         .font(.system(size: 28, weight: .bold))

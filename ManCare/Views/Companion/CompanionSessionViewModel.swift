@@ -459,20 +459,10 @@ class StepViewModel: ObservableObject {
     }
     
     var iconName: String {
-        guard let step = step else { return "questionmark.circle" }
+        guard let step = step else { return ProductIconManager.getFallbackIcon() }
         
-        switch step.stepType {
-        case .cleanser:
-            return "drop.fill"
-        case .faceSerum:
-            return "star.fill"
-        case .moisturizer:
-            return "drop.circle.fill"
-        case .sunscreen, .faceSunscreen:
-            return "sun.max.fill"
-        default:
-            return "questionmark.circle"
-        }
+        // Use ProductIconManager to get custom product assets
+        return ProductIconManager.getIconName(for: step.stepType)
     }
 }
 
