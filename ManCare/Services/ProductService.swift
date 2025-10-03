@@ -14,19 +14,19 @@ import SwiftUI
 class ProductService: ObservableObject {
     @Published var products: [Product] = []
     @Published var userProducts: [Product] = []
-    
+
     private let userDefaults = UserDefaults.standard
     private let userProductsKey = "user_products"
-    
+
     // Shared instance for the entire app
     static let shared = ProductService()
 
     init() {
         loadUserProducts()
     }
-    
+
     // MARK: - User Products Management
-    
+
     /// Add a product to user's collection
     func addUserProduct(_ product: Product) {
         print("📦 ProductService: Adding product to collection")
@@ -35,20 +35,20 @@ class ProductService: ObservableObject {
         print("   Product Type: \(product.tagging.productType.displayName)")
         print("   Brand: \(product.brand ?? "Unknown")")
         print("   Current collection size: \(userProducts.count)")
-        
+
         userProducts.append(product)
         saveUserProducts()
-        
+
         print("✅ ProductService: Product added successfully")
         print("   New collection size: \(userProducts.count)")
     }
-    
+
     /// Remove a product from user's collection
     func removeUserProduct(withId id: String) {
         userProducts.removeAll { $0.id == id }
         saveUserProducts()
     }
-    
+
     /// Update a user product
     func updateUserProduct(_ product: Product) {
         if let index = userProducts.firstIndex(where: { $0.id == product.id }) {
@@ -56,21 +56,21 @@ class ProductService: ObservableObject {
             saveUserProducts()
         }
     }
-    
+
     /// Get user products for a specific product type
     func getUserProducts(for productType: ProductType) -> [Product] {
         return userProducts.filter { $0.tagging.productType == productType }
     }
-    
+
     /// Get user products matching constraints
     func getUserProducts(matching constraints: Constraints) -> [Product] {
         return userProducts.filter { product in
             matchesConstraints(product.tagging, constraints: constraints)
         }
     }
-    
+
     // MARK: - Product Search and Filtering
-    
+
     /// Search products by name, brand, or ingredients
     func searchProducts(query: String) -> [Product] {
         let lowercaseQuery = query.lowercased()
@@ -80,18 +80,18 @@ class ProductService: ObservableObject {
             product.tagging.ingredients.contains { $0.lowercased().contains(lowercaseQuery) }
         }
     }
-    
+
     /// Filter products by product type
     func filterProducts(by productType: ProductType) -> [Product] {
         return userProducts.filter { $0.tagging.productType == productType }
     }
-    
+
     /// Filter products by category
     func filterProducts(by category: ProductCategory) -> [Product] {
         return userProducts.filter { $0.tagging.productType.category == category }
     }
-    
-    
+
+
     /// Filter products by claims
     func filterProducts(by claims: [String]) -> [Product] {
         return userProducts.filter { product in
@@ -100,35 +100,35 @@ class ProductService: ObservableObject {
             }
         }
     }
-    
+
     // MARK: - Product Recommendations
-    
+
     /// Get product recommendations for a product type
     func getRecommendations(for productType: ProductType, constraints: Constraints = Constraints()) -> [Product] {
         var candidates = userProducts.filter { $0.tagging.productType == productType }
-        
+
         // Apply constraints
         candidates = candidates.filter { product in
             matchesConstraints(product.tagging, constraints: constraints)
         }
-        
+
         return candidates
     }
-    
+
     /// Create a product from a name with automatic tagging
     func createProductFromName(_ name: String, brand: String? = nil, additionalInfo: [String: Any] = [:]) -> Product {
         let productType = ProductAliasMapping.normalize(name)
-        
+
         // Extract ingredients and claims from additional info
         let ingredients = additionalInfo["ingredients"] as? [String] ?? []
         let claims = additionalInfo["claims"] as? [String] ?? []
-        
+
         let tagging = ProductTagging(
             productType: productType,
             ingredients: ingredients,
             claims: claims
         )
-        
+
         return Product(
             id: UUID().uuidString,
             displayName: name,
@@ -138,9 +138,60 @@ class ProductService: ObservableObject {
             description: additionalInfo["description"] as? String
         )
     }
-    
+
+    /// Create a product from Open Beauty Facts data
+    func create(from obfProduct: OBFProduct, enrichedINCI: [INCIEntry]? = nil) -> Product {
+        let displayName = obfProduct.product_name ?? "Unknown Product"
+        let brand = obfProduct.brands
+        let size = obfProduct.quantity
+
+        // Parse ingredients from ingredients_text if available
+        let ingredients: [String] = {
+            guard let ingredientsText = obfProduct.ingredients_text else { return [] }
+            // Simple parsing - split by common separators
+            return ingredientsText
+                .components(separatedBy: CharacterSet(charactersIn: ",;"))
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+        }()
+
+        // Determine product type from name
+        let productType = ProductAliasMapping.normalize(displayName)
+
+        // Extract claims from ingredients (basic detection)
+        let claims: [String] = {
+            var detectedClaims: [String] = []
+            let ingredientsLower = ingredients.joined(separator: " ").lowercased()
+
+            if ingredientsLower.contains("fragrance") || ingredientsLower.contains("parfum") {
+                // Don't add fragranceFree claim if fragrance is present
+            } else {
+                detectedClaims.append("fragranceFree")
+            }
+
+            // Add more claim detection as needed
+            return detectedClaims
+        }()
+
+        let tagging = ProductTagging(
+            productType: productType,
+            ingredients: ingredients,
+            claims: claims
+        )
+
+        return Product(
+            id: obfProduct.code ?? UUID().uuidString,
+            displayName: displayName,
+            tagging: tagging,
+            brand: brand,
+            size: size,
+            description: ingredients.isEmpty ? nil : "Ingredients: \(ingredients.prefix(3).joined(separator: ", "))",
+            enrichedINCI: enrichedINCI
+        )
+    }
+
     // MARK: - Private Methods
-    
+
     private func saveUserProducts() {
         print("💾 ProductService: Saving \(userProducts.count) products to UserDefaults")
         if let data = try? JSONEncoder().encode(userProducts) {
@@ -150,7 +201,7 @@ class ProductService: ObservableObject {
             print("❌ ProductService: Failed to encode products")
         }
     }
-    
+
     private func loadUserProducts() {
         print("📂 ProductService: Loading products from UserDefaults")
         if let data = userDefaults.data(forKey: userProductsKey),
@@ -161,8 +212,8 @@ class ProductService: ObservableObject {
             print("ℹ️ ProductService: No saved products found, starting with empty collection")
         }
     }
-    
-    
+
+
     private func matchesConstraints(_ tagging: ProductTagging, constraints: Constraints) -> Bool {
         // Check SPF requirement
         if let requiredSPF = constraints.spf, requiredSPF > 0 {
@@ -172,35 +223,35 @@ class ProductService: ObservableObject {
                 return false
             }
         }
-        
+
         // Check fragrance free requirement
         if let fragranceFree = constraints.fragranceFree, fragranceFree {
             if !tagging.claims.contains("fragranceFree") {
                 return false
             }
         }
-        
+
         // Check sensitive safe requirement
         if let sensitiveSafe = constraints.sensitiveSafe, sensitiveSafe {
             if !tagging.claims.contains("sensitiveSafe") {
                 return false
             }
         }
-        
+
         // Check vegan requirement
         if let vegan = constraints.vegan, vegan {
             if !tagging.claims.contains("vegan") {
                 return false
             }
         }
-        
+
         // Check cruelty free requirement
         if let crueltyFree = constraints.crueltyFree, crueltyFree {
             if !tagging.claims.contains("crueltyFree") {
                 return false
             }
         }
-        
+
         // Check avoid ingredients
         if let avoidIngredients = constraints.avoidIngredients {
             for ingredient in avoidIngredients {
@@ -209,7 +260,7 @@ class ProductService: ObservableObject {
                 }
             }
         }
-        
+
         // Check prefer ingredients (at least one should match)
         if let preferIngredients = constraints.preferIngredients, !preferIngredients.isEmpty {
             let hasPreferredIngredient = preferIngredients.contains { ingredient in
@@ -219,7 +270,7 @@ class ProductService: ObservableObject {
                 return false
             }
         }
-        
+
         return true
     }
 }
@@ -231,7 +282,7 @@ extension ProductService {
     var productStats: ProductStats {
         let totalProducts = userProducts.count
         let productsByType = Dictionary(grouping: userProducts, by: { $0.tagging.productType })
-        
+
         return ProductStats(
             totalProducts: totalProducts,
             productsByType: productsByType

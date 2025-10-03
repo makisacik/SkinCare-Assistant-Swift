@@ -828,15 +828,13 @@ private struct RoutineCard: View {
     private var steps: [RoutineStepDetail] {
         // Compute steps based on current routine and time of day
         guard let activeRoutine = routineViewModel.activeRoutine else { 
-            print("🏠 RoutineCard (\(title)): No active routine, returning empty steps")
-            return [] 
+            return []
         }
         
         let routineSteps = activeRoutine.stepDetails.filter { step in
             step.timeOfDay == timeOfDay.rawValue
         }
         
-        print("🏠 RoutineCard (\(title)): Computing \(routineSteps.count) steps for \(timeOfDay.rawValue) from routine '\(activeRoutine.title)'")
         
         return routineSteps.enumerated().map { (index, stepDetail) in
             RoutineStepDetail(
@@ -853,7 +851,6 @@ private struct RoutineCard: View {
     
     private var productCount: Int {
         let count = steps.count
-        print("🏠 RoutineCard (\(title)): Product count = \(count)")
         return count
     }
     
@@ -985,7 +982,6 @@ private struct RoutineCard: View {
             let normalizedChangedDate = calendar.startOfDay(for: changedDate)
             
             if calendar.isDate(normalizedChangedDate, inSameDayAs: normalizedSelectedDate) {
-                print("🏠 RoutineCard: Received completion change notification for \(normalizedChangedDate)")
                 Task {
                     await loadCompletionsForDate()
                 }
@@ -1001,7 +997,6 @@ private struct RoutineCard: View {
         let completedSteps = await completionViewModel.getCompletedSteps(for: normalizedDate)
         await MainActor.run {
             self.completedStepsForDate = completedSteps
-            print("🏠 RoutineCard: Loaded \(completedSteps.count) completions for \(normalizedDate): \(completedSteps)")
         }
     }
 }

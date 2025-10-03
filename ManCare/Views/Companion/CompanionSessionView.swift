@@ -11,14 +11,14 @@ struct CompanionSessionView: View {
     @StateObject private var sessionViewModel = CompanionSessionViewModel(routineService: ServiceFactory.shared.createRoutineService())
     @StateObject private var stepViewModel = StepViewModel()
     @Environment(\.dismiss) private var dismiss
-    
+
     let routineId: String
     let routineName: String
     let steps: [CompanionStep]
     let selectedDate: Date
     let completionViewModel: RoutineCompletionViewModel
     let onComplete: (() -> Void)?
-    
+
     init(routineId: String, routineName: String, steps: [CompanionStep], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, onComplete: (() -> Void)? = nil) {
         self.routineId = routineId
         self.routineName = routineName
@@ -27,15 +27,15 @@ struct CompanionSessionView: View {
         self.completionViewModel = completionViewModel
         self.onComplete = onComplete
     }
-    
+
     var body: some View {
         NavigationView {
             ZStack {
                 backgroundGradient
-                
+
                 VStack(spacing: 0) {
                     headerView
-                    
+
                     contentView
                 }
             }
@@ -68,7 +68,7 @@ struct CompanionSessionView: View {
             handleStateChange(newState)
         }
     }
-    
+
     private var backgroundGradient: some View {
         LinearGradient(
             gradient: Gradient(colors: [
@@ -81,7 +81,7 @@ struct CompanionSessionView: View {
         )
         .ignoresSafeArea()
     }
-    
+
     private var headerView: some View {
         VStack(spacing: 16) {
             // Top bar with progress and close button
@@ -93,9 +93,9 @@ struct CompanionSessionView: View {
                         .font(.system(size: 24))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-                
+
                 Spacer()
-                
+
                 // Progress indicator
                 if let session = sessionViewModel.session {
                     HStack(spacing: 8) {
@@ -109,7 +109,7 @@ struct CompanionSessionView: View {
                                 print("📊 Steps count: \(session.steps.count)")
                                 print("📊 Steps: \(session.steps.map { $0.title })")
                             }
-                        
+
                         ProgressView(value: session.progress)
                             .progressViewStyle(LinearProgressViewStyle(tint: ThemeManager.shared.theme.palette.primary))
                             .frame(width: 60)
@@ -118,7 +118,7 @@ struct CompanionSessionView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 10)
-            
+
             // Routine title
             Text(routineName)
                 .font(.system(size: 24, weight: .bold))
@@ -127,7 +127,7 @@ struct CompanionSessionView: View {
         }
         .padding(.bottom, 20)
     }
-    
+
     @ViewBuilder
     private var contentView: some View {
         switch sessionViewModel.currentState {
@@ -244,18 +244,18 @@ struct CompanionSessionView: View {
             }
         }
     }
-    
+
     private func handleStateChange(_ newState: SessionState) {
         switch newState {
         case .stepIntro(let stepIndex):
             if let session = sessionViewModel.session, stepIndex < session.steps.count {
                 stepViewModel.setStep(session.steps[stepIndex])
             }
-            
+
         case .routineComplete:
             // Session completed
             break
-            
+
         default:
             break
         }
@@ -270,7 +270,7 @@ struct StepIntroView: View {
     let onStartTimer: () -> Void
     let onCompleteStep: () -> Void
     let onSkipStep: () -> Void
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 32) {
@@ -285,19 +285,19 @@ struct StepIntroView: View {
                             Circle()
                                 .fill(stepViewModel.stepColor.opacity(0.2))
                         )
-                    
+
                     Text(step.title)
                         .font(.system(size: 28, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.center)
                 }
-                
+
                 // Instruction
                 VStack(spacing: 16) {
                     Text("Instructions")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
+
                     Text(step.instruction)
                         .font(.system(size: 16))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -313,7 +313,7 @@ struct StepIntroView: View {
                                 .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
                         )
                 )
-                
+
                 // Action buttons
                 VStack(spacing: 16) {
                     if step.type == .timed {
@@ -335,7 +335,7 @@ struct StepIntroView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
-                    
+
                     HStack(spacing: 16) {
                         Button {
                             onCompleteStep()
@@ -354,7 +354,7 @@ struct StepIntroView: View {
                             )
                         }
                         .buttonStyle(PlainButtonStyle())
-                        
+
                         Button {
                             onSkipStep()
                         } label: {
@@ -374,7 +374,7 @@ struct StepIntroView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                
+
                 Spacer(minLength: 50)
             }
             .padding(.horizontal, 20)
@@ -391,7 +391,7 @@ struct TimerView: View {
     let onSkip: () -> Void
     let onComplete: () -> Void
     let onAdjust: (Int) -> Void
-    
+
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
@@ -399,12 +399,12 @@ struct TimerView: View {
                 VStack(spacing: 0) {
                     Spacer()
                         .frame(height: 20)
-                    
+
                     ZStack {
                         Circle()
                             .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 8)
                             .frame(width: 180, height: 180)
-                        
+
                         Circle()
                             .trim(from: 0, to: timerState.progress)
                             .stroke(
@@ -414,7 +414,7 @@ struct TimerView: View {
                             .frame(width: 180, height: 180)
                             .rotationEffect(.degrees(-90))
                             .animation(.linear(duration: 1), value: timerState.progress)
-                        
+
                         VStack(spacing: 6) {
                             Text(timerState.formattedTime)
                                 .font(.system(size: 32, weight: .bold, design: .monospaced))
@@ -427,12 +427,12 @@ struct TimerView: View {
                                 .lineLimit(2)
                         }
                     }
-                    
+
                     Spacer()
                         .frame(height: 20)
                 }
                 .frame(height: geometry.size.height * 0.4) // Use 40% of screen height for timer
-                
+
                 // Product Tips Section
                 VStack(spacing: 12) {
                     HStack {
@@ -556,13 +556,13 @@ struct TimerView: View {
 struct CompletionView: View {
     let session: CompanionSession?
     let onComplete: () -> Void
-    
+
     @State private var showConfetti = false
-    
+
     var body: some View {
         VStack(spacing: 40) {
             Spacer()
-            
+
             // Celebration animation
             ZStack {
                 Circle()
@@ -570,20 +570,20 @@ struct CompletionView: View {
                     .frame(width: 150, height: 150)
                     .scaleEffect(showConfetti ? 1.1 : 1.0)
                     .animation(.spring(response: 0.8, dampingFraction: 0.6), value: showConfetti)
-                
+
                 Image(systemName: "party.popper.fill")
                     .font(.system(size: 60, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.success)
                     .scaleEffect(showConfetti ? 1.0 : 0.0)
                     .animation(.spring(response: 0.8, dampingFraction: 0.6).delay(0.3), value: showConfetti)
             }
-            
+
             VStack(spacing: 16) {
                 Text("Routine Complete! 🎉")
                     .font(.system(size: 32, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
-                
+
                 if let session = session {
                     Text("You completed \(session.stepsCompleted.count) of \(session.steps.count) steps")
                         .font(.system(size: 16))
@@ -591,7 +591,7 @@ struct CompletionView: View {
                         .multilineTextAlignment(.center)
                 }
             }
-            
+
             // Stats
             if let session = session {
                 VStack(spacing: 12) {
@@ -610,7 +610,7 @@ struct CompletionView: View {
                 )
                 .padding(.horizontal, 40)
             }
-            
+
             Button {
                 onComplete()
             } label: {
@@ -626,14 +626,14 @@ struct CompletionView: View {
             }
             .buttonStyle(PlainButtonStyle())
             .padding(.horizontal, 40)
-            
+
             Spacer()
         }
         .onAppear {
             showConfetti = true
         }
     }
-    
+
     private func formatDuration(_ seconds: Int) -> String {
         let minutes = seconds / 60
         let remainingSeconds = seconds % 60
@@ -646,15 +646,15 @@ struct CompletionView: View {
 struct StatRow: View {
     let title: String
     let value: String
-    
+
     var body: some View {
         HStack {
             Text(title)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            
+
             Spacer()
-            
+
             Text(value)
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)

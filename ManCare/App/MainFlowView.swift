@@ -324,22 +324,30 @@ struct MainFlowView: View {
 
         Task {
             // Create the request outside try-catch so it's accessible in error handling
-            let request = GPTService.createRequest(
-                skinType: skinType,
-                concerns: selectedConcerns,
-                mainGoal: mainGoal,
-                fitzpatrickSkinTone: fitzpatrickSkinTone,
-                ageRange: ageRange,
-                region: region,
-                preferences: selectedPreferences,
+            let request = ManCareRoutineRequest(
+                selectedSkinType: skinType.rawValue,
+                selectedConcerns: selectedConcerns.map { $0.rawValue },
+                selectedMainGoal: mainGoal.rawValue,
+                fitzpatrickSkinTone: fitzpatrickSkinTone.rawValue,
+                ageRange: ageRange.rawValue,
+                region: region.rawValue,
+                selectedPreferences: selectedPreferences.map { prefs in
+                    PreferencesPayload(
+                        fragranceFreeOnly: prefs.fragranceFreeOnly,
+                        suitableForSensitiveSkin: prefs.suitableForSensitiveSkin,
+                        naturalIngredients: prefs.naturalIngredients,
+                        crueltyFree: prefs.crueltyFree,
+                        veganFriendly: prefs.veganFriendly
+                    )
+                },
                 lifestyle: nil, // TODO: Add lifestyle collection
                 locale: "en-US"
             )
 
             do {
                 print("🚀 Starting routine generation...")
-                // Create GPTService instance
-                let gptService = GPTService(apiKey: Config.openAIAPIKey)
+                // Use the routine service (GPT-3.5-turbo for routine generation)
+                let gptService = GPTService.routineService
 
                 // Generate routine using GPTService with timeout
                 print("📡 Calling GPT API...")

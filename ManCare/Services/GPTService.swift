@@ -71,9 +71,12 @@ public final class GPTService {
         case decodingFailed(String)
         case invalidJSON(String)
     }
-    
-    // Shared instance
+
+    // Shared instance for general use (GPT-4o-mini)
     public static let shared = GPTService(apiKey: Config.openAIAPIKey)
+
+    // Specialized instance for routine creation (GPT-3.5-turbo)
+    public static let routineService = createRoutineService(apiKey: Config.openAIAPIKey)
 
     private let apiKey: String
     private let model: String
@@ -86,11 +89,16 @@ public final class GPTService {
 
     /// Inject your API key from Secrets/Keychain/Environment.
     public init(apiKey: String,
-                model: String = "gpt-3.5-turbo",
+                model: String = "gpt-4o-mini",
                 session: URLSession = .shared) {
         self.apiKey = apiKey
         self.model = model
         self.session = session
+    }
+
+    /// Create a specialized instance for routine creation (uses GPT-3.5-turbo)
+    public static func createRoutineService(apiKey: String) -> GPTService {
+        return GPTService(apiKey: apiKey, model: "gpt-3.5-turbo")
     }
 
     // MARK: Public API

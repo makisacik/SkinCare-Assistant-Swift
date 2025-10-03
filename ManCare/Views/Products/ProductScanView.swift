@@ -11,9 +11,9 @@ import AVFoundation
 import UIKit
 
 struct ProductScanView: View {
-    
+
     @Environment(\.dismiss) private var dismiss
-    
+
     @StateObject private var cameraManager = CameraManager()
     @StateObject private var scanManager = ProductScanManager.shared
     private let productService = ProductService.shared
@@ -24,7 +24,7 @@ struct ProductScanView: View {
     @State private var capturedImage: UIImage?
     @State private var showingImagePicker = false
     @State private var isCapturing = false
-    
+
     // Auto-flow states
     @State private var currentStep = ""
     @State private var normalizedProduct: ProductNormalizationResponse?
@@ -33,14 +33,14 @@ struct ProductScanView: View {
     @State private var showingSuccess = false
 
     let onTextExtracted: (String) -> Void
-    
+
     var body: some View {
         NavigationView {
             ZStack {
                 // Camera Preview
                 CameraPreviewView(cameraManager: cameraManager)
                     .ignoresSafeArea()
-                
+
                 // Overlay UI
                 VStack {
                     // Top Controls
@@ -54,9 +54,9 @@ struct ProductScanView: View {
                                 .background(ThemeManager.shared.theme.palette.textPrimary.opacity(0.3))
                                 .clipShape(Circle())
                         }
-                        
+
                         Spacer()
-                        
+
                         Text("Scan Product")
                             .font(.headline)
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
@@ -64,9 +64,9 @@ struct ProductScanView: View {
                             .padding(.vertical, 8)
                             .background(ThemeManager.shared.theme.palette.textPrimary.opacity(0.3))
                             .cornerRadius(20)
-                        
+
                         Spacer()
-                        
+
                         // Flashlight toggle
                         Button {
                             cameraManager.toggleFlashlight()
@@ -77,10 +77,10 @@ struct ProductScanView: View {
                                 .background(ThemeManager.shared.theme.palette.textPrimary.opacity(0.3))
                                 .clipShape(Circle())
                         }
-                        
-                        // Debug: Test OCR button
+
+                        // Debug: Test OCR button with real scanned text
                         Button {
-                            testOCR()
+                            testRealOCR()
                         } label: {
                             Image(systemName: "text.badge.checkmark")
                                 .font(.system(size: 20))
@@ -88,7 +88,7 @@ struct ProductScanView: View {
                                 .background(ThemeManager.shared.theme.palette.info.opacity(0.7))
                                 .clipShape(Circle())
                         }
-                        
+
                         // Debug: Test Camera button
                         Button {
                             testCameraCapture()
@@ -99,7 +99,7 @@ struct ProductScanView: View {
                                 .background(ThemeManager.shared.theme.palette.warning.opacity(0.7))
                                 .clipShape(Circle())
                         }
-                        
+
                         // Debug: Force OCR button
                         Button {
                             if capturedImage != nil {
@@ -118,9 +118,9 @@ struct ProductScanView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
-                    
+
                     Spacer()
-                    
+
                     // Scanning Frame
                     VStack(spacing: 20) {
                         Text("Position the product label within the frame")
@@ -128,22 +128,22 @@ struct ProductScanView: View {
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 20)
-                        
+
                         // Scanning frame overlay
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(ThemeManager.shared.theme.palette.textInverse, lineWidth: 2)
                                 .frame(width: 280, height: 200)
-                            
+
                             // Corner indicators
                             ForEach(0..<4) { index in
                                 CornerIndicator(corner: index)
                             }
                         }
                     }
-                    
+
                     Spacer()
-                    
+
                     // Bottom Controls
                     HStack(spacing: 40) {
                         // Gallery button
@@ -157,7 +157,7 @@ struct ProductScanView: View {
                                 .background(ThemeManager.shared.theme.palette.textPrimary.opacity(0.3))
                                 .clipShape(Circle())
                         }
-                        
+
                         // Capture button
                         Button {
                             capturePhoto()
@@ -166,14 +166,14 @@ struct ProductScanView: View {
                                 Circle()
                                     .fill(ThemeManager.shared.theme.palette.textInverse)
                                     .frame(width: 70, height: 70)
-                                
+
                                 Circle()
                                     .stroke(ThemeManager.shared.theme.palette.textPrimary, lineWidth: 2)
                                     .frame(width: 60, height: 60)
                             }
                         }
                         .disabled(isProcessing || isCapturing)
-                        
+
                         // Process button (appears after capture)
                         if capturedImage != nil {
                             Button {
@@ -196,15 +196,15 @@ struct ProductScanView: View {
                     }
                     .padding(.bottom, 40)
                 }
-                
+
                 // Captured image preview
                 if let image = capturedImage {
                     VStack {
                         Spacer()
-                        
+
                         HStack {
                             Spacer()
-                            
+
                             VStack(spacing: 12) {
                                 Image(uiImage: image)
                                     .resizable()
@@ -215,7 +215,7 @@ struct ProductScanView: View {
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(ThemeManager.shared.theme.palette.textInverse, lineWidth: 2)
                                     )
-                                
+
                                 Text("Photo captured!")
                                     .font(.caption)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
@@ -224,21 +224,21 @@ struct ProductScanView: View {
                                     .background(ThemeManager.shared.theme.palette.success)
                                     .cornerRadius(8)
                             }
-                            
+
                             Spacer()
                         }
-                        
+
                         Spacer()
                     }
                     .background(ThemeManager.shared.theme.palette.textPrimary.opacity(0.3))
                 }
-                
+
                 // Processing overlay
                 if isProcessing {
                     ThemeManager.shared.theme.palette.textPrimary.opacity(0.8)
                         .ignoresSafeArea()
                         .animation(.easeInOut(duration: 0.3), value: isProcessing)
-                    
+
                     VStack(spacing: 24) {
                         Spacer()
 
@@ -283,7 +283,7 @@ struct ProductScanView: View {
 
                     VStack(spacing: 24) {
                         Spacer()
-                        
+
                         VStack(spacing: 20) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 80))
@@ -377,6 +377,17 @@ struct ProductScanView: View {
                 }
             }
         }
+        .sheet(isPresented: $scanManager.showProductConfirmation) {
+            ProductConfirmSheet(candidates: scanManager.productCandidates) { candidate in
+                scanManager.handleProductSelection(candidate)
+                // Only dismiss if a product was selected (not "None")
+                if candidate != nil {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        dismiss()
+                    }
+                }
+            }
+        }
         .onAppear {
             cameraManager.requestCameraPermission()
         }
@@ -387,18 +398,26 @@ struct ProductScanView: View {
                 print("❌ Camera permission denied")
             }
         }
+        .onChange(of: scanManager.shouldNavigateToProducts) { shouldNavigate in
+            if shouldNavigate {
+                print("📱 ProductScanManager triggered navigation - dismissing scan view")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    dismiss()
+                }
+            }
+        }
     }
-    
+
     private func capturePhoto() {
         guard !isCapturing else {
             print("⏳ Already capturing, ignoring duplicate tap")
             return
         }
-        
+
         print("📸 Capturing photo...")
         isCapturing = true
         resetAutoFlow()
-        
+
         cameraManager.capturePhoto { image in
             DispatchQueue.main.async {
                 self.isCapturing = false
@@ -415,21 +434,21 @@ struct ProductScanView: View {
             }
         }
     }
-    
+
     private func processImage() {
-        guard let image = capturedImage else { 
+        guard let image = capturedImage else {
             print("❌ No captured image to process")
-            return 
+            return
         }
-        
+
         print("🔍 Starting OCR processing for image: \(image.size)")
         isProcessing = true
-        
+
         // Use Vision OCR to extract text
         OCRService.extractText(from: image) { result in
             DispatchQueue.main.async {
                 self.isProcessing = false
-                
+
                 switch result {
                 case .success(let text):
                     print("✅ OCR Success! Extracted text: '\(text)'")
@@ -442,7 +461,7 @@ struct ProductScanView: View {
             }
         }
     }
-    
+
     private func testOCR() {
         print("🧪 Testing automatic flow with sample text image...")
         
@@ -455,6 +474,20 @@ struct ProductScanView: View {
         startAutomaticFlow()
     }
     
+    private func testRealOCR() {
+        print("🧪 Testing with real scanned OCR text...")
+        
+        // Use the actual OCR text you encountered
+        let realOCRText = "mia klinika RELAIC ACID SERUN NIACINAMION ZING TEA TREE GLYCINE"
+        extractedText = realOCRText
+        resetAutoFlow()
+        
+        // Skip OCR step and go directly to GPT normalization
+        isProcessing = true
+        currentStep = "Step 2: Normalizing with GPT..."
+        normalizeWithGPT()
+    }
+
     private func testCameraCapture() {
         print("🧪 Testing camera capture with automatic flow...")
         cameraManager.capturePhoto { image in
@@ -469,16 +502,16 @@ struct ProductScanView: View {
             }
         }
     }
-    
+
     private func createTestImage() -> UIImage {
         let size = CGSize(width: 300, height: 200)
         let renderer = UIGraphicsImageRenderer(size: size)
-        
+
         return renderer.image { context in
             // White background
             UIColor.white.setFill()
             context.fill(CGRect(origin: .zero, size: size))
-            
+
             // Black text
             UIColor.black.setFill()
             let text = "CeraVe\nFoaming Facial Cleanser\n150ml"
@@ -486,7 +519,7 @@ struct ProductScanView: View {
                 .font: UIFont.systemFont(ofSize: 24, weight: .bold),
                 .foregroundColor: UIColor.black
             ]
-            
+
             let attributedString = NSAttributedString(string: text, attributes: attributes)
             let textSize = attributedString.size()
             let textRect = CGRect(
@@ -495,7 +528,7 @@ struct ProductScanView: View {
                 width: textSize.width,
                 height: textSize.height
             )
-            
+
             attributedString.draw(in: textRect)
         }
     }
@@ -586,18 +619,65 @@ struct ProductScanView: View {
             return
         }
 
-        print("🔹 Step 3 — Navigating to Products tab with summary")
+        print("🔹 Step 3 — Looking up product in Open Beauty Facts...")
+        currentStep = "Step 3: Searching Open Beauty Facts database..."
 
-        // Set scanned product data and navigate to products tab
+        // Create ProductGuess from normalized data
+        let guess = ProductGuess(
+            brand: normalized.brand,
+            name: normalized.productName,
+            sizeHint: normalized.size,
+            keyINCI: normalized.ingredients
+        )
+
+        // Store the scanned data for potential fallback use
         scanManager.setScannedProduct(extractedText: extractedText, normalizedProduct: normalized)
+        
+        // Use the AI Agent to find and enrich the product
+        Task {
+            await scanManager.resolveProductWithAgent(ocrText: extractedText, guess: guess)
+            
+            await MainActor.run {
+                self.isProcessing = false
+                self.currentStep = "Product lookup completed!"
+                
+                // Don't dismiss immediately - let the confirmation sheet handle it
+                // or wait for the scanManager to trigger navigation
+                print("🎉 Open Beauty Facts lookup completed!")
+            }
+        }
+    }
+
+    private func createFallbackProduct(from normalized: ProductNormalizationResponse) {
+        print("🔄 Creating fallback product from normalized data...")
+        currentStep = "Creating product from normalized data..."
+
+        // Create product using the existing ProductService method
+        let product = productService.createProductFromName(
+            normalized.productName,
+            brand: normalized.brand,
+            additionalInfo: [
+                "size": normalized.size ?? "",
+                "ingredients": normalized.ingredients,
+                "description": "Scanned product"
+            ]
+        )
+
+        // Add to user's collection
+        productService.addUserProduct(product)
 
         isProcessing = false
-        currentStep = "Product information extracted successfully!"
+        currentStep = "Product added successfully!"
 
-        // Dismiss the scan view
-        dismiss()
+        // Show success and dismiss
+        createdProduct = product
+        showingSuccess = true
 
-        print("🎉 Automatic flow completed - navigating to Products tab!")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.dismiss()
+        }
+
+        print("✅ Fallback product created and added successfully!")
     }
 }
 
@@ -605,26 +685,26 @@ struct ProductScanView: View {
 
 struct CameraPreviewView: UIViewRepresentable {
     let cameraManager: CameraManager
-    
+
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: UIScreen.main.bounds)
         cameraManager.setupPreview(in: view)
         return view
     }
-    
+
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
 // MARK: - Corner Indicator
 
 struct CornerIndicator: View {
-    
+
     let corner: Int
-    
+
     var body: some View {
         let size: CGFloat = 20
         let lineWidth: CGFloat = 3
-        
+
         switch corner {
         case 0: // Top-left
             VStack(alignment: .leading, spacing: 0) {
@@ -643,7 +723,7 @@ struct CornerIndicator: View {
             }
             .frame(width: size, height: size)
             .offset(x: -size/2, y: -size/2)
-            
+
         case 1: // Top-right
             VStack(alignment: .trailing, spacing: 0) {
                 HStack(spacing: 0) {
@@ -661,7 +741,7 @@ struct CornerIndicator: View {
             }
             .frame(width: size, height: size)
             .offset(x: size/2, y: -size/2)
-            
+
         case 2: // Bottom-left
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
@@ -679,7 +759,7 @@ struct CornerIndicator: View {
             }
             .frame(width: size, height: size)
             .offset(x: -size/2, y: size/2)
-            
+
         case 3: // Bottom-right
             VStack(alignment: .trailing, spacing: 0) {
                 HStack(spacing: 0) {
@@ -697,7 +777,7 @@ struct CornerIndicator: View {
             }
             .frame(width: size, height: size)
             .offset(x: size/2, y: size/2)
-            
+
         default:
             EmptyView()
         }
@@ -707,13 +787,13 @@ struct CornerIndicator: View {
 // MARK: - Text Result View
 
 struct TextResultView: View {
-    
+
     @Environment(\.dismiss) private var dismiss
-    
+
     let extractedText: String
     let onContinue: (String) -> Void
     let onRetake: () -> Void
-    
+
     @State private var isNormalizing = false
     @State private var normalizedProduct: ProductNormalizationResponse?
     @State private var normalizationError: String?
@@ -727,24 +807,24 @@ struct TextResultView: View {
                     Image(systemName: "text.viewfinder")
                         .font(.system(size: 40, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                    
+
                     Text("Extracted Text")
                         .font(ThemeManager.shared.theme.typo.h2)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
+
                     Text("Review and edit the text before continuing")
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.top, 20)
-                
+
                 // Text Editor
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Product Information")
                         .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
+
                     TextEditor(text: .constant(extractedText))
                         .font(ThemeManager.shared.theme.typo.body)
                         .frame(minHeight: 200)
@@ -757,9 +837,9 @@ struct TextResultView: View {
                         )
                 }
                 .padding(.horizontal, 20)
-                
+
                 Spacer()
-                
+
                 // Normalized Product Results
                 if let normalized = normalizedProduct {
                     VStack(alignment: .leading, spacing: 12) {
@@ -868,7 +948,7 @@ struct TextResultView: View {
                             .cornerRadius(12)
                     }
                     .disabled(isNormalizing)
-                    
+
                     Button {
                         onRetake()
                     } label: {
@@ -942,7 +1022,7 @@ struct TextResultView: View {
 
 struct ImagePicker: UIViewControllerRepresentable {
     let onImageSelected: (UIImage?) -> Void
-    
+
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
@@ -950,20 +1030,20 @@ struct ImagePicker: UIViewControllerRepresentable {
         picker.allowsEditing = false
         return picker
     }
-    
+
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-    
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-    
+
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         let parent: ImagePicker
-        
+
         init(_ parent: ImagePicker) {
             self.parent = parent
         }
-        
+
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let image = info[.originalImage] as? UIImage {
                 parent.onImageSelected(image)
@@ -972,7 +1052,7 @@ struct ImagePicker: UIViewControllerRepresentable {
             }
             picker.dismiss(animated: true)
         }
-        
+
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             parent.onImageSelected(nil)
             picker.dismiss(animated: true)

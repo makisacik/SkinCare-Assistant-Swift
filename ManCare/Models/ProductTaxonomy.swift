@@ -443,8 +443,9 @@ struct Product: Codable, Identifiable, Equatable {
     var imageURL: URL?
     var size: String?
     var description: String?
+    var enrichedINCI: [INCIEntry]?
 
-    init(id: String, displayName: String, tagging: ProductTagging, brand: String? = nil, link: URL? = nil, imageURL: URL? = nil, size: String? = nil, description: String? = nil) {
+    init(id: String, displayName: String, tagging: ProductTagging, brand: String? = nil, link: URL? = nil, imageURL: URL? = nil, size: String? = nil, description: String? = nil, enrichedINCI: [INCIEntry]? = nil) {
         self.id = id
         self.displayName = displayName
         self.tagging = tagging
@@ -453,6 +454,7 @@ struct Product: Codable, Identifiable, Equatable {
         self.imageURL = imageURL
         self.size = size
         self.description = description
+        self.enrichedINCI = enrichedINCI
     }
 
     /// Create a product from a product name with automatic tagging
