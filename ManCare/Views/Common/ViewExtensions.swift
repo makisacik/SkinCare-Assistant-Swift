@@ -7,6 +7,55 @@
 
 import SwiftUI
 
+// MARK: - String Extensions for Proper Capitalization
+
+extension String {
+    /// Capitalize brand and product names properly
+    /// Examples: "mia klinika" -> "Mia Klinika", "CERA VE" -> "Cera Ve"
+    var properCapitalized: String {
+        let words = self.components(separatedBy: .whitespacesAndNewlines)
+            .filter { !$0.isEmpty }
+
+        return words.map { word in
+            // Handle special cases for common brand patterns
+            let lowercaseWord = word.lowercased()
+
+            // Keep certain words in all caps if they appear to be acronyms
+            if lowercaseWord.count <= 3 && word.allSatisfy({ $0.isLetter }) {
+                return word.uppercased()
+            }
+
+            // Capitalize first letter of each word
+            return word.prefix(1).uppercased() + word.dropFirst().lowercased()
+        }.joined(separator: " ")
+    }
+
+    /// Capitalize brand names with special handling for common patterns
+    var brandCapitalized: String {
+        let words = self.components(separatedBy: .whitespacesAndNewlines)
+            .filter { !$0.isEmpty }
+
+        return words.map { word in
+            let lowercaseWord = word.lowercased()
+
+            // Handle common brand name patterns
+            switch lowercaseWord {
+            case "co", "corp", "inc", "ltd", "llc":
+                return word.uppercased()
+            case "of", "the", "and", "or", "in", "on", "at", "to", "for", "with", "by":
+                return word.lowercased()
+            default:
+                // For short words (likely acronyms), keep uppercase
+                if word.count <= 3 && word.allSatisfy({ $0.isLetter }) {
+                    return word.uppercased()
+                }
+                // Otherwise capitalize first letter
+                return word.prefix(1).uppercased() + word.dropFirst().lowercased()
+            }
+        }.joined(separator: " ")
+    }
+}
+
 // MARK: - View Extensions for State Management
 
 extension View {
