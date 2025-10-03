@@ -176,9 +176,10 @@ private struct ProductSelectionCard: View {
                         .fill(Color(product.tagging.productType.color).opacity(0.15))
                         .frame(width: 50, height: 50)
                     
-                    Image(systemName: product.tagging.productType.iconName)
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(Color(product.tagging.productType.color))
+                    Image(product.tagging.productType.customIconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
                 }
                 
                 // Product info

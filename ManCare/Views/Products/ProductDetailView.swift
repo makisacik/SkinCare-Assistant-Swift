@@ -24,9 +24,9 @@ struct ProductDetailView: View {
                 VStack(spacing: 24) {
                     // Header
                     VStack(spacing: 12) {
-                        Image(systemName: product.tagging.productType.iconName)
-                            .font(.system(size: 48, weight: .medium))
-                            .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                        Image(product.tagging.productType.customIconName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 80, height: 80)
                             .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
                             .clipShape(Circle())

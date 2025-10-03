@@ -13,10 +13,10 @@ struct SimpleProductRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: product.tagging.productType.iconName)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                .frame(width: 24)
+            Image(product.tagging.productType.customIconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 24, height: 24)
             VStack(alignment: .leading, spacing: 2) {
                 Text(product.displayName)
                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))

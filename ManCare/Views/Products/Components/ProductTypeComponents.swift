@@ -23,7 +23,7 @@ struct ProductTypeSelectorButton: View {
             Button(action: onTap) {
                 HStack(spacing: 16) {
                     // Product Type Icon
-                    Image(selectedProductType.iconName)
+                    Image(selectedProductType.customIconName)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 32, height: 32)
@@ -73,7 +73,7 @@ struct ProductTypeCard: View {
 
     var body: some View {
         VStack(spacing: 6) {
-            Image(productType.iconName)
+            Image(productType.customIconName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 20, height: 20)
@@ -110,7 +110,7 @@ struct ProductTypeRow: View {
         Button(action: onTap) {
             HStack(spacing: 16) {
                 // Icon
-                Image(productType.iconName)
+                Image(productType.customIconName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 28, height: 28)
