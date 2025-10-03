@@ -892,7 +892,7 @@ private struct RoutineCard: View {
 
                         Image(systemName: iconName)
                             .font(.system(size: 24, weight: .semibold))
-                            .foregroundColor(Color(hex: "#F5C26B"))
+                            .foregroundColor(iconColor)
                     }
 
                     // Content

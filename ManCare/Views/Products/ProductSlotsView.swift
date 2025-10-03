@@ -19,11 +19,17 @@ struct ProductSlotsView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(spacing: 8) {
+            VStack(spacing: 12) {
                 HStack {
-                    Text("My Products")
-                        .font(ThemeManager.shared.theme.typo.h1)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("My Products")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                        Text("Store and manage your skincare collection")
+                            .font(.system(size: 16))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
 
                     Spacer()
                     
@@ -31,117 +37,176 @@ struct ProductSlotsView: View {
                     Button("Test Sheet") {
                         onTestSheetTapped()
                     }
-                    .font(.caption)
-                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(ThemeManager.shared.theme.palette.primary.opacity(0.1))
+                    )
                 }
-
-                Text("Store and manage your own products")
-                    .font(ThemeManager.shared.theme.typo.sub)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
-            .padding(.bottom, 16)
+            .padding(.bottom, 20)
 
             // Products List
             if productService.userProducts.isEmpty {
                 EmptyProductsView()
             } else {
                 ScrollView {
-                    LazyVStack(spacing: 12) {
+                    LazyVStack(spacing: 16) {
                         ForEach(productService.userProducts, id: \.id) { product in
-                            Button {
+                            ProductCard(product: product) {
                                 onProductTapped(product)
-                            } label: {
-                                SimpleProductRow(product: product)
                             }
-                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                     .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
                 }
             }
 
             Spacer()
 
-            // Add Product Options - Two Cards
-            VStack(spacing: 16) {
-                HStack(spacing: 12) {
+            // Add Product Options - Modern Cards
+            VStack(spacing: 20) {
+                Text("Add New Product")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                HStack(spacing: 16) {
                     // Scan Product Card
                     Button {
                         onScanProductTapped()
                     } label: {
-                        VStack(spacing: 8) {
-                            Image(systemName: "camera.viewfinder")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.onSecondary)
-
-                            VStack(spacing: 2) {
-                                Text("Scan Product")
-                                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.onSecondary)
-
-                                Text("Take a photo to automatically extract product information")
-                                    .font(ThemeManager.shared.theme.typo.caption)
-                                    .foregroundColor(ThemeManager.shared.theme.palette.onSecondary.opacity(0.8))
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(2)
+                        VStack(spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(ThemeManager.shared.theme.palette.primary.opacity(0.15))
+                                    .frame(width: 50, height: 50)
+                                Image(systemName: "camera.viewfinder")
+                                    .font(.system(size: 24, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
                             }
 
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.onSecondary)
+                            VStack(spacing: 4) {
+                                Text("Scan Product")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                                Text("Take a photo to automatically extract product information")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(3)
+                            }
+
+                            HStack(spacing: 4) {
+                                Text("Get Started")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                            }
                         }
-                        .padding(12)
+                        .padding(20)
                         .frame(maxWidth: .infinity)
-                        .background(ThemeManager.shared.theme.palette.secondary)
-                        .cornerRadius(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            ThemeManager.shared.theme.palette.surface,
+                                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(ThemeManager.shared.theme.palette.primary.opacity(0.2), lineWidth: 1)
+                                )
+                                .shadow(
+                                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.05),
+                                    radius: 8,
+                                    x: 0,
+                                    y: 2
+                                )
+                        )
                     }
                     .buttonStyle(PlainButtonStyle())
-
-                    // Or Text
-                    VStack {
-                        Text("Or")
-                            .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            .padding(.vertical, 8)
-                    }
 
                     // Add Manually Card
                     Button {
                         onAddProductTapped()
                     } label: {
-                        VStack(spacing: 8) {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.onSecondary)
-
-                            VStack(spacing: 2) {
-                                Text("Add Manually")
-                                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.onSecondary)
-
-                                Text("Enter product details manually")
-                                    .font(ThemeManager.shared.theme.typo.caption)
-                                    .foregroundColor(ThemeManager.shared.theme.palette.onSecondary.opacity(0.8))
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(2)
+                        VStack(spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
+                                    .frame(width: 50, height: 50)
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.system(size: 24, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                             }
 
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.onSecondary)
+                            VStack(spacing: 4) {
+                                Text("Add Manually")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                                Text("Enter product details manually for full control")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(3)
+                            }
+
+                            HStack(spacing: 4) {
+                                Text("Get Started")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                            }
                         }
-                        .padding(12)
+                        .padding(20)
                         .frame(maxWidth: .infinity)
-                        .background(ThemeManager.shared.theme.palette.secondary)
-                        .cornerRadius(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            ThemeManager.shared.theme.palette.surface,
+                                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(ThemeManager.shared.theme.palette.secondary.opacity(0.2), lineWidth: 1)
+                                )
+                                .shadow(
+                                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.05),
+                                    radius: 8,
+                                    x: 0,
+                                    y: 2
+                                )
+                        )
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
                 .padding(.horizontal, 20)
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, 30)
         }
         .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
     }
