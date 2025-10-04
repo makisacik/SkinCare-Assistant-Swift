@@ -34,7 +34,8 @@ struct RoutineDetailSheet: View {
 
                     HeroHeader(
                         title: routine.title,
-                        subtitle: "\(routine.stepCount) steps • \(routine.duration)"
+                        subtitle: "\(routine.stepCount) steps • \(routine.duration)",
+                        imageName: routine.imageName
                     )
 
                     VStack(alignment: .leading, spacing: 20) {
@@ -100,10 +101,11 @@ struct RoutineDetailSheet: View {
 private struct HeroHeader: View {
     let title: String
     let subtitle: String
+    let imageName: String
 
     var body: some View {
         ZStack {
-            Image("example-photo")
+            Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 250)
