@@ -132,7 +132,7 @@ struct DiscoverView: View {
             }
             .padding(.horizontal, 20)
 
-            LazyVGrid(columns: gridColumns, alignment: .center, spacing: 20) {
+            LazyVGrid(columns: gridColumns, alignment: .center, spacing: 10) {
                 ForEach(filteredRoutines, id: \.id) { routine in
                     RoutineGridCard(routine: routine) {
                         showingRoutineDetail = routine

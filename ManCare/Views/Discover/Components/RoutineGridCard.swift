@@ -67,7 +67,6 @@ struct RoutineGridCard: View {
                         .fill(ThemeManager.shared.theme.palette.surface)
                 )
             }
-            .frame(height: 230) // Total fixed height: 180 (image) + 50 (info)
         }
         .buttonStyle(PlainButtonStyle())
     }
