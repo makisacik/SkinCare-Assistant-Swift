@@ -70,7 +70,6 @@ struct ProductSlotsView: View {
 
             Spacer()
 
-            // Add Product Options - Modern Cards
             VStack(spacing: 20) {
                 Text("Add New Product")
                     .font(.system(size: 18, weight: .semibold))
