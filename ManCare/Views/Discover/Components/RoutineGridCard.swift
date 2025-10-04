@@ -14,33 +14,37 @@ struct RoutineGridCard: View {
     var body: some View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 0) {
-                ZStack {
-                    Image("example-photo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: 180)
-                        .clipped()
+                GeometryReader { geo in
+                    ZStack {
+                        Image(routine.imageName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: geo.size.width, height: 180)
+                            .clipped()
 
-                    // Duration badge in bottom-left
-                    VStack {
-                        Spacer()
-                        HStack {
-                            Text(routine.duration)
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color.green.opacity(0.9))
-                                )
+                        // Duration badge in bottom-left
+                        VStack {
                             Spacer()
+                            HStack {
+                                Text(routine.duration)
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(Color.green.opacity(0.9))
+                                    )
+                                Spacer()
+                            }
                         }
+                        .padding(12)
                     }
-                    .padding(12)
+                    .frame(width: geo.size.width, height: 180)
+                    .clipped()
+                    .cornerRadius(16, corners: [.topLeft, .topRight])
                 }
-                .frame(height: 180) // Fixed height for image
-                .cornerRadius(16, corners: [.topLeft, .topRight])
+                .frame(height: 180)
 
                 // Minimal content with fixed height
                 VStack(alignment: .leading, spacing: 4) {

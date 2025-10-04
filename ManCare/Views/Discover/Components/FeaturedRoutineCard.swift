@@ -16,7 +16,7 @@ struct FeaturedRoutineCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 // Background Image
                 ZStack {
-                    Image("example-photo")
+                    Image(routine.imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 280, height: 180)

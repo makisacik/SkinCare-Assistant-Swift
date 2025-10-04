@@ -94,6 +94,7 @@ struct RoutineTemplate: Identifiable, Codable {
     let benefits: [String]
     let isFeatured: Bool
     let isPremium: Bool
+    let imageName: String
     
     // Computed property for backward compatibility
     var steps: [String] {
@@ -158,7 +159,8 @@ extension RoutineTemplate {
                 "Reduced fine lines"
             ],
             isFeatured: true,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-korean"
         ),
         RoutineTemplate(
             title: "Acne Clear Routine",
@@ -189,7 +191,8 @@ extension RoutineTemplate {
                 "Soothes inflammation"
             ],
             isFeatured: true,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-acne"
         ),
         RoutineTemplate(
             title: "Anti-Aging Essentials",
@@ -220,7 +223,8 @@ extension RoutineTemplate {
                 "Stimulates collagen"
             ],
             isFeatured: true,
-            isPremium: true
+            isPremium: true,
+            imageName: "routine-anti-aging"
         )
     ]
     
@@ -250,7 +254,8 @@ extension RoutineTemplate {
                 "Time-efficient"
             ],
             isFeatured: false,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-minimalist"
         ),
         RoutineTemplate(
             title: "Sensitive Skin Soother",
@@ -280,7 +285,8 @@ extension RoutineTemplate {
                 "Calming ingredients"
             ],
             isFeatured: false,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-sensitive"
         ),
         RoutineTemplate(
             title: "Oily Skin Control",
@@ -311,7 +317,8 @@ extension RoutineTemplate {
                 "Prevents breakouts"
             ],
             isFeatured: false,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-oily"
         ),
         RoutineTemplate(
             title: "Dry Skin Hydration",
@@ -344,7 +351,8 @@ extension RoutineTemplate {
                 "Long-lasting moisture"
             ],
             isFeatured: false,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-dry"
         ),
         RoutineTemplate(
             title: "Combination Skin Balance",
@@ -375,7 +383,8 @@ extension RoutineTemplate {
                 "Customizable application"
             ],
             isFeatured: false,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-combination"
         ),
         RoutineTemplate(
             title: "Advanced Korean 12-Step",
@@ -416,7 +425,8 @@ extension RoutineTemplate {
                 "Luxury experience"
             ],
             isFeatured: false,
-            isPremium: true
+            isPremium: true,
+            imageName: "routine-korean"
         ),
         RoutineTemplate(
             title: "Teen Acne Fighter",
@@ -445,7 +455,8 @@ extension RoutineTemplate {
                 "Easy to follow"
             ],
             isFeatured: false,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-acne"
         ),
         RoutineTemplate(
             title: "Mature Skin Revival",
@@ -478,7 +489,8 @@ extension RoutineTemplate {
                 "Comprehensive care"
             ],
             isFeatured: false,
-            isPremium: true
+            isPremium: true,
+            imageName: "routine-mature"
         )
     ]
 }

@@ -151,7 +151,8 @@ class MockRoutineService: RoutineServiceProtocol {
             eveningSteps: routineResponse.routine.evening.map { $0.name },
             benefits: ["Mock benefit"],
             isFeatured: false,
-            isPremium: false
+            isPremium: false,
+            imageName: "routine-minimalist"
         )
         
         return try await saveRoutine(template)

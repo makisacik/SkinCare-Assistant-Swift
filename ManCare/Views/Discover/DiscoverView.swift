@@ -132,24 +132,11 @@ struct DiscoverView: View {
             }
             .padding(.horizontal, 20)
 
-            VStack(spacing: 20) {
-                ForEach(Array(filteredRoutines.chunked(into: 2).enumerated()), id: \.offset) { index, row in
-                    HStack(spacing: 12) {
-                        ForEach(row, id: \.id) { routine in
-                            RoutineGridCard(routine: routine) {
-                                showingRoutineDetail = routine
-                            }
-                            .padding(.bottom, 10)
-                            .frame(maxWidth: .infinity)
-                        }
-
-                        // Add invisible card to maintain grid structure if odd number of items
-                        if row.count == 1 {
-                            Color.clear
-                                .frame(maxWidth: .infinity)
-                        }
+            LazyVGrid(columns: gridColumns, alignment: .center, spacing: 20) {
+                ForEach(filteredRoutines, id: \.id) { routine in
+                    RoutineGridCard(routine: routine) {
+                        showingRoutineDetail = routine
                     }
-                    .padding(.bottom, 8)
                 }
             }
             .padding(.horizontal, 20)
@@ -161,11 +148,14 @@ struct DiscoverView: View {
     private var filteredRoutines: [RoutineTemplate] {
         return RoutineTemplate.allRoutines
     }
+
+    private var gridColumns: [GridItem] {
+        [
+            GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: 12, alignment: .top),
+            GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: 12, alignment: .top)
+        ]
+    }
 }
-
-
-
-
 
 
 // MARK: - Preview

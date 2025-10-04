@@ -214,7 +214,7 @@ struct RoutineHomeView: View {
                                 showingRoutineSwitcher = true
                             } label: {
                                 HStack(spacing: 4) {
-                                    Text("Choose routine")
+                                    Text("My routines")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     Image(systemName: "chevron.right")
