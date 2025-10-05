@@ -10,13 +10,13 @@ import SwiftUI
 struct RoutineHomeView: View {
 
     let generatedRoutine: RoutineResponse?
-    @Binding var selectedTab: MainTabView.Tab
+    @Binding var selectedTab: MainTabView.CurrentTab
     let routineService: RoutineServiceProtocol
 
     @StateObject private var routineViewModel: RoutineHomeViewModel
     @State private var selectedDate = Date()
     
-    init(generatedRoutine: RoutineResponse?, selectedTab: Binding<MainTabView.Tab>, routineService: RoutineServiceProtocol) {
+    init(generatedRoutine: RoutineResponse?, selectedTab: Binding<MainTabView.CurrentTab>, routineService: RoutineServiceProtocol) {
         self.generatedRoutine = generatedRoutine
         self._selectedTab = selectedTab
         self.routineService = routineService
@@ -1096,7 +1096,7 @@ private struct RoutineStepRow: View {
 // MARK: - Explore Routine Library Card
 
 private struct ExploreRoutineLibraryCard: View {
-    @Binding var selectedTab: MainTabView.Tab
+    @Binding var selectedTab: MainTabView.CurrentTab
 
     var body: some View {
         Button(action: {
