@@ -160,6 +160,7 @@ struct StepDropDelegate: DropDelegate {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("EditableStepCard") {
     let mockStep = EditableRoutineStep(
         id: "test_step",
@@ -190,3 +191,4 @@ struct StepDropDelegate: DropDelegate {
         onTap: {}
     )
 }
+#endif

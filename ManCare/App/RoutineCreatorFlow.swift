@@ -1,5 +1,5 @@
 //
-//  MainFlowView.swift
+//  RoutineCreatorFlow.swift
 //  ManCare
 //
 //  Created by Mehmet Ali Kısacık on 2.09.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MainFlowView: View {
+struct RoutineCreatorFlow: View {
     @Environment(\.colorScheme) private var cs
 
     @State private var currentStep: FlowStep = .welcome
@@ -240,7 +240,7 @@ struct MainFlowView: View {
                 }
 
             case .results:
-                NewRoutineResultView(
+                RoutineResultView(
                     skinType: selectedSkinType ?? .normal,
                     concerns: selectedConcerns,
                     mainGoal: selectedMainGoal ?? .healthierOverall,
@@ -875,7 +875,7 @@ private struct TimeoutError: Error {
 // MARK: - Progress Indicator
 
 private struct ProgressIndicator: View {
-    let currentStep: MainFlowView.FlowStep
+    let currentStep: RoutineCreatorFlow.FlowStep
 
     private var stepNumber: Int {
         switch currentStep {
@@ -943,12 +943,12 @@ private struct ProgressIndicator: View {
 
 // MARK: - Preview
 
-#Preview("Main Flow") {
-    MainFlowView()
+#Preview("Routine Creator Flow") {
+    RoutineCreatorFlow()
 }
 
 #Preview("Routine Result") {
-    NewRoutineResultView(
+    RoutineResultView(
         skinType: .combination,
         concerns: [.acne, .redness],
         mainGoal: .reduceBreakouts,

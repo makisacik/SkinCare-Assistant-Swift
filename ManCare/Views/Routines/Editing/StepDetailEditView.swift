@@ -225,6 +225,7 @@ struct StepDetailEditView: View {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("StepDetailEditView") {
     let mockStep = EditableRoutineStep(
         id: "test_step",
@@ -254,3 +255,4 @@ struct StepDetailEditView: View {
         )
     )
 }
+#endif

@@ -294,6 +294,7 @@ private struct EmptyRoutineState: View {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("EditRoutineView") {
     EditRoutineView(
         originalRoutine: nil,
@@ -301,3 +302,4 @@ private struct EmptyRoutineState: View {
         onRoutineUpdated: nil
     )
 }
+#endif

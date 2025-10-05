@@ -407,6 +407,7 @@ private struct StepTypeCard: View {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("AddStepView") {
     AddStepView(
         timeOfDay: .morning,
@@ -416,3 +417,4 @@ private struct StepTypeCard: View {
         )
     )
 }
+#endif

@@ -744,6 +744,7 @@ struct RoutineAlreadyCompletedView: View {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("CompanionSessionView") {
     CompanionSessionView(
         routineId: "morning_routine",
@@ -773,3 +774,4 @@ struct RoutineAlreadyCompletedView: View {
         completionViewModel: RoutineCompletionViewModel.preview
     )
 }
+#endif

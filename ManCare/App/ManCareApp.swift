@@ -19,7 +19,7 @@ struct ManCareApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainFlowView()
+            RoutineCreatorFlow()
                 // Note: We'll need to pass this down through environment or other means
                 // since RoutineService doesn't conform to ObservableObject
         }

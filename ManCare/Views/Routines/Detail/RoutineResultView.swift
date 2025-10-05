@@ -1,5 +1,5 @@
 //
-//  NewRoutineResultView.swift
+//  RoutineResultView.swift
 //  ManCare
 //
 //  Created by Mehmet Ali Kısacık on 2.09.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NewRoutineResultView: View {
+struct RoutineResultView: View {
     
     let skinType: SkinType
     let concerns: Set<Concern>
@@ -411,8 +411,8 @@ private struct RoutineResultHeader: View {
     }
 }
 
-#Preview("NewRoutineResultView") {
-    NewRoutineResultView(
+#Preview("RoutineResultView") {
+    RoutineResultView(
         skinType: .combination,
         concerns: [.acne, .redness],
         mainGoal: .reduceBreakouts,

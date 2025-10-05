@@ -292,6 +292,7 @@ private struct EmptyProductsState: View {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("ProductSelectionView") {
     let mockStep = EditableRoutineStep(
         id: "test_step",
@@ -321,3 +322,4 @@ private struct EmptyProductsState: View {
         )
     )
 }
+#endif

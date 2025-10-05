@@ -834,6 +834,7 @@ private struct EmptyProductTypeView: View {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("MorningRoutineCompletionView") {
     MorningRoutineCompletionView(
         routineSteps: [
@@ -871,3 +872,4 @@ private struct EmptyProductTypeView: View {
         originalRoutine: nil
     )
 }
+#endif

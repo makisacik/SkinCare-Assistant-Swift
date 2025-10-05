@@ -336,6 +336,7 @@ private struct RoutineDetailStepCard: View {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview("RoutineDetailView") {
     RoutineDetailView(
         title: "Morning Routine",
@@ -366,3 +367,4 @@ private struct RoutineDetailStepCard: View {
         onStepTap: { _ in }
     )
 }
+#endif
