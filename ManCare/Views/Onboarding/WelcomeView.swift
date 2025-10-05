@@ -19,89 +19,88 @@ struct WelcomeView: View {
             Color(red: 0.98, green: 0.96, blue: 0.94)
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
-                // Fixed header section
-                VStack(spacing: 16) {
-                    Spacer()
-                        .frame(height: 60)
-                    
-                    ShimmerText(
-                        text: "Glowie",
-                        baseColor: ThemeManager.shared.theme.palette.secondary
-                    )
-                    .font(.system(size: 42, weight: .light, design: .serif))
-                    .padding(.horizontal, 20)
-                    
-                    // Descriptive text with fixed height
-                    Text("Transform your skincare routine with personalized recommendations")
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(3) // Limit to 3 lines to prevent overflow
-                        .frame(minHeight: 60) // Fixed minimum height
-                        .padding(.horizontal, 40)
-                }
-                .frame(height: 200) // Fixed header height
-                
-                // Fixed image section
-                HStack(alignment: .top, spacing: 16) {
-                    // Left card - spans full height of right cards
-                    Image("onboarding-left")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 160, height: 336) // Height = (160 + 16 + 160) to match right side total
-                        .clipped()
-                        .cornerRadius(12)
-                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-                    
-                    // Right cards (two stacked, 1:1 aspect ratio)
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    // Header
                     VStack(spacing: 16) {
-                        // Top right card
-                        Image("onboarding-right-1")
+                        Spacer().frame(height: 60)
+                        
+                        ShimmerText(
+                            text: "Glowie",
+                            baseColor: ThemeManager.shared.theme.palette.secondary
+                        )
+                        .font(.system(size: 42, weight: .light, design: .serif))
+                        .padding(.horizontal, 20)
+                        
+                        Text("Transform your skincare routine with personalized recommendations")
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(3)
+                            .frame(minHeight: 60)
+                            .padding(.horizontal, 40)
+                    }
+                    .frame(height: 200)
+                    .padding(.bottom, 20)
+                    
+                    // IMAGE GROUP that scales with button width and keeps 1:1 ratio
+                    let buttonWidth = geometry.size.width - 40 // since .padding(.horizontal, 20)
+                    
+                    HStack(alignment: .top, spacing: 16) {
+                        Image("onboarding-left")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 160, height: 160) // 1:1 aspect ratio
+                            .frame(width: buttonWidth * 0.48, height: buttonWidth * 0.48 * 2 + 16) // matches right side total height
                             .clipped()
                             .cornerRadius(12)
                             .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
                         
-                        // Bottom right card
-                        Image("onboarding-right-2")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 160, height: 160) // 1:1 aspect ratio
-                            .clipped()
-                            .cornerRadius(12)
-                            .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                        VStack(spacing: 16) {
+                            Image("onboarding-right-1")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: buttonWidth * 0.48, height: buttonWidth * 0.48)
+                                .clipped()
+                                .cornerRadius(12)
+                                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                            
+                            Image("onboarding-right-2")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: buttonWidth * 0.48, height: buttonWidth * 0.48)
+                                .clipped()
+                                .cornerRadius(12)
+                                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                        }
                     }
-                }
-                .padding(.horizontal, 20)
-                .frame(height: 336) // Fixed image height
-                
-                Spacer() // Push button to bottom
-                
-                // Fixed button section
-                Button {
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    onGetStarted()
-                } label: {
-                    HStack(spacing: 8) {
-                        Text("Get Started")
-                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
-                        Image(systemName: "arrow.right")
-                            .font(.system(size: 16, weight: .semibold))
+                    .frame(width: buttonWidth, height: buttonWidth) // ⬅️ ensures square group
+                    .padding(.horizontal, 20)
+                    
+                    Spacer()
+                    
+                    // Button (reference width)
+                    Button {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        onGetStarted()
+                    } label: {
+                        HStack(spacing: 8) {
+                            Text("Get Started")
+                                .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 16, weight: .semibold))
+                        }
+                        .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(ThemeManager.shared.theme.palette.secondary)
+                        .cornerRadius(ThemeManager.shared.theme.cardRadius)
                     }
-                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(ThemeManager.shared.theme.palette.secondary)
-                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 80)
                 }
-                .buttonStyle(PlainButtonStyle())
-                .padding(.horizontal, 20)
-                .padding(.bottom, 80)
             }
-            
+
             // Skip to Home button overlay (development only)
             if let onSkipToHome = onSkipToHome {
                 VStack {

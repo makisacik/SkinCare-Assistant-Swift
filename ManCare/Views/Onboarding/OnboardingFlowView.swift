@@ -88,12 +88,10 @@ struct OnboardingFlowView: View {
                 }
                 .padding(.top, 60)
                 .padding(.bottom, 40)
-                
                 Spacer()
             }
         }
         .onAppear {
-            // Reset to first page when view appears
             currentPage = 0
         }
     }
