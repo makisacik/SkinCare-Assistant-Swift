@@ -5,7 +5,6 @@ struct MainTabView: View {
     @State private var selectedTab: CurrentTab = .routines
     @State private var showingAddProduct = false
     @State private var showingScanProduct = false
-    @State private var showingTestSheet = false
     @State private var selectedProduct: Product?
     @StateObject private var scanManager = ProductScanManager.shared
     let generatedRoutine: RoutineResponse?
@@ -78,25 +77,6 @@ struct MainTabView: View {
                 onDeleteProduct: { ProductService.shared.removeUserProduct(withId: $0.id) }
             )
         }
-        .sheet(isPresented: $showingTestSheet) {
-            // Mock UI tester
-            let mockExtractedText = "mia klinika RELAIC ACID SERUN NIACINAMION ZING TEA TREE GLYCINE"
-            let mockNormalizedProduct = ProductNormalizationResponse(
-                brand: "mia klinika",
-                productName: "RELAIC ACID SERUN",
-                productType: "faceSerum",
-                confidence: 0.85,
-                size: nil,
-                ingredients: ["Niacinamion", "Zing", "Tea Tree", "Glycine"]
-            )
-            ProductSummaryView(
-                extractedText: mockExtractedText,
-                normalizedProduct: mockNormalizedProduct,
-                productService: ProductService.shared,
-                onProductAdded: { _ in showingTestSheet = false },
-                onCancel: { showingTestSheet = false }
-            )
-        }
         .onChange(of: scanManager.shouldNavigateToProducts) { shouldNavigate in
             if shouldNavigate { selectedTab = .products }
         }
@@ -118,7 +98,6 @@ struct MainTabView: View {
             ProductSlotsView(
                 onAddProductTapped: { showingAddProduct = true },
                 onScanProductTapped: { showingScanProduct = true },
-                onTestSheetTapped: { showingTestSheet = true },
                 onProductTapped: { selectedProduct = $0 }
             )
         }

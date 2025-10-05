@@ -13,7 +13,6 @@ struct ProductSlotsView: View {
     // Callbacks for sheet presentation (handled at root level)
     let onAddProductTapped: () -> Void
     let onScanProductTapped: () -> Void
-    let onTestSheetTapped: () -> Void
     let onProductTapped: (Product) -> Void
 
     var body: some View {
@@ -33,18 +32,6 @@ struct ProductSlotsView: View {
 
                     Spacer()
                     
-                    // Test Sheet Button
-                    Button("Test Sheet") {
-                        onTestSheetTapped()
-                    }
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(ThemeManager.shared.theme.palette.primary.opacity(0.1))
-                    )
                 }
             }
             .padding(.horizontal, 20)
@@ -218,7 +205,6 @@ struct ProductSlotsView: View {
     ProductSlotsView(
         onAddProductTapped: { print("Add product tapped") },
         onScanProductTapped: { print("Scan product tapped") },
-        onTestSheetTapped: { print("Test sheet tapped") },
         onProductTapped: { product in print("Product tapped: \(product.displayName)") }
     )
 }

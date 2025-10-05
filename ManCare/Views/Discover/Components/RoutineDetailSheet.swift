@@ -88,8 +88,11 @@ struct RoutineDetailSheet: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Close") { dismiss() }
-                        .foregroundColor(palette.primary)
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(palette.primary)
+                    }
                 }
             }
         }
