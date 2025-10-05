@@ -51,8 +51,6 @@ struct MainTabView: View {
                     }
                 }
                 .tint(ThemeManager.shared.theme.palette.secondary)
-                .onAppear { resetTabBarForModernGlass() }
-
             } else {
                 // ✅ iOS 15–17: classic .tabItem + UIKit appearance
                 LegacyTabView(
@@ -168,18 +166,6 @@ private struct LegacyTabView: View {
 }
 
 extension MainTabView {
-    /// Reset tab bar to default glass appearance for iOS 18+. Call this once at app start.
-    @MainActor
-    private func resetTabBarForModernGlass() {
-        guard #available(iOS 18.0, *) else { return }
-        let appearance = UITabBarAppearance()          // default (no opaque config)
-        appearance.backgroundEffect = nil
-        appearance.backgroundColor = .clear
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().isTranslucent = true
-    }
-
     /// Only called on iOS 15–17. Avoid calling this on iOS 18+, or you'll kill Liquid Glass.
     private func setupLegacyTabBarAppearance() {
         let appearance = UITabBarAppearance()
