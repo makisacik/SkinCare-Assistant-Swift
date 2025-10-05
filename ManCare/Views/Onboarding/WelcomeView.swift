@@ -23,7 +23,7 @@ struct WelcomeView: View {
                 VStack(spacing: 0) {
                     // Header
                     VStack(spacing: 16) {
-                        Spacer().frame(height: 60)
+                        // Spacer removed - now handled by page indicator in OnboardingFlowView
                         
                         ShimmerText(
                             text: "Glowie",

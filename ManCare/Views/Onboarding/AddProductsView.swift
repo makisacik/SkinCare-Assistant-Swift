@@ -22,8 +22,7 @@ struct AddProductsView: View {
             VStack(spacing: 0) {
                 // Fixed header section
                 VStack(spacing: 16) {
-                    Spacer()
-                        .frame(height: 60)
+                    // Spacer removed - now handled by page indicator in OnboardingFlowView
                     
                     // Main headline
                     Text("Add or Scan Products")

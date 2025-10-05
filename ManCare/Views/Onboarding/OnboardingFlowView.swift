@@ -22,55 +22,8 @@ struct OnboardingFlowView: View {
             Color(red: 0.98, green: 0.96, blue: 0.94)
                 .ignoresSafeArea()
             
-            // Page content with smooth transitions
-            TabView(selection: $currentPage) {
-                // Page 0: Welcome
-                WelcomeView(
-                    onGetStarted: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentPage = 1
-                        }
-                    },
-                    onSkipToHome: onSkipToHome
-                )
-                .tag(0)
-                
-                // Page 1: Create Routine
-                CreateRoutineView(
-                    onNext: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentPage = 2
-                        }
-                    },
-                    onPrevious: {}
-                )
-                .tag(1)
-                
-                // Page 2: Add Products
-                AddProductsView(
-                    onNext: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentPage = 3
-                        }
-                    },
-                    onPrevious: {}
-                )
-                .tag(2)
-                
-                // Page 3: Discover & Track Progress
-                DiscoverProgressView(
-                    onGetStarted: {
-                        onComplete()
-                    },
-                    onPrevious: {}
-                )
-                .tag(3)
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .animation(.easeInOut(duration: 0.3), value: currentPage)
-            
-            // Custom page indicator overlay at top
-            VStack {
+            VStack(spacing: 0) {
+                // Page indicator integrated into layout (not overlay)
                 HStack(spacing: 8) {
                     ForEach(0..<totalPages, id: \.self) { index in
                         if index == currentPage {
@@ -87,8 +40,54 @@ struct OnboardingFlowView: View {
                     }
                 }
                 .padding(.top, 60)
-                .padding(.bottom, 40)
-                Spacer()
+                .padding(.bottom, 20)
+                
+                // Page content with smooth transitions
+                TabView(selection: $currentPage) {
+                    // Page 0: Welcome
+                    WelcomeView(
+                        onGetStarted: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                currentPage = 1
+                            }
+                        },
+                        onSkipToHome: onSkipToHome
+                    )
+                    .tag(0)
+                    
+                    // Page 1: Create Routine
+                    CreateRoutineView(
+                        onNext: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                currentPage = 2
+                            }
+                        },
+                        onPrevious: {}
+                    )
+                    .tag(1)
+                    
+                    // Page 2: Add Products
+                    AddProductsView(
+                        onNext: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                currentPage = 3
+                            }
+                        },
+                        onPrevious: {}
+                    )
+                    .tag(2)
+                    
+                    // Page 3: Discover & Track Progress
+                    DiscoverProgressView(
+                        onGetStarted: {
+                            onComplete()
+                        },
+                        onPrevious: {}
+                    )
+                    .tag(3)
+                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .animation(.easeInOut(duration: 0.3), value: currentPage)
             }
         }
         .onAppear {
