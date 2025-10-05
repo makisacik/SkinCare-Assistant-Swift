@@ -87,7 +87,7 @@ struct OnboardingFlowView: View {
                     }
                 }
                 .padding(.top, 60)
-                .padding(.bottom, 20)
+                .padding(.bottom, 40)
                 
                 Spacer()
             }
