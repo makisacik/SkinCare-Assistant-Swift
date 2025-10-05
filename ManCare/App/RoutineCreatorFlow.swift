@@ -40,8 +40,8 @@ struct RoutineCreatorFlow: View {
         ZStack {
             switch currentStep {
             case .welcome:
-                WelcomeView(
-                    onGetStarted: {
+                OnboardingFlowView(
+                    onComplete: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .skinType
                         }
