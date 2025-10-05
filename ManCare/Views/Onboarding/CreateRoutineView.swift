@@ -19,7 +19,7 @@ struct CreateRoutineView: View {
                 // Header section
                 VStack(spacing: 16) {
                     Spacer()
-                        .frame(height: 120)
+                        .frame(height: 60)
                     
                     // Main headline
                     Text("Create Your Routine")
@@ -41,7 +41,7 @@ struct CreateRoutineView: View {
                     .frame(height: 40)
                 
                 // Single image section - same size as combined images from first page
-                Image("onboarding-left")
+                Image("onboarding-routine")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 336, height: 336) // Same size as combined three images (160+16+160 = 336 width, 336 height)
