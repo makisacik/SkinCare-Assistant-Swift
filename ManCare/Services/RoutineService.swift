@@ -31,6 +31,7 @@ protocol RoutineServiceProtocol {
     func saveRoutine(_ template: RoutineTemplate) async throws -> SavedRoutineModel
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel
     func removeRoutine(_ routine: SavedRoutineModel) async throws
+    func removeRoutineTemplate(_ template: RoutineTemplate) async throws
     func setActiveRoutine(_ routine: SavedRoutineModel) async throws
     func isRoutineSaved(_ template: RoutineTemplate) async throws -> Bool
 
@@ -175,6 +176,15 @@ final class RoutineService: RoutineServiceProtocol {
         print("🗑️ Removing routine: \(routine.title)")
 
         try await store.removeRoutine(routine)
+
+        // Emit updated state
+        try await emitUpdatedState()
+    }
+
+    func removeRoutineTemplate(_ template: RoutineTemplate) async throws {
+        print("🗑️ Removing routine template: \(template.title)")
+
+        try await store.removeRoutineTemplate(template)
 
         // Emit updated state
         try await emitUpdatedState()

@@ -20,7 +20,7 @@ final class RoutineListViewModel: ObservableObject {
     @Published var error: Error?
     
     // MARK: - Dependencies
-    private let routineService: RoutineServiceProtocol
+    let routineService: RoutineServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Computed Properties
@@ -177,6 +177,27 @@ final class RoutineListViewModel: ObservableObject {
                     self.isLoading = false
                 }
                 print("❌ Failed to save routine template: \(error)")
+            }
+        }
+    }
+    
+    func removeRoutineTemplate(_ template: RoutineTemplate) {
+        isLoading = true
+        error = nil
+        
+        Task {
+            do {
+                try await routineService.removeRoutineTemplate(template)
+                await MainActor.run {
+                    self.isLoading = false
+                }
+                print("✅ Routine template removed: \(template.title)")
+            } catch {
+                await MainActor.run {
+                    self.error = error
+                    self.isLoading = false
+                }
+                print("❌ Failed to remove routine template: \(error)")
             }
         }
     }

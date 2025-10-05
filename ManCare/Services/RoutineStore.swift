@@ -16,6 +16,7 @@ protocol RoutineStoreProtocol: Sendable {
     func saveRoutine(_ routine: SavedRoutineModel) async throws -> SavedRoutineModel
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel
     func removeRoutine(_ routine: SavedRoutineModel) async throws
+    func removeRoutineTemplate(_ template: RoutineTemplate) async throws
     func setActiveRoutine(_ routine: SavedRoutineModel) async throws
     func isRoutineSaved(_ template: RoutineTemplate) async throws -> Bool
     
@@ -143,6 +144,36 @@ actor RoutineStore: RoutineStoreProtocol {
                 do {
                     let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     request.predicate = NSPredicate(format: "id == %@", routine.id as CVarArg)
+                    
+                    let results = try self.backgroundContext.fetch(request)
+                    
+                    var wasActive = false
+                    for savedRoutine in results {
+                        if savedRoutine.isActive {
+                            wasActive = true
+                        }
+                        self.backgroundContext.delete(savedRoutine)
+                    }
+                    
+                    if wasActive {
+                        UserDefaults.standard.removeObject(forKey: "activeRoutineId")
+                    }
+                    
+                    try self.backgroundContext.save()
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    func removeRoutineTemplate(_ template: RoutineTemplate) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            backgroundContext.perform {
+                do {
+                    let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+                    request.predicate = NSPredicate(format: "templateId == %@", template.id as CVarArg)
                     
                     let results = try self.backgroundContext.fetch(request)
                     

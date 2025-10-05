@@ -69,6 +69,10 @@ final class ServiceFactory {
 // MARK: - Mock Routine Service
 
 class MockRoutineService: RoutineServiceProtocol {
+    func removeRoutineTemplate(_ template: RoutineTemplate) async throws {
+        
+    }
+    
     var routinesStream: AnyPublisher<RoutineServiceState, Never> {
         Just(RoutineServiceState.initial)
             .eraseToAnyPublisher()

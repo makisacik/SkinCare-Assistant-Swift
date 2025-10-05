@@ -10,9 +10,16 @@ import SwiftUI
 struct RoutineDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isStepsExpanded = false
+    @State private var isSaved = false
 
     let routine: RoutineTemplate
     let listViewModel: RoutineListViewModel
+    
+    init(routine: RoutineTemplate, listViewModel: RoutineListViewModel) {
+        self.routine = routine
+        self.listViewModel = listViewModel
+        self._isSaved = State(initialValue: false) // Will be updated in onAppear
+    }
 
     var body: some View {
         let palette = ThemeManager.shared.theme.palette
@@ -64,16 +71,6 @@ struct RoutineDetailSheet: View {
                             }
                         )
 
-                        // CTA
-                        CTAButton(
-                            title: "Add to My Routines",
-                            palette: palette,
-                            action: {
-                                listViewModel.saveRoutineTemplate(routine)
-                                dismiss()
-                            }
-                        )
-                        .padding(.top, 8)
                     }
                     .padding(.horizontal, 24)
                     .background(
@@ -86,12 +83,38 @@ struct RoutineDetailSheet: View {
             .background(palette.background)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
+            .onAppear {
+                Task {
+                    do {
+                        isSaved = try await listViewModel.routineService.isRoutineSaved(routine)
+                    } catch {
+                        print("❌ Failed to check if routine is saved: \(error)")
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(palette.primary)
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        if isSaved {
+                            listViewModel.removeRoutineTemplate(routine)
+                        } else {
+                            listViewModel.saveRoutineTemplate(routine)
+                        }
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isSaved.toggle()
+                        }
+                    }) {
+                        Image(systemName: isSaved ? "heart.fill" : "heart")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(isSaved ? .red : palette.textPrimary)
                     }
                 }
             }
@@ -258,29 +281,6 @@ private struct StepRow: View {
     }
 }
 
-private struct CTAButton: View {
-    let title: String
-    let palette: ThemePalette
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 16, weight: .semibold))
-                Text(title)
-                    .font(.system(size: 16, weight: .semibold))
-            }
-            .foregroundColor(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(palette.primary)
-            )
-        }
-    }
-}
 
 #Preview {
     RoutineDetailSheet(
