@@ -21,11 +21,13 @@ struct WelcomeView: View {
                     Spacer()
                         .frame(height: 60)
                     
-                    // App name with elegant serif font
-                    Text("Glowie")
-                        .font(.system(size: 42, weight: .light, design: .serif))
-                        .foregroundColor(.orange)
-                        .padding(.horizontal, 20)
+                    ShimmerText(
+                        text: "Glowie",
+                        baseColor: ThemeManager.shared.theme.palette.secondary
+                    )
+                    .font(.system(size: 42, weight: .light, design: .serif))
+                    .padding(.horizontal, 20)
+
                     
                     // Descriptive text
                     Text("Transform your skincare routine with personalized recommendations")
