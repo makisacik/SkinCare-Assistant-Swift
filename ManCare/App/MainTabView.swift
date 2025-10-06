@@ -8,17 +8,20 @@ struct MainTabView: View {
     @State private var selectedProduct: Product?
     @StateObject private var scanManager = ProductScanManager.shared
     let generatedRoutine: RoutineResponse?
+    @State private var tempGeneratedRoutine: RoutineResponse?
 
     enum CurrentTab: String, CaseIterable, Hashable {
         case routines = "Routines"
         case discover = "Discover"
         case products = "My Products"
+        case myself = "Myself"
 
         var icon: String {
             switch self {
             case .routines: return "list.bullet.rectangle"
             case .discover: return "sparkles"
             case .products: return "bag.fill"
+            case .myself: return "person.crop.circle"
             }
         }
     }
@@ -29,7 +32,7 @@ struct MainTabView: View {
                 TabView(selection: $selectedTab) {
                     Tab(value: CurrentTab.routines) {
                         RoutineHomeView(
-                            generatedRoutine: generatedRoutine,
+                            generatedRoutine: tempGeneratedRoutine ?? generatedRoutine,
                             selectedTab: $selectedTab,
                             routineService: ServiceFactory.shared.createRoutineService()
                         )
@@ -48,13 +51,30 @@ struct MainTabView: View {
                     } label: {
                         Label("My Products", systemImage: "bag.fill")
                     }
+
+                    Tab(value: CurrentTab.myself) {
+                        MyselfView(
+                            routineService: ServiceFactory.shared.createRoutineService(),
+                            onRoutineGenerated: { response in
+                                tempGeneratedRoutine = response
+                                selectedTab = .routines
+                            }
+                        )
+                    } label: {
+                        Label("Myself", systemImage: "person.crop.circle")
+                    }
                 }
                 .tint(ThemeManager.shared.theme.palette.secondary)
             } else {
                 // ✅ iOS 15–17: classic .tabItem + UIKit appearance
                 LegacyTabView(
                     selectedTab: $selectedTab,
-                    productsContent: productsContent
+                    productsContent: productsContent,
+                    initialRoutine: tempGeneratedRoutine ?? generatedRoutine,
+                    onRoutineGenerated: { response in
+                        tempGeneratedRoutine = response
+                        selectedTab = .routines
+                    }
                 )
                 .tint(ThemeManager.shared.theme.palette.secondary)
                 .onAppear { setupLegacyTabBarAppearance() }
@@ -108,16 +128,20 @@ struct MainTabView: View {
 private struct LegacyTabView: View {
     @Binding var selectedTab: MainTabView.CurrentTab
     let productsContent: AnyView
+    let initialRoutine: RoutineResponse?
+    let onRoutineGenerated: (RoutineResponse) -> Void
 
-    init(selectedTab: Binding<MainTabView.CurrentTab>, productsContent: some View) {
+    init(selectedTab: Binding<MainTabView.CurrentTab>, productsContent: some View, initialRoutine: RoutineResponse?, onRoutineGenerated: @escaping (RoutineResponse) -> Void) {
         _selectedTab = selectedTab
         self.productsContent = AnyView(productsContent)
+        self.initialRoutine = initialRoutine
+        self.onRoutineGenerated = onRoutineGenerated
     }
 
     var body: some View {
         TabView(selection: $selectedTab) {
             RoutineHomeView(
-                generatedRoutine: nil,
+                generatedRoutine: initialRoutine,
                 selectedTab: $selectedTab,
                 routineService: ServiceFactory.shared.createRoutineService()
             )
@@ -140,6 +164,16 @@ private struct LegacyTabView: View {
                     Text(MainTabView.CurrentTab.products.rawValue)
                 }
                 .tag(MainTabView.CurrentTab.products)
+
+            MyselfView(
+                routineService: ServiceFactory.shared.createRoutineService(),
+                onRoutineGenerated: onRoutineGenerated
+            )
+            .tabItem {
+                Image(systemName: MainTabView.CurrentTab.myself.icon)
+                Text(MainTabView.CurrentTab.myself.rawValue)
+            }
+            .tag(MainTabView.CurrentTab.myself)
         }
     }
 }
