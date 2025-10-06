@@ -24,21 +24,12 @@ struct OnboardingFlowView: View {
             
             VStack(spacing: 0) {
                 // Page indicator integrated into layout (not overlay)
-                HStack(spacing: 8) {
-                    ForEach(0..<totalPages, id: \.self) { index in
-                        if index == currentPage {
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(ThemeManager.shared.theme.palette.primary)
-                                .frame(width: 24, height: 8)
-                                .animation(.easeInOut(duration: 0.2), value: currentPage)
-                        } else {
-                            Circle()
-                                .fill(ThemeManager.shared.theme.palette.separator)
-                                .frame(width: 8, height: 8)
-                                .animation(.easeInOut(duration: 0.2), value: currentPage)
-                        }
-                    }
-                }
+                PageIndicator(
+                    total: totalPages,
+                    index: $currentPage,
+                    activeColor: ThemeManager.shared.theme.palette.primary,
+                    inactiveColor: ThemeManager.shared.theme.palette.separator
+                )
                 .padding(.top, 60)
                 .padding(.bottom, 20)
                 

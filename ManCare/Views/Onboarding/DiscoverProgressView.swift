@@ -19,19 +19,34 @@ struct DiscoverProgressView: View {
             Color(red: 0.98, green: 0.96, blue: 0.94)
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
-                // Fixed header section
-                VStack(spacing: 16) {
-                    // Spacer removed - now handled by page indicator in OnboardingFlowView
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    // Fixed header section
+                    VStack(spacing: 16) {
+                        // Spacer removed - now handled by page indicator in OnboardingFlowView
+                        
+                        // Main headline
+                        Text("Discover & Track")
+                            .font(.system(size: 32, weight: .bold, design: .serif))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                    }
+                    .frame(height: 120) // Reduced header height since descriptive text moved below
                     
-                    // Main headline
-                    Text("Discover & Track")
-                        .font(.system(size: 32, weight: .bold, design: .serif))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        .multilineTextAlignment(.center)
+                    // IMAGE that scales with button width and keeps 1:1 ratio
+                    let buttonWidth = geometry.size.width - 40 // since .padding(.horizontal, 20)
+                    
+                    Image("onboarding-discover")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: buttonWidth, height: buttonWidth) // Square aspect ratio matching button width
+                        .clipped()
+                        .cornerRadius(12)
+                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
                         .padding(.horizontal, 20)
                     
-                    // Descriptive text with fixed height
+                    // Descriptive text below image
                     Text("Find new skincare routines, learn from others, and watch your glow evolve over time.")
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -39,42 +54,31 @@ struct DiscoverProgressView: View {
                         .lineLimit(4) // Limit to 4 lines to prevent overflow
                         .frame(minHeight: 80) // Fixed minimum height
                         .padding(.horizontal, 40)
-                }
-                .frame(height: 200) // Fixed header height
-                
-                // Fixed image section
-                Image("onboarding-discover")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 336, height: 336) // Same size as combined three images (160+16+160 = 336 width, 336 height)
-                    .clipped()
-                    .cornerRadius(12)
-                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-                    .padding(.horizontal, 20)
-                    .frame(height: 336) // Fixed image height
-                
-                Spacer() // Push button to bottom
-                
-                // Fixed button section
-                Button {
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    onGetStarted()
-                } label: {
-                    HStack(spacing: 8) {
-                        Text("Get Started")
-                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
-                        Image(systemName: "arrow.right")
-                            .font(.system(size: 16, weight: .semibold))
+                        .padding(.top, 20)
+                    
+                    Spacer() // Push button to bottom
+                    
+                    // Button (reference width)
+                    Button {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        onGetStarted()
+                    } label: {
+                        HStack(spacing: 8) {
+                            Text("Get Started")
+                                .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 16, weight: .semibold))
+                        }
+                        .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(ThemeManager.shared.theme.palette.secondary)
+                        .cornerRadius(ThemeManager.shared.theme.cardRadius)
                     }
-                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(ThemeManager.shared.theme.palette.secondary)
-                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 80)
                 }
-                .buttonStyle(PlainButtonStyle())
-                .padding(.horizontal, 20)
-                .padding(.bottom, 80)
             }
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }

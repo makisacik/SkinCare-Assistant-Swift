@@ -21,7 +21,7 @@ struct WelcomeView: View {
             
             GeometryReader { geometry in
                 VStack(spacing: 0) {
-                    // Header
+                    // Fixed header section
                     VStack(spacing: 16) {
                         // Spacer removed - now handled by page indicator in OnboardingFlowView
                         
@@ -31,17 +31,8 @@ struct WelcomeView: View {
                         )
                         .font(.system(size: 42, weight: .light, design: .serif))
                         .padding(.horizontal, 20)
-                        
-                        Text("Transform your skincare routine with personalized recommendations")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(3)
-                            .frame(minHeight: 60)
-                            .padding(.horizontal, 40)
                     }
-                    .frame(height: 200)
-                    .padding(.bottom, 20)
+                    .frame(height: 120) // Reduced header height since descriptive text moved below
                     
                     // IMAGE GROUP that scales with button width and keeps 1:1 ratio
                     let buttonWidth = geometry.size.width - 40 // since .padding(.horizontal, 20)
@@ -75,6 +66,16 @@ struct WelcomeView: View {
                     }
                     .frame(width: buttonWidth, height: buttonWidth) // ⬅️ ensures square group
                     .padding(.horizontal, 20)
+                    
+                    // Descriptive text below image
+                    Text("Transform your skincare routine with personalized recommendations")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(4) // Limit to 4 lines to prevent overflow
+                        .frame(minHeight: 80) // Fixed minimum height
+                        .padding(.horizontal, 40)
+                        .padding(.top, 20)
                     
                     Spacer()
                     
