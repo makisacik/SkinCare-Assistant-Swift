@@ -16,7 +16,7 @@ struct PageIndicator: View {
     // Tweakables
     private let dot: CGFloat = 8
     private let activeWidth: CGFloat = 24
-    private let spacing: CGFloat = 8
+    private let spacing: CGFloat = 2
     
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
