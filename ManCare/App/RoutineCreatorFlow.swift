@@ -9,8 +9,10 @@ import SwiftUI
 
 struct RoutineCreatorFlow: View {
     @Environment(\.colorScheme) private var cs
+    
+    let onComplete: (RoutineResponse?) -> Void
 
-    @State private var currentStep: FlowStep = .welcome
+    @State private var currentStep: FlowStep = .skinType
     @State private var selectedSkinType: SkinType?
     @State private var selectedConcerns: Set<Concern> = []
     @State private var selectedMainGoal: MainGoal?
@@ -23,7 +25,6 @@ struct RoutineCreatorFlow: View {
     @State private var routineError: Error?
 
     enum FlowStep {
-        case welcome
         case skinType
         case concerns
         case mainGoal
@@ -33,38 +34,11 @@ struct RoutineCreatorFlow: View {
         case preferences
         case loading
         case results
-        case home
     }
 
     var body: some View {
         ZStack {
             switch currentStep {
-            case .welcome:
-                OnboardingFlowView(
-                    onComplete: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .skinType
-                        }
-                    },
-                    onSkipToHome: {
-                        // Set up sample data for testing
-                        selectedSkinType = .normal
-                        selectedConcerns = [.largePores]
-                        selectedMainGoal = .healthierOverall
-                        selectedFitzpatrickSkinTone = .type3
-                        selectedAgeRange = .thirties
-                        selectedRegion = .temperate
-                        selectedPreferences = nil
-                        generatedRoutine = createMockRoutineResponse()
-
-                        // Note: Routine saving is handled in RoutineHomeView.onAppear to avoid duplicates
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .home
-                        }
-                    }
-                )
-                .transition(.opacity)
-
             case .skinType:
                 SkinTypeSelectionView { skinType in
                     selectedSkinType = skinType
@@ -248,7 +222,7 @@ struct RoutineCreatorFlow: View {
                     generatedRoutine: generatedRoutine,
                     onRestart: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .welcome
+                            currentStep = .skinType
                             selectedSkinType = nil
                             selectedConcerns = []
                             selectedMainGoal = nil
@@ -267,18 +241,9 @@ struct RoutineCreatorFlow: View {
                         }
                     },
                     onContinue: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .home
-                        }
+                        onComplete(generatedRoutine)
                     }
                 )
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing).combined(with: .opacity),
-                    removal:   .move(edge: .leading).combined(with: .opacity)
-                ))
-
-            case .home:
-                MainTabView(generatedRoutine: generatedRoutine)
                 .transition(.asymmetric(
                     insertion: .move(edge: .trailing).combined(with: .opacity),
                     removal:   .move(edge: .leading).combined(with: .opacity)
@@ -879,23 +844,20 @@ private struct ProgressIndicator: View {
 
     private var stepNumber: Int {
         switch currentStep {
-        case .welcome: return 1
-        case .skinType: return 2
-        case .concerns: return 3
-        case .mainGoal: return 4
-        case .fitzpatrickSkinTone: return 5
-        case .ageRange: return 6
-        case .region: return 7
-        case .preferences: return 8
-        case .loading: return 9
-        case .results: return 10
-        case .home: return 11
+        case .skinType: return 1
+        case .concerns: return 2
+        case .mainGoal: return 3
+        case .fitzpatrickSkinTone: return 4
+        case .ageRange: return 5
+        case .region: return 6
+        case .preferences: return 7
+        case .loading: return 8
+        case .results: return 9
         }
     }
 
     private var stepTitle: String {
         switch currentStep {
-        case .welcome: return "Welcome"
         case .skinType: return "Skin Type"
         case .concerns: return "Concerns"
         case .mainGoal: return "Main Goal"
@@ -905,7 +867,6 @@ private struct ProgressIndicator: View {
         case .preferences: return "Preferences"
         case .loading: return "Analyzing"
         case .results: return "Results"
-        case .home: return "Home"
         }
     }
 
@@ -929,7 +890,7 @@ private struct ProgressIndicator: View {
             Spacer()
 
             // Progress text
-            Text("\(stepNumber) of 11")
+            Text("\(stepNumber) of 9")
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
         }
@@ -944,7 +905,7 @@ private struct ProgressIndicator: View {
 // MARK: - Preview
 
 #Preview("Routine Creator Flow") {
-    RoutineCreatorFlow()
+    RoutineCreatorFlow(onComplete: { _ in })
 }
 
 #Preview("Routine Result") {
