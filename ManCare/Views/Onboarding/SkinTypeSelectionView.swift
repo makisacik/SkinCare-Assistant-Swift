@@ -60,8 +60,8 @@ struct SkinTypeSelectionView: View {
             
             VStack(alignment: .leading, spacing: 20) {
                 // Title section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("What's your skin type?")
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("What's your skin type?")
                     .font(ThemeManager.shared.theme.typo.h1)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Text("Select your base type to build a simple routine.")

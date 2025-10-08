@@ -258,7 +258,7 @@ struct RoutineCreatorFlow: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: shouldShowBackButton ? AnyView(backButton) : nil)
+            .navigationBarItems(leading: backButton.opacity(shouldShowBackButton ? 1 : 0))
             .onAppear {
                 setupNavigationBarAppearance()
             }
