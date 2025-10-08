@@ -21,25 +21,6 @@ struct CycleSetupView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // Header with back button
-            HStack {
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    onPrevious()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Back")
-                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                    }
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                }
-                .buttonStyle(PlainButtonStyle())
-                Spacer()
-            }
-            .padding(.top, 8)
-            
             // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("Track Your Cycle")
@@ -257,6 +238,7 @@ struct CycleSetupView: View {
                 }
             )
         }
+        .backButtonToolbar(action: onPrevious)
     }
 }
 

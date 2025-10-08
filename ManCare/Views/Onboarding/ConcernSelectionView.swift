@@ -63,28 +63,6 @@ struct ConcernSelectionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-
-            // Header with back button
-            HStack {
-                if let onBack = onBack {
-                    Button {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        onBack()
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 16, weight: .semibold))
-                            Text("Back")
-                                .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                        }
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                Spacer()
-            }
-            .padding(.top, 8)
-
             // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What concerns you?")
@@ -169,7 +147,9 @@ struct ConcernSelectionView: View {
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { newScheme in
             ThemeManager.shared.refreshForSystemChange(newScheme)
-        }    }
+        }
+        .backButtonToolbar(action: onBack ?? {})
+    }
 
     private func toggle(_ c: Concern) {
         if c == .none {

@@ -60,25 +60,6 @@ struct MainGoalView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // Header with back button
-            HStack {
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    onBack()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Back")
-                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                    }
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                }
-                .buttonStyle(PlainButtonStyle())
-                Spacer()
-            }
-            .padding(.top, 8)
-            
             // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your main goal?")
@@ -150,6 +131,7 @@ struct MainGoalView: View {
         .padding(20)
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
+        .backButtonToolbar(action: onBack)
     }
 }
 

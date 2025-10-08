@@ -20,7 +20,7 @@ struct RoutineResultView: View {
     
     var body: some View {
         VStack(spacing: 24) {
-            RoutineResultHeader(onBack: onBack)
+            RoutineResultHeader()
             
             ScrollView {
                 LazyVStack(spacing: 20) {
@@ -92,6 +92,7 @@ struct RoutineResultView: View {
             .padding(.bottom, 20)
         }
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
+        .backButtonToolbar(action: onBack)
     }
     
     private func generateMorningRoutine() -> [RoutineStep] {
@@ -371,29 +372,8 @@ private struct ProfileRow: View {
 
 private struct RoutineResultHeader: View {
     
-    let onBack: () -> Void
-    
     var body: some View {
         VStack(spacing: 8) {
-            // Back button
-            HStack {
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    onBack()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Back")
-                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                    }
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                }
-                .buttonStyle(PlainButtonStyle())
-                Spacer()
-            }
-            .padding(.top, 8)
-            
             // Title
             VStack(spacing: 8) {
                 Text("Your personalized routine")
