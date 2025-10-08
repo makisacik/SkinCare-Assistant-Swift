@@ -252,8 +252,9 @@ public struct PrimaryButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity)
             .background(configuration.isPressed ? ThemeManager.shared.theme.palette.primaryLight : ThemeManager.shared.theme.palette.primary)
             .cornerRadius(ThemeManager.shared.theme.cornerRadius)
-            .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 8, x: 0, y: 4)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.2), radius: 4, x: 0, y: 2)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 
@@ -270,7 +271,8 @@ public struct GhostButtonStyle: ButtonStyle {
                 RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cornerRadius)
                     .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
             )
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 
@@ -283,8 +285,9 @@ public struct SecondaryButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity)
             .background(configuration.isPressed ? ThemeManager.shared.theme.palette.secondaryLight : ThemeManager.shared.theme.palette.secondary)
             .cornerRadius(ThemeManager.shared.theme.cornerRadius)
-            .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 8, x: 0, y: 4)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.2), radius: 4, x: 0, y: 2)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 

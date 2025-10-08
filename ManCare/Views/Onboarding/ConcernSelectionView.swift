@@ -67,22 +67,27 @@ struct ConcernSelectionView: View {
             ThemeManager.shared.theme.palette.accentBackground
                 .ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 20) {
-                // Title section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("What concerns you?")
-                    .font(ThemeManager.shared.theme.typo.h1)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text("Pick what you want to focus on.")
-                    .font(ThemeManager.shared.theme.typo.sub)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Title section
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("What concerns you?")
+                            .font(ThemeManager.shared.theme.typo.h1)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        Text("Pick what you want to focus on.")
+                            .font(ThemeManager.shared.theme.typo.sub)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+                    .onTapGesture {
+                        dismissKeyboard()
+                    }
 
-            // Grid of concerns
-            LazyVGrid(columns: columns, spacing: 10) {
+                    // Grid of concerns
+                    LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(Concern.allCases) { c in
                     ConcernCard(concern: c, selected: selections.contains(c))
                         .onTapGesture {
+                            dismissKeyboard()
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
                                 toggle(c)
@@ -92,66 +97,62 @@ struct ConcernSelectionView: View {
                         .accessibilityLabel(Text(c.title))
                         .accessibilityHint(Text("Tap to select"))
                         .accessibilityAddTraits(selections.contains(c) ? .isSelected : [])
+                    }
                 }
-            }
             
-            // Custom concern input
-            HStack(spacing: 12) {
-                Image(systemName: "pencil.circle.fill")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(isEditingCustomConcern || !customConcern.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
+                // Custom concern input
+                HStack(spacing: 12) {
+                    Image(systemName: "pencil.circle.fill")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(isEditingCustomConcern || !customConcern.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
+                    
+                    TextField("Type your own concern...", text: $customConcern, onEditingChanged: { editing in
+                        isEditingCustomConcern = editing
+                    })
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .submitLabel(.done)
+                    .onChange(of: customConcern) { newValue in
+                        if newValue.count > 60 {
+                            customConcern = String(newValue.prefix(60))
+                        }
+                    }
+                }
+                .padding(14)
+                .background(
+                    RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
+                        .fill(ThemeManager.shared.theme.palette.cardBackground)
+                        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(isEditingCustomConcern ? 0.2 : 0.1), radius: isEditingCustomConcern ? 6 : 3, x: 0, y: isEditingCustomConcern ? 3 : 1)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                                .stroke(isEditingCustomConcern || !customConcern.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.separator, lineWidth: isEditingCustomConcern || !customConcern.isEmpty ? 2 : 1)
+                        )
+                )
+                .animation(.easeInOut(duration: 0.2), value: isEditingCustomConcern)
+                .animation(.easeInOut(duration: 0.2), value: customConcern.isEmpty)
                 
-                TextField("Type your own concern...", text: $customConcern, onEditingChanged: { editing in
-                    isEditingCustomConcern = editing
-                })
-                .font(ThemeManager.shared.theme.typo.body)
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                .textFieldStyle(PlainTextFieldStyle())
-                .submitLabel(.done)
-            }
-            .padding(14)
-            .background(
-                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
-                    .fill(ThemeManager.shared.theme.palette.cardBackground)
-                    .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(isEditingCustomConcern ? 0.8 : 0.5), radius: isEditingCustomConcern ? 10 : 4, x: 0, y: isEditingCustomConcern ? 6 : 2)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
-                            .stroke(isEditingCustomConcern || !customConcern.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.separator, lineWidth: isEditingCustomConcern || !customConcern.isEmpty ? 2 : 1)
-                    )
-            )
-            .animation(.easeInOut(duration: 0.2), value: isEditingCustomConcern)
-            .animation(.easeInOut(duration: 0.2), value: customConcern.isEmpty)
-            
-            Spacer(minLength: 8)
-            
-            // Action buttons
-            VStack(spacing: 12) {
-                // Continue
+                Spacer(minLength: 8)
+                
+                // Continue button
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     onContinue(selections)
                 } label: {
-                    Text(selections.isEmpty
-                         ? "Continue"
-                         : "Continue with \(selections.count) Selected")
+                    Text("Continue")
                 }
                 .buttonStyle(PrimaryButtonStyle())
-
-                // Optional: Skip
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    onContinue([])
-                } label: {
-                    Text("Skip for now")
                 }
-                .buttonStyle(GhostButtonStyle())
+                .padding(20)
             }
-            }
-            .padding(20)
         }
         .onChange(of: cs) { newScheme in
             ThemeManager.shared.refreshForSystemChange(newScheme)
         }
+    }
+    
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
     private func toggle(_ c: Concern) {
@@ -222,16 +223,17 @@ private struct ConcernCard: View {
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
-                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(1.0)
-                                        : ThemeManager.shared.theme.palette.shadow,
-                        radius: selected ? 12 : 8, x: 0, y: selected ? 6 : 4)
+                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(0.3)
+                                        : ThemeManager.shared.theme.palette.shadow.opacity(0.15),
+                        radius: selected ? 8 : 4, x: 0, y: selected ? 4 : 2)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,
                                 lineWidth: selected ? 2 : 1)
                 )
         )
-        .animation(.easeInOut(duration: 0.18), value: selected)
+        .scaleEffect(selected ? 1.05 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: selected)
     }
 }
 

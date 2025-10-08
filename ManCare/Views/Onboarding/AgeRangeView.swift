@@ -59,7 +59,7 @@ struct AgeRangeView: View {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 onContinue(picked)
             } label: {
-                Text(selection == nil ? "Continue" : "Continue with \(selection!.title)")
+                Text("Continue")
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
@@ -112,16 +112,17 @@ private struct AgeRangeCard: View {
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
-                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(1.0)
-                                        : ThemeManager.shared.theme.palette.shadow,
-                        radius: selected ? 14 : 10, x: 0, y: selected ? 8 : 6)
+                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(0.3)
+                                        : ThemeManager.shared.theme.palette.shadow.opacity(0.15),
+                        radius: selected ? 8 : 4, x: 0, y: selected ? 4 : 2)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,
                                 lineWidth: selected ? 2 : 1)
                 )
         )
-        .animation(.easeInOut(duration: 0.18), value: selected)
+        .scaleEffect(selected ? 1.05 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: selected)
     }
 }
 

@@ -131,7 +131,7 @@ struct FitzpatrickSkinToneView: View {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 onContinue(picked)
             } label: {
-                Text(selection == nil ? "Continue" : "Continue with \(selection!.title)")
+                Text("Continue")
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
@@ -232,7 +232,7 @@ private struct FitzpatrickSkinToneDetailCard: View {
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(ThemeManager.shared.theme.palette.cardBackground)
-                .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 12, x: 0, y: 6)
+                .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.2), radius: 6, x: 0, y: 3)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(ThemeManager.shared.theme.palette.primary.opacity(0.3), lineWidth: 2)

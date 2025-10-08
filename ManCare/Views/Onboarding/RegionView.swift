@@ -55,7 +55,7 @@ struct RegionView: View {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 onContinue(picked)
             } label: {
-                Text(selection == nil ? "Continue" : "Continue with \(selection!.title)")
+                Text("Continue")
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
@@ -126,7 +126,7 @@ private struct ClimateWheel: View {
                 .background(
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.accentBackground)
-                        .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 4, x: 0, y: 2)
+                        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.15), radius: 2, x: 0, y: 1)
                 )
             }
 
@@ -279,7 +279,7 @@ private struct ClimateDetailCard: View {
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(ThemeManager.shared.theme.palette.cardBackground)
-                .shadow(color: ThemeManager.shared.theme.palette.shadow, radius: 8, x: 0, y: 4)
+                .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.2), radius: 6, x: 0, y: 3)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(region.climateColor.opacity(0.3), lineWidth: 1)

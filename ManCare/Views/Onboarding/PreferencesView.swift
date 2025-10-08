@@ -170,7 +170,7 @@ private struct PreferenceToggle: View {
         .padding(16)
         .background(ThemeManager.shared.theme.palette.cardBackground)
         .cornerRadius(ThemeManager.shared.theme.cardRadius)
-        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.5), radius: 4, x: 0, y: 2)
+        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.15), radius: 3, x: 0, y: 1)
     }
 }
 

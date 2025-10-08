@@ -63,78 +63,93 @@ struct MainGoalView: View {
             ThemeManager.shared.theme.palette.accentBackground
                 .ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 20) {
-                // Title section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("What's your main goal?")
-                    .font(ThemeManager.shared.theme.typo.h1)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text("Choose the primary focus for your skincare routine.")
-                    .font(ThemeManager.shared.theme.typo.sub)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Title section
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("What's your main goal?")
+                            .font(ThemeManager.shared.theme.typo.h1)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        Text("Choose the primary focus for your skincare routine.")
+                            .font(ThemeManager.shared.theme.typo.sub)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+                    .onTapGesture {
+                        dismissKeyboard()
+                    }
             
-            // Grid of goals
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(MainGoal.allCases) { goal in
-                    MainGoalCard(goal: goal, selected: selection == goal)
-                        .onTapGesture {
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
-                                selection = goal
+                    // Grid of goals
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(MainGoal.allCases) { goal in
+                            MainGoalCard(goal: goal, selected: selection == goal)
+                                .onTapGesture {
+                                    dismissKeyboard()
+                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                    withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
+                                        selection = goal
+                                    }
+                                }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel(Text(goal.title))
+                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityAddTraits(selection == goal ? .isSelected : [])
+                        }
+                    }
+            
+                    // Custom goal input
+                    HStack(spacing: 12) {
+                        Image(systemName: "pencil.circle.fill")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
+                        
+                        TextField("Type your own goal...", text: $customGoal, onEditingChanged: { editing in
+                            isEditingCustomGoal = editing
+                        })
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .submitLabel(.done)
+                        .onChange(of: customGoal) { newValue in
+                            if newValue.count > 60 {
+                                customGoal = String(newValue.prefix(60))
                             }
                         }
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel(Text(goal.title))
-                        .accessibilityHint(Text("Tap to select"))
-                        .accessibilityAddTraits(selection == goal ? .isSelected : [])
-                }
-            }
-            
-            // Custom goal input
-            HStack(spacing: 12) {
-                Image(systemName: "pencil.circle.fill")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
-                
-                TextField("Type your own goal...", text: $customGoal, onEditingChanged: { editing in
-                    isEditingCustomGoal = editing
-                })
-                .font(ThemeManager.shared.theme.typo.body)
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                .textFieldStyle(PlainTextFieldStyle())
-                .submitLabel(.done)
-            }
-            .padding(14)
-            .background(
-                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
-                    .fill(ThemeManager.shared.theme.palette.cardBackground)
-                    .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(isEditingCustomGoal ? 0.8 : 0.5), radius: isEditingCustomGoal ? 10 : 4, x: 0, y: isEditingCustomGoal ? 6 : 2)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
-                            .stroke(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.separator, lineWidth: isEditingCustomGoal || !customGoal.isEmpty ? 2 : 1)
+                    }
+                    .padding(14)
+                    .background(
+                        RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
+                            .fill(ThemeManager.shared.theme.palette.cardBackground)
+                            .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(isEditingCustomGoal ? 0.2 : 0.1), radius: isEditingCustomGoal ? 6 : 3, x: 0, y: isEditingCustomGoal ? 3 : 1)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                                    .stroke(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.separator, lineWidth: isEditingCustomGoal || !customGoal.isEmpty ? 2 : 1)
+                            )
                     )
-            )
-            .animation(.easeInOut(duration: 0.2), value: isEditingCustomGoal)
-            .animation(.easeInOut(duration: 0.2), value: customGoal.isEmpty)
-            
-            Spacer(minLength: 8)
-            
-            // Continue button
-            Button {
-                guard let picked = selection else { return }
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                onContinue(picked)
-            } label: {
-                Text(selection == nil ? "Continue" : "Continue with \(selection!.title)")
+                    .animation(.easeInOut(duration: 0.2), value: isEditingCustomGoal)
+                    .animation(.easeInOut(duration: 0.2), value: customGoal.isEmpty)
+                    
+                    Spacer(minLength: 8)
+                    
+                    // Continue button
+                    Button {
+                        guard let picked = selection else { return }
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        onContinue(picked)
+                    } label: {
+                        Text("Continue")
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .disabled(selection == nil)
+                    .opacity(selection == nil ? 0.7 : 1.0)
+                }
+                .padding(20)
             }
-            .buttonStyle(PrimaryButtonStyle())
-            .disabled(selection == nil)
-            .opacity(selection == nil ? 0.7 : 1.0)
-            }
-            .padding(20)
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
+    }
+    
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
@@ -183,16 +198,17 @@ private struct MainGoalCard: View {
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
-                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(1.0)
-                                        : ThemeManager.shared.theme.palette.shadow,
-                        radius: selected ? 12 : 8, x: 0, y: selected ? 6 : 4)
+                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(0.3)
+                                        : ThemeManager.shared.theme.palette.shadow.opacity(0.15),
+                        radius: selected ? 8 : 4, x: 0, y: selected ? 4 : 2)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,
                                 lineWidth: selected ? 2 : 1)
                 )
         )
-        .animation(.easeInOut(duration: 0.18), value: selected)
+        .scaleEffect(selected ? 1.05 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: selected)
     }
 }
 
