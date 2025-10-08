@@ -10,8 +10,7 @@ import SwiftUI
 struct RoutineCreatorFlow: View {
     @Environment(\.colorScheme) private var cs
     
-    let onComplete: (RoutineResponse?) -> Void
-
+    @State private var showMainApp = false
     @State private var currentStep: FlowStep = .skinType
     @State private var selectedSkinType: SkinType?
     @State private var selectedConcerns: Set<Concern> = []
@@ -39,6 +38,26 @@ struct RoutineCreatorFlow: View {
     }
 
     var body: some View {
+        ZStack {
+            if showMainApp {
+                MainTabView(generatedRoutine: generatedRoutine)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+                    .zIndex(2)
+            } else {
+                routineCreatorContent
+                    .transition(.asymmetric(
+                        insertion: .opacity,
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
+                    .zIndex(1)
+            }
+        }
+    }
+    
+    private var routineCreatorContent: some View {
         ZStack {
             switch currentStep {
             case .skinType:
@@ -268,7 +287,9 @@ struct RoutineCreatorFlow: View {
                         }
                     },
                     onContinue: {
-                        onComplete(generatedRoutine)
+                        withAnimation(.easeInOut(duration: 0.4)) {
+                            showMainApp = true
+                        }
                     }
                 )
                 .transition(.asymmetric(
@@ -934,7 +955,7 @@ private struct ProgressIndicator: View {
 // MARK: - Preview
 
 #Preview("Routine Creator Flow") {
-    RoutineCreatorFlow(onComplete: { _ in })
+    RoutineCreatorFlow()
 }
 
 #Preview("Routine Result") {

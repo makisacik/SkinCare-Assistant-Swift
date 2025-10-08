@@ -10,13 +10,31 @@ import SwiftUI
 struct OnboardingFlowView: View {
     @State private var currentPage = 0
     @State private var isAnimating = false
-    
-    var onComplete: () -> Void
-    var onSkipToHome: (() -> Void)? = nil
+    @State private var showRoutineCreator = false
     
     private let totalPages = 4
     
     var body: some View {
+        ZStack {
+            if showRoutineCreator {
+                RoutineCreatorFlow()
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
+                    .zIndex(2)
+            } else {
+                mainOnboardingView
+                    .transition(.asymmetric(
+                        insertion: .opacity,
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
+                    .zIndex(1)
+            }
+        }
+    }
+    
+    private var mainOnboardingView: some View {
         ZStack {
             // Background
             Color(red: 0.98, green: 0.96, blue: 0.94)
@@ -42,7 +60,11 @@ struct OnboardingFlowView: View {
                                 currentPage = 1
                             }
                         },
-                        onSkipToHome: onSkipToHome
+                        onSkipToHome: {
+                            withAnimation(.easeInOut(duration: 0.4)) {
+                                showRoutineCreator = true
+                            }
+                        }
                     )
                     .tag(0)
                     
@@ -71,7 +93,9 @@ struct OnboardingFlowView: View {
                     // Page 3: Discover & Track Progress
                     DiscoverProgressView(
                         onGetStarted: {
-                            onComplete()
+                            withAnimation(.easeInOut(duration: 0.4)) {
+                                showRoutineCreator = true
+                            }
                         },
                         onPrevious: {}
                     )
@@ -88,17 +112,11 @@ struct OnboardingFlowView: View {
 }
 
 #Preview("OnboardingFlowView - Light") {
-    OnboardingFlowView(
-        onComplete: {},
-        onSkipToHome: {}
-    )
-    .preferredColorScheme(.light)
+    OnboardingFlowView()
+        .preferredColorScheme(.light)
 }
 
 #Preview("OnboardingFlowView - Dark") {
-    OnboardingFlowView(
-        onComplete: {},
-        onSkipToHome: {}
-    )
-    .preferredColorScheme(.dark)
+    OnboardingFlowView()
+        .preferredColorScheme(.dark)
 }
