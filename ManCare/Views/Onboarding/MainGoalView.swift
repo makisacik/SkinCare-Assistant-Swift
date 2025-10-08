@@ -52,10 +52,15 @@ struct MainGoalView: View {
     @State private var selection: MainGoal? = nil
     @State private var customGoal: String = ""
     @State private var isEditingCustomGoal: Bool = false
-    var onContinue: (MainGoal) -> Void
+    var onContinue: (MainGoal?, String) -> Void
     
     private let columns = [GridItem(.flexible(), spacing: 12),
                            GridItem(.flexible(), spacing: 12)]
+    
+    /// Continue button is enabled when either a selection exists or custom text is not empty
+    private var isContinueEnabled: Bool {
+        selection != nil || !customGoal.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     
     var body: some View {
         ZStack {
@@ -102,9 +107,15 @@ struct MainGoalView: View {
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
                         
-                        TextField("Type your own goal...", text: $customGoal, onEditingChanged: { editing in
-                            isEditingCustomGoal = editing
-                        })
+                    TextField("Type your own goal...", text: $customGoal, onEditingChanged: { editing in
+                        isEditingCustomGoal = editing
+                        // Clear card selection when text field is tapped
+                        if editing {
+                            withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
+                                selection = nil
+                            }
+                        }
+                    })
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .textFieldStyle(PlainTextFieldStyle())
@@ -130,17 +141,17 @@ struct MainGoalView: View {
                     
                     Spacer(minLength: 8)
                     
-                    // Continue button
-                    Button {
-                        guard let picked = selection else { return }
-                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                        onContinue(picked)
-                    } label: {
-                        Text("Continue")
-                    }
-                    .buttonStyle(PrimaryButtonStyle())
-                    .disabled(selection == nil)
-                    .opacity(selection == nil ? 0.7 : 1.0)
+                // Continue button
+                Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    // If a card is selected, it overrides the custom text
+                    onContinue(selection, customGoal.trimmingCharacters(in: .whitespacesAndNewlines))
+                } label: {
+                    Text("Continue")
+                }
+                .buttonStyle(PrimaryButtonStyle())
+                .disabled(!isContinueEnabled)
+                .opacity(isContinueEnabled ? 1.0 : 0.7)
                 }
                 .padding(20)
             }
@@ -213,11 +224,11 @@ private struct MainGoalCard: View {
 }
 
 #Preview("MainGoalView - Light") {
-    MainGoalView(onContinue: { _ in })
+    MainGoalView(onContinue: { _, _ in })
         .preferredColorScheme(.light)
 }
 
 #Preview("MainGoalView - Dark") {
-    MainGoalView(onContinue: { _ in })
+    MainGoalView(onContinue: { _, _ in })
         .preferredColorScheme(.dark)
 }

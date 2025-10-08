@@ -14,7 +14,9 @@ struct RoutineCreatorFlow: View {
     @State private var currentStep: FlowStep = .skinType
     @State private var selectedSkinType: SkinType?
     @State private var selectedConcerns: Set<Concern> = []
+    @State private var customConcernText: String = ""
     @State private var selectedMainGoal: MainGoal?
+    @State private var customGoalText: String = ""
     @State private var selectedFitzpatrickSkinTone: FitzpatrickSkinTone?
     @State private var selectedAgeRange: AgeRange?
     @State private var selectedRegion: Region?
@@ -75,8 +77,9 @@ struct RoutineCreatorFlow: View {
 
             case .concerns:
                 ConcernSelectionView(
-                    onContinue: { concerns in
+                    onContinue: { concerns, customText in
                         selectedConcerns = concerns
+                        customConcernText = customText
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .mainGoal
                         }
@@ -89,8 +92,9 @@ struct RoutineCreatorFlow: View {
 
             case .mainGoal:
                 MainGoalView(
-                    onContinue: { mainGoal in
+                    onContinue: { mainGoal, customText in
                         selectedMainGoal = mainGoal
+                        customGoalText = customText
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .fitzpatrickSkinTone
                         }
@@ -231,7 +235,9 @@ struct RoutineCreatorFlow: View {
                             currentStep = .skinType
                             selectedSkinType = nil
                             selectedConcerns = []
+                            customConcernText = ""
                             selectedMainGoal = nil
+                            customGoalText = ""
                             selectedFitzpatrickSkinTone = nil
                             selectedAgeRange = nil
                             selectedRegion = nil
@@ -341,11 +347,16 @@ struct RoutineCreatorFlow: View {
     private func generateRoutine() {
         guard !isLoadingRoutine else { return }
         guard let skinType = selectedSkinType,
-              let mainGoal = selectedMainGoal,
               let fitzpatrickSkinTone = selectedFitzpatrickSkinTone,
               let ageRange = selectedAgeRange,
               let region = selectedRegion else {
             routineError = GPTService.GPTServiceError.requestFailed(-1, "Missing required data")
+            return
+        }
+        
+        // Validate that we have either a selected main goal or custom goal text
+        guard selectedMainGoal != nil || !customGoalText.isEmpty else {
+            routineError = GPTService.GPTServiceError.requestFailed(-1, "Missing main goal")
             return
         }
 
@@ -365,11 +376,34 @@ struct RoutineCreatorFlow: View {
         routineError = nil
 
         Task {
+            // Build concerns array: combine selected concerns with custom text
+            var concernsToSend: [String] = []
+            // Only add selected concerns if they're not just "none"
+            let selectedConcernsFiltered = selectedConcerns.filter { $0 != .none }
+            concernsToSend.append(contentsOf: selectedConcernsFiltered.map { $0.rawValue })
+            // Add custom concern text if not empty
+            if !customConcernText.isEmpty {
+                concernsToSend.append(customConcernText)
+            }
+            
+            // For main goal: if card is selected, use it; otherwise use custom text
+            let goalToSend: String
+            if let selectedGoal = selectedMainGoal {
+                // Card overrides custom text
+                goalToSend = selectedGoal.rawValue
+            } else if !customGoalText.isEmpty {
+                // Use custom text if no card selected
+                goalToSend = customGoalText
+            } else {
+                // Fallback to default
+                goalToSend = MainGoal.healthierOverall.rawValue
+            }
+            
             // Create the request outside try-catch so it's accessible in error handling
             let request = ManCareRoutineRequest(
                 selectedSkinType: skinType.rawValue,
-                selectedConcerns: selectedConcerns.map { $0.rawValue },
-                selectedMainGoal: mainGoal.rawValue,
+                selectedConcerns: concernsToSend,
+                selectedMainGoal: goalToSend,
                 fitzpatrickSkinTone: fitzpatrickSkinTone.rawValue,
                 ageRange: ageRange.rawValue,
                 region: region.rawValue,

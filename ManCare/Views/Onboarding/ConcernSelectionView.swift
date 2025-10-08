@@ -53,13 +53,18 @@ struct ConcernSelectionView: View {
     @State private var selections: Set<Concern> = []
     @State private var customConcern: String = ""
     @State private var isEditingCustomConcern: Bool = false
-    /// Called when user taps Continue with current selections
-    var onContinue: (Set<Concern>) -> Void = { _ in }
+    /// Called when user taps Continue with current selections and custom text
+    var onContinue: (Set<Concern>, String) -> Void = { _, _ in }
     /// Called when user wants to go back to skin type selection
     var onBack: (() -> Void)? = nil
 
     private let columns = [GridItem(.flexible(), spacing: 12),
                            GridItem(.flexible(), spacing: 12)]
+    
+    /// Continue button is enabled when either selections exist or custom text is not empty
+    private var isContinueEnabled: Bool {
+        !selections.isEmpty || !customConcern.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 
     var body: some View {
         ZStack {
@@ -137,11 +142,13 @@ struct ConcernSelectionView: View {
                 // Continue button
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    onContinue(selections)
+                    onContinue(selections, customConcern.trimmingCharacters(in: .whitespacesAndNewlines))
                 } label: {
                     Text("Continue")
                 }
                 .buttonStyle(PrimaryButtonStyle())
+                .disabled(!isContinueEnabled)
+                .opacity(isContinueEnabled ? 1.0 : 0.7)
                 }
                 .padding(20)
             }
@@ -240,14 +247,14 @@ private struct ConcernCard: View {
 // MARK: - Preview
 
 #Preview("ConcernSelection – Light") {
-    ConcernSelectionView { _ in }
+    ConcernSelectionView { _, _ in }
         .preferredColorScheme(.light)
         .frame(maxHeight: 640)
         .padding(.vertical, 8)
 }
 
 #Preview("ConcernSelection – Dark") {
-    ConcernSelectionView { _ in }
+    ConcernSelectionView { _, _ in }
         .preferredColorScheme(.dark)
         .frame(maxHeight: 640)
         .padding(.vertical, 8)
