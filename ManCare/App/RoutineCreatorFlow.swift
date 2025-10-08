@@ -23,6 +23,7 @@ struct RoutineCreatorFlow: View {
     @State private var generatedRoutine: RoutineResponse?
     @State private var isLoadingRoutine = false
     @State private var routineError: Error?
+    @State private var cycleData: CycleData?
 
     enum FlowStep {
         case skinType
@@ -34,6 +35,7 @@ struct RoutineCreatorFlow: View {
         case preferences
         case loading
         case results
+        case cycleSetup
     }
 
     var body: some View {
@@ -132,12 +134,36 @@ struct RoutineCreatorFlow: View {
                     onContinue: { region in
                         selectedRegion = region
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .preferences
+                            currentStep = .cycleSetup
                         }
                     },
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .ageRange
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .cycleSetup:
+                CycleSetupView(
+                    onNext: { data in
+                        cycleData = data
+                        if let data = data {
+                            // Save cycle data if provided
+                            let store = CycleStore()
+                            store.updateCycleData(data)
+                        }
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .preferences
+                        }
+                    },
+                    onPrevious: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .region
                         }
                     }
                 )
@@ -156,7 +182,7 @@ struct RoutineCreatorFlow: View {
                     },
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .region
+                            currentStep = .cycleSetup
                         }
                     },
                     onSkip: {
@@ -233,6 +259,7 @@ struct RoutineCreatorFlow: View {
                             generatedRoutine = nil
                             routineError = nil
                             isLoadingRoutine = false
+                            cycleData = nil
                         }
                     },
                     onBack: {
@@ -850,9 +877,10 @@ private struct ProgressIndicator: View {
         case .fitzpatrickSkinTone: return 4
         case .ageRange: return 5
         case .region: return 6
-        case .preferences: return 7
-        case .loading: return 8
-        case .results: return 9
+        case .cycleSetup: return 7
+        case .preferences: return 8
+        case .loading: return 9
+        case .results: return 10
         }
     }
 
@@ -864,6 +892,7 @@ private struct ProgressIndicator: View {
         case .fitzpatrickSkinTone: return "Skin Tone"
         case .ageRange: return "Age Range"
         case .region: return "Region"
+        case .cycleSetup: return "Cycle Setup"
         case .preferences: return "Preferences"
         case .loading: return "Analyzing"
         case .results: return "Results"
@@ -890,7 +919,7 @@ private struct ProgressIndicator: View {
             Spacer()
 
             // Progress text
-            Text("\(stepNumber) of 9")
+            Text("\(stepNumber) of 10")
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
         }

@@ -285,8 +285,8 @@ struct RoutineHomeView: View {
                     }
                 )
 
-                // Explore Routine Library Card
-                ExploreRoutineLibraryCard(selectedTab: $selectedTab)
+                // Menstruation Cycle Card
+                MenstruationCycleCard()
 
                 // UV Index Card
                 UVIndexCard()
@@ -1093,70 +1093,6 @@ private struct RoutineStepRow: View {
             onTap()
         }                }    }
 
-// MARK: - Explore Routine Library Card
-
-private struct ExploreRoutineLibraryCard: View {
-    @Binding var selectedTab: MainTabView.CurrentTab
-
-    var body: some View {
-        Button(action: {
-            selectedTab = .discover
-        }) {
-            VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Explore Routine Library")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        .multilineTextAlignment(.leading)
-
-                    Text("Discover Korean Skincare, Anti-Aging, Acne-focused routines →")
-                        .font(.system(size: 14))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        .multilineTextAlignment(.leading)
-                }
-
-                Spacer()
-            }
-
-            // Routine Categories Preview
-            HStack(spacing: 12) {
-                Image(systemName: "sparkles")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
-
-                Text("Expert-curated routines personalized for you")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                Spacer()
-            }    .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(ThemeManager.shared.theme.palette.primary.opacity(0.08))
-            )
-        }.padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            ThemeManager.shared.theme.palette.surface,                // Surface color
-                            ThemeManager.shared.theme.palette.surface,             // Accent background
-                            ThemeManager.shared.theme.palette.surface.opacity(0.8),                 // Surface alt
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
-                )
-        )
-        .padding(.horizontal, 20)
-        }.buttonStyle(PlainButtonStyle())
-                }    }
 // MARK: - UV Index Card
 
 private struct UVIndexCard: View {
