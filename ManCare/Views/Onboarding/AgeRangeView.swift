@@ -23,49 +23,51 @@ struct AgeRangeView: View {
             ThemeManager.shared.theme.palette.accentBackground
                 .ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 20) {
-                // Title section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("What's your age range?")
-                    .font(ThemeManager.shared.theme.typo.h1)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text("This helps us tailor the routine to your skin's current needs.")
-                    .font(ThemeManager.shared.theme.typo.sub)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
-            
-            // Grid of age ranges
-            LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(AgeRange.allCases) { ageRange in
-                    AgeRangeCard(ageRange: ageRange, selected: selection == ageRange)
-                        .onTapGesture {
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
-                                selection = ageRange
-                            }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Title section
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("What's your age range?")
+                            .font(ThemeManager.shared.theme.typo.h1)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        Text("This helps us tailor the routine to your skin's current needs.")
+                            .font(ThemeManager.shared.theme.typo.sub)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+                    
+                    // Grid of age ranges
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(AgeRange.allCases) { ageRange in
+                            AgeRangeCard(ageRange: ageRange, selected: selection == ageRange)
+                                .onTapGesture {
+                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                    withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
+                                        selection = ageRange
+                                    }
+                                }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel(Text(ageRange.title))
+                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityAddTraits(selection == ageRange ? .isSelected : [])
                         }
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel(Text(ageRange.title))
-                        .accessibilityHint(Text("Tap to select"))
-                        .accessibilityAddTraits(selection == ageRange ? .isSelected : [])
+                    }
+                    
+                    Spacer(minLength: 8)
+                    
+                    // Continue button
+                    Button {
+                        guard let picked = selection else { return }
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        onContinue(picked)
+                    } label: {
+                        Text("Continue")
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .disabled(selection == nil)
+                    .opacity(selection == nil ? 0.7 : 1.0)
                 }
+                .padding(20)
             }
-            
-            Spacer(minLength: 8)
-            
-            // Continue button
-            Button {
-                guard let picked = selection else { return }
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                onContinue(picked)
-            } label: {
-                Text("Continue")
-            }
-            .buttonStyle(PrimaryButtonStyle())
-            .disabled(selection == nil)
-            .opacity(selection == nil ? 0.7 : 1.0)
-            }
-            .padding(20)
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
     }
@@ -79,36 +81,42 @@ private struct AgeRangeCard: View {
     let selected: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
-                        .frame(width: 36, height: 36)
+                        .frame(width: 32, height: 32)
                     Image(systemName: ageRange.iconName)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                        .font(.system(size: 20, weight: .semibold))
+                        .font(.system(size: 18, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
             
             Text(ageRange.title)
-                .font(ThemeManager.shared.theme.typo.title)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .minimumScaleFactor(0.9)
             
             Text(ageRange.description)
-                .font(ThemeManager.shared.theme.typo.caption)
+                .font(.system(size: 12))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                .lineLimit(3)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer(minLength: 0)
         }
-        .padding(ThemeManager.shared.theme.padding)
+        .frame(height: 110)
+        .padding(12)
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)

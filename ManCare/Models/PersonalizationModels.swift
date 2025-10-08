@@ -206,7 +206,7 @@ enum Region: String, CaseIterable, Identifiable, Codable {
         case .temperate: return Color(red: 0.3, green: 0.6, blue: 0.9) // Blue
         case .continental: return Color(red: 0.8, green: 0.4, blue: 0.2) // Orange
         case .mediterranean: return Color(red: 1.0, green: 0.6, blue: 0.0) // Golden
-        case .arctic: return Color(red: 0.8, green: 0.9, blue: 1.0) // Light blue
+        case .arctic: return Color(red: 0.3, green: 0.7, blue: 1.0) // Bright blue
         case .desert: return Color(red: 0.9, green: 0.7, blue: 0.3) // Sandy
         case .mountain: return Color(red: 0.5, green: 0.3, blue: 0.2) // Brown
         }

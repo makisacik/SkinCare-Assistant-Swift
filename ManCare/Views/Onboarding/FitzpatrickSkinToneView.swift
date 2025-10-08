@@ -12,10 +12,11 @@ struct FitzpatrickSkinToneView: View {
     @Environment(\.colorScheme) private var cs
     
     @State private var selection: FitzpatrickSkinTone? = nil
-    @State private var sliderValue: Double = 0
     var onContinue: (FitzpatrickSkinTone) -> Void
     
     private let skinTones = FitzpatrickSkinTone.allCases
+    private let columns = [GridItem(.flexible(), spacing: 12),
+                           GridItem(.flexible(), spacing: 12)]
     
     var body: some View {
         ZStack {
@@ -23,221 +24,121 @@ struct FitzpatrickSkinToneView: View {
             ThemeManager.shared.theme.palette.accentBackground
                 .ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 20) {
-                // Title section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("What's your skin tone?")
-                    .font(ThemeManager.shared.theme.typo.h1)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text("This helps us recommend the right SPF and UV protection for your skin.")
-                    .font(ThemeManager.shared.theme.typo.sub)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
-            
-            // Skin tone slider
-            VStack(spacing: 16) {
-                // Skin color gradient bar
-                ZStack {
-                    HStack(spacing: 0) {
-                        ForEach(Array(skinTones.enumerated()), id: \.offset) { index, skinTone in
-                            Rectangle()
-                                .fill(skinTone.skinColor)
-                                .frame(maxWidth: .infinity)
-                                .overlay(
-                                    // Type labels
-                                    VStack {
-                                        Spacer()
-                                        Text("\(index + 1)")
-                                            .font(.system(size: 10, weight: .bold))
-                                            .foregroundColor(skinTone.textColor)
-                                    }
-                                    .padding(.bottom, 4)
-                                )
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Title section
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("What's your skin tone?")
+                            .font(ThemeManager.shared.theme.typo.h1)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        Text("This helps us recommend the right SPF and UV protection for your skin.")
+                            .font(ThemeManager.shared.theme.typo.sub)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+                    
+                    // Grid of skin tones
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(skinTones) { skinTone in
+                            FitzpatrickSkinToneCard(skinTone: skinTone, selected: selection == skinTone)
                                 .onTapGesture {
                                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                     withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
                                         selection = skinTone
-                                        sliderValue = Double(index)
                                     }
                                 }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel(Text(skinTone.title))
+                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityAddTraits(selection == skinTone ? .isSelected : [])
                         }
                     }
-                    .frame(height: 40)
-                    .cornerRadius(20)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                    )
                     
-                    // Selection indicator
-                    if let selectedTone = selection,
-                       let selectedIndex = skinTones.firstIndex(of: selectedTone) {
-                        GeometryReader { geometry in
-                            Circle()
-                                .fill(ThemeManager.shared.theme.palette.primary)
-                                .frame(width: 12, height: 12)
-                                .overlay(
-                                    Circle()
-                                        .stroke(ThemeManager.shared.theme.palette.primary, lineWidth: 2)
-                                )
-                                .position(
-                                    x: (CGFloat(selectedIndex) + 0.5) * (geometry.size.width / 6),
-                                    y: geometry.size.height / 2
-                                )
-                                .animation(.spring(response: 0.3, dampingFraction: 0.8), value: selectedIndex)
-                        }
-                        .frame(height: 40)
-                    }
-                }
-                
-                // Slider
-                VStack(spacing: 8) {
-                    Slider(value: $sliderValue, in: 0...5, step: 1)
-                        .accentColor(ThemeManager.shared.theme.palette.primary)
-                        .onChange(of: sliderValue) { newValue in
-                            let index = Int(newValue)
-                            if index < skinTones.count {
-                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
-                                    selection = skinTones[index]
-                                }
-                            }
-                        }
+                    Spacer(minLength: 8)
                     
-                    // Slider labels
-                    HStack {
-                        Text("Lightest")
-                            .font(ThemeManager.shared.theme.typo.caption)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                        Spacer()
-                        Text("Darkest")
-                            .font(ThemeManager.shared.theme.typo.caption)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                    // Continue button
+                    Button {
+                        guard let picked = selection else { return }
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        onContinue(picked)
+                    } label: {
+                        Text("Continue")
                     }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .disabled(selection == nil)
+                    .opacity(selection == nil ? 0.7 : 1.0)
                 }
+                .padding(20)
             }
-            
-            // Selected skin tone card
-            if let selectedTone = selection {
-                FitzpatrickSkinToneDetailCard(skinTone: selectedTone)
-                    .transition(.scale.combined(with: .opacity))
-            }
-            
-            Spacer(minLength: 8)
-            
-            // Continue button
-            Button {
-                guard let picked = selection else { return }
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                onContinue(picked)
-            } label: {
-                Text("Continue")
-            }
-            .buttonStyle(PrimaryButtonStyle())
-            .disabled(selection == nil)
-            .opacity(selection == nil ? 0.7 : 1.0)
-            }
-            .padding(20)
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
-        .onAppear {
-            // Set initial selection to Type III (middle)
-            selection = .type3
-            sliderValue = 2
-        }
     }
 }
 
-// MARK: - Detail Card
+// MARK: - Card
 
-private struct FitzpatrickSkinToneDetailCard: View {
+private struct FitzpatrickSkinToneCard: View {
     
     let skinTone: FitzpatrickSkinTone
+    let selected: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 8) {
             // Header with skin color circle
-            HStack(spacing: 16) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(skinTone.skinColor)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 32, height: 32)
                         .overlay(
                             Circle()
-                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 2)
+                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                         )
                     Image(systemName: skinTone.iconName)
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(skinTone.textColor)
                 }
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(skinTone.title)
-                        .font(ThemeManager.shared.theme.typo.title)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
-                    Text(skinTone.description)
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                }
-                
                 Spacer()
+                
+                if selected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                        .font(.system(size: 18, weight: .semibold))
+                        .transition(.scale.combined(with: .opacity))
+                }
             }
             
-            // UV Protection Info
-            VStack(alignment: .leading, spacing: 12) {
-                Text("UV Protection")
-                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                
-                HStack(spacing: 20) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "sun.max.fill")
-                                .font(.system(size: 14))
-                                .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                            Text("UV Sensitivity")
-                                .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        }
-                        Text(skinTone.uvSensitivity)
-                            .font(ThemeManager.shared.theme.typo.body)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    }
-                    
-                    Spacer()
-                    
-                    VStack(alignment: .trailing, spacing: 4) {
-                        HStack(spacing: 6) {
-                            Text("Recommended SPF")
-                                .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            Image(systemName: "shield.fill")
-                                .font(.system(size: 14))
-                                .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                        }
-                        Text("SPF \(skinTone.recommendedSPF)+")
-                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                    }
-                }
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(ThemeManager.shared.theme.palette.cardBackground.opacity(0.5))
-            )
+            Text(skinTone.title)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .minimumScaleFactor(0.9)
+            
+            Text(skinTone.description)
+                .font(.system(size: 12))
+                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer(minLength: 0)
         }
-        .padding(ThemeManager.shared.theme.padding)
+        .frame(height: 110)
+        .padding(12)
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
-                .fill(ThemeManager.shared.theme.palette.cardBackground)
-                .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.2), radius: 6, x: 0, y: 3)
+                .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
+                .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(0.3)
+                                        : ThemeManager.shared.theme.palette.shadow.opacity(0.15),
+                        radius: selected ? 8 : 4, x: 0, y: selected ? 4 : 2)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
-                        .stroke(ThemeManager.shared.theme.palette.primary.opacity(0.3), lineWidth: 2)
+                        .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,
+                                lineWidth: selected ? 2 : 1)
                 )
         )
+        .scaleEffect(selected ? 1.05 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: selected)
     }
 }
 
