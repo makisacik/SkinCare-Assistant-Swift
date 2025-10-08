@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// A toolbar-style back button that can be used without NavigationStack
+/// This modifier adds a fixed-position back button using safeAreaInset
 struct BackButtonToolbar: ViewModifier {
     let action: () -> Void
     
@@ -31,9 +32,9 @@ struct BackButtonToolbar: ViewModifier {
                     
                     Spacer()
                 }
+                .frame(height: 44) // Fixed height - this is the key to consistent positioning
+                .frame(maxWidth: .infinity)
                 .padding(.horizontal, 20)
-                .padding(.top, 45)
-                .padding(.bottom, 12)
                 .background(ThemeManager.shared.theme.palette.accentBackground)
             }
     }

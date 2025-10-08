@@ -53,14 +53,18 @@ struct MainGoalView: View {
     @State private var customGoal: String = ""
     @State private var isEditingCustomGoal: Bool = false
     var onContinue: (MainGoal) -> Void
-    var onBack: () -> Void
     
     private let columns = [GridItem(.flexible(), spacing: 12),
                            GridItem(.flexible(), spacing: 12)]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your main goal?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -127,11 +131,10 @@ struct MainGoalView: View {
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
             .opacity(selection == nil ? 0.7 : 1.0)
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
-        .backButtonToolbar(action: onBack)
     }
 }
 
@@ -194,11 +197,11 @@ private struct MainGoalCard: View {
 }
 
 #Preview("MainGoalView - Light") {
-    MainGoalView(onContinue: { _ in }, onBack: {})
+    MainGoalView(onContinue: { _ in })
         .preferredColorScheme(.light)
 }
 
 #Preview("MainGoalView - Dark") {
-    MainGoalView(onContinue: { _ in }, onBack: {})
+    MainGoalView(onContinue: { _ in })
         .preferredColorScheme(.dark)
 }

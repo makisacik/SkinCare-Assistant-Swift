@@ -53,22 +53,13 @@ struct SkinTypeSelectionView: View {
                            GridItem(.flexible(), spacing: 12)]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Invisible toolbar to match pages with back button
-            HStack {
-                HStack(spacing: 6) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text("Back")
-                        .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                }
-                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                .hidden() // Make it invisible but keep the space
-                Spacer()
-            }
-            .padding(.top, 8)
-
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your skin type?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -109,10 +100,9 @@ struct SkinTypeSelectionView: View {
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
             .opacity(selection == nil ? 0.7 : 1.0)
-
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { newScheme in
             ThemeManager.shared.refreshForSystemChange(newScheme)
         }

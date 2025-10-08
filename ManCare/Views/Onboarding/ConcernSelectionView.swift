@@ -16,7 +16,7 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         case .redness:             return "Redness"
         case .blackheads:          return "Blackheads"
         case .largePores:          return "Large Pores"
-        case .postShaveIrritation: return "Post-Shave Irritation"
+        case .postShaveIrritation: return "Post-Shave"
         case .none:                return "None"
         }
     }
@@ -62,8 +62,13 @@ struct ConcernSelectionView: View {
                            GridItem(.flexible(), spacing: 12)]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What concerns you?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -116,9 +121,9 @@ struct ConcernSelectionView: View {
             )
             .animation(.easeInOut(duration: 0.2), value: isEditingCustomConcern)
             .animation(.easeInOut(duration: 0.2), value: customConcern.isEmpty)
-
+            
             Spacer(minLength: 8)
-
+            
             // Action buttons
             VStack(spacing: 12) {
                 // Continue
@@ -141,14 +146,12 @@ struct ConcernSelectionView: View {
                 }
                 .buttonStyle(GhostButtonStyle())
             }
-
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { newScheme in
             ThemeManager.shared.refreshForSystemChange(newScheme)
         }
-        .backButtonToolbar(action: onBack ?? {})
     }
 
     private func toggle(_ c: Concern) {
@@ -214,7 +217,7 @@ private struct ConcernCard: View {
             
             Spacer(minLength: 0)
         }
-        .frame(height: 110)
+        .frame(height: 100)
         .padding(12)
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)

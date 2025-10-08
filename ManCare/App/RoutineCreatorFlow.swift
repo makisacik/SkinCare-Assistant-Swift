@@ -58,8 +58,9 @@ struct RoutineCreatorFlow: View {
     }
     
     private var routineCreatorContent: some View {
-        ZStack {
-            switch currentStep {
+        NavigationView {
+            ZStack {
+                switch currentStep {
             case .skinType:
                 SkinTypeSelectionView { skinType in
                     selectedSkinType = skinType
@@ -79,11 +80,6 @@ struct RoutineCreatorFlow: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .mainGoal
                         }
-                    },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .skinType
-                        }
                     }
                 )
                 .transition(.asymmetric(
@@ -97,11 +93,6 @@ struct RoutineCreatorFlow: View {
                         selectedMainGoal = mainGoal
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .fitzpatrickSkinTone
-                        }
-                    },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .concerns
                         }
                     }
                 )
@@ -117,11 +108,6 @@ struct RoutineCreatorFlow: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .ageRange
                         }
-                    },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .mainGoal
-                        }
                     }
                 )
                 .transition(.asymmetric(
@@ -136,11 +122,6 @@ struct RoutineCreatorFlow: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .region
                         }
-                    },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .fitzpatrickSkinTone
-                        }
                     }
                 )
                 .transition(.asymmetric(
@@ -154,11 +135,6 @@ struct RoutineCreatorFlow: View {
                         selectedRegion = region
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .cycleSetup
-                        }
-                    },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .ageRange
                         }
                     }
                 )
@@ -179,11 +155,6 @@ struct RoutineCreatorFlow: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .preferences
                         }
-                    },
-                    onPrevious: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .region
-                        }
                     }
                 )
                 .transition(.asymmetric(
@@ -197,11 +168,6 @@ struct RoutineCreatorFlow: View {
                         selectedPreferences = preferences
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .loading
-                        }
-                    },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .cycleSetup
                         }
                     },
                     onSkip: {
@@ -241,11 +207,6 @@ struct RoutineCreatorFlow: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .results
                         }
-                    },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .preferences
-                        }
                     }
                 )
                 .transition(.opacity) // loading can just fade
@@ -281,11 +242,6 @@ struct RoutineCreatorFlow: View {
                             cycleData = nil
                         }
                     },
-                    onBack: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .loading
-                        }
-                    },
                     onContinue: {
                         withAnimation(.easeInOut(duration: 0.4)) {
                             showMainApp = true
@@ -297,14 +253,87 @@ struct RoutineCreatorFlow: View {
                     removal:   .move(edge: .leading).combined(with: .opacity)
                 ))
             }
+            }
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea()) // keep root bg painted
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: shouldShowBackButton ? AnyView(backButton) : nil)
+            .onAppear {
+                setupNavigationBarAppearance()
+            }
         }
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea()) // keep root bg painted
+        .navigationViewStyle(.stack) // Force stack style to prevent iPad split view
         .onChange(of: cs) { newColorScheme in
             // Only disable animations during theme changes to prevent flashing
             withAnimation(.none) {
                 ThemeManager.shared.refreshForSystemChange(newColorScheme)
             }
         }
+    }
+    
+    // MARK: - Back Navigation
+    
+    /// Determines if the back button should be shown for the current step
+    private var shouldShowBackButton: Bool {
+        switch currentStep {
+        case .skinType:
+            // First step, no back button
+            return false
+        default:
+            return true
+        }
+    }
+    
+    /// Back button view
+    private var backButton: some View {
+        Button(action: handleBackNavigation) {
+            Image(systemName: "chevron.left")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+        }
+    }
+    
+    /// Handles back navigation based on the current step
+    private func handleBackNavigation() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        withAnimation(.easeInOut(duration: 0.3)) {
+            switch currentStep {
+            case .skinType:
+                // No back action for first step
+                break
+            case .concerns:
+                currentStep = .skinType
+            case .mainGoal:
+                currentStep = .concerns
+            case .fitzpatrickSkinTone:
+                currentStep = .mainGoal
+            case .ageRange:
+                currentStep = .fitzpatrickSkinTone
+            case .region:
+                currentStep = .ageRange
+            case .cycleSetup:
+                currentStep = .region
+            case .preferences:
+                currentStep = .cycleSetup
+            case .loading:
+                currentStep = .preferences
+            case .results:
+                currentStep = .loading
+            }
+        }
+    }
+    
+    /// Setup navigation bar appearance with theme colors
+    private func setupNavigationBarAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = UIColor(ThemeManager.shared.theme.palette.accentBackground)
+        appearance.shadowImage = UIImage() // Remove shadow
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
     }
 
     // MARK: - Routine Generation
@@ -959,14 +988,15 @@ private struct ProgressIndicator: View {
 }
 
 #Preview("Routine Result") {
-    RoutineResultView(
-        skinType: .combination,
-        concerns: [.acne, .redness],
-        mainGoal: .reduceBreakouts,
-        preferences: nil,
-        generatedRoutine: nil,
-        onRestart: {},
-        onBack: {},
-        onContinue: {}
-    )
+    NavigationView {
+        RoutineResultView(
+            skinType: .combination,
+            concerns: [.acne, .redness],
+            mainGoal: .reduceBreakouts,
+            preferences: nil,
+            generatedRoutine: nil,
+            onRestart: {},
+            onContinue: {}
+        )
+    }
 }

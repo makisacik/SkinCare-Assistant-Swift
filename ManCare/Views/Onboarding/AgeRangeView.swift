@@ -13,14 +13,18 @@ struct AgeRangeView: View {
     
     @State private var selection: AgeRange? = nil
     var onContinue: (AgeRange) -> Void
-    var onBack: () -> Void
     
     private let columns = [GridItem(.flexible(), spacing: 12),
                            GridItem(.flexible(), spacing: 12)]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your age range?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -60,11 +64,10 @@ struct AgeRangeView: View {
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
             .opacity(selection == nil ? 0.7 : 1.0)
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
-        .backButtonToolbar(action: onBack)
     }
 }
 
@@ -123,11 +126,11 @@ private struct AgeRangeCard: View {
 }
 
 #Preview("AgeRangeView - Light") {
-    AgeRangeView(onContinue: { _ in }, onBack: {})
+    AgeRangeView(onContinue: { _ in })
         .preferredColorScheme(.light)
 }
 
 #Preview("AgeRangeView - Dark") {
-    AgeRangeView(onContinue: { _ in }, onBack: {})
+    AgeRangeView(onContinue: { _ in })
         .preferredColorScheme(.dark)
 }

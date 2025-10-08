@@ -14,13 +14,17 @@ struct FitzpatrickSkinToneView: View {
     @State private var selection: FitzpatrickSkinTone? = nil
     @State private var sliderValue: Double = 0
     var onContinue: (FitzpatrickSkinTone) -> Void
-    var onBack: () -> Void
     
     private let skinTones = FitzpatrickSkinTone.allCases
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your skin tone?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -132,16 +136,15 @@ struct FitzpatrickSkinToneView: View {
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
             .opacity(selection == nil ? 0.7 : 1.0)
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .onAppear {
             // Set initial selection to Type III (middle)
             selection = .type3
             sliderValue = 2
         }
-        .backButtonToolbar(action: onBack)
     }
 }
 
@@ -239,11 +242,11 @@ private struct FitzpatrickSkinToneDetailCard: View {
 }
 
 #Preview("FitzpatrickSkinToneView - Light") {
-    FitzpatrickSkinToneView(onContinue: { _ in }, onBack: {})
+    FitzpatrickSkinToneView(onContinue: { _ in })
         .preferredColorScheme(.light)
 }
 
 #Preview("FitzpatrickSkinToneView - Dark") {
-    FitzpatrickSkinToneView(onContinue: { _ in }, onBack: {})
+    FitzpatrickSkinToneView(onContinue: { _ in })
         .preferredColorScheme(.dark)
 }

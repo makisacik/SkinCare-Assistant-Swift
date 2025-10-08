@@ -18,13 +18,17 @@ struct PreferencesView: View {
     @State private var veganFriendly = false
 
     var onContinue: (Preferences) -> Void
-    var onBack: () -> Void
     var onSkip: () -> Void
     var onContinueWithoutAPI: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("Any preferences?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -118,11 +122,10 @@ struct PreferencesView: View {
                 .buttonStyle(PlainButtonStyle())
                 #endif
             }
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
-        .backButtonToolbar(action: onBack)
     }
 }
 
@@ -186,11 +189,11 @@ struct Preferences: Codable {
 }
 
 #Preview("PreferencesView - Light") {
-    PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {}, onContinueWithoutAPI: {})
+    PreferencesView(onContinue: { _ in }, onSkip: {}, onContinueWithoutAPI: {})
         .preferredColorScheme(.light)
 }
 
 #Preview("PreferencesView - Dark") {
-    PreferencesView(onContinue: { _ in }, onBack: {}, onSkip: {}, onContinueWithoutAPI: {})
+    PreferencesView(onContinue: { _ in }, onSkip: {}, onContinueWithoutAPI: {})
         .preferredColorScheme(.dark)
 }

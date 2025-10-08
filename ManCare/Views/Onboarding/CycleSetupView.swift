@@ -11,7 +11,6 @@ struct CycleSetupView: View {
     @Environment(\.colorScheme) private var cs
     
     var onNext: (CycleData?) -> Void
-    var onPrevious: () -> Void
     
     @State private var lastPeriodDate: Date = Date()
     @State private var cycleLength: Double = 28
@@ -20,8 +19,13 @@ struct CycleSetupView: View {
     @State private var showPaywall = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("Track Your Cycle")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -215,9 +219,9 @@ struct CycleSetupView: View {
                 }
                 .buttonStyle(GhostButtonStyle())
             }
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .animation(.easeInOut, value: showDatePicker)
         .sheet(isPresented: $showPaywall) {
@@ -238,7 +242,6 @@ struct CycleSetupView: View {
                 }
             )
         }
-        .backButtonToolbar(action: onPrevious)
     }
 }
 
@@ -273,16 +276,14 @@ private struct CyclePhaseIcon: View {
 
 #Preview("CycleSetupView - Light") {
     CycleSetupView(
-        onNext: { _ in },
-        onPrevious: {}
+        onNext: { _ in }
     )
     .preferredColorScheme(.light)
 }
 
 #Preview("CycleSetupView - Dark") {
     CycleSetupView(
-        onNext: { _ in },
-        onPrevious: {}
+        onNext: { _ in }
     )
     .preferredColorScheme(.dark)
 }

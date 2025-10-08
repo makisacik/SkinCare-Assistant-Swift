@@ -15,7 +15,6 @@ struct RoutineResultView: View {
     let preferences: Preferences?
     let generatedRoutine: RoutineResponse?
     let onRestart: () -> Void
-    let onBack: () -> Void
     let onContinue: () -> Void
     
     var body: some View {
@@ -92,7 +91,6 @@ struct RoutineResultView: View {
             .padding(.bottom, 20)
         }
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
-        .backButtonToolbar(action: onBack)
     }
     
     private func generateMorningRoutine() -> [RoutineStep] {
@@ -392,14 +390,15 @@ private struct RoutineResultHeader: View {
 }
 
 #Preview("RoutineResultView") {
-    RoutineResultView(
-        skinType: .combination,
-        concerns: [.acne, .redness],
-        mainGoal: .reduceBreakouts,
-        preferences: nil,
-        generatedRoutine: nil,
-        onRestart: {},
-        onBack: {},
-        onContinue: {}
-    )
+    NavigationView {
+        RoutineResultView(
+            skinType: .combination,
+            concerns: [.acne, .redness],
+            mainGoal: .reduceBreakouts,
+            preferences: nil,
+            generatedRoutine: nil,
+            onRestart: {},
+            onContinue: {}
+        )
+    }
 }

@@ -14,13 +14,17 @@ struct RegionView: View {
     @State private var selection: Region? = nil
     @State private var selectedClimateIndex: Int = 0
     var onContinue: (Region) -> Void
-    var onBack: () -> Void
 
     private let regions = Region.allCases
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title section
+        ZStack {
+            // Background that fills entire space
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your climate like?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -56,16 +60,15 @@ struct RegionView: View {
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)
             .opacity(selection == nil ? 0.7 : 1.0)
+            }
+            .padding(20)
         }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .onAppear {
             // Set initial selection to temperate
             selection = .temperate
             selectedClimateIndex = 2
         }
-        .backButtonToolbar(action: onBack)
     }
 }
 
@@ -320,11 +323,11 @@ private struct ClimateInfoItem: View {
 }
 
 #Preview("RegionView - Light") {
-    RegionView(onContinue: { _ in }, onBack: {})
+    RegionView(onContinue: { _ in })
         .preferredColorScheme(.light)
 }
 
 #Preview("RegionView - Dark") {
-    RegionView(onContinue: { _ in }, onBack: {})
+    RegionView(onContinue: { _ in })
         .preferredColorScheme(.dark)
 }
