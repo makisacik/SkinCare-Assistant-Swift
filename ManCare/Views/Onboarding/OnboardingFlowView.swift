@@ -48,8 +48,7 @@ struct OnboardingFlowView: View {
                     activeColor: ThemeManager.shared.theme.palette.primary,
                     inactiveColor: ThemeManager.shared.theme.palette.separator
                 )
-                .padding(.top, 60)
-                .padding(.bottom, 20)
+                .padding(.top, 50)
                 
                 // Page content with smooth transitions
                 TabView(selection: $currentPage) {

@@ -7,7 +7,7 @@
 import SwiftUI
 
 enum Concern: String, CaseIterable, Identifiable, Codable {
-    case acne, redness, blackheads, largePores, postShaveIrritation
+    case acne, redness, blackheads, largePores, postShaveIrritation, none
     var id: String { rawValue }
 
     var title: String {
@@ -17,6 +17,7 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         case .blackheads:          return "Blackheads"
         case .largePores:          return "Large Pores"
         case .postShaveIrritation: return "Post-Shave Irritation"
+        case .none:                return "None"
         }
     }
 
@@ -27,6 +28,7 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         case .blackheads:          return "Clogged pores, oil build-up"
         case .largePores:          return "Texture, visible pores"
         case .postShaveIrritation: return "Razor burn, ingrowns"
+        case .none:                return "No specific concerns"
         }
     }
 
@@ -37,6 +39,7 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         case .blackheads:          return "circle.dashed.inset.filled"  // texture/pores
         case .largePores:          return "circle.dashed.inset.filled"  // texture/pores
         case .postShaveIrritation: return "scissors"                       // SF Symbols 16+
+        case .none:                return "checkmark.circle.fill"        // no concerns
         }
     }
 }
@@ -82,10 +85,10 @@ struct ConcernSelectionView: View {
 
             // Title section
             VStack(alignment: .leading, spacing: 6) {
-                Text("What concerns you most?")
+                Text("What concerns you?")
                     .font(ThemeManager.shared.theme.typo.h1)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text("Pick what you want to focus on. You can change this anytime.")
+                Text("Pick what you want to focus on.")
                     .font(ThemeManager.shared.theme.typo.sub)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -109,23 +112,28 @@ struct ConcernSelectionView: View {
 
             Spacer(minLength: 8)
 
-            // Continue
-            Button {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                onContinue(selections)
-            } label: {
-                Text(selections.isEmpty
-                     ? "Continue"
-                     : "Continue with \(selections.count) Selected")
-            }
-            .buttonStyle(PrimaryButtonStyle())
+            // Action buttons
+            VStack(spacing: 12) {
+                // Continue
+                Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    onContinue(selections)
+                } label: {
+                    Text(selections.isEmpty
+                         ? "Continue"
+                         : "Continue with \(selections.count) Selected")
+                }
+                .buttonStyle(PrimaryButtonStyle())
 
-            // Optional: Clear selection / Skip
-            Button("Skip for now") {
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                onContinue([])
+                // Optional: Skip
+                Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    onContinue([])
+                } label: {
+                    Text("Skip for now")
+                }
+                .buttonStyle(GhostButtonStyle())
             }
-            .buttonStyle(GhostButtonStyle())
 
         }
         .padding(20)
@@ -135,7 +143,26 @@ struct ConcernSelectionView: View {
         }    }
 
     private func toggle(_ c: Concern) {
-        if selections.contains(c) { selections.remove(c) } else { selections.insert(c) }
+        if c == .none {
+            // If selecting "None", clear all other selections
+            if selections.contains(.none) {
+                selections.remove(.none)
+            } else {
+                selections.removeAll()
+                selections.insert(.none)
+            }
+        } else {
+            // If selecting any other concern, remove "None" if it's selected
+            if selections.contains(.none) {
+                selections.remove(.none)
+            }
+            
+            if selections.contains(c) {
+                selections.remove(c)
+            } else {
+                selections.insert(c)
+            }
+        }
     }
 }
 

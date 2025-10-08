@@ -97,24 +97,6 @@ struct PreferencesView: View {
             VStack(spacing: 12) {
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    onContinueWithoutAPI()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "bolt.fill")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Continue without API call")
-                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
-                    }
-                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(ThemeManager.shared.theme.palette.primary)
-                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Button {
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     let preferences = Preferences(
                         fragranceFreeOnly: fragranceFreeOnly,
                         suitableForSensitiveSkin: suitableForSensitiveSkin,
@@ -125,8 +107,6 @@ struct PreferencesView: View {
                     onContinue(preferences)
                 } label: {
                     Text("Continue with Preferences")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 56)
                 }
                 .buttonStyle(PrimaryButtonStyle())
 
@@ -135,10 +115,27 @@ struct PreferencesView: View {
                     onSkip()
                 } label: {
                     Text("Skip for now")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 48)
                 }
                 .buttonStyle(GhostButtonStyle())
+                
+                // Debug button - only show in development
+                #if DEBUG
+                Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    onContinueWithoutAPI()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 14, weight: .semibold))
+                        Text("Continue without API call")
+                            .font(.system(size: 14, weight: .medium))
+                    }
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 40)
+                }
+                .buttonStyle(PlainButtonStyle())
+                #endif
             }
         }
         .padding(20)

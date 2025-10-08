@@ -54,8 +54,21 @@ struct SkinTypeSelectionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
+            // Invisible toolbar to match pages with back button
+            HStack {
+                HStack(spacing: 6) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 16, weight: .semibold))
+                    Text("Back")
+                        .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                }
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                .hidden() // Make it invisible but keep the space
+                Spacer()
+            }
+            .padding(.top, 8)
 
-            // Başlık
+            // Title section
             VStack(alignment: .leading, spacing: 6) {
                 Text("What's your skin type?")
                     .font(ThemeManager.shared.theme.typo.h1)
@@ -64,7 +77,6 @@ struct SkinTypeSelectionView: View {
                     .font(ThemeManager.shared.theme.typo.sub)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
-            .padding(.top, 8)
 
             // Grid seçim
             LazyVGrid(columns: columns, spacing: 12) {

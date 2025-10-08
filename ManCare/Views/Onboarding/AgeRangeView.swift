@@ -75,8 +75,6 @@ struct AgeRangeView: View {
                 onContinue(picked)
             } label: {
                 Text(selection == nil ? "Continue" : "Continue with \(selection!.title)")
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(selection == nil)

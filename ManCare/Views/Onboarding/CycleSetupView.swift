@@ -20,61 +20,61 @@ struct CycleSetupView: View {
     @State private var showPaywall = false
     
     var body: some View {
-        ZStack {
-            // Background
-            Color(red: 0.98, green: 0.96, blue: 0.94)
-                .ignoresSafeArea()
+        VStack(alignment: .leading, spacing: 20) {
+            // Header with back button
+            HStack {
+                Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    onPrevious()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Back")
+                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                    }
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                }
+                .buttonStyle(PlainButtonStyle())
+                Spacer()
+            }
+            .padding(.top, 8)
+            
+            // Title section
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Track Your Cycle")
+                    .font(ThemeManager.shared.theme.typo.h1)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                Text("Get personalized skincare tips that adapt to your menstrual cycle")
+                    .font(ThemeManager.shared.theme.typo.sub)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+            }
             
             ScrollView {
-                VStack(spacing: 0) {
-                    // Fixed header section
-                    VStack(spacing: 12) {
-                        // Title
-                        Text("Track Your Cycle")
-                            .font(.system(size: 32, weight: .bold, design: .serif))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 20)
-                        
-                        // Subtitle
-                        Text("Get personalized skincare tips that adapt to your menstrual cycle")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 40)
-                            .padding(.top, 4)
-                    }
-                    .frame(minHeight: 120)
-                    .padding(.top, 20)
-                    
+                VStack(spacing: 20) {
                     // Visual Element - Cycle Phases Illustration
-                    VStack(spacing: 16) {
-                        HStack(spacing: 12) {
-                            CyclePhaseIcon(
-                                phase: .menstrual,
-                                icon: "drop.fill",
-                                color: ThemeManager.shared.theme.palette.error
-                            )
-                            CyclePhaseIcon(
-                                phase: .follicular,
-                                icon: "sparkles",
-                                color: ThemeManager.shared.theme.palette.success
-                            )
-                            CyclePhaseIcon(
-                                phase: .ovulation,
-                                icon: "sun.max.fill",
-                                color: ThemeManager.shared.theme.palette.warning
-                            )
-                            CyclePhaseIcon(
-                                phase: .luteal,
-                                icon: "moon.fill",
-                                color: ThemeManager.shared.theme.palette.primary
-                            )
-                        }
-                        .padding(.vertical, 20)
+                    HStack(spacing: 12) {
+                        CyclePhaseIcon(
+                            phase: .menstrual,
+                            icon: "drop.fill",
+                            color: ThemeManager.shared.theme.palette.error
+                        )
+                        CyclePhaseIcon(
+                            phase: .follicular,
+                            icon: "sparkles",
+                            color: ThemeManager.shared.theme.palette.success
+                        )
+                        CyclePhaseIcon(
+                            phase: .ovulation,
+                            icon: "sun.max.fill",
+                            color: ThemeManager.shared.theme.palette.warning
+                        )
+                        CyclePhaseIcon(
+                            phase: .luteal,
+                            icon: "moon.fill",
+                            color: ThemeManager.shared.theme.palette.primary
+                        )
                     }
-                    .padding(.horizontal, 20)
-                    
                     // Input Section
                     VStack(spacing: 16) {
                         // Last Period Start Date
@@ -191,70 +191,52 @@ struct CycleSetupView: View {
                                         .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
                                 )
                         )
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    
-                    // Info Box
-                    HStack(spacing: 10) {
-                        Image(systemName: "lock.fill")
-                            .font(.system(size: 14))
-                            .foregroundColor(ThemeManager.shared.theme.palette.info)
                         
-                        Text("Your cycle data stays private on your device")
-                            .font(.system(size: 12))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
-                    .padding(12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(ThemeManager.shared.theme.palette.info.opacity(0.1))
-                    )
-                    .padding(.horizontal, 20)
-                    .padding(.top, 16)
-                    
-                    Spacer(minLength: 40)
-                    
-                    // Buttons
-                    VStack(spacing: 12) {
-                        // Continue Button
-                        Button {
-                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                            // Show paywall for premium feature
-                            showPaywall = true
-                        } label: {
-                            HStack(spacing: 8) {
-                                Text("Continue")
-                                    .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 16, weight: .semibold))
-                            }
-                            .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(ThemeManager.shared.theme.palette.secondary)
-                            .cornerRadius(ThemeManager.shared.theme.cardRadius)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        // Skip Button
-                        Button {
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            onNext(nil)
-                        } label: {
-                            Text("Skip for now")
-                                .font(.system(size: 16, weight: .medium))
+                        // Info Box
+                        HStack(spacing: 10) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 14))
+                                .foregroundColor(ThemeManager.shared.theme.palette.info)
+                            
+                            Text("Your cycle data stays private on your device")
+                                .font(.system(size: 12))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 48)
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .padding(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(ThemeManager.shared.theme.palette.info.opacity(0.1))
+                        )
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 40)
                 }
             }
+            
+            Spacer(minLength: 8)
+            
+            // Buttons
+            VStack(spacing: 12) {
+                // Continue Button
+                Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    // Show paywall for premium feature
+                    showPaywall = true
+                } label: {
+                    Text("Continue")
+                }
+                .buttonStyle(PrimaryButtonStyle())
+                
+                // Skip Button
+                Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    onNext(nil)
+                } label: {
+                    Text("Skip for now")
+                }
+                .buttonStyle(GhostButtonStyle())
+            }
         }
+        .padding(20)
+        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .animation(.easeInOut, value: showDatePicker)
         .sheet(isPresented: $showPaywall) {
