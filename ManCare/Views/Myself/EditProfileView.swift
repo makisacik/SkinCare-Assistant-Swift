@@ -11,15 +11,13 @@ struct EditProfileView: View {
     let initialProfile: UserProfile?
     let onCancel: () -> Void
     let onSave: (UserProfile) -> Void
-    let onGenerate: (UserProfile) -> Void
 
     @State private var draft: UserProfileDraft
 
-    init(initialProfile: UserProfile?, onCancel: @escaping () -> Void, onSave: @escaping (UserProfile) -> Void, onGenerate: @escaping (UserProfile) -> Void) {
+    init(initialProfile: UserProfile?, onCancel: @escaping () -> Void, onSave: @escaping (UserProfile) -> Void) {
         self.initialProfile = initialProfile
         self.onCancel = onCancel
         self.onSave = onSave
-        self.onGenerate = onGenerate
         _draft = State(initialValue: UserProfileDraft(from: initialProfile))
     }
 
@@ -81,22 +79,6 @@ struct EditProfileView: View {
                 if draft.fitzpatrickSkinTone == nil { draft.fitzpatrickSkinTone = .type3 }
                 if draft.ageRange == nil { draft.ageRange = .twenties }
                 if draft.region == nil { draft.region = .temperate }
-            }
-            .safeAreaInset(edge: .bottom) {
-                Button {
-                    if let p = draft.toProfile() { onGenerate(p) }
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "wand.and.stars")
-                        Text("Create New Routine")
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(PrimaryButtonStyle())
-                .disabled(!draft.isValid)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             }
         }
     }
