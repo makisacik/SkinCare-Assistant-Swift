@@ -51,6 +51,8 @@ struct ConcernSelectionView: View {
     @Environment(\.colorScheme)  private var cs
 
     @State private var selections: Set<Concern> = []
+    @State private var customConcern: String = ""
+    @State private var isEditingCustomConcern: Bool = false
     /// Called when user taps Continue with current selections
     var onContinue: (Set<Concern>) -> Void = { _ in }
     /// Called when user wants to go back to skin type selection
@@ -94,7 +96,7 @@ struct ConcernSelectionView: View {
             }
 
             // Grid of concerns
-            LazyVGrid(columns: columns, spacing: 12) {
+            LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(Concern.allCases) { c in
                     ConcernCard(concern: c, selected: selections.contains(c))
                         .onTapGesture {
@@ -109,6 +111,33 @@ struct ConcernSelectionView: View {
                         .accessibilityAddTraits(selections.contains(c) ? .isSelected : [])
                 }
             }
+            
+            // Custom concern input
+            HStack(spacing: 12) {
+                Image(systemName: "pencil.circle.fill")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(isEditingCustomConcern || !customConcern.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
+                
+                TextField("Type your own concern...", text: $customConcern, onEditingChanged: { editing in
+                    isEditingCustomConcern = editing
+                })
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                .textFieldStyle(PlainTextFieldStyle())
+                .submitLabel(.done)
+            }
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
+                    .fill(ThemeManager.shared.theme.palette.cardBackground)
+                    .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(isEditingCustomConcern ? 0.8 : 0.5), radius: isEditingCustomConcern ? 10 : 4, x: 0, y: isEditingCustomConcern ? 6 : 2)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                            .stroke(isEditingCustomConcern || !customConcern.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.separator, lineWidth: isEditingCustomConcern || !customConcern.isEmpty ? 2 : 1)
+                    )
+            )
+            .animation(.easeInOut(duration: 0.2), value: isEditingCustomConcern)
+            .animation(.easeInOut(duration: 0.2), value: customConcern.isEmpty)
 
             Spacer(minLength: 8)
 
@@ -174,41 +203,45 @@ private struct ConcernCard: View {
     let selected: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
-                        .frame(width: 36, height: 36)
+                        .frame(width: 32, height: 32)
                     Image(systemName: concern.iconName)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                        .font(.system(size: 20, weight: .semibold))
+                        .font(.system(size: 18, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
 
             Text(concern.title)
-                .font(ThemeManager.shared.theme.typo.title)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
+            
             Text(concern.subtitle)
-                .font(ThemeManager.shared.theme.typo.caption)
+                .font(.system(size: 12))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer(minLength: 0)
         }
-        .padding(ThemeManager.shared.theme.padding)
+        .frame(height: 110)
+        .padding(12)
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
                 .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(1.0)
                                         : ThemeManager.shared.theme.palette.shadow,
-                        radius: selected ? 14 : 10, x: 0, y: selected ? 8 : 6)
+                        radius: selected ? 12 : 8, x: 0, y: selected ? 6 : 4)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,

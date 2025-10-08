@@ -16,7 +16,7 @@ enum MainGoal: String, CaseIterable, Identifiable, Codable {
         case .healthierOverall: return "Healthier skin overall"
         case .reduceBreakouts: return "Reduce breakouts"
         case .sootheIrritation: return "Soothe irritation"
-        case .preventAging: return "Prevent aging / sun damage"
+        case .preventAging: return "Prevent sun damage"
         case .ageSlower: return "Age slower"
         case .shinySkin: return "Shiny, glowing skin"
         }
@@ -27,8 +27,8 @@ enum MainGoal: String, CaseIterable, Identifiable, Codable {
         case .healthierOverall: return "Build a solid foundation for better skin"
         case .reduceBreakouts: return "Clear acne and prevent future breakouts"
         case .sootheIrritation: return "Calm redness and sensitivity"
-        case .preventAging: return "Protect against sun damage and aging"
-        case .ageSlower: return "Slow down the aging process with targeted care"
+        case .preventAging: return "Protect against UV damage and aging"
+        case .ageSlower: return "Slow down aging with targeted care"
         case .shinySkin: return "Achieve a radiant, healthy glow"
         }
     }
@@ -50,6 +50,8 @@ struct MainGoalView: View {
     @Environment(\.colorScheme) private var cs
     
     @State private var selection: MainGoal? = nil
+    @State private var customGoal: String = ""
+    @State private var isEditingCustomGoal: Bool = false
     var onContinue: (MainGoal) -> Void
     var onBack: () -> Void
     
@@ -88,7 +90,7 @@ struct MainGoalView: View {
             }
             
             // Grid of goals
-            LazyVGrid(columns: columns, spacing: 12) {
+            LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(MainGoal.allCases) { goal in
                     MainGoalCard(goal: goal, selected: selection == goal)
                         .onTapGesture {
@@ -103,6 +105,33 @@ struct MainGoalView: View {
                         .accessibilityAddTraits(selection == goal ? .isSelected : [])
                 }
             }
+            
+            // Custom goal input
+            HStack(spacing: 12) {
+                Image(systemName: "pencil.circle.fill")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
+                
+                TextField("Type your own goal...", text: $customGoal, onEditingChanged: { editing in
+                    isEditingCustomGoal = editing
+                })
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                .textFieldStyle(PlainTextFieldStyle())
+                .submitLabel(.done)
+            }
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
+                    .fill(ThemeManager.shared.theme.palette.cardBackground)
+                    .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(isEditingCustomGoal ? 0.8 : 0.5), radius: isEditingCustomGoal ? 10 : 4, x: 0, y: isEditingCustomGoal ? 6 : 2)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                            .stroke(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.separator, lineWidth: isEditingCustomGoal || !customGoal.isEmpty ? 2 : 1)
+                    )
+            )
+            .animation(.easeInOut(duration: 0.2), value: isEditingCustomGoal)
+            .animation(.easeInOut(duration: 0.2), value: customGoal.isEmpty)
             
             Spacer(minLength: 8)
             
@@ -132,42 +161,46 @@ private struct MainGoalCard: View {
     let selected: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
-                        .frame(width: 36, height: 36)
+                        .frame(width: 32, height: 32)
                     Image(systemName: goal.iconName)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                        .font(.system(size: 20, weight: .semibold))
+                        .font(.system(size: 18, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
             
             Text(goal.title)
-                .font(ThemeManager.shared.theme.typo.title)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .minimumScaleFactor(0.9)
             
             Text(goal.subtitle)
-                .font(ThemeManager.shared.theme.typo.caption)
+                .font(.system(size: 12))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                .lineLimit(3)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(ThemeManager.shared.theme.padding)
+        .frame(height: 110)
+        .padding(12)
         .background(
             RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius, style: .continuous)
                 .fill(selected ? ThemeManager.shared.theme.palette.cardBackground.opacity(0.98) : ThemeManager.shared.theme.palette.cardBackground)
                 .shadow(color: selected ? ThemeManager.shared.theme.palette.shadow.opacity(1.0)
                                         : ThemeManager.shared.theme.palette.shadow,
-                        radius: selected ? 14 : 10, x: 0, y: selected ? 8 : 6)
+                        radius: selected ? 12 : 8, x: 0, y: selected ? 6 : 4)
                 .overlay(
                     RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
                         .stroke(selected ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator,
