@@ -14,6 +14,7 @@ struct CycleSettingsView: View {
     @State private var lastPeriodDate: Date
     @State private var cycleLength: Double
     @State private var periodLength: Double
+    @State private var showPaywall = false
     
     init(cycleStore: CycleStore) {
         self.cycleStore = cycleStore
@@ -153,8 +154,7 @@ struct CycleSettingsView: View {
                     
                     // Save Button
                     Button {
-                        saveSettings()
-                        dismiss()
+                        showPaywall = true
                     } label: {
                         Text("Save Settings")
                             .font(.system(size: 16, weight: .semibold))
@@ -177,6 +177,20 @@ struct CycleSettingsView: View {
                     }
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(
+                    onSubscribe: {
+                        // Handle subscription - for now just save the settings
+                        showPaywall = false
+                        saveSettings()
+                        dismiss()
+                    },
+                    onClose: {
+                        // Close paywall without saving
+                        showPaywall = false
+                    }
+                )
             }
         }
     }

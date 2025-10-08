@@ -17,6 +17,7 @@ struct CycleSetupView: View {
     @State private var cycleLength: Double = 28
     @State private var periodLength: Double = 5
     @State private var showDatePicker = false
+    @State private var showPaywall = false
     
     var body: some View {
         ZStack {
@@ -219,12 +220,8 @@ struct CycleSetupView: View {
                         // Continue Button
                         Button {
                             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                            let cycleData = CycleData(
-                                lastPeriodStartDate: lastPeriodDate,
-                                averageCycleLength: Int(cycleLength),
-                                periodLength: Int(periodLength)
-                            )
-                            onNext(cycleData)
+                            // Show paywall for premium feature
+                            showPaywall = true
                         } label: {
                             HStack(spacing: 8) {
                                 Text("Continue")
@@ -260,6 +257,24 @@ struct CycleSetupView: View {
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .animation(.easeInOut, value: showDatePicker)
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(
+                onSubscribe: {
+                    // Handle subscription - for now just save the cycle data
+                    let cycleData = CycleData(
+                        lastPeriodStartDate: lastPeriodDate,
+                        averageCycleLength: Int(cycleLength),
+                        periodLength: Int(periodLength)
+                    )
+                    showPaywall = false
+                    onNext(cycleData)
+                },
+                onClose: {
+                    // Close paywall without subscribing
+                    showPaywall = false
+                }
+            )
+        }
     }
 }
 
