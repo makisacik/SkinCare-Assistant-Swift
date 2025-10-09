@@ -18,80 +18,190 @@ struct RoutineResultView: View {
     let onContinue: () -> Void
     
     var body: some View {
-        VStack(spacing: 24) {
-            RoutineResultHeader()
-            
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    // Morning Routine
-                    RoutineSection(
-                        title: "Morning",
-                        steps: generateMorningRoutine(),
-                        iconName: "sun.max.fill"
-                    )
-                    
-                    // Night Routine
-                    RoutineSection(
-                        title: "Night",
-                        steps: generateNightRoutine(),
-                        iconName: "moon.fill"
-                    )
-                    
-                    // Summary card
-                    SummaryCard(
-                        skinType: skinType,
-                        concerns: concerns,
-                        mainGoal: mainGoal
-                    )
-                }
-                .padding(20)
-            }
-            
-            // CTA Buttons
-            VStack(spacing: 12) {
-                // Continue Button
-                Button {
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    onContinue()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Continue")
-                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
-                    }
-                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(ThemeManager.shared.theme.palette.secondary)
-                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
-                }
-                .buttonStyle(PlainButtonStyle())
+        ZStack {
+            // Background gradient
+            backgroundGradient
 
-                // Reminders Button
-                Button {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    // TODO: Implement reminders functionality
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "bell.fill")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("Turn on reminders")
-                            .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
+            VStack(spacing: 0) {
+                // Header
+                headerView
+
+                // Content
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Steps Section
+                        stepsSection
+                        
+                        // Start Your Journey Button
+                        startJourneyButton
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
                     }
-                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
-                    .cornerRadius(ThemeManager.shared.theme.cardRadius)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea(.all, edges: .bottom))
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
         }
-        .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
     }
+    
+    // MARK: - Background
+    
+    private var backgroundGradient: some View {
+        ThemeManager.shared.theme.palette.background
+            .ignoresSafeArea()
+    }
+    
+    // MARK: - Header
+    
+    private var headerView: some View {
+        VStack(spacing: 0) {
+            // Header background - extends into safe area
+            ZStack {
+                // Deep accent gradient background for header
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        ThemeManager.shared.theme.palette.primaryLight,     // Lighter primary
+                        ThemeManager.shared.theme.palette.primary,          // Base primary
+                        ThemeManager.shared.theme.palette.primaryLight      // Lighter primary
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea(.all, edges: .top) // Extend into safe area
+
+                VStack(spacing: 16) {
+                    // Title and decorations
+                    HStack {
+                        Text("YOUR PERSONALIZED ROUTINE")
+                            .font(.system(size: 24, weight: .black))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+                            .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
+
+                        Spacer()
+
+                        // Decorative elements
+                        HStack(spacing: 8) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+
+                    // Subtitle
+                    Text("Based on your skin type and selected concerns")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                }
+            }
+            .frame(height: 140)
+        }
+    }
+    
+    // MARK: - Steps Section
+    
+    private var stepsSection: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            // Morning Routine Section
+            VStack(alignment: .leading, spacing: 16) {
+                // Section header
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Morning Routine")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                        Text("\(generateMorningRoutine().count) steps")
+                            .font(.system(size: 16))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                    }
+                    Spacer()
+                }
+                
+                // Morning steps
+                VStack(spacing: 20) {
+                    ForEach(Array(generateMorningRoutine().enumerated()), id: \.offset) { index, step in
+                        RoutineResultStepRow(
+                            step: step,
+                            stepNumber: index + 1
+                        )
+                    }
+                }
+            }
+            
+            // Evening Routine Section
+            VStack(alignment: .leading, spacing: 16) {
+                // Section header
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Evening Routine")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                        Text("\(generateNightRoutine().count) steps")
+                            .font(.system(size: 16))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                    }
+                    Spacer()
+                }
+                
+                // Evening steps
+                VStack(spacing: 20) {
+                    ForEach(Array(generateNightRoutine().enumerated()), id: \.offset) { index, step in
+                        RoutineResultStepRow(
+                            step: step,
+                            stepNumber: index + 1
+                        )
+                    }
+                }
+            }
+            
+            // Summary card
+            RoutineResultSummaryCard(
+                skinType: skinType,
+                concerns: concerns,
+                mainGoal: mainGoal
+            )
+        }
+    }
+    
+    // MARK: - Start Journey Button
+    
+    private var startJourneyButton: some View {
+        Button {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            onContinue()
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "arrow.right.circle.fill")
+                    .font(.system(size: 20, weight: .semibold))
+                Text("Start Your Journey")
+                    .font(.system(size: 18, weight: .semibold))
+            }
+            .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
+            .frame(maxWidth: .infinity)
+            .frame(height: 56)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        ThemeManager.shared.theme.palette.primary,
+                        ThemeManager.shared.theme.palette.primaryLight
+                    ]),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .cornerRadius(16)
+            .shadow(color: ThemeManager.shared.theme.palette.primary.opacity(0.3), radius: 8, x: 0, y: 4)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    // MARK: - Routine Generation Functions
     
     private func generateMorningRoutine() -> [RoutineStep] {
         // Use generated routine if available
@@ -207,198 +317,18 @@ struct RoutineResultView: View {
         
         return steps
     }
-
-    // MARK: - Helper Functions
-
 }
 
-// MARK: - Routine Section
-
-private struct RoutineSection: View {
-    
-    let title: String
-    let steps: [RoutineStep]
-    let iconName: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Section header
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
-                        .frame(width: 32, height: 32)
-                    Image(iconName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 24, height: 24)
-                }
-                
-                Text(title)
-                    .font(ThemeManager.shared.theme.typo.h2)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                
-                Spacer()
-                
-                Text("\(steps.count) steps")
-                    .font(ThemeManager.shared.theme.typo.caption)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-            }
-            
-            // Steps
-            VStack(spacing: 12) {
-                ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
-                    RoutineStepRow(step: step, stepNumber: index + 1)
-                }
-            }
-        }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.cardBackground)
-        .cornerRadius(ThemeManager.shared.theme.cardRadius)
-        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
-    }
-}
-
-// MARK: - Routine Step Row
-
-private struct RoutineStepRow: View {
-    
-    let step: RoutineStep
-    let stepNumber: Int
-    
-    var body: some View {
-        HStack(spacing: 16) {
-            // Step number
-            ZStack {
-                Circle()
-                    .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.2))
-                    .frame(width: 28, height: 28)
-                Text("\(stepNumber)")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-            }
-            
-            // Step content
-            VStack(alignment: .leading, spacing: 4) {
-                Text(step.title)
-                    .font(ThemeManager.shared.theme.typo.title)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text(step.instructions)
-                    .font(ThemeManager.shared.theme.typo.body)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    .lineLimit(nil)
-            }
-            
-            Spacer()
-            
-            // Step icon
-            Image(step.productType.iconName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 20, height: 20)
-        }
-        .padding(.vertical, 8)
-    }
-}
-
-// MARK: - Summary Card
-
-private struct SummaryCard: View {
-    
-    let skinType: SkinType
-    let concerns: Set<Concern>
-    let mainGoal: MainGoal
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Your Profile Summary")
-                .font(ThemeManager.shared.theme.typo.h3)
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-            
-            VStack(spacing: 12) {
-                ProfileRow(title: "Skin Type", value: skinType.title, iconName: skinType.iconName)
-                ProfileRow(title: "Main Goal", value: mainGoal.title, iconName: mainGoal.iconName)
-                
-                if !concerns.isEmpty {
-                    ProfileRow(
-                        title: "Focus Areas",
-                        value: "\(concerns.count) selected",
-                        iconName: "target"
-                    )
-                }
-            }
-        }
-        .padding(20)
-        .background(ThemeManager.shared.theme.palette.cardBackground)
-        .cornerRadius(ThemeManager.shared.theme.cardRadius)
-        .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.5), radius: 8, x: 0, y: 4)
-    }
-}
-
-// MARK: - Profile Row
-
-private struct ProfileRow: View {
-    
-    let title: String
-    let value: String
-    let iconName: String
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(iconName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 20, height: 20)
-            
-            Text(title)
-                .font(ThemeManager.shared.theme.typo.body)
-                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            
-            Spacer()
-            
-            Text(value)
-                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-        }
-    }
-}
-
-// MARK: - Models
-
-
-// MARK: - Routine Result Header
-
-private struct RoutineResultHeader: View {
-    
-    var body: some View {
-        VStack(spacing: 8) {
-            // Title
-            VStack(spacing: 8) {
-                Text("Your personalized routine")
-                    .font(ThemeManager.shared.theme.typo.h1)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    .multilineTextAlignment(.center)
-                
-                Text("Based on your skin type and selected concerns")
-                    .font(ThemeManager.shared.theme.typo.sub)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.top, 20)
-        }
-    }
-}
+// MARK: - Preview
 
 #Preview("RoutineResultView") {
-    NavigationView {
-        RoutineResultView(
-            skinType: .combination,
-            concerns: [.acne, .redness],
-            mainGoal: .reduceBreakouts,
-            preferences: nil,
-            generatedRoutine: nil,
-            onRestart: {},
-            onContinue: {}
-        )
-    }
+    RoutineResultView(
+        skinType: .combination,
+        concerns: [.acne, .redness],
+        mainGoal: .reduceBreakouts,
+        preferences: nil,
+        generatedRoutine: nil,
+        onRestart: {},
+        onContinue: {}
+    )
 }

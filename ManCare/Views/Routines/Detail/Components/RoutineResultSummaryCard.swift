@@ -1,0 +1,55 @@
+//
+//  RoutineResultSummaryCard.swift
+//  ManCare
+//
+//  Created by Mehmet Ali Kısacık on 2.09.2025.
+//
+
+import SwiftUI
+
+struct RoutineResultSummaryCard: View {
+    
+    let skinType: SkinType
+    let concerns: Set<Concern>
+    let mainGoal: MainGoal
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Your Profile Summary")
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+            
+            VStack(spacing: 12) {
+                ProfileRow(title: "Skin Type", value: skinType.title, iconName: skinType.iconName)
+                ProfileRow(title: "Main Goal", value: mainGoal.title, iconName: mainGoal.iconName)
+                
+                if !concerns.isEmpty {
+                    ProfileRow(
+                        title: "Focus Areas",
+                        value: "\(concerns.count) selected",
+                        iconName: "target"
+                    )
+                }
+            }
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(ThemeManager.shared.theme.palette.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                )
+        )
+    }
+}
+
+#Preview("RoutineResultSummaryCard") {
+    RoutineResultSummaryCard(
+        skinType: .combination,
+        concerns: [.acne, .redness],
+        mainGoal: .reduceBreakouts
+    )
+    .padding()
+    .background(ThemeManager.shared.theme.palette.background)
+}

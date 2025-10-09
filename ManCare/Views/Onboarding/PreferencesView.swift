@@ -103,8 +103,7 @@ struct PreferencesView: View {
                 }
                 .buttonStyle(GhostButtonStyle())
                 
-                // Debug button - only show in development
-                #if DEBUG
+                // Testing button - skip API call and go directly to results
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     onContinueWithoutAPI()
@@ -120,7 +119,6 @@ struct PreferencesView: View {
                     .frame(height: 40)
                 }
                 .buttonStyle(PlainButtonStyle())
-                #endif
             }
             }
             .padding(20)

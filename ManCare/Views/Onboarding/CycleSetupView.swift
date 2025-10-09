@@ -206,7 +206,11 @@ struct CycleSetupView: View {
                     // Show paywall for premium feature
                     showPaywall = true
                 } label: {
-                    Text("Continue")
+                    HStack(spacing: 8) {
+                        Image(systemName: "star.circle")
+                            .font(.system(size: 16, weight: .medium))
+                        Text("Continue")
+                    }
                 }
                 .buttonStyle(PrimaryButtonStyle())
                 
