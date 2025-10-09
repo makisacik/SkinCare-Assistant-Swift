@@ -1,51 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24299" systemVersion="24G231" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="RoutineCompletion" representedClassName="RoutineCompletion" syncable="YES" codeGenerationType="class">
-        <attribute name="stepId" optional="NO" attributeType="String"/>
-        <attribute name="completionDate" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="timeOfDay" optional="NO" attributeType="String"/>
-        <attribute name="stepType" optional="NO" attributeType="String"/>
-        <attribute name="stepTitle" optional="NO" attributeType="String"/>
-        <attribute name="isCompleted" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="completionDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="stepId" attributeType="String"/>
+        <attribute name="stepTitle" attributeType="String"/>
+        <attribute name="stepType" attributeType="String"/>
+        <attribute name="timeOfDay" attributeType="String"/>
     </entity>
     <entity name="SavedRoutineEntity" representedClassName="SavedRoutineEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="templateId" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="title" optional="NO" attributeType="String"/>
-        <attribute name="routineDescription" optional="NO" attributeType="String"/>
-        <attribute name="category" optional="NO" attributeType="String"/>
-        <attribute name="stepCount" optional="NO" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="duration" optional="NO" attributeType="String"/>
-        <attribute name="difficulty" optional="NO" attributeType="String"/>
-        <attribute name="tags" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
-        <attribute name="steps" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
+        <attribute name="adaptationEnabled" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="adaptationJSON" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="adaptationType" optional="YES" attributeType="String"/>
         <attribute name="benefits" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
-        <attribute name="isFeatured" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="isPremium" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="savedDate" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="isActive" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="category" attributeType="String"/>
+        <attribute name="difficulty" attributeType="String"/>
+        <attribute name="duration" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isActive" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isFeatured" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isPremium" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="routineDescription" attributeType="String"/>
+        <attribute name="savedDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="stepCount" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="steps" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
+        <attribute name="tags" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
+        <attribute name="templateId" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String"/>
         <relationship name="stepDetails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SavedStepDetailEntity" inverseName="routine" inverseEntity="SavedStepDetailEntity"/>
     </entity>
     <entity name="SavedStepDetailEntity" representedClassName="SavedStepDetailEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="title" optional="NO" attributeType="String"/>
-        <attribute name="stepDescription" optional="NO" attributeType="String"/>
-        <attribute name="iconName" optional="YES" attributeType="String"/>
-        <attribute name="stepType" optional="NO" attributeType="String"/>
-        <attribute name="timeOfDay" optional="NO" attributeType="String"/>
-        <attribute name="why" optional="YES" attributeType="String"/>
         <attribute name="how" optional="YES" attributeType="String"/>
-        <attribute name="order" optional="NO" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="iconName" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="order" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="stepDescription" attributeType="String"/>
+        <attribute name="stepType" attributeType="String"/>
+        <attribute name="timeOfDay" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="why" optional="YES" attributeType="String"/>
         <relationship name="routine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SavedRoutineEntity" inverseName="stepDetails" inverseEntity="SavedRoutineEntity"/>
     </entity>
-    <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
-        <element name="RoutineCompletion" positionX="-63" positionY="18" width="128" height="119"/>
-        <element name="SavedRoutineEntity" positionX="-63" positionY="54" width="128" height="194"/>
-        <element name="SavedStepDetailEntity" positionX="-63" positionY="90" width="128" height="119"/>
-    </elements>
 </model>

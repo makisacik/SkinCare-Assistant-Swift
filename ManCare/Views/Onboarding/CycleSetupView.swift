@@ -203,13 +203,19 @@ struct CycleSetupView: View {
                 // Continue Button
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    // Show paywall for premium feature
-                    showPaywall = true
+                    // PAYWALL COMMENTED OUT - Direct adaptation
+                    // showPaywall = true
+                    let cycleData = CycleData(
+                        lastPeriodStartDate: lastPeriodDate,
+                        averageCycleLength: Int(cycleLength),
+                        periodLength: Int(periodLength)
+                    )
+                    onNext(cycleData)
                 } label: {
                     HStack(spacing: 8) {
-                        Image(systemName: "star.circle")
+                        Image(systemName: "waveform.path.ecg")
                             .font(.system(size: 16, weight: .medium))
-                        Text("Continue")
+                        Text("Enable Cycle Tracking")
                     }
                 }
                 .buttonStyle(PrimaryButtonStyle())
@@ -228,24 +234,25 @@ struct CycleSetupView: View {
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .animation(.easeInOut, value: showDatePicker)
-        .sheet(isPresented: $showPaywall) {
-            PaywallView(
-                onSubscribe: {
-                    // Handle subscription - for now just save the cycle data
-                    let cycleData = CycleData(
-                        lastPeriodStartDate: lastPeriodDate,
-                        averageCycleLength: Int(cycleLength),
-                        periodLength: Int(periodLength)
-                    )
-                    showPaywall = false
-                    onNext(cycleData)
-                },
-                onClose: {
-                    // Close paywall without subscribing
-                    showPaywall = false
-                }
-            )
-        }
+        // PAYWALL SHEET COMMENTED OUT
+        // .sheet(isPresented: $showPaywall) {
+        //     PaywallView(
+        //         onSubscribe: {
+        //             // Handle subscription - for now just save the cycle data
+        //             let cycleData = CycleData(
+        //                 lastPeriodStartDate: lastPeriodDate,
+        //                 averageCycleLength: Int(cycleLength),
+        //                 periodLength: Int(periodLength)
+        //             )
+        //             showPaywall = false
+        //             onNext(cycleData)
+        //         },
+        //         onClose: {
+        //             // Close paywall without subscribing
+        //             showPaywall = false
+        //         }
+        //     )
+        // }
     }
 }
 

@@ -31,7 +31,25 @@ final class ServiceFactory {
     func createRoutineStore() -> RoutineStoreProtocol {
         return RoutineStore()
     }
-    
+
+    // MARK: - Adaptation Services
+
+    func createAdaptationRulesEngine() -> AdaptationRulesEngine {
+        return AdaptationRulesEngine()
+    }
+
+    func createSnapshotCache() -> SnapshotCache {
+        return SnapshotCache()
+    }
+
+    func createRoutineAdapterService() -> RoutineAdapterProtocol {
+        return RoutineAdapterService(
+            cycleStore: CycleStore(),
+            rulesEngine: createAdaptationRulesEngine(),
+            snapshotCache: createSnapshotCache()
+        )
+    }
+
     // MARK: - ViewModels
     
     @MainActor
@@ -185,4 +203,15 @@ class MockRoutineService: RoutineServiceProtocol {
         return try await saveInitialRoutine(from: routineResponse)
     }
     func refreshData() async throws {}
+
+    func toggleAdaptation(
+        for routine: SavedRoutineModel,
+        enabled: Bool,
+        type: AdaptationType?
+    ) async throws {}
+
+    func getAdaptedSnapshot(
+        _ routine: SavedRoutineModel,
+        for date: Date
+    ) async throws -> RoutineSnapshot? { return nil }
 }

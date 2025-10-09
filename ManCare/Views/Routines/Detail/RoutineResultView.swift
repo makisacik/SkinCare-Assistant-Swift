@@ -14,6 +14,7 @@ struct RoutineResultView: View {
     let mainGoal: MainGoal
     let preferences: Preferences?
     let generatedRoutine: RoutineResponse?
+    let cycleData: CycleData? // NEW: Cycle tracking data
     let onRestart: () -> Void
     let onContinue: () -> Void
     
@@ -29,6 +30,11 @@ struct RoutineResultView: View {
                 // Content
                 ScrollView {
                     VStack(spacing: 24) {
+                        // Cycle Tracking Badge (if enabled)
+                        if cycleData != nil {
+                            cycleAdaptationCard
+                        }
+                        
                         // Steps Section
                         stepsSection
                         
@@ -169,6 +175,94 @@ struct RoutineResultView: View {
         }
     }
     
+    // MARK: - Cycle Adaptation Card
+    
+    private var cycleAdaptationCard: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 12) {
+                // Icon
+                ZStack {
+                    Circle()
+                        .fill(ThemeManager.shared.theme.palette.success.opacity(0.15))
+                        .frame(width: 48, height: 48)
+                    
+                    Image(systemName: "waveform.path.ecg")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.success)
+                }
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Cycle-Adaptive Routine")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    
+                    Text("Automatically adapts daily")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 24))
+                    .foregroundColor(ThemeManager.shared.theme.palette.success)
+            }
+            
+            Divider()
+            
+            // Explanation
+            VStack(alignment: .leading, spacing: 12) {
+                Text("How your routine adapts:")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                
+                adaptationPoint(
+                    icon: "drop.fill",
+                    color: ThemeManager.shared.theme.palette.error,
+                    text: "Menstrual Phase: Gentle care, skip harsh products"
+                )
+                
+                adaptationPoint(
+                    icon: "sparkles",
+                    color: ThemeManager.shared.theme.palette.success,
+                    text: "Follicular Phase: Perfect for treatments & new products"
+                )
+                
+                adaptationPoint(
+                    icon: "sun.max.fill",
+                    color: ThemeManager.shared.theme.palette.warning,
+                    text: "Ovulation Phase: Maintain your routine, natural glow"
+                )
+                
+                adaptationPoint(
+                    icon: "moon.fill",
+                    color: ThemeManager.shared.theme.palette.primary,
+                    text: "Luteal Phase: Oil control & breakout prevention"
+                )
+            }
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(ThemeManager.shared.theme.palette.surface)
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        )
+    }
+    
+    private func adaptationPoint(icon: String, color: Color, text: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(color)
+                .frame(width: 20)
+            
+            Text(text)
+                .font(.system(size: 13))
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+    
     // MARK: - Start Journey Button
     
     private var startJourneyButton: some View {
@@ -177,8 +271,6 @@ struct RoutineResultView: View {
             onContinue()
         } label: {
             HStack(spacing: 8) {
-                Image(systemName: "arrow.right.circle.fill")
-                    .font(.system(size: 20, weight: .semibold))
                 Text("Start Your Journey")
                     .font(.system(size: 18, weight: .semibold))
             }
@@ -328,6 +420,24 @@ struct RoutineResultView: View {
         mainGoal: .reduceBreakouts,
         preferences: nil,
         generatedRoutine: nil,
+        cycleData: nil,
+        onRestart: {},
+        onContinue: {}
+    )
+}
+
+#Preview("RoutineResultView - Cycle Enabled") {
+    RoutineResultView(
+        skinType: .combination,
+        concerns: [.acne, .redness],
+        mainGoal: .reduceBreakouts,
+        preferences: nil,
+        generatedRoutine: nil,
+        cycleData: CycleData(
+            lastPeriodStartDate: Calendar.current.date(byAdding: .day, value: -10, to: Date()) ?? Date(),
+            averageCycleLength: 28,
+            periodLength: 5
+        ),
         onRestart: {},
         onContinue: {}
     )

@@ -107,8 +107,10 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
     let savedDate: Date
     let isActive: Bool
     let stepDetails: [SavedStepDetailModel]
+    let adaptationEnabled: Bool
+    let adaptationType: AdaptationType?
 
-    init(from template: RoutineTemplate, isActive: Bool = false) {
+    init(from template: RoutineTemplate, isActive: Bool = false, adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil) {
         self.id = UUID()
         self.templateId = template.id
         self.title = template.title
@@ -125,6 +127,8 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.isPremium = template.isPremium
         self.savedDate = Date()
         self.isActive = isActive
+        self.adaptationEnabled = adaptationEnabled
+        self.adaptationType = adaptationType
         // Create step details from template steps using ProductTypeDatabase
         var allStepDetails: [SavedStepDetailModel] = []
 
@@ -159,7 +163,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.stepDetails = allStepDetails
     }
 
-    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = []) {
+    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil) {
         self.id = UUID()
         self.templateId = templateId
         self.title = title
@@ -177,6 +181,8 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.savedDate = savedDate
         self.isActive = isActive
         self.stepDetails = stepDetails
+        self.adaptationEnabled = adaptationEnabled
+        self.adaptationType = adaptationType
     }
 
     init(from entity: SavedRoutineEntity) {
@@ -203,5 +209,8 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.stepDetails = (entity.stepDetails as? Set<SavedStepDetailEntity>)?.compactMap { stepEntity in
             SavedStepDetailModel(from: stepEntity)
         }.sorted { $0.order < $1.order } ?? []
+        // Adaptation fields (default to false for backward compatibility)
+        self.adaptationEnabled = entity.adaptationEnabled
+        self.adaptationType = entity.adaptationType.flatMap { AdaptationType(rawValue: $0) }
     }
 }

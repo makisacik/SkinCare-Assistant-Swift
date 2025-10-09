@@ -57,6 +57,18 @@ protocol RoutineServiceProtocol {
 
     // State Management
     func refreshData() async throws
+
+    // Adaptation Operations
+    func toggleAdaptation(
+        for routine: SavedRoutineModel,
+        enabled: Bool,
+        type: AdaptationType?
+    ) async throws
+
+    func getAdaptedSnapshot(
+        _ routine: SavedRoutineModel,
+        for date: Date
+    ) async throws -> RoutineSnapshot?
 }
 
 // MARK: - Routine Service State
@@ -89,7 +101,7 @@ final class RoutineService: RoutineServiceProtocol {
     var routinesStream: AnyPublisher<RoutineServiceState, Never> {
         stateSubject.eraseToAnyPublisher()
     }
-    
+
     var completionChangesStream: AnyPublisher<Date, Never> {
         completionChangeSubject.eraseToAnyPublisher()
     }
@@ -224,7 +236,7 @@ final class RoutineService: RoutineServiceProtocol {
         Task { @MainActor in
             self.completionChangeSubject.send(startOfDay)
         }
-        
+
         // Emit updated state (for routines and active routine)
         try await emitUpdatedState()
     }
@@ -254,7 +266,7 @@ final class RoutineService: RoutineServiceProtocol {
         Task { @MainActor in
             self.completionChangeSubject.send(Date())
         }
-        
+
         // Emit updated state
         try await emitUpdatedState()
     }
@@ -341,4 +353,34 @@ extension RoutineService {
     }
 
     // Note: completedSteps removed - use getCompletedSteps(for: date) for date-specific completions
+}
+
+// MARK: - Adaptation Extensions
+
+extension RoutineService {
+    func toggleAdaptation(
+        for routine: SavedRoutineModel,
+        enabled: Bool,
+        type: AdaptationType?
+    ) async throws {
+        print("🔄 RoutineService: Toggling adaptation for routine \(routine.title)")
+
+        try await store.updateAdaptationSettings(
+            routineId: routine.id,
+            enabled: enabled,
+            type: type
+        )
+
+        // Emit updated state
+        try await emitUpdatedState()
+    }
+
+    func getAdaptedSnapshot(
+        _ routine: SavedRoutineModel,
+        for date: Date
+    ) async throws -> RoutineSnapshot? {
+        // This will be provided by the RoutineAdapterService
+        // For now, return nil - UI will handle this via RoutineAdapterService directly
+        return nil
+    }
 }

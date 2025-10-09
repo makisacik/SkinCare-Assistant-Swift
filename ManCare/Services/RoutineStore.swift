@@ -8,6 +8,15 @@
 import Foundation
 import CoreData
 
+// MARK: - Store Errors
+
+enum RoutineStoreError: Error {
+    case routineNotFound
+    case saveFailed
+    case deleteFailed
+    case invalidData
+}
+
 // MARK: - Store Protocol
 
 protocol RoutineStoreProtocol: Sendable {
@@ -19,13 +28,18 @@ protocol RoutineStoreProtocol: Sendable {
     func removeRoutineTemplate(_ template: RoutineTemplate) async throws
     func setActiveRoutine(_ routine: SavedRoutineModel) async throws
     func isRoutineSaved(_ template: RoutineTemplate) async throws -> Bool
-    
+
     func toggleStepCompletion(stepId: String, stepTitle: String, stepType: ProductType, timeOfDay: TimeOfDay, date: Date) async throws
     func isStepCompleted(stepId: String, date: Date) async throws -> Bool
     func getCompletedSteps(for date: Date) async throws -> Set<String>
     func getCompletionStats(from startDate: Date, to endDate: Date) async throws -> [Date: CompletionStats]
     func getCurrentStreak() async throws -> Int
     func clearAllCompletions() async throws
+
+    // Adaptation methods
+    func updateAdaptationSettings(routineId: UUID, enabled: Bool, type: AdaptationType?) async throws
+    func saveCustomRules(routineId: UUID, rules: [AdaptationRule]) async throws
+    func fetchCustomRules(routineId: UUID) async throws -> [AdaptationRule]?
 }
 
 // MARK: - Store Actor Implementation
@@ -33,7 +47,7 @@ protocol RoutineStoreProtocol: Sendable {
 actor RoutineStore: RoutineStoreProtocol {
     private let persistenceController: PersistenceController
     private let backgroundContext: NSManagedObjectContext
-    
+
     init(persistenceController: PersistenceController = .shared) {
         self.persistenceController = persistenceController
 
@@ -42,25 +56,25 @@ actor RoutineStore: RoutineStoreProtocol {
 
         print("🏪 RoutineStore actor initialized with dedicated background context")
     }
-    
+
     // MARK: - Core Data Context Access
-    
+
     private var viewContext: NSManagedObjectContext {
         persistenceController.container.viewContext
     }
-    
+
     // MARK: - Routine Operations
-    
+
     func fetchSavedRoutines() async throws -> [SavedRoutineModel] {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     request.sortDescriptors = [NSSortDescriptor(keyPath: \SavedRoutineEntity.savedDate, ascending: false)]
-                    
+
                     let results = try self.backgroundContext.fetch(request)
                     let routines = results.compactMap { SavedRoutineModel(from: $0) }
-                    
+
                     continuation.resume(returning: routines)
                 } catch {
                     continuation.resume(throwing: error)
@@ -68,7 +82,7 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func fetchActiveRoutine() async throws -> SavedRoutineModel? {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
@@ -76,10 +90,10 @@ actor RoutineStore: RoutineStoreProtocol {
                     let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     request.predicate = NSPredicate(format: "isActive == YES")
                     request.fetchLimit = 1
-                    
+
                     let results = try self.backgroundContext.fetch(request)
                     let activeRoutine = results.first.map { SavedRoutineModel(from: $0) }
-                    
+
                     continuation.resume(returning: activeRoutine)
                 } catch {
                     continuation.resume(throwing: error)
@@ -87,14 +101,14 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func saveRoutine(_ routine: SavedRoutineModel) async throws -> SavedRoutineModel {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let savedRoutineEntity = SavedRoutineEntity(context: self.backgroundContext)
                     self.populateRoutineEntity(savedRoutineEntity, with: routine, in: self.backgroundContext)
-                    
+
                     try self.backgroundContext.save()
                     continuation.resume(returning: routine)
                 } catch {
@@ -103,19 +117,19 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let initialRoutine = self.createInitialRoutineModel(from: routineResponse)
-                    
+
                     // Check if we already have a "My First Routine"
                     let existingRequest: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     existingRequest.predicate = NSPredicate(format: "title == %@", "My First Routine")
-                    
+
                     let existingResults = try self.backgroundContext.fetch(existingRequest)
-                    
+
                     if let existing = existingResults.first {
                         print("🔄 Updating existing 'My First Routine' (ID: \(existing.id?.uuidString ?? "nil"))")
                         self.populateRoutineEntity(existing, with: initialRoutine, in: self.backgroundContext)
@@ -125,10 +139,10 @@ actor RoutineStore: RoutineStoreProtocol {
                         let newEntity = SavedRoutineEntity(context: self.backgroundContext)
                         self.populateRoutineEntity(newEntity, with: initialRoutine, in: self.backgroundContext)
                     }
-                    
+
                     // Update UserDefaults consistently
                     UserDefaults.standard.set(initialRoutine.id.uuidString, forKey: "activeRoutineId")
-                    
+
                     try self.backgroundContext.save()
                     continuation.resume(returning: initialRoutine)
                 } catch {
@@ -137,16 +151,16 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func removeRoutine(_ routine: SavedRoutineModel) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     request.predicate = NSPredicate(format: "id == %@", routine.id as CVarArg)
-                    
+
                     let results = try self.backgroundContext.fetch(request)
-                    
+
                     var wasActive = false
                     for savedRoutine in results {
                         if savedRoutine.isActive {
@@ -154,11 +168,11 @@ actor RoutineStore: RoutineStoreProtocol {
                         }
                         self.backgroundContext.delete(savedRoutine)
                     }
-                    
+
                     if wasActive {
                         UserDefaults.standard.removeObject(forKey: "activeRoutineId")
                     }
-                    
+
                     try self.backgroundContext.save()
                     continuation.resume()
                 } catch {
@@ -167,16 +181,16 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func removeRoutineTemplate(_ template: RoutineTemplate) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     request.predicate = NSPredicate(format: "templateId == %@", template.id as CVarArg)
-                    
+
                     let results = try self.backgroundContext.fetch(request)
-                    
+
                     var wasActive = false
                     for savedRoutine in results {
                         if savedRoutine.isActive {
@@ -184,11 +198,11 @@ actor RoutineStore: RoutineStoreProtocol {
                         }
                         self.backgroundContext.delete(savedRoutine)
                     }
-                    
+
                     if wasActive {
                         UserDefaults.standard.removeObject(forKey: "activeRoutineId")
                     }
-                    
+
                     try self.backgroundContext.save()
                     continuation.resume()
                 } catch {
@@ -197,22 +211,22 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func setActiveRoutine(_ routine: SavedRoutineModel) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     try self.deactivateAllRoutines(in: self.backgroundContext)
-                    
+
                     let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     request.predicate = NSPredicate(format: "id == %@", routine.id as CVarArg)
-                    
+
                     let results = try self.backgroundContext.fetch(request)
                     if let routineEntity = results.first {
                         routineEntity.isActive = true
                         UserDefaults.standard.set(routine.id.uuidString, forKey: "activeRoutineId")
                     }
-                    
+
                     try self.backgroundContext.save()
                     continuation.resume()
                 } catch {
@@ -221,7 +235,7 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func isRoutineSaved(_ template: RoutineTemplate) async throws -> Bool {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
@@ -229,7 +243,7 @@ actor RoutineStore: RoutineStoreProtocol {
                     let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
                     request.predicate = NSPredicate(format: "templateId == %@", template.id as CVarArg)
                     request.fetchLimit = 1
-                    
+
                     let count = try self.backgroundContext.count(for: request)
                     continuation.resume(returning: count > 0)
                 } catch {
@@ -238,16 +252,16 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     // MARK: - Tracking Operations
-    
+
     func toggleStepCompletion(stepId: String, stepTitle: String, stepType: ProductType, timeOfDay: TimeOfDay, date: Date = Date()) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let calendar = Calendar.current
                     let startOfDay = calendar.startOfDay(for: date)
-                    
+
                     if let existingCompletion = self.getCompletionSync(stepId: stepId, date: startOfDay, in: self.backgroundContext) {
                         existingCompletion.isCompleted.toggle()
                         existingCompletion.createdAt = Date()
@@ -261,7 +275,7 @@ actor RoutineStore: RoutineStoreProtocol {
                         completion.isCompleted = true
                         completion.createdAt = Date()
                     }
-                    
+
                     try self.backgroundContext.save()
                     continuation.resume()
                 } catch {
@@ -270,14 +284,14 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func isStepCompleted(stepId: String, date: Date = Date()) async throws -> Bool {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let calendar = Calendar.current
                     let startOfDay = calendar.startOfDay(for: date)
-                    
+
                     let completion = self.getCompletionSync(stepId: stepId, date: startOfDay, in: self.backgroundContext)
                     continuation.resume(returning: completion?.isCompleted ?? false)
                 } catch {
@@ -286,23 +300,23 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func getCompletedSteps(for date: Date = Date()) async throws -> Set<String> {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let calendar = Calendar.current
                     let startOfDay = calendar.startOfDay(for: date)
-                    
+
                     let request: NSFetchRequest<RoutineCompletion> = RoutineCompletion.fetchRequest()
                     request.predicate = NSPredicate(format: "completionDate == %@ AND isCompleted == YES", startOfDay as NSDate)
-                    
+
                     let completions = try self.backgroundContext.fetch(request)
                     let stepIds: Set<String> = Set(completions.compactMap { completion in
                         guard let stepId = completion.stepId, !stepId.isEmpty else { return nil }
                         return stepId
                     })
-                    
+
                     continuation.resume(returning: stepIds)
                 } catch {
                     continuation.resume(throwing: error)
@@ -310,7 +324,7 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func getCurrentStreak() async throws -> Int {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
@@ -319,23 +333,23 @@ actor RoutineStore: RoutineStoreProtocol {
                     let today = calendar.startOfDay(for: Date())
                     var streak = 0
                     var currentDate = today
-                    
+
                     // Optimize: Single query for date range instead of daily queries
                     let endDate = calendar.date(byAdding: .day, value: -30, to: today) ?? today
-                    
+
                     let request: NSFetchRequest<RoutineCompletion> = RoutineCompletion.fetchRequest()
-                    request.predicate = NSPredicate(format: "completionDate >= %@ AND completionDate <= %@ AND isCompleted == YES", 
+                    request.predicate = NSPredicate(format: "completionDate >= %@ AND completionDate <= %@ AND isCompleted == YES",
                                                   endDate as NSDate, today as NSDate)
-                    
+
                     let completions = try self.backgroundContext.fetch(request)
                     let completionDates = Set(completions.compactMap { $0.completionDate })
-                    
+
                     // Count consecutive days
                     while completionDates.contains(currentDate) {
                         streak += 1
                         currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
                     }
-                    
+
                     continuation.resume(returning: streak)
                 } catch {
                     continuation.resume(throwing: error)
@@ -343,30 +357,30 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func getCompletionStats(from startDate: Date, to endDate: Date) async throws -> [Date: CompletionStats] {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
                     let calendar = Calendar.current
                     var stats: [Date: CompletionStats] = [:]
-                    
+
                     let request: NSFetchRequest<RoutineCompletion> = RoutineCompletion.fetchRequest()
                     request.predicate = NSPredicate(format: "completionDate >= %@ AND completionDate <= %@",
                                                   calendar.startOfDay(for: startDate) as NSDate,
                                                   calendar.startOfDay(for: endDate) as NSDate)
-                    
+
                     let completions = try self.backgroundContext.fetch(request)
-                    
+
                     let groupedCompletions = Dictionary(grouping: completions) { completion in
                         guard let completionDate = completion.completionDate else { return Date() }
                         return calendar.startOfDay(for: completionDate)
                     }
-                    
+
                     for (date, dateCompletions) in groupedCompletions {
                         let completedCount = dateCompletions.filter { $0.isCompleted }.count
                         let totalCount = dateCompletions.count
-                        
+
                         stats[date] = CompletionStats(
                             date: date,
                             completedSteps: completedCount,
@@ -374,7 +388,7 @@ actor RoutineStore: RoutineStoreProtocol {
                             completionRate: totalCount > 0 ? Double(completedCount) / Double(totalCount) : 0.0
                         )
                     }
-                    
+
                     continuation.resume(returning: stats)
                 } catch {
                     continuation.resume(throwing: error)
@@ -382,7 +396,7 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     func clearAllCompletions() async throws {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
@@ -391,17 +405,17 @@ actor RoutineStore: RoutineStoreProtocol {
                     let request: NSFetchRequest<NSFetchRequestResult> = RoutineCompletion.fetchRequest()
                     let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
                     deleteRequest.resultType = .resultTypeObjectIDs
-                    
+
                     let result = try self.backgroundContext.execute(deleteRequest) as? NSBatchDeleteResult
                     let objectIDArray = result?.result as? [NSManagedObjectID] ?? []
-                    
+
                     // Merge changes to main context
                     let changes = [NSDeletedObjectsKey: objectIDArray]
                     NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self.viewContext])
-                    
+
                     // Clear UserDefaults
                     UserDefaults.standard.removeObject(forKey: "activeRoutineId")
-                    
+
                     continuation.resume()
                 } catch {
                     continuation.resume(throwing: error)
@@ -409,9 +423,9 @@ actor RoutineStore: RoutineStoreProtocol {
             }
         }
     }
-    
+
     // MARK: - Private Helper Methods
-    
+
     private func populateRoutineEntity(_ entity: SavedRoutineEntity, with routine: SavedRoutineModel, in context: NSManagedObjectContext) {
         entity.id = routine.id
         entity.templateId = routine.templateId
@@ -428,14 +442,16 @@ actor RoutineStore: RoutineStoreProtocol {
         entity.isPremium = routine.isPremium
         entity.savedDate = routine.savedDate
         entity.isActive = routine.isActive
-        
+        entity.adaptationEnabled = routine.adaptationEnabled
+        entity.adaptationType = routine.adaptationType?.rawValue
+
         // Delete existing step details
         if let existingSteps = entity.stepDetails as? Set<SavedStepDetailEntity> {
             for step in existingSteps {
                 context.delete(step)
             }
         }
-        
+
         // Save step details
         for stepDetail in routine.stepDetails {
             let stepEntity = SavedStepDetailEntity(context: context)
@@ -450,11 +466,11 @@ actor RoutineStore: RoutineStoreProtocol {
             stepEntity.routine = entity
         }
     }
-    
+
     private func createInitialRoutineModel(from routineResponse: RoutineResponse) -> SavedRoutineModel {
         var stepDetails: [SavedStepDetailModel] = []
         var order = 0
-        
+
         for step in routineResponse.routine.morning {
             stepDetails.append(SavedStepDetailModel(
                 title: step.name,
@@ -467,7 +483,7 @@ actor RoutineStore: RoutineStoreProtocol {
             ))
             order += 1
         }
-        
+
         for step in routineResponse.routine.evening {
             stepDetails.append(SavedStepDetailModel(
                 title: step.name,
@@ -480,11 +496,11 @@ actor RoutineStore: RoutineStoreProtocol {
             ))
             order += 1
         }
-        
+
         let morningSteps = routineResponse.routine.morning.map { $0.name }
         let eveningSteps = routineResponse.routine.evening.map { $0.name }
         let allSteps = morningSteps + eveningSteps
-        
+
         return SavedRoutineModel(
             templateId: UUID(),
             title: "My First Routine",
@@ -504,28 +520,101 @@ actor RoutineStore: RoutineStoreProtocol {
             stepDetails: stepDetails
         )
     }
-    
+
     private func deactivateAllRoutines(in context: NSManagedObjectContext) throws {
         let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
         request.predicate = NSPredicate(format: "isActive == YES")
-        
+
         let activeRoutines = try context.fetch(request)
         for routine in activeRoutines {
             routine.isActive = false
         }
     }
-    
+
     private func getCompletionSync(stepId: String, date: Date, in context: NSManagedObjectContext) -> RoutineCompletion? {
         let request: NSFetchRequest<RoutineCompletion> = RoutineCompletion.fetchRequest()
         request.predicate = NSPredicate(format: "stepId == %@ AND completionDate == %@", stepId, date as NSDate)
         request.fetchLimit = 1
-        
+
         do {
             let completions = try context.fetch(request)
             return completions.first
         } catch {
             print("❌ Error fetching completion: \(error)")
             return nil
+        }
+    }
+
+    // MARK: - Adaptation Management
+
+    func updateAdaptationSettings(
+        routineId: UUID,
+        enabled: Bool,
+        type: AdaptationType?
+    ) async throws {
+        print("🔄 RoutineStore: Updating adaptation settings for routine \(routineId)")
+
+        try await backgroundContext.perform {
+            let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", routineId as CVarArg)
+            request.fetchLimit = 1
+
+            guard let entity = try self.backgroundContext.fetch(request).first else {
+                throw RoutineStoreError.routineNotFound
+            }
+
+            entity.adaptationEnabled = enabled
+            entity.adaptationType = type?.rawValue
+
+            try self.backgroundContext.save()
+            print("✅ RoutineStore: Updated adaptation settings - enabled: \(enabled), type: \(type?.rawValue ?? "none")")
+        }
+    }
+
+    func saveCustomRules(
+        routineId: UUID,
+        rules: [AdaptationRule]
+    ) async throws {
+        print("🔄 RoutineStore: Saving custom rules for routine \(routineId)")
+
+        // For now, we'll store this as JSON in the adaptationJSON field
+        // Future: Create AdaptationAttachmentEntity for more structured storage
+        try await backgroundContext.perform {
+            let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", routineId as CVarArg)
+            request.fetchLimit = 1
+
+            guard let entity = try self.backgroundContext.fetch(request).first else {
+                throw RoutineStoreError.routineNotFound
+            }
+
+            // Encode rules to JSON
+            let encoder = JSONEncoder()
+            let rulesData = try encoder.encode(rules)
+            entity.adaptationJSON = rulesData
+
+            try self.backgroundContext.save()
+            print("✅ RoutineStore: Saved \(rules.count) custom rules")
+        }
+    }
+
+    func fetchCustomRules(routineId: UUID) async throws -> [AdaptationRule]? {
+        return try await backgroundContext.perform {
+            let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", routineId as CVarArg)
+            request.fetchLimit = 1
+
+            guard let entity = try self.backgroundContext.fetch(request).first else {
+                throw RoutineStoreError.routineNotFound
+            }
+
+            guard let rulesData = entity.adaptationJSON else {
+                return nil
+            }
+
+            let decoder = JSONDecoder()
+            let rules = try decoder.decode([AdaptationRule].self, from: rulesData)
+            return rules
         }
     }
 }
@@ -537,11 +626,11 @@ struct CompletionStats: Sendable {
     let completedSteps: Int
     let totalSteps: Int
     let completionRate: Double
-    
+
     var isComplete: Bool {
         return completionRate >= 1.0
     }
-    
+
     var progressPercentage: Double {
         return completionRate * 100
     }

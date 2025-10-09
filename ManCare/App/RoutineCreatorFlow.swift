@@ -230,6 +230,7 @@ struct RoutineCreatorFlow: View {
                     mainGoal: selectedMainGoal ?? .healthierOverall,
                     preferences: selectedPreferences,
                     generatedRoutine: generatedRoutine,
+                    cycleData: cycleData,  // NEW: Pass cycle data
                     onRestart: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .skinType
@@ -1029,6 +1030,7 @@ private struct ProgressIndicator: View {
             mainGoal: .reduceBreakouts,
             preferences: nil,
             generatedRoutine: nil,
+            cycleData: nil,
             onRestart: {},
             onContinue: {}
         )

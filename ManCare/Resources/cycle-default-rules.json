@@ -1,0 +1,317 @@
+{
+  "type": "cycle",
+  "version": "1.0",
+  "rules": [
+    {
+      "id": "menstrual-cleanser",
+      "productType": "cleanser",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Use gentle, circular motions. Avoid harsh scrubbing as your skin barrier is weaker.",
+        "orderPriority": 1,
+        "warnings": ["Skin barrier is compromised during menstrual phase"]
+      }
+    },
+    {
+      "id": "menstrual-exfoliant",
+      "contextKey": "menstrual",
+      "productType": "exfoliant",
+      "action": {
+        "emphasis": "skip",
+        "guidanceTemplate": null,
+        "orderPriority": null,
+        "warnings": ["Too harsh for sensitive menstrual phase skin"]
+      }
+    },
+    {
+      "id": "menstrual-retinol",
+      "contextKey": "menstrual",
+      "productType": "retinol",
+      "action": {
+        "emphasis": "reduce",
+        "guidanceTemplate": "Use pea-sized amount only. Skip if you notice irritation.",
+        "orderPriority": null,
+        "warnings": ["Increased sensitivity to actives during this phase"]
+      }
+    },
+    {
+      "id": "menstrual-serum",
+      "contextKey": "menstrual",
+      "productType": "serum",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Focus on hydrating and soothing serums. Apply generously.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-moisturizer",
+      "contextKey": "menstrual",
+      "productType": "moisturizer",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Layer generously to support barrier repair. Consider a thicker cream.",
+        "orderPriority": 4,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-sunscreen",
+      "contextKey": "menstrual",
+      "productType": "sunscreen",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Apply as usual. Protection is especially important when skin is sensitive.",
+        "orderPriority": 5,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-cleanser",
+      "contextKey": "follicular",
+      "productType": "cleanser",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Your skin is resilient! Use your regular cleansing technique.",
+        "orderPriority": 1,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-exfoliant",
+      "contextKey": "follicular",
+      "productType": "exfoliant",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Great time for deeper exfoliation. Your skin can handle more intensive treatment.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-retinol",
+      "contextKey": "follicular",
+      "productType": "retinol",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Perfect time to use your full dosage. Skin absorption is optimal.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-serum",
+      "contextKey": "follicular",
+      "productType": "serum",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Great time to try new active serums or increase concentration.",
+        "orderPriority": 4,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-treatment",
+      "contextKey": "follicular",
+      "productType": "treatment",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Ideal time for intensive treatments, peels, or new products.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-moisturizer",
+      "contextKey": "follicular",
+      "productType": "moisturizer",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Your regular moisturizer is perfect. Skin is balanced.",
+        "orderPriority": 5,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-cleanser",
+      "contextKey": "ovulation",
+      "productType": "cleanser",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Maintain your routine. Your skin is at its best!",
+        "orderPriority": 1,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-exfoliant",
+      "contextKey": "ovulation",
+      "productType": "exfoliant",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Continue your regular exfoliation schedule.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-retinol",
+      "contextKey": "ovulation",
+      "productType": "retinol",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Keep up your regular retinol routine.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-moisturizer",
+      "contextKey": "ovulation",
+      "productType": "moisturizer",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Your skin is well-balanced. Stick with your routine.",
+        "orderPriority": 4,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-cleanser",
+      "contextKey": "luteal",
+      "productType": "cleanser",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Double cleanse if wearing makeup. Oil production increases during this phase.",
+        "orderPriority": 1,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-exfoliant",
+      "contextKey": "luteal",
+      "productType": "exfoliant",
+      "action": {
+        "emphasis": "reduce",
+        "guidanceTemplate": "Limit to 2x per week maximum to avoid irritation.",
+        "orderPriority": 2,
+        "warnings": ["Skin can become more reactive during luteal phase"]
+      }
+    },
+    {
+      "id": "luteal-retinol",
+      "contextKey": "luteal",
+      "productType": "retinol",
+      "action": {
+        "emphasis": "reduce",
+        "guidanceTemplate": "Consider reducing frequency or amount if you notice increased sensitivity.",
+        "orderPriority": 4,
+        "warnings": ["May cause irritation as progesterone rises"]
+      }
+    },
+    {
+      "id": "luteal-mask",
+      "contextKey": "luteal",
+      "productType": "mask",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Clay or charcoal masks are excellent for managing increased oil production.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-moisturizer",
+      "contextKey": "luteal",
+      "productType": "moisturizer",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Consider switching to a lighter moisturizer if feeling too oily.",
+        "orderPriority": 5,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-spot-treatment",
+      "contextKey": "luteal",
+      "productType": "spot treatment",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Keep spot treatments handy. Breakouts are more common now.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-toner",
+      "contextKey": "luteal",
+      "productType": "toner",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Use a balancing or mattifying toner to control oil.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    }
+  ],
+  "briefings": [
+    {
+      "contextKey": "menstrual",
+      "title": "Menstrual Phase (Days 1-5)",
+      "summary": "Your skin is more sensitive right now. Focus on gentle, hydrating care and barrier support.",
+      "tips": [
+        "Avoid harsh actives and exfoliation",
+        "Prioritize barrier repair with gentle, hydrating products",
+        "Use calming ingredients like ceramides and niacinamide",
+        "Be extra gentle with cleansing"
+      ],
+      "generalWarnings": [
+        "Skin barrier is compromised",
+        "Increased sensitivity to actives"
+      ]
+    },
+    {
+      "contextKey": "follicular",
+      "title": "Follicular Phase (Days 6-13)",
+      "summary": "Your skin is resilient and glowing! This is the perfect time for intensive treatments and trying new products.",
+      "tips": [
+        "Perfect time for intensive treatments and peels",
+        "Try new products or increase active concentration",
+        "Maximize use of exfoliants and retinoids",
+        "Skin has optimal absorption and resilience"
+      ],
+      "generalWarnings": []
+    },
+    {
+      "contextKey": "ovulation",
+      "title": "Ovulation Phase (Days 14-16)",
+      "summary": "Your skin looks its best! Maintain your routine and enjoy your natural glow.",
+      "tips": [
+        "Skin is at peak radiance and firmness",
+        "Maintain your current routine",
+        "Great time for photos and events",
+        "Natural glow is maximized"
+      ],
+      "generalWarnings": []
+    },
+    {
+      "contextKey": "luteal",
+      "title": "Luteal Phase (Days 17-28)",
+      "summary": "Oil production increases and breakouts may appear. Focus on balancing and oil control.",
+      "tips": [
+        "Use mattifying or balancing toners",
+        "Add clay masks to control shine",
+        "Keep spot treatments ready",
+        "Consider lighter moisturizers",
+        "Limit harsh actives to avoid irritation"
+      ],
+      "generalWarnings": [
+        "Increased oil production",
+        "Higher breakout risk",
+        "Possible increased sensitivity"
+      ]
+    }
+  ]
+}
