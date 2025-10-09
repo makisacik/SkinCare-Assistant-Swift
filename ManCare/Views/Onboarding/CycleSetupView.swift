@@ -17,7 +17,14 @@ struct CycleSetupView: View {
     @State private var periodLength: Double = 5
     @State private var showDatePicker = false
     @State private var showPaywall = false
-    
+    @State private var showDefaultDataAlert = false
+
+    // Track if user has edited the default values
+    @State private var hasUserEditedCycleData = false
+    @State private var hasEditedDate = false
+    @State private var hasEditedCycleLength = false
+    @State private var hasEditedPeriodLength = false
+
     var body: some View {
         ZStack {
             // Background that fills entire space
@@ -30,7 +37,7 @@ struct CycleSetupView: View {
                 Text("Track Your Cycle")
                     .font(ThemeManager.shared.theme.typo.h1)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text("Get personalized skincare tips that adapt to your menstrual cycle")
+                Text("Your skincare evolves with you — routines adapt to each phase.")
                     .font(ThemeManager.shared.theme.typo.sub)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -78,7 +85,7 @@ struct CycleSetupView: View {
                                     
                                     Text(lastPeriodDate, style: .date)
                                         .font(.system(size: 16, weight: .medium))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                        .foregroundColor(hasEditedDate ? ThemeManager.shared.theme.palette.textPrimary : ThemeManager.shared.theme.palette.textMuted)
                                     
                                     Spacer()
                                     
@@ -112,6 +119,10 @@ struct CycleSetupView: View {
                                         .fill(ThemeManager.shared.theme.palette.surface)
                                 )
                                 .transition(.opacity.combined(with: .scale))
+                                .onChange(of: lastPeriodDate) { _ in
+                                    hasEditedDate = true
+                                    hasUserEditedCycleData = true
+                                }
                             }
                         }
                         
@@ -126,11 +137,15 @@ struct CycleSetupView: View {
                                 
                                 Text("\(Int(cycleLength)) days")
                                     .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                    .foregroundColor(hasEditedCycleLength ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.textMuted)
                             }
                             
                             Slider(value: $cycleLength, in: 21...35, step: 1)
                                 .accentColor(ThemeManager.shared.theme.palette.primary)
+                                .onChange(of: cycleLength) { _ in
+                                    hasEditedCycleLength = true
+                                    hasUserEditedCycleData = true
+                                }
                             
                             Text("Typical range: 21-35 days")
                                 .font(.system(size: 11))
@@ -157,11 +172,15 @@ struct CycleSetupView: View {
                                 
                                 Text("\(Int(periodLength)) days")
                                     .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                                    .foregroundColor(hasEditedPeriodLength ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.textMuted)
                             }
                             
                             Slider(value: $periodLength, in: 3...7, step: 1)
                                 .accentColor(ThemeManager.shared.theme.palette.primary)
+                                .onChange(of: periodLength) { _ in
+                                    hasEditedPeriodLength = true
+                                    hasUserEditedCycleData = true
+                                }
                             
                             Text("Typical range: 3-7 days")
                                 .font(.system(size: 11))
@@ -203,26 +222,38 @@ struct CycleSetupView: View {
                 // Continue Button
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    // PAYWALL COMMENTED OUT - Direct adaptation
-                    // showPaywall = true
-                    let cycleData = CycleData(
-                        lastPeriodStartDate: lastPeriodDate,
-                        averageCycleLength: Int(cycleLength),
-                        periodLength: Int(periodLength)
-                    )
-                    onNext(cycleData)
+
+                    // Check if user has edited data
+                    if !hasUserEditedCycleData {
+                        showDefaultDataAlert = true
+                    } else {
+                        // Save cycle data locally
+                        saveCycleDataLocally()
+                        // Show paywall
+                        showPaywall = true
+                    }
                 } label: {
                     HStack(spacing: 8) {
-                        Image(systemName: "waveform.path.ecg")
-                            .font(.system(size: 16, weight: .medium))
-                        Text("Enable Cycle Tracking")
+                        Text("✨")
+                            .font(.system(size: 16))
+                        Text("Enable Cycle-Adaptive Routines")
+                            .font(.system(size: 16, weight: .semibold))
                     }
                 }
                 .buttonStyle(PrimaryButtonStyle())
                 
+                // Helper text above skip
+                Text("You can enable this later from your profile.")
+                    .font(.system(size: 12))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 4)
+
                 // Skip Button
                 Button {
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    // Save data locally even if skipped (for future use)
+                    saveCycleDataLocally()
                     onNext(nil)
                 } label: {
                     Text("Skip for now")
@@ -234,25 +265,52 @@ struct CycleSetupView: View {
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .animation(.easeInOut, value: showDatePicker)
-        // PAYWALL SHEET COMMENTED OUT
-        // .sheet(isPresented: $showPaywall) {
-        //     PaywallView(
-        //         onSubscribe: {
-        //             // Handle subscription - for now just save the cycle data
-        //             let cycleData = CycleData(
-        //                 lastPeriodStartDate: lastPeriodDate,
-        //                 averageCycleLength: Int(cycleLength),
-        //                 periodLength: Int(periodLength)
-        //             )
-        //             showPaywall = false
-        //             onNext(cycleData)
-        //         },
-        //         onClose: {
-        //             // Close paywall without subscribing
-        //             showPaywall = false
-        //         }
-        //     )
-        // }
+        .alert("Use Default Averages?", isPresented: $showDefaultDataAlert) {
+            Button("Edit First", role: .cancel) {
+                // Just close the alert
+            }
+            Button("Continue") {
+                // User confirmed to use defaults
+                saveCycleDataLocally()
+                // Show paywall
+                showPaywall = true
+            }
+        } message: {
+            Text("Would you like to use these default averages (28-day cycle, 5-day period) or update them first to match your cycle?")
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(
+                onSubscribe: {
+                    // For testing: act as if subscription was successful
+                    let cycleData = CycleData(
+                        lastPeriodStartDate: lastPeriodDate,
+                        averageCycleLength: Int(cycleLength),
+                        periodLength: Int(periodLength)
+                    )
+                    showPaywall = false
+                    onNext(cycleData)
+                },
+                onClose: {
+                    // User closed paywall without subscribing
+                    showPaywall = false
+                    // Save data locally for future use, but skip activation
+                    onNext(nil)
+                }
+            )
+        }
+    }
+
+    // MARK: - Helper Functions
+
+    private func saveCycleDataLocally() {
+        let cycleData = CycleData(
+            lastPeriodStartDate: lastPeriodDate,
+            averageCycleLength: Int(cycleLength),
+            periodLength: Int(periodLength)
+        )
+
+        // Save to CycleStore for future use
+        CycleStore().updateCycleData(cycleData)
     }
 }
 

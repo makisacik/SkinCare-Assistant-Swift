@@ -4,13 +4,16 @@
 //
 //  Premium feature paywall view
 //
+//  TESTING MODE: Currently simulates successful purchases without payment processing
+//  For production: Integrate StoreKit/RevenueCat for actual subscription handling
+//
 
 import SwiftUI
 
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
-    var onSubscribe: () -> Void
-    var onClose: () -> Void
+    var onSubscribe: () -> Void  // Called when user "purchases" (testing mode - no actual payment)
+    var onClose: () -> Void      // Called when user closes without purchasing
     
     var body: some View {
         NavigationView {

@@ -38,6 +38,9 @@ struct MorningRoutineCompletionView: View {
     @State private var showCyclePromotion = true
     @State private var showCycleSetup = false
     @State private var showEnableConfirmation = false
+    @State private var showPaywall = false
+    @State private var isPremiumUser = false  // For testing: simulates premium status
+    @State private var hasCycleData = false
     private let routineStore = RoutineStore()
     private let adapterService: RoutineAdapterProtocol = ServiceFactory.shared.createRoutineAdapterService()
 
@@ -104,17 +107,6 @@ struct MorningRoutineCompletionView: View {
                                 )
                             }
 
-                            // Phase Briefing Card
-                            if let snapshot = routineSnapshot {
-                                PhaseBriefingCard(
-                                    snapshot: snapshot,
-                                    currentDay: currentCycleDay,
-                                    totalDays: totalCycleDays
-                                )
-                                .environmentObject(ThemeManager.shared)
-                                .transition(.opacity.combined(with: .move(edge: .top)))
-                            }
-
                             // Steps Section
                             stepsSection
 
@@ -142,6 +134,11 @@ struct MorningRoutineCompletionView: View {
                     if let routine = activeRoutine, routine.adaptationEnabled {
                         routineSnapshot = await adapterService.getSnapshot(routine: routine, for: selectedDate)
                     }
+
+                    // Check if cycle data exists
+                    let calendar = Calendar.current
+                    let daysSinceLastPeriod = calendar.dateComponents([.day], from: cycleStore.cycleData.lastPeriodStartDate, to: Date()).day ?? 0
+                    hasCycleData = daysSinceLastPeriod >= 0 && daysSinceLastPeriod < 60
                 } catch {
                     print("❌ Error loading active routine: \(error)")
                 }
@@ -203,11 +200,34 @@ struct MorningRoutineCompletionView: View {
                 // After setup, save the cycle data
                 if let cycleData = cycleData {
                     cycleStore.updateCycleData(cycleData)
+                    hasCycleData = true
                 }
                 showCycleSetup = false
                 // Now enable adaptation
                 enableCycleTracking()
             }
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(
+                onSubscribe: {
+                    // For testing: act as if subscription was successful
+                    isPremiumUser = true
+                    showPaywall = false
+
+                    // Now check if user has cycle data
+                    if hasCycleData {
+                        // Enable adaptation with existing data
+                        enableCycleTracking()
+                    } else {
+                        // Show cycle setup to collect data
+                        showCycleSetup = true
+                    }
+                },
+                onClose: {
+                    // User closed paywall without subscribing
+                    showPaywall = false
+                }
+            )
         }
         .alert("Enable Cycle-Adaptive Routine?", isPresented: $showEnableConfirmation) {
             Button("Cancel", role: .cancel) { }
@@ -308,19 +328,38 @@ struct MorningRoutineCompletionView: View {
                 }
                 Spacer()
 
-                Button {
-                    // Edit steps action
-                } label: {
-                    Text("Edit steps >")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                // Cycle status or enable button
+                if activeRoutine?.adaptationEnabled ?? false {
+                    // Adapted state - show status
+                    HStack(spacing: 6) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(ThemeManager.shared.theme.palette.success)
+                        Text("Routine adapted to your cycle")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+                } else {
+                    // Not adapted - show enable button
+                    Button {
+                        handleEnableCycleAdaptation()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text("✨")
+                                .font(.system(size: 12))
+                            Text("Enable Cycle-Adaptive Routines")
+                                .font(.system(size: 13, weight: .semibold))
+                        }
+                        .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                         .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
+                        .padding(.vertical, 8)
                         .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(ThemeManager.shared.theme.palette.primary.opacity(0.3))
+                            Capsule()
+                                .fill(ThemeManager.shared.theme.palette.primary)
                         )
-                }            .buttonStyle(PlainButtonStyle())
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
             }
             // Steps list
             VStack(spacing: 20) {
@@ -523,6 +562,23 @@ struct MorningRoutineCompletionView: View {
     }
 
     // MARK: - Cycle Tracking Functions
+
+    private func handleEnableCycleAdaptation() {
+        // Check if user is premium
+        if !isPremiumUser {
+            // Show paywall for non-premium users
+            showPaywall = true
+        } else {
+            // Premium user - check if they have cycle data
+            if hasCycleData {
+                // Has data - enable adaptation
+                enableCycleTracking()
+            } else {
+                // No data - show cycle setup
+                showCycleSetup = true
+            }
+        }
+    }
 
     private func enableCycleTracking() {
         // Check if cycle data exists (simple heuristic: last period is within reasonable time)
