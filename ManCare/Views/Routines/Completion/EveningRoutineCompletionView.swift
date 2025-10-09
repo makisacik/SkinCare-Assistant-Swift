@@ -407,10 +407,7 @@ struct EveningRoutineCompletionView: View {
         }}
 
     private var trailingButtons: some View {
-        HStack(spacing: 12) {
-            cycleButton
-            editButton
-        }
+        editButton
     }
 
     private var cycleButton: some View {
@@ -776,7 +773,11 @@ private struct DetailedStepRow: View {
                     )
                     .padding(.leading, 56)
                 }
-            }        .padding(20)
+            }
+            .padding(.top, 20)
+            .padding(.bottom, 20)
+            .padding(.trailing, 20)
+            .padding(.leading, 12)
             .contentShape(Rectangle())
             .onTapGesture {
                 onTap()

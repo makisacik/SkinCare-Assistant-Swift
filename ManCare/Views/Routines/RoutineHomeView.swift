@@ -1259,7 +1259,7 @@ struct RoutineSwitcherView: View {
                     Text("Select your active routine")
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                }
+                }.padding(.top, 15)
 
                 Spacer()
 

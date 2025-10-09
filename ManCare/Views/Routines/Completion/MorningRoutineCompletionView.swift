@@ -407,10 +407,7 @@ struct MorningRoutineCompletionView: View {
         }}
 
     private var trailingButtons: some View {
-        HStack(spacing: 12) {
-            cycleButton
-            editButton
-        }
+        editButton
     }
 
     private var cycleButton: some View {
@@ -711,7 +708,7 @@ private struct DetailedStepRow: View {
                         StepAdaptationBadge(emphasis: adapted.emphasisLevel)
                     }
 
-                    Spacer(minLength: 8)
+                    //Spacer(minLength: 8)
                 }
 
                 // Add product button below the horizontal row
@@ -776,7 +773,10 @@ private struct DetailedStepRow: View {
                     )
                     .padding(.leading, 56)
                 }
-            }        .padding(20)
+            }        .padding(.top, 20)
+            .padding(.bottom, 20)
+            .padding(.trailing, 20)
+            .padding(.leading, 12)
             .contentShape(Rectangle())
             .onTapGesture {
                 onTap()
@@ -826,7 +826,7 @@ private struct DetailedStepRow: View {
                 .padding(.top, 4)
 
             Spacer()
-        }    .frame(width: 70)
+        }    .frame(width: 60)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(ThemeManager.shared.theme.palette.surface)
