@@ -14,8 +14,9 @@ struct RoutineHomeView: View {
     let routineService: RoutineServiceProtocol
 
     @StateObject private var routineViewModel: RoutineHomeViewModel
+    @StateObject private var cycleStore = CycleStore()
     @State private var selectedDate = Date()
-    
+
     init(generatedRoutine: RoutineResponse?, selectedTab: Binding<MainTabView.CurrentTab>, routineService: RoutineServiceProtocol) {
         self.generatedRoutine = generatedRoutine
         self._selectedTab = selectedTab
@@ -138,6 +139,7 @@ struct RoutineHomeView: View {
                 routineSteps: generateMorningRoutine(),
                 selectedDate: selectedDate,
                 completionViewModel: routineViewModel.completionViewModel,
+                cycleStore: cycleStore,
                 onComplete: {
                     showingMorningRoutineCompletion = false
                 },
@@ -148,6 +150,7 @@ struct RoutineHomeView: View {
                 routineSteps: generateEveningRoutine(),
                 selectedDate: selectedDate,
                 completionViewModel: routineViewModel.completionViewModel,
+                cycleStore: cycleStore,
                 onComplete: {
                     showingEveningRoutineCompletion = false
                 },

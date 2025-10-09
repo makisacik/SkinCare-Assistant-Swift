@@ -10,6 +10,7 @@ import SwiftUI
 struct EveningRoutineCompletionView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var completionViewModel: RoutineCompletionViewModel
+    @ObservedObject var cycleStore: CycleStore
 
     @ObservedObject private var productService = ProductService.shared
 
@@ -18,10 +19,11 @@ struct EveningRoutineCompletionView: View {
     let onComplete: () -> Void
     let originalRoutine: RoutineResponse?
 
-    init(routineSteps: [RoutineStepDetail], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?) {
+    init(routineSteps: [RoutineStepDetail], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, cycleStore: CycleStore, onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?) {
         self._routineSteps = State(initialValue: routineSteps)
         self.selectedDate = selectedDate
         self.completionViewModel = completionViewModel
+        self._cycleStore = ObservedObject(wrappedValue: cycleStore)
         self.onComplete = onComplete
         self.originalRoutine = originalRoutine
     }
@@ -29,6 +31,15 @@ struct EveningRoutineCompletionView: View {
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingProductSelection: RoutineStepDetail?
     @State private var showingEditRoutine = false
+
+    // MARK: - Cycle Tracking State
+    @State private var activeRoutine: SavedRoutineModel?
+    @State private var routineSnapshot: RoutineSnapshot?
+    @State private var showCyclePromotion = true
+    @State private var showCycleSetup = false
+    @State private var showEnableConfirmation = false
+    private let routineStore = RoutineStore()
+    private let adapterService: RoutineAdapterProtocol = ServiceFactory.shared.createRoutineAdapterService()
 
     private var completedStepsCount: Int {
         // Filter completed steps to only include evening routine steps
@@ -41,6 +52,31 @@ struct EveningRoutineCompletionView: View {
     private var isRoutineComplete: Bool {
         completedStepsCount == totalSteps
     }
+
+    // MARK: - Cycle Tracking Helpers
+
+    private var shouldShowCycleBanner: Bool {
+        guard let routine = activeRoutine else { return false }
+        return !routine.adaptationEnabled && showCyclePromotion && cycleBannerDismissCount < 3
+    }
+
+    private var cycleBannerDismissCount: Int {
+        UserDefaults.standard.integer(forKey: "cycleBannerDismissCount")
+    }
+
+    private var currentCycleDay: Int {
+        cycleStore.cycleData.currentDayInCycle(for: selectedDate)
+    }
+
+    private var totalCycleDays: Int {
+        cycleStore.cycleData.averageCycleLength
+    }
+
+    private func findAdaptedStep(for stepId: String) -> AdaptedStepDetail? {
+        guard let snapshot = routineSnapshot else { return nil }
+        return snapshot.eveningSteps.first { $0.id.uuidString == stepId }
+    }
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -54,6 +90,31 @@ struct EveningRoutineCompletionView: View {
                     // Content
                     ScrollView {
                         VStack(spacing: 24) {
+                            // Cycle Promotion Banner
+                            if shouldShowCycleBanner {
+                                CyclePromotionBanner(
+                                    onEnable: {
+                                        enableCycleTracking()
+                                    },
+                                    onDismiss: {
+                                        showCyclePromotion = false
+                                        let count = cycleBannerDismissCount + 1
+                                        UserDefaults.standard.set(count, forKey: "cycleBannerDismissCount")
+                                    }
+                                )
+                            }
+
+                            // Phase Briefing Card
+                            if let snapshot = routineSnapshot {
+                                PhaseBriefingCard(
+                                    snapshot: snapshot,
+                                    currentDay: currentCycleDay,
+                                    totalDays: totalCycleDays
+                                )
+                                .environmentObject(ThemeManager.shared)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                            }
+
                             // Steps Section
                             stepsSection
 
@@ -65,12 +126,24 @@ struct EveningRoutineCompletionView: View {
                 }        }        .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: backButton, trailing: editButton)
+            .navigationBarItems(leading: backButton, trailing: trailingButtons)
             .onAppear {
                 setupNavigationBarAppearance()
                 // Load completion state from RoutineManager
                 Task {
                     completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
+                }
+            }
+            .task {
+                // Load active routine and adaptation if enabled
+                do {
+                    activeRoutine = try await routineStore.fetchActiveRoutine()
+
+                    if let routine = activeRoutine, routine.adaptationEnabled {
+                        routineSnapshot = await adapterService.getSnapshot(routine: routine, for: selectedDate)
+                    }
+                } catch {
+                    print("❌ Error loading active routine: \(error)")
                 }
             }
             .task(id: selectedDate) {
@@ -81,7 +154,7 @@ struct EveningRoutineCompletionView: View {
                 let calendar = Calendar.current
                 let normalizedSelectedDate = calendar.startOfDay(for: selectedDate)
                 let normalizedChangedDate = calendar.startOfDay(for: changedDate)
-                
+
                 if calendar.isDate(normalizedChangedDate, inSameDayAs: normalizedSelectedDate) {
                     print("🌙 Evening completion view received completion change for \(normalizedChangedDate)")
                     Task {
@@ -124,7 +197,31 @@ struct EveningRoutineCompletionView: View {
                         // Update the routine steps when the routine is edited
                         updateRoutineSteps(from: updatedRoutine)
                     }            )
-            }    }}
+            }    }
+        .sheet(isPresented: $showCycleSetup) {
+            CycleSetupView { cycleData in
+                // After setup, save the cycle data
+                if let cycleData = cycleData {
+                    cycleStore.updateCycleData(cycleData)
+                }
+                showCycleSetup = false
+                // Now enable adaptation
+                enableCycleTracking()
+            }
+        }
+        .alert("Enable Cycle-Adaptive Routine?", isPresented: $showEnableConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Enable") {
+                Task {
+                    await performEnableCycleTracking()
+                }
+            }
+        } message: {
+            let phase = cycleStore.cycleData.currentPhase(for: selectedDate)
+            let day = currentCycleDay
+            Text("Your routine will automatically adapt based on your cycle phase.\n\nCurrent Phase: \(phase.title) (Day \(day))")
+        }
+    }
 
     // MARK: - Background
 
@@ -240,7 +337,9 @@ struct EveningRoutineCompletionView: View {
                         },
                         onTap: {
                             showingStepDetail = step
-                        }                )
+                        },
+                        adaptedStep: findAdaptedStep(for: step.id)
+                    )
                 }        }    }}
 
 
@@ -263,6 +362,56 @@ struct EveningRoutineCompletionView: View {
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
         }}
+
+    private var trailingButtons: some View {
+        HStack(spacing: 12) {
+            cycleButton
+            editButton
+        }
+    }
+
+    private var cycleButton: some View {
+        Button {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            if activeRoutine?.adaptationEnabled == true {
+                // Show cycle info or settings
+                // For now, just provide haptic feedback
+            } else {
+                // Enable cycle tracking
+                enableCycleTracking()
+            }
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(cycleButtonBackgroundColor)
+                    .frame(width: 32, height: 32)
+
+                Image(systemName: "waveform.path.ecg")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(cycleButtonForegroundColor)
+            }
+        }
+    }
+
+    private var cycleButtonBackgroundColor: Color {
+        if let routine = activeRoutine, routine.adaptationEnabled {
+            // Show phase color
+            let phase = cycleStore.cycleData.currentPhase(for: selectedDate)
+            return phase.mainColor.opacity(0.2)
+        } else {
+            return ThemeManager.shared.theme.palette.border
+        }
+    }
+
+    private var cycleButtonForegroundColor: Color {
+        if let routine = activeRoutine, routine.adaptationEnabled {
+            // Show phase color
+            let phase = cycleStore.cycleData.currentPhase(for: selectedDate)
+            return phase.mainColor
+        } else {
+            return ThemeManager.shared.theme.palette.textSecondary
+        }
+    }
 
     // MARK: - Helper Methods
 
@@ -298,13 +447,13 @@ struct EveningRoutineCompletionView: View {
 
     private func toggleStepCompletion(_ stepId: String) {
         // Find the step to get its details
-        guard let step = routineSteps.first(where: { $0.id == stepId }) else { 
+        guard let step = routineSteps.first(where: { $0.id == stepId }) else {
             print("❌ Step not found with ID: \(stepId)")
-            return 
+            return
         }
 
         print("🌙 Toggling step completion - ID: \(stepId), Title: \(step.title)")
-        
+
         // Immediately update local state for responsive UI
         let wasCompleted = completedSteps.contains(stepId)
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
@@ -316,7 +465,7 @@ struct EveningRoutineCompletionView: View {
                 print("✅ Locally added completion for: \(stepId)")
             }
         }
-        
+
         // Use the RoutineManager to persist the completion
         completionViewModel.toggleStepCompletion(
             stepId: stepId,
@@ -328,7 +477,7 @@ struct EveningRoutineCompletionView: View {
 
         // Add haptic feedback
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        
+
         print("📊 Current completed steps count: \(completedSteps.count)")
         print("📊 Completed steps: \(completedSteps)")
     }
@@ -373,6 +522,58 @@ struct EveningRoutineCompletionView: View {
         completedSteps = newCompletedSteps
     }
 
+    // MARK: - Cycle Tracking Functions
+
+    private func enableCycleTracking() {
+        // Check if cycle data exists (simple heuristic: last period is within reasonable time)
+        let calendar = Calendar.current
+        let daysSinceLastPeriod = calendar.dateComponents([.day], from: cycleStore.cycleData.lastPeriodStartDate, to: Date()).day ?? 0
+        let hasValidData = daysSinceLastPeriod >= 0 && daysSinceLastPeriod < 60
+
+        if hasValidData {
+            // Show confirmation dialog
+            showEnableConfirmation = true
+        } else {
+            // Show cycle setup
+            showCycleSetup = true
+        }
+    }
+
+    private func performEnableCycleTracking() async {
+        guard let routine = activeRoutine else { return }
+
+        do {
+            try await routineStore.updateAdaptationSettings(
+                routineId: routine.id,
+                enabled: true,
+                type: .cycle
+            )
+
+            // Reload routine and generate snapshot
+            do {
+                activeRoutine = try await routineStore.fetchActiveRoutine()
+                if let updated = activeRoutine {
+                    routineSnapshot = await adapterService.getSnapshot(
+                        routine: updated,
+                        for: selectedDate
+                    )
+                }
+            } catch {
+                print("❌ Error reloading routine: \(error)")
+            }
+
+            // Hide banner and provide success feedback
+            await MainActor.run {
+                withAnimation {
+                    showCyclePromotion = false
+                }
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+            }
+        } catch {
+            print("❌ Error enabling cycle tracking: \(error)")
+        }
+    }
+
 }
 
 // MARK: - Detailed Step Row
@@ -385,6 +586,7 @@ private struct DetailedStepRow: View {
     let onToggle: () -> Void
     let onAddProduct: () -> Void
     let onTap: () -> Void
+    let adaptedStep: AdaptedStepDetail? // NEW: Adaptation info
 
     @State private var showCheckmarkAnimation = false
 
@@ -408,7 +610,7 @@ private struct DetailedStepRow: View {
         HStack(spacing: 0) {
             // Left content area
             VStack(alignment: .leading, spacing: 16) {
-                // Horizontal row with step number, icon, and name
+                // Horizontal row with step number, icon, name, and badge
                 HStack(spacing: 12) {
                     // Step number
                     Text("\(stepNumber)")
@@ -425,12 +627,29 @@ private struct DetailedStepRow: View {
                         .cornerRadius(8)
 
                     // Step title (smaller font) - allow it to expand and wrap
-                    Text(step.title)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    ZStack {
+                        Text(step.title)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        // Custom strikethrough for iOS 15.6 compatibility
+                        if adaptedStep?.emphasisLevel == .skip {
+                            GeometryReader { geometry in
+                                Rectangle()
+                                    .fill(ThemeManager.shared.theme.palette.textMuted)
+                                    .frame(height: 1.5)
+                                    .offset(y: geometry.size.height / 2)
+                            }
+                        }
+                    }
+
+                    // Adaptation badge
+                    if let adapted = adaptedStep, adapted.emphasisLevel != .normal {
+                        StepAdaptationBadge(emphasis: adapted.emphasisLevel)
+                    }
 
                     Spacer(minLength: 8)
                 }
@@ -457,11 +676,33 @@ private struct DetailedStepRow: View {
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .lineLimit(nil)
                     .padding(.leading, 56) // Align with the content above
+
+                // Adaptation guidance
+                if let adapted = adaptedStep, let guidance = adapted.adaptation?.guidance, !guidance.isEmpty {
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle.fill")
+                            .font(.caption2)
+                            .foregroundColor(adapted.emphasisLevel.color)
+
+                        Text(guidance)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(adapted.emphasisLevel.color)
+                    }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(adapted.emphasisLevel.color.opacity(0.1))
+                    )
+                    .padding(.leading, 56)
+                }
             }        .padding(20)
             .contentShape(Rectangle())
             .onTapGesture {
                 onTap()
             }
+            .opacity(adaptedStep?.emphasisLevel == .skip ? 0.5 : 1.0)
 
             // Right completion area
             completionArea
@@ -868,6 +1109,7 @@ private struct EmptyProductTypeView: View {
         ],
         selectedDate: Date(),
         completionViewModel: RoutineCompletionViewModel.preview,
+        cycleStore: CycleStore(),
         onComplete: { print("Evening routine completed!") },
         originalRoutine: nil
     )

@@ -141,12 +141,12 @@ struct StepAdaptation: Codable, Equatable {
 // MARK: - Adaptation Rule
 
 struct AdaptationRule: Codable, Identifiable, Equatable {
-    let id: UUID
+    let id: String
     let productType: String  // ProductType rawValue
     let contextKey: String   // e.g., "menstrual", "luteal"
     let action: RuleAction
     
-    init(id: UUID = UUID(), productType: String, contextKey: String, action: RuleAction) {
+    init(id: String, productType: String, contextKey: String, action: RuleAction) {
         self.id = id
         self.productType = productType
         self.contextKey = contextKey
