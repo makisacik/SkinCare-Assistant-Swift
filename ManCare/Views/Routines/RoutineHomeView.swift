@@ -133,7 +133,10 @@ struct RoutineHomeView: View {
                 selectedDate: selectedDate,
                 onStepTap: { step in
                     showingStepDetail = step
-                }    )
+                },
+                routine: routineViewModel.activeRoutine,
+                cycleStore: cycleStore
+            )
         }        .fullScreenCover(isPresented: $showingMorningRoutineCompletion) {
             MorningRoutineCompletionView(
                 routineSteps: generateMorningRoutine(),
@@ -339,9 +342,9 @@ struct RoutineHomeView: View {
             for step in morningSteps {
                 print("🐛 DEBUG: Morning step - ID: \(step.id), Title: '\(step.title)'")
             }
-            return morningSteps.enumerated().map { (index, stepDetail) in
+            return morningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "morning_\(stepDetail.stepType)_\(index)", // Use consistent deterministic ID
+                    id: stepDetail.id.uuidString, // FIXED: Use actual UUID from saved routine
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -417,9 +420,9 @@ struct RoutineHomeView: View {
             for step in eveningSteps {
                 print("🐛 DEBUG: Evening step - ID: \(step.id), Title: '\(step.title)'")
             }
-            return eveningSteps.enumerated().map { (index, stepDetail) in
+            return eveningSteps.map { stepDetail in
                 RoutineStepDetail(
-                    id: "evening_\(stepDetail.stepType)_\(index)", // Use consistent deterministic ID
+                    id: stepDetail.id.uuidString, // FIXED: Use actual UUID from saved routine
                     title: stepDetail.title,
                     description: stepDetail.stepDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
@@ -837,11 +840,11 @@ private struct RoutineCard: View {
         let routineSteps = activeRoutine.stepDetails.filter { step in
             step.timeOfDay == timeOfDay.rawValue
         }
-        
-        
-        return routineSteps.enumerated().map { (index, stepDetail) in
+
+
+        return routineSteps.map { stepDetail in
             RoutineStepDetail(
-                id: "\(timeOfDay.rawValue)_\(stepDetail.stepType)_\(index)",
+                id: stepDetail.id.uuidString, // FIXED: Use actual UUID
                 title: stepDetail.title,
                 description: stepDetail.stepDescription,
                 stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,

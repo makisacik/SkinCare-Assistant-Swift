@@ -1421,19 +1421,82 @@ struct ProductTypeDatabase {
 
     static func getStepType(for stepName: String) -> String {
         let lowercased = stepName.lowercased()
+
+        // Order matters - check most specific first
+
+        // Cleansers
         if lowercased.contains("cleanser") || lowercased.contains("cleanse") {
             return "cleanser"
-        } else if lowercased.contains("toner") {
-            return "faceSerum"
-        } else if lowercased.contains("serum") || lowercased.contains("treatment") {
-            return "faceSerum"
-        } else if lowercased.contains("moisturizer") || lowercased.contains("cream") {
-            return "moisturizer"
-        } else if lowercased.contains("sunscreen") || lowercased.contains("spf") {
-            return "sunscreen"
-        } else {
-            return "faceSerum"
         }
+
+        // Sunscreen (check before moisturizer since some have "cream" in name)
+        if lowercased.contains("sunscreen") || lowercased.contains("spf") {
+            return "sunscreen"
+        }
+
+        // Eye cream (check before general cream/moisturizer)
+        if lowercased.contains("eye") && lowercased.contains("cream") {
+            return "eye cream"
+        }
+
+        // Facial Oil
+        if (lowercased.contains("facial") && lowercased.contains("oil")) ||
+           lowercased.contains("face oil") {
+            return "facial oil"
+        }
+
+        // Toner
+        if lowercased.contains("toner") {
+            return "toner"
+        }
+
+        // Exfoliants
+        if lowercased.contains("exfoliant") || lowercased.contains("exfoliating") {
+            return "exfoliant"
+        }
+
+        // Retinol (check before treatment to catch "Retinol Treatment")
+        if lowercased.contains("retinol") {
+            return "retinol"
+        }
+
+        // Spot treatment (specific treatment type)
+        if lowercased.contains("spot") && lowercased.contains("treatment") {
+            return "spot treatment"
+        }
+
+        // Masks
+        if lowercased.contains("mask") {
+            return "mask"
+        }
+
+        // Essence (check before treatment and serum for "Treatment Essence")
+        if lowercased.contains("essence") {
+            return "serum"  // Essences are mapped to serum category
+        }
+
+        // Ampoule (highly concentrated serum)
+        if lowercased.contains("ampoule") {
+            return "serum"
+        }
+
+        // Treatment (general) - check after specific treatments
+        if lowercased.contains("treatment") {
+            return "treatment"
+        }
+
+        // Serum
+        if lowercased.contains("serum") {
+            return "serum"
+        }
+
+        // Moisturizer (check for cream but exclude eye cream already handled)
+        if lowercased.contains("moisturizer") || lowercased.contains("cream") {
+            return "moisturizer"
+        }
+
+        // Default fallback
+        return "serum"
     }
 
     static func getTimeOfDay(for stepName: String, index: Int, totalSteps: Int) -> String {

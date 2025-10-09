@@ -42,7 +42,11 @@ struct MorningRoutineCompletionView: View {
     @State private var isPremiumUser = false  // For testing: simulates premium status
     @State private var hasCycleData = false
     private let routineStore = RoutineStore()
-    private let adapterService: RoutineAdapterProtocol = ServiceFactory.shared.createRoutineAdapterService()
+
+    // FIXED: Use the passed-in cycleStore instead of creating a new one
+    private var adapterService: RoutineAdapterProtocol {
+        ServiceFactory.shared.routineAdapterService(cycleStore: cycleStore)
+    }
 
     private var completedStepsCount: Int {
         // Filter completed steps to only include morning routine steps
@@ -413,8 +417,8 @@ struct MorningRoutineCompletionView: View {
         Button {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             if activeRoutine?.adaptationEnabled == true {
-                // Show cycle info or settings
-                // For now, just provide haptic feedback
+                // Cycle is enabled - adaptations shown inline on steps
+                // Just provide haptic feedback
             } else {
                 // Enable cycle tracking
                 enableCycleTracking()
@@ -733,23 +737,42 @@ private struct DetailedStepRow: View {
                     .lineLimit(nil)
                     .padding(.leading, 56) // Align with the content above
 
-                // Adaptation guidance
-                if let adapted = adaptedStep, let guidance = adapted.adaptation?.guidance, !guidance.isEmpty {
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle.fill")
-                            .font(.caption2)
-                            .foregroundColor(adapted.emphasisLevel.color)
+                // Adaptation guidance - Made MORE prominent
+                if let adapted = adaptedStep, adapted.emphasisLevel != .normal {
+                    VStack(alignment: .leading, spacing: 8) {
+                        // Emphasis label
+                        HStack(spacing: 6) {
+                            Image(systemName: adapted.emphasisLevel.icon)
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(adapted.emphasisLevel.color)
 
-                        Text(guidance)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(adapted.emphasisLevel.color)
+                            Text(adapted.emphasisLevel.displayName.uppercased())
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(adapted.emphasisLevel.color)
+
+                            Text("• Cycle Adapted")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor(adapted.emphasisLevel.color.opacity(0.7))
+                        }
+
+                        // Guidance text
+                        if let guidance = adapted.adaptation?.guidance, !guidance.isEmpty {
+                            Text(guidance)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(adapted.emphasisLevel.color)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
-                    .padding(.vertical, 6)
-                    .padding(.horizontal, 10)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(adapted.emphasisLevel.color.opacity(0.1))
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(adapted.emphasisLevel.color.opacity(0.15))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(adapted.emphasisLevel.color.opacity(0.3), lineWidth: 1.5)
+                            )
                     )
                     .padding(.leading, 56)
                 }

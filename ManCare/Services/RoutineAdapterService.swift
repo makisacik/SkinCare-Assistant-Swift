@@ -81,9 +81,9 @@ class RoutineAdapterService: RoutineAdapterProtocol {
                 using: ruleSet.rules,
                 for: contextKey
             )
-            
+
             let displayOrder = adaptation?.orderOverride ?? step.order
-            
+
             return AdaptedStepDetail(
                 baseStep: step,
                 adaptation: adaptation,

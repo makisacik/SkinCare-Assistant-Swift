@@ -11,12 +11,20 @@ struct OnboardingFlowView: View {
     @State private var currentPage = 0
     @State private var isAnimating = false
     @State private var showRoutineCreator = false
+    @State private var skipToHome = false
     
     private let totalPages = 4
     
     var body: some View {
         ZStack {
-            if showRoutineCreator {
+            if skipToHome {
+                MainTabView(generatedRoutine: nil)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
+                    .zIndex(3)
+            } else if showRoutineCreator {
                 RoutineCreatorFlow()
                     .transition(.asymmetric(
                         insertion: .move(edge: .trailing).combined(with: .opacity),
@@ -61,7 +69,7 @@ struct OnboardingFlowView: View {
                         },
                         onSkipToHome: {
                             withAnimation(.easeInOut(duration: 0.4)) {
-                                showRoutineCreator = true
+                                skipToHome = true
                             }
                         }
                     )

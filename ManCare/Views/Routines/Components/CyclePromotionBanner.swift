@@ -130,3 +130,4 @@ struct CyclePromotionBanner: View {
     .background(ThemeManager.shared.theme.palette.background)
 }
 
+

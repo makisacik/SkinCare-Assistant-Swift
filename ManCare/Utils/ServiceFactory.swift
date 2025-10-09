@@ -50,6 +50,14 @@ final class ServiceFactory {
         )
     }
 
+    func routineAdapterService(cycleStore: CycleStore) -> RoutineAdapterProtocol {
+        return RoutineAdapterService(
+            cycleStore: cycleStore,
+            rulesEngine: createAdaptationRulesEngine(),
+            snapshotCache: createSnapshotCache()
+        )
+    }
+
     // MARK: - ViewModels
     
     @MainActor

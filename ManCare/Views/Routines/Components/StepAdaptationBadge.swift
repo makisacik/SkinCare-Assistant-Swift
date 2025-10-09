@@ -74,3 +74,4 @@ struct StepAdaptationBadge: View {
     .background(ThemeManager.shared.theme.palette.background)
 }
 
+

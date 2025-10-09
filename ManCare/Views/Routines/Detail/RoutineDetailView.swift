@@ -18,10 +18,13 @@ struct RoutineDetailView: View {
     let completionViewModel: RoutineCompletionViewModel
     let selectedDate: Date
     let onStepTap: (RoutineStepDetail) -> Void
+    let routine: SavedRoutineModel? // NEW: For adaptation support
+    let cycleStore: CycleStore? // NEW: For cycle adaptations
 
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var completedCount: Int = 0
     @State private var completedStepIds: Set<String> = []
+    @State private var routineSnapshot: RoutineSnapshot? // NEW: Adapted snapshot
 
     private var progressPercentage: Double {
         guard !steps.isEmpty else { return 0 }
@@ -45,9 +48,11 @@ struct RoutineDetailView: View {
         }
         .task {
             await loadCompletionData()
+            await loadAdaptations()
         }
         .task(id: selectedDate) {
             await loadCompletionData()
+            await loadAdaptations()
         }
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
@@ -62,6 +67,32 @@ struct RoutineDetailView: View {
             self.completedStepIds = completedSteps
             self.completedCount = completed.count
         }
+    }
+
+    private func loadAdaptations() async {
+        guard let routine = routine,
+              routine.adaptationEnabled,
+              let cycleStore = cycleStore else {
+            return
+        }
+
+        // Create adapter service
+        let adapterService = ServiceFactory.shared.routineAdapterService(cycleStore: cycleStore)
+
+        // Get adapted snapshot
+        if let snapshot = await adapterService.getSnapshot(routine: routine, for: selectedDate) {
+            await MainActor.run {
+                self.routineSnapshot = snapshot
+            }
+        }
+    }
+
+    private func getAdaptationEmphasis(for step: RoutineStepDetail) -> StepEmphasis? {
+        guard let snapshot = routineSnapshot else { return nil }
+
+        // Find the adapted step matching this step ID
+        let adaptedStep = snapshot.adaptedSteps.first { $0.baseStep.id.uuidString == step.id }
+        return adaptedStep?.emphasisLevel
     }
 
     private var backgroundGradient: some View {
@@ -175,7 +206,8 @@ struct RoutineDetailView: View {
                     },
                     onTap: {
                         showingStepDetail = step
-                    }
+                    },
+                    adaptationEmphasis: getAdaptationEmphasis(for: step)
                 )
             }
         }
@@ -236,6 +268,7 @@ private struct RoutineDetailStepCard: View {
     let isCompleted: Bool
     let onToggle: () -> Void
     let onTap: () -> Void
+    let adaptationEmphasis: StepEmphasis? // NEW: For cycle adaptation badge
 
     @State private var showCheckmarkAnimation = false
 
@@ -275,11 +308,16 @@ private struct RoutineDetailStepCard: View {
 
             Spacer()
 
-            // Step icon and completion button
+            // Step icon, adaptation badge, and completion button
             HStack(spacing: 12) {
                 Image(systemName: step.iconName)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(stepColor)
+
+                // Adaptation badge
+                if let emphasis = adaptationEmphasis, emphasis != .normal {
+                    StepAdaptationBadge(emphasis: emphasis)
+                }
 
                 Button {
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -364,7 +402,9 @@ private struct RoutineDetailStepCard: View {
         ],
         completionViewModel: RoutineCompletionViewModel.preview,
         selectedDate: Date(),
-        onStepTap: { _ in }
+        onStepTap: { _ in },
+        routine: nil,
+        cycleStore: nil
     )
 }
 #endif

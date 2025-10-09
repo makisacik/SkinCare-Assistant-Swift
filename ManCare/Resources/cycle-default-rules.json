@@ -254,6 +254,94 @@
         "orderPriority": 2,
         "warnings": []
       }
+    },
+    {
+      "id": "menstrual-eye-cream",
+      "contextKey": "menstrual",
+      "productType": "eye cream",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Apply gently. Extra hydration helps with puffiness and dark circles.",
+        "orderPriority": null,
+        "warnings": ["Increased fluid retention may cause puffiness"]
+      }
+    },
+    {
+      "id": "follicular-eye-cream",
+      "contextKey": "follicular",
+      "productType": "eye cream",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Apply your regular amount with gentle patting motions.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-eye-cream",
+      "contextKey": "ovulation",
+      "productType": "eye cream",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Your eye area looks bright and fresh. Continue normal application.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-eye-cream",
+      "contextKey": "luteal",
+      "productType": "eye cream",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "May need extra product for under-eye area. Watch for puffiness.",
+        "orderPriority": null,
+        "warnings": ["Hormonal changes may cause dark circles and puffiness"]
+      }
+    },
+    {
+      "id": "menstrual-facial-oil",
+      "contextKey": "menstrual",
+      "productType": "facial oil",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Can be beneficial for barrier support. Use 2-3 drops, not more.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-facial-oil",
+      "contextKey": "follicular",
+      "productType": "facial oil",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Great time to use facial oils. Skin absorbs them beautifully now.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-facial-oil",
+      "contextKey": "ovulation",
+      "productType": "facial oil",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Continue regular use. Your skin is balanced and glowing.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-facial-oil",
+      "contextKey": "luteal",
+      "productType": "facial oil",
+      "action": {
+        "emphasis": "reduce",
+        "guidanceTemplate": "Use sparingly or skip if feeling oily. Your natural sebum production is higher.",
+        "orderPriority": null,
+        "warnings": ["Increased natural oil production - may cause congestion"]
+      }
     }
   ],
   "briefings": [
