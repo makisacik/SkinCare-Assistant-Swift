@@ -75,13 +75,13 @@ enum StepEmphasis: String, Codable {
     var color: Color {
         switch self {
         case .skip:
-            return .red
+            return ThemeManager.shared.theme.palette.error
         case .reduce:
-            return .orange
+            return ThemeManager.shared.theme.palette.warning
         case .normal:
-            return .gray
+            return ThemeManager.shared.theme.palette.textMuted
         case .emphasize:
-            return .blue
+            return ThemeManager.shared.theme.palette.secondaryLight
         }
     }
 }
