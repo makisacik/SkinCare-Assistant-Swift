@@ -335,14 +335,9 @@ struct EveningRoutineCompletionView: View {
                 // Cycle status or enable button
                 if activeRoutine?.adaptationEnabled ?? false {
                     // Adapted state - show status
-                    HStack(spacing: 6) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(ThemeManager.shared.theme.palette.success)
-                        Text("Routine adapted to your cycle")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
+                    Text("Routine adapted to your cycle")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 } else {
                     // Not adapted - show enable button
                     Button {

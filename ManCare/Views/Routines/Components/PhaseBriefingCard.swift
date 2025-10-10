@@ -56,16 +56,10 @@ struct PhaseBriefingCard: View {
                 }
 
                 // Status indicator
-                HStack(spacing: 6) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 12))
-                        .foregroundColor(theme.theme.palette.success)
-
-                    Text("Routine adapted to your cycle")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(theme.theme.palette.textSecondary)
-                }
-                .padding(.top, 4)
+                Text("Routine adapted to your cycle")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(theme.theme.palette.textSecondary)
+                    .padding(.top, 4)
             } else {
                 // Not adapted - show call to action
                 HStack(spacing: 12) {

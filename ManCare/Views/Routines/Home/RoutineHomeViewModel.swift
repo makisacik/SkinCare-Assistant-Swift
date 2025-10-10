@@ -37,6 +37,29 @@ class RoutineHomeViewModel: ObservableObject {
         listViewModel.activeRoutine
     }
 
+    // MARK: - Change Observation Setup
+
+    private func setupChangeObservation() {
+        // Propagate changes from child view models to trigger view updates
+        listViewModel.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+
+        completionViewModel.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+
+        generationViewModel.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+    }
+
     var hasRoutines: Bool {
         listViewModel.hasRoutines
     }
@@ -65,6 +88,9 @@ class RoutineHomeViewModel: ObservableObject {
         self.generationViewModel = RoutineGenerationViewModel(routineService: routineService)
 
         print("🏠 RoutineHomeViewModel initialized with new architecture")
+
+        // Set up change observation to propagate updates from child view models
+        setupChangeObservation()
     }
 
     // MARK: - Public Methods
