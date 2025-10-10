@@ -250,6 +250,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
             .background(configuration.isPressed ? ThemeManager.shared.theme.palette.primaryLight : ThemeManager.shared.theme.palette.primary)
             .cornerRadius(ThemeManager.shared.theme.cornerRadius)
             .shadow(color: ThemeManager.shared.theme.palette.shadow.opacity(0.2), radius: 4, x: 0, y: 2)
@@ -265,6 +266,7 @@ public struct GhostButtonStyle: ButtonStyle {
             .foregroundColor(ThemeManager.shared.theme.palette.primary)
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
             .background(configuration.isPressed ? ThemeManager.shared.theme.palette.surface : Color.clear)
             .cornerRadius(ThemeManager.shared.theme.cornerRadius)
             .overlay(
