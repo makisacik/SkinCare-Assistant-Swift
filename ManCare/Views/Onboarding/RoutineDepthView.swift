@@ -1,0 +1,293 @@
+//
+//  RoutineDepthView.swift
+//  ManCare
+//
+//  Created by Mehmet Ali Kısacık on 10.10.2025.
+//
+
+import SwiftUI
+
+// MARK: - Routine Depth Model
+
+enum RoutineDepth: String, CaseIterable, Identifiable, Codable {
+    case simple
+    case intermediate
+    case advanced
+    
+    var id: String { rawValue }
+    
+    var title: String {
+        switch self {
+        case .simple: return "Simple"
+        case .intermediate: return "Intermediate"
+        case .advanced: return "Advanced"
+        }
+    }
+    
+    var subtitle: String {
+        switch self {
+        case .simple: return "Quick & essential"
+        case .intermediate: return "Balanced approach"
+        case .advanced: return "Comprehensive care"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .simple:
+            return "Perfect for busy mornings."
+        case .intermediate:
+            return "A balanced routine that covers all your skin needs without overwhelming you."
+        case .advanced:
+            return "Complete skincare regimen with 7-9 steps for those who love detailed routines."
+        }
+    }
+    
+    var stepCountDescription: String {
+        switch self {
+        case .simple:
+            return "3-4 steps per routine"
+        case .intermediate:
+            return "5-6 steps per routine"
+        case .advanced:
+            return "7-9 steps per routine"
+        }
+    }
+    
+    var timeEstimate: String {
+        switch self {
+        case .simple:
+            return "~3-5 minutes"
+        case .intermediate:
+            return "~6-8 minutes"
+        case .advanced:
+            return "~10-15 minutes"
+        }
+    }
+    
+    var iconName: String {
+        switch self {
+        case .simple: return "bolt.fill"
+        case .intermediate: return "star.fill"
+        case .advanced: return "crown.fill"
+        }
+    }
+    
+    var accentColor: Color {
+        switch self {
+        case .simple: return Color(red: 0.2, green: 0.7, blue: 0.9) // Light blue
+        case .intermediate: return Color(red: 0.4, green: 0.6, blue: 0.9) // Medium blue
+        case .advanced: return Color(red: 0.6, green: 0.4, blue: 0.9) // Purple
+        }
+    }
+    
+    // For GPT system prompt
+    var stepGuidance: String {
+        switch self {
+        case .simple:
+            return "Generate a minimal routine with 3-4 essential steps (cleanser, moisturizer, sunscreen AM only, and one targeted treatment if needed)"
+        case .intermediate:
+            return "Generate a balanced routine with 5-6 steps including cleanser, toner/essence, serum, eye cream (optional), moisturizer, and sunscreen (AM only)"
+        case .advanced:
+            return "Generate a comprehensive routine with 7-9 steps including double cleanse (PM), toner, essence, multiple serums/treatments, eye cream, moisturizer, sleeping mask/oil (PM), and sunscreen (AM only)"
+        }
+    }
+}
+
+// MARK: - View
+
+struct RoutineDepthView: View {
+    
+    @Environment(\.colorScheme) private var cs
+    @State private var selectedDepth: RoutineDepth?
+    
+    var onContinue: (RoutineDepth) -> Void
+    
+    var body: some View {
+        ZStack {
+            // Background
+            ThemeManager.shared.theme.palette.accentBackground
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 12) {
+                // Title section
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Routine Level")
+                        .font(ThemeManager.shared.theme.typo.h1)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Text("How detailed would you like your skincare routine to be?")
+                        .font(ThemeManager.shared.theme.typo.sub)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                
+                // Options
+                VStack(spacing: 10) {
+                    ForEach(RoutineDepth.allCases) { depth in
+                        RoutineDepthCard(
+                            depth: depth,
+                            isSelected: selectedDepth == depth
+                        ) {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                selectedDepth = depth
+                            }
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        }
+                    }
+                }
+                
+                Spacer(minLength: 8)
+                
+                // Bottom actions aligned with CycleSetupView spacing
+                VStack(spacing: 12) {
+                    // Continue button (primary)
+                    Button {
+                        guard let depth = selectedDepth else { return }
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        onContinue(depth)
+                    } label: {
+                        Text("Continue")
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .disabled(selectedDepth == nil)
+                    .opacity(selectedDepth == nil ? 0.7 : 1.0)
+
+                    // Helper text placeholder to match CycleSetup vertical offset
+                    Text("You can enable this later from your profile.")
+                        .font(.system(size: 12))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 4)
+                        .hidden()
+
+                    // Hidden ghost button placeholder to match spacing below primary
+                    Button("") {}
+                        .buttonStyle(GhostButtonStyle())
+                        .hidden()
+                }
+            }
+            .padding(20)
+        }
+        .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
+    }
+}
+
+// MARK: - Routine Depth Card
+
+private struct RoutineDepthCard: View {
+    
+    let depth: RoutineDepth
+    let isSelected: Bool
+    let onTap: () -> Void
+    
+    var body: some View {
+        Button(action: onTap) {
+            HStack(spacing: 16) {
+                // Icon
+                ZStack {
+                    Circle()
+                        .fill(isSelected ? depth.accentColor : depth.accentColor.opacity(0.2))
+                        .frame(width: 56, height: 56)
+                    
+                    Image(systemName: depth.iconName)
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundColor(isSelected ? .white : depth.accentColor)
+                }
+                
+                // Content
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text(depth.title)
+                            .font(ThemeManager.shared.theme.typo.h3)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .lineLimit(nil)
+                        
+                        Spacer()
+                        
+                        // Selection indicator
+                        if isSelected {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 24))
+                                .foregroundColor(depth.accentColor)
+                        } else {
+                            Circle()
+                                .strokeBorder(ThemeManager.shared.theme.palette.separator, lineWidth: 2)
+                                .frame(width: 24, height: 24)
+                        }
+                    }
+                    
+                    Text(depth.subtitle)
+                        .font(ThemeManager.shared.theme.typo.sub)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Text(depth.description)
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, 4)
+                    
+                    // Stats
+                    HStack(spacing: 16) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "list.bullet")
+                                .font(.system(size: 12, weight: .medium))
+                            Text(depth.stepCountDescription)
+                                .font(ThemeManager.shared.theme.typo.caption)
+                                .lineLimit(1)
+                        }
+                        
+                        HStack(spacing: 6) {
+                            Image(systemName: "clock")
+                                .font(.system(size: 12, weight: .medium))
+                            Text(depth.timeEstimate)
+                                .font(ThemeManager.shared.theme.typo.caption)
+                                .lineLimit(1)
+                        }
+                    }
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                    .padding(.top, 6)
+                }
+            }
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                    .fill(ThemeManager.shared.theme.palette.cardBackground)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: ThemeManager.shared.theme.cardRadius)
+                            .strokeBorder(
+                                isSelected ? depth.accentColor : Color.clear,
+                                lineWidth: 2
+                            )
+                    )
+            )
+            .shadow(
+                color: isSelected 
+                    ? depth.accentColor.opacity(0.3)
+                    : ThemeManager.shared.theme.palette.shadow.opacity(0.1),
+                radius: isSelected ? 8 : 4,
+                x: 0,
+                y: isSelected ? 4 : 2
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// MARK: - Previews
+
+#Preview("Routine Depth - Light") {
+    RoutineDepthView(onContinue: { _ in })
+        .preferredColorScheme(.light)
+}
+
+#Preview("Routine Depth - Dark") {
+    RoutineDepthView(onContinue: { _ in })
+        .preferredColorScheme(.dark)
+}
+

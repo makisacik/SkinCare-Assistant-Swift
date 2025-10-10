@@ -109,7 +109,7 @@ class MockRoutineService: RoutineServiceProtocol {
             .eraseToAnyPublisher()
     }
     
-    func generateRoutine(skinType: SkinType, concerns: Set<Concern>, mainGoal: MainGoal, fitzpatrickSkinTone: FitzpatrickSkinTone, ageRange: AgeRange, region: Region, preferences: Preferences?, lifestyle: LifestyleAnswers?) async throws -> RoutineResponse {
+    func generateRoutine(skinType: SkinType, concerns: Set<Concern>, mainGoal: MainGoal, fitzpatrickSkinTone: FitzpatrickSkinTone, ageRange: AgeRange, region: Region, routineDepth: RoutineDepth?, preferences: Preferences?, lifestyle: LifestyleAnswers?) async throws -> RoutineResponse {
         // Create a simple mock routine response
         let mockStep = APIRoutineStep(
             step: .cleanser,
@@ -197,7 +197,7 @@ class MockRoutineService: RoutineServiceProtocol {
     func getCurrentStreak() async throws -> Int { return 0 }
     func clearAllCompletions() async throws {}
     func getCompletionStats(from startDate: Date, to endDate: Date) async throws -> [Date: CompletionStats] { return [:] }
-    func generateAndSaveInitialRoutine(skinType: SkinType, concerns: Set<Concern>, mainGoal: MainGoal, fitzpatrickSkinTone: FitzpatrickSkinTone, ageRange: AgeRange, region: Region, preferences: Preferences?, lifestyle: LifestyleAnswers?) async throws -> SavedRoutineModel {
+    func generateAndSaveInitialRoutine(skinType: SkinType, concerns: Set<Concern>, mainGoal: MainGoal, fitzpatrickSkinTone: FitzpatrickSkinTone, ageRange: AgeRange, region: Region, routineDepth: RoutineDepth?, preferences: Preferences?, lifestyle: LifestyleAnswers?) async throws -> SavedRoutineModel {
         let routineResponse = try await generateRoutine(
             skinType: skinType,
             concerns: concerns,
@@ -205,6 +205,7 @@ class MockRoutineService: RoutineServiceProtocol {
             fitzpatrickSkinTone: fitzpatrickSkinTone,
             ageRange: ageRange,
             region: region,
+            routineDepth: routineDepth,
             preferences: preferences,
             lifestyle: lifestyle
         )

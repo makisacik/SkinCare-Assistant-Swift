@@ -20,6 +20,7 @@ struct RoutineCreatorFlow: View {
     @State private var selectedFitzpatrickSkinTone: FitzpatrickSkinTone?
     @State private var selectedAgeRange: AgeRange?
     @State private var selectedRegion: Region?
+    @State private var selectedRoutineDepth: RoutineDepth?
     @State private var selectedPreferences: Preferences?
     @State private var generatedRoutine: RoutineResponse?
     @State private var isLoadingRoutine = false
@@ -33,10 +34,11 @@ struct RoutineCreatorFlow: View {
         case fitzpatrickSkinTone
         case ageRange
         case region
+        case cycleSetup
+        case routineDepth
         case preferences
         case loading
         case results
-        case cycleSetup
     }
 
     var body: some View {
@@ -157,6 +159,20 @@ struct RoutineCreatorFlow: View {
                             store.updateCycleData(data)
                         }
                         withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .routineDepth
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .routineDepth:
+                RoutineDepthView(
+                    onContinue: { depth in
+                        selectedRoutineDepth = depth
+                        withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .preferences
                         }
                     }
@@ -197,12 +213,15 @@ struct RoutineCreatorFlow: View {
             case .loading:
                 LoadingView(
                     statuses: [
+                        "Thinking...",
                         "Analyzing your skin type…",
                         "Processing your concerns…",
                         "Evaluating your main goal…",
+                        "Assessing environmental factors…",
                         "Preparing routine results…",
                         "Creating product slots…",
-                        "Optimizing for your preferences…"
+                        "Optimizing for your preferences…",
+                        "Almost done! Finalizing your results…"
                     ],
                     stepInterval: 2.0,
                     autoFinish: false,
@@ -242,6 +261,7 @@ struct RoutineCreatorFlow: View {
                             selectedFitzpatrickSkinTone = nil
                             selectedAgeRange = nil
                             selectedRegion = nil
+                            selectedRoutineDepth = nil
                             selectedPreferences = nil
                             generatedRoutine = nil
                             routineError = nil
@@ -321,8 +341,10 @@ struct RoutineCreatorFlow: View {
                 currentStep = .ageRange
             case .cycleSetup:
                 currentStep = .region
-            case .preferences:
+            case .routineDepth:
                 currentStep = .cycleSetup
+            case .preferences:
+                currentStep = .routineDepth
             case .loading:
                 currentStep = .preferences
             case .results:
@@ -408,6 +430,7 @@ struct RoutineCreatorFlow: View {
                 fitzpatrickSkinTone: fitzpatrickSkinTone.rawValue,
                 ageRange: ageRange.rawValue,
                 region: region.rawValue,
+                routineDepth: selectedRoutineDepth?.rawValue,
                 selectedPreferences: selectedPreferences.map { prefs in
                     PreferencesPayload(
                         fragranceFreeOnly: prefs.fragranceFreeOnly,
@@ -435,6 +458,7 @@ struct RoutineCreatorFlow: View {
                 print("   - Fitzpatrick Skin Tone: \(request.fitzpatrickSkinTone)")
                 print("   - Age Range: \(request.ageRange)")
                 print("   - Region: \(request.region)")
+                print("   - Routine Depth: \(request.routineDepth ?? "intermediate (default)")")
                 if let prefs = request.selectedPreferences {
                     print("   - Preferences: fragranceFree=\(prefs.fragranceFreeOnly), sensitive=\(prefs.suitableForSensitiveSkin), natural=\(prefs.naturalIngredients), crueltyFree=\(prefs.crueltyFree), vegan=\(prefs.veganFriendly)")
                 } else {
@@ -963,9 +987,10 @@ private struct ProgressIndicator: View {
         case .ageRange: return 5
         case .region: return 6
         case .cycleSetup: return 7
-        case .preferences: return 8
-        case .loading: return 9
-        case .results: return 10
+        case .routineDepth: return 8
+        case .preferences: return 9
+        case .loading: return 10
+        case .results: return 11
         }
     }
 
@@ -978,6 +1003,7 @@ private struct ProgressIndicator: View {
         case .ageRange: return "Age Range"
         case .region: return "Region"
         case .cycleSetup: return "Cycle Setup"
+        case .routineDepth: return "Routine Level"
         case .preferences: return "Preferences"
         case .loading: return "Analyzing"
         case .results: return "Results"
@@ -1004,7 +1030,7 @@ private struct ProgressIndicator: View {
             Spacer()
 
             // Progress text
-            Text("\(stepNumber) of 10")
+            Text("\(stepNumber) of 11")
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
         }

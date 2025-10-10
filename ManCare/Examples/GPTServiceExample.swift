@@ -64,11 +64,12 @@ extension GPTService {
         fitzpatrickSkinTone: FitzpatrickSkinTone,
         ageRange: AgeRange,
         region: Region,
+        routineDepth: RoutineDepth? = nil,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers? = nil,
         locale: String = "en-US"
     ) -> ManCareRoutineRequest {
-        
+
         let preferencesPayload = preferences.map { prefs in
             PreferencesPayload(
                 fragranceFreeOnly: prefs.fragranceFreeOnly,
@@ -78,7 +79,7 @@ extension GPTService {
                 veganFriendly: prefs.veganFriendly
             )
         }
-        
+
         let lifestylePayload = lifestyle.map { ls in
             LifestylePayload(
                 sleepQuality: ls.sleep?.rawValue,
@@ -93,7 +94,7 @@ extension GPTService {
                 sensitiveSkin: ls.sensitiveSkin
             )
         }
-        
+
         return ManCareRoutineRequest(
             selectedSkinType: skinType.rawValue,
             selectedConcerns: concerns.map { $0.rawValue },
@@ -101,6 +102,7 @@ extension GPTService {
             fitzpatrickSkinTone: fitzpatrickSkinTone.rawValue,
             ageRange: ageRange.rawValue,
             region: region.rawValue,
+            routineDepth: routineDepth?.rawValue,
             selectedPreferences: preferencesPayload,
             lifestyle: lifestylePayload,
             locale: locale

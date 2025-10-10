@@ -323,6 +323,7 @@ struct MyselfView: View {
                 fitzpatrickSkinTone: profile.fitzpatrickSkinTone,
                 ageRange: profile.ageRange,
                 region: profile.region,
+                routineDepth: nil, // Use default (intermediate) when generating from profile
                 preferences: profile.preferences,
                 lifestyle: nil
             )

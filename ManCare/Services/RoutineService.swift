@@ -24,6 +24,7 @@ protocol RoutineServiceProtocol {
         fitzpatrickSkinTone: FitzpatrickSkinTone,
         ageRange: AgeRange,
         region: Region,
+        routineDepth: RoutineDepth?,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers?
     ) async throws -> RoutineResponse
@@ -51,6 +52,7 @@ protocol RoutineServiceProtocol {
         fitzpatrickSkinTone: FitzpatrickSkinTone,
         ageRange: AgeRange,
         region: Region,
+        routineDepth: RoutineDepth?,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers?
     ) async throws -> SavedRoutineModel
@@ -140,6 +142,7 @@ final class RoutineService: RoutineServiceProtocol {
         fitzpatrickSkinTone: FitzpatrickSkinTone,
         ageRange: AgeRange,
         region: Region,
+        routineDepth: RoutineDepth? = nil,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers? = nil
     ) async throws -> RoutineResponse {
@@ -153,6 +156,7 @@ final class RoutineService: RoutineServiceProtocol {
             fitzpatrickSkinTone: fitzpatrickSkinTone,
             ageRange: ageRange,
             region: region,
+            routineDepth: routineDepth,
             preferences: preferences,
             lifestyle: lifestyle
         )
@@ -284,6 +288,7 @@ final class RoutineService: RoutineServiceProtocol {
         fitzpatrickSkinTone: FitzpatrickSkinTone,
         ageRange: AgeRange,
         region: Region,
+        routineDepth: RoutineDepth? = nil,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers? = nil
     ) async throws -> SavedRoutineModel {
@@ -297,6 +302,7 @@ final class RoutineService: RoutineServiceProtocol {
             fitzpatrickSkinTone: fitzpatrickSkinTone,
             ageRange: ageRange,
             region: region,
+            routineDepth: routineDepth,
             preferences: preferences,
             lifestyle: lifestyle
         )

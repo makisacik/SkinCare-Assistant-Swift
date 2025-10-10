@@ -15,6 +15,7 @@ public struct ManCareRoutineRequest: Codable {
     public let fitzpatrickSkinTone: String             // "type1" | "type2" | "type3" | "type4" | "type5" | "type6"
     public let ageRange: String                        // "teens" | "twenties" | "thirties" | "forties" | "fifties" | "sixtiesPlus"
     public let region: String                          // "tropical" | "subtropical" | "temperate" | "continental" | "mediterranean" | "arctic" | "desert" | "mountain"
+    public let routineDepth: String?                   // "simple" | "intermediate" | "advanced"
     public let selectedPreferences: PreferencesPayload?
     public let lifestyle: LifestylePayload?
     public let locale: String                          // e.g. "en-US"
@@ -25,6 +26,7 @@ public struct ManCareRoutineRequest: Codable {
                 fitzpatrickSkinTone: String,
                 ageRange: String,
                 region: String,
+                routineDepth: String? = nil,
                 selectedPreferences: PreferencesPayload?,
                 lifestyle: LifestylePayload?,
                 locale: String = "en-US") {
@@ -34,6 +36,7 @@ public struct ManCareRoutineRequest: Codable {
         self.fitzpatrickSkinTone = fitzpatrickSkinTone
         self.ageRange = ageRange
         self.region = region
+        self.routineDepth = routineDepth
         self.selectedPreferences = selectedPreferences
         self.lifestyle = lifestyle
         self.locale = locale
@@ -117,7 +120,7 @@ public final class GPTService {
             return cachedResponse
         }
 
-        let system = Self.systemPrompt(schemaJSON: Self.schemaJSON)
+        let system = Self.systemPrompt(schemaJSON: Self.schemaJSON, routineDepth: request.routineDepth)
         let user = Self.userPrompt(from: request, routineDepthFallback: routineDepthFallback)
         let json = try await completeJSON(systemPrompt: system, userPrompt: user, timeout: timeout)
         // Decode strictly into your RoutineResponse model
@@ -190,7 +193,8 @@ public final class GPTService {
     private func createCacheKey(for request: ManCareRoutineRequest) -> String {
         let concerns = request.selectedConcerns.sorted().joined(separator: ",")
         let prefs = request.selectedPreferences.map { "\($0.fragranceFreeOnly),\($0.suitableForSensitiveSkin),\($0.naturalIngredients),\($0.crueltyFree),\($0.veganFriendly)" } ?? "none"
-        return "\(request.selectedSkinType)|\(concerns)|\(request.selectedMainGoal)|\(request.fitzpatrickSkinTone)|\(request.ageRange)|\(request.region)|\(prefs)"
+        let depth = request.routineDepth ?? "intermediate"
+        return "\(request.selectedSkinType)|\(concerns)|\(request.selectedMainGoal)|\(request.fitzpatrickSkinTone)|\(request.ageRange)|\(request.region)|\(depth)|\(prefs)"
     }
 
     /// Enhance a single step with ProductTypeDatabase information
@@ -325,11 +329,46 @@ public final class GPTService {
     // MARK: - Prompt Builders
 
     /// System prompt with embedded schema and rules (JSON only).
-    private static func systemPrompt(schemaJSON: String) -> String {
+    private static func systemPrompt(schemaJSON: String, routineDepth: String? = nil) -> String {
+        // Get routine depth guidance
+        let depthGuidance: String
+        if let depth = routineDepth {
+            switch depth {
+            case "simple":
+                depthGuidance = """
+
+                ROUTINE DEPTH: SIMPLE (3-4 steps per routine)
+                - Morning: cleanser, moisturizer, sunscreen (+ optional targeted treatment)
+                - Evening: cleanser, treatment/serum, moisturizer
+                - Keep it minimal and focused on essentials
+                """
+            case "intermediate":
+                depthGuidance = """
+
+                ROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine)
+                - Morning: cleanser, toner/essence, serum, moisturizer, eye cream (optional), sunscreen
+                - Evening: cleanser, toner, serum/treatment, eye cream (optional), moisturizer, night treatment
+                - Balanced approach with key treatments
+                """
+            case "advanced":
+                depthGuidance = """
+
+                ROUTINE DEPTH: ADVANCED (7-9 steps per routine)
+                - Morning: cleanser, toner, essence, multiple serums, eye cream, moisturizer, face oil (optional), sunscreen
+                - Evening: oil cleanser, water cleanser, toner, essence, treatment, serum, eye cream, moisturizer, sleeping mask/night oil
+                - Comprehensive multi-step routine with layered treatments
+                """
+            default:
+                depthGuidance = "\n\nROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine)"
+            }
+        } else {
+            depthGuidance = "\n\nROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine) - Default if not specified"
+        }
+
         return """
         You are a skincare expert. Return ONLY valid JSON matching the schema exactly.
 
-        Rules: Safe, realistic, concise. Align to skin type, concerns, main goal, Fitzpatrick skin tone, age range, region, and preferences. Age-appropriate recommendations. No brand names. Include guardrails.
+        Rules: Safe, realistic, comprehensive within depth constraints. Align to skin type, concerns, main goal, Fitzpatrick skin tone, age range, region, and preferences. Age-appropriate recommendations. No brand names. Include guardrails.\(depthGuidance)
 
         PRODUCT TYPES: cleanser, moisturizer, sunscreen, faceSerum, exfoliator, faceMask
 
@@ -364,6 +403,11 @@ public final class GPTService {
         parts.append("Age:\(req.ageRange)")
         parts.append("Region:\(req.region)")
 
+        // Add routine depth (use from request or fallback)
+        if let depth = req.routineDepth ?? routineDepthFallback {
+            parts.append("RoutineLevel:\(depth)")
+        }
+
         if let prefs = req.selectedPreferences {
             let prefsStr = "fragranceFree:\(prefs.fragranceFreeOnly),sensitive:\(prefs.suitableForSensitiveSkin),natural:\(prefs.naturalIngredients),crueltyFree:\(prefs.crueltyFree),vegan:\(prefs.veganFriendly)"
             parts.append("Prefs:\(prefsStr)")
@@ -386,9 +430,6 @@ public final class GPTService {
             }
         }
 
-        if let depth = routineDepthFallback {
-            parts.append("Depth:\(depth)")
-        }
         parts.append("Locale:\(req.locale)")
         return parts.joined(separator: " ")
     }

@@ -53,6 +53,7 @@ final class RoutineGenerationViewModel: ObservableObject {
         fitzpatrickSkinTone: FitzpatrickSkinTone,
         ageRange: AgeRange,
         region: Region,
+        routineDepth: RoutineDepth? = nil,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers? = nil
     ) {
@@ -70,6 +71,7 @@ final class RoutineGenerationViewModel: ObservableObject {
                     fitzpatrickSkinTone: fitzpatrickSkinTone,
                     ageRange: ageRange,
                     region: region,
+                    routineDepth: routineDepth,
                     preferences: preferences,
                     lifestyle: lifestyle
                 )
@@ -97,6 +99,7 @@ final class RoutineGenerationViewModel: ObservableObject {
         fitzpatrickSkinTone: FitzpatrickSkinTone,
         ageRange: AgeRange,
         region: Region,
+        routineDepth: RoutineDepth? = nil,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers? = nil
     ) {
@@ -114,6 +117,7 @@ final class RoutineGenerationViewModel: ObservableObject {
                     fitzpatrickSkinTone: fitzpatrickSkinTone,
                     ageRange: ageRange,
                     region: region,
+                    routineDepth: routineDepth,
                     preferences: preferences,
                     lifestyle: lifestyle
                 )
