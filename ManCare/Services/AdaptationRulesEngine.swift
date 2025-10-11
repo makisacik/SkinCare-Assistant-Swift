@@ -51,14 +51,21 @@ class AdaptationRulesEngine {
         using rules: [AdaptationRule],
         for contextKey: String
     ) -> StepAdaptation? {
+        // Debug logging for essence issues
+        print("🔍 [AdaptationRulesEngine] Looking for rule for step: '\(step.title)' (stepType: '\(step.stepType)') in context: '\(contextKey)'")
+        
         // Find matching rule for this step's product type and context
         guard let matchingRule = rules.first(where: { rule in
-            rule.productType.lowercased() == step.stepType.lowercased() &&
+            productTypesMatch(rule.productType, step.stepType) &&
             rule.contextKey.lowercased() == contextKey.lowercased()
         }) else {
             // No adaptation needed - use normal emphasis
+            print("⚠️ [AdaptationRulesEngine] No matching rule found for '\(step.stepType)' in context '\(contextKey)'")
             return nil
         }
+        
+        print("✅ [AdaptationRulesEngine] Found rule: '\(matchingRule.id)' for '\(step.stepType)' -> '\(matchingRule.action.emphasis)'")
+        print("📝 [AdaptationRulesEngine] Guidance: '\(matchingRule.action.guidanceTemplate ?? "No guidance")'")
         
         // Build StepAdaptation from rule
         return StepAdaptation(
@@ -71,7 +78,59 @@ class AdaptationRulesEngine {
             origin: .default
         )
     }
-    
+
+    // MARK: - Private Helpers
+
+    /// Flexible product type matching with normalization
+    private func productTypesMatch(_ ruleType: String, _ stepType: String) -> Bool {
+        print("🔍 [AdaptationRulesEngine] Matching: '\(ruleType)' vs '\(stepType)'")
+        
+        // 1. Exact match
+        if ruleType == stepType {
+            print("✅ [AdaptationRulesEngine] Exact match: '\(ruleType)' == '\(stepType)'")
+            return true
+        }
+
+        // 2. Case-insensitive exact match
+        if ruleType.lowercased() == stepType.lowercased() {
+            print("✅ [AdaptationRulesEngine] Case-insensitive match: '\(ruleType)' == '\(stepType)'")
+            return true
+        }
+
+        // 3. Normalize both (remove spaces, underscores) and compare
+        let normalizedRule = ruleType.replacingOccurrences(of: " ", with: "")
+                                    .replacingOccurrences(of: "_", with: "")
+                                    .lowercased()
+        let normalizedStep = stepType.replacingOccurrences(of: " ", with: "")
+                                    .replacingOccurrences(of: "_", with: "")
+                                    .lowercased()
+
+        if normalizedRule == normalizedStep {
+            print("✅ [AdaptationRulesEngine] Normalized match: '\(ruleType)' <-> '\(stepType)'")
+            return true
+        }
+
+        // 4. Check if they map to the same ProductType via alias system
+        if let ruleProductType = ProductType(rawValue: ruleType),
+           let stepProductType = ProductType(rawValue: stepType),
+           ruleProductType == stepProductType {
+            print("✅ [AdaptationRulesEngine] ProductType enum match: '\(ruleType)' == '\(stepType)'")
+            return true
+        }
+
+        // 5. Use alias mapping as last resort
+        let ruleMapped = ProductAliasMapping.normalize(ruleType)
+        let stepMapped = ProductAliasMapping.normalize(stepType)
+
+        if ruleMapped == stepMapped {
+            print("✅ [AdaptationRulesEngine] Alias match: '\(ruleType)' -> \(ruleMapped.rawValue), '\(stepType)' -> \(stepMapped.rawValue)")
+            return true
+        }
+
+        print("❌ [AdaptationRulesEngine] No match found: '\(ruleType)' vs '\(stepType)'")
+        return false
+    }
+
     // MARK: - Rule Merging
     
     /// Merge custom rules with base rules (custom rules override base)

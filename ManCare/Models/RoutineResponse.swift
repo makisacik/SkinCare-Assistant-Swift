@@ -57,6 +57,30 @@ struct APIRoutineStep: Codable {
     let why: String
     let how: String
     let constraints: Constraints
+
+    // Custom decoder to handle missing constraints
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        step = try container.decode(ProductType.self, forKey: .step)
+        name = try container.decode(String.self, forKey: .name)
+        why = try container.decode(String.self, forKey: .why)
+        how = try container.decode(String.self, forKey: .how)
+        // If constraints is missing, use empty default
+        if let decodedConstraints = try? container.decode(Constraints.self, forKey: .constraints) {
+            constraints = decodedConstraints
+        } else {
+            print("⚠️ [APIRoutineStep] Missing constraints for step '\(name)', using empty default")
+            constraints = Constraints()
+        }
+    }
+
+    init(step: ProductType, name: String, why: String, how: String, constraints: Constraints) {
+        self.step = step
+        self.name = name
+        self.why = why
+        self.how = how
+        self.constraints = constraints
+    }
 }
 
 // Removed StepType. Use ProductType everywhere.

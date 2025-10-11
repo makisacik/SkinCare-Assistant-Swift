@@ -16,7 +16,7 @@
     {
       "id": "menstrual-exfoliant",
       "contextKey": "menstrual",
-      "productType": "exfoliant",
+      "productType": "exfoliator",
       "action": {
         "emphasis": "skip",
         "guidanceTemplate": null,
@@ -38,12 +38,34 @@
     {
       "id": "menstrual-serum",
       "contextKey": "menstrual",
-      "productType": "serum",
+      "productType": "faceSerum",
       "action": {
         "emphasis": "emphasize",
-        "guidanceTemplate": "Focus on hydrating and soothing serums. Apply generously.",
+        "guidanceTemplate": "Choose hydrating serums with hyaluronic acid or niacinamide. Apply 2-3 drops and pat gently.",
         "orderPriority": 3,
         "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-essence",
+      "contextKey": "menstrual",
+      "productType": "essence",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Gentle patting motions work best. Essence helps prepare skin for other products during this sensitive phase.",
+        "orderPriority": 2,
+        "warnings": ["Use gentle pressure - skin barrier is compromised"]
+      }
+    },
+    {
+      "id": "menstrual-toner",
+      "contextKey": "menstrual",
+      "productType": "toner",
+      "action": {
+        "emphasis": "reduce",
+        "guidanceTemplate": "Use alcohol-free, hydrating toners. Avoid harsh astringents during this sensitive phase.",
+        "orderPriority": 2,
+        "warnings": ["Skip toners with alcohol or strong acids"]
       }
     },
     {
@@ -82,7 +104,7 @@
     {
       "id": "follicular-exfoliant",
       "contextKey": "follicular",
-      "productType": "exfoliant",
+      "productType": "exfoliator",
       "action": {
         "emphasis": "emphasize",
         "guidanceTemplate": "Great time for deeper exfoliation. Your skin can handle more intensive treatment.",
@@ -104,18 +126,40 @@
     {
       "id": "follicular-serum",
       "contextKey": "follicular",
-      "productType": "serum",
+      "productType": "faceSerum",
       "action": {
         "emphasis": "emphasize",
-        "guidanceTemplate": "Great time to try new active serums or increase concentration.",
+        "guidanceTemplate": "Perfect time for vitamin C, retinol, or peptide serums. Your skin can handle stronger actives now.",
         "orderPriority": 4,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-essence",
+      "contextKey": "follicular",
+      "productType": "essence",
+      "action": {
+        "emphasis": "emphasize",
+        "guidanceTemplate": "Perfect time for intensive essence treatments. Your skin absorbs nutrients optimally now.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-toner",
+      "contextKey": "follicular",
+      "productType": "toner",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Your skin is resilient. Use your regular toner routine.",
+        "orderPriority": 2,
         "warnings": []
       }
     },
     {
       "id": "follicular-treatment",
       "contextKey": "follicular",
-      "productType": "treatment",
+      "productType": "faceSerum",
       "action": {
         "emphasis": "emphasize",
         "guidanceTemplate": "Ideal time for intensive treatments, peels, or new products.",
@@ -148,7 +192,7 @@
     {
       "id": "ovulation-exfoliant",
       "contextKey": "ovulation",
-      "productType": "exfoliant",
+      "productType": "exfoliator",
       "action": {
         "emphasis": "normal",
         "guidanceTemplate": "Continue your regular exfoliation schedule.",
@@ -179,6 +223,28 @@
       }
     },
     {
+      "id": "ovulation-essence",
+      "contextKey": "ovulation",
+      "productType": "essence",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Your skin is glowing naturally. Continue your regular essence application.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-toner",
+      "contextKey": "ovulation",
+      "productType": "toner",
+      "action": {
+        "emphasis": "normal",
+        "guidanceTemplate": "Your skin looks its best. Continue your regular toner routine.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
       "id": "luteal-cleanser",
       "contextKey": "luteal",
       "productType": "cleanser",
@@ -192,7 +258,7 @@
     {
       "id": "luteal-exfoliant",
       "contextKey": "luteal",
-      "productType": "exfoliant",
+      "productType": "exfoliator",
       "action": {
         "emphasis": "reduce",
         "guidanceTemplate": "Limit to 2x per week maximum to avoid irritation.",
@@ -214,7 +280,7 @@
     {
       "id": "luteal-mask",
       "contextKey": "luteal",
-      "productType": "mask",
+      "productType": "faceMask",
       "action": {
         "emphasis": "emphasize",
         "guidanceTemplate": "Clay or charcoal masks are excellent for managing increased oil production.",
@@ -236,7 +302,7 @@
     {
       "id": "luteal-spot-treatment",
       "contextKey": "luteal",
-      "productType": "spot treatment",
+      "productType": "spotTreatment",
       "action": {
         "emphasis": "emphasize",
         "guidanceTemplate": "Keep spot treatments handy. Breakouts are more common now.",
@@ -256,9 +322,20 @@
       }
     },
     {
+      "id": "luteal-essence",
+      "contextKey": "luteal",
+      "productType": "essence",
+      "action": {
+        "emphasis": "reduce",
+        "guidanceTemplate": "Use lighter essence formulas. Heavy essences may feel too rich during this oilier phase.",
+        "orderPriority": 3,
+        "warnings": ["Skip heavy, oil-based essences if feeling congested"]
+      }
+    },
+    {
       "id": "menstrual-eye-cream",
       "contextKey": "menstrual",
-      "productType": "eye cream",
+      "productType": "eyeCream",
       "action": {
         "emphasis": "emphasize",
         "guidanceTemplate": "Apply gently. Extra hydration helps with puffiness and dark circles.",
@@ -269,7 +346,7 @@
     {
       "id": "follicular-eye-cream",
       "contextKey": "follicular",
-      "productType": "eye cream",
+      "productType": "eyeCream",
       "action": {
         "emphasis": "normal",
         "guidanceTemplate": "Apply your regular amount with gentle patting motions.",
@@ -280,7 +357,7 @@
     {
       "id": "ovulation-eye-cream",
       "contextKey": "ovulation",
-      "productType": "eye cream",
+      "productType": "eyeCream",
       "action": {
         "emphasis": "normal",
         "guidanceTemplate": "Your eye area looks bright and fresh. Continue normal application.",
@@ -291,7 +368,7 @@
     {
       "id": "luteal-eye-cream",
       "contextKey": "luteal",
-      "productType": "eye cream",
+      "productType": "eyeCream",
       "action": {
         "emphasis": "emphasize",
         "guidanceTemplate": "May need extra product for under-eye area. Watch for puffiness.",
@@ -302,7 +379,7 @@
     {
       "id": "menstrual-facial-oil",
       "contextKey": "menstrual",
-      "productType": "facial oil",
+      "productType": "facialOil",
       "action": {
         "emphasis": "normal",
         "guidanceTemplate": "Can be beneficial for barrier support. Use 2-3 drops, not more.",
@@ -313,7 +390,7 @@
     {
       "id": "follicular-facial-oil",
       "contextKey": "follicular",
-      "productType": "facial oil",
+      "productType": "facialOil",
       "action": {
         "emphasis": "emphasize",
         "guidanceTemplate": "Great time to use facial oils. Skin absorbs them beautifully now.",
@@ -324,7 +401,7 @@
     {
       "id": "ovulation-facial-oil",
       "contextKey": "ovulation",
-      "productType": "facial oil",
+      "productType": "facialOil",
       "action": {
         "emphasis": "normal",
         "guidanceTemplate": "Continue regular use. Your skin is balanced and glowing.",
@@ -335,7 +412,7 @@
     {
       "id": "luteal-facial-oil",
       "contextKey": "luteal",
-      "productType": "facial oil",
+      "productType": "facialOil",
       "action": {
         "emphasis": "reduce",
         "guidanceTemplate": "Use sparingly or skip if feeling oily. Your natural sebum production is higher.",

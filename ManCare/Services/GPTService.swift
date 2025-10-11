@@ -338,24 +338,24 @@ public final class GPTService {
                 depthGuidance = """
 
                 ROUTINE DEPTH: SIMPLE (3-4 steps per routine)
-                - Morning: cleanser, moisturizer, sunscreen (+ optional targeted treatment)
-                - Evening: cleanser, treatment/serum, moisturizer
+                - Morning: cleanser, moisturizer, sunscreen (+ optional faceSerum)
+                - Evening: cleanser, faceSerum, moisturizer
                 - Keep it minimal and focused on essentials
                 """
             case "intermediate":
                 depthGuidance = """
 
                 ROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine)
-                - Morning: cleanser, toner/essence, serum, moisturizer, eye cream (optional), sunscreen
-                - Evening: cleanser, toner, serum/treatment, eye cream (optional), moisturizer, night treatment
+                - Morning: cleanser, toner or essence, faceSerum, moisturizer, eyeCream (optional), sunscreen
+                - Evening: cleanser, toner, faceSerum, eyeCream (optional), moisturizer
                 - Balanced approach with key treatments
                 """
             case "advanced":
                 depthGuidance = """
 
                 ROUTINE DEPTH: ADVANCED (7-9 steps per routine)
-                - Morning: cleanser, toner, essence, multiple serums, eye cream, moisturizer, face oil (optional), sunscreen
-                - Evening: oil cleanser, water cleanser, toner, essence, treatment, serum, eye cream, moisturizer, sleeping mask/night oil
+                - Morning: cleanser, toner, essence, multiple serums, eyeCream, moisturizer, facialOil (optional), sunscreen
+                - Evening: cleansingOil, cleanser, toner, essence, faceSerum, eyeCream, moisturizer, facialOil
                 - Comprehensive multi-step routine with layered treatments
                 """
             default:
@@ -370,9 +370,13 @@ public final class GPTService {
 
         Rules: Safe, realistic, comprehensive within depth constraints. Align to skin type, concerns, main goal, Fitzpatrick skin tone, age range, region, and preferences. Age-appropriate recommendations. No brand names. Include guardrails.\(depthGuidance)
 
-        PRODUCT TYPES: cleanser, moisturizer, sunscreen, faceSerum, exfoliator, faceMask
+        \(Self.getProductTypeInfo())
 
-        Use exact product type names from schema. "name" field: descriptive names like "Gentle Cleanser", "Vitamin C Serum". "step" field: must match available product types exactly.
+        CRITICAL:
+        1. Use exact camelCase product type names (e.g., "cleansingOil" not "oil cleanser", "faceSerum" not "serum", "eyeCream" not "eye cream")
+        2. "name" field: descriptive names like "Gentle Cleanser", "Vitamin C Serum"
+        3. "step" field: must match available product types exactly
+        4. ALWAYS include "constraints" field for every step (use empty object {} if no specific constraints)
 
         SCHEMA:
         \(schemaJSON)
@@ -443,10 +447,10 @@ public final class GPTService {
           "locale": "string",
           "summary": {"title": "string", "one_liner": "string"},
           "routine": {
-            "depth": "standard",
-            "morning": [{"step": "cleanser|moisturizer|sunscreen|faceSerum", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}],
-            "evening": [{"step": "cleanser|moisturizer|faceSerum|exfoliator", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}],
-            "weekly": [{"step": "faceMask|exfoliator", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}]
+            "depth": "simple|intermediate|advanced",
+            "morning": [{"step": "cleanser|toner|essence|faceSerum|eyeCream|moisturizer|sunscreen", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}],
+            "evening": [{"step": "cleansingOil|cleanser|toner|essence|faceSerum|exfoliator|eyeCream|moisturizer|facialOil", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}],
+            "weekly": [{"step": "faceMask|exfoliator|chemicalPeel", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}]
           },
           "guardrails": {"cautions": ["string"], "when_to_stop": ["string"], "sun_notes": "string"},
           "adaptation": {"for_skin_type": "string", "for_concerns": ["string"], "for_preferences": ["string"]},

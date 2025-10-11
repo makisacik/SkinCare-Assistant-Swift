@@ -73,7 +73,10 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
             self = productType
             return
         }
-        
+
+        // Log that we need to normalize
+        print("⚠️ [ProductType] No exact match for '\(value)', trying normalization...")
+
         // Normalize the input: remove spaces, convert to lowercase, convert underscores to nothing
         let normalized = value.replacingOccurrences(of: " ", with: "")
                              .replacingOccurrences(of: "_", with: "")
@@ -83,13 +86,16 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
         for productType in ProductType.allCases {
             let caseNormalized = productType.rawValue.lowercased()
             if normalized == caseNormalized {
+                print("✅ [ProductType] Normalized '\(value)' -> '\(productType.rawValue)'")
                 self = productType
                 return
             }
         }
         
         // If still no match, use the alias mapping system
+        print("⚠️ [ProductType] Using alias mapping for '\(value)'")
         let mappedType = ProductAliasMapping.normalize(value)
+        print("✅ [ProductType] Mapped '\(value)' -> '\(mappedType.rawValue)'")
         self = mappedType
     }
 
@@ -371,7 +377,7 @@ struct ProductAliasMapping {
         // Treatment aliases
         "serum": .faceSerum,
         "face serum": .faceSerum,
-        "essence": .faceSerum,
+        "essence": .essence,
         "ampoule": .faceSerum,
         "exfoliator": .exfoliator,
         "peel": .exfoliator,
@@ -448,6 +454,8 @@ struct ProductAliasMapping {
             return .cleanser
         } else if normalized.contains("moisturizer") || normalized.contains("cream") || normalized.contains("lotion") {
             return .moisturizer
+        } else if normalized.contains("essence") {
+            return .essence
         } else if normalized.contains("serum") || normalized.contains("treatment") {
             return .faceSerum
         } else if normalized.contains("sunscreen") || normalized.contains("spf") {
