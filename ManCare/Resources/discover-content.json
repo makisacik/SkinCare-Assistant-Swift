@@ -63,5 +63,47 @@
       "period": "thisWeek"
     }
   ],
+  "miniGuides": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "title": "Skincare 101: Build a basic routine",
+      "subtitle": "Cleanse, treat, moisturize, protect",
+      "minutes": 5,
+      "imageName": "placeholder",
+      "category": "Basics"
+    },
+    {
+      "id": "22222222-2222-2222-2222-222222222222",
+      "title": "How your cycle affects skin",
+      "subtitle": "Breakouts, sensitivity and glow across phases",
+      "minutes": 7,
+      "imageName": "placeholder",
+      "category": "Menstrual Health"
+    },
+    {
+      "id": "44444444-4444-4444-4444-444444444444",
+      "title": "AM vs PM Routine",
+      "subtitle": "Day protection, night repair",
+      "minutes": 4,
+      "imageName": "placeholder",
+      "category": "Basics"
+    },
+    {
+      "id": "55555555-5555-5555-5555-555555555555",
+      "title": "Acids, Explained",
+      "subtitle": "AHA vs BHA vs PHA—who needs what",
+      "minutes": 5,
+      "imageName": "placeholder",
+      "category": "Ingredients"
+    },
+    {
+      "id": "66666666-6666-6666-6666-666666666666",
+      "title": "Retinoids 101",
+      "subtitle": "Strengths, purging, and how to buffer",
+      "minutes": 6,
+      "imageName": "placeholder",
+      "category": "Ingredients"
+    }
+  ],
   "lastUpdated": "2025-10-11T08:00:00Z"
 }

@@ -39,36 +39,39 @@ actor DiscoverContentService {
         print("✅ DiscoverContentService: Loaded content from JSON")
         return content
     }
-    
+
     /// Get the active banner for current date
     func getActiveBanner() async throws -> HeroBanner? {
         let content = try await loadContent()
         return content.hero.isActive ? content.hero : nil
     }
-    
+
     /// Get fresh routines filtered by relevance
     func getFreshRoutines() async throws -> [FreshRoutine] {
         let content = try await loadContent()
         return filterActiveRoutines(content.routines)
     }
-    
+
     /// Get current season based on date
     func getCurrentSeason() -> Season {
         return calculateSeasonFromDate(Date())
     }
-    
     /// Check if content should be refreshed
     func shouldRefreshContent(lastRefresh: Date) -> Bool {
         let timeInterval = Date().timeIntervalSince(lastRefresh)
         // Refresh if more than 1 hour has passed
         return timeInterval > 3600
     }
-    
     /// Force refresh cached content
     func refreshContent() async throws -> DiscoverContent {
         cachedContent = nil
         lastLoadDate = nil
         return try await loadContent()
+    }
+    /// Expose mini guides
+    func getMiniGuides() async throws -> [MiniGuide] {
+        let content = try await loadContent()
+        return content.miniGuides ?? []
     }
     
     // MARK: - Private Helpers

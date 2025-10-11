@@ -15,6 +15,7 @@ final class DiscoverViewModel: ObservableObject {
 
     @Published var freshRoutines: [FreshRoutine] = []
     @Published var trendingRoutines: [(routine: RoutineTemplate, increase: Int)] = []
+    @Published var miniGuides: [MiniGuide] = []
     @Published var isLoading = false
     @Published var error: Error?
 
@@ -45,6 +46,9 @@ final class DiscoverViewModel: ObservableObject {
             // Update fresh routines
             freshRoutines = try await contentService.getFreshRoutines()
 
+            // Mini guides
+            miniGuides = try await contentService.getMiniGuides()
+
             // Load trending routines
             await loadTrendingRoutines(from: content.communityHeat)
 
@@ -65,6 +69,8 @@ final class DiscoverViewModel: ObservableObject {
             let content = try await contentService.refreshContent()
 
             freshRoutines = try await contentService.getFreshRoutines()
+
+            miniGuides = try await contentService.getMiniGuides()
 
             await loadTrendingRoutines(from: content.communityHeat)
 

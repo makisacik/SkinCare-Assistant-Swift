@@ -15,6 +15,7 @@ struct DiscoverContent: Codable {
     let routines: [FreshRoutine]
     let seasonalPlaybook: SeasonalPlaybook
     let communityHeat: [TrendingRoutine]
+    let miniGuides: [MiniGuide]?
     let lastUpdated: Date
 }
 
@@ -235,5 +236,16 @@ struct RefreshTimeHelper {
             return "Refreshed \(days) day\(days == 1 ? "" : "s") ago"
         }
     }
+}
+
+// MARK: - Mini Guide
+
+struct MiniGuide: Codable, Identifiable {
+    let id: UUID
+    let title: String
+    let subtitle: String
+    let minutes: Int
+    let imageName: String
+    let category: String
 }
 

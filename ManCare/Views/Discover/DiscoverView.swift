@@ -48,6 +48,11 @@ struct DiscoverView: View {
                             freshDropsSection
                         }
 
+                        // Mini Guides Section
+                        if !viewModel.miniGuides.isEmpty {
+                            miniGuidesSection
+                        }
+
                         // Community Heat Section
                         if !viewModel.trendingRoutines.isEmpty {
                             communityHeatSection
@@ -161,6 +166,15 @@ struct DiscoverView: View {
             onRoutineTap: { routine in
                 showingRoutineDetail = routine
             }
+        )
+    }
+
+    // MARK: - Mini Guides Section
+
+    private var miniGuidesSection: some View {
+        MiniGuidesSection(
+            guides: viewModel.miniGuides,
+            onTap: { _ in }
         )
     }
 
