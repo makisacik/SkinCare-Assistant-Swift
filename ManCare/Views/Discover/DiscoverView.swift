@@ -15,6 +15,7 @@ struct DiscoverView: View {
     @StateObject private var viewModel: DiscoverViewModel
     @StateObject private var listViewModel: RoutineListViewModel
     @State private var showingRoutineDetail: RoutineTemplate?
+    @State private var showingGuideDetail: Guide?
     @State private var selectedPeriod: TrendingPeriod = .thisWeek
     @State private var showConfetti = false
     @State private var navigationPath = NavigationPath()
@@ -89,6 +90,9 @@ struct DiscoverView: View {
             }
             .sheet(item: $showingRoutineDetail) { routine in
                 RoutineDetailSheet(routine: routine, listViewModel: listViewModel)
+            }
+            .sheet(item: $showingGuideDetail) { guide in
+                GuideDetailView(guide: guide)
             }
             .alert("Error", isPresented: .constant(viewModel.error != nil)) {
                 Button("Retry") {
@@ -174,7 +178,10 @@ struct DiscoverView: View {
     private var miniGuidesSection: some View {
         MiniGuidesSection(
             guides: viewModel.miniGuides,
-            onTap: { _ in }
+            onTap: { miniGuide in
+                let guideContentService = GuideContentService()
+                showingGuideDetail = guideContentService.getGuide(for: miniGuide)
+            }
         )
     }
 
