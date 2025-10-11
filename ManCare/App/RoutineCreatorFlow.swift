@@ -629,7 +629,7 @@ struct RoutineCreatorFlow: View {
         ))
 
         let routine = Routine(
-            depth: .standard,
+            depth: .intermediate,
             morning: morningSteps,
             evening: eveningSteps,
             weekly: nil

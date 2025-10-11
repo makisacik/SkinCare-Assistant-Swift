@@ -46,7 +46,7 @@ struct Routine: Codable {
 }
 
 enum Depth: String, Codable { 
-    case minimal, standard, detailed 
+    case simple, intermediate, advanced 
 }
 
 // MARK: - Routine Step

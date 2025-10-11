@@ -125,7 +125,7 @@ class MockRoutineService: RoutineServiceProtocol {
         )
         
         let mockRoutine = Routine(
-            depth: .minimal,
+            depth: .simple,
             morning: [mockStep],
             evening: [mockStep],
             weekly: nil

@@ -19,6 +19,7 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
 
     // Treatment products
     case faceSerum
+    case essence
     case exfoliator
     case faceMask
     case facialOil
@@ -61,6 +62,36 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
     case cleansingBalm
 
     var id: String { rawValue }
+    
+    // Custom decoder to handle variations in product type names
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(String.self)
+        
+        // First, try exact match with raw value
+        if let productType = ProductType(rawValue: value) {
+            self = productType
+            return
+        }
+        
+        // Normalize the input: remove spaces, convert to lowercase, convert underscores to nothing
+        let normalized = value.replacingOccurrences(of: " ", with: "")
+                             .replacingOccurrences(of: "_", with: "")
+                             .lowercased()
+        
+        // Try to find a matching case by comparing normalized versions
+        for productType in ProductType.allCases {
+            let caseNormalized = productType.rawValue.lowercased()
+            if normalized == caseNormalized {
+                self = productType
+                return
+            }
+        }
+        
+        // If still no match, use the alias mapping system
+        let mappedType = ProductAliasMapping.normalize(value)
+        self = mappedType
+    }
 
     /// Display name for UI
     var displayName: String {
@@ -73,6 +104,7 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
 
         // Treatment products
         case .faceSerum: return "Face Serum"
+        case .essence: return "Essence"
         case .exfoliator: return "Exfoliator"
         case .faceMask: return "Face Mask"
         case .facialOil: return "Facial Oil"
@@ -132,6 +164,7 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
 
         // Treatment products
         case .faceSerum: return "indigo"
+        case .essence: return "indigo"
         case .exfoliator: return "orange"
         case .faceMask: return "pink"
         case .facialOil: return "brown"
@@ -190,7 +223,7 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .cleanser, .moisturizer, .sunscreen:
             return .both
-        case .toner, .faceSerum, .exfoliator, .retinol, .vitaminC, .niacinamide:
+        case .toner, .faceSerum, .essence, .exfoliator, .retinol, .vitaminC, .niacinamide:
             return .dailyPM
         case .shaveCream, .aftershave, .shaveGel:
             return .dailyAM
@@ -208,7 +241,7 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
             return .cleansing
         case .toner, .facialMist:
             return .toning
-        case .faceSerum, .exfoliator, .spotTreatment, .retinol, .vitaminC, .niacinamide, .chemicalPeel:
+        case .faceSerum, .essence, .exfoliator, .spotTreatment, .retinol, .vitaminC, .niacinamide, .chemicalPeel:
             return .treatment
         case .moisturizer, .eyeCream, .facialOil:
             return .moisturizing
@@ -313,6 +346,7 @@ struct ProductAliasMapping {
         "cleansing cream": .cleanser,
         "milk cleanser": .cleanser,
         "cleansing oil": .cleansingOil,
+        "oil cleanser": .cleansingOil,
         "cleansing balm": .cleansingBalm,
         "micellar water": .micellarWater,
         "makeup remover": .makeupRemover,
