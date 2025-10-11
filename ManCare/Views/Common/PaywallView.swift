@@ -14,7 +14,9 @@ struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     var onSubscribe: () -> Void  // Called when user "purchases" (testing mode - no actual payment)
     var onClose: () -> Void      // Called when user closes without purchasing
-    
+
+    @State private var showCloseButton = false
+
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
@@ -136,18 +138,28 @@ struct PaywallView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        onClose()
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    if showCloseButton {
+                        Button {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            onClose()
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        }
+                        .transition(.opacity)
                     }
                 }
             }
             .modifier(ClearNavigationBarModifier())
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                    withAnimation(.easeIn(duration: 0.3)) {
+                        showCloseButton = true
+                    }
+                }
+            }
         }
     }
 }

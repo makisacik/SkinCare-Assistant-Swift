@@ -287,10 +287,8 @@ struct CycleSetupView: View {
                     onNext(cycleData)
                 },
                 onClose: {
-                    // User closed paywall without subscribing
+                    // User closed paywall without subscribing - just dismiss
                     showPaywall = false
-                    // Save data locally for future use, but skip activation
-                    onNext(nil)
                 }
             )
         }

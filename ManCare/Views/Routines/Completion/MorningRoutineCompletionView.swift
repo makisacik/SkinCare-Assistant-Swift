@@ -122,9 +122,16 @@ struct MorningRoutineCompletionView: View {
                 }        }        .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: backButton, trailing: trailingButtons)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    backButton
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    trailingButtons
+                }
+            }
+            .toolbarBackground(.hidden, for: .navigationBar)
             .onAppear {
-                setupNavigationBarAppearance()
                 // Load completion state from RoutineManager
                 Task {
                     completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
@@ -449,36 +456,6 @@ struct MorningRoutineCompletionView: View {
     }
 
     // MARK: - Helper Methods
-
-    private func setupNavigationBarAppearance() {
-        // Only apply custom navigation bar styling on iOS < 18
-        if #unavailable(iOS 18.0) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithTransparentBackground()
-
-            // Create the same pink gradient as the header
-            let gradientLayer = CAGradientLayer()
-            gradientLayer.colors = [
-                UIColor(red: 0.9, green: 0.3, blue: 0.6, alpha: 1.0).cgColor,
-                UIColor(red: 0.8, green: 0.2, blue: 0.5, alpha: 1.0).cgColor
-            ]
-            gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-            gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-
-            // Create a background image from the gradient
-            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
-            let backgroundImage = renderer.image { context in
-                gradientLayer.render(in: context.cgContext)
-            }
-
-            appearance.backgroundImage = backgroundImage
-            appearance.shadowImage = UIImage() // Remove shadow
-
-            UINavigationBar.appearance().standardAppearance = appearance
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-            UINavigationBar.appearance().compactAppearance = appearance
-        }
-    }
 
     private func toggleStepCompletion(_ stepId: String) {
         // Find the step to get its details

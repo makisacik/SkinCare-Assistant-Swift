@@ -292,6 +292,7 @@ struct RoutineCreatorFlow: View {
                     }
                 }
             }
+            .toolbar(currentStep == .results ? .hidden : .visible, for: .navigationBar)
             .onAppear {
                 setupNavigationBarAppearance()
             }
@@ -669,7 +670,7 @@ struct RoutineCreatorFlow: View {
             "one_liner": "A simple routine to prevent aging and minimize large pores."
           },
           "routine": {
-            "depth": "standard",
+            "depth": "intermediate",
             "morning": [
               {
                 "step": "cleanser",
