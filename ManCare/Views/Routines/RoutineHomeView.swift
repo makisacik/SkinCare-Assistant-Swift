@@ -1302,10 +1302,13 @@ struct RoutineStepDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     }
-                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                 }
             }
         }

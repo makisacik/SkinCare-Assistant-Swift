@@ -678,12 +678,7 @@ private struct DetailedStepRow: View {
                         }
                     }
 
-                    // Adaptation badge
-                    if let adapted = adaptedStep, adapted.emphasisLevel != .normal {
-                        StepAdaptationBadge(emphasis: adapted.emphasisLevel)
-                    }
-
-                    //Spacer(minLength: 8)
+                    Spacer(minLength: 8)
                 }
 
                 // Add product button below the horizontal row
@@ -700,14 +695,7 @@ private struct DetailedStepRow: View {
                                 .fill(stepColor.opacity(0.3))
                         )
                 }            .buttonStyle(PlainButtonStyle())
-                .padding(.leading, 56) // Align with the content above
-
-                // Step description
-                Text(step.description)
-                    .font(.system(size: 14))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    .lineLimit(nil)
-                    .padding(.leading, 56) // Align with the content above
+                .padding(.leading, 52) // Align with the image
 
                 // Adaptation guidance - Made MORE prominent
                 if let adapted = adaptedStep, adapted.emphasisLevel != .normal {
@@ -746,7 +734,7 @@ private struct DetailedStepRow: View {
                                     .stroke(adapted.emphasisLevel.color.opacity(0.3), lineWidth: 1.5)
                             )
                     )
-                    .padding(.leading, 56)
+                    .padding(.leading, 52) // Align with the image
                 }
             }        .padding(.top, 20)
             .padding(.bottom, 20)
