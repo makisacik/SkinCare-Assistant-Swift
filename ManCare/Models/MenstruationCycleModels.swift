@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 // MARK: - Menstruation Cycle Phase
 
@@ -153,30 +154,92 @@ struct CycleData: Codable {
 class CycleStore: ObservableObject {
     @Published var cycleData: CycleData
     
-    private let storageKey = "user_cycle_data"
+    private let viewContext: NSManagedObjectContext
+    private let legacyStorageKey = "user_cycle_data"
     
-    init() {
-        // Load saved data or create default
-        if let data = UserDefaults.standard.data(forKey: storageKey),
-           let decoded = try? JSONDecoder().decode(CycleData.self, from: data) {
-            self.cycleData = decoded
+    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        self.viewContext = context
+
+        // Load from Core Data or migrate from UserDefaults
+        if let loadedData = Self.loadFromCoreData(context: context) {
+            self.cycleData = loadedData
+        } else if let legacyData = Self.loadFromUserDefaults() {
+            // Migration: Load from UserDefaults and save to Core Data
+            self.cycleData = legacyData
+            Self.saveToCoreData(legacyData, context: context)
+            // Clean up old UserDefaults data
+            UserDefaults.standard.removeObject(forKey: legacyStorageKey)
+            print("✅ Migrated cycle data from UserDefaults to Core Data")
         } else {
             // Default example data for demonstration
             // Set last period start to 10 days ago for demo purposes
             let tenDaysAgo = Calendar.current.date(byAdding: .day, value: -10, to: Date()) ?? Date()
             self.cycleData = CycleData(lastPeriodStartDate: tenDaysAgo)
-            save()
+            Self.saveToCoreData(self.cycleData, context: context)
         }
     }
-    
+
     func updateCycleData(_ newData: CycleData) {
         cycleData = newData
-        save()
+        Self.saveToCoreData(newData, context: viewContext)
     }
-    
-    private func save() {
-        if let encoded = try? JSONEncoder().encode(cycleData) {
-            UserDefaults.standard.set(encoded, forKey: storageKey)
+
+    // MARK: - Core Data Operations
+
+    private static func loadFromCoreData(context: NSManagedObjectContext) -> CycleData? {
+        let fetchRequest: NSFetchRequest<UserCycleData> = UserCycleData.fetchRequest()
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let entity = results.first {
+                return CycleData(
+                    lastPeriodStartDate: entity.lastPeriodStartDate ?? Date(),
+                    averageCycleLength: Int(entity.averageCycleLength),
+                    periodLength: Int(entity.periodLength)
+                )
+            }
+        } catch {
+            print("❌ Error fetching cycle data from Core Data: \(error)")
         }
+
+        return nil
+    }
+
+    private static func saveToCoreData(_ data: CycleData, context: NSManagedObjectContext) {
+        // Fetch existing entity or create new one
+        let fetchRequest: NSFetchRequest<UserCycleData> = UserCycleData.fetchRequest()
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            let entity: UserCycleData
+
+            if let existingEntity = results.first {
+                entity = existingEntity
+            } else {
+                entity = UserCycleData(context: context)
+            }
+
+            // Update entity
+            entity.lastPeriodStartDate = data.lastPeriodStartDate
+            entity.averageCycleLength = Int16(data.averageCycleLength)
+            entity.periodLength = Int16(data.periodLength)
+
+            // Save context
+            try context.save()
+            print("✅ Saved cycle data to Core Data")
+        } catch {
+            print("❌ Error saving cycle data to Core Data: \(error)")
+        }
+    }
+
+    // MARK: - Legacy UserDefaults Migration
+
+    private static func loadFromUserDefaults() -> CycleData? {
+        let storageKey = "user_cycle_data"
+        if let data = UserDefaults.standard.data(forKey: storageKey),
+           let decoded = try? JSONDecoder().decode(CycleData.self, from: data) {
+            return decoded
+        }
+        return nil
     }
 }

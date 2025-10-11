@@ -45,4 +45,9 @@
         <attribute name="why" optional="YES" attributeType="String"/>
         <relationship name="routine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SavedRoutineEntity" inverseName="stepDetails" inverseEntity="SavedRoutineEntity"/>
     </entity>
+    <entity name="UserCycleData" representedClassName="UserCycleData" syncable="YES" codeGenerationType="class">
+        <attribute name="averageCycleLength" attributeType="Integer 16" defaultValueString="28" usesScalarValueType="YES"/>
+        <attribute name="lastPeriodStartDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="periodLength" attributeType="Integer 16" defaultValueString="5" usesScalarValueType="YES"/>
+    </entity>
 </model>
