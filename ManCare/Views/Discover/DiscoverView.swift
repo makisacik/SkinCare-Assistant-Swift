@@ -2,164 +2,191 @@
 //  DiscoverView.swift
 //  ManCare
 //
-//  Created by Mehmet Ali Kısacık on 2.09.2025.
+//  Transformed with dynamic content feed
 //
 
 import SwiftUI
 
+// MARK: - Navigation Destination
+
+struct AllRoutinesDestination: Hashable {}
+
 struct DiscoverView: View {
-    @StateObject private var listViewModel = RoutineListViewModel(routineService: ServiceFactory.shared.createRoutineService())
+    @StateObject private var viewModel: DiscoverViewModel
+    @StateObject private var listViewModel: RoutineListViewModel
     @State private var showingRoutineDetail: RoutineTemplate?
+    @State private var selectedPeriod: TrendingPeriod = .thisWeek
+    @State private var showConfetti = false
+    @State private var navigationPath = NavigationPath()
+
+    init() {
+        let contentService = DiscoverContentService()
+        let routineStore = RoutineStore()
+        let routineService = ServiceFactory.shared.createRoutineService()
+
+        _viewModel = StateObject(wrappedValue: DiscoverViewModel(
+            contentService: contentService,
+            routineStore: routineStore
+        ))
+        _listViewModel = StateObject(wrappedValue: RoutineListViewModel(
+            routineService: routineService
+        ))
+    }
 
     var body: some View {
-        ZStack {
-            // Background gradient
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    ThemeManager.shared.theme.palette.background,
-                    ThemeManager.shared.theme.palette.background,
-                    ThemeManager.shared.theme.palette.background,
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+        NavigationStack(path: $navigationPath) {
+            ZStack {
+                backgroundGradient
 
-            ScrollView {
-                LazyVStack(spacing: 24) {
-                    // Header Section
-                    headerSection
+                ScrollView {
+                    LazyVStack(spacing: 32) {
+                        // Header
+                        headerSection
 
-                    // Trending & Popular Routines
-                    featuredSection
+                        // Fresh Drops Section
+                        if !viewModel.freshRoutines.isEmpty {
+                            freshDropsSection
+                        }
 
-                    // All Routines Grid
-                    routinesGridSection
+                        // Community Heat Section
+                        if !viewModel.trendingRoutines.isEmpty {
+                            communityHeatSection
+                        }
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 100)
                 }
-                .padding(.bottom, 100) // Space for tab bar
+                .refreshable {
+                    await viewModel.refreshContent()
+                }
+
+                // Confetti overlay
+                if showConfetti {
+                    ConfettiEffect(trigger: showConfetti)
+                        .allowsHitTesting(false)
+                }
+
+                // Loading overlay
+                if viewModel.isLoading {
+                    LoadingView()
+                }
+            }
+            .navigationTitle("Discover")
+            .navigationBarTitleDisplayMode(.large)
+            .navigationDestination(for: AllRoutinesDestination.self) { _ in
+                AllRoutinesSheet(listViewModel: listViewModel) { routine in
+                    navigationPath.removeLast()
+                    showingRoutineDetail = routine
+                }
+            }
+            .task {
+                await viewModel.loadContent()
+            }
+            .sheet(item: $showingRoutineDetail) { routine in
+                RoutineDetailSheet(routine: routine, listViewModel: listViewModel)
+            }
+            .alert("Error", isPresented: .constant(viewModel.error != nil)) {
+                Button("Retry") {
+                    Task {
+                        await viewModel.retry()
+                    }
+                }
+                Button("Dismiss") {
+                    viewModel.clearError()
+                }
+            } message: {
+                if let error = viewModel.error {
+                    Text(error.localizedDescription)
+                }
             }
         }
-        .sheet(item: $showingRoutineDetail) { routine in
-            RoutineDetailSheet(routine: routine, listViewModel: listViewModel)
-        }
-        .onAppear {
-            listViewModel.loadRoutines()
-        }
-        .withRoutineLoading(listViewModel.isLoading)
-        .handleRoutineError(listViewModel.error)
+    }
+
+    // MARK: - Background
+
+    private var backgroundGradient: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                ThemeManager.shared.theme.palette.background,
+                ThemeManager.shared.theme.palette.background,
+                ThemeManager.shared.theme.palette.surface.opacity(0.3)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
     }
 
     // MARK: - Header Section
 
     private var headerSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Discover")
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                    Text("Expert-curated routines for every skin concern")
-                        .font(.system(size: 16))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                }
-
-                Spacer()
-
-                // Profile icon placeholder
-                Circle()
-                    .fill(ThemeManager.shared.theme.palette.primary.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                    .overlay(
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                    )
-            }
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Expert-curated routines and trending favorites")
+                .font(.system(size: 16))
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, 20)
-        .padding(.top, 20)
     }
 
+    // MARK: - Fresh Drops Section
 
-
-    // MARK: - Trending & Popular Section
-
-    private var featuredSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Trending & Popular")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                Spacer()
-
-                Button("See All") {
-                    // TODO: Navigate to all featured
-                }
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(ThemeManager.shared.theme.palette.primary)
+    private var freshDropsSection: some View {
+        FreshDropsSection(
+            freshRoutines: viewModel.freshRoutines,
+            getRoutineTemplate: { freshRoutine in
+                viewModel.getRoutineTemplate(for: freshRoutine)
+            },
+            onRoutineTap: { routine in
+                showingRoutineDetail = routine
+            },
+            onSaveTap: { routine in
+                handleSaveRoutine(routine)
+            },
+            onViewAll: {
+                navigationPath.append(AllRoutinesDestination())
             }
-            .padding(.horizontal, 20)
+        )
+    }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(RoutineTemplate.featuredRoutines, id: \.id) { routine in
-                        FeaturedRoutineCard(routine: routine) {
-                            showingRoutineDetail = routine
-                        }
-                    }
-                }
-                .padding(.horizontal, 20)
+    // MARK: - Community Heat Section
+
+    private var communityHeatSection: some View {
+        CommunityHeatSection(
+            trendingRoutines: filteredTrendingRoutines,
+            selectedPeriod: selectedPeriod,
+            onPeriodChange: { period in
+                selectedPeriod = period
+            },
+            onRoutineTap: { routine in
+                showingRoutineDetail = routine
             }
+        )
+    }
+
+    private var filteredTrendingRoutines: [(routine: RoutineTemplate, increase: Int)] {
+        // In a real implementation, filter by period
+        // For now, just return all trending routines
+        return viewModel.trendingRoutines
+    }
+
+    // MARK: - Helper Methods
+
+    private func handleSaveRoutine(_ routine: RoutineTemplate) {
+        listViewModel.saveRoutineTemplate(routine)
+
+        // Trigger haptic feedback
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.impactOccurred()
+
+        // Show confetti
+        showConfetti = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            showConfetti = false
         }
-    }
-
-    // MARK: - Routines Grid Section
-
-    private var routinesGridSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("All Routines")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                Spacer()
-
-                Text("\(filteredRoutines.count) routines")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-            }
-            .padding(.horizontal, 20)
-
-            LazyVGrid(columns: gridColumns, alignment: .center, spacing: 10) {
-                ForEach(filteredRoutines, id: \.id) { routine in
-                    RoutineGridCard(routine: routine) {
-                        showingRoutineDetail = routine
-                    }
-                }
-            }
-            .padding(.horizontal, 20)
-        }
-    }
-
-    // MARK: - Computed Properties
-
-    private var filteredRoutines: [RoutineTemplate] {
-        return RoutineTemplate.allRoutines
-    }
-
-    private var gridColumns: [GridItem] {
-        [
-            GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: 12, alignment: .top),
-            GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: 12, alignment: .top)
-        ]
     }
 }
 
-
-// MARK: - Preview
-
-#Preview("Discover View") {
+#Preview {
     DiscoverView()
 }

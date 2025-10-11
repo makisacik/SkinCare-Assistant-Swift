@@ -1,0 +1,67 @@
+{
+  "hero": {
+    "title": "Barrier Reset Week",
+    "subtitle": "Soothe redness + rebuild your moisture shield",
+    "ctaText": "Explore routines",
+    "themeColor": "#FFE6D1",
+    "startDate": "2025-10-06T00:00:00Z",
+    "endDate": "2025-10-13T23:59:59Z",
+    "ticker": {
+      "routines": 5,
+      "guides": 2
+    }
+  },
+  "routines": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "templateId": "550e8400-e29b-41d4-a716-446655440001",
+      "badge": "new",
+      "updatedAt": "2025-10-09T00:00:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "templateId": "550e8400-e29b-41d4-a716-446655440002",
+      "badge": "trending",
+      "updatedAt": "2025-10-08T00:00:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "templateId": "550e8400-e29b-41d4-a716-446655440003",
+      "badge": "updated",
+      "updatedAt": "2025-10-07T00:00:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440004",
+      "templateId": "550e8400-e29b-41d4-a716-446655440004",
+      "badge": "new",
+      "updatedAt": "2025-10-10T00:00:00Z"
+    }
+  ],
+  "seasonalPlaybook": {
+    "season": "autumn",
+    "articles": [
+      "Barrier First: why it matters",
+      "Humectants vs Emollients vs Occlusives",
+      "Wind-Proof Night Routine"
+    ],
+    "ctaText": "Build my seasonal plan"
+  },
+  "communityHeat": [
+    {
+      "templateId": "550e8400-e29b-41d4-a716-446655440005",
+      "saveIncrease": 42,
+      "period": "thisWeek"
+    },
+    {
+      "templateId": "550e8400-e29b-41d4-a716-446655440006",
+      "saveIncrease": 31,
+      "period": "thisWeek"
+    },
+    {
+      "templateId": "550e8400-e29b-41d4-a716-446655440007",
+      "saveIncrease": 24,
+      "period": "thisWeek"
+    }
+  ],
+  "lastUpdated": "2025-10-11T08:00:00Z"
+}

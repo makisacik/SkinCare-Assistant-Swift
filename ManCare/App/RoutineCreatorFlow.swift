@@ -211,7 +211,7 @@ struct RoutineCreatorFlow: View {
                 ))
 
             case .loading:
-                LoadingView(
+                RoutineLoadingView(
                     statuses: [
                         "Thinking...",
                         "Analyzing your skin type…",

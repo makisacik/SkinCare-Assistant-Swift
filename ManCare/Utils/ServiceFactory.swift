@@ -12,22 +12,22 @@ import Combine
 
 final class ServiceFactory {
     static let shared = ServiceFactory()
-    
+
     private init() {}
-    
+
     // MARK: - Core Services
-    
+
     func createRoutineService() -> RoutineServiceProtocol {
         return RoutineService(
             gptService: createGPTService(),
             store: createRoutineStore()
         )
     }
-    
+
     func createGPTService() -> GPTService {
         return GPTService.shared // Keep using singleton for now
     }
-    
+
     func createRoutineStore() -> RoutineStoreProtocol {
         return RoutineStore()
     }
@@ -58,34 +58,40 @@ final class ServiceFactory {
         )
     }
 
+    // MARK: - Discover Services
+
+    func createDiscoverContentService() -> DiscoverContentService {
+        return DiscoverContentService()
+    }
+
     // MARK: - ViewModels
-    
+
     @MainActor
     func createRoutineCompletionViewModel() -> RoutineCompletionViewModel {
         return RoutineCompletionViewModel(routineService: createRoutineService())
     }
-    
+
     @MainActor
     func createCompanionSessionViewModel() -> CompanionSessionViewModel {
         return CompanionSessionViewModel(routineService: createRoutineService())
     }
-    
+
     @MainActor
     func createRoutineListViewModel() -> RoutineListViewModel {
         return RoutineListViewModel(routineService: createRoutineService())
     }
-    
+
     @MainActor
     func createRoutineGenerationViewModel() -> RoutineGenerationViewModel {
         return RoutineGenerationViewModel(routineService: createRoutineService())
     }
-    
+
     // MARK: - Mock Services (for testing)
-    
+
     func createMockRoutineService() -> RoutineServiceProtocol {
         return MockRoutineService()
     }
-    
+
     @MainActor
     func createMockRoutineCompletionViewModel() -> RoutineCompletionViewModel {
         return RoutineCompletionViewModel(routineService: createMockRoutineService())
@@ -96,19 +102,19 @@ final class ServiceFactory {
 
 class MockRoutineService: RoutineServiceProtocol {
     func removeRoutineTemplate(_ template: RoutineTemplate) async throws {
-        
+
     }
-    
+
     var routinesStream: AnyPublisher<RoutineServiceState, Never> {
         Just(RoutineServiceState.initial)
             .eraseToAnyPublisher()
     }
-    
+
     var completionChangesStream: AnyPublisher<Date, Never> {
         Just(Date())
             .eraseToAnyPublisher()
     }
-    
+
     func generateRoutine(skinType: SkinType, concerns: Set<Concern>, mainGoal: MainGoal, fitzpatrickSkinTone: FitzpatrickSkinTone, ageRange: AgeRange, region: Region, routineDepth: RoutineDepth?, preferences: Preferences?, lifestyle: LifestyleAnswers?) async throws -> RoutineResponse {
         // Create a simple mock routine response
         let mockStep = APIRoutineStep(
@@ -118,31 +124,31 @@ class MockRoutineService: RoutineServiceProtocol {
             how: "Apply to wet face, massage gently, rinse",
             constraints: Constraints()
         )
-        
+
         let mockSummary = Summary(
             title: "Mock Routine",
             oneLiner: "A simple mock routine for testing"
         )
-        
+
         let mockRoutine = Routine(
             depth: .simple,
             morning: [mockStep],
             evening: [mockStep],
             weekly: nil
         )
-        
+
         let mockGuardrails = Guardrails(
             cautions: ["Test caution"],
             whenToStop: ["If irritation occurs"],
             sunNotes: "Always wear sunscreen"
         )
-        
+
         let mockAdaptation = Adaptation(
             forSkinType: "Mock skin type",
             forConcerns: ["Mock concern"],
             forPreferences: ["Mock preference"]
         )
-        
+
         let mockProductSlot = ProductSlot(
             slotID: "mock-slot-1",
             step: .cleanser,
@@ -150,7 +156,7 @@ class MockRoutineService: RoutineServiceProtocol {
             constraints: Constraints(),
             notes: "Mock product slot"
         )
-        
+
         return RoutineResponse(
             version: "1.0",
             locale: "en-US",
@@ -161,12 +167,12 @@ class MockRoutineService: RoutineServiceProtocol {
             productSlots: [mockProductSlot]
         )
     }
-    
+
     func saveRoutine(_ template: RoutineTemplate) async throws -> SavedRoutineModel {
         // Create a simple mock saved routine
         return SavedRoutineModel(from: template, isActive: false)
     }
-    
+
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel {
         // Convert RoutineResponse to RoutineTemplate first
         let template = RoutineTemplate(
@@ -184,10 +190,10 @@ class MockRoutineService: RoutineServiceProtocol {
             isPremium: false,
             imageName: "routine-minimalist"
         )
-        
+
         return try await saveRoutine(template)
     }
-    
+
     func removeRoutine(_ routine: SavedRoutineModel) async throws {}
     func setActiveRoutine(_ routine: SavedRoutineModel) async throws {}
     func isRoutineSaved(_ template: RoutineTemplate) async throws -> Bool { return false }

@@ -124,3 +124,12 @@ enum ViewState {
         return false
     }
 }
+
+// MARK: - Array Extensions
+
+extension Array {
+    /// Safe subscript access that returns nil if index is out of bounds
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}

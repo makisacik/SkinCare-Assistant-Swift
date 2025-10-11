@@ -617,6 +617,49 @@ actor RoutineStore: RoutineStoreProtocol {
             return rules
         }
     }
+
+    // MARK: - Save Tracking (for Discover Page)
+
+    /// Get the number of times a routine template has been saved
+    func getRoutineSaveCount(_ templateId: UUID) async throws -> Int {
+        return try await withCheckedThrowingContinuation { continuation in
+            backgroundContext.perform {
+                do {
+                    let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+                    request.predicate = NSPredicate(format: "templateId == %@", templateId as CVarArg)
+
+                    let count = try self.backgroundContext.count(for: request)
+                    continuation.resume(returning: count)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
+    /// Get the save trend (new saves in recent days)
+    func getRoutineSaveTrend(_ templateId: UUID, days: Int = 7) async throws -> Int {
+        return try await withCheckedThrowingContinuation { continuation in
+            backgroundContext.perform {
+                do {
+                    let calendar = Calendar.current
+                    let startDate = calendar.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+
+                    let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+                    request.predicate = NSPredicate(
+                        format: "templateId == %@ AND savedDate >= %@",
+                        templateId as CVarArg,
+                        startDate as NSDate
+                    )
+
+                    let count = try self.backgroundContext.count(for: request)
+                    continuation.resume(returning: count)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Supporting Types
