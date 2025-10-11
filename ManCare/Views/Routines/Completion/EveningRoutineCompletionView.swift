@@ -195,7 +195,10 @@ struct EveningRoutineCompletionView: View {
                     }            }        }        .allowsHitTesting(showingProductSelection != nil)
         )
         .sheet(item: $showingStepDetail) { stepDetail in
-            RoutineStepDetailView(stepDetail: stepDetail)
+            RoutineStepDetailView(
+                stepDetail: stepDetail,
+                adaptedStep: findAdaptedStep(for: stepDetail.id)
+            )
         }    .sheet(isPresented: $showingEditRoutine) {
             if let routine = originalRoutine {
                 EditRoutineView(

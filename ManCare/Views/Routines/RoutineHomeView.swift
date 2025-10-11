@@ -725,7 +725,7 @@ private struct CalendarDayView: View {
 
     @State private var hasCompletions: Bool = false
     @State private var completionRate: Double = 0.0
-    
+
     private var indicatorColor: Color {
         if completionRate >= 1.0 {
             // Fully completed
@@ -830,13 +830,13 @@ private struct RoutineCard: View {
     let onStepTap: (RoutineStepDetail) -> Void
 
     @State private var completedStepsForDate: Set<String> = []
-    
+
     private var steps: [RoutineStepDetail] {
         // Compute steps based on current routine and time of day
-        guard let activeRoutine = routineViewModel.activeRoutine else { 
+        guard let activeRoutine = routineViewModel.activeRoutine else {
             return []
         }
-        
+
         let routineSteps = activeRoutine.stepDetails.filter { step in
             step.timeOfDay == timeOfDay.rawValue
         }
@@ -854,12 +854,12 @@ private struct RoutineCard: View {
             )
         }
     }
-    
+
     private var productCount: Int {
         let count = steps.count
         return count
     }
-    
+
     private var completedCount: Int {
         steps.filter { step in
             completedStepsForDate.contains(step.id)
@@ -986,7 +986,7 @@ private struct RoutineCard: View {
             let calendar = Calendar.current
             let normalizedSelectedDate = calendar.startOfDay(for: selectedDate)
             let normalizedChangedDate = calendar.startOfDay(for: changedDate)
-            
+
             if calendar.isDate(normalizedChangedDate, inSameDayAs: normalizedSelectedDate) {
                 Task {
                     await loadCompletionsForDate()
@@ -999,7 +999,7 @@ private struct RoutineCard: View {
         // Normalize date to start of day for consistency
         let calendar = Calendar.current
         let normalizedDate = calendar.startOfDay(for: selectedDate)
-        
+
         let completedSteps = await completionViewModel.getCompletedSteps(for: normalizedDate)
         await MainActor.run {
             self.completedStepsForDate = completedSteps
@@ -1199,45 +1199,192 @@ struct RoutineStepDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
     let stepDetail: RoutineStepDetail
+    let adaptedStep: AdaptedStepDetail?
+
+    init(stepDetail: RoutineStepDetail, adaptedStep: AdaptedStepDetail? = nil) {
+        self.stepDetail = stepDetail
+        self.adaptedStep = adaptedStep
+    }
+
+    private var stepColor: Color {
+        switch stepDetail.stepType.color {
+        case "blue": return ThemeManager.shared.theme.palette.info
+        case "green": return ThemeManager.shared.theme.palette.success
+        case "yellow": return ThemeManager.shared.theme.palette.warning
+        case "orange": return ThemeManager.shared.theme.palette.warning
+        case "purple": return ThemeManager.shared.theme.palette.primary
+        case "red": return ThemeManager.shared.theme.palette.error
+        case "pink": return ThemeManager.shared.theme.palette.primary
+        case "teal": return ThemeManager.shared.theme.palette.info
+        case "indigo": return ThemeManager.shared.theme.palette.info
+        case "brown": return ThemeManager.shared.theme.palette.textMuted
+        case "gray": return ThemeManager.shared.theme.palette.textMuted
+        default: return ThemeManager.shared.theme.palette.primary
+        }
+    }
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 24) {
-                // Icon
-                ZStack {
-                    Circle()
-                        .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
-                        .frame(width: 80, height: 80)
-                    Image(stepDetail.iconName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 50, height: 50)
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Product Icon and Title Header - Compact Layout
+                    HStack(alignment: .top, spacing: 12) {
+                        Image(stepDetail.iconName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 56, height: 56)
+                            .clipped()
+                            .cornerRadius(10)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(stepDetail.title)
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                            Text(stepDetail.stepType.category.rawValue)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                        }
+
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 16)
+                    .padding(.bottom, 12)
+
+                    // Combined Why and How Section
+                    if (stepDetail.why != nil && !stepDetail.why!.isEmpty) ||
+                       (stepDetail.how != nil && !stepDetail.how!.isEmpty) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            if let why = stepDetail.why, !why.isEmpty {
+                                Text(why)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    .lineSpacing(3)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            if let how = stepDetail.how, !how.isEmpty,
+                               let why = stepDetail.why, !why.isEmpty {
+                                Divider()
+                                    .padding(.vertical, 4)
+                            }
+
+                            if let how = stepDetail.how, !how.isEmpty {
+                                Text(how)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    .lineSpacing(3)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                        .padding(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(ThemeManager.shared.theme.palette.surface)
+                        )
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 12)
+                    }
+
+                    // Cycle Adaptation Section
+                    if let adapted = adaptedStep, adapted.emphasisLevel != .normal {
+                        cycleAdaptationSection(adapted: adapted)
+                    }
+
+                    Spacer(minLength: 20)
                 }
-
-                // Title
-                Text(stepDetail.title)
-                    .font(ThemeManager.shared.theme.typo.h1)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    .multilineTextAlignment(.center)
-
-                // Description
-                Text(stepDetail.description)
-                    .font(ThemeManager.shared.theme.typo.body)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-
-                Spacer()
-            }    .padding(24)
+                .padding(.bottom, 20)
+            }
+            .background(ThemeManager.shared.theme.palette.background)
             .navigationTitle("Step Details")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
-                    }            .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                }    }    }                }    }
+                    }
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                }
+            }
+        }
+        .modifier(PresentationModifier())
+    }
+
+    // MARK: - Cycle Adaptation Section
+
+    private func cycleAdaptationSection(adapted: AdaptedStepDetail) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Section Header with Badge
+            HStack(spacing: 8) {
+                Image(systemName: "waveform.path.ecg")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(adapted.emphasisLevel.color)
+
+                Text("Cycle Adaptation")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                Spacer()
+
+                // Emphasis Badge - smaller
+                ZStack {
+                    Circle()
+                        .fill(adapted.emphasisLevel.color.opacity(0.15))
+                        .frame(width: 28, height: 28)
+
+                    Circle()
+                        .stroke(adapted.emphasisLevel.color.opacity(0.3), lineWidth: 1.2)
+                        .frame(width: 28, height: 28)
+
+                    Image(systemName: adapted.emphasisLevel.icon)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(adapted.emphasisLevel.color)
+                }
+            }
+
+            // Emphasis Label
+            HStack(spacing: 6) {
+                Text(adapted.emphasisLevel.displayName.uppercased())
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundColor(adapted.emphasisLevel.color)
+
+                Text("• Based on your cycle")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(adapted.emphasisLevel.color.opacity(0.1))
+            )
+
+            // Adaptation Guidance
+            if let guidance = adapted.adaptation?.guidance, !guidance.isEmpty {
+                Text(guidance)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(adapted.emphasisLevel.color)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(ThemeManager.shared.theme.palette.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(adapted.emphasisLevel.color.opacity(0.3), lineWidth: 1.2)
+                )
+        )
+        .padding(.horizontal, 20)
+        .padding(.bottom, 12)
+    }
+}
 // MARK: - Preview
 
 
