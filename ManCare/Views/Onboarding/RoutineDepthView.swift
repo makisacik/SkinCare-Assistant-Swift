@@ -37,20 +37,20 @@ enum RoutineDepth: String, CaseIterable, Identifiable, Codable {
         case .simple:
             return "Perfect for busy mornings."
         case .intermediate:
-            return "A balanced routine that covers all your skin needs without overwhelming you."
+            return "A balanced routine."
         case .advanced:
-            return "Complete skincare regimen with 7-9 steps for those who love detailed routines."
+            return "For those who love detailed routines."
         }
     }
     
     var stepCountDescription: String {
         switch self {
         case .simple:
-            return "3-4 steps per routine"
+            return "3-4 steps"
         case .intermediate:
-            return "5-6 steps per routine"
+            return "5-6 steps"
         case .advanced:
-            return "7-9 steps per routine"
+            return "7-9 steps"
         }
     }
     
@@ -105,46 +105,43 @@ struct RoutineDepthView: View {
     
     var body: some View {
         ZStack {
-            // Background
+            // Background that fills entire space
             ThemeManager.shared.theme.palette.accentBackground
                 .ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 20) {
                 // Title section
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 6) {
                     Text("Routine Level")
                         .font(ThemeManager.shared.theme.typo.h1)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                    
                     Text("How detailed would you like your skincare routine to be?")
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
                 }
                 
-                // Options
-                VStack(spacing: 10) {
-                    ForEach(RoutineDepth.allCases) { depth in
-                        RoutineDepthCard(
-                            depth: depth,
-                            isSelected: selectedDepth == depth
-                        ) {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                selectedDepth = depth
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Options
+                        VStack(spacing: 10) {
+                            ForEach(RoutineDepth.allCases) { depth in
+                                RoutineDepthCard(
+                                    depth: depth,
+                                    isSelected: selectedDepth == depth
+                                ) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedDepth = depth
+                                    }
+                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                }
                             }
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         }
                     }
                 }
                 
-                Spacer(minLength: 8)
-                
-                // Bottom actions aligned with CycleSetupView spacing
+                // Buttons
                 VStack(spacing: 12) {
-                    // Continue button (primary)
+                    // Continue Button
                     Button {
                         guard let depth = selectedDepth else { return }
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
@@ -155,19 +152,6 @@ struct RoutineDepthView: View {
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(selectedDepth == nil)
                     .opacity(selectedDepth == nil ? 0.7 : 1.0)
-
-                    // Helper text placeholder to match CycleSetup vertical offset
-                    Text("You can enable this later from your profile.")
-                        .font(.system(size: 12))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 4)
-                        .hidden()
-
-                    // Hidden ghost button placeholder to match spacing below primary
-                    Button("") {}
-                        .buttonStyle(GhostButtonStyle())
-                        .hidden()
                 }
             }
             .padding(20)

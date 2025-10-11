@@ -118,7 +118,9 @@ struct MainGoalView: View {
                     })
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        .tint(ThemeManager.shared.theme.palette.primary)
                         .textFieldStyle(PlainTextFieldStyle())
+                        .colorScheme(.light)
                         .submitLabel(.done)
                         .onChange(of: customGoal) { newValue in
                             if newValue.count > 60 {

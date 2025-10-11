@@ -19,6 +19,7 @@ struct ProfileRow: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 20, height: 20)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
             Text(title)
                 .font(ThemeManager.shared.theme.typo.body)

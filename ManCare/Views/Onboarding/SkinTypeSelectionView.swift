@@ -65,6 +65,7 @@ struct SkinTypeSelectionView: View {
                         Text("What's your skin type?")
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .padding(.top, 44) // Add top padding to align with pages that have back button
                         Text("Select your base type to build a simple routine.")
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)

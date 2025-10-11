@@ -116,7 +116,9 @@ struct ConcernSelectionView: View {
                     })
                     .font(ThemeManager.shared.theme.typo.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    .tint(ThemeManager.shared.theme.palette.primary)
                     .textFieldStyle(PlainTextFieldStyle())
+                    .colorScheme(.light)
                     .submitLabel(.done)
                     .onChange(of: customConcern) { newValue in
                         if newValue.count > 60 {
