@@ -235,7 +235,7 @@ struct GuideDetailView: View {
         switch content.type {
         case .intro:
             if let text = content.text {
-                Text(text)
+                Text(LocalizedStringKey(text))
                     .font(.title3)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -259,7 +259,7 @@ struct GuideDetailView: View {
             }
         case .paragraph:
             if let text = content.text {
-                Text(text)
+                Text(LocalizedStringKey(text))
                     .font(.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -310,7 +310,7 @@ struct GuideDetailView: View {
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(Color(hex: "#F59E0B"))
 
-                    Text(text)
+                    Text(LocalizedStringKey(text))
                         .font(.callout)
                         .foregroundColor(Color(hex: "#92400E"))
                         .fixedSize(horizontal: false, vertical: true)
