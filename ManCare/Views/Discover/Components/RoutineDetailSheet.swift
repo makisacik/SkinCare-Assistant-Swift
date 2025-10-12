@@ -37,7 +37,7 @@ struct RoutineDetailSheet: View {
 
         NavigationView {
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 0) {
 
                     HeroHeader(
                         title: routine.title,
@@ -73,13 +73,16 @@ struct RoutineDetailSheet: View {
 
                     }
                     .padding(.horizontal, 24)
+                    .padding(.vertical, 24)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
                             .fill(palette.background)
                     )
                     .padding(.horizontal, 16)
+                    .padding(.bottom, 24)
                 }
             }
+            .ignoresSafeArea(edges: .top)
             .background(palette.background)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -97,10 +100,11 @@ struct RoutineDetailSheet: View {
                     Button(action: { dismiss() }) {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(palette.primary)
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         if isSaved {
@@ -114,7 +118,8 @@ struct RoutineDetailSheet: View {
                     }) {
                         Image(systemName: isSaved ? "heart.fill" : "heart")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(isSaved ? .red : palette.textPrimary)
+                            .foregroundColor(isSaved ? .red : .white)
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                     }
                 }
             }
@@ -130,36 +135,43 @@ private struct HeroHeader: View {
     let imageName: String
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
+            // Background image
             Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(height: 250)
+                .frame(width: UIScreen.main.bounds.width, height: 340)
                 .clipped()
 
+            // Gradient overlay
             LinearGradient(
-                gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
+                gradient: Gradient(colors: [
+                    Color.black.opacity(0.0),
+                    Color.black.opacity(0.4),
+                    Color.black.opacity(0.8)
+                ]),
                 startPoint: .top,
                 endPoint: .bottom
             )
+            .frame(height: 340)
 
-            VStack {
-                Spacer()
-                HStack {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(title)
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(.white)
+            // Content
+            VStack(alignment: .leading, spacing: 8) {
+                Text(title)
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
 
-                        Text(subtitle)
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.white.opacity(0.9))
-                    }
-                    Spacer()
-                }
-                .padding(24)
+                Text(subtitle)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white.opacity(0.9))
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(24)
+            .padding(.top, 60) // Extra padding for safe area
         }
+        .frame(width: UIScreen.main.bounds.width, height: 340)
+        .clipped()
     }
 }
 

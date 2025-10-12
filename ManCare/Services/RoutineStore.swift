@@ -444,6 +444,7 @@ actor RoutineStore: RoutineStoreProtocol {
         entity.isActive = routine.isActive
         entity.adaptationEnabled = routine.adaptationEnabled
         entity.adaptationType = routine.adaptationType?.rawValue
+        entity.imageName = routine.imageName
 
         // Delete existing step details
         if let existingSteps = entity.stepDetails as? Set<SavedStepDetailEntity> {

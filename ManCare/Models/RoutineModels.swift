@@ -109,6 +109,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
     let stepDetails: [SavedStepDetailModel]
     let adaptationEnabled: Bool
     let adaptationType: AdaptationType?
+    let imageName: String
 
     init(from template: RoutineTemplate, isActive: Bool = false, adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil) {
         self.id = UUID()
@@ -129,6 +130,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.isActive = isActive
         self.adaptationEnabled = adaptationEnabled
         self.adaptationType = adaptationType
+        self.imageName = template.imageName
         // Create step details from template steps using ProductTypeDatabase
         var allStepDetails: [SavedStepDetailModel] = []
 
@@ -163,7 +165,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.stepDetails = allStepDetails
     }
 
-    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil) {
+    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, imageName: String = "routine-minimalist") {
         self.id = UUID()
         self.templateId = templateId
         self.title = title
@@ -183,6 +185,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.stepDetails = stepDetails
         self.adaptationEnabled = adaptationEnabled
         self.adaptationType = adaptationType
+        self.imageName = imageName
     }
 
     init(from entity: SavedRoutineEntity) {
@@ -212,5 +215,6 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         // Adaptation fields (default to false for backward compatibility)
         self.adaptationEnabled = entity.adaptationEnabled
         self.adaptationType = entity.adaptationType.flatMap { AdaptationType(rawValue: $0) }
+        self.imageName = entity.imageName ?? "routine-minimalist"
     }
 }
