@@ -44,6 +44,7 @@ struct GuideContent: Identifiable {
         case paragraph
         case list
         case image
+        case tip
         case disclaimer
     }
     
@@ -109,7 +110,7 @@ struct GuideDetailView: View {
                 .animation(.easeInOut(duration: 0.25), value: showCompactBar)
         }
         .ignoresSafeArea(edges: .top)
-        .background(ThemeManager.shared.theme.palette.background)
+        .background(Color(red: 0.98, green: 0.96, blue: 0.94))
         .toolbar(.hidden, for: .navigationBar)
     }
 
@@ -193,7 +194,7 @@ struct GuideDetailView: View {
         .background(
             // Rounded top for the content area that sits under the image
             RoundedCorner(radius: 24, corners: [.topLeft, .topRight])
-                .fill(ThemeManager.shared.theme.palette.background)
+                .fill(Color(red: 0.98, green: 0.96, blue: 0.94))
                 .offset(y: -24)
         )
         .padding(.top, -24) // pull content up to overlap header bottom
@@ -273,7 +274,7 @@ struct GuideDetailView: View {
                             Text("•")
                                 .font(.body)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            Text(item)
+                            Text(LocalizedStringKey(item))
                                 .font(.body)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .lineSpacing(4)
@@ -300,6 +301,26 @@ struct GuideDetailView: View {
                     }
                 }
                 .padding(.vertical, 16)
+            }
+        case .tip:
+            if let text = content.text {
+                HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: "lightbulb.fill")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(Color(hex: "#F59E0B"))
+
+                    Text(text)
+                        .font(.callout)
+                        .foregroundColor(Color(hex: "#92400E"))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineSpacing(3)
+                }
+                .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(hex: "#FEF3C7"))
+                )
+                .padding(.vertical, 12)
             }
         case .disclaimer:
             if let text = content.text {
