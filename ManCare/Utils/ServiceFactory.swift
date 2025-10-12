@@ -176,6 +176,7 @@ class MockRoutineService: RoutineServiceProtocol {
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel {
         // Convert RoutineResponse to RoutineTemplate first
         let template = RoutineTemplate(
+            id: UUID(),
             title: routineResponse.summary.title,
             description: routineResponse.summary.oneLiner,
             category: .all,

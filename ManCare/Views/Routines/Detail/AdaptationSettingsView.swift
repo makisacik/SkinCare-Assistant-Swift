@@ -180,6 +180,7 @@ struct AdaptationSettingsView: View {
 #Preview {
     let mockRoutine = SavedRoutineModel(
         from: RoutineTemplate(
+            id: UUID(),
             title: "Morning Glow",
             description: "Start your day fresh",
             category: .all,

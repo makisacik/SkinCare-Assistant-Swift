@@ -176,6 +176,7 @@ struct PhaseBriefingCard: View {
 
     let routine = SavedRoutineModel(
         from: RoutineTemplate(
+            id: UUID(),
             title: "Test",
             description: "Test",
             category: .all,

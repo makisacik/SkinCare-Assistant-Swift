@@ -103,11 +103,8 @@ final class DiscoverViewModel: ObservableObject {
     }
     
     func getRoutineTemplate(byId id: UUID) -> RoutineTemplate? {
-        // Since RoutineTemplate generates new UUIDs each time,
-        // we'll use a simple index-based approach for now
-        // In production, you'd want stable IDs or title-based matching
-        let index = abs(id.hashValue) % RoutineTemplate.allRoutines.count
-        return RoutineTemplate.allRoutines[safe: index] ?? RoutineTemplate.allRoutines.first
+        // Use stable IDs to match routines
+        return RoutineTemplate.allRoutines.first { $0.id == id }
     }
     
     func getBadgeColor(_ badge: RoutineBadge) -> Color {

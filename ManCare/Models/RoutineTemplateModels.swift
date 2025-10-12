@@ -81,7 +81,7 @@ enum RoutineCategory: String, CaseIterable, Codable {
 // MARK: - Routine Template
 
 struct RoutineTemplate: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     let title: String
     let description: String
     let category: RoutineCategory
@@ -127,8 +127,22 @@ struct RoutineTemplate: Identifiable, Codable {
 // MARK: - Sample Data
 
 extension RoutineTemplate {
+    // Stable UUIDs for specific routines
+    static let koreanGlassSkinId = UUID(uuidString: "A1111111-1111-1111-1111-111111111111")!
+    static let acneClearId = UUID(uuidString: "A2222222-2222-2222-2222-222222222222")!
+    static let antiAgingId = UUID(uuidString: "A3333333-3333-3333-3333-333333333333")!
+    static let minimalistId = UUID(uuidString: "A4444444-4444-4444-4444-444444444444")!
+    static let sensitiveId = UUID(uuidString: "A5555555-5555-5555-5555-555555555555")!
+    static let oilyId = UUID(uuidString: "A6666666-6666-6666-6666-666666666666")!
+    static let dryId = UUID(uuidString: "A7777777-7777-7777-7777-777777777777")!
+    static let combinationId = UUID(uuidString: "A8888888-8888-8888-8888-888888888888")!
+    static let advancedKoreanId = UUID(uuidString: "A9999999-9999-9999-9999-999999999999")!
+    static let teenAcneId = UUID(uuidString: "AA111111-1111-1111-1111-111111111111")!
+    static let matureSkinId = UUID(uuidString: "AB111111-1111-1111-1111-111111111111")!
+
     static let featuredRoutines: [RoutineTemplate] = [
         RoutineTemplate(
+            id: koreanGlassSkinId,
             title: "Korean Glass Skin",
             description: "Achieve that coveted dewy, glass-like complexion with this comprehensive Korean skincare routine.",
             category: .korean,
@@ -163,6 +177,7 @@ extension RoutineTemplate {
             imageName: "routine-korean"
         ),
         RoutineTemplate(
+            id: acneClearId,
             title: "Acne Clear Routine",
             description: "Combat breakouts and prevent future acne with this targeted routine for clear, healthy skin.",
             category: .acne,
@@ -195,6 +210,7 @@ extension RoutineTemplate {
             imageName: "routine-acne"
         ),
         RoutineTemplate(
+            id: antiAgingId,
             title: "Anti-Aging Essentials",
             description: "Combat signs of aging with this powerful routine featuring proven anti-aging ingredients.",
             category: .antiAging,
@@ -231,6 +247,7 @@ extension RoutineTemplate {
     static let allRoutines: [RoutineTemplate] = featuredRoutines + [
         // Additional routines
         RoutineTemplate(
+            id: minimalistId,
             title: "Minimalist Daily",
             description: "Keep it simple with just the essentials for busy mornings and evenings.",
             category: .minimalist,
@@ -258,6 +275,7 @@ extension RoutineTemplate {
             imageName: "routine-minimalist"
         ),
         RoutineTemplate(
+            id: sensitiveId,
             title: "Sensitive Skin Soother",
             description: "Gentle, calming routine designed for sensitive and reactive skin types.",
             category: .sensitive,
@@ -289,6 +307,7 @@ extension RoutineTemplate {
             imageName: "routine-sensitive"
         ),
         RoutineTemplate(
+            id: oilyId,
             title: "Oily Skin Control",
             description: "Manage excess oil and shine while maintaining healthy, balanced skin.",
             category: .oily,
@@ -321,6 +340,7 @@ extension RoutineTemplate {
             imageName: "routine-oily"
         ),
         RoutineTemplate(
+            id: dryId,
             title: "Dry Skin Hydration",
             description: "Intensive hydration routine to quench thirsty, dry skin and restore moisture barrier.",
             category: .dry,
@@ -355,6 +375,7 @@ extension RoutineTemplate {
             imageName: "routine-dry"
         ),
         RoutineTemplate(
+            id: combinationId,
             title: "Combination Skin Balance",
             description: "Address different needs across your face - oily T-zone and dry cheeks.",
             category: .combination,
@@ -387,6 +408,7 @@ extension RoutineTemplate {
             imageName: "routine-combination"
         ),
         RoutineTemplate(
+            id: advancedKoreanId,
             title: "Advanced Korean 12-Step",
             description: "The complete Korean skincare ritual for ultimate skin transformation.",
             category: .korean,
@@ -429,6 +451,7 @@ extension RoutineTemplate {
             imageName: "routine-korean"
         ),
         RoutineTemplate(
+            id: teenAcneId,
             title: "Teen Acne Fighter",
             description: "Gentle yet effective routine designed specifically for teenage skin and hormonal acne.",
             category: .acne,
@@ -459,6 +482,7 @@ extension RoutineTemplate {
             imageName: "routine-acne"
         ),
         RoutineTemplate(
+            id: matureSkinId,
             title: "Mature Skin Revival",
             description: "Comprehensive routine targeting multiple signs of aging for mature skin.",
             category: .antiAging,

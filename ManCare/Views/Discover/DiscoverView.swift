@@ -16,7 +16,6 @@ struct DiscoverView: View {
     @StateObject private var listViewModel: RoutineListViewModel
     @State private var showingRoutineDetail: RoutineTemplate?
     @State private var showingGuideDetail: Guide?
-    @State private var selectedPeriod: TrendingPeriod = .thisWeek
     @State private var showConfetti = false
     @State private var navigationPath = NavigationPath()
 
@@ -41,9 +40,6 @@ struct DiscoverView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 32) {
-                        // Header
-                        headerSection
-
                         // Fresh Drops Section
                         if !viewModel.freshRoutines.isEmpty {
                             freshDropsSection
@@ -54,10 +50,6 @@ struct DiscoverView: View {
                             miniGuidesSection
                         }
 
-                        // Community Heat Section
-                        if !viewModel.trendingRoutines.isEmpty {
-                            communityHeatSection
-                        }
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 100)
@@ -77,8 +69,6 @@ struct DiscoverView: View {
                     LoadingView()
                 }
             }
-            .navigationTitle("Discover")
-            .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: AllRoutinesDestination.self) { _ in
                 AllRoutinesSheet(listViewModel: listViewModel) { routine in
                     navigationPath.removeLast()
@@ -118,7 +108,7 @@ struct DiscoverView: View {
             gradient: Gradient(colors: [
                 ThemeManager.shared.theme.palette.background,
                 ThemeManager.shared.theme.palette.background,
-                ThemeManager.shared.theme.palette.surface.opacity(0.3)
+                ThemeManager.shared.theme.palette.surface.opacity(0.8)
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -158,21 +148,6 @@ struct DiscoverView: View {
         )
     }
 
-    // MARK: - Community Heat Section
-
-    private var communityHeatSection: some View {
-        CommunityHeatSection(
-            trendingRoutines: filteredTrendingRoutines,
-            selectedPeriod: selectedPeriod,
-            onPeriodChange: { period in
-                selectedPeriod = period
-            },
-            onRoutineTap: { routine in
-                showingRoutineDetail = routine
-            }
-        )
-    }
-
     // MARK: - Mini Guides Section
 
     private var miniGuidesSection: some View {
@@ -183,12 +158,6 @@ struct DiscoverView: View {
                 showingGuideDetail = guideContentService.getGuide(for: miniGuide)
             }
         )
-    }
-
-    private var filteredTrendingRoutines: [(routine: RoutineTemplate, increase: Int)] {
-        // In a real implementation, filter by period
-        // For now, just return all trending routines
-        return viewModel.trendingRoutines
     }
 
     // MARK: - Helper Methods

@@ -378,6 +378,7 @@ struct WhyThisAdaptationModal: View {
 
     let routine = SavedRoutineModel(
         from: RoutineTemplate(
+            id: UUID(),
             title: "Test",
             description: "Test",
             category: .all,
