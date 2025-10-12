@@ -123,22 +123,22 @@ struct GuideDetailView: View {
 
         return ZStack(alignment: .bottomLeading) {
             // Parallax image
-            Image(guide.imageName)
-                .resizable()
-                .scaledToFill()
-                .frame(height: height)
-                .frame(maxWidth: .infinity)
-                .clipped()
-                .overlay(
-                    LinearGradient(
-                        colors: [Color.black.opacity(0.0), Color.black.opacity(0.35)],
-                        startPoint: .center, endPoint: .bottom
+            GeometryReader { geometry in
+                Image(guide.imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geometry.size.width, height: height)
+                    .clipped()
+                    .overlay(
+                        LinearGradient(
+                            colors: [Color.black.opacity(0.0), Color.black.opacity(0.35)],
+                            startPoint: .center, endPoint: .bottom
+                        )
                     )
-                )
-                .offset(y: parallaxOffset(for: scrollY))
-                .scaleEffect(headerScale(for: scrollY))
-                .animation(.smooth(duration: 0.25), value: scrollY)
-
+                    .offset(y: parallaxOffset(for: scrollY))
+                    .scaleEffect(headerScale(for: scrollY))
+                    .animation(.smooth(duration: 0.25), value: scrollY)
+            }
         }
         .frame(height: headerMaxHeight) // layout baseline; actual image height animates
         .background(Color.clear)
@@ -288,10 +288,11 @@ struct GuideDetailView: View {
                 VStack(alignment: .center, spacing: 8) {
                     Image(imageName)
                         .resizable()
-                        .scaledToFit()
-                        .cornerRadius(12)
+                        .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)
-                        .frame(maxHeight: 300)
+                        .frame(height: 240)
+                        .cornerRadius(12)
+                        .clipped()
                     
                     if let caption = content.caption {
                         Text(caption)

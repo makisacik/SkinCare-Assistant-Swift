@@ -12,6 +12,7 @@ class GuideContentService {
     /// Convert a MiniGuide to a full Guide with content
     func getGuide(for miniGuide: MiniGuide) -> Guide {
         let content = getContent(for: miniGuide)
+        let headerImage = getHeaderImage(for: miniGuide)
         
         return Guide(
             id: miniGuide.id.uuidString,
@@ -19,11 +20,28 @@ class GuideContentService {
             subtitle: miniGuide.subtitle,
             readMinutes: miniGuide.minutes,
             updatedAt: Date(),
-            imageName: miniGuide.imageName,
+            imageName: headerImage,
             content: content
         )
     }
     
+    private func getHeaderImage(for miniGuide: MiniGuide) -> String {
+        switch miniGuide.title {
+        case "How your cycle affects skin":
+            return "guide-cycle-1"
+        case "AM vs PM Routine":
+            return "guide-ampm-1"
+        case "Acids, Explained":
+            return "guide-acids-1"
+        case "Retinoids":
+            return "guide-retinol-1"
+        case "Skinimalism & Minimal Routines":
+            return "guide-minimalist-1"
+        default:
+            return miniGuide.imageName
+        }
+    }
+
     private func getContent(for miniGuide: MiniGuide) -> [GuideContent] {
         switch miniGuide.title {
         case "How your cycle affects skin":
@@ -46,7 +64,7 @@ class GuideContentService {
             GuideContent(type: .intro, text: "Hormonal shifts across your menstrual cycle influence hydration, oiliness, sensitivity, and glow. Knowing what to expect helps you tailor your routine each phase."),
 
             GuideContent(type: .h2, text: "Cycle Phases & Skin at a Glance"),
-            GuideContent(type: .image, imageName: "placeholder", caption: "Hormonal changes and skin responses through the cycle"),
+            GuideContent(type: .image, imageName: "content-cycle-1", caption: "Hormonal changes and skin responses through the cycle"),
             GuideContent(type: .list, items: [
                 "Menstruation (Days 1–5): Skin feels dry, tight, fragile",
                 "Follicular (Days 6–13): Skin calms and becomes more resilient",
@@ -55,7 +73,7 @@ class GuideContentService {
             ]),
 
             GuideContent(type: .h3, text: "Menstruation – Repair & Hydrate"),
-            GuideContent(type: .image, imageName: "placeholder", caption: "Soothing care for your barrier during your period"),
+            GuideContent(type: .image, imageName: "content-cycle-2", caption: "Soothing care for your barrier during your period"),
             GuideContent(type: .paragraph, text: "With estrogen and progesterone low, skin is more vulnerable. Use mild, hydrating cleansers and barrier-repair moisturizers."),
             GuideContent(type: .paragraph, text: "Skip actives like retinoids or strong acids — your skin needs calm, not stress."),
             GuideContent(type: .tip, text: "Tip: Use a calming mask or compress to reduce inflammation."),
@@ -71,7 +89,7 @@ class GuideContentService {
             GuideContent(type: .h3, text: "Ovulation – Glow & Maintain"),
             GuideContent(type: .paragraph, text: "At peak hormone levels, skin often looks radiant. But excess oil in the T-zone may appear."),
             GuideContent(type: .paragraph, text: "Switch to lighter moisturizers, double-cleanse if wearing makeup, and use a clay mask if needed."),
-            GuideContent(type: .tip, text: "Pro Tip: It’s a great time for photos or events — your skin tends to look its best."),
+            GuideContent(type: .tip, text: "Pro Tip: It's a great time for photos or events — your skin tends to look its best."),
 
             GuideContent(type: .h3, text: "Luteal – Soothe & Prevent"),
             GuideContent(type: .paragraph, text: "Rising progesterone increases oil and inflammation, which can trigger breakouts."),
@@ -86,9 +104,9 @@ class GuideContentService {
     
     private var ampmRoutineContent: [GuideContent] {
         [
-            GuideContent(type: .intro, text: "Your skin isn’t the same all day — it behaves differently in daylight and darkness. By understanding those shifts, you can match your routine to support what your skin is trying to do."),
+            GuideContent(type: .intro, text: "Your skin isn't the same all day — it behaves differently in daylight and darkness. By understanding those shifts, you can match your routine to support what your skin is trying to do."),
 
-            GuideContent(type: .image, imageName: "placeholder", caption: "Skin functions across day & night"),
+            GuideContent(type: .image, imageName: "content-ampm-1", caption: "Skin functions across day & night"),
 
             // — Morning Logic —
             GuideContent(type: .h2, text: "Morning: Defense & Stabilization"),
@@ -141,9 +159,9 @@ class GuideContentService {
     
     private var acidsExplainedContent: [GuideContent] {
         [
-            GuideContent(type: .intro, text: "Chemical exfoliants — or “acids” in skincare — gently dissolve the bonds between dead skin cells. Used well, they can help refine texture, brighten, and unclog pores. But to use them effectively, it helps to understand how they work and when to use each kind."),
+            GuideContent(type: .intro, text: "Chemical exfoliants — or \"acids\" in skincare — gently dissolve the bonds between dead skin cells. Used well, they can help refine texture, brighten, and unclog pores. But to use them effectively, it helps to understand how they work and when to use each kind."),
 
-            GuideContent(type: .image, imageName: "placeholder", caption: "Overview: how different acids work (AHA, BHA, PHA)"),
+            GuideContent(type: .image, imageName: "content-acids-1", caption: "Overview: how different acids work (AHA, BHA, PHA)"),
 
             GuideContent(type: .h2, text: "What Happens When You Use an Exfoliating Acid?"),
             GuideContent(type: .paragraph, text: "Your skin naturally sheds dead cells over time — but sometimes that process slows, leading to dullness, roughness, and clogged pores. Acids act like gentle unlockers, breaking down the glue (desmosomes) between those cells so they can slough off more smoothly. When used properly, this supports renewal without harsh scrubbing."),
@@ -192,7 +210,7 @@ class GuideContentService {
             GuideContent(type: .paragraph, text: "Here are a few example patterns to help you slot in acids without disrupting your core care:"),
             GuideContent(type: .paragraph, text: "• **Night Routine (3×/week)**: Cleanse → apply acid → wait a few minutes → hydrating serum → moisturizer\n\n• **Alternate Nights**: Use BHA one night, AHA another, and keep some nights for barrier recovery (no actives)\n\n• **Separation**: If you use an acid and a retinoid, consider using them on different nights until your skin adjusts."),
 
-            GuideContent(type: .image, imageName: "placeholder", caption: "Example skin-friendly layering: acid → hydrating → barrier support"),
+            GuideContent(type: .image, imageName: "content-acids-2", caption: "Example skin-friendly layering: acid → hydrating → barrier support"),
 
             GuideContent(type: .paragraph, text: "Over time, your skin may tolerate stronger formulas or more frequent use — but always move slowly. Let the skin adapt. Exfoliation is a tool, not a race.")
         ]
@@ -203,7 +221,7 @@ class GuideContentService {
         [
             GuideContent(type: .intro, text: "Retinoids — derivatives of vitamin A — are among the most studied and effective tools for smoothing texture, fading discoloration, and managing breakouts. But the benefits come with nuance: you need to introduce them thoughtfully and let them work over time."),
 
-            GuideContent(type: .image, imageName: "placeholder", caption: "How retinoids work at a cellular level"),
+            GuideContent(type: .image, imageName: "content-retinol-1", caption: "How retinoids work at a cellular level"),
 
             GuideContent(type: .h2, text: "What Retinoids Do & Why They’re Powerful"),
             GuideContent(type: .paragraph, text: "Retinoids improve skin by accelerating cellular turnover (encouraging older cells to shed), stimulating collagen production, and helping regulate pigmentation. Over weeks and months, this can translate to smoother skin, fewer clogged pores, and a more even tone."),
@@ -218,7 +236,7 @@ class GuideContentService {
             GuideContent(type: .h3, text: "Prescription Retinoids (e.g. Tretinoin)"),
             GuideContent(type: .paragraph, text: "These are already in the active form (retinoic acid), so they are the strongest. They often deliver faster results, but also higher risk of irritation, especially in early phases."),
 
-            GuideContent(type: .image, imageName: "placeholder", caption: "Comparative strength: retinol vs retinal vs tretinoin"),
+            GuideContent(type: .image, imageName: "content-retinol-2", caption: "Comparative strength: retinol vs retinal vs tretinoin"),
 
             GuideContent(type: .h2, text: "How to Start & Build Tolerance"),
             GuideContent(type: .paragraph, text: "Because retinoids can cause dryness, flaking, or sensitivity initially, the key is to start slow and build over time."),
@@ -255,7 +273,7 @@ class GuideContentService {
         [
             GuideContent(type: .intro, text: "Skinimalism encourages a shift from product overload to deliberate simplicity — using fewer, smarter choices to support your skin's natural rhythm."),
 
-            GuideContent(type: .image, imageName: "placeholder", caption: "Skinimalism: fewer products, more skin health"),
+            GuideContent(type: .image, imageName: "content-minimalist-1", caption: "Skinimalism: fewer products, more skin health"),
 
             GuideContent(type: .h2, text: "Why Minimal Works Better Sometimes"),
             GuideContent(type: .paragraph, text: "Your skin is already doing a lot: protecting, repairing, renewing. Too many actives or layers can stress its barrier, confuse signals, or cause ingredient conflicts. Minimal routines reduce these stress hits."),
