@@ -18,6 +18,7 @@ struct DiscoverView: View {
     @State private var showingGuideDetail: Guide?
     @State private var showConfetti = false
     @State private var navigationPath = NavigationPath()
+    @State private var showingPersonalizedRoutinePreferences = false
 
     init() {
         let contentService = DiscoverContentService()
@@ -44,6 +45,9 @@ struct DiscoverView: View {
                         if !viewModel.freshRoutines.isEmpty {
                             freshDropsSection
                         }
+
+                        // Personalized Routine Card
+                        personalizedRoutineCard
 
                         // Mini Guides Section
                         if !viewModel.miniGuides.isEmpty {
@@ -83,6 +87,12 @@ struct DiscoverView: View {
             }
             .sheet(item: $showingGuideDetail) { guide in
                 GuideDetailView(guide: guide)
+            }
+            .sheet(isPresented: $showingPersonalizedRoutinePreferences) {
+                PersonalizedRoutinePreferencesView { request in
+                    // TODO: Implement personalized routine generation
+                    print("Personalized routine request: \(request)")
+                }
             }
             .alert("Error", isPresented: .constant(viewModel.error != nil)) {
                 Button("Retry") {
@@ -124,6 +134,17 @@ struct DiscoverView: View {
                 .font(.system(size: 16))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal, 20)
+    }
+
+    // MARK: - Personalized Routine Card
+
+    private var personalizedRoutineCard: some View {
+        HStack {
+            PersonalizedRoutineCard {
+                showingPersonalizedRoutinePreferences = true
+            }
         }
         .padding(.horizontal, 20)
     }
