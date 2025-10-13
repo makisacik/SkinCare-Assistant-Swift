@@ -89,10 +89,15 @@ struct DiscoverView: View {
                 GuideDetailView(guide: guide)
             }
             .sheet(isPresented: $showingPersonalizedRoutinePreferences) {
-                PersonalizedRoutinePreferencesView { request in
-                    // TODO: Implement personalized routine generation
-                    print("Personalized routine request: \(request)")
-                }
+                PersonalizedRoutineFlowWrapper(
+                    onComplete: { routine, name in
+                        // Save the routine and show success
+                        handlePersonalizedRoutineComplete(routine: routine, name: name)
+                    }
+                )
+            }
+            .onAppear {
+                // Any setup needed
             }
             .alert("Error", isPresented: .constant(viewModel.error != nil)) {
                 Button("Retry") {
@@ -194,6 +199,42 @@ struct DiscoverView: View {
         showConfetti = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             showConfetti = false
+        }
+    }
+
+    // MARK: - Personalized Routine Completion Handler
+
+    private func handlePersonalizedRoutineComplete(routine: RoutineResponse, name: String) {
+        // Save the routine to the routine store
+        Task {
+            // Convert RoutineResponse to a saveable format
+            let routineTemplate = RoutineTemplate(
+                id: UUID(),
+                title: name,
+                description: "Your personalized skincare routine",
+                category: .combination, // Use existing category since .personalized doesn't exist
+                stepCount: routine.routine.morning.count + routine.routine.evening.count,
+                duration: "5-10 minutes",
+                difficulty: .beginner,
+                tags: ["personalized", "custom"],
+                morningSteps: routine.routine.morning.map { $0.name },
+                eveningSteps: routine.routine.evening.map { $0.name },
+                benefits: ["Personalized for your skin", "Custom routine"],
+                isFeatured: false,
+                isPremium: false,
+                imageName: "routine_placeholder"
+            )
+
+            // Save to routine store
+            listViewModel.saveRoutineTemplate(routineTemplate)
+
+            // Show success feedback
+            await MainActor.run {
+                showConfetti = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    showConfetti = false
+                }
+            }
         }
     }
 }

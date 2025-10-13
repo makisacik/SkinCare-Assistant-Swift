@@ -19,6 +19,7 @@ public struct ManCareRoutineRequest: Codable {
     public let selectedPreferences: PreferencesPayload?
     public let lifestyle: LifestylePayload?
     public let locale: String                          // e.g. "en-US"
+    public let customDetails: String?                  // Custom text/details from user
 
     public init(selectedSkinType: String,
                 selectedConcerns: [String],
@@ -29,7 +30,8 @@ public struct ManCareRoutineRequest: Codable {
                 routineDepth: String? = nil,
                 selectedPreferences: PreferencesPayload?,
                 lifestyle: LifestylePayload?,
-                locale: String = "en-US") {
+                locale: String = "en-US",
+                customDetails: String? = nil) {
         self.selectedSkinType = selectedSkinType
         self.selectedConcerns = selectedConcerns
         self.selectedMainGoal = selectedMainGoal
@@ -40,6 +42,7 @@ public struct ManCareRoutineRequest: Codable {
         self.selectedPreferences = selectedPreferences
         self.lifestyle = lifestyle
         self.locale = locale
+        self.customDetails = customDetails
     }
 }
 
@@ -432,6 +435,11 @@ public final class GPTService {
             if !kv.isEmpty {
                 parts.append("Lifestyle:\(kv.joined(separator: ","))")
             }
+        }
+
+        // Add custom details if provided
+        if let customDetails = req.customDetails, !customDetails.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            parts.append("CustomDetails:\(customDetails.trimmingCharacters(in: .whitespacesAndNewlines))")
         }
 
         parts.append("Locale:\(req.locale)")
