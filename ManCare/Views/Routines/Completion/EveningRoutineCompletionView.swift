@@ -31,6 +31,15 @@ struct EveningRoutineCompletionView: View {
     @State private var showingStepDetail: RoutineStepDetail?
     @State private var showingProductSelection: RoutineStepDetail?
     @State private var showingEditRoutine = false
+    @State private var showingCompanionMode = false
+    @State private var companionLaunch: CompanionLaunch?
+
+    // Payload for Companion presentation
+    private struct CompanionLaunch: Identifiable {
+        let id = UUID()
+        let steps: [CompanionStep]
+        let selectedDate: Date
+    }
 
     // MARK: - Cycle Tracking State
     @State private var activeRoutine: SavedRoutineModel?
@@ -273,6 +282,18 @@ struct EveningRoutineCompletionView: View {
             let day = currentCycleDay
             Text("Your routine will automatically adapt based on your cycle phase.\n\nCurrent Phase: \(phase.title) (Day \(day))")
         }
+        .fullScreenCover(item: $companionLaunch) { launch in
+            CompanionSessionView(
+                routineId: "evening_routine",
+                routineName: "Evening Routine",
+                steps: launch.steps,
+                selectedDate: launch.selectedDate,
+                completionViewModel: completionViewModel,
+                onComplete: {
+                    companionLaunch = nil
+                }
+            )
+        }
     }
 
     // MARK: - Background
@@ -431,7 +452,20 @@ struct EveningRoutineCompletionView: View {
         }}
 
     private var trailingButtons: some View {
-        editButton
+        HStack(spacing: 16) {
+            playButton
+            editButton
+        }
+    }
+
+    private var playButton: some View {
+        Button {
+            startCompanionMode()
+        } label: {
+            Image(systemName: "play.circle")
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+        }
     }
 
     private var cycleButton: some View {
@@ -623,6 +657,17 @@ struct EveningRoutineCompletionView: View {
         } catch {
             print("❌ Error enabling cycle tracking: \(error)")
         }
+    }
+
+    private func startCompanionMode() {
+        print("🌙 Starting companion mode for evening routine")
+        let companionSteps = routineSteps.enumerated().map { index, step in
+            CompanionStep.from(routineStep: step, order: index)
+        }
+        companionLaunch = CompanionLaunch(
+            steps: companionSteps,
+            selectedDate: selectedDate
+        )
     }
 
 }
