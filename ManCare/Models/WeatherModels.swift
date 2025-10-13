@@ -18,15 +18,15 @@ struct WeatherData: Codable, Equatable {
     let hasSnow: Bool
     let timestamp: Date
     let condition: String? // Optional weather condition description
-    
+
     var uvLevel: UVLevel {
         UVLevel.from(uvIndex: uvIndex)
     }
-    
+
     var isStale: Bool {
         Date().timeIntervalSince(timestamp) > 3600 // 1 hour
     }
-    
+
     init(uvIndex: Int, humidity: Double, windSpeed: Double, temperature: Double, hasSnow: Bool, timestamp: Date = Date(), condition: String? = nil) {
         self.uvIndex = uvIndex
         self.humidity = humidity
@@ -45,7 +45,7 @@ enum UVLevel: String, Codable {
     case moderate   // 3-7
     case high       // 8-10
     case extreme    // 11+
-    
+
     static func from(uvIndex: Int) -> UVLevel {
         switch uvIndex {
         case 0...2:
@@ -58,7 +58,7 @@ enum UVLevel: String, Codable {
             return .extreme
         }
     }
-    
+
     var displayName: String {
         switch self {
         case .low:
@@ -71,7 +71,7 @@ enum UVLevel: String, Codable {
             return "Extreme"
         }
     }
-    
+
     var color: Color {
         switch self {
         case .low:
@@ -84,7 +84,7 @@ enum UVLevel: String, Codable {
             return .red
         }
     }
-    
+
     var icon: String {
         switch self {
         case .low:
@@ -97,7 +97,7 @@ enum UVLevel: String, Codable {
             return "exclamationmark.triangle.fill"
         }
     }
-    
+
     var contextKey: String {
         switch self {
         case .low:
@@ -119,20 +119,20 @@ struct WeatherRecommendation: Equatable {
     let textureAdjustment: String?
     let activeIngredientWarnings: [String]
     let generalTips: [String]
-    
+
     init(spfLevel: String, textureAdjustment: String? = nil, activeIngredientWarnings: [String] = [], generalTips: [String] = []) {
         self.spfLevel = spfLevel
         self.textureAdjustment = textureAdjustment
         self.activeIngredientWarnings = activeIngredientWarnings
         self.generalTips = generalTips
     }
-    
+
     static func from(weatherData: WeatherData) -> WeatherRecommendation {
         var spfLevel = "SPF 30"
         var textureAdjustment: String?
         var warnings: [String] = []
         var tips: [String] = []
-        
+
         // UV Index recommendations
         switch weatherData.uvLevel {
         case .low:
@@ -153,7 +153,7 @@ struct WeatherRecommendation: Equatable {
             tips.append("Stay in shade during peak hours (10am-4pm)")
             tips.append("Wear protective clothing")
         }
-        
+
         // Humidity adjustments
         if weatherData.humidity < 35 {
             textureAdjustment = "Use heavier moisturizers and occlusives"
@@ -163,13 +163,13 @@ struct WeatherRecommendation: Equatable {
             textureAdjustment = "Use lighter gel moisturizers"
             tips.append("Avoid thick occlusives or heavy oils")
         }
-        
+
         // Wind adjustments
         if weatherData.windSpeed > 25 {
             tips.append("Apply barrier cream or balm")
             warnings.append("Skip harsh peels and strong retinoids")
         }
-        
+
         // Temperature adjustments
         if weatherData.temperature < 8 {
             if textureAdjustment == nil {
@@ -182,12 +182,12 @@ struct WeatherRecommendation: Equatable {
             }
             tips.append("Choose oil-free formulations")
         }
-        
+
         // Snow reflection
         if weatherData.hasSnow {
             warnings.append("Snow reflects UV rays - treat as high UV day")
         }
-        
+
         return WeatherRecommendation(
             spfLevel: spfLevel,
             textureAdjustment: textureAdjustment,
@@ -202,43 +202,59 @@ struct WeatherRecommendation: Equatable {
 struct WeatherAdaptationContext: Equatable {
     let weatherData: WeatherData
     let date: Date
-    
+
+    /// Get active context keys based on weather data thresholds
+    /// Matches the thresholds defined in weather-adaptation-rules.json
     var contextKeys: [String] {
         var keys: [String] = []
-        
-        // UV context
-        keys.append(weatherData.uvLevel.contextKey)
-        
-        // Humidity context
+
+        // UV context (thresholds from rules JSON)
+        if weatherData.uvIndex >= 11 {
+            keys.append("uv_extreme")
+        } else if weatherData.uvIndex >= 8 {
+            keys.append("uv_high")
+        } else if weatherData.uvIndex >= 3 {
+            keys.append("uv_moderate")
+        } else {
+            keys.append("uv_low")
+        }
+
+        // Humidity context (< 35% or > 70%)
         if weatherData.humidity < 35 {
             keys.append("low_humidity")
         } else if weatherData.humidity > 70 {
             keys.append("high_humidity")
         }
-        
-        // Wind context
+
+        // Wind context (> 25 km/h)
         if weatherData.windSpeed > 25 {
             keys.append("windy")
         }
-        
-        // Temperature context
+
+        // Temperature context (< 8°C or > 26°C)
         if weatherData.temperature < 8 {
             keys.append("cold")
-        } else if weatherData.temperature > 30 {
+        } else if weatherData.temperature > 26 {
             keys.append("hot")
         }
-        
+
         // Snow context
         if weatherData.hasSnow {
             keys.append("snow")
         }
-        
+
         return keys
     }
-    
+
     init(weatherData: WeatherData, date: Date = Date()) {
         self.weatherData = weatherData
         self.date = date
+    }
+
+    /// Check if all given contexts are active
+    func matches(contexts: [String]) -> Bool {
+        let activeKeys = Set(contextKeys)
+        return contexts.allSatisfy { activeKeys.contains($0) }
     }
 }
 
@@ -249,7 +265,7 @@ enum LocationPermissionState: String {
     case denied
     case authorized
     case restricted
-    
+
     var isAuthorized: Bool {
         return self == .authorized
     }

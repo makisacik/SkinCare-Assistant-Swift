@@ -85,8 +85,10 @@ final class LocationService: NSObject, ObservableObject {
         
         print("📍 Location permission state updated: \(permissionState.rawValue)")
         
-        // Update the preferences store
-        WeatherPreferencesStore.shared.updateLocationPermissionState(permissionState)
+        // Update the preferences store on main thread
+        Task { @MainActor in
+            WeatherPreferencesStore.shared.updateLocationPermissionState(permissionState)
+        }
     }
 }
 

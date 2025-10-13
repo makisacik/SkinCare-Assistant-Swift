@@ -14,7 +14,7 @@ enum AdaptationType: String, Codable, CaseIterable {
     case cycle      // Menstruation cycle-based
     case seasonal   // Future: weather/season based
     case skinState  // Future: real-time skin condition
-    
+
     var displayName: String {
         switch self {
         case .cycle:
@@ -25,7 +25,7 @@ enum AdaptationType: String, Codable, CaseIterable {
             return "Skin State"
         }
     }
-    
+
     var description: String {
         switch self {
         case .cycle:
@@ -45,7 +45,7 @@ enum StepEmphasis: String, Codable {
     case reduce     // Use less / lighter application
     case normal     // Standard application
     case emphasize  // Focus on this / use more
-    
+
     var displayName: String {
         switch self {
         case .skip:
@@ -58,7 +58,7 @@ enum StepEmphasis: String, Codable {
             return "Emphasize"
         }
     }
-    
+
     var icon: String {
         switch self {
         case .skip:
@@ -71,7 +71,7 @@ enum StepEmphasis: String, Codable {
             return "arrow.up.circle.fill"
         }
     }
-    
+
     var color: Color {
         switch self {
         case .skip:
@@ -92,7 +92,7 @@ enum AdaptationOrigin: String, Codable {
     case `default`  // Built-in rule set
     case gpt        // AI-recommended
     case user       // User customized
-    
+
     var displayName: String {
         switch self {
         case .default:
@@ -103,7 +103,7 @@ enum AdaptationOrigin: String, Codable {
             return "Custom"
         }
     }
-    
+
     var icon: String {
         switch self {
         case .default:
@@ -126,7 +126,7 @@ struct StepAdaptation: Codable, Equatable {
     let orderOverride: Int?
     let warnings: [String]
     let origin: AdaptationOrigin
-    
+
     init(stepId: UUID, contextKey: String, emphasis: StepEmphasis, guidance: String? = nil, orderOverride: Int? = nil, warnings: [String] = [], origin: AdaptationOrigin = .default) {
         self.stepId = stepId
         self.contextKey = contextKey
@@ -142,31 +142,103 @@ struct StepAdaptation: Codable, Equatable {
 
 struct AdaptationRule: Codable, Identifiable, Equatable {
     let id: String
-    let productType: String  // ProductType rawValue
-    let contextKey: String   // e.g., "menstrual", "luteal"
-    let action: RuleAction
-    
+
+    // Legacy format (cycle rules)
+    let productType: String?  // ProductType rawValue
+    let contextKey: String?   // e.g., "menstrual", "luteal"
+    let action: RuleAction?
+
+    // New format v1.1 (weather rules)
+    let appliesTo: String?    // "am", "pm", "both"
+    let when: [String]?       // context keys that must match
+    let target: RuleTarget?
+    let effects: RuleEffects?
+
+    // Legacy init for cycle rules
     init(id: String, productType: String, contextKey: String, action: RuleAction) {
         self.id = id
         self.productType = productType
         self.contextKey = contextKey
         self.action = action
+        self.appliesTo = nil
+        self.when = nil
+        self.target = nil
+        self.effects = nil
+    }
+
+    // New init for weather rules v1.1
+    init(id: String, appliesTo: String, when: [String], target: RuleTarget, effects: RuleEffects) {
+        self.id = id
+        self.appliesTo = appliesTo
+        self.when = when
+        self.target = target
+        self.effects = effects
+        self.productType = nil
+        self.contextKey = nil
+        self.action = nil
+    }
+
+    var isLegacyFormat: Bool {
+        return productType != nil && contextKey != nil && action != nil
+    }
+
+    var isNewFormat: Bool {
+        return appliesTo != nil && when != nil && target != nil && effects != nil
     }
 }
 
-// MARK: - Rule Action
+// MARK: - Rule Action (Legacy)
 
 struct RuleAction: Codable, Equatable {
     let emphasis: StepEmphasis
     let guidanceTemplate: String?
     let orderPriority: Int?
     let warnings: [String]
-    
+
     init(emphasis: StepEmphasis, guidanceTemplate: String? = nil, orderPriority: Int? = nil, warnings: [String] = []) {
         self.emphasis = emphasis
         self.guidanceTemplate = guidanceTemplate
         self.orderPriority = orderPriority
         self.warnings = warnings
+    }
+}
+
+// MARK: - Rule Effects (New Schema v1.1)
+
+struct RuleEffects: Codable, Equatable {
+    let ensure: EnsureEffect?
+    let suppress: Bool?
+    let emphasis: StepEmphasis?
+    let note: String?
+    let weightHint: String? // "gel", "cream", "balm"
+    let priority: Int
+    let userOverrideAllowed: Bool?
+
+    init(ensure: EnsureEffect? = nil, suppress: Bool? = nil, emphasis: StepEmphasis? = nil, note: String? = nil, weightHint: String? = nil, priority: Int, userOverrideAllowed: Bool? = nil) {
+        self.ensure = ensure
+        self.suppress = suppress
+        self.emphasis = emphasis
+        self.note = note
+        self.weightHint = weightHint
+        self.priority = priority
+        self.userOverrideAllowed = userOverrideAllowed
+    }
+}
+
+struct EnsureEffect: Codable, Equatable {
+    let kind: String
+    let title: String
+}
+
+// MARK: - Rule Target
+
+struct RuleTarget: Codable, Equatable {
+    let kinds: [String]
+    let stepId: String?
+
+    init(kinds: [String], stepId: String? = nil) {
+        self.kinds = kinds
+        self.stepId = stepId
     }
 }
 
@@ -177,7 +249,7 @@ struct AdaptationRuleSet: Codable {
     let version: String
     let rules: [AdaptationRule]
     let briefings: [PhaseBriefing]
-    
+
     init(type: AdaptationType, version: String, rules: [AdaptationRule], briefings: [PhaseBriefing]) {
         self.type = type
         self.version = version
@@ -194,7 +266,7 @@ struct PhaseBriefing: Codable, Equatable {
     let summary: String
     let tips: [String]
     let generalWarnings: [String]
-    
+
     init(contextKey: String, title: String, summary: String, tips: [String] = [], generalWarnings: [String] = []) {
         self.contextKey = contextKey
         self.title = title
@@ -210,13 +282,13 @@ struct AdaptedStepDetail: Identifiable, Equatable {
     let baseStep: SavedStepDetailModel
     let adaptation: StepAdaptation?
     let displayOrder: Int
-    
+
     var id: UUID { baseStep.id }
-    
+
     var shouldShow: Bool { adaptation?.emphasis != .skip }
     var emphasisLevel: StepEmphasis { adaptation?.emphasis ?? .normal }
     var guidanceText: String { adaptation?.guidance ?? baseStep.how ?? "" }
-    
+
     init(baseStep: SavedStepDetailModel, adaptation: StepAdaptation? = nil, displayOrder: Int? = nil) {
         self.baseStep = baseStep
         self.adaptation = adaptation
@@ -232,7 +304,7 @@ struct RoutineSnapshot: Equatable {
     let date: Date
     let adaptedSteps: [AdaptedStepDetail]
     let briefing: PhaseBriefing
-    
+
     init(baseRoutine: SavedRoutineModel, contextKey: String, date: Date, adaptedSteps: [AdaptedStepDetail], briefing: PhaseBriefing) {
         self.baseRoutine = baseRoutine
         self.contextKey = contextKey
@@ -240,15 +312,15 @@ struct RoutineSnapshot: Equatable {
         self.adaptedSteps = adaptedSteps
         self.briefing = briefing
     }
-    
+
     var morningSteps: [AdaptedStepDetail] {
         adaptedSteps.filter { $0.baseStep.timeOfDayEnum == .morning }.sorted { $0.displayOrder < $1.displayOrder }
     }
-    
+
     var eveningSteps: [AdaptedStepDetail] {
         adaptedSteps.filter { $0.baseStep.timeOfDayEnum == .evening }.sorted { $0.displayOrder < $1.displayOrder }
     }
-    
+
     var weeklySteps: [AdaptedStepDetail] {
         adaptedSteps.filter { $0.baseStep.timeOfDayEnum == .weekly }.sorted { $0.displayOrder < $1.displayOrder }
     }
@@ -261,7 +333,7 @@ struct RoutineAdaptationAttachment: Codable, Equatable {
     let type: AdaptationType
     let customRules: [AdaptationRule]?
     let lastUpdated: Date
-    
+
     init(routineId: UUID, type: AdaptationType, customRules: [AdaptationRule]? = nil, lastUpdated: Date = Date()) {
         self.routineId = routineId
         self.type = type

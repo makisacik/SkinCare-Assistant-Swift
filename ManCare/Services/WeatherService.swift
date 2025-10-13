@@ -67,8 +67,10 @@ final class WeatherService {
         
         print("✅ Weather fetched: UV \(uvIndex), Temp \(temperature)°C, Humidity \(humidity)%, Wind \(windSpeedKmh) km/h")
         
-        // Cache the weather data
-        preferencesStore.cacheWeatherData(weatherData)
+        // Cache the weather data on main thread
+        await MainActor.run {
+            preferencesStore.cacheWeatherData(weatherData)
+        }
         
         return weatherData
     }
@@ -80,10 +82,11 @@ final class WeatherService {
             return MockWeatherService.shared.getMockWeatherData()
         }
         
-        // Check if we should fetch new data
-        guard preferencesStore.shouldFetchWeather else {
+        // Check if we should fetch new data (access main actor property)
+        let shouldFetch = await preferencesStore.shouldFetchWeather
+        guard shouldFetch else {
             print("ℹ️ Using cached weather data")
-            return preferencesStore.cachedWeatherData
+            return await preferencesStore.cachedWeatherData
         }
         
         // Try to fetch new data
@@ -92,7 +95,7 @@ final class WeatherService {
                 return try await fetchCurrentWeather()
             } catch {
                 print("⚠️ Failed to fetch weather, using cached data: \(error.localizedDescription)")
-                return preferencesStore.cachedWeatherData
+                return await preferencesStore.cachedWeatherData
             }
         } else {
             print("⚠️ WeatherKit requires iOS 16.0+")
@@ -113,8 +116,8 @@ final class WeatherService {
             throw LocationError.permissionDenied
         }
         
-        // Enable weather adaptation
-        preferencesStore.setWeatherAdaptationEnabled(true)
+        // Enable weather adaptation (access main actor method)
+        await preferencesStore.setWeatherAdaptationEnabled(true)
         
         // Fetch weather data
         return await getCurrentWeatherData()
