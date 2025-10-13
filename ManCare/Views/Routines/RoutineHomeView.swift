@@ -291,11 +291,8 @@ struct RoutineHomeView: View {
                     }
                 )
 
-                // Menstruation Cycle Card
-                MenstruationCycleCard()
-
-                // UV Index Card
-                UVIndexCard()
+                // Weather Adaptation Card
+                WeatherAdaptationCard()
 
                 // Weekly Routine (if available)
                 if let weeklySteps = generateWeeklyRoutine(), !weeklySteps.isEmpty {

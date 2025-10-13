@@ -21,7 +21,7 @@ class AdaptationRulesEngine {
         case .cycle:
             filename = "cycle-default-rules"
         case .seasonal:
-            filename = "seasonal-default-rules"
+            filename = "weather-adaptation-rules"
         case .skinState:
             filename = "skinstate-default-rules"
         }

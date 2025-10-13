@@ -27,13 +27,15 @@ class RoutineAdapterService: RoutineAdapterProtocol {
     private let cycleStore: CycleStore
     private let rulesEngine: AdaptationRulesEngine
     private let snapshotCache: SnapshotCache
+    private let weatherService: WeatherService
     
     // MARK: - Initialization
     
-    init(cycleStore: CycleStore, rulesEngine: AdaptationRulesEngine, snapshotCache: SnapshotCache) {
+    init(cycleStore: CycleStore, rulesEngine: AdaptationRulesEngine, snapshotCache: SnapshotCache, weatherService: WeatherService = WeatherService.shared) {
         self.cycleStore = cycleStore
         self.rulesEngine = rulesEngine
         self.snapshotCache = snapshotCache
+        self.weatherService = weatherService
         print("🔧 RoutineAdapterService initialized")
     }
     
@@ -64,8 +66,8 @@ class RoutineAdapterService: RoutineAdapterProtocol {
         
         print("🔄 RoutineAdapterService: Generating snapshot for \(routine.title) on \(date)")
         
-        // 1. Determine context key (phase from CycleStore)
-        let contextKey = getContextKey(for: adaptationType, date: date)
+        // 1. Determine context key (phase from CycleStore or weather data)
+        let contextKey = await getContextKey(for: adaptationType, date: date)
         print("📍 Context: \(contextKey)")
         
         // 2. Load rules
@@ -112,17 +114,32 @@ class RoutineAdapterService: RoutineAdapterProtocol {
     
     // MARK: - Private Helpers
     
-    private func getContextKey(for type: AdaptationType, date: Date) -> String {
+    private func getContextKey(for type: AdaptationType, date: Date) async -> String {
         switch type {
         case .cycle:
             return cycleStore.cycleData.currentPhase(for: date).rawValue
         case .seasonal:
-            return getCurrentSeason(date: date)
+            return await getWeatherContextKey(date: date)
         case .skinState:
             return "normal"
         }
     }
     
+    private func getWeatherContextKey(date: Date) async -> String {
+        // Try to get current weather data
+        if let weatherData = await weatherService.getCurrentWeatherData() {
+            let context = WeatherAdaptationContext(weatherData: weatherData, date: date)
+
+            // Return the primary context key (UV level is most important)
+            // Note: The rules engine will match against all context keys in the context
+            return context.weatherData.uvLevel.contextKey
+        } else {
+            // Fallback to season-based context if weather data unavailable
+            print("⚠️ Weather data unavailable, falling back to season")
+            return getCurrentSeason(date: date)
+        }
+    }
+
     private func getCurrentSeason(date: Date) -> String {
         let calendar = Calendar.current
         let month = calendar.component(.month, from: date)

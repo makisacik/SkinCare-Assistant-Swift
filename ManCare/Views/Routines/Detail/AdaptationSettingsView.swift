@@ -108,7 +108,7 @@ struct AdaptationSettingsView: View {
         case .cycle:
             Text("Your routine will adapt based on your menstruation cycle phase.")
         case .seasonal:
-            Text("Your routine will adapt based on the current season and weather.")
+            Text("Your routine will adapt based on real-time weather including UV index, humidity, wind, and temperature. Location permission required.")
         case .skinState:
             Text("Your routine will adapt based on your current skin condition.")
         }
@@ -146,7 +146,7 @@ struct AdaptationSettingsView: View {
         case .cycle:
             return "Your routine will be customized based on your current cycle phase, with emphasis on gentle care during sensitive phases and intensive treatments during resilient phases."
         case .seasonal:
-            return "Your routine will adjust for seasonal changes, focusing on hydration in winter and oil control in summer."
+            return "Your routine will adapt based on real-time weather conditions including UV index, humidity, wind, and temperature. Get SPF recommendations, texture adjustments, and active ingredient warnings tailored to today's weather."
         case .skinState:
             return "Your routine will respond to your current skin condition, adapting to breakouts, dryness, or sensitivity."
         }

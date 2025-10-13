@@ -46,7 +46,8 @@ final class ServiceFactory {
         return RoutineAdapterService(
             cycleStore: CycleStore(),
             rulesEngine: createAdaptationRulesEngine(),
-            snapshotCache: createSnapshotCache()
+            snapshotCache: createSnapshotCache(),
+            weatherService: WeatherService.shared
         )
     }
 
@@ -54,7 +55,8 @@ final class ServiceFactory {
         return RoutineAdapterService(
             cycleStore: cycleStore,
             rulesEngine: createAdaptationRulesEngine(),
-            snapshotCache: createSnapshotCache()
+            snapshotCache: createSnapshotCache(),
+            weatherService: WeatherService.shared
         )
     }
 

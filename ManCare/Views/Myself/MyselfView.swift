@@ -18,9 +18,10 @@ struct MyselfView: View {
         ScrollView {
             VStack(spacing: 24) {
                 profileHeader
-                statsSection
-                createRoutineButton
-                smartInsights
+
+                // Menstruation Cycle Card
+                MenstruationCycleCard()
+                    .padding(.horizontal, -20) // Compensate for parent padding
             }
             .padding(20)
         }
@@ -37,18 +38,7 @@ struct MyselfView: View {
                 }
             )
         }
-        .confirmationDialog(
-            "Create new personalized routine?",
-            isPresented: $showingGenerateConfirm,
-            titleVisibility: .visible
-        ) {
-            Button("Generate from current profile") {
-                Task { await generateRoutineIfPossible() }
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("We'll create a new routine from your profile. It won't auto-link products.")
-        }
+        // confirmation dialog removed with create routine button
     }
 
     @ViewBuilder
