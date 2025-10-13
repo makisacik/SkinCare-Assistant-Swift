@@ -297,7 +297,16 @@ struct PersonalizedRoutineResultView: View {
                 // Save button (replaces Start Your Journey)
                 Button {
                     let name = routineName.trimmingCharacters(in: .whitespacesAndNewlines)
-                    onSave(name.isEmpty ? defaultRoutineName() : name)
+                    if name.isEmpty {
+                        Task {
+                            let store = RoutineStore()
+                            let count = (try? await store.fetchSavedRoutines().count) ?? 0
+                            let finalName = count == 0 ? "My Routine" : "My Routine \(count + 1)"
+                            onSave(finalName)
+                        }
+                    } else {
+                        onSave(name)
+                    }
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "tray.and.arrow.down")
