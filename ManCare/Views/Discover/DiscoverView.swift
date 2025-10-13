@@ -88,7 +88,7 @@ struct DiscoverView: View {
             .sheet(item: $showingGuideDetail) { guide in
                 GuideDetailView(guide: guide)
             }
-            .sheet(isPresented: $showingPersonalizedRoutinePreferences) {
+            .fullScreenCover(isPresented: $showingPersonalizedRoutinePreferences) {
                 PersonalizedRoutineFlowWrapper(
                     onComplete: { routine, name in
                         // Save the routine and show success

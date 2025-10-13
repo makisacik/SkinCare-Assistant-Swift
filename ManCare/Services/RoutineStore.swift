@@ -124,17 +124,17 @@ actor RoutineStore: RoutineStoreProtocol {
                 do {
                     let initialRoutine = self.createInitialRoutineModel(from: routineResponse)
 
-                    // Check if we already have a "My First Routine"
+                    // Check if we already have a "My Routine"
                     let existingRequest: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
-                    existingRequest.predicate = NSPredicate(format: "title == %@", "My First Routine")
+                    existingRequest.predicate = NSPredicate(format: "title == %@", "My Routine")
 
                     let existingResults = try self.backgroundContext.fetch(existingRequest)
 
                     if let existing = existingResults.first {
-                        print("🔄 Updating existing 'My First Routine' (ID: \(existing.id?.uuidString ?? "nil"))")
+                        print("🔄 Updating existing 'My Routine' (ID: \(existing.id?.uuidString ?? "nil"))")
                         self.populateRoutineEntity(existing, with: initialRoutine, in: self.backgroundContext)
                     } else {
-                        print("✨ Creating new 'My First Routine'")
+                        print("✨ Creating new 'My Routine'")
                         try self.deactivateAllRoutines(in: self.backgroundContext)
                         let newEntity = SavedRoutineEntity(context: self.backgroundContext)
                         self.populateRoutineEntity(newEntity, with: initialRoutine, in: self.backgroundContext)
@@ -504,7 +504,7 @@ actor RoutineStore: RoutineStoreProtocol {
 
         return SavedRoutineModel(
             templateId: UUID(),
-            title: "My First Routine",
+            title: "My Routine",
             description: "Your personalized skincare routine created during onboarding",
             category: .all,
             stepCount: allSteps.count,

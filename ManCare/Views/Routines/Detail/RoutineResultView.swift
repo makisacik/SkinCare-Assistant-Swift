@@ -17,6 +17,7 @@ struct RoutineResultView: View {
     let cycleData: CycleData? // NEW: Cycle tracking data
     let onRestart: () -> Void
     let onContinue: () -> Void
+    var showStartButton: Bool = true
     
     var body: some View {
         ZStack {
@@ -38,10 +39,12 @@ struct RoutineResultView: View {
                         // Steps Section
                         stepsSection
                         
-                        // Start Your Journey Button
-                        startJourneyButton
-                            .padding(.top, 20)
-                            .padding(.bottom, 40)
+                        // Start Your Journey Button (optional)
+                        if showStartButton {
+                            startJourneyButton
+                                .padding(.top, 20)
+                                .padding(.bottom, 40)
+                        }
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 20)

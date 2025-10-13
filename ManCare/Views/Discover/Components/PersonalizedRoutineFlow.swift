@@ -258,31 +258,86 @@ struct PersonalizedRoutineResultView: View {
     let onRestart: () -> Void
 
     var body: some View {
-        RoutineResultView(
-            skinType: request.skinType,
-            concerns: request.concerns,
-            mainGoal: request.mainGoal,
-            preferences: nil,
-            generatedRoutine: generatedRoutine,
-            cycleData: nil,
-            onRestart: onRestart,
-            onContinue: {
-                // Save with the provided name
-                onSave(routineName.isEmpty ? "My Personalized Routine" : routineName)
-            }
-        )
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Save") {
-                    onSave(routineName.isEmpty ? "My Personalized Routine" : routineName)
+        ZStack(alignment: .bottom) {
+            // Base result content (keeps header/steps), continue action unused here
+            RoutineResultView(
+                skinType: request.skinType,
+                concerns: request.concerns,
+                mainGoal: request.mainGoal,
+                preferences: nil,
+                generatedRoutine: generatedRoutine,
+                cycleData: nil,
+                onRestart: onRestart,
+                onContinue: { /* handled by custom save button below */ },
+                showStartButton: false
+            )
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .navigationBarTrailing) { EmptyView() } }
+
+            // Personalized save controls overlay
+            VStack(spacing: 12) {
+                // Name field
+                HStack {
+                    Image(systemName: "pencil")
+                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                    TextField("Routine name", text: $routineName)
+                        .textInputAutocapitalization(.words)
+                        .disableAutocorrection(true)
                 }
-                .disabled(routineName.trimmingCharacters(in: .whitespacesAndNewlines).count < 3)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(.systemBackground))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                        )
+                )
+
+                // Save button (replaces Start Your Journey)
+                Button {
+                    let name = routineName.trimmingCharacters(in: .whitespacesAndNewlines)
+                    onSave(name.isEmpty ? defaultRoutineName() : name)
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "tray.and.arrow.down")
+                            .font(.system(size: 18, weight: .semibold))
+                        Text("Save Routine")
+                            .font(.system(size: 18, weight: .semibold))
+                    }
+                    .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                ThemeManager.shared.theme.palette.primary,
+                                ThemeManager.shared.theme.palette.primaryLight
+                            ]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(16)
+                    .shadow(color: ThemeManager.shared.theme.palette.primary.opacity(0.3), radius: 8, x: 0, y: 4)
+                }
+                .disabled(routineName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
+            .background(Color.clear.ignoresSafeArea(edges: .bottom))
         }
         .onAppear {
             if routineName.isEmpty {
-                routineName = "My Personalized Routine"
+                Task {
+                    let store = RoutineStore()
+                    if let count = try? await store.fetchSavedRoutines().count {
+                        // First one is "My Routine" without number; subsequent are "My Routine N"
+                        routineName = count == 0 ? "My Routine" : "My Routine \(count + 1)"
+                    } else {
+                        routineName = "My Routine"
+                    }
+                }
             }
         }
     }
