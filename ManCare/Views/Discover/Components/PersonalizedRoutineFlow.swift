@@ -79,14 +79,19 @@ struct PersonalizedRoutineFlowWrapper: View {
             ZStack {
                 switch currentStep {
                 case .preferences:
-                    PersonalizedRoutinePreferencesView { req in
-                        print("📝 Preferences collected, transitioning to loading...")
-                        print("   - Request: \(req)")
-                        request = req
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .loading
+                    PersonalizedRoutinePreferencesView(
+                        onGenerate: { req in
+                            print("📝 Preferences collected, transitioning to loading...")
+                            print("   - Request: \(req)")
+                            request = req
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                currentStep = .loading
+                            }
+                        },
+                        onDismiss: {
+                            dismiss()
                         }
-                    }
+                    )
                     .transition(.asymmetric(
                         insertion: .move(edge: .trailing).combined(with: .opacity),
                         removal: .move(edge: .leading).combined(with: .opacity)
@@ -286,7 +291,6 @@ struct PersonalizedRoutineResultView: View {
 // MARK: - Personalized Routine Preferences View
 
 struct PersonalizedRoutinePreferencesView: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject private var userProfileStore = UserProfileStore.shared
 
     @State private var skinType: SkinType = .combination
@@ -303,6 +307,7 @@ struct PersonalizedRoutinePreferencesView: View {
     @State private var showCustomDetailsSection: Bool = true
 
     let onGenerate: (PersonalizedRoutineRequest) -> Void
+    let onDismiss: () -> Void
 
     var body: some View {
         NavigationView {
@@ -327,14 +332,21 @@ struct PersonalizedRoutinePreferencesView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
+                    Button(action: {
+                        onDismiss()
+                    }) {
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.primary)
                     }
-                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
                 }
             }
             .onAppear {
                 loadUserPreferences()
+            }
+            .onTapGesture {
+                // Dismiss keyboard when tapping anywhere on the view
+                hideKeyboard()
             }
         }
     }
@@ -374,37 +386,39 @@ struct PersonalizedRoutinePreferencesView: View {
 
     private var skinTypeSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Section header - fully tappable
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    showSkinTypeSection.toggle()
+            // Section header - chevron only tappable
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Skin Type")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("Currently: \(skinType.title)")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-            }) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Skin Type")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Currently: \(skinType.title)")
-                            .font(.system(size: 14))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                Spacer()
+
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showSkinTypeSection.toggle()
                     }
-
-                    Spacer()
-
+                }) {
                     Image(systemName: showSkinTypeSection ? "chevron.up" : "chevron.down")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                        .padding(12) // enlarge hit area
+                        .contentShape(Rectangle())
                 }
-                .padding(20)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: showSkinTypeSection ? 16 : 16)
-                        .fill(ThemeManager.shared.theme.palette.surface)
-                )
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: showSkinTypeSection ? 16 : 16)
+                    .fill(ThemeManager.shared.theme.palette.surface)
+            )
 
             // Collapsible content
             if showSkinTypeSection {
@@ -429,7 +443,7 @@ struct PersonalizedRoutinePreferencesView: View {
                                 .frame(height: 80)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(skinType == type ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surfaceAlt)
+                                        .fill(skinType == type ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surface)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
                                                 .stroke(skinType == type ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.border, lineWidth: skinType == type ? 0 : 1)
@@ -453,37 +467,39 @@ struct PersonalizedRoutinePreferencesView: View {
 
     private var concernsSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Section header - fully tappable
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    showConcernsSection.toggle()
+            // Section header - chevron only tappable
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Skin Concerns")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("Selected: \(selectedConcerns.isEmpty ? "None" : selectedConcerns.map { $0.title }.joined(separator: ", "))")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-            }) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Skin Concerns")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Selected: \(selectedConcerns.isEmpty ? "None" : selectedConcerns.map { $0.title }.joined(separator: ", "))")
-                            .font(.system(size: 14))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                Spacer()
+
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showConcernsSection.toggle()
                     }
-
-                    Spacer()
-
+                }) {
                     Image(systemName: showConcernsSection ? "chevron.up" : "chevron.down")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                        .padding(12)
+                        .contentShape(Rectangle())
                 }
-                .padding(20)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(ThemeManager.shared.theme.palette.surface)
-                )
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(ThemeManager.shared.theme.palette.surface)
+            )
 
             // Collapsible content
             if showConcernsSection {
@@ -510,7 +526,7 @@ struct PersonalizedRoutinePreferencesView: View {
                                 .frame(height: 80)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(selectedConcerns.contains(concern) ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surfaceAlt)
+                                        .fill(selectedConcerns.contains(concern) ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surface)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
                                                 .stroke(selectedConcerns.contains(concern) ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.border, lineWidth: selectedConcerns.contains(concern) ? 0 : 1)
@@ -534,37 +550,39 @@ struct PersonalizedRoutinePreferencesView: View {
 
     private var goalSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Section header - fully tappable
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    showGoalSection.toggle()
+            // Section header - chevron only tappable
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Main Goal")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("Currently: \(mainGoal.title)")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-            }) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Main Goal")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Currently: \(mainGoal.title)")
-                            .font(.system(size: 14))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                Spacer()
+
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showGoalSection.toggle()
                     }
-
-                    Spacer()
-
+                }) {
                     Image(systemName: showGoalSection ? "chevron.up" : "chevron.down")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                        .padding(12)
+                        .contentShape(Rectangle())
                 }
-                .padding(20)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(ThemeManager.shared.theme.palette.surface)
-                )
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(ThemeManager.shared.theme.palette.surface)
+            )
 
             // Collapsible content
             if showGoalSection {
@@ -589,7 +607,7 @@ struct PersonalizedRoutinePreferencesView: View {
                                 .frame(height: 80)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(mainGoal == goal ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surfaceAlt)
+                                        .fill(mainGoal == goal ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surface)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
                                                 .stroke(mainGoal == goal ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.border, lineWidth: mainGoal == goal ? 0 : 1)
@@ -613,37 +631,39 @@ struct PersonalizedRoutinePreferencesView: View {
 
     private var routineDepthSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Section header - fully tappable
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    showRoutineDepthSection.toggle()
+            // Section header - chevron only tappable
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Routine Complexity")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("Selected: \(routineDepth?.title ?? "Not selected")")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-            }) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Routine Complexity")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Selected: \(routineDepth?.title ?? "Not selected")")
-                            .font(.system(size: 14))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                Spacer()
+
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showRoutineDepthSection.toggle()
                     }
-
-                    Spacer()
-
+                }) {
                     Image(systemName: showRoutineDepthSection ? "chevron.up" : "chevron.down")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                        .padding(12)
+                        .contentShape(Rectangle())
                 }
-                .padding(20)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(ThemeManager.shared.theme.palette.surface)
-                )
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(ThemeManager.shared.theme.palette.surface)
+            )
 
             // Collapsible content
             if showRoutineDepthSection {
@@ -684,7 +704,7 @@ struct PersonalizedRoutinePreferencesView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(routineDepth == depth ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surfaceAlt)
+                                        .fill(routineDepth == depth ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.surface)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
                                                 .stroke(routineDepth == depth ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.border, lineWidth: routineDepth == depth ? 0 : 1)
@@ -708,37 +728,39 @@ struct PersonalizedRoutinePreferencesView: View {
 
     private var customDetailsSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Section header - fully tappable
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    showCustomDetailsSection.toggle()
+            // Section header - chevron only tappable
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Additional Details")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("Custom notes: \(customDetails.isEmpty ? "None" : "\(customDetails.count) characters")")
+                        .font(.system(size: 14))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-            }) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Additional Details")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Custom notes: \(customDetails.isEmpty ? "None" : "\(customDetails.count) characters")")
-                            .font(.system(size: 14))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                Spacer()
+
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showCustomDetailsSection.toggle()
                     }
-
-                    Spacer()
-
+                }) {
                     Image(systemName: showCustomDetailsSection ? "chevron.up" : "chevron.down")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                        .padding(12)
+                        .contentShape(Rectangle())
                 }
-                .padding(20)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(ThemeManager.shared.theme.palette.surface)
-                )
+                .buttonStyle(PlainButtonStyle())
             }
-            .buttonStyle(PlainButtonStyle())
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(ThemeManager.shared.theme.palette.surface)
+            )
 
             // Collapsible content
             if showCustomDetailsSection {
@@ -746,25 +768,51 @@ struct PersonalizedRoutinePreferencesView: View {
                     Divider()
                         .padding(.horizontal, 20)
 
-                    Text("Share any specific concerns, allergies, or preferences to help us create the perfect routine for you")
+                    Text("Share any specific concerns, allergies, or preferences")
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .padding(.horizontal, 20)
 
-                    TextEditor(text: $customDetails)
-                        .frame(minHeight: 100)
-                        .padding(12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(ThemeManager.shared.theme.palette.surfaceAlt)
-                                .overlay(
+                    VStack(alignment: .leading, spacing: 8) {
+                        ZStack(alignment: .topLeading) {
+                            TextEditor(text: $customDetails)
+                                .frame(minHeight: 80)
+                                .padding(16)
+                                .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                                        .fill(Color(.systemBackground))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                                        )
                                 )
-                        )
-                        .font(.system(size: 16))
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 20)
+                                .font(.system(size: 16))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                .onChange(of: customDetails) { newValue in
+                                    if newValue.count > 100 {
+                                        customDetails = String(newValue.prefix(100))
+                                    }
+                                }
+
+                            if customDetails.isEmpty {
+                                Text("e.g., I have sensitive skin, prefer natural products, or I'm allergic to fragrances...")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 16)
+                                    .allowsHitTesting(false)
+                            }
+                        }
+
+                        HStack {
+                            Spacer()
+                            Text("\(customDetails.count)/100")
+                                .font(.system(size: 12))
+                                .foregroundColor(customDetails.count > 90 ? ThemeManager.shared.theme.palette.error : ThemeManager.shared.theme.palette.textMuted)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
                 }
             }
         }
@@ -788,7 +836,6 @@ struct PersonalizedRoutinePreferencesView: View {
             )
 
             onGenerate(request)
-            dismiss()
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "wand.and.stars")
@@ -872,11 +919,20 @@ struct PersonalizedRoutinePreferencesView: View {
             }
         }
     }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
 
 
 #Preview {
-    PersonalizedRoutinePreferencesView { request in
-        print("Generated request: \(request)")
-    }
+    PersonalizedRoutinePreferencesView(
+        onGenerate: { request in
+            print("Generated request: \(request)")
+        },
+        onDismiss: {
+            print("Dismissed")
+        }
+    )
 }

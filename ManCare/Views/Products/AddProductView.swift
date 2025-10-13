@@ -80,11 +80,13 @@ struct AddProductView: View {
                                         .font(ThemeManager.shared.theme.typo.body)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 12)
-                                        .background(ThemeManager.shared.theme.palette.accentBackground)
-                                        .cornerRadius(12)
-                                        .overlay(
+                                        .background(
                                             RoundedRectangle(cornerRadius: 12)
-                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+                                                .fill(Color(.systemBackground))
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 12)
+                                                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                                                )
                                         )
 
                                     Button {
@@ -136,16 +138,43 @@ struct AddProductView: View {
                                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                                TextEditor(text: $description)
-                                    .font(ThemeManager.shared.theme.typo.body)
-                                    .frame(minHeight: 100)
-                                    .padding(12)
-                                    .background(ThemeManager.shared.theme.palette.accentBackground)
-                                    .cornerRadius(12)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                                    )
+                                VStack(alignment: .leading, spacing: 6) {
+                                    ZStack(alignment: .topLeading) {
+                                        TextEditor(text: $description)
+                                            .font(ThemeManager.shared.theme.typo.body)
+                                            .frame(minHeight: 100)
+                                            .padding(12)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .fill(Color(.systemBackground))
+                                                    .overlay(
+                                                        RoundedRectangle(cornerRadius: 12)
+                                                            .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                                                    )
+                                            )
+                                            .onChange(of: description) { newValue in
+                                                if newValue.count > 150 {
+                                                    description = String(newValue.prefix(150))
+                                                }
+                                            }
+
+                                        if description.isEmpty {
+                                            Text("e.g., Key benefits, texture, how it feels, any notable notes...")
+                                                .font(ThemeManager.shared.theme.typo.body)
+                                                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                                                .padding(.horizontal, 16)
+                                                .padding(.vertical, 12)
+                                                .allowsHitTesting(false)
+                                        }
+                                    }
+
+                                    HStack {
+                                        Spacer()
+                                        Text("\(description.count)/150")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(description.count > 135 ? ThemeManager.shared.theme.palette.error : ThemeManager.shared.theme.palette.textMuted)
+                                    }
+                                }
                             }
                         }
                     }
