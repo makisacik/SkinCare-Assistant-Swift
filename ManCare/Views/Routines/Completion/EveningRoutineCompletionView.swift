@@ -730,9 +730,13 @@ private struct DetailedStepRow: View {
                                 .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(adapted.emphasisLevel.color)
 
-                            // Only show label for cycle adaptations
+                            // Show label based on adaptation source
                             if ["menstrual", "follicular", "ovulatory", "luteal"].contains(adapted.adaptation?.contextKey ?? "") {
                                 Text("• Cycle Adapted")
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundColor(adapted.emphasisLevel.color.opacity(0.7))
+                            } else {
+                                Text("• Based on Weather")
                                     .font(.system(size: 10, weight: .medium))
                                     .foregroundColor(adapted.emphasisLevel.color.opacity(0.7))
                             }

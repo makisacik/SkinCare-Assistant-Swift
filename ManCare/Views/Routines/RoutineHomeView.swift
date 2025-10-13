@@ -1285,9 +1285,9 @@ struct RoutineStepDetailView: View {
                         .padding(.bottom, 12)
                     }
 
-                    // Cycle Adaptation Section
+                    // Adaptation Section (Cycle or Weather)
                     if let adapted = adaptedStep, adapted.emphasisLevel != .normal {
-                        cycleAdaptationSection(adapted: adapted)
+                        adaptationSection(adapted: adapted)
                     }
 
                     Spacer(minLength: 20)
@@ -1312,17 +1312,22 @@ struct RoutineStepDetailView: View {
         .modifier(PresentationModifier())
     }
 
-    // MARK: - Cycle Adaptation Section
+    // MARK: - Adaptation Section (Cycle or Weather)
 
-    private func cycleAdaptationSection(adapted: AdaptedStepDetail) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
+    private func adaptationSection(adapted: AdaptedStepDetail) -> some View {
+        let isCycleAdaptation = ["menstrual", "follicular", "ovulatory", "luteal"].contains(adapted.adaptation?.contextKey ?? "")
+        let sectionTitle = isCycleAdaptation ? "Cycle Adaptation" : "Weather Adaptation"
+        let sectionIcon = isCycleAdaptation ? "waveform.path.ecg" : "sun.max.fill"
+        let sectionSubtitle = isCycleAdaptation ? "Based on your cycle" : "Based on weather"
+
+        return VStack(alignment: .leading, spacing: 10) {
             // Section Header with Badge
             HStack(spacing: 8) {
-                Image(systemName: "waveform.path.ecg")
+                Image(systemName: sectionIcon)
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(adapted.emphasisLevel.color)
 
-                Text("Cycle Adaptation")
+                Text(sectionTitle)
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -1350,7 +1355,7 @@ struct RoutineStepDetailView: View {
                     .font(.system(size: 11, weight: .bold))
                     .foregroundColor(adapted.emphasisLevel.color)
 
-                Text("• Based on your cycle")
+                Text("• \(sectionSubtitle)")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             }
