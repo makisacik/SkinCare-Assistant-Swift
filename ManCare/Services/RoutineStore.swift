@@ -555,7 +555,7 @@ actor RoutineStore: RoutineStoreProtocol {
     ) async throws {
         print("🔄 RoutineStore: Updating adaptation settings for routine \(routineId)")
 
-        try await backgroundContext.perform {
+        try await backgroundContext.perform  {
             let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", routineId as CVarArg)
             request.fetchLimit = 1

@@ -47,12 +47,12 @@ struct SavedStepDetailModel: Identifiable, Codable, Equatable {
         }
         return ProductIconManager.getIconName(for: productType)
     }
-    
+
     // Computed properties for enum access
     var stepTypeEnum: ProductType {
         return ProductType(rawValue: stepType) ?? .cleanser
     }
-    
+
     var timeOfDayEnum: TimeOfDay {
         return TimeOfDay(rawValue: timeOfDay) ?? .morning
     }
@@ -108,8 +108,19 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
     let isActive: Bool
     let stepDetails: [SavedStepDetailModel]
     let adaptationEnabled: Bool
-    let adaptationType: AdaptationType?
+    let adaptationType: AdaptationType?  // Legacy: single type (backward compatible)
+    let adaptationTypes: [AdaptationType]?  // New: multiple types for combined adaptations
     let imageName: String
+
+    // Computed property to get all active adaptation types
+    var activeAdaptationTypes: [AdaptationType] {
+        if let types = adaptationTypes, !types.isEmpty {
+            return types
+        } else if let type = adaptationType {
+            return [type]
+        }
+        return []
+    }
 
     init(from template: RoutineTemplate, isActive: Bool = false, adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil) {
         self.id = UUID()
@@ -130,6 +141,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.isActive = isActive
         self.adaptationEnabled = adaptationEnabled
         self.adaptationType = adaptationType
+        self.adaptationTypes = adaptationType.map { [$0] }  // Convert single to array
         self.imageName = template.imageName
         // Create step details from template steps using ProductTypeDatabase
         var allStepDetails: [SavedStepDetailModel] = []
@@ -165,7 +177,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.stepDetails = allStepDetails
     }
 
-    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, imageName: String = "routine-minimalist") {
+    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, adaptationTypes: [AdaptationType]? = nil, imageName: String = "routine-minimalist") {
         self.id = UUID()
         self.templateId = templateId
         self.title = title
@@ -185,6 +197,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.stepDetails = stepDetails
         self.adaptationEnabled = adaptationEnabled
         self.adaptationType = adaptationType
+        self.adaptationTypes = adaptationTypes ?? adaptationType.map { [$0] }
         self.imageName = imageName
     }
 
@@ -215,6 +228,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         // Adaptation fields (default to false for backward compatibility)
         self.adaptationEnabled = entity.adaptationEnabled
         self.adaptationType = entity.adaptationType.flatMap { AdaptationType(rawValue: $0) }
+        self.adaptationTypes = self.adaptationType.map { [$0] }  // Convert to array for backward compat
         self.imageName = entity.imageName ?? "routine-minimalist"
     }
 }

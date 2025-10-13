@@ -49,13 +49,34 @@ class RoutineAdapterService: RoutineAdapterProtocol {
         routine: SavedRoutineModel,
         for date: Date
     ) async -> RoutineSnapshot? {
+        print("🔍 RoutineAdapterService.getSnapshot called for: \(routine.title)")
+        print("🔍 Adaptation enabled: \(routine.adaptationEnabled)")
+        print("🔍 Adaptation type (legacy): \(routine.adaptationType?.rawValue ?? "nil")")
+
         guard routine.adaptationEnabled else {
             print("⚠️ RoutineAdapterService: Adaptation not enabled for routine \(routine.title)")
             return nil
         }
 
-        guard let adaptationType = routine.adaptationType else {
-            print("⚠️ RoutineAdapterService: No adaptation type set for routine \(routine.title)")
+        // Smart adaptation: Apply both cycle and weather if weather preferences are enabled
+        var adaptationTypes: [AdaptationType] = []
+
+        // Add the routine's configured type
+        if let type = routine.adaptationType {
+            adaptationTypes.append(type)
+        }
+
+        // Also add weather if globally enabled (works alongside cycle)
+        let weatherEnabled = await WeatherPreferencesStore.shared.isWeatherAdaptationEnabled
+        if weatherEnabled && !adaptationTypes.contains(.seasonal) {
+            adaptationTypes.append(.seasonal)
+            print("🌤 Adding weather adaptation alongside \(routine.adaptationType?.rawValue ?? "base") routine")
+        }
+
+        print("🔍 Applying adaptation types: \(adaptationTypes.map { $0.rawValue })")
+
+        guard !adaptationTypes.isEmpty else {
+            print("⚠️ RoutineAdapterService: No adaptation types to apply")
             return nil
         }
 
@@ -65,51 +86,25 @@ class RoutineAdapterService: RoutineAdapterProtocol {
         }
 
         print("🔄 RoutineAdapterService: Generating snapshot for \(routine.title) on \(date)")
+        print("📋 Adaptation types count: \(adaptationTypes.count)")
+        print("📋 Adaptation types: \(adaptationTypes.map { $0.rawValue }.joined(separator: " + "))")
 
-        // 1. Determine context key (phase from CycleStore or weather data)
-        let contextKey = await getContextKey(for: adaptationType, date: date)
-        print("📍 Context: \(contextKey)")
-
-        // 2. Load rules
-        guard let ruleSet = rulesEngine.loadRuleSet(type: adaptationType) else {
-            print("❌ RoutineAdapterService: Failed to load rule set for \(adaptationType.rawValue)")
-            return nil
-        }
-
-        // 3. Get active contexts for weather rules
-        var activeContexts: [String]? = nil
-        if adaptationType == .seasonal {
-            // For weather adaptation, get all active contexts
-            if let weatherData = await weatherService.getCurrentWeatherData() {
-                let context = WeatherAdaptationContext(weatherData: weatherData, date: date)
-                activeContexts = context.contextKeys
-                print("🌤 Active weather contexts: \(activeContexts ?? [])")
-            }
-        }
-
-        // 4. Resolve adaptations for each step
-        let adaptedSteps = routine.stepDetails.map { step -> AdaptedStepDetail in
-            let adaptation = rulesEngine.resolve(
-                step: step,
-                using: ruleSet.rules,
-                for: contextKey,
-                timeOfDay: step.timeOfDayEnum,
-                activeContexts: activeContexts
-            )
-
-            let displayOrder = adaptation?.orderOverride ?? step.order
-
-            return AdaptedStepDetail(
-                baseStep: step,
-                adaptation: adaptation,
-                displayOrder: displayOrder
-            )
-        }.sorted { $0.displayOrder < $1.displayOrder }
+        // Apply all adaptation types and merge results
+        // Cycle wins conflicts if both are enabled
+        let adaptedSteps = await applyMultipleAdaptations(
+            routine: routine,
+            types: adaptationTypes,
+            date: date
+        )
 
         print("✅ Adapted \(adaptedSteps.count) steps (\(adaptedSteps.filter { !$0.shouldShow }.count) skipped)")
+        print("📊 Non-normal steps: \(adaptedSteps.filter { $0.emphasisLevel != .normal }.count)")
 
-        // 4. Get briefing
-        let briefing = ruleSet.briefings.first { $0.contextKey == contextKey } ?? createDefaultBriefing(for: contextKey)
+        // Get briefing from primary type (first in list)
+        let primaryType = adaptationTypes.first!
+        let contextKey = await getContextKey(for: primaryType, date: date)
+        let ruleSet = rulesEngine.loadRuleSet(type: primaryType)
+        let briefing = ruleSet?.briefings.first { $0.contextKey == contextKey } ?? createDefaultBriefing(for: contextKey)
 
         let snapshot = RoutineSnapshot(
             baseRoutine: routine,
@@ -123,6 +118,108 @@ class RoutineAdapterService: RoutineAdapterProtocol {
         snapshotCache.set(snapshot, for: routine.id, date: date)
 
         return snapshot
+    }
+
+    // MARK: - Multiple Adaptations
+
+    private func applyMultipleAdaptations(
+        routine: SavedRoutineModel,
+        types: [AdaptationType],
+        date: Date
+    ) async -> [AdaptedStepDetail] {
+        print("🔄 Applying \(types.count) adaptation types: \(types.map { $0.rawValue })")
+
+        // Collect all adaptations for each step
+        var stepAdaptations: [UUID: [StepAdaptation]] = [:]
+
+        for adaptationType in types {
+            print("📋 Processing \(adaptationType.rawValue) adaptation...")
+
+            // Load rules for this type
+            guard let ruleSet = rulesEngine.loadRuleSet(type: adaptationType) else {
+                print("❌ Failed to load rules for \(adaptationType.rawValue)")
+                continue
+            }
+
+            // Get context
+            let contextKey = await getContextKey(for: adaptationType, date: date)
+
+            // Get active contexts for weather
+            var activeContexts: [String]? = nil
+            if adaptationType == .seasonal {
+                if let weatherData = await weatherService.getCurrentWeatherData() {
+                    let context = WeatherAdaptationContext(weatherData: weatherData, date: date)
+                    activeContexts = context.contextKeys
+                    print("🌤 Active weather contexts: \(activeContexts ?? [])")
+                }
+            }
+
+            // Resolve adaptations for each step
+            for step in routine.stepDetails {
+                let adaptation = rulesEngine.resolve(
+                    step: step,
+                    using: ruleSet.rules,
+                    for: contextKey,
+                    timeOfDay: step.timeOfDayEnum,
+                    activeContexts: activeContexts
+                )
+
+                if let adaptation = adaptation {
+                    if stepAdaptations[step.id] == nil {
+                        stepAdaptations[step.id] = []
+                    }
+                    stepAdaptations[step.id]?.append(adaptation)
+                }
+            }
+        }
+
+        // Merge adaptations for each step with cycle winning conflicts
+        let adaptedSteps = routine.stepDetails.map { step -> AdaptedStepDetail in
+            let adaptations = stepAdaptations[step.id] ?? []
+
+            // Merge adaptations with cycle winning
+            let finalAdaptation = mergeAdaptations(adaptations, cycleWins: types.contains(.cycle))
+
+            let displayOrder = finalAdaptation?.orderOverride ?? step.order
+
+            return AdaptedStepDetail(
+                baseStep: step,
+                adaptation: finalAdaptation,
+                displayOrder: displayOrder
+            )
+        }.sorted { $0.displayOrder < $1.displayOrder }
+
+        return adaptedSteps
+    }
+
+    /// Merge multiple adaptations for a single step
+    /// Cycle wins conflicts ONLY if cycle has non-normal emphasis
+    /// If cycle is normal and weather is not, weather applies
+    private func mergeAdaptations(_ adaptations: [StepAdaptation], cycleWins: Bool) -> StepAdaptation? {
+        guard !adaptations.isEmpty else { return nil }
+        if adaptations.count == 1 { return adaptations.first }
+
+        // Separate cycle and non-cycle adaptations
+        let cycleAdaptation = adaptations.first(where: { ["menstrual", "follicular", "ovulatory", "luteal"].contains($0.contextKey) })
+        let otherAdaptations = adaptations.filter { !["menstrual", "follicular", "ovulatory", "luteal"].contains($0.contextKey) }
+
+        // If cycle wins mode and cycle has a NON-NORMAL emphasis, use it
+        if cycleWins, let cycle = cycleAdaptation, cycle.emphasis != .normal {
+            print("🏆 Cycle adaptation wins conflict for step (cycle: \(cycle.emphasis.rawValue))")
+            return cycle
+        }
+
+        // If cycle is normal or doesn't exist, check for non-normal adaptations from other types
+        let nonNormalAdaptations = (otherAdaptations + (cycleAdaptation.map { [$0] } ?? [])).filter { $0.emphasis != .normal }
+
+        if let bestAdaptation = nonNormalAdaptations.first {
+            let source = ["menstrual", "follicular", "ovulatory", "luteal"].contains(bestAdaptation.contextKey) ? "cycle" : "weather"
+            print("✅ Using \(source) adaptation (emphasis: \(bestAdaptation.emphasis.rawValue))")
+            return bestAdaptation
+        }
+
+        // If all are normal, use any one (doesn't matter)
+        return adaptations.first
     }
 
     // MARK: - Private Helpers

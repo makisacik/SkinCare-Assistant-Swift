@@ -80,8 +80,17 @@ struct MorningRoutineCompletionView: View {
     }
 
     private func findAdaptedStep(for stepId: String) -> AdaptedStepDetail? {
-        guard let snapshot = routineSnapshot else { return nil }
-        return snapshot.morningSteps.first { $0.id.uuidString == stepId }
+        guard let snapshot = routineSnapshot else {
+            print("⚠️ [MorningCompletion] No snapshot available for step \(stepId)")
+            return nil
+        }
+        let adaptedStep = snapshot.morningSteps.first { $0.id.uuidString == stepId }
+        if let adapted = adaptedStep {
+            print("✅ [MorningCompletion] Found adapted step: \(adapted.baseStep.title) - emphasis: \(adapted.emphasisLevel.rawValue)")
+        } else {
+            print("⚠️ [MorningCompletion] No adapted step found for ID: \(stepId)")
+        }
+        return adaptedStep
     }
 
     var body: some View {
@@ -142,8 +151,17 @@ struct MorningRoutineCompletionView: View {
                 do {
                     activeRoutine = try await routineStore.fetchActiveRoutine()
 
+                    print("🔍 [MorningCompletion] Active routine: \(activeRoutine?.title ?? "none")")
+                    print("🔍 [MorningCompletion] Adaptation enabled: \(activeRoutine?.adaptationEnabled ?? false)")
+                    print("🔍 [MorningCompletion] Adaptation type: \(activeRoutine?.adaptationType?.rawValue ?? "none")")
+
                     if let routine = activeRoutine, routine.adaptationEnabled {
+                        print("🔄 [MorningCompletion] Loading adapted snapshot for \(routine.adaptationType?.rawValue ?? "unknown") adaptation")
                         routineSnapshot = await adapterService.getSnapshot(routine: routine, for: selectedDate)
+                        print("✅ [MorningCompletion] Snapshot loaded with \(routineSnapshot?.adaptedSteps.count ?? 0) adapted steps")
+                        print("📋 [MorningCompletion] Morning steps in snapshot: \(routineSnapshot?.morningSteps.count ?? 0)")
+                    } else {
+                        print("ℹ️ [MorningCompletion] No adaptation enabled or no active routine")
                     }
 
                     // Check if cycle data exists
@@ -343,13 +361,13 @@ struct MorningRoutineCompletionView: View {
                 Spacer()
 
                 // Cycle status or enable button
-                if activeRoutine?.adaptationEnabled ?? false {
-                    // Adapted state - show status
+                if activeRoutine?.adaptationEnabled ?? false, activeRoutine?.activeAdaptationTypes.contains(.cycle) ?? false {
+                    // Cycle is enabled - show status
                     Text("Routine adapted to your cycle")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 } else {
-                    // Not adapted - show enable button
+                    // Cycle not enabled - show enable button
                     Button {
                         handleEnableCycleAdaptation()
                     } label: {
@@ -386,7 +404,8 @@ struct MorningRoutineCompletionView: View {
                         onTap: {
                             showingStepDetail = step
                         },
-                        adaptedStep: findAdaptedStep(for: step.id)
+                        adaptedStep: findAdaptedStep(for: step.id),
+                        adaptationType: activeRoutine?.adaptationType
                     )
                 }        }    }}
 
@@ -619,6 +638,7 @@ private struct DetailedStepRow: View {
     let onAddProduct: () -> Void
     let onTap: () -> Void
     let adaptedStep: AdaptedStepDetail? // NEW: Adaptation info
+    let adaptationType: AdaptationType? // NEW: For displaying correct label
 
     @State private var showCheckmarkAnimation = false
 
@@ -697,7 +717,7 @@ private struct DetailedStepRow: View {
                 }            .buttonStyle(PlainButtonStyle())
                 .padding(.leading, 52) // Align with the image
 
-                // Adaptation guidance - Made MORE prominent
+                // Adaptation guidance - Only show for non-normal emphasis
                 if let adapted = adaptedStep, adapted.emphasisLevel != .normal {
                     VStack(alignment: .leading, spacing: 8) {
                         // Emphasis label
@@ -710,9 +730,12 @@ private struct DetailedStepRow: View {
                                 .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(adapted.emphasisLevel.color)
 
-                            Text("• Cycle Adapted")
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundColor(adapted.emphasisLevel.color.opacity(0.7))
+                            // Only show label for cycle adaptations
+                            if ["menstrual", "follicular", "ovulatory", "luteal"].contains(adapted.adaptation?.contextKey ?? "") {
+                                Text("• Cycle Adapted")
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundColor(adapted.emphasisLevel.color.opacity(0.7))
+                            }
                         }
 
                         // Guidance text

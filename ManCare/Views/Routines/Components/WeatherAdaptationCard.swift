@@ -14,7 +14,7 @@ struct WeatherAdaptationCard: View {
     @State private var isLoading = false
     @State private var showingDetailSheet = false
     @State private var errorMessage: String?
-    
+
     var body: some View {
         Group {
             if preferencesStore.isWeatherAdaptationEnabled && weatherData != nil {
@@ -28,6 +28,7 @@ struct WeatherAdaptationCard: View {
         .padding(.horizontal, 20)
         .task {
             await loadWeatherData()
+            await autoEnableIfPermissionGranted()
         }
         .sheet(isPresented: $showingDetailSheet) {
             if let weather = weatherData {
@@ -35,9 +36,26 @@ struct WeatherAdaptationCard: View {
             }
         }
     }
-    
+
+    // MARK: - Auto-enable Helper
+
+    private func autoEnableIfPermissionGranted() async {
+        // If user already has location permission but weather adaptation isn't enabled,
+        // enable it automatically
+        let isEnabled = await preferencesStore.isWeatherAdaptationEnabled
+        if locationService.permissionState.isAuthorized && !isEnabled {
+            print("📍 Location permission already granted, auto-enabling weather adaptation")
+            let weatherService = WeatherService.shared
+            do {
+                _ = try await weatherService.requestLocationPermissionAndFetch()
+            } catch {
+                print("⚠️ Failed to auto-enable: \(error)")
+            }
+        }
+    }
+
     // MARK: - State 1: Permission Request Card
-    
+
     private var permissionRequestCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
@@ -46,7 +64,7 @@ struct WeatherAdaptationCard: View {
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.leading)
-                    
+
                     if let error = errorMessage {
                         Text(error)
                             .font(.system(size: 14))
@@ -59,10 +77,10 @@ struct WeatherAdaptationCard: View {
                             .multilineTextAlignment(.leading)
                     }
                 }
-                
+
                 Spacer()
             }
-            
+
             // Weather factors badges
             HStack(spacing: 8) {
                 WeatherFactorBadge(icon: "sun.max.fill", label: "UV", color: .orange)
@@ -70,7 +88,7 @@ struct WeatherAdaptationCard: View {
                 WeatherFactorBadge(icon: "wind", label: "Wind", color: .cyan)
                 WeatherFactorBadge(icon: "thermometer", label: "Temp", color: .red)
             }
-            
+
             // Enable button
             Button {
                 Task {
@@ -85,7 +103,7 @@ struct WeatherAdaptationCard: View {
                     } else {
                         Image(systemName: locationService.permissionState == .denied ? "location.slash.fill" : "location.fill")
                             .font(.system(size: 14, weight: .semibold))
-                        
+
                         Text(locationService.permissionState == .denied ? "Enable in Settings" : "Enable Weather Adaptation")
                             .font(.system(size: 15, weight: .semibold))
                     }
@@ -95,8 +113,8 @@ struct WeatherAdaptationCard: View {
                 .padding(.vertical, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(locationService.permissionState == .denied ? 
-                              ThemeManager.shared.theme.palette.error : 
+                        .fill(locationService.permissionState == .denied ?
+                              ThemeManager.shared.theme.palette.error :
                               ThemeManager.shared.theme.palette.primary)
                 )
             }
@@ -122,9 +140,9 @@ struct WeatherAdaptationCard: View {
                 )
         )
     }
-    
+
     // MARK: - State 2: Active Weather Card
-    
+
     private var activeWeatherCard: some View {
         Button {
             showingDetailSheet = true
@@ -136,16 +154,16 @@ struct WeatherAdaptationCard: View {
                         Text("Weather-Adapted Routine")
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
+
                         if let weather = weatherData {
                             Text(weather.condition ?? "Current conditions")
                                 .font(.system(size: 13))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                     }
-                    
+
                     Spacer()
-                    
+
                     // Disable button
                     Button {
                         preferencesStore.setWeatherAdaptationEnabled(false)
@@ -157,7 +175,7 @@ struct WeatherAdaptationCard: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                
+
                 if let weather = weatherData {
                     // UV Index - Most Important
                     HStack(spacing: 12) {
@@ -165,22 +183,22 @@ struct WeatherAdaptationCard: View {
                             Circle()
                                 .fill(weather.uvLevel.color.opacity(0.2))
                                 .frame(width: 44, height: 44)
-                            
+
                             Image(systemName: weather.uvLevel.icon)
                                 .font(.system(size: 20, weight: .semibold))
                                 .foregroundColor(weather.uvLevel.color)
                         }
-                        
+
                         VStack(alignment: .leading, spacing: 2) {
                             Text("UV Index: \(weather.uvIndex)")
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            
+
                             Text("\(weather.uvLevel.displayName) - \(WeatherRecommendation.from(weatherData: weather).spfLevel)")
                                 .font(.system(size: 13))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
-                        
+
                         Spacer()
                     }
                     .padding(12)
@@ -192,7 +210,7 @@ struct WeatherAdaptationCard: View {
                                     .stroke(weather.uvLevel.color.opacity(0.3), lineWidth: 1)
                             )
                     )
-                    
+
                     // Weather summary
                     HStack(spacing: 16) {
                         WeatherMetric(
@@ -200,20 +218,20 @@ struct WeatherAdaptationCard: View {
                             value: String(format: "%.0f°C", weather.temperature),
                             color: .red
                         )
-                        
+
                         WeatherMetric(
                             icon: "humidity.fill",
                             value: String(format: "%.0f%%", weather.humidity),
                             color: .blue
                         )
-                        
+
                         WeatherMetric(
                             icon: "wind",
                             value: String(format: "%.0f km/h", weather.windSpeed),
                             color: .cyan
                         )
                     }
-                    
+
                     // Today's tip
                     let recommendation = WeatherRecommendation.from(weatherData: weather)
                     if let tip = recommendation.generalTips.first {
@@ -221,12 +239,12 @@ struct WeatherAdaptationCard: View {
                             Image(systemName: "lightbulb.fill")
                                 .font(.system(size: 12, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.info)
-                            
+
                             Text(tip)
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .lineLimit(2)
-                            
+
                             Spacer()
                         }
                         .padding(.horizontal, 12)
@@ -260,9 +278,9 @@ struct WeatherAdaptationCard: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
-    
+
     // MARK: - Actions
-    
+
     private func enableWeatherAdaptation() async {
         // If permission denied, open settings
         if locationService.permissionState == .denied {
@@ -271,10 +289,10 @@ struct WeatherAdaptationCard: View {
             }
             return
         }
-        
+
         isLoading = true
         errorMessage = nil
-        
+
         do {
             let weatherService = WeatherService.shared
             _ = try await weatherService.requestLocationPermissionAndFetch()
@@ -283,13 +301,13 @@ struct WeatherAdaptationCard: View {
             errorMessage = "Unable to enable: \(error.localizedDescription)"
             print("❌ Failed to enable weather adaptation: \(error)")
         }
-        
+
         isLoading = false
     }
-    
+
     private func loadWeatherData() async {
         guard preferencesStore.isWeatherAdaptationEnabled else { return }
-        
+
         let weatherService = WeatherService.shared
         if let data = await weatherService.getCurrentWeatherData() {
             await MainActor.run {
@@ -305,13 +323,13 @@ private struct WeatherFactorBadge: View {
     let icon: String
     let label: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Image(systemName: icon)
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(color)
-            
+
             Text(label)
                 .font(.system(size: 10, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
@@ -331,13 +349,13 @@ private struct WeatherMetric: View {
     let icon: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(color)
-            
+
             Text(value)
                 .font(.system(size: 13, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
@@ -356,7 +374,7 @@ private struct WeatherMetric: View {
 private struct WeatherDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
     let weatherData: WeatherData
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -375,17 +393,17 @@ private struct WeatherDetailSheet: View {
                                         .font(.system(size: 16))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 }
-                                
+
                                 let recommendation = WeatherRecommendation.from(weatherData: weatherData)
-                                
+
                                 WeatherDetailRow(label: "Recommended SPF", value: recommendation.spfLevel)
-                                
+
                                 if !recommendation.activeIngredientWarnings.isEmpty {
                                     VStack(alignment: .leading, spacing: 8) {
                                         Text("⚠️ Warnings")
                                             .font(.system(size: 14, weight: .semibold))
                                             .foregroundColor(ThemeManager.shared.theme.palette.error)
-                                        
+
                                         ForEach(recommendation.activeIngredientWarnings, id: \.self) { warning in
                                             Text("• \(warning)")
                                                 .font(.system(size: 13))
@@ -401,7 +419,7 @@ private struct WeatherDetailSheet: View {
                             }
                         }
                     )
-                    
+
                     // Environmental Conditions
                     WeatherDetailSection(
                         title: "Environmental Conditions",
@@ -427,7 +445,7 @@ private struct WeatherDetailSheet: View {
                             }
                         }
                     )
-                    
+
                     // Recommendations
                     let recommendation = WeatherRecommendation.from(weatherData: weatherData)
                     if !recommendation.generalTips.isEmpty {
@@ -449,7 +467,7 @@ private struct WeatherDetailSheet: View {
                             }
                         )
                     }
-                    
+
                     if let textureAdjustment = recommendation.textureAdjustment {
                         WeatherDetailSection(
                             title: "Product Texture",
@@ -486,19 +504,19 @@ private struct WeatherDetailSection<Content: View>: View {
     let icon: String
     let iconColor: Color
     let content: () -> Content
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(iconColor)
-                
+
                 Text(title)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             }
-            
+
             content()
         }
         .padding(16)
@@ -518,15 +536,15 @@ private struct WeatherDetailSection<Content: View>: View {
 private struct WeatherDetailRow: View {
     let label: String
     let value: String
-    
+
     var body: some View {
         HStack {
             Text(label)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            
+
             Spacer()
-            
+
             Text(value)
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
@@ -552,7 +570,7 @@ extension Color {
         default:
             (a, r, g, b) = (255, 0, 0, 0)
         }
-        
+
         self.init(
             .sRGB,
             red: Double(r) / 255,
