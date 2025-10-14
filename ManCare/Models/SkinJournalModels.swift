@@ -55,6 +55,9 @@ enum SkinFeelTag: String, CaseIterable, Codable {
     case calm = "Calm"
     case glowing = "Glowing"
     case dull = "Dull"
+    case sensitive = "Sensitive"
+    case wrinkles = "Wrinkles"
+    case dryness = "Dryness"
     
     var emoji: String {
         switch self {
@@ -66,6 +69,9 @@ enum SkinFeelTag: String, CaseIterable, Codable {
         case .calm: return "😌"
         case .glowing: return "✨"
         case .dull: return "😑"
+        case .sensitive: return "😣"
+        case .wrinkles: return "👴"
+        case .dryness: return "🥵"
         }
     }
     
@@ -79,6 +85,9 @@ enum SkinFeelTag: String, CaseIterable, Codable {
         case .calm: return .mint
         case .glowing: return .yellow
         case .dull: return .gray
+        case .sensitive: return .pink
+        case .wrinkles: return .purple
+        case .dryness: return .orange
         }
     }
 }
@@ -193,5 +202,3 @@ extension SkinJournalEntryModel {
 }
 
 import CoreData
-
-

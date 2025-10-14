@@ -7,7 +7,7 @@
 import SwiftUI
 
 enum Concern: String, CaseIterable, Identifiable, Codable {
-    case acne, redness, blackheads, largePores, postShaveIrritation, none
+    case acne, redness, blackheads, largePores, sensitive, wrinkles, dryness, none
     var id: String { rawValue }
 
     var title: String {
@@ -16,7 +16,9 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         case .redness:             return "Redness"
         case .blackheads:          return "Blackheads"
         case .largePores:          return "Large Pores"
-        case .postShaveIrritation: return "Post-Shave"
+        case .sensitive:           return "Sensitive"
+        case .wrinkles:            return "Wrinkles"
+        case .dryness:             return "Dryness"
         case .none:                return "None"
         }
     }
@@ -27,7 +29,9 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         case .redness:             return "Sensitivity, flushing"
         case .blackheads:          return "Clogged pores, oil build-up"
         case .largePores:          return "Texture, visible pores"
-        case .postShaveIrritation: return "Razor burn, ingrowns"
+        case .sensitive:           return "Easily irritated skin"
+        case .wrinkles:            return "Fine lines, aging signs"
+        case .dryness:             return "Flaky, dehydrated skin"
         case .none:                return "No specific concerns"
         }
     }
@@ -38,7 +42,9 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
         case .redness:             return "thermometer.sun"             // heat/redness
         case .blackheads:          return "circle.dashed.inset.filled"  // texture/pores
         case .largePores:          return "circle.dashed.inset.filled"  // texture/pores
-        case .postShaveIrritation: return "scissors"                       // SF Symbols 16+
+        case .sensitive:           return "exclamationmark.triangle.fill" // sensitivity warning
+        case .wrinkles:            return "waveform.path"               // lines/wrinkles
+        case .dryness:             return "sun.max.fill"                // drying out/dehydration
         case .none:                return "checkmark.circle.fill"        // no concerns
         }
     }

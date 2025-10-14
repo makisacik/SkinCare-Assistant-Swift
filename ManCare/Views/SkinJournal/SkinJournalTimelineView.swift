@@ -12,7 +12,6 @@ struct SkinJournalTimelineView: View {
     @ObservedObject private var store = SkinJournalStore.shared
     @State private var showingAddEntry = false
     @State private var searchText = ""
-    @State private var selectedEntry: SkinJournalEntryModel?
     @State private var showingComparison = false
     
     private let columns = [
@@ -81,9 +80,6 @@ struct SkinJournalTimelineView: View {
             .sheet(isPresented: $showingAddEntry) {
                 AddSkinJournalEntryView()
             }
-            .sheet(item: $selectedEntry) { entry in
-                SkinJournalEntryDetailView(entry: entry)
-            }
             .sheet(isPresented: $showingComparison) {
                 if store.entries.count >= 2 {
                     SkinJournalComparisonView()
@@ -104,9 +100,6 @@ struct SkinJournalTimelineView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(filteredEntries) { entry in
                         EntryCard(entry: entry, store: store)
-                            .onTapGesture {
-                                selectedEntry = entry
-                            }
                     }
                 }
                 .padding(.horizontal)
