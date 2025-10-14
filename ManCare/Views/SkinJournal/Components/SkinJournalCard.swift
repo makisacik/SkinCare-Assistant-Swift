@@ -74,6 +74,7 @@ struct SkinJournalCard: View {
                     y: 8
                 )
         )
+        .padding(.horizontal, 20)
         .sheet(isPresented: $showingTimeline) {
             SkinJournalTimelineView()
         }

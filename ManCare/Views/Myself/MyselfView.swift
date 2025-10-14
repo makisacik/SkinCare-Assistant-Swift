@@ -18,16 +18,15 @@ struct MyselfView: View {
         ScrollView {
             VStack(spacing: 24) {
                 profileHeader
+                    .padding(.horizontal, 20)
 
                 // Menstruation Cycle Card
                 MenstruationCycleCard()
-                    .padding(.horizontal, -20) // Compensate for parent padding
 
                 // Skin Journal Card
                 SkinJournalCard()
-                    .padding(.horizontal, -20) // Compensate for parent padding
             }
-            .padding(20)
+            .padding(.vertical, 20)
         }
         .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
         .navigationTitle("Profile")
