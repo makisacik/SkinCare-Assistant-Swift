@@ -22,6 +22,10 @@ struct MyselfView: View {
                 // Menstruation Cycle Card
                 MenstruationCycleCard()
                     .padding(.horizontal, -20) // Compensate for parent padding
+
+                // Skin Journal Card
+                SkinJournalCard()
+                    .padding(.horizontal, -20) // Compensate for parent padding
             }
             .padding(20)
         }

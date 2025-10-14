@@ -213,7 +213,7 @@ struct RoutineHomeView: View {
                 RoutineCard(
                     title: "Morning routine",
                     iconName: "sun.max.fill",
-                    iconColor: ThemeManager.shared.theme.palette.info,
+                    iconColor: ThemeManager.shared.theme.palette.primary,
                     timeOfDay: .morning,
                     routineViewModel: routineViewModel,
                     completionViewModel: routineViewModel.completionViewModel,
