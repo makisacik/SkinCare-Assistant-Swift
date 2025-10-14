@@ -71,14 +71,15 @@ struct FreshRoutineCard: View {
                                 }
                                 onSave()
                             }) {
-                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                Image(systemName: isSaved ? "heart.fill" : "heart")
                                     .font(.system(size: 20, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(isSaved ? .red : .white)
                                     .frame(width: 40, height: 40)
                                     .background(
                                         Circle()
                                             .fill(Color.black.opacity(0.3))
                                     )
+                                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                             }
                             .buttonStyle(PlainButtonStyle())
                         }

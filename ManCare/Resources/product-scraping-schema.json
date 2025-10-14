@@ -1,0 +1,324 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0.0",
+    "generatedAt": "${NOW}",
+    "targetTotalProducts": 25000,
+    "notes": "Centralized taxonomy and scraping schema for personalized product recommendations."
+  },
+  "enums": {
+    "skinTypes": ["oily", "dry", "combination", "normal"],
+    "concerns": [
+      "acne",
+      "redness",
+      "blackheads",
+      "largePores",
+      "sensitive",
+      "wrinkles",
+      "dryness",
+      "none"
+    ],
+    "mainGoals": [
+      "healthierOverall",
+      "reduceBreakouts",
+      "sootheIrritation",
+      "preventAging",
+      "ageSlower",
+      "shinySkin"
+    ],
+    "fitzpatrickSkinTones": [
+      "type1",
+      "type2",
+      "type3",
+      "type4",
+      "type5",
+      "type6"
+    ],
+    "ageRanges": [
+      "teens",
+      "twenties",
+      "thirties",
+      "forties",
+      "fifties",
+      "sixtiesPlus"
+    ],
+    "regions": [
+      "tropical",
+      "subtropical",
+      "temperate",
+      "continental",
+      "mediterranean",
+      "arctic",
+      "desert",
+      "mountain"
+    ],
+    "preferences": [
+      "fragranceFreeOnly",
+      "suitableForSensitiveSkin",
+      "naturalIngredients",
+      "crueltyFree",
+      "veganFriendly"
+    ],
+    "lifestyle": {
+      "sleepQuality": ["poor", "average", "good"],
+      "outdoorHoursRangePerDay": [0, 10],
+      "smokes": [true, false],
+      "drinksAlcohol": [true, false],
+      "exerciseFreq": ["none", "oneToTwo", "threeToFour", "fivePlus"],
+      "routineDepth": ["minimal", "standard", "detailed"],
+      "sunResponse": ["rarely", "sometimes", "easily"]
+    },
+    "productCategories": {
+      "cleansing": [
+        "cleanser",
+        "faceWash",
+        "cleansingOil",
+        "cleansingBalm",
+        "micellarWater",
+        "makeupRemover"
+      ],
+      "toning": ["toner", "facialMist"],
+      "treatment": [
+        "faceSerum",
+        "essence",
+        "exfoliator",
+        "spotTreatment",
+        "retinol",
+        "vitaminC",
+        "niacinamide",
+        "chemicalPeel"
+      ],
+      "moisturizing": ["moisturizer", "eyeCream", "facialOil"],
+      "sunProtection": [
+        "sunscreen",
+        "faceSunscreen",
+        "bodySunscreen",
+        "lipBalm"
+      ],
+      "masks": ["faceMask", "hairMask"],
+      "shaving": ["shaveCream", "aftershave", "shaveGel"],
+      "bodyCare": ["bodyLotion", "bodyWash", "handCream"],
+      "hairCare": ["shampoo", "conditioner", "hairOil"]
+    },
+    "productTypes": [
+      "cleanser",
+      "moisturizer",
+      "sunscreen",
+      "toner",
+      "faceSerum",
+      "essence",
+      "exfoliator",
+      "faceMask",
+      "facialOil",
+      "facialMist",
+      "eyeCream",
+      "spotTreatment",
+      "retinol",
+      "vitaminC",
+      "niacinamide",
+      "faceSunscreen",
+      "bodySunscreen",
+      "lipBalm",
+      "shaveCream",
+      "aftershave",
+      "shaveGel",
+      "bodyLotion",
+      "bodyWash",
+      "handCream",
+      "shampoo",
+      "conditioner",
+      "hairOil",
+      "hairMask",
+      "chemicalPeel",
+      "micellarWater",
+      "makeupRemover",
+      "faceWash",
+      "cleansingOil",
+      "cleansingBalm"
+    ]
+  },
+  "aliasMap": {
+    "cleanser": "cleanser",
+    "face wash": "faceWash",
+    "facial cleanser": "cleanser",
+    "cleansing gel": "cleanser",
+    "cleansing cream": "cleanser",
+    "milk cleanser": "cleanser",
+    "cleansing oil": "cleansingOil",
+    "oil cleanser": "cleansingOil",
+    "cleansing balm": "cleansingBalm",
+    "micellar water": "micellarWater",
+    "makeup remover": "makeupRemover",
+
+    "moisturizer": "moisturizer",
+    "face cream": "moisturizer",
+    "face lotion": "moisturizer",
+    "moisturizing cream": "moisturizer",
+    "moisturizing gel": "moisturizer",
+    "gel moisturizer": "moisturizer",
+    "eye cream": "eyeCream",
+
+    "sunscreen": "sunscreen",
+    "spf": "sunscreen",
+    "sun protection": "sunscreen",
+    "face sunscreen": "faceSunscreen",
+    "body sunscreen": "bodySunscreen",
+    "lip balm": "lipBalm",
+
+    "serum": "faceSerum",
+    "face serum": "faceSerum",
+    "essence": "essence",
+    "ampoule": "faceSerum",
+    "exfoliator": "exfoliator",
+    "peel": "exfoliator",
+    "chemical peel": "chemicalPeel",
+    "spot treatment": "spotTreatment",
+    "acne treatment": "spotTreatment",
+    "retinol": "retinol",
+    "vitamin c": "vitaminC",
+    "ascorbic acid": "vitaminC",
+    "niacinamide": "niacinamide",
+
+    "toner": "toner",
+    "facial mist": "facialMist",
+    "face mist": "facialMist",
+    "facial spray": "facialMist",
+
+    "face oil": "facialOil",
+    "facial oil": "facialOil",
+    "oil": "facialOil",
+
+    "face mask": "faceMask",
+    "clay mask": "faceMask",
+    "sheet mask": "faceMask",
+    "sleeping mask": "faceMask",
+    "overnight mask": "faceMask",
+
+    "shave cream": "shaveCream",
+    "shaving cream": "shaveCream",
+    "shave gel": "shaveGel",
+    "shaving gel": "shaveGel",
+    "shave foam": "shaveCream",
+
+    "aftershave": "aftershave",
+    "after shave": "aftershave",
+    "post shave": "aftershave",
+    "aftershave balm": "aftershave",
+    "soothing balm": "aftershave",
+
+    "body lotion": "bodyLotion",
+    "body wash": "bodyWash",
+    "hand cream": "handCream",
+
+    "shampoo": "shampoo",
+    "conditioner": "conditioner",
+    "hair oil": "hairOil",
+    "hair mask": "hairMask"
+  },
+  "keyIngredients": [
+    "niacinamide",
+    "retinol",
+    "vitamin C",
+    "hyaluronic acid",
+    "salicylic acid",
+    "glycolic acid",
+    "AHA",
+    "BHA",
+    "PHA",
+    "ceramides",
+    "peptides",
+    "zinc",
+    "SPF",
+    "centella asiatica",
+    "tea tree oil",
+    "benzoyl peroxide"
+  ],
+  "productSchema": {
+    "id": "string",
+    "displayName": "string",
+    "brand": "string",
+    "productType": "enum:enums.productTypes",
+    "category": "enum:keys(enums.productCategories)",
+    "suitableFor": {
+      "skinTypes": "array<enum:enums.skinTypes>",
+      "concerns": "array<enum:enums.concerns>",
+      "ageRanges": "array<enum:enums.ageRanges>",
+      "skinTones": "array<enum:enums.fitzpatrickSkinTones>",
+      "climate": "array<enum:enums.regions>"
+    },
+    "preferences": {
+      "fragranceFree": "boolean",
+      "sensitiveSkinSafe": "boolean",
+      "naturalIngredients": "boolean",
+      "crueltyFree": "boolean",
+      "vegan": "boolean"
+    },
+    "ingredients": "array<{ name:string, function?:string, concerns?:array<string> }>",
+    "priceRange": "enum:budget|mid|premium",
+    "size": "string",
+    "description": "string",
+    "imageURL": "url",
+    "purchaseLink": "url",
+    "spf": "number(optional)",
+    "tags": "array<string>"
+  },
+  "scrapingTargets": {
+    "total": 25000,
+    "perCategory": {
+      "cleansing": 5000,
+      "moisturizing": 3500,
+      "sunProtection": 4000,
+      "treatment": 8000,
+      "toning": 1500,
+      "masks": 1000,
+      "shaving": 900,
+      "bodyCare": 700,
+      "hairCare": 400
+    },
+    "perType": {
+      "cleanser": 1400,
+      "faceWash": 1000,
+      "cleansingOil": 800,
+      "cleansingBalm": 700,
+      "micellarWater": 600,
+      "makeupRemover": 500,
+
+      "moisturizer": 2200,
+      "eyeCream": 800,
+      "facialOil": 500,
+
+      "sunscreen": 1500,
+      "faceSunscreen": 1200,
+      "bodySunscreen": 900,
+      "lipBalm": 400,
+
+      "faceSerum": 2000,
+      "essence": 700,
+      "exfoliator": 1100,
+      "spotTreatment": 1100,
+      "retinol": 800,
+      "vitaminC": 800,
+      "niacinamide": 800,
+      "chemicalPeel": 700,
+
+      "toner": 1200,
+      "facialMist": 300,
+
+      "faceMask": 700,
+      "hairMask": 300,
+
+      "shaveCream": 400,
+      "aftershave": 300,
+      "shaveGel": 200,
+
+      "bodyLotion": 300,
+      "bodyWash": 250,
+      "handCream": 150,
+
+      "shampoo": 200,
+      "conditioner": 120,
+      "hairOil": 80
+    }
+  }
+}
+
+

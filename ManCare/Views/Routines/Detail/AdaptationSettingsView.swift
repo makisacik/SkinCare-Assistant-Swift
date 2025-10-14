@@ -184,11 +184,14 @@ struct AdaptationSettingsView: View {
             title: "Morning Glow",
             description: "Start your day fresh",
             category: .all,
-            stepCount: 5,
             duration: "10 min",
             difficulty: .beginner,
             tags: ["hydrating"],
-            morningSteps: ["Cleanser", "Serum", "Moisturizer"],
+            morningSteps: [
+                TemplateRoutineStep(title: "Cleanser", why: "Cleanse skin", how: "Apply gently"),
+                TemplateRoutineStep(title: "Serum", why: "Treat skin", how: "Pat in"),
+                TemplateRoutineStep(title: "Moisturizer", why: "Hydrate skin", how: "Apply evenly")
+            ],
             eveningSteps: [],
             benefits: ["Hydrated skin"],
             isFeatured: false,
@@ -199,7 +202,7 @@ struct AdaptationSettingsView: View {
         adaptationEnabled: false
     )
 
-    return AdaptationSettingsView(
+    AdaptationSettingsView(
         routine: mockRoutine,
         routineService: ServiceFactory.shared.createRoutineService()
     )

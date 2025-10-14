@@ -78,11 +78,12 @@ struct AddProductView: View {
                                 HStack(spacing: 12) {
                                     TextField("Add ingredient", text: $newIngredient)
                                         .font(ThemeManager.shared.theme.typo.body)
+                                        .colorScheme(.light)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 12)
                                         .background(
                                             RoundedRectangle(cornerRadius: 12)
-                                                .fill(Color(.systemBackground))
+                                                .fill(Color.white)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 12)
                                                         .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
@@ -142,11 +143,12 @@ struct AddProductView: View {
                                     ZStack(alignment: .topLeading) {
                                         TextEditor(text: $description)
                                             .font(ThemeManager.shared.theme.typo.body)
+                                            .colorScheme(.light)
                                             .frame(minHeight: 100)
                                             .padding(12)
                                             .background(
                                                 RoundedRectangle(cornerRadius: 12)
-                                                    .fill(Color(.systemBackground))
+                                                    .fill(Color.white)
                                                     .overlay(
                                                         RoundedRectangle(cornerRadius: 12)
                                                             .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)

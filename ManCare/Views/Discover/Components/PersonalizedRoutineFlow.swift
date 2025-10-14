@@ -283,11 +283,12 @@ struct PersonalizedRoutineResultView: View {
                     TextField("Routine name", text: $routineName)
                         .textInputAutocapitalization(.words)
                         .disableAutocorrection(true)
+                        .colorScheme(.light)
                 }
                 .padding(12)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.systemBackground))
+                        .fill(Color.white)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
@@ -844,7 +845,7 @@ struct PersonalizedRoutinePreferencesView: View {
                                 .padding(16)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color(.systemBackground))
+                                        .fill(Color.white)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 12)
                                                 .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
@@ -852,6 +853,7 @@ struct PersonalizedRoutinePreferencesView: View {
                                 )
                                 .font(.system(size: 16))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                .colorScheme(.light)
                                 .onChange(of: customDetails) { newValue in
                                     if newValue.count > 100 {
                                         customDetails = String(newValue.prefix(100))

@@ -74,6 +74,11 @@ actor DiscoverContentService {
         return content.miniGuides ?? []
     }
     
+    /// Get inspirational quotes
+    func getInspirationalQuotes() async throws -> [InspirationalQuote] {
+        let content = try await loadContent()
+        return content.inspirationalQuotes ?? []
+    }
     // MARK: - Private Helpers
     
     private func loadFromJSON() throws -> DiscoverContent {

@@ -16,6 +16,7 @@ struct DiscoverContent: Codable {
     let seasonalPlaybook: SeasonalPlaybook
     let communityHeat: [TrendingRoutine]
     let miniGuides: [MiniGuide]?
+    let inspirationalQuotes: [InspirationalQuote]?
     let lastUpdated: Date
 }
 
@@ -247,5 +248,22 @@ struct MiniGuide: Codable, Identifiable {
     let minutes: Int
     let imageName: String
     let category: String
+}
+
+// MARK: - Inspirational Quote
+
+struct InspirationalQuote: Codable, Identifiable {
+    let id: UUID
+    let text: String
+    let author: String
+    let category: String
+
+    var displayText: String {
+        return text
+    }
+
+    var displayAuthor: String {
+        return "- \(author)"
+    }
 }
 

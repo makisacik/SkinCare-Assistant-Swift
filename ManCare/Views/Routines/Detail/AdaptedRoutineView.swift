@@ -382,11 +382,16 @@ struct WhyThisAdaptationModal: View {
             title: "Test",
             description: "Test",
             category: .all,
-            stepCount: 1,
             duration: "10 min",
             difficulty: .beginner,
             tags: [],
-            morningSteps: ["Cleanser"],
+            morningSteps: [
+                TemplateRoutineStep(
+                    title: "Cleanser",
+                    why: "Test why",
+                    how: "Test how"
+                )
+            ],
             eveningSteps: [],
             benefits: [],
             isFeatured: false,

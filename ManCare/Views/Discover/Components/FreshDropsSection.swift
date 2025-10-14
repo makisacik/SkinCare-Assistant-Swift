@@ -40,7 +40,7 @@ struct FreshDropsSection: View {
                     onViewAll()
                 }
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             }
             .padding(.horizontal, 20)
             

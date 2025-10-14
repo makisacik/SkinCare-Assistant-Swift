@@ -182,12 +182,23 @@ class MockRoutineService: RoutineServiceProtocol {
             title: routineResponse.summary.title,
             description: routineResponse.summary.oneLiner,
             category: .all,
-            stepCount: routineResponse.routine.morning.count + routineResponse.routine.evening.count,
             duration: "10 min",
             difficulty: .beginner,
             tags: ["Mock"],
-            morningSteps: routineResponse.routine.morning.map { $0.name },
-            eveningSteps: routineResponse.routine.evening.map { $0.name },
+            morningSteps: routineResponse.routine.morning.map { step in
+                TemplateRoutineStep(
+                    title: step.name,
+                    why: step.why,
+                    how: step.how
+                )
+            },
+            eveningSteps: routineResponse.routine.evening.map { step in
+                TemplateRoutineStep(
+                    title: step.name,
+                    why: step.why,
+                    how: step.how
+                )
+            },
             benefits: ["Mock benefit"],
             isFeatured: false,
             isPremium: false,

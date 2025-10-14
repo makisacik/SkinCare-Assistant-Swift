@@ -306,19 +306,13 @@ struct MorningRoutineCompletionView: View {
 
     private var headerView: some View {
         VStack(spacing: 0) {
-            // Pink header background - extends into safe area
+            // Morning background image header - extends into safe area
             ZStack {
-                // Deep accent gradient background for header
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        ThemeManager.shared.theme.palette.primaryLight,     // Lighter primary
-                        ThemeManager.shared.theme.palette.primary,          // Base primary
-                        ThemeManager.shared.theme.palette.primaryLight      // Lighter primary
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea(.all, edges: .top) // Extend into safe area
+                // Morning background image
+                Image("morning-background")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .ignoresSafeArea(.all, edges: .top) // Extend into safe area
 
                 VStack(spacing: 16) {
                     // Title and decorations
@@ -359,7 +353,7 @@ struct MorningRoutineCompletionView: View {
             // Completion percentage
             Text("\(totalSteps > 0 ? Int((Double(completedStepsCount) / Double(totalSteps)) * 100) : 0)%")
                 .font(.system(size: 14, weight: .bold))
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
         }    .padding(.horizontal, 20)
         .padding(.bottom, 16)
     }

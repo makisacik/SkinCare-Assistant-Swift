@@ -132,8 +132,8 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.duration = template.duration
         self.difficulty = template.difficulty
         self.tags = template.tags
-        self.morningSteps = template.morningSteps
-        self.eveningSteps = template.eveningSteps
+        self.morningSteps = template.morningSteps.map { $0.title }
+        self.eveningSteps = template.eveningSteps.map { $0.title }
         self.benefits = template.benefits
         self.isFeatured = template.isFeatured
         self.isPremium = template.isPremium
@@ -143,33 +143,33 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.adaptationType = adaptationType
         self.adaptationTypes = adaptationType.map { [$0] }  // Convert single to array
         self.imageName = template.imageName
-        // Create step details from template steps using ProductTypeDatabase
+        // Create step details from template steps
         var allStepDetails: [SavedStepDetailModel] = []
 
         // Add morning steps
-        for (index, stepName) in template.morningSteps.enumerated() {
-            let productInfo = ProductTypeDatabase.getInfo(for: stepName)
+        for (index, step) in template.morningSteps.enumerated() {
+            let stepType = ProductAliasMapping.normalize(step.title)
             allStepDetails.append(SavedStepDetailModel(
-                title: productInfo.name,
-                stepDescription: productInfo.description,
-                stepType: ProductTypeDatabase.getStepType(for: stepName),
+                title: step.title,
+                stepDescription: step.why,
+                stepType: stepType.rawValue,
                 timeOfDay: "morning",
-                why: productInfo.why,
-                how: productInfo.how,
+                why: step.why,
+                how: step.how,
                 order: index
             ))
         }
 
         // Add evening steps
-        for (index, stepName) in template.eveningSteps.enumerated() {
-            let productInfo = ProductTypeDatabase.getInfo(for: stepName)
+        for (index, step) in template.eveningSteps.enumerated() {
+            let stepType = ProductAliasMapping.normalize(step.title)
             allStepDetails.append(SavedStepDetailModel(
-                title: productInfo.name,
-                stepDescription: productInfo.description,
-                stepType: ProductTypeDatabase.getStepType(for: stepName),
+                title: step.title,
+                stepDescription: step.why,
+                stepType: stepType.rawValue,
                 timeOfDay: "evening",
-                why: productInfo.why,
-                how: productInfo.how,
+                why: step.why,
+                how: step.how,
                 order: index + template.morningSteps.count
             ))
         }

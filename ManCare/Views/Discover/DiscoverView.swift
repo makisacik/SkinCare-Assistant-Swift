@@ -54,6 +54,11 @@ struct DiscoverView: View {
                             miniGuidesSection
                         }
 
+                        // Inspirational Quotes Section
+                        if !viewModel.inspirationalQuotes.isEmpty {
+                            inspirationalQuotesSection
+                        }
+
                     }
                     .padding(.top, 20)
                     .padding(.bottom, 100)
@@ -119,15 +124,13 @@ struct DiscoverView: View {
     // MARK: - Background
 
     private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                ThemeManager.shared.theme.palette.background,
-                ThemeManager.shared.theme.palette.background,
-                ThemeManager.shared.theme.palette.surface.opacity(0.8)
-            ]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+        GeometryReader { geometry in
+            Image("cloudy-background")
+                .resizable()
+                .scaledToFill()
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .clipped()
+        }
         .ignoresSafeArea()
     }
 
@@ -186,6 +189,12 @@ struct DiscoverView: View {
         )
     }
 
+    // MARK: - Inspirational Quotes Section
+
+    private var inspirationalQuotesSection: some View {
+        InspirationalQuotesSection(quotes: viewModel.inspirationalQuotes)
+    }
+
     // MARK: - Helper Methods
 
     private func handleSaveRoutine(_ routine: RoutineTemplate) {
@@ -213,12 +222,23 @@ struct DiscoverView: View {
                 title: name,
                 description: "Your personalized skincare routine",
                 category: .combination, // Use existing category since .personalized doesn't exist
-                stepCount: routine.routine.morning.count + routine.routine.evening.count,
                 duration: "5-10 minutes",
                 difficulty: .beginner,
                 tags: ["personalized", "custom"],
-                morningSteps: routine.routine.morning.map { $0.name },
-                eveningSteps: routine.routine.evening.map { $0.name },
+                morningSteps: routine.routine.morning.map { step in
+                    TemplateRoutineStep(
+                        title: step.name,
+                        why: step.why,
+                        how: step.how
+                    )
+                },
+                eveningSteps: routine.routine.evening.map { step in
+                    TemplateRoutineStep(
+                        title: step.name,
+                        why: step.why,
+                        how: step.how
+                    )
+                },
                 benefits: ["Personalized for your skin", "Custom routine"],
                 isFeatured: false,
                 isPremium: false,
