@@ -204,16 +204,25 @@ class SkinJournalCameraManager: NSObject, ObservableObject {
     func requestCameraPermission() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
+            print("✅ Camera permission already granted")
             permissionGranted = true
         case .notDetermined:
+            print("📷 Requesting camera permission...")
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
                 DispatchQueue.main.async {
                     self?.permissionGranted = granted
+                    if granted {
+                        print("✅ Camera permission granted by user")
+                    } else {
+                        print("❌ Camera permission denied by user")
+                    }
                 }
             }
         case .denied, .restricted:
+            print("❌ Camera permission denied or restricted")
             permissionGranted = false
         @unknown default:
+            print("⚠️ Unknown camera permission status")
             permissionGranted = false
         }
     }
@@ -409,8 +418,17 @@ struct SkinJournalCameraPreviewView: UIViewRepresentable {
         let view = UIView(frame: .zero)
         view.backgroundColor = .black
         
-        DispatchQueue.main.async {
-            cameraManager.setupPreview(in: view)
+        // Wait a bit for permission to be granted before setting up preview
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if cameraManager.permissionGranted {
+                cameraManager.setupPreview(in: view)
+            } else {
+                print("⚠️ Waiting for camera permission...")
+                // Try again after another delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    cameraManager.setupPreview(in: view)
+                }
+            }
         }
         
         return view

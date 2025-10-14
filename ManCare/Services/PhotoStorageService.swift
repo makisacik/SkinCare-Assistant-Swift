@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import UniformTypeIdentifiers
 
 /// Service for managing local photo storage in the app's Documents directory
 class PhotoStorageService {
@@ -55,19 +56,37 @@ class PhotoStorageService {
             return nil
         }
         
-        // Generate unique filename
-        let filename = "\(id.uuidString).jpg"
+        // Generate unique filename with HEIC extension
+        let filename = "\(id.uuidString).heic"
         let fileURL = directoryURL.appendingPathComponent(filename)
         
-        // Compress image to JPEG (quality 0.8 for good balance)
-        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
-            print("❌ Could not convert image to JPEG data")
-            return nil
+        // Step 1: Resize to reasonable dimensions (1200px max)
+        let resizedImage = resizeImage(image, maxDimension: 1200)
+        print("📐 Resized image from \(image.size) to \(resizedImage.size)")
+
+        // Step 2: Convert to HEIC with quality 0.85 (high quality, still efficient)
+        guard let imageData = resizedImage.heicData(compressionQuality: 0.85) else {
+            print("⚠️ HEIC conversion failed, falling back to JPEG")
+            // Fallback to JPEG if HEIC fails
+            guard let jpegData = resizedImage.jpegData(compressionQuality: 0.85) else {
+                print("❌ Could not convert image to any format")
+                return nil
+            }
+            let jpegFilename = "\(id.uuidString).jpg"
+            let jpegURL = directoryURL.appendingPathComponent(jpegFilename)
+            do {
+                try jpegData.write(to: jpegURL)
+                print("✅ Saved JPEG photo: \(jpegFilename), size: \(jpegData.count / 1024)KB")
+                return jpegFilename
+            } catch {
+                print("❌ Failed to save photo: \(error)")
+                return nil
+            }
         }
         
         do {
             try imageData.write(to: fileURL)
-            print("✅ Saved photo: \(filename), size: \(imageData.count / 1024)KB")
+            print("✅ Saved HEIC photo: \(filename), size: \(imageData.count / 1024)KB")
             return filename
         } catch {
             print("❌ Failed to save photo: \(error)")
@@ -185,6 +204,79 @@ class PhotoStorageService {
             return false
         }
     }
+
+    // MARK: - Image Optimization
+
+    /// Resize image to a maximum dimension while preserving aspect ratio
+    private func resizeImage(_ image: UIImage, maxDimension: CGFloat = 1200) -> UIImage {
+        let size = image.size
+
+        // Check if resize is needed
+        guard size.width > maxDimension || size.height > maxDimension else {
+            print("📐 Image already smaller than \(maxDimension)px, skipping resize")
+            return image
+        }
+
+        // Calculate new size maintaining aspect ratio
+        let aspectRatio = size.width / size.height
+        var newSize: CGSize
+
+        if size.width > size.height {
+            newSize = CGSize(width: maxDimension, height: maxDimension / aspectRatio)
+        } else {
+            newSize = CGSize(width: maxDimension * aspectRatio, height: maxDimension)
+        }
+
+        // Create graphics context and resize
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        defer { UIGraphicsEndImageContext() }
+
+        image.draw(in: CGRect(origin: .zero, size: newSize))
+
+        guard let resizedImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            print("⚠️ Failed to resize image, using original")
+            return image
+        }
+
+        print("📐 Resized from \(Int(size.width))×\(Int(size.height)) to \(Int(newSize.width))×\(Int(newSize.height))")
+        return resizedImage
+    }
 }
 
+// MARK: - UIImage HEIC Extension
 
+extension UIImage {
+    /// Convert UIImage to HEIC data with specified compression quality
+    func heicData(compressionQuality: CGFloat) -> Data? {
+        guard let cgImage = self.cgImage else {
+            print("⚠️ Could not get CGImage for HEIC conversion")
+            return nil
+        }
+
+        let data = NSMutableData()
+
+        guard let destination = CGImageDestinationCreateWithData(
+            data,
+            UTType.heic.identifier as CFString,
+            1,
+            nil
+        ) else {
+            print("⚠️ Could not create HEIC destination")
+            return nil
+        }
+
+        let options: [CFString: Any] = [
+            kCGImageDestinationLossyCompressionQuality: compressionQuality
+        ]
+
+        CGImageDestinationAddImage(destination, cgImage, options as CFDictionary)
+
+        guard CGImageDestinationFinalize(destination) else {
+            print("⚠️ Could not finalize HEIC image")
+            return nil
+        }
+
+        print("✅ Converted to HEIC format")
+        return data as Data
+    }
+}
