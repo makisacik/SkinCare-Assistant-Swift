@@ -179,6 +179,50 @@ class RoutineEditingService: ObservableObject {
         editableRoutine.updateSteps(steps, for: timeOfDay)
     }
     
+    /// Move step up in order
+    func moveStepUp(_ step: EditableRoutineStep) {
+        let timeOfDay = step.timeOfDay
+        var steps = editableRoutine.steps(for: timeOfDay)
+        
+        guard let currentIndex = steps.firstIndex(where: { $0.id == step.id }),
+              currentIndex > 0 else {
+            return
+        }
+        
+        // Swap with previous step
+        steps.swapAt(currentIndex, currentIndex - 1)
+        
+        // Update the order values
+        for (index, step) in steps.enumerated() {
+            steps[index] = step.copy(order: index)
+        }
+        
+        // Update the routine
+        editableRoutine.updateSteps(steps, for: timeOfDay)
+    }
+    
+    /// Move step down in order
+    func moveStepDown(_ step: EditableRoutineStep) {
+        let timeOfDay = step.timeOfDay
+        var steps = editableRoutine.steps(for: timeOfDay)
+        
+        guard let currentIndex = steps.firstIndex(where: { $0.id == step.id }),
+              currentIndex < steps.count - 1 else {
+            return
+        }
+        
+        // Swap with next step
+        steps.swapAt(currentIndex, currentIndex + 1)
+        
+        // Update the order values
+        for (index, step) in steps.enumerated() {
+            steps[index] = step.copy(order: index)
+        }
+        
+        // Update the routine
+        editableRoutine.updateSteps(steps, for: timeOfDay)
+    }
+    
     /// Update step frequency
     func updateStepFrequency(_ step: EditableRoutineStep, frequency: StepFrequency) {
         let updatedStep = step.copy(frequency: frequency)

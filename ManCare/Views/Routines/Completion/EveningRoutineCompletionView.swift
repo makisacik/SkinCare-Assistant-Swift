@@ -231,6 +231,7 @@ struct EveningRoutineCompletionView: View {
                 EditRoutineView(
                     savedRoutine: active,
                     completionViewModel: completionViewModel,
+                    initialTimeOfDay: .evening,
                     onRoutineUpdated: { updatedRoutine in
                         // Update the routine steps when the routine is edited
                         updateRoutineSteps(from: updatedRoutine)

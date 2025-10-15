@@ -18,27 +18,16 @@ struct EditableStepCard: View {
     var body: some View {
         VStack(spacing: 0) {
             // Main card content
-            HStack(spacing: 16) {
-                // Reorder handle
-                Image(systemName: "line.3.horizontal")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                    .frame(width: 20)
+            HStack(spacing: 14) {
+                // Step icon - bigger with rounded corners
+                Image(step.iconName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 
-                // Step icon
-                ZStack {
-                    Circle()
-                        .fill(step.stepTypeColor.opacity(0.15))
-                        .frame(width: 50, height: 50)
-                    
-                    Image(step.iconName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 30, height: 30)
-                }
-                
-                // Step info
-                VStack(alignment: .leading, spacing: 4) {
+                // Step info - tappable area to edit
+                VStack(alignment: .leading, spacing: 6) {
                     Text(step.title)
                         .font(ThemeManager.shared.theme.typo.title)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
@@ -59,41 +48,66 @@ struct EditableStepCard: View {
                                 .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.success)
                         }
+                        .padding(.top, 2)
                     }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    onTap()
                 }
                 
                 Spacer()
                 
-                // Action buttons
-                VStack(spacing: 8) {
-                    // Attach/Detach product button
-                    Button {
-                        if step.hasAttachedProduct {
-                            editingService.detachProduct(from: step)
-                        } else {
-                            showingProductSelection = true
-                        }
-                    } label: {
-                        Image(systemName: step.hasAttachedProduct ? "link.badge.minus" : "link.badge.plus")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(step.hasAttachedProduct ? ThemeManager.shared.theme.palette.error : ThemeManager.shared.theme.palette.secondary)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    // Remove button (only for non-locked steps)
-                    if !step.isLocked {
+                // Action buttons - larger touch targets
+                HStack(spacing: 8) {
+                    // Move up/down buttons - bigger and easier to tap
+                    VStack(spacing: 2) {
                         Button {
-                            editingService.removeStep(step)
+                            editingService.moveStepUp(step)
                         } label: {
-                            Image(systemName: "trash")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.error)
+                            Image(systemName: "chevron.up")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                .frame(width: 44, height: 32)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
+                                )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+
+                        Button {
+                            editingService.moveStepDown(step)
+                        } label: {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                .frame(width: 44, height: 32)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
+                                )
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
+
+                    // Delete button - always show in edit mode
+                    Button {
+                        editingService.removeStep(step)
+                    } label: {
+                        Image(systemName: "trash.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.error)
+                            .frame(width: 44, height: 68)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(ThemeManager.shared.theme.palette.error.opacity(0.1))
+                            )
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
-            .padding(20)
+            .padding(14)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(ThemeManager.shared.theme.palette.cardBackground)
@@ -104,17 +118,6 @@ struct EditableStepCard: View {
             )
         }
         .padding(.horizontal, 20)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            onTap()
-        }
-        .onDrag {
-            return NSItemProvider(object: step.id as NSString)
-        }
-        .onDrop(of: [.text], delegate: StepDropDelegate(
-            step: step,
-            editingService: editingService
-        ))
         .sheet(isPresented: $showingProductSelection) {
             ProductSelectionView(
                 step: step,
@@ -124,39 +127,6 @@ struct EditableStepCard: View {
     }
 }
 
-// MARK: - Step Drop Delegate
-
-struct StepDropDelegate: DropDelegate {
-    let step: EditableRoutineStep
-    let editingService: RoutineEditingService
-    
-    func dropEntered(info: DropInfo) {
-        // Visual feedback when dragging over
-    }
-    
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        return DropProposal(operation: .move)
-    }
-    
-    func performDrop(info: DropInfo) -> Bool {
-        guard let itemProvider = info.itemProviders(for: [.text]).first else {
-            return false
-        }
-        
-        itemProvider.loadItem(forTypeIdentifier: "public.text", options: nil) { (item, error) in
-            if let data = item as? Data,
-               let draggedStepId = String(data: data, encoding: .utf8),
-               draggedStepId != step.id {
-                
-                DispatchQueue.main.async {
-                    editingService.reorderSteps(draggedStepId: draggedStepId, targetStepId: step.id)
-                }
-            }
-        }
-        
-        return true
-    }
-}
 
 // MARK: - Preview
 

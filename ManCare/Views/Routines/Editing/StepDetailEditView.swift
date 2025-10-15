@@ -16,25 +16,17 @@ struct StepDetailEditView: View {
     
     @State private var title: String
     @State private var description: String
-    @State private var customInstructions: String
-    @State private var frequency: StepFrequency
-    @State private var morningEnabled: Bool
-    @State private var eveningEnabled: Bool
     
     init(step: EditableRoutineStep, editingService: RoutineEditingService) {
         self.step = step
         self.editingService = editingService
         self._title = State(initialValue: step.title)
         self._description = State(initialValue: step.description)
-        self._customInstructions = State(initialValue: step.customInstructions ?? "")
-        self._frequency = State(initialValue: step.frequency)
-        self._morningEnabled = State(initialValue: step.morningEnabled)
-        self._eveningEnabled = State(initialValue: step.eveningEnabled)
     }
     
     var body: some View {
         NavigationView {
-            ScrollView(.vertical, showsIndicators: true) {
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 24) {
                     // Header with step icon and type
                     VStack(spacing: 16) {
@@ -43,9 +35,10 @@ struct StepDetailEditView: View {
                                 .fill(step.stepTypeColor.opacity(0.15))
                                 .frame(width: 80, height: 80)
                             
-                            Image(systemName: step.iconName)
-                                .font(.system(size: 32, weight: .semibold))
-                                .foregroundColor(step.stepTypeColor)
+                            Image(step.iconName)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 36, height: 36)
                         }
                         
                         VStack(spacing: 8) {
@@ -53,138 +46,66 @@ struct StepDetailEditView: View {
                                 .font(ThemeManager.shared.theme.typo.h2)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
-                            Text("Customize this step")
+                            Text("Edit step details")
                                 .font(ThemeManager.shared.theme.typo.body)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                     }
                     .padding(.top, 20)
                     
-                    // Basic Information
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Basic Information")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
-                        VStack(spacing: 16) {
-                            // Title
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Title")
-                                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                
-                                TextField("Step title", text: $title)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                            }
+                    // Step Information
+                    VStack(alignment: .leading, spacing: 20) {
+                        // Title
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Step Name")
+                                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
-                            // Description
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Description")
-                                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                
-                                TextField("Step description", text: $description)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .lineLimit(3)
-                            }
+                            TextField("Enter step name", text: $title)
+                                .font(ThemeManager.shared.theme.typo.body)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                .padding(12)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+                                        )
+                                )
                         }
-                    }
-                    .padding(.horizontal, 20)
-                    
-                    // Time of Day Settings
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("When to use")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
-                        VStack(spacing: 12) {
-                            // Morning toggle
-                            HStack {
-                                Image(systemName: "sun.max.fill")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.warning)
-                                
-                                Text("Morning")
+                        // Description - multiline
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Description")
+                                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                            ZStack(alignment: .topLeading) {
+                                TextEditor(text: $description)
                                     .font(ThemeManager.shared.theme.typo.body)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                
-                                Spacer()
-                                
-                                Toggle("", isOn: $morningEnabled)
-                                    .labelsHidden()
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(ThemeManager.shared.theme.palette.cardBackground)
-                                    .overlay(
+                                    .frame(minHeight: 120)
+                                    .padding(8)
+                                    .background(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+                                            .fill(ThemeManager.shared.theme.palette.accentBackground)
                                     )
-                            )
-                            
-                            // Evening toggle
-                            HStack {
-                                Image(systemName: "moon.fill")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 
-                                Text("Evening")
-                                    .font(ThemeManager.shared.theme.typo.body)
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                
-                                Spacer()
-                                
-                                Toggle("", isOn: $eveningEnabled)
-                                    .labelsHidden()
+                                if description.isEmpty {
+                                    Text("Enter step description...")
+                                        .font(ThemeManager.shared.theme.typo.body)
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 16)
+                                        .allowsHitTesting(false)
+                                }
                             }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .background(
+                            .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(ThemeManager.shared.theme.palette.cardBackground)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                                    )
+                                    .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                             )
                         }
-                    }
-                    .padding(.horizontal, 20)
-                    
-                    // Frequency
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Frequency")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
-                        Picker("Frequency", selection: $frequency) {
-                            ForEach(StepFrequency.allCases, id: \.self) { freq in
-                                Text(freq.displayName).tag(freq)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                    }
-                    .padding(.horizontal, 20)
-                    
-                    // Custom Instructions
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Custom Instructions")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
-                        TextEditor(text: $customInstructions)
-                            .frame(minHeight: 100)
-                            .padding(12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(ThemeManager.shared.theme.palette.cardBackground)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                                    )
-                            )
                     }
                     .padding(.horizontal, 20)
                     
@@ -195,29 +116,31 @@ struct StepDetailEditView: View {
             .navigationTitle("Edit Step")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(
-                leading: Button("Cancel") {
-                    dismiss()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary),
-                trailing: Button("Save") {
-                    saveChanges()
-                    dismiss()
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        saveChanges()
+                        dismiss()
+                    }
+                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
+                    .font(.system(size: 16, weight: .semibold))
+                    .disabled(title.isEmpty || description.isEmpty)
                 }
-                .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                .font(.system(size: 16, weight: .semibold))
-            )
+            }
         }
     }
     
     private func saveChanges() {
         let updatedStep = step.copy(
             title: title,
-            description: description,
-            frequency: frequency,
-            customInstructions: customInstructions.isEmpty ? nil : customInstructions,
-            morningEnabled: morningEnabled,
-            eveningEnabled: eveningEnabled
+            description: description
         )
         editingService.editableRoutine.updateStep(updatedStep)
     }

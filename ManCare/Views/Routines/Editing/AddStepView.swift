@@ -17,10 +17,7 @@ struct AddStepView: View {
     @State private var selectedStepType: ProductType = .faceSerum
     @State private var customTitle = ""
     @State private var customDescription = ""
-    @State private var customInstructions = ""
-    @State private var frequency: StepFrequency = .daily
-    @State private var morningEnabled = true
-    @State private var eveningEnabled = false
+    @State private var showingProductTypeSelector = false
     
     var body: some View {
         NavigationView {
@@ -39,35 +36,15 @@ struct AddStepView: View {
                     }
                     .padding(.top, 20)
                     
-                    // Step type selection
+                    // Product Type Selection
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("Step Type")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
-                        LazyVGrid(columns: [
-                            GridItem(.flexible()),
-                            GridItem(.flexible())
-                        ], spacing: 12) {
-                            ForEach(ProductType.allCases, id: \.self) { stepType in
-                                StepTypeCard(
-                                    stepType: stepType,
-                                    isSelected: selectedStepType == stepType,
-                                    onSelect: {
-                                        selectedStepType = stepType
-                                        updateDefaultsForStepType(stepType)
-                                    }
-                                )
-                            }
+                        ProductTypeSelectorButton(selectedProductType: $selectedStepType) {
+                            showingProductTypeSelector = true
                         }
                     }
                     
-                    // Custom details
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Customize Details")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
+                    // Step Details
+                    VStack(alignment: .leading, spacing: 20) {
                         // Title
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Step Name")
@@ -79,155 +56,51 @@ struct AddStepView: View {
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .padding(12)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 8)
+                                    RoundedRectangle(cornerRadius: 12)
                                         .fill(ThemeManager.shared.theme.palette.accentBackground)
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
+                                            RoundedRectangle(cornerRadius: 12)
                                                 .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
                                         )
                                 )
                         }
                         
-                        // Description
+                        // Description - multiline
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Description")
                                 .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
-                            TextField("Enter description", text: $customDescription)
-                                .font(ThemeManager.shared.theme.typo.body)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                                        )
-                                )
-                        }
-                        
-                        // Custom instructions
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Custom Instructions (Optional)")
-                                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            
-                            TextField("Add personal notes or instructions", text: $customInstructions)
-                                .font(ThemeManager.shared.theme.typo.body)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                                        )
-                                )
-                        }
-                    }
-                    
-                    // Frequency selection
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Frequency")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
-                        HStack(spacing: 8) {
-                            ForEach(StepFrequency.allCases, id: \.self) { freq in
-                                Button {
-                                    frequency = freq
-                                } label: {
-                                    Text(freq.displayName)
-                                        .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
-                                        .foregroundColor(frequency == freq ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 6)
-                                                .fill(frequency == freq ? ThemeManager.shared.theme.palette.secondary : Color.clear)
-                                                .overlay(
-                                                    RoundedRectangle(cornerRadius: 6)
-                                                        .stroke(frequency == freq ? ThemeManager.shared.theme.palette.secondary : ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                                                )
-                                        )
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            }
-                            
-                            Spacer()
-                        }
-                    }
-                    
-                    // Time of day selection (only for non-weekly steps)
-                    if timeOfDay != .weekly {
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("When to Use")
-                                .font(ThemeManager.shared.theme.typo.h3)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            
-                            HStack(spacing: 16) {
-                                // Morning toggle
-                                Button {
-                                    morningEnabled.toggle()
-                                } label: {
-                                    HStack(spacing: 8) {
-                                        Image(systemName: "sun.max.fill")
-                                            .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(morningEnabled ? ThemeManager.shared.theme.palette.warning : ThemeManager.shared.theme.palette.textMuted)
-                                        
-                                        Text("Morning")
-                                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                                            .foregroundColor(morningEnabled ? ThemeManager.shared.theme.palette.textPrimary : ThemeManager.shared.theme.palette.textMuted)
-                                    }
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 8)
+                            ZStack(alignment: .topLeading) {
+                                TextEditor(text: $customDescription)
+                                    .font(ThemeManager.shared.theme.typo.body)
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                    .frame(minHeight: 120)
+                                    .padding(8)
                                     .background(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(morningEnabled ? ThemeManager.shared.theme.palette.warning.opacity(0.1) : Color.clear)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(morningEnabled ? ThemeManager.shared.theme.palette.warning : ThemeManager.shared.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
-                                            )
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(ThemeManager.shared.theme.palette.accentBackground)
                                     )
-                                }
-                                .buttonStyle(PlainButtonStyle())
                                 
-                                // Evening toggle
-                                Button {
-                                    eveningEnabled.toggle()
-                                } label: {
-                                    HStack(spacing: 8) {
-                                        Image(systemName: "moon.fill")
-                                            .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(eveningEnabled ? ThemeManager.shared.theme.palette.info : ThemeManager.shared.theme.palette.textMuted)
-                                        
-                                        Text("Evening")
-                                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                                            .foregroundColor(eveningEnabled ? ThemeManager.shared.theme.palette.textPrimary : ThemeManager.shared.theme.palette.textMuted)
-                                    }
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 8)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(eveningEnabled ? ThemeManager.shared.theme.palette.info.opacity(0.1) : Color.clear)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(eveningEnabled ? ThemeManager.shared.theme.palette.info : ThemeManager.shared.theme.palette.textMuted.opacity(0.3), lineWidth: 1)
-                                            )
-                                    )
+                                if customDescription.isEmpty {
+                                    Text("Enter step description...")
+                                        .font(ThemeManager.shared.theme.typo.body)
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 16)
+                                        .allowsHitTesting(false)
                                 }
-                                .buttonStyle(PlainButtonStyle())
-                                
-                                Spacer()
                             }
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+                            )
                         }
                     }
                 }
                 .padding(20)
             }
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
             .navigationTitle("Add Step")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -248,6 +121,9 @@ struct AddStepView: View {
                     .disabled(customTitle.isEmpty || customDescription.isEmpty)
                 }
             }
+        }
+        .sheet(isPresented: $showingProductTypeSelector) {
+            ProductTypeSelectorSheet(selectedProductType: $selectedStepType)
         }
         .onAppear {
             updateDefaultsForStepType(selectedStepType)
@@ -273,18 +149,18 @@ struct AddStepView: View {
             why: getDefaultWhy(for: selectedStepType),
             how: getDefaultHow(for: selectedStepType),
             isEnabled: true,
-            frequency: frequency,
-            customInstructions: customInstructions.isEmpty ? nil : customInstructions,
+            frequency: .daily,
+            customInstructions: nil,
             isLocked: isStepTypeLocked(selectedStepType),
             originalStep: false,
             order: editingService.editableRoutine.steps(for: timeOfDay).count,
-            morningEnabled: morningEnabled,
-            eveningEnabled: eveningEnabled,
+            morningEnabled: timeOfDay == .morning || timeOfDay == .weekly,
+            eveningEnabled: timeOfDay == .evening || timeOfDay == .weekly,
             attachedProductId: nil,
             productConstraints: nil
         )
         
-        editingService.addNewStep(type: selectedStepType, timeOfDay: timeOfDay)
+        editingService.editableRoutine.addStep(newStep)
         dismiss()
     }
     
@@ -362,48 +238,6 @@ struct AddStepView: View {
     }
 }
 
-// MARK: - Step Type Card
-
-private struct StepTypeCard: View {
-    
-    let stepType: ProductType
-    let isSelected: Bool
-    let onSelect: () -> Void
-    
-    private var stepTypeColor: Color { Color(stepType.color) }
-    
-    private var iconName: String { ProductIconManager.getIconName(for: stepType) }
-    
-    private var displayName: String { stepType.displayName }
-    
-    var body: some View {
-        Button {
-            onSelect()
-        } label: {
-            VStack(spacing: 12) {
-                Image(systemName: iconName)
-                    .font(.system(size: 24, weight: .semibold))
-                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : stepTypeColor)
-                
-                Text(displayName)
-                    .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textPrimary)
-                    .multilineTextAlignment(.center)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 100)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? stepTypeColor : stepTypeColor.opacity(0.1))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(isSelected ? stepTypeColor : stepTypeColor.opacity(0.3), lineWidth: 1)
-                    )
-            )
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
 
 // MARK: - Preview
 

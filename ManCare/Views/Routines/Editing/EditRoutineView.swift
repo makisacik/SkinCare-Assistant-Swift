@@ -12,79 +12,93 @@ struct EditRoutineView: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var editingService: RoutineEditingService
-    @State private var selectedTimeOfDay: TimeOfDay = .morning
+    @State private var selectedTimeOfDay: TimeOfDay
     @State private var showingAddStep = false
     @State private var showingStepDetail: EditableRoutineStep?
     
     let onRoutineUpdated: ((RoutineResponse) -> Void)?
 
-    init(savedRoutine: SavedRoutineModel, completionViewModel: RoutineCompletionViewModel, onRoutineUpdated: ((RoutineResponse) -> Void)? = nil) {
+    init(savedRoutine: SavedRoutineModel, completionViewModel: RoutineCompletionViewModel, initialTimeOfDay: TimeOfDay = .morning, onRoutineUpdated: ((RoutineResponse) -> Void)? = nil) {
         self._editingService = StateObject(wrappedValue: RoutineEditingService(savedRoutine: savedRoutine, completionViewModel: completionViewModel))
+        self._selectedTimeOfDay = State(initialValue: initialTimeOfDay)
         self.onRoutineUpdated = onRoutineUpdated
     }
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Simple header
-                HStack {
-                    Button("Cancel") {
-                        editingService.cancelEditing()
-                        dismiss()
-                    }
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    
-                    Spacer()
-                    
-                    Text("Edit Routine")
-                        .font(ThemeManager.shared.theme.typo.h2)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
-                    Spacer()
-                    
-                    Button("Save") {
-                        Task {
-                            if let updatedRoutine = await editingService.saveRoutine() {
-                                onRoutineUpdated?(updatedRoutine)
-                            }
+                // Modern header
+                VStack(spacing: 0) {
+                    HStack {
+                        Button("Cancel") {
+                            editingService.cancelEditing()
                             dismiss()
                         }
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+
+                        Spacer()
+
+                        Text("Edit Routine")
+                            .font(ThemeManager.shared.theme.typo.h2)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                        Spacer()
+
+                        Button("Save") {
+                            Task {
+                                if let updatedRoutine = await editingService.saveRoutine() {
+                                    onRoutineUpdated?(updatedRoutine)
+                                }
+                                dismiss()
+                            }
+                        }
+                        .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                     }
-                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                    .font(.system(size: 16, weight: .semibold))
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
+                .background(ThemeManager.shared.theme.palette.cardBackground)
                 
-                // Time of Day Selector
-                HStack(spacing: 0) {
-                    ForEach(TimeOfDay.allCases, id: \.self) { timeOfDay in
+                // Time of Day Selector (only Morning and Evening)
+                HStack(spacing: 12) {
+                    ForEach([TimeOfDay.morning, TimeOfDay.evening], id: \.self) { timeOfDay in
                         Button {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 selectedTimeOfDay = timeOfDay
                             }
                         } label: {
-                            VStack(spacing: 4) {
+                            VStack(spacing: 6) {
                                 Image(systemName: iconNameForTimeOfDay(timeOfDay))
-                                    .font(.system(size: 16, weight: .semibold))
+                                    .font(.system(size: 18, weight: .semibold))
                                 Text(timeOfDay.displayName)
-                                    .font(.system(size: 12, weight: .medium))
+                                    .font(.system(size: 13, weight: .semibold))
                             }
-                            .foregroundColor(selectedTimeOfDay == timeOfDay ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
+                            .foregroundColor(selectedTimeOfDay == timeOfDay ? ThemeManager.shared.theme.palette.onPrimary : ThemeManager.shared.theme.palette.textSecondary)
                             .frame(maxWidth: .infinity)
-                            .frame(height: 60)
+                            .frame(height: 70)
                             .background(
-                                selectedTimeOfDay == timeOfDay ?
-                                ThemeManager.shared.theme.palette.secondary :
-                                Color.clear
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(selectedTimeOfDay == timeOfDay ?
+                                        ThemeManager.shared.theme.palette.secondary :
+                                        ThemeManager.shared.theme.palette.accentBackground
+                                    )
                             )
-                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(selectedTimeOfDay == timeOfDay ?
+                                        ThemeManager.shared.theme.palette.secondary :
+                                        ThemeManager.shared.theme.palette.separator,
+                                        lineWidth: selectedTimeOfDay == timeOfDay ? 2 : 1
+                                    )
+                            )
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 16)
+                .padding(.vertical, 16)
                 
                 // Content
                 TabView(selection: $selectedTimeOfDay) {
@@ -115,20 +129,6 @@ struct EditRoutineView: View {
                         }
                     )
                     .tag(TimeOfDay.evening)
-                    
-                    // Weekly Routine
-                    EditableRoutineSection(
-                        timeOfDay: .weekly,
-                        steps: editingService.editableRoutine.weeklySteps,
-                        editingService: editingService,
-                        onStepTap: { step in
-                            showingStepDetail = step
-                        },
-                        onAddStep: {
-                            showingAddStep = true
-                        }
-                    )
-                    .tag(TimeOfDay.weekly)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
@@ -175,8 +175,8 @@ private struct EditableRoutineSection: View {
     let onAddStep: () -> Void
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 16) {
+        ScrollView(showsIndicators: false) {
+            LazyVStack(spacing: 12) {
                 // Section header with add button
                 HStack {
                     Text("\(timeOfDay.displayName) Routine")
@@ -189,21 +189,24 @@ private struct EditableRoutineSection: View {
                         onAddStep()
                     } label: {
                         HStack(spacing: 6) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 14, weight: .semibold))
-                            Text("Add Step")
-                                .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 16, weight: .semibold))
+                            Text("Add")
+                                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                         }
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
-                        .cornerRadius(8)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.12))
+                        )
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 20)
+                .padding(.top, 8)
+                .padding(.bottom, 4)
                 
                 // Steps
                 ForEach(steps.sorted { $0.order < $1.order }) { step in
@@ -237,47 +240,53 @@ private struct EmptyRoutineState: View {
     let onAddStep: () -> Void
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Image(systemName: iconNameForTimeOfDay(timeOfDay))
-                .font(.system(size: 48, weight: .light))
-                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                .font(.system(size: 56, weight: .thin))
+                .foregroundColor(ThemeManager.shared.theme.palette.textMuted.opacity(0.5))
             
-            Text("No steps yet")
-                .font(ThemeManager.shared.theme.typo.h3)
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-            
-            Text("Add your first step to build your \(timeOfDay.displayName.lowercased()) routine")
-                .font(ThemeManager.shared.theme.typo.body)
-                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 8) {
+                Text("No Steps Yet")
+                    .font(ThemeManager.shared.theme.typo.h2)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                Text("Add your first step to build your \(timeOfDay.displayName.lowercased()) routine")
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
             
             Button {
                 onAddStep()
             } label: {
                 HStack(spacing: 8) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 16, weight: .semibold))
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 18, weight: .semibold))
                     Text("Add First Step")
                         .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 }
                 .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
-                .background(ThemeManager.shared.theme.palette.secondary)
-                .cornerRadius(8)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(ThemeManager.shared.theme.palette.secondary)
+                )
             }
             .buttonStyle(PlainButtonStyle())
         }
-        .padding(40)
+        .padding(.vertical, 60)
+        .padding(.horizontal, 40)
         .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(ThemeManager.shared.theme.palette.cardBackground)
+            RoundedRectangle(cornerRadius: 20)
+                .fill(ThemeManager.shared.theme.palette.accentBackground)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 20)
+                        .strokeBorder(ThemeManager.shared.theme.palette.separator, lineWidth: 1, antialiased: true)
                 )
         )
         .padding(.horizontal, 20)
+        .padding(.top, 40)
     }
     
     private func iconNameForTimeOfDay(_ timeOfDay: TimeOfDay) -> String {
