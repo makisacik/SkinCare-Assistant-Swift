@@ -193,9 +193,6 @@ struct SkinJournalComparisonView: View {
                     sideBySideComparisonView(before: before, after: after)
                 }
                 
-                // Analysis comparison
-                analysisComparisonView(before: before, after: after)
-                
                 // Tags comparison
                 tagsComparisonView(before: before, after: after)
             }
@@ -314,106 +311,9 @@ struct SkinJournalComparisonView: View {
         }
     }
     
-    private func analysisComparisonView(before: SkinJournalEntryModel, after: SkinJournalEntryModel) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Analysis Comparison")
-                .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-            
-            VStack(spacing: 12) {
-                comparisonCard(
-                    icon: "sun.max.fill",
-                    title: "Brightness",
-                    beforeValue: before.imageAnalysis.brightnessDescription,
-                    afterValue: after.imageAnalysis.brightnessDescription,
-                    change: brightnessDifferenceText(before: before, after: after),
-                    color: .orange
-                )
-                
-                comparisonCard(
-                    icon: "face.smiling",
-                    title: "Skin Tone",
-                    beforeValue: before.imageAnalysis.overallTone,
-                    afterValue: after.imageAnalysis.overallTone,
-                    change: nil,
-                    color: .blue
-                )
-            }
-        }
-    }
-    
-    private func comparisonCard(
-        icon: String,
-        title: String,
-        beforeValue: String,
-        afterValue: String,
-        change: String?,
-        color: Color
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 20))
-                    .foregroundColor(color)
-                    .frame(width: 40, height: 40)
-                    .background(color.opacity(0.15))
-                    .clipShape(Circle())
-                
-                Text(title)
-                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-            }
-            
-            HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Before")
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                    Text(beforeValue)
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 12))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("After")
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                    Text(afterValue)
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            
-            if let change = change {
-                Text(change)
-                    .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
-                    .foregroundColor(color)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(color.opacity(0.1))
-                    .cornerRadius(8)
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(ThemeManager.shared.theme.palette.surface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
-                )
-        )
-    }
-    
     private func tagsComparisonView(before: SkinJournalEntryModel, after: SkinJournalEntryModel) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Tags & Notes")
+            Text("Skin Feel")
                 .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
@@ -507,27 +407,6 @@ struct SkinJournalComparisonView: View {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
         return formatter.string(from: date)
-    }
-    
-    private func brightnessDifferenceText(before: SkinJournalEntryModel, after: SkinJournalEntryModel) -> String {
-        let diff = after.imageAnalysis.brightness - before.imageAnalysis.brightness
-        let absDiff = abs(diff)
-        
-        if absDiff < 0.05 {
-            return "No significant change"
-        } else if diff > 0 {
-            if absDiff < 0.15 {
-                return "Slightly brighter ↗"
-            } else {
-                return "Much brighter ↗↗"
-            }
-        } else {
-            if absDiff < 0.15 {
-                return "Slightly darker ↘"
-            } else {
-                return "Much darker ↘↘"
-            }
-        }
     }
 }
 

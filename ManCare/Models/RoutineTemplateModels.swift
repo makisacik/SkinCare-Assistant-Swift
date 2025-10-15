@@ -731,7 +731,7 @@ extension RoutineTemplate {
         ),
         RoutineTemplate(
             id: advancedKoreanId,
-            title: "Advanced Korean 12-Step",
+            title: "Advanced Korean Routine",
             description: "The complete Korean skincare ritual for ultimate skin transformation.",
             category: .korean,
             duration: "25-30 min",

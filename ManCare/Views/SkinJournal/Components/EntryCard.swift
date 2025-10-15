@@ -64,19 +64,6 @@ struct EntryCard: View {
                     }
                 }
                 
-                // Notes preview
-                if !entry.notes.isEmpty {
-                    Text(entry.notes)
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        .lineLimit(2)
-                } else {
-                    Text("No notes")
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                        .italic()
-                }
-                
                 // Skin feel tags
                 if !entry.skinFeelTags.isEmpty {
                     HStack(spacing: 6) {

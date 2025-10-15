@@ -15,12 +15,12 @@ struct AddSkinJournalEntryView: View {
     @State private var currentStep: AddEntryStep = .camera
     @State private var capturedPhoto: UIImage?
     @State private var isPhotoMirrored = false
-    @State private var notes: String = ""
     @State private var selectedMood: String? // Changed from selectedMoodTags to single mood
     @State private var selectedSkinFeelTags: Set<SkinFeelTag> = []
     @State private var isSaving = false
     @State private var showError = false
     @State private var errorMessage = ""
+    @State private var hasMoodForToday = false
     
     enum AddEntryStep {
         case camera
@@ -76,11 +76,10 @@ struct AddSkinJournalEntryView: View {
                         photoPreview(photo)
                     }
                     
-                    // Notes section
-                    notesSection
-                    
-                    // Mood tags section
-                    moodTagsSection
+                    // Mood tags section (only if no mood exists for today)
+                    if !hasMoodForToday {
+                        moodTagsSection
+                    }
                     
                     // Skin feel tags section
                     skinFeelTagsSection
@@ -103,8 +102,12 @@ struct AddSkinJournalEntryView: View {
                 UINavigationBar.appearance().standardAppearance = appearance
                 UINavigationBar.appearance().scrollEdgeAppearance = appearance
 
+                // Check if mood already exists for today
+                hasMoodForToday = moodStore.getMoodEntry(for: Date()) != nil
+
                 print("📝 Details view appeared")
                 print("📝 Captured photo exists: \(capturedPhoto != nil)")
+                print("📝 Has mood for today: \(hasMoodForToday)")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -186,28 +189,6 @@ struct AddSkinJournalEntryView: View {
                     .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
             )
             .zIndex(0)  // explicitly under the header
-        }
-    }
-    
-    private var notesSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Notes")
-                .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-            
-            Text("How is your skin feeling today?")
-                .font(ThemeManager.shared.theme.typo.caption)
-                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            
-            TextEditor(text: $notes)
-                .frame(height: 120)
-                .padding(12)
-                .background(ThemeManager.shared.theme.palette.surface)
-                .cornerRadius(12)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
-                )
         }
     }
     
@@ -373,7 +354,6 @@ struct AddSkinJournalEntryView: View {
         }
         
         print("📝 Starting to save entry...")
-        print("   Notes: '\(notes)'")
         print("   Selected mood: \(selectedMood ?? "none")")
         print("   Skin feel tags: \(selectedSkinFeelTags)")
         print("   Photo mirrored: \(isPhotoMirrored)")
@@ -384,15 +364,15 @@ struct AddSkinJournalEntryView: View {
             do {
                 let skinFeelTagsArray = Array(selectedSkinFeelTags)
 
-                // Save mood separately to DailyMoodStore if selected
-                if let moodEmoji = selectedMood {
+                // Save mood separately to DailyMoodStore if selected (only if no mood exists yet)
+                if let moodEmoji = selectedMood, !hasMoodForToday {
                     moodStore.saveMood(emoji: moodEmoji, for: Date())
                     print("💚 Saved mood: \(moodEmoji)")
                 }
 
                 let savedEntry = try await store.saveEntry(
                     photo: photo,
-                    notes: notes,
+                    notes: "",
                     skinFeelTags: skinFeelTagsArray
                 )
                 

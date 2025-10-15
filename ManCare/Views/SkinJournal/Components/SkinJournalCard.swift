@@ -14,7 +14,6 @@ struct SkinJournalCard: View {
     @State private var showingTimeline = false
     @State private var showingAddEntry = false
     @State private var showPremiumSheet = false
-    @State private var showComparison = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,13 +26,13 @@ struct SkinJournalCard: View {
             } else {
                 // Premium users
                 if store.totalEntries >= 2 {
-                    // Show premium preview with compare button
+                    // Show premium preview with journal button
                     VStack(spacing: 0) {
                         premiumHeaderSection
                         Divider()
                             .background(ThemeManager.shared.theme.palette.border)
-                        PremiumJourneyPreview(onCompareRequest: {
-                            showComparison = true
+                        PremiumJourneyPreview(onJournalRequest: {
+                            showingTimeline = true
                         })
                     }
                 } else {
@@ -74,9 +73,6 @@ struct SkinJournalCard: View {
         }
         .sheet(isPresented: $showPremiumSheet) {
             SkinJournalPremiumSheet()
-        }
-        .sheet(isPresented: $showComparison) {
-            SkinJournalComparisonView()
         }
         .onAppear {
             print("🔄 SkinJournalCard appeared, refreshing entries...")
@@ -162,30 +158,38 @@ struct SkinJournalCard: View {
 
     private var contentView: some View {
         VStack(spacing: 16) {
-            // Latest entry preview
-            if let latestEntry = store.getMostRecentEntry() {
-                latestEntryPreview(latestEntry)
+            // Latest two entries preview
+            latestEntriesPreview()
+
+            // "More on journal" text if more than 3 entries
+            if store.totalEntries > 3 {
+                Text("More on journal")
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                    .padding(.top, 4)
             }
 
-            // Stats and actions
-            HStack(spacing: 16) {
-                // Streak stat
-                statPill(
-                    icon: "flame.fill",
-                    value: "\(store.getCurrentStreak())",
-                    label: "Day Streak",
-                    color: .orange
-                )
-
-                // View button
-                viewJournalButton
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
+            // View Journal button
+            viewJournalButton
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
         }
     }
 
-    private func latestEntryPreview(_ entry: SkinJournalEntryModel) -> some View {
+    private func latestEntriesPreview() -> some View {
+        VStack(spacing: 12) {
+            let sortedEntries = store.entries.sorted { $0.date > $1.date }
+            let entriesToShow = Array(sortedEntries.prefix(2))
+
+            ForEach(entriesToShow, id: \.id) { entry in
+                entryPreviewRow(entry)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 16)
+    }
+
+    private func entryPreviewRow(_ entry: SkinJournalEntryModel) -> some View {
         HStack(spacing: 16) {
             // Thumbnail
             if let image = store.loadPhoto(for: entry) {
@@ -202,10 +206,6 @@ struct SkinJournalCard: View {
 
             // Info
             VStack(alignment: .leading, spacing: 6) {
-                Text("Latest Entry")
-                    .font(ThemeManager.shared.theme.typo.caption)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-
                 Text(formatDate(entry.date))
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
@@ -224,54 +224,11 @@ struct SkinJournalCard: View {
             }
 
             Spacer()
-
-            // Add button
-            Button {
-                if premiumManager.canUseSkinJournal() {
-                    showingAddEntry = true
-                } else {
-                    showPremiumSheet = true
-                }
-            } label: {
-                Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 32))
-                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
-            }
         }
-        .padding(20)
+        .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(ThemeManager.shared.theme.palette.background.opacity(0.5))
-        )
-        .padding(.horizontal, 20)
-        .padding(.top, 16)
-    }
-
-    private func statPill(icon: String, value: String, label: String, color: Color) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 16))
-                .foregroundColor(color)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(value)
-                    .font(ThemeManager.shared.theme.typo.body.weight(.bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                Text(label)
-                    .font(ThemeManager.shared.theme.typo.caption)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(ThemeManager.shared.theme.palette.background)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
-                )
         )
     }
 
