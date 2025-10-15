@@ -10,51 +10,84 @@ import AVFoundation
 import UIKit
 
 struct SkinJournalCameraView: View {
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var cameraManager = SkinJournalCameraManager()
     @State private var showGhostOverlay = true
     @State private var capturedImage: UIImage?
     @State private var isProcessing = false
     @State private var showInstructions = true
+    @State private var isCameraReady = false
     
     let lastSelfieImage: UIImage?
     let onPhotoCapture: (UIImage) -> Void
     
     var body: some View {
         ZStack {
+            // Black background while camera initializes
+            Color.black.ignoresSafeArea()
+
             // Camera preview
-            SkinJournalCameraPreviewView(cameraManager: cameraManager)
-                .ignoresSafeArea()
-            
+            if isCameraReady {
+                SkinJournalCameraPreviewView(cameraManager: cameraManager)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+            } else {
+                // Loading indicator
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .tint(.white)
+
+                    Text("Initializing camera...")
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(.white)
+                }
+            }
+
             // Face guide overlay - dotted template for alignment
             if showGhostOverlay {
                 FaceGuideOverlay()
                     .allowsHitTesting(false)
             }
-            
+
             // Processing overlay
             if isProcessing {
                 Color.black.opacity(0.7)
                     .ignoresSafeArea()
-                
+
                 VStack(spacing: 16) {
                     ProgressView()
                         .scaleEffect(1.5)
                         .tint(.white)
-                    
+
                     Text("Analyzing photo...")
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(.white)
                 }
             }
-            
-            // Controls overlay
-            VStack {
-                // Top controls
-                HStack {
-                    Spacer()
-                    
-                    // Always show the guide toggle
-                    Button {
+
+            // Controls overlay (only show when camera is ready)
+            if isCameraReady {
+                VStack {
+                    // Top controls
+                    HStack {
+                        // Close button (chevron down)
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Color.black.opacity(0.5))
+                                .clipShape(Circle())
+                        }
+                        .padding(.leading, 16)
+
+                        Spacer()
+
+                        // Guide toggle button
+                        Button {
                         withAnimation {
                             showGhostOverlay.toggle()
                             
@@ -82,7 +115,7 @@ struct SkinJournalCameraView: View {
                         .background(Color.black.opacity(0.5))
                         .cornerRadius(22)
                     }
-                    .padding()
+                    .padding(.trailing, 16)
                 }
                 
                 Spacer()
@@ -150,14 +183,22 @@ struct SkinJournalCameraView: View {
                 }
                 .padding(.bottom, 40)
             }
+            }
         }
         .onAppear {
             cameraManager.requestCameraPermission()
-            
-            // Auto-hide instructions after 1.5 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                withAnimation(.easeOut(duration: 0.3)) {
-                    showInstructions = false
+
+            // Wait for camera to initialize before showing preview
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    isCameraReady = true
+                }
+
+                // Auto-hide instructions after camera is ready
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        showInstructions = false
+                    }
                 }
             }
         }

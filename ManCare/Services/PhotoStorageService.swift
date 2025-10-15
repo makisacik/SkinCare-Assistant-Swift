@@ -228,7 +228,8 @@ class PhotoStorageService {
         }
 
         // Create graphics context and resize
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        // Use opaque = true since camera photos don't need transparency
+        UIGraphicsBeginImageContextWithOptions(newSize, true, 1.0)
         defer { UIGraphicsEndImageContext() }
 
         image.draw(in: CGRect(origin: .zero, size: newSize))

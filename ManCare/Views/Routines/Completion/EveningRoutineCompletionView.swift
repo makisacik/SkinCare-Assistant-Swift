@@ -48,9 +48,9 @@ struct EveningRoutineCompletionView: View {
     @State private var showCycleSetup = false
     @State private var showEnableConfirmation = false
     @State private var showPaywall = false
-    @State private var isPremiumUser = false  // For testing: simulates premium status
     @State private var hasCycleData = false
     private let routineStore = RoutineStore()
+    @ObservedObject private var premiumManager = PremiumManager.shared
 
     // FIXED: Use the passed-in cycleStore instead of creating a new one
     private var adapterService: RoutineAdapterProtocol {
@@ -251,8 +251,7 @@ struct EveningRoutineCompletionView: View {
         .sheet(isPresented: $showPaywall) {
             PaywallView(
                 onSubscribe: {
-                    // For testing: act as if subscription was successful
-                    isPremiumUser = true
+                    // Paywall handles premium status via PremiumManager
                     showPaywall = false
 
                     // Now check if user has cycle data
@@ -588,7 +587,7 @@ struct EveningRoutineCompletionView: View {
 
     private func handleEnableCycleAdaptation() {
         // Check if user is premium
-        if !isPremiumUser {
+        if !premiumManager.isPremium {
             // Show paywall for non-premium users
             showPaywall = true
         } else {

@@ -224,6 +224,9 @@ struct RoutineHomeView: View {
                     }
                 )
 
+                // Daily Mood Tracking Card
+                DailyMoodTrackingCard(selectedDate: selectedDate)
+
                 // Evening Routine Card
                 RoutineCard(
                     title: "Evening routine",

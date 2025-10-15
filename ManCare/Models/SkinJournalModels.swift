@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 
+// MARK: - Journal Entry Source
+
+enum JournalEntrySource: String, Codable {
+    case skinJournal = "skin_journal"
+    case moodTrackingCard = "mood_tracking_card"
+}
+
 // MARK: - Skin Journal Entry
 
 struct SkinJournalEntryModel: Identifiable, Codable {
@@ -20,6 +27,7 @@ struct SkinJournalEntryModel: Identifiable, Codable {
     var imageAnalysis: ImageAnalysisResult
     let createdAt: Date
     var reminderEnabled: Bool
+    var source: JournalEntrySource // Track where entry was created from
     
     init(
         id: UUID = UUID(),
@@ -30,7 +38,8 @@ struct SkinJournalEntryModel: Identifiable, Codable {
         skinFeelTags: [SkinFeelTag] = [],
         imageAnalysis: ImageAnalysisResult = ImageAnalysisResult(),
         createdAt: Date = Date(),
-        reminderEnabled: Bool = false
+        reminderEnabled: Bool = false,
+        source: JournalEntrySource = .skinJournal
     ) {
         self.id = id
         self.date = date
@@ -41,6 +50,7 @@ struct SkinJournalEntryModel: Identifiable, Codable {
         self.imageAnalysis = imageAnalysis
         self.createdAt = createdAt
         self.reminderEnabled = reminderEnabled
+        self.source = source
     }
 }
 
@@ -170,7 +180,11 @@ extension SkinJournalEntryModel {
             overallTone: entity.overallTone ?? "Not analyzed",
             analyzedAt: createdAt
         )
-        
+
+        // Parse source, defaulting to skinJournal for backward compatibility
+        let sourceString = entity.value(forKey: "source") as? String ?? "skin_journal"
+        let source = JournalEntrySource(rawValue: sourceString) ?? .skinJournal
+
         return SkinJournalEntryModel(
             id: id,
             date: date,
@@ -180,10 +194,11 @@ extension SkinJournalEntryModel {
             skinFeelTags: skinFeelTags,
             imageAnalysis: imageAnalysis,
             createdAt: createdAt,
-            reminderEnabled: entity.reminderEnabled
+            reminderEnabled: entity.reminderEnabled,
+            source: source
         )
     }
-    
+
     /// Convert model to Core Data entity
     func toEntity(context: NSManagedObjectContext) -> SkinJournalEntry {
         let entity = SkinJournalEntry(context: context)
@@ -197,6 +212,10 @@ extension SkinJournalEntryModel {
         entity.overallTone = self.imageAnalysis.overallTone
         entity.createdAt = self.createdAt
         entity.reminderEnabled = self.reminderEnabled
+
+        // Save source if the entity supports it (backward compatible)
+        entity.setValue(self.source.rawValue, forKey: "source")
+
         return entity
     }
 }

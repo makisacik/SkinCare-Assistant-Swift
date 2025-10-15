@@ -65,7 +65,7 @@ struct MyselfView: View {
                                 .fill(ThemeManager.shared.theme.palette.textInverse.opacity(0.2))
                         )
                         .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
-                        .padding(.top, -8)
+                        .padding(.top, -18)
 
                     // Current Date
                     Text(Date(), style: .date)
@@ -87,7 +87,7 @@ struct MyselfView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 4)
             }
-            .frame(height: 220)
+            .frame(height: 190)
             .overlay(alignment: .topTrailing) {
                 settingsMenuButton
             }
@@ -188,8 +188,8 @@ struct MyselfView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 16)
-        .padding(.bottom, 12)
+        .padding(.top, 4)
+        .padding(.bottom, 4)
     }
 
     @ViewBuilder

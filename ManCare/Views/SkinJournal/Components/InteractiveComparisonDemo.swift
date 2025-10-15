@@ -46,19 +46,21 @@ struct InteractiveComparisonDemo: View {
                 .background(ThemeManager.shared.theme.palette.border)
             
             // Comparison demo
-            VStack(spacing: 16) {
-                comparisonSliderView
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                
-                // Labels
+            VStack(spacing: 8) {
+                // Labels above the photo
                 labelsView
                     .padding(.horizontal, 28)
+                    .padding(.top, 12)
+                    .padding(.bottom, 6)
+                
+                comparisonSliderView
+                    .padding(.horizontal, 20)
                 
                 // Upgrade prompt (shows after interaction or if previously shown)
                 if showUpgradePrompt {
                     upgradePromptView
                         .padding(.horizontal, 20)
+                        .padding(.top, 8)
                         .padding(.bottom, 20)
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -107,7 +109,8 @@ struct InteractiveComparisonDemo: View {
                 .font(.system(size: 24))
                 .foregroundColor(ThemeManager.shared.theme.palette.primary.opacity(0.6))
         }
-        .padding(20)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 20)
     }
     
     // MARK: - Comparison Slider View

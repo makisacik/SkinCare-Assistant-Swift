@@ -62,5 +62,6 @@
         <attribute name="overallTone" optional="YES" attributeType="String"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="reminderEnabled" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="source" optional="YES" attributeType="String" defaultValueString="skin_journal"/>
     </entity>
 </model>
