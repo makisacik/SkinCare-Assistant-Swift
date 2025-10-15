@@ -7,14 +7,18 @@
 
 import SwiftUI
 
+// Helper struct for navigation
+struct AddStepDestination: Hashable {
+    let timeOfDay: TimeOfDay
+}
+
 struct EditRoutineView: View {
     
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var editingService: RoutineEditingService
     @State private var selectedTimeOfDay: TimeOfDay
-    @State private var showingAddStep = false
-    @State private var showingStepDetail: EditableRoutineStep?
+    @State private var navigationPath = NavigationPath()
     
     let onRoutineUpdated: ((RoutineResponse) -> Void)?
 
@@ -25,16 +29,18 @@ struct EditRoutineView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $navigationPath) {
             VStack(spacing: 0) {
                 // Modern header
                 VStack(spacing: 0) {
                     HStack {
-                        Button("Cancel") {
+                        Button {
                             editingService.cancelEditing()
                             dismiss()
+                        } label: {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 18, weight: .semibold))
                         }
-                        .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
 
                         Spacer()
@@ -107,12 +113,7 @@ struct EditRoutineView: View {
                         timeOfDay: .morning,
                         steps: editingService.editableRoutine.morningSteps,
                         editingService: editingService,
-                        onStepTap: { step in
-                            showingStepDetail = step
-                        },
-                        onAddStep: {
-                            showingAddStep = true
-                        }
+                        navigationPath: $navigationPath
                     )
                     .tag(TimeOfDay.morning)
                     
@@ -121,12 +122,7 @@ struct EditRoutineView: View {
                         timeOfDay: .evening,
                         steps: editingService.editableRoutine.eveningSteps,
                         editingService: editingService,
-                        onStepTap: { step in
-                            showingStepDetail = step
-                        },
-                        onAddStep: {
-                            showingAddStep = true
-                        }
+                        navigationPath: $navigationPath
                     )
                     .tag(TimeOfDay.evening)
                 }
@@ -134,21 +130,21 @@ struct EditRoutineView: View {
             }
             .background(ThemeManager.shared.theme.palette.cardBackground.ignoresSafeArea())
             .navigationBarHidden(true)
-        }
-        .sheet(isPresented: $showingAddStep) {
-            AddStepView(
-                timeOfDay: selectedTimeOfDay,
-                editingService: editingService
-            )
-        }
-        .sheet(item: $showingStepDetail) { step in
-            StepDetailEditView(
-                step: step,
-                editingService: editingService
-            )
-        }
-        .onAppear {
-            editingService.startEditing()
+            .navigationDestination(for: EditableRoutineStep.self) { step in
+                StepDetailEditView(
+                    step: step,
+                    editingService: editingService
+                )
+            }
+            .navigationDestination(for: AddStepDestination.self) { destination in
+                AddStepView(
+                    timeOfDay: destination.timeOfDay,
+                    editingService: editingService
+                )
+            }
+            .onAppear {
+                editingService.startEditing()
+            }
         }
     }
     
@@ -171,8 +167,7 @@ private struct EditableRoutineSection: View {
     let timeOfDay: TimeOfDay
     let steps: [EditableRoutineStep]
     let editingService: RoutineEditingService
-    let onStepTap: (EditableRoutineStep) -> Void
-    let onAddStep: () -> Void
+    @Binding var navigationPath: NavigationPath
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -186,7 +181,7 @@ private struct EditableRoutineSection: View {
                     Spacer()
                     
                     Button {
-                        onAddStep()
+                        navigationPath.append(AddStepDestination(timeOfDay: timeOfDay))
                     } label: {
                         HStack(spacing: 6) {
                             Image(systemName: "plus.circle.fill")
@@ -214,16 +209,18 @@ private struct EditableRoutineSection: View {
                         step: step,
                         editingService: editingService,
                         onTap: {
-                            onStepTap(step)
+                            navigationPath.append(step)
                         }
                     )
+                    .transition(.move(edge: .top).combined(with: .opacity))
                 }
+                .animation(.spring(response: 0.35, dampingFraction: 0.75), value: steps.map { $0.order })
                 
                 // Empty state
                 if steps.isEmpty {
                     EmptyRoutineState(
                         timeOfDay: timeOfDay,
-                        onAddStep: onAddStep
+                        navigationPath: $navigationPath
                     )
                 }
             }
@@ -237,7 +234,7 @@ private struct EditableRoutineSection: View {
 private struct EmptyRoutineState: View {
     
     let timeOfDay: TimeOfDay
-    let onAddStep: () -> Void
+    @Binding var navigationPath: NavigationPath
     
     var body: some View {
         VStack(spacing: 20) {
@@ -257,7 +254,7 @@ private struct EmptyRoutineState: View {
             }
             
             Button {
-                onAddStep()
+                navigationPath.append(AddStepDestination(timeOfDay: timeOfDay))
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")

@@ -63,7 +63,9 @@ struct EditableStepCard: View {
                     // Move up/down buttons - bigger and easier to tap
                     VStack(spacing: 2) {
                         Button {
-                            editingService.moveStepUp(step)
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                                editingService.moveStepUp(step)
+                            }
                         } label: {
                             Image(systemName: "chevron.up")
                                 .font(.system(size: 14, weight: .bold))
@@ -77,7 +79,9 @@ struct EditableStepCard: View {
                         .buttonStyle(PlainButtonStyle())
 
                         Button {
-                            editingService.moveStepDown(step)
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                                editingService.moveStepDown(step)
+                            }
                         } label: {
                             Image(systemName: "chevron.down")
                                 .font(.system(size: 14, weight: .bold))
@@ -93,7 +97,9 @@ struct EditableStepCard: View {
 
                     // Delete button - always show in edit mode
                     Button {
-                        editingService.removeStep(step)
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                            editingService.removeStep(step)
+                        }
                     } label: {
                         Image(systemName: "trash.fill")
                             .font(.system(size: 16, weight: .semibold))

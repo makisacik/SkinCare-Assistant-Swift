@@ -14,10 +14,10 @@ class RoutineEditingService: ObservableObject {
     @Published var coachMessages: [CoachMessage] = []
     @Published var editingState: RoutineEditingState = .viewing
     @Published var showingPreview = false
-    
+
     private let completionViewModel: RoutineCompletionViewModel
     private let persistenceController = PersistenceController.shared
-    
+
     init(savedRoutine: SavedRoutineModel, completionViewModel: RoutineCompletionViewModel) {
         // Try to load cached editable routine first, otherwise create from saved routine
         if let cachedRoutine = Self.loadSavedRoutine() {
@@ -27,37 +27,37 @@ class RoutineEditingService: ObservableObject {
         }
         self.completionViewModel = completionViewModel
     }
-    
+
     // MARK: - Public Methods
-    
+
     /// Start editing mode
     func startEditing() {
         editingState = .editing
         coachMessages.removeAll()
     }
-    
+
     /// Cancel editing and discard changes
     func cancelEditing() {
         // Reload from Core Data to discard changes
         editingState = .viewing
         coachMessages.removeAll()
     }
-    
+
     /// Save the edited routine
     func saveRoutine() async -> RoutineResponse? {
         editingState = .saving
-        
+
         // Save to UserDefaults for now (in a real app, you might save to Core Data)
         do {
             let data = try JSONEncoder().encode(editableRoutine)
             UserDefaults.standard.set(data, forKey: "customized_routine")
-            
+
             // Update routine tracking service with new step IDs if needed
             await updateRoutineTracking()
-            
+
             editingState = .viewing
             showingPreview = false
-            
+
             // Return the updated routine converted back to RoutineResponse
             return editableRoutine.toRoutineResponse()
         } catch {
@@ -66,32 +66,37 @@ class RoutineEditingService: ObservableObject {
             return nil
         }
     }
-    
+
     /// Show preview of changes
     func showPreview() {
         editingState = .previewing
         showingPreview = true
     }
-    
+
     /// Toggle step enabled/disabled
     func toggleStep(_ step: EditableRoutineStep) {
         let updatedStep = step.copy(isEnabled: !step.isEnabled)
-        editableRoutine.updateStep(updatedStep)
-        
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateStep(updatedStep)
+        editableRoutine = updatedRoutine
+
         // Generate coach message if removing an important step
         if !step.isEnabled && step.isLocked {
             generateCoachMessageForStepRemoval(step)
         }
     }
-    
+
     /// Remove a step
     func removeStep(_ step: EditableRoutineStep) {
         // Generate coach message before removal
         generateCoachMessageForStepRemoval(step)
-        
-        editableRoutine.removeStep(withId: step.id)
+
+        // Update the routine - trigger @Published update
+        var updatedRoutine = editableRoutine
+        updatedRoutine.removeStep(withId: step.id)
+        editableRoutine = updatedRoutine
     }
-    
+
     /// Swap step type
     func swapStepType(_ step: EditableRoutineStep, newType: ProductType) {
         let newTitle = getDefaultTitle(for: newType)
@@ -99,7 +104,7 @@ class RoutineEditingService: ObservableObject {
         // iconName is computed from stepType, not stored
         let newWhy = getDefaultWhy(for: newType)
         let newHow = getDefaultHow(for: newType)
-        
+
         let updatedStep = step.copy(
             title: newTitle,
             description: newDescription,
@@ -109,26 +114,30 @@ class RoutineEditingService: ObservableObject {
             how: newHow,
             originalStep: false
         )
-        
-        editableRoutine.updateStep(updatedStep)
+
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateStep(updatedStep)
+        editableRoutine = updatedRoutine
         generateCoachMessageForStepSwap(step, newType: newType)
     }
-    
+
     /// Reorder steps
     func reorderSteps(_ steps: [EditableRoutineStep], for timeOfDay: TimeOfDay) {
         var reorderedSteps = steps
         for (index, step) in reorderedSteps.enumerated() {
             reorderedSteps[index] = step.copy(order: index)
         }
-        editableRoutine.updateSteps(reorderedSteps, for: timeOfDay)
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateSteps(reorderedSteps, for: timeOfDay)
+        editableRoutine = updatedRoutine
     }
-    
+
     /// Reorder two specific steps by swapping their positions
     func reorderSteps(draggedStepId: String, targetStepId: String) {
         // Find the dragged step and target step from all time periods
         var draggedStep: EditableRoutineStep?
         var targetStep: EditableRoutineStep?
-        
+
         // Search in morning steps
         if draggedStep == nil {
             draggedStep = editableRoutine.morningSteps.first(where: { $0.id == draggedStepId })
@@ -136,7 +145,7 @@ class RoutineEditingService: ObservableObject {
         if targetStep == nil {
             targetStep = editableRoutine.morningSteps.first(where: { $0.id == targetStepId })
         }
-        
+
         // Search in evening steps
         if draggedStep == nil {
             draggedStep = editableRoutine.eveningSteps.first(where: { $0.id == draggedStepId })
@@ -144,7 +153,7 @@ class RoutineEditingService: ObservableObject {
         if targetStep == nil {
             targetStep = editableRoutine.eveningSteps.first(where: { $0.id == targetStepId })
         }
-        
+
         // Search in weekly steps
         if draggedStep == nil {
             draggedStep = editableRoutine.weeklySteps.first(where: { $0.id == draggedStepId })
@@ -152,93 +161,103 @@ class RoutineEditingService: ObservableObject {
         if targetStep == nil {
             targetStep = editableRoutine.weeklySteps.first(where: { $0.id == targetStepId })
         }
-        
+
         guard let dragged = draggedStep, let target = targetStep else {
             return
         }
-        
+
         // Get all steps for the same time of day
         let timeOfDay = dragged.timeOfDay
         var steps = editableRoutine.steps(for: timeOfDay)
-        
+
         // Find indices of the steps to swap
         guard let draggedIndex = steps.firstIndex(where: { $0.id == draggedStepId }),
               let targetIndex = steps.firstIndex(where: { $0.id == targetStepId }) else {
             return
         }
-        
+
         // Swap the steps
         steps.swapAt(draggedIndex, targetIndex)
-        
+
         // Update the order values
         for (index, step) in steps.enumerated() {
             steps[index] = step.copy(order: index)
         }
-        
-        // Update the routine
-        editableRoutine.updateSteps(steps, for: timeOfDay)
+
+        // Update the routine - trigger @Published update
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateSteps(steps, for: timeOfDay)
+        editableRoutine = updatedRoutine
     }
-    
+
     /// Move step up in order
     func moveStepUp(_ step: EditableRoutineStep) {
         let timeOfDay = step.timeOfDay
         var steps = editableRoutine.steps(for: timeOfDay)
-        
+
         guard let currentIndex = steps.firstIndex(where: { $0.id == step.id }),
               currentIndex > 0 else {
             return
         }
-        
+
         // Swap with previous step
         steps.swapAt(currentIndex, currentIndex - 1)
-        
+
         // Update the order values
         for (index, step) in steps.enumerated() {
             steps[index] = step.copy(order: index)
         }
-        
-        // Update the routine
-        editableRoutine.updateSteps(steps, for: timeOfDay)
+
+        // Update the routine - trigger @Published update
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateSteps(steps, for: timeOfDay)
+        editableRoutine = updatedRoutine
     }
-    
+
     /// Move step down in order
     func moveStepDown(_ step: EditableRoutineStep) {
         let timeOfDay = step.timeOfDay
         var steps = editableRoutine.steps(for: timeOfDay)
-        
+
         guard let currentIndex = steps.firstIndex(where: { $0.id == step.id }),
               currentIndex < steps.count - 1 else {
             return
         }
-        
+
         // Swap with next step
         steps.swapAt(currentIndex, currentIndex + 1)
-        
+
         // Update the order values
         for (index, step) in steps.enumerated() {
             steps[index] = step.copy(order: index)
         }
-        
-        // Update the routine
-        editableRoutine.updateSteps(steps, for: timeOfDay)
+
+        // Update the routine - trigger @Published update
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateSteps(steps, for: timeOfDay)
+        editableRoutine = updatedRoutine
     }
-    
+
     /// Update step frequency
     func updateStepFrequency(_ step: EditableRoutineStep, frequency: StepFrequency) {
         let updatedStep = step.copy(frequency: frequency)
-        editableRoutine.updateStep(updatedStep)
-        
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateStep(updatedStep)
+        editableRoutine = updatedRoutine
+
         if frequency == .custom {
             generateCoachMessageForCustomFrequency(step)
         }
     }
-    
+
     /// Add custom instructions
     func addCustomInstructions(_ step: EditableRoutineStep, instructions: String) {
         let updatedStep = step.copy(customInstructions: instructions)
-        editableRoutine.updateStep(updatedStep)
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateStep(updatedStep)
+        editableRoutine = updatedRoutine
     }
-    
+
     /// Toggle time of day for a step
     func toggleTimeOfDay(_ step: EditableRoutineStep, timeOfDay: TimeOfDay) {
         var updatedStep = step
@@ -251,26 +270,38 @@ class RoutineEditingService: ObservableObject {
             // Weekly steps are handled differently
             break
         }
-        editableRoutine.updateStep(updatedStep)
+        var updatedRoutine = editableRoutine
+        updatedRoutine.updateStep(updatedStep)
+        editableRoutine = updatedRoutine
     }
-    
+
     /// Add a new step
     func addNewStep(type: ProductType, timeOfDay: TimeOfDay) {
         let newStep = createNewStep(type: type, timeOfDay: timeOfDay)
-        editableRoutine.addStep(newStep)
+        var updatedRoutine = editableRoutine
+        updatedRoutine.addStep(newStep)
+        editableRoutine = updatedRoutine
         generateCoachMessageForNewStep(newStep)
     }
-    
+
+    /// Add a custom step (with user-provided title and description)
+    func addCustomStep(_ step: EditableRoutineStep) {
+        var updatedRoutine = editableRoutine
+        updatedRoutine.addStep(step)
+        editableRoutine = updatedRoutine
+        generateCoachMessageForNewStep(step)
+    }
+
     /// Get available step types for swapping
     func getAvailableStepTypes(excluding currentType: ProductType) -> [ProductType] {
         return ProductType.allCases.filter { $0 != currentType }
     }
-    
+
     /// Clear all coach messages
     func clearCoachMessages() {
         coachMessages.removeAll()
     }
-    
+
     /// Attach a product to a step
     func attachProduct(_ product: Product, to step: EditableRoutineStep) {
         let updatedStep = step.copy(attachedProductId: product.id)
@@ -293,15 +324,15 @@ class RoutineEditingService: ObservableObject {
     func getAttachedProduct(for step: EditableRoutineStep) -> Product? {
         return step.getAttachedProduct(from: ProductService.shared)
     }
-    
+
     // MARK: - Static Methods
-    
+
     /// Load saved routine from UserDefaults
     static func loadSavedRoutine() -> EditableRoutine? {
         guard let data = UserDefaults.standard.data(forKey: "customized_routine") else {
             return nil
         }
-        
+
         do {
             let routine = try JSONDecoder().decode(EditableRoutine.self, from: data)
             return routine
@@ -310,23 +341,23 @@ class RoutineEditingService: ObservableObject {
             return nil
         }
     }
-    
+
     /// Check if there's a saved routine
     static func hasSavedRoutine() -> Bool {
         return UserDefaults.standard.data(forKey: "customized_routine") != nil
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func updateRoutineTracking() async {
         // Update routine tracking service with new step configurations
         // This would involve updating the step IDs and configurations
         // in the tracking service to match the edited routine
     }
-    
+
     private func generateCoachMessageForStepRemoval(_ step: EditableRoutineStep) {
         let message: CoachMessage
-        
+
         switch step.stepType {
         case .cleanser:
             message = CoachMessage(
@@ -375,13 +406,13 @@ class RoutineEditingService: ObservableObject {
                 action: nil
             )
         }
-        
+
         coachMessages.append(message)
     }
-    
+
     private func generateCoachMessageForStepSwap(_ step: EditableRoutineStep, newType: ProductType) {
         let message: CoachMessage
-        
+
         switch (step.stepType, newType) {
         case (.moisturizer, .faceSerum):
             message = CoachMessage(
@@ -412,10 +443,10 @@ class RoutineEditingService: ObservableObject {
                 action: nil
             )
         }
-        
+
         coachMessages.append(message)
     }
-    
+
     private func generateCoachMessageForCustomFrequency(_ step: EditableRoutineStep) {
         let message = CoachMessage(
             type: .suggestion,
@@ -426,13 +457,13 @@ class RoutineEditingService: ObservableObject {
                 self.updateStepFrequency(step, frequency: .twiceWeekly)
             }
         )
-        
+
         coachMessages.append(message)
     }
-    
+
     private func generateCoachMessageForNewStep(_ step: EditableRoutineStep) {
         let message: CoachMessage
-        
+
         switch step.stepType {
         case .faceSerum:
             message = CoachMessage(
@@ -461,14 +492,14 @@ class RoutineEditingService: ObservableObject {
                 action: nil
             )
         }
-        
+
         coachMessages.append(message)
     }
-    
+
     private func createNewStep(type: ProductType, timeOfDay: TimeOfDay) -> EditableRoutineStep {
         let existingSteps = editableRoutine.steps(for: timeOfDay)
         let nextOrder = existingSteps.count
-        
+
         return EditableRoutineStep(
             id: "\(timeOfDay.rawValue)_\(type.rawValue)_\(UUID().uuidString.prefix(8))",
             title: getDefaultTitle(for: type),
@@ -490,7 +521,7 @@ class RoutineEditingService: ObservableObject {
             productConstraints: nil
         )
     }
-    
+
     private func getDefaultTitle(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
@@ -505,7 +536,7 @@ class RoutineEditingService: ObservableObject {
             return stepType.displayName
         }
     }
-    
+
     private func getDefaultDescription(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
@@ -520,7 +551,7 @@ class RoutineEditingService: ObservableObject {
             return ""
         }
     }
-    
+
     private func getDefaultWhy(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
@@ -535,7 +566,7 @@ class RoutineEditingService: ObservableObject {
             return ""
         }
     }
-    
+
     private func getDefaultHow(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
@@ -550,7 +581,7 @@ class RoutineEditingService: ObservableObject {
             return ""
         }
     }
-    
+
     private func generateCoachMessageForProductAttachment(_ step: EditableRoutineStep, product: Product) {
         let message: CoachMessage
 

@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - Editable Routine Models
 
 /// Represents an editable version of a routine step with all customization options
-struct EditableRoutineStep: Identifiable, Codable {
+struct EditableRoutineStep: Identifiable, Codable, Hashable {
     let id: String
     var title: String
     var description: String
@@ -111,6 +111,15 @@ struct EditableRoutineStep: Identifiable, Codable {
             how: customInstructions ?? how,
             constraints: productConstraints ?? Constraints()
         )
+    }
+
+    // Hashable conformance
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: EditableRoutineStep, rhs: EditableRoutineStep) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 
