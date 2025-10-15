@@ -10,6 +10,7 @@ import SwiftUI
 struct SkinJournalCard: View {
     @ObservedObject private var store = SkinJournalStore.shared
     @ObservedObject private var premiumManager = PremiumManager.shared
+    @StateObject private var moodStore = DailyMoodStore()
     @State private var showingTimeline = false
     @State private var showingAddEntry = false
     @State private var showPremiumSheet = false
@@ -209,13 +210,15 @@ struct SkinJournalCard: View {
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                // Mood tags
-                if !entry.moodTags.isEmpty {
-                    HStack(spacing: 4) {
-                        ForEach(entry.moodTags.prefix(4), id: \.self) { emoji in
-                            Text(emoji)
-                                .font(.system(size: 14))
-                        }
+                // Mood emoji (from DailyMoodStore)
+                if let mood = moodStore.getMoodEntry(for: entry.date)?.moodEmoji {
+                    HStack(spacing: 6) {
+                        Text(mood)
+                            .font(.system(size: 20))
+
+                        Text("Mood")
+                            .font(ThemeManager.shared.theme.typo.caption)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
                 }
             }

@@ -849,7 +849,7 @@ extension RoutineTemplate {
             ],
             isFeatured: false,
             isPremium: true,
-            imageName: "routine-korean"
+            imageName: "routine-advanced-korean"
         ),
         RoutineTemplate(
             id: teenAcneId,

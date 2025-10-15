@@ -14,6 +14,7 @@ struct DailyMoodTrackingCard: View {
     @State private var showingCamera = false
     @State private var selectedMood: String?
     @State private var capturedImage: UIImage?
+    @State private var shouldHideCard = false
     
     private var moodEntry: DailyMoodEntry? {
         moodStore.getMoodEntry(for: selectedDate)
@@ -27,6 +28,18 @@ struct DailyMoodTrackingCard: View {
         }
     }
     
+    private var shouldShowCard: Bool {
+        // Don't show if already completed for today
+        if moodStore.isCompleted(for: selectedDate) {
+            return false
+        }
+        // Don't show if manually hidden after completion
+        if shouldHideCard {
+            return false
+        }
+        return true
+    }
+
     enum CardState {
         case moodSelection
         case photoCapture
@@ -34,17 +47,25 @@ struct DailyMoodTrackingCard: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            switch cardState {
-            case .moodSelection:
-                moodSelectionView
-            case .photoCapture:
-                photoCaptureView
-            case .completed:
-                completedView
+        Group {
+            if shouldShowCard {
+                VStack(spacing: 0) {
+                    switch cardState {
+                    case .moodSelection:
+                        moodSelectionView
+                    case .photoCapture:
+                        photoCaptureView
+                    case .completed:
+                        completedView
+                    }
+                }
+                .padding(.horizontal, 20)
+                .transition(.asymmetric(
+                    insertion: .scale.combined(with: .opacity),
+                    removal: .scale.combined(with: .opacity)
+                ))
             }
         }
-        .padding(.horizontal, 20)
         .fullScreenCover(isPresented: $showingCamera) {
             SkinJournalCameraView(
                 lastSelfieImage: nil,
@@ -52,6 +73,10 @@ struct DailyMoodTrackingCard: View {
                     handlePhotoCapture(image)
                 }
             )
+        }
+        .onChange(of: selectedDate) { _ in
+            // Reset hide state when date changes
+            shouldHideCard = false
         }
     }
     
@@ -288,18 +313,16 @@ struct DailyMoodTrackingCard: View {
         
         print("✅ Saved photo: \(photoFileName)")
         
-        // Create Skin Journal entry
+        // Create Skin Journal entry (without mood - that's stored separately)
         let journalEntry = SkinJournalEntryModel(
             id: entryId,
             date: selectedDate,
             photoFileName: photoFileName,
             notes: "",
-            moodTags: [moodEntry?.moodEmoji ?? ""],
             skinFeelTags: [],
             imageAnalysis: analyzeImage(image),
             createdAt: Date(),
-            reminderEnabled: false,
-            source: .moodTrackingCard
+            reminderEnabled: false
         )
         
         // Save to Skin Journal (using Core Data)
@@ -315,6 +338,13 @@ struct DailyMoodTrackingCard: View {
         showingCamera = false
         
         print("✅ Skin Journal entry created with mood: \(moodEntry?.moodEmoji ?? "")")
+
+        // Hide card after 2 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            withAnimation(.easeOut(duration: 0.5)) {
+                shouldHideCard = true
+            }
+        }
     }
     
     // MARK: - Helper Methods

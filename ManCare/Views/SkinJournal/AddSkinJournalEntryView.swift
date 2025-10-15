@@ -10,12 +10,13 @@ import SwiftUI
 struct AddSkinJournalEntryView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var store = SkinJournalStore.shared
+    @StateObject private var moodStore = DailyMoodStore()
     
     @State private var currentStep: AddEntryStep = .camera
     @State private var capturedPhoto: UIImage?
     @State private var isPhotoMirrored = false
     @State private var notes: String = ""
-    @State private var selectedMoodTags: Set<String> = []
+    @State private var selectedMood: String? // Changed from selectedMoodTags to single mood
     @State private var selectedSkinFeelTags: Set<SkinFeelTag> = []
     @State private var isSaving = false
     @State private var showError = false
@@ -212,61 +213,59 @@ struct AddSkinJournalEntryView: View {
     
     private var moodTagsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Lifestyle Factors")
+            Text("How are you feeling?")
                 .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
-            Text("What might be affecting your skin?")
+            Text("Select your mood for today")
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
-            SkinJournalFlowLayout(spacing: 8) {
-                ForEach(MoodTag.allTags, id: \.emoji) { tag in
-                    moodTagChip(tag)
+            // Mood grid
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible()),
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 12) {
+                ForEach(MoodOption.allMoods) { mood in
+                    moodButton(mood: mood)
                 }
             }
         }
     }
     
-    private func moodTagChip(_ tag: MoodTag) -> some View {
-        let isSelected = selectedMoodTags.contains(tag.emoji)
+    private func moodButton(mood: MoodOption) -> some View {
+        let isSelected = selectedMood == mood.emoji
         
         return Button {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
             if isSelected {
-                selectedMoodTags.remove(tag.emoji)
+                selectedMood = nil
             } else {
-                selectedMoodTags.insert(tag.emoji)
+                selectedMood = mood.emoji
             }
         } label: {
-            HStack(spacing: 6) {
-                Text(tag.emoji)
-                    .font(.system(size: 16))
-                Text(tag.label)
-                    .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
+            VStack(spacing: 6) {
+                Text(mood.emoji)
+                    .font(.system(size: 32))
+
+                Text(mood.label)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
             .background(
-                isSelected ?
-                    ThemeManager.shared.theme.palette.primary.opacity(0.15) :
-                    ThemeManager.shared.theme.palette.surface
-            )
-            .foregroundColor(
-                isSelected ?
-                    ThemeManager.shared.theme.palette.primary :
-                    ThemeManager.shared.theme.palette.textPrimary
-            )
-            .cornerRadius(20)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(
-                        isSelected ?
-                            ThemeManager.shared.theme.palette.primary :
-                            ThemeManager.shared.theme.palette.border,
-                        lineWidth: 1.5
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? ThemeManager.shared.theme.palette.primary.opacity(0.15) : ThemeManager.shared.theme.palette.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(isSelected ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: isSelected ? 2 : 1)
                     )
             )
         }
+        .buttonStyle(PlainButtonStyle())
     }
     
     private var skinFeelTagsSection: some View {
@@ -375,7 +374,7 @@ struct AddSkinJournalEntryView: View {
         
         print("📝 Starting to save entry...")
         print("   Notes: '\(notes)'")
-        print("   Mood tags: \(selectedMoodTags)")
+        print("   Selected mood: \(selectedMood ?? "none")")
         print("   Skin feel tags: \(selectedSkinFeelTags)")
         print("   Photo mirrored: \(isPhotoMirrored)")
         
@@ -383,13 +382,17 @@ struct AddSkinJournalEntryView: View {
         
         Task {
             do {
-                let moodTagsArray = Array(selectedMoodTags)
                 let skinFeelTagsArray = Array(selectedSkinFeelTags)
-                
+
+                // Save mood separately to DailyMoodStore if selected
+                if let moodEmoji = selectedMood {
+                    moodStore.saveMood(emoji: moodEmoji, for: Date())
+                    print("💚 Saved mood: \(moodEmoji)")
+                }
+
                 let savedEntry = try await store.saveEntry(
                     photo: photo,
                     notes: notes,
-                    moodTags: moodTagsArray,
                     skinFeelTags: skinFeelTagsArray
                 )
                 

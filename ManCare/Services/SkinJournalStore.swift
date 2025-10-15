@@ -70,33 +70,31 @@ class SkinJournalStore: ObservableObject {
     func saveEntry(
         photo: UIImage,
         notes: String,
-        moodTags: [String],
         skinFeelTags: [SkinFeelTag],
         date: Date = Date()
     ) async throws -> SkinJournalEntryModel {
-        
+
         let id = UUID()
         print("🔵 Starting to save journal entry with ID: \(id)")
-        
+
         // Save photo to disk
         guard let photoFileName = photoStorage.savePhoto(photo, withID: id) else {
             print("❌ Failed to save photo to disk")
             throw SkinJournalError.photoSaveFailed
         }
         print("✅ Photo saved to disk: \(photoFileName)")
-        
+
         // Analyze image
         print("🔍 Starting image analysis...")
         let analysis = await imageAnalysis.analyzeImage(photo)
         print("✅ Image analysis complete: brightness=\(analysis.brightness), tone=\(analysis.overallTone)")
-        
+
         // Create entry model
         let entry = SkinJournalEntryModel(
             id: id,
             date: date,
             photoFileName: photoFileName,
             notes: notes,
-            moodTags: moodTags,
             skinFeelTags: skinFeelTags,
             imageAnalysis: analysis,
             createdAt: Date(),
@@ -134,25 +132,21 @@ class SkinJournalStore: ObservableObject {
     func updateEntry(
         id: UUID,
         notes: String? = nil,
-        moodTags: [String]? = nil,
         skinFeelTags: [SkinFeelTag]? = nil,
         reminderEnabled: Bool? = nil
     ) throws {
         let request: NSFetchRequest<SkinJournalEntry> = SkinJournalEntry.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        
+
         do {
             let results = try context.fetch(request)
             guard let entity = results.first else {
                 throw SkinJournalError.entryNotFound
             }
-            
+
             // Update fields
             if let notes = notes {
                 entity.notes = notes
-            }
-            if let moodTags = moodTags {
-                entity.moodTags = moodTags.joined(separator: ",")
             }
             if let skinFeelTags = skinFeelTags {
                 entity.skinFeelTags = skinFeelTags.map { $0.rawValue }.joined(separator: ",")
@@ -160,10 +154,10 @@ class SkinJournalStore: ObservableObject {
             if let reminderEnabled = reminderEnabled {
                 entity.reminderEnabled = reminderEnabled
             }
-            
+
             try context.save()
             print("✅ Updated journal entry: \(id)")
-            
+
             // Refresh entries
             fetchAllEntries()
         } catch {

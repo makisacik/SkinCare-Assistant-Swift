@@ -10,7 +10,12 @@ import SwiftUI
 struct EntryCard: View {
     let entry: SkinJournalEntryModel
     let store: SkinJournalStore
-    
+    @StateObject private var moodStore = DailyMoodStore()
+
+    private var moodForEntry: String? {
+        moodStore.getMoodEntry(for: entry.date)?.moodEmoji
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Photo thumbnail
@@ -47,19 +52,15 @@ struct EntryCard: View {
             
             // Info section
             VStack(alignment: .leading, spacing: 8) {
-                // Mood tags
-                if !entry.moodTags.isEmpty {
-                    HStack(spacing: 4) {
-                        ForEach(entry.moodTags.prefix(3), id: \.self) { emoji in
-                            Text(emoji)
-                                .font(.system(size: 14))
-                        }
+                // Mood emoji (from DailyMoodStore)
+                if let mood = moodForEntry {
+                    HStack(spacing: 6) {
+                        Text(mood)
+                            .font(.system(size: 24))
                         
-                        if entry.moodTags.count > 3 {
-                            Text("+\(entry.moodTags.count - 3)")
-                                .font(ThemeManager.shared.theme.typo.caption)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                        }
+                        Text("Mood")
+                            .font(ThemeManager.shared.theme.typo.caption)
+                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
                 }
                 

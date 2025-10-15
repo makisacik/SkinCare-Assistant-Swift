@@ -11,6 +11,7 @@ struct PremiumJourneyPreview: View {
     let onCompareRequest: () -> Void
     
     @ObservedObject private var store = SkinJournalStore.shared
+    @StateObject private var moodStore = DailyMoodStore()
     
     var body: some View {
         VStack(spacing: 16) {
@@ -102,14 +103,10 @@ struct PremiumJourneyPreview: View {
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 
-                // Emoji tags
-                if !entry.moodTags.isEmpty {
-                    HStack(spacing: 2) {
-                        ForEach(entry.moodTags.prefix(3), id: \.self) { emoji in
-                            Text(emoji)
-                                .font(.system(size: 12))
-                        }
-                    }
+                // Mood emoji (from DailyMoodStore)
+                if let mood = moodStore.getMoodEntry(for: entry.date)?.moodEmoji {
+                    Text(mood)
+                        .font(.system(size: 20))
                 }
             }
         }

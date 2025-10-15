@@ -124,14 +124,27 @@ struct DiscoverView: View {
     // MARK: - Background
 
     private var backgroundGradient: some View {
-        GeometryReader { geometry in
-            Image("cloudy-background")
-                .resizable()
-                .scaledToFill()
-                .frame(width: geometry.size.width, height: geometry.size.height)
-                .clipped()
+        ZStack {
+            // Main background color
+            ThemeManager.shared.theme.palette.background
+                .ignoresSafeArea()
+
+            // Soft gradient at the bottom
+            VStack {
+                Spacer()
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.clear,
+                        ThemeManager.shared.theme.palette.surface.opacity(0.3),
+                        ThemeManager.shared.theme.palette.surface.opacity(0.5)
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 200)
+                .ignoresSafeArea(edges: .bottom)
+            }
         }
-        .ignoresSafeArea()
     }
 
     // MARK: - Header Section

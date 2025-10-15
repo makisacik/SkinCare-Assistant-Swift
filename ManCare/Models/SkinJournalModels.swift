@@ -8,13 +8,6 @@
 import Foundation
 import SwiftUI
 
-// MARK: - Journal Entry Source
-
-enum JournalEntrySource: String, Codable {
-    case skinJournal = "skin_journal"
-    case moodTrackingCard = "mood_tracking_card"
-}
-
 // MARK: - Skin Journal Entry
 
 struct SkinJournalEntryModel: Identifiable, Codable {
@@ -22,35 +15,29 @@ struct SkinJournalEntryModel: Identifiable, Codable {
     let date: Date
     var photoFileName: String
     var notes: String
-    var moodTags: [String] // Emoji tags
     var skinFeelTags: [SkinFeelTag]
     var imageAnalysis: ImageAnalysisResult
     let createdAt: Date
     var reminderEnabled: Bool
-    var source: JournalEntrySource // Track where entry was created from
     
     init(
         id: UUID = UUID(),
         date: Date = Date(),
         photoFileName: String,
         notes: String = "",
-        moodTags: [String] = [],
         skinFeelTags: [SkinFeelTag] = [],
         imageAnalysis: ImageAnalysisResult = ImageAnalysisResult(),
         createdAt: Date = Date(),
-        reminderEnabled: Bool = false,
-        source: JournalEntrySource = .skinJournal
+        reminderEnabled: Bool = false
     ) {
         self.id = id
         self.date = date
         self.photoFileName = photoFileName
         self.notes = notes
-        self.moodTags = moodTags
         self.skinFeelTags = skinFeelTags
         self.imageAnalysis = imageAnalysis
         self.createdAt = createdAt
         self.reminderEnabled = reminderEnabled
-        self.source = source
     }
 }
 
@@ -171,31 +158,24 @@ extension SkinJournalEntryModel {
         }
         
         let notes = entity.notes ?? ""
-        let moodTags = (entity.moodTags ?? "").split(separator: ",").map(String.init)
         let skinFeelTagStrings = (entity.skinFeelTags ?? "").split(separator: ",").map(String.init)
         let skinFeelTags = skinFeelTagStrings.compactMap { SkinFeelTag(rawValue: $0) }
-        
+
         let imageAnalysis = ImageAnalysisResult(
             brightness: entity.brightness,
             overallTone: entity.overallTone ?? "Not analyzed",
             analyzedAt: createdAt
         )
 
-        // Parse source, defaulting to skinJournal for backward compatibility
-        let sourceString = entity.value(forKey: "source") as? String ?? "skin_journal"
-        let source = JournalEntrySource(rawValue: sourceString) ?? .skinJournal
-
         return SkinJournalEntryModel(
             id: id,
             date: date,
             photoFileName: photoFileName,
             notes: notes,
-            moodTags: moodTags,
             skinFeelTags: skinFeelTags,
             imageAnalysis: imageAnalysis,
             createdAt: createdAt,
-            reminderEnabled: entity.reminderEnabled,
-            source: source
+            reminderEnabled: entity.reminderEnabled
         )
     }
 
@@ -206,15 +186,11 @@ extension SkinJournalEntryModel {
         entity.date = self.date
         entity.photoFileName = self.photoFileName
         entity.notes = self.notes
-        entity.moodTags = self.moodTags.joined(separator: ",")
         entity.skinFeelTags = self.skinFeelTags.map { $0.rawValue }.joined(separator: ",")
         entity.brightness = self.imageAnalysis.brightness
         entity.overallTone = self.imageAnalysis.overallTone
         entity.createdAt = self.createdAt
         entity.reminderEnabled = self.reminderEnabled
-
-        // Save source if the entity supports it (backward compatible)
-        entity.setValue(self.source.rawValue, forKey: "source")
 
         return entity
     }

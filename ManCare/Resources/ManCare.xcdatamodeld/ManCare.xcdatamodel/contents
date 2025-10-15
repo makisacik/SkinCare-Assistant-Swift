@@ -56,12 +56,10 @@
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="photoFileName" attributeType="String"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
-        <attribute name="moodTags" optional="YES" attributeType="String"/>
         <attribute name="skinFeelTags" optional="YES" attributeType="String"/>
         <attribute name="brightness" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="overallTone" optional="YES" attributeType="String"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="reminderEnabled" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="source" optional="YES" attributeType="String" defaultValueString="skin_journal"/>
     </entity>
 </model>
