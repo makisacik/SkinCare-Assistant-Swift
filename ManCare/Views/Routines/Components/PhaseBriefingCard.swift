@@ -15,8 +15,19 @@ struct PhaseBriefingCard: View {
     let onEnableCycleAdaptation: () -> Void
 
     @EnvironmentObject var theme: ThemeManager
+    @ObservedObject private var premiumManager = PremiumManager.shared
 
     var body: some View {
+        // Don't show enable prompt for premium users when not adapted
+        // Premium users should just use cycle adaptation without prompts
+        if !isAdapted && !premiumManager.isPremium {
+            EmptyView()
+        } else {
+            contentView
+        }
+    }
+
+    private var contentView: some View {
         VStack(alignment: .leading, spacing: 12) {
             if isAdapted, let snapshot = snapshot {
                 // Adapted state - show phase info
@@ -87,24 +98,26 @@ struct PhaseBriefingCard: View {
 
                     Spacer()
 
-                    // Enable button
-                    Button {
-                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                        onEnableCycleAdaptation()
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text("✨")
-                                .font(.system(size: 12))
-                            Text("Enable")
-                                .font(.system(size: 13, weight: .semibold))
+                    // Enable button (only show for non-premium)
+                    if !premiumManager.isPremium {
+                        Button {
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                            // Show upgrade prompt
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("👑")
+                                    .font(.system(size: 12))
+                                Text("Premium")
+                                    .font(.system(size: 13, weight: .semibold))
+                            }
+                            .foregroundColor(theme.theme.palette.onPrimary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                Capsule()
+                                    .fill(Color(red: 1.0, green: 0.65, blue: 0.0))
+                            )
                         }
-                        .foregroundColor(theme.theme.palette.onPrimary)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(
-                            Capsule()
-                                .fill(theme.theme.palette.primary)
-                        )
                     }
                 }
             }

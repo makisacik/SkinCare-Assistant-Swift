@@ -12,6 +12,8 @@ struct RoutineDetailSheet: View {
     @State private var selectedTimeOfDay: TimeOfDay = .morning
     @State private var isSaved = false
     @State private var showingStepDetail: RoutineStepDetail?
+    @State private var showingErrorAlert = false
+    @State private var errorMessage = ""
 
     let routine: RoutineTemplate
     let listViewModel: RoutineListViewModel
@@ -99,6 +101,11 @@ struct RoutineDetailSheet: View {
                     adaptedStep: nil
                 )
             }
+            .alert("Error", isPresented: $showingErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(errorMessage)
+            }
             .onAppear {
                 Task {
                     do {
@@ -122,13 +129,33 @@ struct RoutineDetailSheet: View {
                     Button(action: {
                         if isSaved {
                             listViewModel.removeRoutineTemplate(routine)
+                            let gen = UINotificationFeedbackGenerator()
+                            gen.notificationOccurred(.warning)
+                            withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
+                                isSaved.toggle()
+                            }
                         } else {
+                            // Attempt to save
                             listViewModel.saveRoutineTemplate(routine)
-                        }
-                        let gen = UINotificationFeedbackGenerator()
-                        gen.notificationOccurred(isSaved ? .warning : .success)
-                        withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
-                            isSaved.toggle()
+                            
+                            // Check for error after a short delay to allow async operation
+                            Task {
+                                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
+                                await MainActor.run {
+                                    if let error = listViewModel.error {
+                                        errorMessage = error.localizedDescription
+                                        showingErrorAlert = true
+                                        listViewModel.clearError()
+                                    } else if !listViewModel.isLoading {
+                                        // Success - toggle the saved state
+                                        let gen = UINotificationFeedbackGenerator()
+                                        gen.notificationOccurred(.success)
+                                        withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
+                                            isSaved.toggle()
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }) {
                         Image(systemName: isSaved ? "heart.fill" : "heart")

@@ -51,6 +51,12 @@ final class ServiceFactory {
         )
     }
 
+    // MARK: - Premium Management
+
+    func createPremiumManager() -> PremiumManager {
+        return PremiumManager.shared
+    }
+
     func routineAdapterService(cycleStore: CycleStore) -> RoutineAdapterProtocol {
         return RoutineAdapterService(
             cycleStore: cycleStore,

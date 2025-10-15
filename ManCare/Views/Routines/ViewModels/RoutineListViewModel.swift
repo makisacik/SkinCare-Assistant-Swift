@@ -166,6 +166,19 @@ final class RoutineListViewModel: ObservableObject {
         
         Task {
             do {
+                // Check premium status before saving
+                let premiumManager = PremiumManager.shared
+                let canCreate = await premiumManager.canCreateRoutine()
+
+                if !canCreate {
+                    await MainActor.run {
+                        self.error = PremiumError.routineLimitReached
+                        self.isLoading = false
+                    }
+                    print("❌ Cannot save routine: limit reached for non-premium user")
+                    return
+                }
+
                 let _ = try await routineService.saveRoutine(template)
                 await MainActor.run {
                     self.isLoading = false

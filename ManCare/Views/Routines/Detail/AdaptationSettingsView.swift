@@ -19,6 +19,7 @@ struct AdaptationSettingsView: View {
     @State private var errorMessage = ""
 
     @EnvironmentObject var theme: ThemeManager
+    @ObservedObject private var premiumManager = PremiumManager.shared
 
     init(routine: SavedRoutineModel, routineService: RoutineServiceProtocol) {
         self.routine = routine
@@ -155,6 +156,17 @@ struct AdaptationSettingsView: View {
     private func saveSettings() async {
         isSaving = true
         defer { isSaving = false }
+
+        // Check premium requirements for cycle adaptation
+        if adaptationEnabled && selectedAdaptationType == .cycle {
+            if !premiumManager.canUseCycleAdaptation() {
+                await MainActor.run {
+                    errorMessage = "Cycle adaptation requires a premium subscription"
+                    showError = true
+                }
+                return
+            }
+        }
 
         do {
             try await routineService.toggleAdaptation(

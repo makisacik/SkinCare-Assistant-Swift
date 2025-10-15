@@ -12,10 +12,12 @@ import SwiftUI
 
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var premiumManager = PremiumManager.shared
     var onSubscribe: () -> Void  // Called when user "purchases" (testing mode - no actual payment)
     var onClose: () -> Void      // Called when user closes without purchasing
 
     @State private var showCloseButton = false
+    @State private var isPurchasing = false
 
     var body: some View {
         NavigationView {
@@ -92,26 +94,44 @@ struct PaywallView: View {
                         // CTA Button
                         Button {
                             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                            onSubscribe()
+                            Task {
+                                isPurchasing = true
+                                do {
+                                    try await premiumManager.purchasePremium()
+                                    onSubscribe()
+                                    dismiss()
+                                } catch {
+                                    print("❌ Purchase failed: \(error)")
+                                }
+                                isPurchasing = false
+                            }
                         } label: {
-                            Text("Start my free week")
-                                .font(.system(size: 17, weight: .semibold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 52)
-                                .background(
-                                    LinearGradient(
-                                        colors: [
-                                            ThemeManager.shared.theme.palette.primary,
-                                            ThemeManager.shared.theme.palette.secondary
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
+                            HStack(spacing: 8) {
+                                if isPurchasing {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .scaleEffect(0.9)
+                                }
+                                Text(isPurchasing ? "Processing..." : "Start my free week")
+                                    .font(.system(size: 17, weight: .semibold))
+                            }
+                            .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .background(
+                                LinearGradient(
+                                    colors: [
+                                        ThemeManager.shared.theme.palette.primary,
+                                        ThemeManager.shared.theme.palette.secondary
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
                                 )
-                                .cornerRadius(26)
-                                .shadow(color: ThemeManager.shared.theme.palette.primary.opacity(0.4), radius: 10, x: 0, y: 5)
+                            )
+                            .cornerRadius(26)
+                            .shadow(color: ThemeManager.shared.theme.palette.primary.opacity(0.4), radius: 10, x: 0, y: 5)
                         }
+                        .disabled(isPurchasing)
                         .padding(.horizontal, 24)
                         .padding(.top, 12)
                         
