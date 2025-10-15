@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MyselfView: View {
     @StateObject private var profileStore = UserProfileStore.shared
+    @StateObject private var premiumManager = PremiumManager.shared
     @State private var showingEdit = false
     @State private var showingGenerateConfirm = false
     @State private var selectedTab = 0
@@ -110,6 +111,19 @@ struct MyselfView: View {
                 showingEdit = true
             } label: {
                 Label("Edit Profile", systemImage: "person.circle")
+            }
+
+            Button {
+                if premiumManager.isPremium {
+                    premiumManager.revokePremium()
+                } else {
+                    premiumManager.grantPremium()
+                }
+            } label: {
+                Label(
+                    premiumManager.isPremium ? "Disable Premium (Test)" : "Enable Premium (Test)",
+                    systemImage: premiumManager.isPremium ? "crown.fill" : "crown"
+                )
             }
         } label: {
             Image(systemName: "line.3.horizontal")

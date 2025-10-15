@@ -91,6 +91,20 @@ struct AddSkinJournalEntryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbarBackground(ThemeManager.shared.theme.palette.surface, for: .navigationBar)
+            .onAppear {
+                // Set navigation title color to app's text color
+                let appearance = UINavigationBarAppearance()
+                appearance.configureWithOpaqueBackground()
+                appearance.backgroundColor = UIColor(ThemeManager.shared.theme.palette.surface)
+                appearance.titleTextAttributes = [
+                    .foregroundColor: UIColor(ThemeManager.shared.theme.palette.textPrimary)
+                ]
+                UINavigationBar.appearance().standardAppearance = appearance
+                UINavigationBar.appearance().scrollEdgeAppearance = appearance
+
+                print("📝 Details view appeared")
+                print("📝 Captured photo exists: \(capturedPhoto != nil)")
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Back") {
@@ -109,10 +123,6 @@ struct AddSkinJournalEntryView: View {
                     .fontWeight(.semibold)
                     .disabled(isSaving)
                 }
-            }
-            .onAppear {
-                print("📝 Details view appeared")
-                print("📝 Captured photo exists: \(capturedPhoto != nil)")
             }
         }
     }

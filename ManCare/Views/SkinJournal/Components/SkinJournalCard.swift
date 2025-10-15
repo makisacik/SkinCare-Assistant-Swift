@@ -12,9 +12,103 @@ struct SkinJournalCard: View {
     @ObservedObject private var premiumManager = PremiumManager.shared
     @State private var showingTimeline = false
     @State private var showingAddEntry = false
-    @State private var showingPremiumAlert = false
+    @State private var showPremiumSheet = false
+    @State private var showComparison = false
 
     var body: some View {
+        VStack(spacing: 0) {
+            // Content based on premium status
+            if !premiumManager.isPremium {
+                // Non-premium users - always show interactive demo
+                InteractiveComparisonDemo(onUpgradeRequest: {
+                    showPremiumSheet = true
+                })
+            } else {
+                // Premium users
+                if store.totalEntries >= 2 {
+                    // Show premium preview with compare button
+                    VStack(spacing: 0) {
+                        premiumHeaderSection
+                        Divider()
+                            .background(ThemeManager.shared.theme.palette.border)
+                        PremiumJourneyPreview(onCompareRequest: {
+                            showComparison = true
+                        })
+                    }
+                } else {
+                    // Show regular content view
+                    standardContentView
+                }
+            }
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            ThemeManager.shared.theme.palette.surface,
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                )
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                    radius: 20,
+                    x: 0,
+                    y: 8
+                )
+        )
+        .padding(.horizontal, 20)
+        .sheet(isPresented: $showingTimeline) {
+            SkinJournalTimelineView()
+        }
+        .sheet(isPresented: $showingAddEntry) {
+            AddSkinJournalEntryView()
+        }
+        .sheet(isPresented: $showPremiumSheet) {
+            SkinJournalPremiumSheet()
+        }
+        .sheet(isPresented: $showComparison) {
+            SkinJournalComparisonView()
+        }
+        .onAppear {
+            print("🔄 SkinJournalCard appeared, refreshing entries...")
+            store.fetchAllEntries()
+        }
+    }
+
+    // MARK: - Premium Header Section
+
+    private var premiumHeaderSection: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Skin Journey")
+                    .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                Text("\(store.totalEntries) entr\(store.totalEntries == 1 ? "y" : "ies")")
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+            }
+
+            Spacer()
+
+            Image(systemName: "camera.on.rectangle.fill")
+                .font(.system(size: 24))
+                .foregroundColor(ThemeManager.shared.theme.palette.primary.opacity(0.6))
+        }
+        .padding(20)
+    }
+
+    // MARK: - Standard Content View
+
+    private var standardContentView: some View {
         ZStack {
             VStack(spacing: 0) {
                 // Header
@@ -56,44 +150,10 @@ struct SkinJournalCard: View {
             }
             .blur(radius: premiumManager.isPremium ? 0 : 5)
 
-            // Premium overlay
+            // Premium overlay for non-premium users
             if !premiumManager.isPremium {
                 premiumOverlay
             }
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            ThemeManager.shared.theme.palette.surface,
-                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
-                )
-                .shadow(
-                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
-                    radius: 20,
-                    x: 0,
-                    y: 8
-                )
-        )
-        .padding(.horizontal, 20)
-        .sheet(isPresented: $showingTimeline) {
-            SkinJournalTimelineView()
-        }
-        .sheet(isPresented: $showingAddEntry) {
-            AddSkinJournalEntryView()
-        }
-        .onAppear {
-            print("🔄 SkinJournalCard appeared, refreshing entries...")
-            store.fetchAllEntries()
         }
     }
 
@@ -167,7 +227,7 @@ struct SkinJournalCard: View {
                 if premiumManager.canUseSkinJournal() {
                     showingAddEntry = true
                 } else {
-                    showingPremiumAlert = true
+                    showPremiumSheet = true
                 }
             } label: {
                 Image(systemName: "plus.circle.fill")
@@ -217,7 +277,7 @@ struct SkinJournalCard: View {
             if premiumManager.canUseSkinJournal() {
                 showingTimeline = true
             } else {
-                showingPremiumAlert = true
+                showPremiumSheet = true
             }
         } label: {
             HStack(spacing: 8) {
@@ -273,7 +333,7 @@ struct SkinJournalCard: View {
                 if premiumManager.canUseSkinJournal() {
                     showingAddEntry = true
                 } else {
-                    showingPremiumAlert = true
+                    showPremiumSheet = true
                 }
             } label: {
                 HStack(spacing: 8) {
@@ -346,7 +406,7 @@ struct SkinJournalCard: View {
             }
 
             Button {
-                showingPremiumAlert = true
+                showPremiumSheet = true
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "sparkles")
@@ -382,19 +442,6 @@ struct SkinJournalCard: View {
                 .fill(ThemeManager.shared.theme.palette.surface.opacity(0.98))
         )
         .padding(.horizontal, 40)
-        .alert("Premium Required", isPresented: $showingPremiumAlert) {
-            if !premiumManager.isPremium {
-                Button("Upgrade", role: nil) {
-                    // For now, just grant premium in test mode
-                    Task {
-                        try? await premiumManager.purchasePremium()
-                    }
-                }
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Skin Journey requires a premium subscription. Upgrade now to unlock this feature!")
-        }
     }
 
     // MARK: - Helper Methods
