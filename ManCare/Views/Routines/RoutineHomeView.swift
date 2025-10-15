@@ -85,15 +85,13 @@ struct RoutineHomeView: View {
                     // Calendar Strip
                     CalendarStripView(selectedDate: $selectedDate, completionViewModel: routineViewModel.completionViewModel)
                 }        .background(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            ThemeManager.shared.theme.palette.primaryLight,     // Lighter primary
-                            ThemeManager.shared.theme.palette.primary,          // Base primary
-                            ThemeManager.shared.theme.palette.primaryLight
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
+                    GeometryReader { geometry in
+                        Image("header-background-4")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .clipped()
+                    }
                     .ignoresSafeArea(.all, edges: .top) // Extend to top safe area
                 )
 
@@ -531,51 +529,24 @@ private struct RoutineHeaderView: View {
     @Binding var selectedDate: Date
     @ObservedObject var completionViewModel: RoutineCompletionViewModel
 
-    @State private var currentStreak: Int = 0
-
     var body: some View {
         VStack(spacing: 16) {
-            // Top bar with streak and date
+            // Top bar with date
             HStack {
-                // Streak display
-                if currentStreak > 0 {
-                    HStack(spacing: 6) {
-                        Image(systemName: "flame.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.error)
-
-                        Text("\(currentStreak) day streak")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    }            .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(ThemeManager.shared.theme.palette.warning.opacity(0.2))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(ThemeManager.shared.theme.palette.warning.opacity(0.3), lineWidth: 1)
-                            )
-                    )
-                }
-
                 Spacer()
 
                 // Date display
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(selectedDate, style: .date)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                        .font(ThemeManager.shared.theme.typo.h2.weight(.semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
                     Text("Today")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        .font(ThemeManager.shared.theme.typo.caption)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
                 }    }        .padding(.top, 8)
         }.padding(.horizontal, 20)
         .padding(.bottom, 20)
-        .onAppear {
-            currentStreak = completionViewModel.currentStreak
-        }
     }    }
 // MARK: - Calendar Strip View
 
@@ -661,17 +632,17 @@ private struct CalendarDayView: View {
         Button(action: onTap) {
             VStack(spacing: 4) {
                 Text(dayFormatter.string(from: date))
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
 
                 Text(dateFormatter.string(from: date))
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
 
-                // Completion indicator with different states
-                if hasCompletions {
+                // Completion indicator with different states (hidden when selected)
+                if hasCompletions && !isSelected {
                     Circle()
-                        .fill(isSelected ? indicatorColor : indicatorColor.opacity(0.8))
+                        .fill(indicatorColor.opacity(0.8))
                         .frame(width: 6, height: 6)
                         .scaleEffect(completionRate >= 1.0 ? 1.2 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: completionRate)
@@ -684,8 +655,8 @@ private struct CalendarDayView: View {
         }
         .frame(width: 40, height: 50)
         .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? ThemeManager.shared.theme.palette.background : Color.clear)
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(isSelected ? ThemeManager.shared.theme.palette.textInverse.opacity(0.2) : Color.clear)
             )
         .buttonStyle(PlainButtonStyle())
         .onAppear {

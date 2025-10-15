@@ -13,12 +13,22 @@ struct EditProfileView: View {
     let onSave: (UserProfile) -> Void
 
     @State private var draft: UserProfileDraft
+    @StateObject private var cycleStore = CycleStore()
+    @State private var lastPeriodStartDate: Date
+    @State private var averageCycleLength: Int
+    @State private var periodLength: Int
 
     init(initialProfile: UserProfile?, onCancel: @escaping () -> Void, onSave: @escaping (UserProfile) -> Void) {
         self.initialProfile = initialProfile
         self.onCancel = onCancel
         self.onSave = onSave
         _draft = State(initialValue: UserProfileDraft(from: initialProfile))
+
+        // Initialize cycle data with current values
+        let store = CycleStore()
+        _lastPeriodStartDate = State(initialValue: store.cycleData.lastPeriodStartDate)
+        _averageCycleLength = State(initialValue: store.cycleData.averageCycleLength)
+        _periodLength = State(initialValue: store.cycleData.periodLength)
     }
 
     var body: some View {
@@ -55,16 +65,65 @@ struct EditProfileView: View {
                         ForEach(Region.allCases) { Text($0.title).tag($0) }
                     }
                 }
+
+                Section("Menstruation Cycle") {
+                    DatePicker("Last Period Start",
+                              selection: $lastPeriodStartDate,
+                              in: ...Date(),
+                              displayedComponents: .date)
+
+                    Stepper("Cycle Length: \(averageCycleLength) days",
+                           value: $averageCycleLength,
+                           in: 21...45)
+
+                    Stepper("Period Length: \(periodLength) days",
+                           value: $periodLength,
+                           in: 2...10)
+
+                    // Show current phase info
+                    let currentData = CycleData(lastPeriodStartDate: lastPeriodStartDate,
+                                               averageCycleLength: averageCycleLength,
+                                               periodLength: periodLength)
+                    let phase = currentData.currentPhase()
+                    let dayInCycle = currentData.currentDayInCycle()
+
+                    HStack {
+                        Image(systemName: phase.iconName)
+                            .foregroundColor(phase.mainColor)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Current Phase: \(phase.title)")
+                                .font(.subheadline)
+                            Text("Day \(dayInCycle) of \(averageCycleLength)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
             }
             .navigationTitle("Edit Profile")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel", role: .cancel) { onCancel() }
+                    Button {
+                        onCancel()
+                    } label: {
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         if let p = draft.toProfile() {
+                            // Save profile
                             onSave(p)
+
+                            // Save cycle data
+                            let newCycleData = CycleData(
+                                lastPeriodStartDate: lastPeriodStartDate,
+                                averageCycleLength: averageCycleLength,
+                                periodLength: periodLength
+                            )
+                            cycleStore.updateCycleData(newCycleData)
                         } else {
                             print("❌ EditProfileView: draft invalid on Save")
                         }
