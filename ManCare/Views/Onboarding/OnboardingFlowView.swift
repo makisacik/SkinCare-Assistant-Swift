@@ -18,7 +18,7 @@ struct OnboardingFlowView: View {
     var body: some View {
         ZStack {
             if skipToHome {
-                MainTabView(generatedRoutine: nil)
+                MainTabView()
                     .transition(.asymmetric(
                         insertion: .move(edge: .trailing).combined(with: .opacity),
                         removal: .move(edge: .leading).combined(with: .opacity)

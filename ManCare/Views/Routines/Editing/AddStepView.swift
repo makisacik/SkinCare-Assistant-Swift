@@ -412,7 +412,7 @@ private struct StepTypeCard: View {
     AddStepView(
         timeOfDay: .morning,
         editingService: RoutineEditingService(
-            originalRoutine: nil,
+            savedRoutine: SavedRoutineModel.preview,
             completionViewModel: RoutineCompletionViewModel.preview
         )
     )

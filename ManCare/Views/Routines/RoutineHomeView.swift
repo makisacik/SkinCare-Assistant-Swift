@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RoutineHomeView: View {
 
-    let generatedRoutine: RoutineResponse?
     @Binding var selectedTab: MainTabView.CurrentTab
     let routineService: RoutineServiceProtocol
 
@@ -17,8 +16,7 @@ struct RoutineHomeView: View {
     @StateObject private var cycleStore = CycleStore()
     @State private var selectedDate = Date()
 
-    init(generatedRoutine: RoutineResponse?, selectedTab: Binding<MainTabView.CurrentTab>, routineService: RoutineServiceProtocol) {
-        self.generatedRoutine = generatedRoutine
+    init(selectedTab: Binding<MainTabView.CurrentTab>, routineService: RoutineServiceProtocol) {
         self._selectedTab = selectedTab
         self.routineService = routineService
         self._routineViewModel = StateObject(wrappedValue: RoutineHomeViewModel(routineService: routineService))
@@ -48,11 +46,10 @@ struct RoutineHomeView: View {
             .ignoresSafeArea()
             .onAppear {
                 print("🏠 RoutineHomeView onAppear")
-                print("📊 generatedRoutine: \(generatedRoutine != nil ? "exists" : "nil")")
                 print("📊 activeRoutine: \(routineViewModel.activeRoutine?.title ?? "nil")")
                 print("📊 savedRoutines count: \(routineViewModel.savedRoutines.count)")
 
-                // Load routines first
+                // Load routines (they are already saved to Core Data from onboarding flow)
                 routineViewModel.onAppear()
 
                 // TEMPORARY DEBUG: Check for problematic active routine
@@ -63,15 +60,9 @@ struct RoutineHomeView: View {
                         print("🚨 WARNING: Active routine '\(activeRoutine.title)' has duplicate step IDs!")
                         print("🚨 Total steps: \(allStepIds.count), Unique IDs: \(uniqueStepIds.count)")
                         print("🚨 Consider clearing the routine data to fix duplicates")
-                    }    }
-
-                // Auto-save initial routine if available and no active routine exists
-                if let routine = generatedRoutine, routineViewModel.activeRoutine == nil {
-                    print("💾 Saving initial routine from generatedRoutine")
-                    routineViewModel.saveInitialRoutine(from: routine)
-                } else {
-                    print("⚠️ Not saving routine - generatedRoutine: \(generatedRoutine != nil), activeRoutine: \(routineViewModel.activeRoutine != nil)")
-                }}
+                    }
+                }
+            }
 
             VStack(spacing: 0) {
                 // Calendar section with its own background extending to top safe area
@@ -102,13 +93,15 @@ struct RoutineHomeView: View {
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(stepDetail: stepDetail)
         }.sheet(isPresented: $showingEditRoutine) {
-            if let routine = generatedRoutine {
+            if let active = routineViewModel.activeRoutine {
+                // Use SavedRoutineModel directly - our single source of truth
                 EditRoutineView(
-                    originalRoutine: routine,
+                    savedRoutine: active,
                     completionViewModel: routineViewModel.completionViewModel,
                     onRoutineUpdated: nil
                 )
-            }}
+            }
+        }
         .sheet(item: $showingRoutineDetail) { routineData in
             RoutineDetailView(
                 title: routineData.title,
@@ -131,8 +124,7 @@ struct RoutineHomeView: View {
                 cycleStore: cycleStore,
                 onComplete: {
                     showingMorningRoutineCompletion = false
-                },
-                originalRoutine: generatedRoutine
+                }
             )
         }        .fullScreenCover(isPresented: $showingEveningRoutineCompletion) {
             EveningRoutineCompletionView(
@@ -142,8 +134,7 @@ struct RoutineHomeView: View {
                 cycleStore: cycleStore,
                 onComplete: {
                     showingEveningRoutineCompletion = false
-                },
-                originalRoutine: generatedRoutine
+                }
             )
         }.sheet(isPresented: $showingRoutineSwitcher) {
             if #available(iOS 16.0, *) {
@@ -296,22 +287,7 @@ struct RoutineHomeView: View {
             }
         }
 
-        // Fallback to generated routine from onboarding
-        if let routine = generatedRoutine {
-            print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.morning.count) morning steps")
-            return routine.routine.morning.enumerated().map { (index, apiStep) in
-                RoutineStepDetail(
-                    id: "morning_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
-                    title: apiStep.name,
-                    description: "\(apiStep.why) - \(apiStep.how)",
-                    stepType: apiStep.step,
-                    timeOfDay: .morning,
-                    why: apiStep.why,
-                    how: apiStep.how
-                )
-            }}
-
-        // Fallback routine
+        // Fallback routine - this shouldn't happen in normal flow
         print("🐛 DEBUG: Using hardcoded fallback morning routine")
         return [
             RoutineStepDetail(
@@ -374,22 +350,7 @@ struct RoutineHomeView: View {
             }
         }
 
-        // Fallback to generated routine from onboarding
-        if let routine = generatedRoutine {
-            print("🐛 DEBUG: Using generated routine from onboarding with \(routine.routine.evening.count) evening steps")
-            return routine.routine.evening.enumerated().map { (index, apiStep) in
-                RoutineStepDetail(
-                    id: "evening_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
-                    title: apiStep.name,
-                    description: "\(apiStep.why) - \(apiStep.how)",
-                    stepType: apiStep.step,
-                    timeOfDay: .evening,
-                    why: apiStep.why,
-                    how: apiStep.how
-                )
-            }}
-
-        // Fallback routine
+        // Fallback routine - this shouldn't happen in normal flow
         print("🐛 DEBUG: Using hardcoded fallback evening routine")
         return [
             RoutineStepDetail(
@@ -423,22 +384,26 @@ struct RoutineHomeView: View {
     }
 
     private func generateWeeklyRoutine() -> [RoutineStepDetail]? {
-        guard let routine = generatedRoutine,
-              let weeklySteps = routine.routine.weekly else {
+        // Use active routine from RoutineViewModel if available
+        guard let activeRoutine = routineViewModel.activeRoutine else {
             return nil
         }
 
-        return weeklySteps.enumerated().map { (index, apiStep) in
+        let weeklySteps = activeRoutine.stepDetails.filter { $0.timeOfDay == "weekly" }
+        guard !weeklySteps.isEmpty else { return nil }
+
+        return weeklySteps.map { stepDetail in
             RoutineStepDetail(
-                id: "weekly_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
-                title: apiStep.name,
-                description: "\(apiStep.why) - \(apiStep.how)",
-                stepType: apiStep.step,
+                id: stepDetail.id.uuidString,
+                title: stepDetail.title,
+                description: stepDetail.stepDescription,
+                stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                 timeOfDay: .weekly,
-                why: apiStep.why,
-                how: apiStep.how
+                why: stepDetail.why,
+                how: stepDetail.how
             )
-        }}
+        }
+    }
 
     private func getCoachMessage() -> String {
         let hour = Calendar.current.component(.hour, from: selectedDate)
@@ -1407,7 +1372,6 @@ private struct RoutineSwitcherCard: View {
 
 #Preview("RoutineHomeView") {
     RoutineHomeView(
-        generatedRoutine: nil,
         selectedTab: .constant(.routines),
         routineService: ServiceFactory.shared.createMockRoutineService()
     )

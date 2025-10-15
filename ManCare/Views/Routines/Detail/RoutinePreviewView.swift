@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct RoutinePreviewView: View {
-    
+
     @Environment(\.dismiss) private var dismiss
-    
-    let originalRoutine: RoutineResponse?
+
     let editedRoutine: EditableRoutine
     let onConfirm: () -> Void
     let onCancel: () -> Void
-    
+
     @State private var selectedTimeOfDay: TimeOfDay = .morning
     
     var body: some View {
@@ -48,27 +47,24 @@ struct RoutinePreviewView: View {
                 // Content
                 TabView(selection: $selectedTimeOfDay) {
                     // Morning Routine
-                    RoutineComparisonSection(
+                    RoutinePreviewSection(
                         timeOfDay: .morning,
-                        originalSteps: originalRoutine?.routine.morning ?? [],
                         editedSteps: editedRoutine.morningSteps,
                         title: "Morning Routine"
                     )
                     .tag(TimeOfDay.morning)
-                    
+
                     // Evening Routine
-                    RoutineComparisonSection(
+                    RoutinePreviewSection(
                         timeOfDay: .evening,
-                        originalSteps: originalRoutine?.routine.evening ?? [],
                         editedSteps: editedRoutine.eveningSteps,
                         title: "Evening Routine"
                     )
                     .tag(TimeOfDay.evening)
-                    
+
                     // Weekly Routine
-                    RoutineComparisonSection(
+                    RoutinePreviewSection(
                         timeOfDay: .weekly,
-                        originalSteps: originalRoutine?.routine.weekly ?? [],
                         editedSteps: editedRoutine.weeklySteps,
                         title: "Weekly Routine"
                     )
@@ -125,15 +121,14 @@ struct RoutinePreviewView: View {
     }
 }
 
-// MARK: - Routine Comparison Section
+// MARK: - Routine Preview Section
 
-private struct RoutineComparisonSection: View {
-    
+private struct RoutinePreviewSection: View {
+
     let timeOfDay: TimeOfDay
-    let originalSteps: [APIRoutineStep]
     let editedSteps: [EditableRoutineStep]
     let title: String
-    
+
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 20) {
@@ -142,138 +137,23 @@ private struct RoutineComparisonSection: View {
                     Text(title)
                         .font(ThemeManager.shared.theme.typo.h2)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
-                    Text("Compare your changes")
+
+                    Text("\(editedSteps.filter { $0.isEnabled }.count) active steps")
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .padding(.top, 20)
-                
-                // Original routine
-                if !originalSteps.isEmpty {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Original Routine")
-                                .font(ThemeManager.shared.theme.typo.h3)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            
-                            Spacer()
-                            
-                            Text("\(originalSteps.count) steps")
-                                .font(ThemeManager.shared.theme.typo.caption)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        }
-                        
-                        ForEach(Array(originalSteps.enumerated()), id: \.offset) { index, step in
-                            OriginalStepCard(step: step, stepNumber: index + 1)
-                        }
-                    }
-                    .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(ThemeManager.shared.theme.palette.cardBackground)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                            )
-                    )
-                }
-                
+
                 // Edited routine
                 VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("Your Customized Routine")
-                            .font(ThemeManager.shared.theme.typo.h3)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
-                        Spacer()
-                        
-                        Text("\(editedSteps.filter { $0.isEnabled }.count) active steps")
-                            .font(ThemeManager.shared.theme.typo.caption)
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
-                    
                     ForEach(editedSteps.sorted { $0.order < $1.order }) { step in
                         EditedStepCard(step: step)
                     }
                 }
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(ThemeManager.shared.theme.palette.cardBackground)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(ThemeManager.shared.theme.palette.secondary.opacity(0.3), lineWidth: 2)
-                        )
-                )
-                
-                // Summary
-                RoutineSummaryCard(
-                    originalCount: originalSteps.count,
-                    editedCount: editedSteps.filter { $0.isEnabled }.count,
-                    addedCount: editedSteps.filter { !$0.originalStep && $0.isEnabled }.count,
-                    removedCount: originalSteps.count - editedSteps.filter { $0.originalStep && $0.isEnabled }.count
-                )
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 100)
         }
-    }
-}
-
-// MARK: - Original Step Card
-
-private struct OriginalStepCard: View {
-    
-    let step: APIRoutineStep
-    let stepNumber: Int
-    
-    private var stepTypeColor: Color {
-        Color(step.step.color)
-    }
-    
-    private var iconName: String { ProductIconManager.getIconName(for: step.step) }
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            // Step number
-            ZStack {
-                Circle()
-                    .fill(stepTypeColor.opacity(0.2))
-                    .frame(width: 28, height: 28)
-                Text("\(stepNumber)")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(stepTypeColor)
-            }
-            
-            // Step content
-            VStack(alignment: .leading, spacing: 4) {
-                Text(step.name)
-                    .font(ThemeManager.shared.theme.typo.title)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text(step.why)
-                    .font(ThemeManager.shared.theme.typo.body)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    .lineLimit(nil)
-            }
-            
-            Spacer()
-            
-            // Step icon
-            Image(systemName: iconName)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(stepTypeColor.opacity(0.7))
-        }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(ThemeManager.shared.theme.palette.accentBackground)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                )
-        )
     }
 }
 
@@ -396,95 +276,6 @@ private struct EditedStepCard: View {
     }
 }
 
-// MARK: - Routine Summary Card
-
-private struct RoutineSummaryCard: View {
-    
-    let originalCount: Int
-    let editedCount: Int
-    let addedCount: Int
-    let removedCount: Int
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Summary of Changes")
-                .font(ThemeManager.shared.theme.typo.h3)
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-            
-            VStack(spacing: 12) {
-                SummaryRow(
-                    title: "Original steps",
-                    value: "\(originalCount)",
-                    iconName: "list.bullet",
-                    color: ThemeManager.shared.theme.palette.info
-                )
-                
-                SummaryRow(
-                    title: "Active steps",
-                    value: "\(editedCount)",
-                    iconName: "checkmark.circle",
-                    color: ThemeManager.shared.theme.palette.success
-                )
-                
-                if addedCount > 0 {
-                    SummaryRow(
-                        title: "Added steps",
-                        value: "\(addedCount)",
-                        iconName: "plus.circle",
-                        color: ThemeManager.shared.theme.palette.success
-                    )
-                }
-                
-                if removedCount > 0 {
-                    SummaryRow(
-                        title: "Removed steps",
-                        value: "\(removedCount)",
-                        iconName: "minus.circle",
-                        color: ThemeManager.shared.theme.palette.error
-                    )
-                }
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(ThemeManager.shared.theme.palette.cardBackground)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                )
-        )
-    }
-}
-
-// MARK: - Summary Row
-
-private struct SummaryRow: View {
-    
-    let title: String
-    let value: String
-    let iconName: String
-    let color: Color
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: iconName)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(color)
-                .frame(width: 20)
-            
-            Text(title)
-                .font(ThemeManager.shared.theme.typo.body)
-                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            
-            Spacer()
-            
-            Text(value)
-                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-        }
-    }
-}
 
 // MARK: - Preview
 
@@ -511,13 +302,12 @@ private struct SummaryRow: View {
         ],
         eveningSteps: [],
         weeklySteps: [],
-        originalRoutine: nil,
+        savedRoutineId: UUID(),
         lastModified: Date(),
         isCustomized: true
     )
-    
+
     RoutinePreviewView(
-        originalRoutine: nil,
         editedRoutine: mockEditableRoutine,
         onConfirm: {},
         onCancel: {}

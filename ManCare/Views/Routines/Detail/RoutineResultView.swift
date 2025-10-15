@@ -8,17 +8,15 @@
 import SwiftUI
 
 struct RoutineResultView: View {
-    
-    let skinType: SkinType
-    let concerns: Set<Concern>
-    let mainGoal: MainGoal
-    let preferences: Preferences?
-    let generatedRoutine: RoutineResponse?
-    let cycleData: CycleData? // NEW: Cycle tracking data
+
+    let cycleData: CycleData? // Cycle tracking data
     let onRestart: () -> Void
     let onContinue: () -> Void
     var showStartButton: Bool = true
-    
+
+    @State private var savedRoutine: SavedRoutineModel? = nil
+    private let routineStore = RoutineStore()
+
     var body: some View {
         ZStack {
             // Background gradient
@@ -35,10 +33,10 @@ struct RoutineResultView: View {
                         if cycleData != nil {
                             cycleAdaptationCard
                         }
-                        
+
                         // Steps Section
                         stepsSection
-                        
+
                         // Start Your Journey Button (optional)
                         if showStartButton {
                             startJourneyButton
@@ -52,17 +50,26 @@ struct RoutineResultView: View {
                 .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea(.all, edges: .bottom))
             }
         }
+        .task {
+            // Load the saved routine from Core Data (single source of truth)
+            do {
+                savedRoutine = try await routineStore.fetchActiveRoutine()
+                print("✅ [RoutineResultView] Loaded active routine from Core Data: \(savedRoutine?.title ?? "none")")
+            } catch {
+                print("❌ [RoutineResultView] Error loading routine from Core Data: \(error)")
+            }
+        }
     }
-    
+
     // MARK: - Background
-    
+
     private var backgroundGradient: some View {
         ThemeManager.shared.theme.palette.background
             .ignoresSafeArea()
     }
-    
+
     // MARK: - Header
-    
+
     private var headerView: some View {
         VStack(spacing: 0) {
             // Header background - extends into safe area
@@ -110,9 +117,9 @@ struct RoutineResultView: View {
             .frame(height: 140)
         }
     }
-    
+
     // MARK: - Steps Section
-    
+
     private var stepsSection: some View {
         VStack(alignment: .leading, spacing: 24) {
             // Morning Routine Section
@@ -130,7 +137,7 @@ struct RoutineResultView: View {
                     }
                     Spacer()
                 }
-                
+
                 // Morning steps
                 VStack(spacing: 20) {
                     ForEach(Array(generateMorningRoutine().enumerated()), id: \.offset) { index, step in
@@ -141,7 +148,7 @@ struct RoutineResultView: View {
                     }
                 }
             }
-            
+
             // Evening Routine Section
             VStack(alignment: .leading, spacing: 16) {
                 // Section header
@@ -157,7 +164,7 @@ struct RoutineResultView: View {
                     }
                     Spacer()
                 }
-                
+
                 // Evening steps
                 VStack(spacing: 20) {
                     ForEach(Array(generateNightRoutine().enumerated()), id: \.offset) { index, step in
@@ -168,18 +175,14 @@ struct RoutineResultView: View {
                     }
                 }
             }
-            
-            // Summary card
-            RoutineResultSummaryCard(
-                skinType: skinType,
-                concerns: concerns,
-                mainGoal: mainGoal
-            )
+
+            // Summary card - shows user's profile info
+            // (routine-specific summary could be added here if needed)
         }
     }
-    
+
     // MARK: - Cycle Adaptation Card
-    
+
     private var cycleAdaptationCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 12) {
@@ -188,55 +191,55 @@ struct RoutineResultView: View {
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.success.opacity(0.15))
                         .frame(width: 48, height: 48)
-                    
+
                     Image(systemName: "waveform.path.ecg")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.success)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Cycle-Adaptive Routine")
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    
+
                     Text("Automatically adapts daily")
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-                
+
                 Spacer()
-                
+
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 24))
                     .foregroundColor(ThemeManager.shared.theme.palette.success)
             }
-            
+
             Divider()
-            
+
             // Explanation
             VStack(alignment: .leading, spacing: 12) {
                 Text("How your routine adapts:")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                
+
                 adaptationPoint(
                     icon: "drop.fill",
                     color: ThemeManager.shared.theme.palette.error,
                     text: "Menstrual Phase: Gentle care, skip harsh products"
                 )
-                
+
                 adaptationPoint(
                     icon: "sparkles",
                     color: ThemeManager.shared.theme.palette.success,
                     text: "Follicular Phase: Perfect for treatments & new products"
                 )
-                
+
                 adaptationPoint(
                     icon: "sun.max.fill",
                     color: ThemeManager.shared.theme.palette.warning,
                     text: "Ovulation Phase: Maintain your routine, natural glow"
                 )
-                
+
                 adaptationPoint(
                     icon: "moon.fill",
                     color: ThemeManager.shared.theme.palette.primary,
@@ -251,23 +254,23 @@ struct RoutineResultView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
     }
-    
+
     private func adaptationPoint(icon: String, color: Color, text: String) -> some View {
         HStack(spacing: 10) {
             Image(systemName: icon)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(color)
                 .frame(width: 20)
-            
+
             Text(text)
                 .font(.system(size: 13))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
-    
+
     // MARK: - Start Journey Button
-    
+
     private var startJourneyButton: some View {
         Button {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
@@ -295,134 +298,49 @@ struct RoutineResultView: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
-    
+
     // MARK: - Routine Generation Functions
-    
+
     private func generateMorningRoutine() -> [RoutineStep] {
-        // Use generated routine if available
-        if let routine = generatedRoutine {
-            return routine.routine.morning.map { apiStep in
-                RoutineStep(
-                    productType: apiStep.step,
-                    title: apiStep.name,
-                    instructions: "\(apiStep.why) - \(apiStep.how)"
-                )
-            }
+        // Use saved routine from Core Data (single source of truth)
+        guard let routine = savedRoutine else {
+            print("⚠️ [RoutineResultView] No saved routine available for morning steps")
+            return []
         }
 
-        // Fallback to hardcoded routine
-        var steps: [RoutineStep] = []
-        
-        // Always start with cleanser
-        steps.append(RoutineStep(
-            productType: .cleanser,
-            title: "Gentle Cleanser",
-            instructions: "Oil-free gel cleanser – reduces shine, clears pores"
-        ))
-        
-        // Add treatment based on concerns
-        if concerns.contains(.acne) {
-            steps.append(RoutineStep(
-                productType: .faceSerum,
-                title: "Acne Treatment",
-                instructions: "Salicylic acid serum – targets breakouts, prevents new ones"
-            ))
+        let morningSteps = routine.stepDetails.filter { $0.timeOfDay == "morning" }
+        return morningSteps.sorted { $0.order < $1.order }.map { stepDetail in
+            RoutineStep(
+                productType: ProductType(rawValue: stepDetail.stepType) ?? .cleanser,
+                title: stepDetail.title,
+                instructions: stepDetail.stepDescription
+            )
         }
-        
-        if concerns.contains(.redness) {
-            steps.append(RoutineStep(
-                productType: .faceSerum,
-                title: "Soothing Serum",
-                instructions: "Centella serum – calms redness, reduces irritation"
-            ))
-        }
-        
-        // Always end with moisturizer and sunscreen
-        steps.append(RoutineStep(
-            productType: .moisturizer,
-            title: "Moisturizer",
-            instructions: "Lightweight gel moisturizer – hydrates without greasiness"
-        ))
-        
-        steps.append(RoutineStep(
-            productType: .sunscreen,
-            title: "Sunscreen",
-            instructions: "SPF 30+ broad spectrum – protects against sun damage"
-        ))
-        
-        return steps
     }
-    
+
     private func generateNightRoutine() -> [RoutineStep] {
-        // Use generated routine if available
-        if let routine = generatedRoutine {
-            return routine.routine.evening.map { apiStep in
-                RoutineStep(
-                    productType: apiStep.step,
-                    title: apiStep.name,
-                    instructions: "\(apiStep.why) - \(apiStep.how)"
-                )
-            }
+        // Use saved routine from Core Data (single source of truth)
+        guard let routine = savedRoutine else {
+            print("⚠️ [RoutineResultView] No saved routine available for evening steps")
+            return []
         }
 
-        // Fallback to hardcoded routine
-        var steps: [RoutineStep] = []
-        
-        // Always start with cleanser
-        steps.append(RoutineStep(
-            productType: .cleanser,
-            title: "Gentle Cleanser",
-            instructions: "Oil-free gel cleanser – removes daily buildup"
-        ))
-        
-        // Add treatment based on main goal
-        switch mainGoal {
-        case .reduceBreakouts:
-            steps.append(RoutineStep(
-                productType: .faceSerum,
-                title: "Retinol Treatment",
-                instructions: "Low-strength retinol – unclogs pores, reduces breakouts"
-            ))
-        case .sootheIrritation:
-            steps.append(RoutineStep(
-                productType: .faceSerum,
-                title: "Repair Serum",
-                instructions: "Ceramide serum – strengthens skin barrier"
-            ))
-        case .preventAging:
-            steps.append(RoutineStep(
-                productType: .faceSerum,
-                title: "Anti-aging Serum",
-                instructions: "Peptide serum – boosts collagen, reduces fine lines"
-            ))
-        default:
-            steps.append(RoutineStep(
-                productType: .faceSerum,
-                title: "Treatment Serum",
-                instructions: "Vitamin C serum – brightens, evens skin tone"
-            ))
+        let eveningSteps = routine.stepDetails.filter { $0.timeOfDay == "evening" }
+        return eveningSteps.sorted { $0.order < $1.order }.map { stepDetail in
+            RoutineStep(
+                productType: ProductType(rawValue: stepDetail.stepType) ?? .cleanser,
+                title: stepDetail.title,
+                instructions: stepDetail.stepDescription
+            )
         }
-        
-        // Always end with moisturizer
-        steps.append(RoutineStep(
-            productType: .moisturizer,
-            title: "Night Moisturizer",
-            instructions: "Rich cream moisturizer – repairs while you sleep"
-        ))
-        
-        return steps
     }
 }
 
 // MARK: - Preview
+// Note: RoutineResultStepRow is defined in Components/RoutineResultStepRow.swift
 
 #Preview("RoutineResultView") {
     RoutineResultView(
-        skinType: .combination,
-        concerns: [.acne, .redness],
-        mainGoal: .reduceBreakouts,
-        preferences: nil,
-        generatedRoutine: nil,
         cycleData: nil,
         onRestart: {},
         onContinue: {}
@@ -431,11 +349,6 @@ struct RoutineResultView: View {
 
 #Preview("RoutineResultView - Cycle Enabled") {
     RoutineResultView(
-        skinType: .combination,
-        concerns: [.acne, .redness],
-        mainGoal: .reduceBreakouts,
-        preferences: nil,
-        generatedRoutine: nil,
         cycleData: CycleData(
             lastPeriodStartDate: Calendar.current.date(byAdding: .day, value: -10, to: Date()) ?? Date(),
             averageCycleLength: 28,

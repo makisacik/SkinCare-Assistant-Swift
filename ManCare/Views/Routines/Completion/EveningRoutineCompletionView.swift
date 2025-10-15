@@ -17,15 +17,13 @@ struct EveningRoutineCompletionView: View {
     @State private var routineSteps: [RoutineStepDetail]
     let selectedDate: Date
     let onComplete: () -> Void
-    let originalRoutine: RoutineResponse?
 
-    init(routineSteps: [RoutineStepDetail], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, cycleStore: CycleStore, onComplete: @escaping () -> Void, originalRoutine: RoutineResponse?) {
+    init(routineSteps: [RoutineStepDetail], selectedDate: Date, completionViewModel: RoutineCompletionViewModel, cycleStore: CycleStore, onComplete: @escaping () -> Void) {
         self._routineSteps = State(initialValue: routineSteps)
         self.selectedDate = selectedDate
         self.completionViewModel = completionViewModel
         self._cycleStore = ObservedObject(wrappedValue: cycleStore)
         self.onComplete = onComplete
-        self.originalRoutine = originalRoutine
     }
     @State private var completedSteps: Set<String> = []
     @State private var showingStepDetail: RoutineStepDetail?
@@ -226,16 +224,20 @@ struct EveningRoutineCompletionView: View {
                 stepDetail: stepDetail,
                 adaptedStep: findAdaptedStep(for: stepDetail.id)
             )
-        }    .sheet(isPresented: $showingEditRoutine) {
-            if let routine = originalRoutine {
+        }
+        .sheet(isPresented: $showingEditRoutine) {
+            if let active = activeRoutine {
+                // Use SavedRoutineModel directly (single source of truth)
                 EditRoutineView(
-                    originalRoutine: routine,
+                    savedRoutine: active,
                     completionViewModel: completionViewModel,
                     onRoutineUpdated: { updatedRoutine in
                         // Update the routine steps when the routine is edited
                         updateRoutineSteps(from: updatedRoutine)
-                    }            )
-            }    }
+                    }
+                )
+            }
+        }
         .sheet(isPresented: $showCycleSetup) {
             CycleSetupView { cycleData in
                 // After setup, save the cycle data
@@ -1218,8 +1220,7 @@ private struct EmptyProductTypeView: View {
         selectedDate: Date(),
         completionViewModel: RoutineCompletionViewModel.preview,
         cycleStore: CycleStore(),
-        onComplete: { print("Evening routine completed!") },
-        originalRoutine: nil
+        onComplete: { print("Evening routine completed!") }
     )
 }
 #endif

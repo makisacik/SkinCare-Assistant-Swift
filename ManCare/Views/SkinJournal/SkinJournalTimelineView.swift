@@ -122,12 +122,6 @@ struct SkinJournalTimelineView: View {
                 value: "\(store.getCurrentStreak())",
                 label: "Day Streak"
             )
-            
-            statBox(
-                icon: "internaldrive.fill",
-                value: store.getTotalStorageUsed(),
-                label: "Storage"
-            )
         }
         .padding(.horizontal)
     }

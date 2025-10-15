@@ -60,6 +60,27 @@ struct EditableRoutineStep: Identifiable, Codable {
         self.attachedProductId = nil
         self.productConstraints = apiStep.constraints
     }
+
+    /// Initialize from SavedStepDetailModel (Core Data format)
+    init(from savedStep: SavedStepDetailModel) {
+        self.id = savedStep.id.uuidString
+        self.title = savedStep.title
+        self.description = savedStep.stepDescription
+        self.stepType = ProductType(rawValue: savedStep.stepType) ?? .cleanser
+        self.timeOfDay = savedStep.timeOfDayEnum
+        self.why = savedStep.why ?? ""
+        self.how = savedStep.how ?? ""
+        self.isEnabled = true
+        self.frequency = .daily
+        self.customInstructions = nil
+        self.isLocked = isStepTypeLocked(self.stepType)
+        self.originalStep = true
+        self.order = savedStep.order
+        self.morningEnabled = savedStep.timeOfDay == "morning"
+        self.eveningEnabled = savedStep.timeOfDay == "evening"
+        self.attachedProductId = nil
+        self.productConstraints = nil
+    }
     
     init(id: String, title: String, description: String, stepType: ProductType, timeOfDay: TimeOfDay, why: String, how: String, isEnabled: Bool = true, frequency: StepFrequency = .daily, customInstructions: String? = nil, isLocked: Bool = false, originalStep: Bool = false, order: Int, morningEnabled: Bool, eveningEnabled: Bool, attachedProductId: String? = nil, productConstraints: Constraints? = nil) {
         self.id = id
@@ -155,33 +176,57 @@ struct EditableRoutine: Codable {
     var weeklySteps: [EditableRoutineStep]
     
     // Metadata
-    var originalRoutine: RoutineResponse?
+    var savedRoutineId: UUID?  // Link to Core Data
     var lastModified: Date
     var isCustomized: Bool
-    
-    init(from routine: RoutineResponse) {
-        self.morningSteps = routine.routine.morning.enumerated().map { index, step in
-            EditableRoutineStep(from: step, timeOfDay: .morning, order: index)
-        }
-        self.eveningSteps = routine.routine.evening.enumerated().map { index, step in
-            EditableRoutineStep(from: step, timeOfDay: .evening, order: index)
-        }
-        self.weeklySteps = (routine.routine.weekly ?? []).enumerated().map { index, step in
-            EditableRoutineStep(from: step, timeOfDay: .weekly, order: index)
-        }
-        self.originalRoutine = routine
+
+    init(from savedRoutine: SavedRoutineModel) {
+        // Filter and map morning steps
+        self.morningSteps = savedRoutine.stepDetails
+            .filter { $0.timeOfDay == "morning" }
+            .sorted { $0.order < $1.order }
+            .map { EditableRoutineStep(from: $0) }
+
+        // Filter and map evening steps
+        self.eveningSteps = savedRoutine.stepDetails
+            .filter { $0.timeOfDay == "evening" }
+            .sorted { $0.order < $1.order }
+            .map { EditableRoutineStep(from: $0) }
+
+        // Filter and map weekly steps
+        self.weeklySteps = savedRoutine.stepDetails
+            .filter { $0.timeOfDay == "weekly" }
+            .sorted { $0.order < $1.order }
+            .map { EditableRoutineStep(from: $0) }
+
+        self.savedRoutineId = savedRoutine.id
         self.lastModified = Date()
         self.isCustomized = false
     }
-    
-    init(morningSteps: [EditableRoutineStep] = [], eveningSteps: [EditableRoutineStep] = [], weeklySteps: [EditableRoutineStep] = [], originalRoutine: RoutineResponse? = nil, lastModified: Date = Date(), isCustomized: Bool = false) {
+
+    init(morningSteps: [EditableRoutineStep] = [], eveningSteps: [EditableRoutineStep] = [], weeklySteps: [EditableRoutineStep] = [], savedRoutineId: UUID? = nil, lastModified: Date = Date(), isCustomized: Bool = false) {
         self.morningSteps = morningSteps
         self.eveningSteps = eveningSteps
         self.weeklySteps = weeklySteps
-        self.originalRoutine = originalRoutine
+        self.savedRoutineId = savedRoutineId
         self.lastModified = lastModified
         self.isCustomized = isCustomized
     }
+
+    // MARK: - Preview Support
+
+    #if DEBUG
+    static var preview: EditableRoutine {
+        EditableRoutine(
+            morningSteps: [],
+            eveningSteps: [],
+            weeklySteps: [],
+            savedRoutineId: UUID(),
+            lastModified: Date(),
+            isCustomized: false
+        )
+    }
+    #endif
     
     /// Get all steps for a specific time of day
     func steps(for timeOfDay: TimeOfDay) -> [EditableRoutineStep] {
@@ -200,31 +245,37 @@ struct EditableRoutine: Codable {
         return steps(for: timeOfDay).filter { $0.isEnabled }
     }
     
-    /// Convert back to RoutineResponse
-    func toRoutineResponse() -> RoutineResponse? {
-        guard let original = originalRoutine else { return nil }
-        
+    /// Convert to RoutineResponse for API communication
+    func toRoutineResponse() -> RoutineResponse {
         // Convert EditableRoutineStep back to APIRoutineStep
-        let morningSteps = morningSteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
-        let eveningSteps = eveningSteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
-        let weeklySteps = weeklySteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
-        
-        // Create new routine structure
-        let updatedRoutine = Routine(
-            depth: original.routine.depth,
-            morning: morningSteps,
-            evening: eveningSteps,
-            weekly: weeklySteps.isEmpty ? nil : weeklySteps
-        )
-        
+        let morningAPISteps = morningSteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
+        let eveningAPISteps = eveningSteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
+        let weeklyAPISteps = weeklySteps.filter { $0.isEnabled }.map { $0.toAPIRoutineStep() }
+
         return RoutineResponse(
-            version: original.version,
-            locale: original.locale,
-            summary: original.summary,
-            routine: updatedRoutine,
-            guardrails: original.guardrails,
-            adaptation: original.adaptation,
-            productSlots: original.productSlots
+            version: "1.0",
+            locale: "en-US",
+            summary: Summary(
+                title: "Edited Routine",
+                oneLiner: "Your customized skincare routine"
+            ),
+            routine: Routine(
+                depth: .simple,
+                morning: morningAPISteps,
+                evening: eveningAPISteps,
+                weekly: weeklyAPISteps.isEmpty ? nil : weeklyAPISteps
+            ),
+            guardrails: Guardrails(
+                cautions: [],
+                whenToStop: [],
+                sunNotes: ""
+            ),
+            adaptation: Adaptation(
+                forSkinType: "",
+                forConcerns: [],
+                forPreferences: []
+            ),
+            productSlots: []
         )
     }
     

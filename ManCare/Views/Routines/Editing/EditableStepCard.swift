@@ -185,7 +185,7 @@ struct StepDropDelegate: DropDelegate {
     EditableStepCard(
         step: mockStep,
         editingService: RoutineEditingService(
-            originalRoutine: nil,
+            savedRoutine: SavedRoutineModel.preview,
             completionViewModel: RoutineCompletionViewModel.preview
         ),
         onTap: {}

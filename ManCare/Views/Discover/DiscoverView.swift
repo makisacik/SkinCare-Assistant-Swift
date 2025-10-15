@@ -95,9 +95,9 @@ struct DiscoverView: View {
             }
             .fullScreenCover(isPresented: $showingPersonalizedRoutinePreferences) {
                 PersonalizedRoutineFlowWrapper(
-                    onComplete: { routine, name in
-                        // Save the routine and show success
-                        handlePersonalizedRoutineComplete(routine: routine, name: name)
+                    onComplete: {
+                        // Routine is already saved to Core Data, just show success
+                        handlePersonalizedRoutineComplete()
                     }
                 )
             }
@@ -226,48 +226,12 @@ struct DiscoverView: View {
 
     // MARK: - Personalized Routine Completion Handler
 
-    private func handlePersonalizedRoutineComplete(routine: RoutineResponse, name: String) {
-        // Save the routine to the routine store
-        Task {
-            // Convert RoutineResponse to a saveable format
-            let routineTemplate = RoutineTemplate(
-                id: UUID(),
-                title: name,
-                description: "Your personalized skincare routine",
-                category: .combination, // Use existing category since .personalized doesn't exist
-                duration: "5-10 minutes",
-                difficulty: .beginner,
-                tags: ["personalized", "custom"],
-                morningSteps: routine.routine.morning.map { step in
-                    TemplateRoutineStep(
-                        title: step.name,
-                        why: step.why,
-                        how: step.how
-                    )
-                },
-                eveningSteps: routine.routine.evening.map { step in
-                    TemplateRoutineStep(
-                        title: step.name,
-                        why: step.why,
-                        how: step.how
-                    )
-                },
-                benefits: ["Personalized for your skin", "Custom routine"],
-                isFeatured: false,
-                isPremium: false,
-                imageName: "routine_placeholder"
-            )
-
-            // Save to routine store
-            listViewModel.saveRoutineTemplate(routineTemplate)
-
-            // Show success feedback
-            await MainActor.run {
-                showConfetti = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    showConfetti = false
-                }
-            }
+    private func handlePersonalizedRoutineComplete() {
+        // Routine is already saved to Core Data by PersonalizedRoutineFlowWrapper
+        // Just show success feedback
+        showConfetti = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            showConfetti = false
         }
     }
 }

@@ -317,7 +317,7 @@ private struct EmptyProductsState: View {
     ProductSelectionView(
         step: mockStep,
         editingService: RoutineEditingService(
-            originalRoutine: nil,
+            savedRoutine: SavedRoutineModel.preview,
             completionViewModel: RoutineCompletionViewModel.preview
         )
     )

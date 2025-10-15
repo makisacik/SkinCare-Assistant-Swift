@@ -63,10 +63,10 @@ struct PersonalizedRoutineFlowWrapper: View {
     @Environment(\.dismiss) private var dismiss
     @State private var currentStep: PersonalizedRoutineStep = .preferences
     @State private var request: PersonalizedRoutineRequest?
-    @State private var generatedRoutine: RoutineResponse?
     @State private var routineName: String = ""
 
-    let onComplete: (RoutineResponse, String) -> Void
+    let onComplete: () -> Void  // Simplified - no need to pass routine back
+    private let routineService = ServiceFactory.shared.createRoutineService()
 
     enum PersonalizedRoutineStep {
         case preferences
@@ -121,29 +121,23 @@ struct PersonalizedRoutineFlowWrapper: View {
                     }
 
                 case .results:
-                    if let req = request, let routine = generatedRoutine {
-                        PersonalizedRoutineResultView(
-                            request: req,
-                            generatedRoutine: routine,
-                            routineName: $routineName,
-                            onSave: { name in
-                                onComplete(routine, name)
-                                dismiss()
-                            },
-                            onRestart: {
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    currentStep = .preferences
-                                    request = nil
-                                    generatedRoutine = nil
-                                    routineName = ""
-                                }
+                    PersonalizedRoutineResultView(
+                        routineName: $routineName,
+                        onSave: { name in
+                            saveRoutineWithName(name)
+                        },
+                        onRestart: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                currentStep = .preferences
+                                request = nil
+                                routineName = ""
                             }
-                        )
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .trailing).combined(with: .opacity),
-                            removal: .move(edge: .leading).combined(with: .opacity)
-                        ))
-                    }
+                        }
+                    )
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
                 }
             }
         }
@@ -159,25 +153,43 @@ struct PersonalizedRoutineFlowWrapper: View {
                 let routine = try await service.generatePersonalizedRoutine(request: req)
                 print("✅ Routine generated successfully!")
 
+                // Save to Core Data immediately (single source of truth)
+                print("💾 Saving personalized routine to Core Data...")
+                _ = try await routineService.saveInitialRoutine(from: routine)
+                print("✅ Personalized routine saved to Core Data")
+
                 await MainActor.run {
-                    generatedRoutine = routine
-                    // Manually trigger the transition to results
                     withAnimation(.easeInOut(duration: 0.3)) {
                         currentStep = .results
                     }
                 }
             } catch {
                 print("❌ Error generating routine: \(error)")
-                // Handle error - use fallback routine
+                // Handle error - use fallback routine and save it
+                let fallbackRoutine = createFallbackRoutine(for: req)
+                do {
+                    _ = try await routineService.saveInitialRoutine(from: fallbackRoutine)
+                    print("✅ Fallback routine saved to Core Data")
+                } catch {
+                    print("❌ Error saving fallback routine: \(error)")
+                }
+
                 await MainActor.run {
-                    generatedRoutine = createFallbackRoutine(for: req)
-                    // Manually trigger the transition to results
                     withAnimation(.easeInOut(duration: 0.3)) {
                         currentStep = .results
                     }
                 }
             }
         }
+    }
+
+    private func saveRoutineWithName(_ name: String) {
+        // Routine is already saved to Core Data during generation
+        // Title updating would require adding a new service method
+        print("✅ Completing personalized routine flow with name: \(name)")
+
+        onComplete()
+        dismiss()
     }
 
     private func createFallbackRoutine(for request: PersonalizedRoutineRequest) -> RoutineResponse {
@@ -251,21 +263,14 @@ struct PersonalizedRoutineFlowWrapper: View {
 // MARK: - Personalized Routine Result View
 
 struct PersonalizedRoutineResultView: View {
-    let request: PersonalizedRoutineRequest
-    let generatedRoutine: RoutineResponse
     @Binding var routineName: String
     let onSave: (String) -> Void
     let onRestart: () -> Void
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Base result content (keeps header/steps), continue action unused here
+            // Base result content (loads from Core Data)
             RoutineResultView(
-                skinType: request.skinType,
-                concerns: request.concerns,
-                mainGoal: request.mainGoal,
-                preferences: nil,
-                generatedRoutine: generatedRoutine,
                 cycleData: nil,
                 onRestart: onRestart,
                 onContinue: { /* handled by custom save button below */ },

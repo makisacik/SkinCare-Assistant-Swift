@@ -117,10 +117,27 @@ final class RoutineListViewModel: ObservableObject {
     func removeRoutine(_ routine: SavedRoutineModel) {
         isLoading = true
         error = nil
-        
+
         Task {
             do {
+                let wasActive = (activeRoutine?.id == routine.id)
+
                 try await routineService.removeRoutine(routine)
+
+                // If we removed the active routine and there are other routines available,
+                // automatically set the first one as active
+                if wasActive {
+                    // Wait a moment for the routine stream to update
+                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
+
+                    if let firstRoutine = savedRoutines.first(where: { $0.id != routine.id }) {
+                        print("📌 Removed active routine, setting first available routine as active: \(firstRoutine.title)")
+                        try await routineService.setActiveRoutine(firstRoutine)
+                    } else {
+                        print("ℹ️ No other routines available after removal")
+                    }
+                }
+
                 await MainActor.run {
                     self.isLoading = false
                 }
@@ -179,7 +196,14 @@ final class RoutineListViewModel: ObservableObject {
                     return
                 }
 
-                let _ = try await routineService.saveRoutine(template)
+                let savedRoutine = try await routineService.saveRoutine(template)
+
+                // If there's no active routine, automatically set this as active
+                if activeRoutine == nil {
+                    print("📌 No active routine found, setting newly saved routine as active")
+                    try await routineService.setActiveRoutine(savedRoutine)
+                }
+
                 await MainActor.run {
                     self.isLoading = false
                 }

@@ -15,9 +15,7 @@ import Combine
 final class RoutineGenerationViewModel: ObservableObject {
     // MARK: - Published Properties (UI State Only)
     @Published var isGenerating = false
-    @Published var isSaving = false
     @Published var error: Error?
-    @Published var generatedRoutine: RoutineResponse?
     @Published var savedRoutine: SavedRoutineModel?
     
     // MARK: - Dependencies
@@ -26,15 +24,15 @@ final class RoutineGenerationViewModel: ObservableObject {
     
     // MARK: - Computed Properties
     var isLoading: Bool {
-        isGenerating || isSaving
+        isGenerating
     }
     
     var errorMessage: String? {
         error?.localizedDescription
     }
     
-    var hasGeneratedRoutine: Bool {
-        generatedRoutine != nil
+    var hasSavedRoutine: Bool {
+        savedRoutine != nil
     }
     
     // MARK: - Initialization
@@ -59,11 +57,11 @@ final class RoutineGenerationViewModel: ObservableObject {
     ) {
         isGenerating = true
         error = nil
-        generatedRoutine = nil
         savedRoutine = nil
         
         Task {
             do {
+                // Generate via API
                 let routine = try await routineService.generateRoutine(
                     skinType: skinType,
                     concerns: concerns,
@@ -75,13 +73,18 @@ final class RoutineGenerationViewModel: ObservableObject {
                     preferences: preferences,
                     lifestyle: lifestyle
                 )
-                
+
+                print("✅ Routine generated from API: \(routine.summary.title)")
+
+                // Immediately save to Core Data (single source of truth)
+                let saved = try await routineService.saveInitialRoutine(from: routine)
+
                 await MainActor.run {
-                    self.generatedRoutine = routine
+                    self.savedRoutine = saved
                     self.isGenerating = false
                 }
                 
-                print("✅ Routine generated successfully: \(routine.summary.title)")
+                print("✅ Routine saved to Core Data: \(saved.title)")
             } catch {
                 await MainActor.run {
                     self.error = error
@@ -105,7 +108,6 @@ final class RoutineGenerationViewModel: ObservableObject {
     ) {
         isGenerating = true
         error = nil
-        generatedRoutine = nil
         savedRoutine = nil
         
         Task {
@@ -127,7 +129,7 @@ final class RoutineGenerationViewModel: ObservableObject {
                     self.isGenerating = false
                 }
                 
-                print("✅ Routine generated and saved: \(savedRoutine.title)")
+                print("✅ Routine generated and saved to Core Data: \(savedRoutine.title)")
             } catch {
                 await MainActor.run {
                     self.error = error
@@ -139,39 +141,9 @@ final class RoutineGenerationViewModel: ObservableObject {
     }
     
     // MARK: - Save Methods
-    
-    func saveGeneratedRoutine() {
-        guard let routine = generatedRoutine else {
-            error = RoutineGenerationError.noRoutineToSave
-            return
-        }
-        
-        isSaving = true
-        error = nil
-        savedRoutine = nil
-        
-        Task {
-            do {
-                let savedRoutine = try await routineService.saveInitialRoutine(from: routine)
-                
-                await MainActor.run {
-                    self.savedRoutine = savedRoutine
-                    self.isSaving = false
-                }
-                
-                print("✅ Generated routine saved: \(savedRoutine.title)")
-            } catch {
-                await MainActor.run {
-                    self.error = error
-                    self.isSaving = false
-                }
-                print("❌ Failed to save generated routine: \(error)")
-            }
-        }
-    }
-    
+
     func saveRoutineTemplate(_ template: RoutineTemplate) {
-        isSaving = true
+        isGenerating = true
         error = nil
         savedRoutine = nil
         
@@ -181,14 +153,14 @@ final class RoutineGenerationViewModel: ObservableObject {
                 
                 await MainActor.run {
                     self.savedRoutine = savedRoutine
-                    self.isSaving = false
+                    self.isGenerating = false
                 }
                 
-                print("✅ Routine template saved: \(savedRoutine.title)")
+                print("✅ Routine template saved to Core Data: \(savedRoutine.title)")
             } catch {
                 await MainActor.run {
                     self.error = error
-                    self.isSaving = false
+                    self.isGenerating = false
                 }
                 print("❌ Failed to save routine template: \(error)")
             }
@@ -203,9 +175,7 @@ final class RoutineGenerationViewModel: ObservableObject {
     
     func reset() {
         isGenerating = false
-        isSaving = false
         error = nil
-        generatedRoutine = nil
         savedRoutine = nil
         print("🔄 RoutineGenerationViewModel reset")
     }

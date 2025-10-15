@@ -18,15 +18,12 @@ class RoutineEditingService: ObservableObject {
     private let completionViewModel: RoutineCompletionViewModel
     private let persistenceController = PersistenceController.shared
     
-    init(originalRoutine: RoutineResponse?, completionViewModel: RoutineCompletionViewModel) {
-        // Try to load saved routine first, then fall back to original or empty
-        if let savedRoutine = Self.loadSavedRoutine() {
-            self.editableRoutine = savedRoutine
-        } else if let routine = originalRoutine {
-            self.editableRoutine = EditableRoutine(from: routine)
+    init(savedRoutine: SavedRoutineModel, completionViewModel: RoutineCompletionViewModel) {
+        // Try to load cached editable routine first, otherwise create from saved routine
+        if let cachedRoutine = Self.loadSavedRoutine() {
+            self.editableRoutine = cachedRoutine
         } else {
-            // Create empty routine for preview/testing
-            self.editableRoutine = EditableRoutine()
+            self.editableRoutine = EditableRoutine(from: savedRoutine)
         }
         self.completionViewModel = completionViewModel
     }
@@ -39,11 +36,9 @@ class RoutineEditingService: ObservableObject {
         coachMessages.removeAll()
     }
     
-    /// Cancel editing and revert to original
+    /// Cancel editing and discard changes
     func cancelEditing() {
-        if let original = editableRoutine.originalRoutine {
-            editableRoutine = EditableRoutine(from: original)
-        }
+        // Reload from Core Data to discard changes
         editingState = .viewing
         coachMessages.removeAll()
     }

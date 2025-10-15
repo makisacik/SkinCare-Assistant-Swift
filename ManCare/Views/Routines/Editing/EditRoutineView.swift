@@ -17,9 +17,9 @@ struct EditRoutineView: View {
     @State private var showingStepDetail: EditableRoutineStep?
     
     let onRoutineUpdated: ((RoutineResponse) -> Void)?
-    
-    init(originalRoutine: RoutineResponse?, completionViewModel: RoutineCompletionViewModel, onRoutineUpdated: ((RoutineResponse) -> Void)? = nil) {
-        self._editingService = StateObject(wrappedValue: RoutineEditingService(originalRoutine: originalRoutine, completionViewModel: completionViewModel))
+
+    init(savedRoutine: SavedRoutineModel, completionViewModel: RoutineCompletionViewModel, onRoutineUpdated: ((RoutineResponse) -> Void)? = nil) {
+        self._editingService = StateObject(wrappedValue: RoutineEditingService(savedRoutine: savedRoutine, completionViewModel: completionViewModel))
         self.onRoutineUpdated = onRoutineUpdated
     }
     
@@ -297,7 +297,7 @@ private struct EmptyRoutineState: View {
 #if DEBUG
 #Preview("EditRoutineView") {
     EditRoutineView(
-        originalRoutine: nil,
+        savedRoutine: SavedRoutineModel.preview,
         completionViewModel: RoutineCompletionViewModel.preview,
         onRoutineUpdated: nil
     )

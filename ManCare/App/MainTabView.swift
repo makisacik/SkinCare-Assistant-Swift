@@ -7,8 +7,6 @@ struct MainTabView: View {
     @State private var showingScanProduct = false
     @State private var selectedProduct: Product?
     @StateObject private var scanManager = ProductScanManager.shared
-    let generatedRoutine: RoutineResponse?
-    @State private var tempGeneratedRoutine: RoutineResponse?
 
     enum CurrentTab: String, CaseIterable, Hashable {
         case routines = "Routines"
@@ -32,7 +30,6 @@ struct MainTabView: View {
                 TabView(selection: $selectedTab) {
                     Tab(value: CurrentTab.routines) {
                         RoutineHomeView(
-                            generatedRoutine: tempGeneratedRoutine ?? generatedRoutine,
                             selectedTab: $selectedTab,
                             routineService: ServiceFactory.shared.createRoutineService()
                         )
@@ -55,8 +52,8 @@ struct MainTabView: View {
                     Tab(value: CurrentTab.myself) {
                         MyselfView(
                             routineService: ServiceFactory.shared.createRoutineService(),
-                            onRoutineGenerated: { response in
-                                tempGeneratedRoutine = response
+                            onRoutineGenerated: { _ in
+                                // Routine is already saved to Core Data, just switch to routines tab
                                 selectedTab = .routines
                             }
                         )
@@ -69,12 +66,7 @@ struct MainTabView: View {
                 // ✅ iOS 15–17: classic .tabItem + UIKit appearance
                 LegacyTabView(
                     selectedTab: $selectedTab,
-                    productsContent: productsContent,
-                    initialRoutine: tempGeneratedRoutine ?? generatedRoutine,
-                    onRoutineGenerated: { response in
-                        tempGeneratedRoutine = response
-                        selectedTab = .routines
-                    }
+                    productsContent: productsContent
                 )
                 .tint(ThemeManager.shared.theme.palette.secondary)
                 .onAppear { setupLegacyTabBarAppearance() }
@@ -128,20 +120,15 @@ struct MainTabView: View {
 private struct LegacyTabView: View {
     @Binding var selectedTab: MainTabView.CurrentTab
     let productsContent: AnyView
-    let initialRoutine: RoutineResponse?
-    let onRoutineGenerated: (RoutineResponse) -> Void
 
-    init(selectedTab: Binding<MainTabView.CurrentTab>, productsContent: some View, initialRoutine: RoutineResponse?, onRoutineGenerated: @escaping (RoutineResponse) -> Void) {
+    init(selectedTab: Binding<MainTabView.CurrentTab>, productsContent: some View) {
         _selectedTab = selectedTab
         self.productsContent = AnyView(productsContent)
-        self.initialRoutine = initialRoutine
-        self.onRoutineGenerated = onRoutineGenerated
     }
 
     var body: some View {
         TabView(selection: $selectedTab) {
             RoutineHomeView(
-                generatedRoutine: initialRoutine,
                 selectedTab: $selectedTab,
                 routineService: ServiceFactory.shared.createRoutineService()
             )
@@ -167,7 +154,10 @@ private struct LegacyTabView: View {
 
             MyselfView(
                 routineService: ServiceFactory.shared.createRoutineService(),
-                onRoutineGenerated: onRoutineGenerated
+                onRoutineGenerated: { _ in
+                    // Routine is already saved to Core Data, just switch to routines tab
+                    selectedTab = .routines
+                }
             )
             .tabItem {
                 Image(systemName: MainTabView.CurrentTab.myself.icon)

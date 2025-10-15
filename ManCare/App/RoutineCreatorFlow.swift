@@ -22,10 +22,12 @@ struct RoutineCreatorFlow: View {
     @State private var selectedRegion: Region?
     @State private var selectedRoutineDepth: RoutineDepth?
     @State private var selectedPreferences: Preferences?
-    @State private var generatedRoutine: RoutineResponse?
     @State private var isLoadingRoutine = false
     @State private var routineError: Error?
     @State private var cycleData: CycleData?
+
+    // Use RoutineService for proper Core Data handling
+    private let routineService = ServiceFactory.shared.createRoutineService()
 
     enum FlowStep {
         case skinType
@@ -44,7 +46,7 @@ struct RoutineCreatorFlow: View {
     var body: some View {
         ZStack {
             if showMainApp {
-                MainTabView(generatedRoutine: generatedRoutine)
+                MainTabView()
                     .transition(.asymmetric(
                         insertion: .move(edge: .trailing).combined(with: .opacity),
                         removal: .opacity
@@ -199,9 +201,15 @@ struct RoutineCreatorFlow: View {
                     onContinueWithoutAPI: {
                         // Use mock data instead of API call
                         print("🚀 Using mock routine data for testing...")
-                        generatedRoutine = createMockRoutineResponse()
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .results
+                        Task {
+                            let mockRoutine = createMockRoutineResponse()
+                            // Save to Core Data immediately
+                            _ = try? await routineService.saveInitialRoutine(from: mockRoutine)
+                            await MainActor.run {
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    currentStep = .results
+                                }
+                            }
                         }
                     }
                 )
@@ -244,12 +252,7 @@ struct RoutineCreatorFlow: View {
 
             case .results:
                 RoutineResultView(
-                    skinType: selectedSkinType ?? .normal,
-                    concerns: selectedConcerns,
-                    mainGoal: selectedMainGoal ?? .healthierOverall,
-                    preferences: selectedPreferences,
-                    generatedRoutine: generatedRoutine,
-                    cycleData: cycleData,  // NEW: Pass cycle data
+                    cycleData: cycleData,
                     onRestart: {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .skinType
@@ -263,7 +266,6 @@ struct RoutineCreatorFlow: View {
                             selectedRegion = nil
                             selectedRoutineDepth = nil
                             selectedPreferences = nil
-                            generatedRoutine = nil
                             routineError = nil
                             isLoadingRoutine = false
                             cycleData = nil
@@ -526,8 +528,15 @@ struct RoutineCreatorFlow: View {
                 print("   - For Concerns: \(routine.adaptation.forConcerns)")
                 print("   - For Preferences: \(routine.adaptation.forPreferences)")
 
+                // Save to Core Data immediately - this is our single source of truth
+                do {
+                    _ = try await routineService.saveInitialRoutine(from: routine)
+                    print("✅ Routine saved to Core Data")
+                } catch {
+                    print("❌ Error saving routine to Core Data: \(error)")
+                }
+
                 await MainActor.run {
-                    self.generatedRoutine = routine
                     self.isLoadingRoutine = false
                     // Transition to results page
                     withAnimation(.easeInOut(duration: 0.3)) {
@@ -538,23 +547,31 @@ struct RoutineCreatorFlow: View {
                 // Enhance routine with product info asynchronously in background
                 Task {
                     let enhancedRoutine = await gptService.enhanceRoutineAsync(routine)
-                    await MainActor.run {
-                        self.generatedRoutine = enhancedRoutine
-                        print("✅ Routine enhanced with product information")
+                    // Save the enhanced version to Core Data
+                    do {
+                        _ = try await routineService.saveInitialRoutine(from: enhancedRoutine)
+                        print("✅ Routine enhanced with product information and saved to Core Data")
+                    } catch {
+                        print("❌ Error saving enhanced routine: \(error)")
                     }
                 }
             } catch {
                 print("❌ Error generating routine: \(error)")
+
+                // Create a fallback routine and save to Core Data
+                let fallbackRoutine = self.createFallbackRoutine(for: request)
+                do {
+                    _ = try await routineService.saveInitialRoutine(from: fallbackRoutine)
+                    print("✅ Fallback routine saved to Core Data")
+                } catch {
+                    print("❌ Error saving fallback routine: \(error)")
+                }
+
                 await MainActor.run {
                     self.routineError = error
                     self.isLoadingRoutine = false
 
-                    // Create a fallback routine for better UX
-                    if self.generatedRoutine == nil {
-                        self.generatedRoutine = self.createFallbackRoutine(for: request)
-                    }
-
-                    // Transition to results page even with error (fallback routine will be shown)
+                    // Transition to results page (fallback routine is now in Core Data)
                     withAnimation(.easeInOut(duration: 0.3)) {
                         self.currentStep = .results
                     }
@@ -1058,11 +1075,6 @@ private struct ProgressIndicator: View {
 #Preview("Routine Result") {
     NavigationView {
         RoutineResultView(
-            skinType: .combination,
-            concerns: [.acne, .redness],
-            mainGoal: .reduceBreakouts,
-            preferences: nil,
-            generatedRoutine: nil,
             cycleData: nil,
             onRestart: {},
             onContinue: {}

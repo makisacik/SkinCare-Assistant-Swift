@@ -231,4 +231,128 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.adaptationTypes = self.adaptationType.map { [$0] }  // Convert to array for backward compat
         self.imageName = entity.imageName ?? "routine-minimalist"
     }
+
+    // MARK: - Conversion to RoutineResponse
+
+    /// Convert SavedRoutineModel back to RoutineResponse format for editing
+    func toRoutineResponse() -> RoutineResponse {
+        // Convert morning steps
+        let morningAPISteps: [APIRoutineStep] = stepDetails
+            .filter { $0.timeOfDay == "morning" }
+            .sorted { $0.order < $1.order }
+            .map { step in
+                APIRoutineStep(
+                    step: ProductType(rawValue: step.stepType) ?? .cleanser,
+                    name: step.title,
+                    why: step.why ?? "",
+                    how: step.how ?? "",
+                    constraints: Constraints()
+                )
+            }
+
+        // Convert evening steps
+        let eveningAPISteps: [APIRoutineStep] = stepDetails
+            .filter { $0.timeOfDay == "evening" }
+            .sorted { $0.order < $1.order }
+            .map { step in
+                APIRoutineStep(
+                    step: ProductType(rawValue: step.stepType) ?? .cleanser,
+                    name: step.title,
+                    why: step.why ?? "",
+                    how: step.how ?? "",
+                    constraints: Constraints()
+                )
+            }
+
+        // Convert weekly steps
+        let weeklyAPISteps: [APIRoutineStep]? = {
+            let weeklySteps = stepDetails
+                .filter { $0.timeOfDay == "weekly" }
+                .sorted { $0.order < $1.order }
+            guard !weeklySteps.isEmpty else { return nil }
+            return weeklySteps.map { step in
+                APIRoutineStep(
+                    step: ProductType(rawValue: step.stepType) ?? .cleanser,
+                    name: step.title,
+                    why: step.why ?? "",
+                    how: step.how ?? "",
+                    constraints: Constraints()
+                )
+            }
+        }()
+
+        return RoutineResponse(
+            version: "1.0",
+            locale: "en-US",
+            summary: Summary(
+                title: title,
+                oneLiner: description
+            ),
+            routine: Routine(
+                depth: .simple,
+                morning: morningAPISteps,
+                evening: eveningAPISteps,
+                weekly: weeklyAPISteps
+            ),
+            guardrails: Guardrails(
+                cautions: [],
+                whenToStop: [],
+                sunNotes: ""
+            ),
+            adaptation: Adaptation(
+                forSkinType: "",
+                forConcerns: [],
+                forPreferences: []
+            ),
+            productSlots: []
+        )
+    }
+
+    // MARK: - Preview Support
+
+    #if DEBUG
+    static var preview: SavedRoutineModel {
+        SavedRoutineModel(
+            templateId: UUID(),
+            title: "Preview Routine",
+            description: "A sample routine for previews",
+            category: .all,
+            stepCount: 3,
+            duration: "5-10 min",
+            difficulty: .beginner,
+            tags: ["preview"],
+            morningSteps: ["Cleanser", "Moisturizer", "Sunscreen"],
+            eveningSteps: ["Cleanser", "Serum", "Moisturizer"],
+            benefits: ["Sample benefit"],
+            isFeatured: false,
+            isPremium: false,
+            savedDate: Date(),
+            isActive: true,
+            stepDetails: [
+                SavedStepDetailModel(
+                    title: "Gentle Cleanser",
+                    stepDescription: "Sample cleanser",
+                    stepType: ProductType.cleanser.rawValue,
+                    timeOfDay: "morning",
+                    why: "Cleans your skin",
+                    how: "Apply and rinse",
+                    order: 0
+                ),
+                SavedStepDetailModel(
+                    title: "Moisturizer",
+                    stepDescription: "Sample moisturizer",
+                    stepType: ProductType.moisturizer.rawValue,
+                    timeOfDay: "morning",
+                    why: "Hydrates your skin",
+                    how: "Apply to face",
+                    order: 1
+                )
+            ],
+            adaptationEnabled: false,
+            adaptationType: nil,
+            adaptationTypes: nil,
+            imageName: "routine-minimalist"
+        )
+    }
+    #endif
 }
