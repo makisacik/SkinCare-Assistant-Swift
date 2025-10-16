@@ -53,15 +53,16 @@ struct AddStepView: View {
                         TextField("Enter step name", text: $customTitle)
                             .font(ThemeManager.shared.theme.typo.body)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            .padding(12)
+                            .padding(16)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(ThemeManager.shared.theme.palette.accentBackground)
+                                    .fill(Color.white)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+                                            .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
                                     )
                             )
+                            .colorScheme(.light)
                     }
 
                     // Description - multiline
@@ -72,44 +73,36 @@ struct AddStepView: View {
 
                         ZStack(alignment: .topLeading) {
                             TextEditor(text: $customDescription)
-                                .font(ThemeManager.shared.theme.typo.body)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .frame(minHeight: 120)
-                                .padding(8)
+                                .padding(16)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
+                                        .fill(Color.white)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                                        )
                                 )
+                                .font(ThemeManager.shared.theme.typo.body)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                .colorScheme(.light)
 
                             if customDescription.isEmpty {
                                 Text("Enter step description...")
                                     .font(ThemeManager.shared.theme.typo.body)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                                    .padding(.horizontal, 12)
+                                    .padding(.horizontal, 20)
                                     .padding(.vertical, 16)
                                     .allowsHitTesting(false)
                             }
                         }
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                        )
                     }
                 }
             }
             .padding(20)
         }
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
-        .navigationTitle("Add Step")
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("Cancel") {
-                    dismiss()
-                }
-                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
-
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Add") {
                     addStep()

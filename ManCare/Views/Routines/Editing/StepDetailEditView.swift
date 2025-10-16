@@ -30,7 +30,7 @@ struct StepDetailEditView: View {
                 // Header with step icon and type
                 VStack(spacing: 16) {
                     ZStack {
-                        Circle()
+                        RoundedRectangle(cornerRadius: 16)
                             .fill(step.stepTypeColor.opacity(0.15))
                             .frame(width: 80, height: 80)
 
@@ -39,6 +39,7 @@ struct StepDetailEditView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 36, height: 36)
                     }
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
 
                     VStack(spacing: 8) {
                         Text(step.stepTypeDisplayName)
@@ -63,15 +64,16 @@ struct StepDetailEditView: View {
                         TextField("Enter step name", text: $title)
                             .font(ThemeManager.shared.theme.typo.body)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            .padding(12)
+                            .padding(16)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(ThemeManager.shared.theme.palette.accentBackground)
+                                    .fill(Color.white)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
+                                            .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
                                     )
                             )
+                            .colorScheme(.light)
                     }
 
                     // Description - multiline
@@ -82,28 +84,29 @@ struct StepDetailEditView: View {
 
                         ZStack(alignment: .topLeading) {
                             TextEditor(text: $description)
-                                .font(ThemeManager.shared.theme.typo.body)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .frame(minHeight: 120)
-                                .padding(8)
+                                .padding(16)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(ThemeManager.shared.theme.palette.accentBackground)
+                                        .fill(Color.white)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                                        )
                                 )
+                                .font(ThemeManager.shared.theme.typo.body)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                .colorScheme(.light)
 
                             if description.isEmpty {
                                 Text("Enter step description...")
                                     .font(ThemeManager.shared.theme.typo.body)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                                    .padding(.horizontal, 12)
+                                    .padding(.horizontal, 20)
                                     .padding(.vertical, 16)
                                     .allowsHitTesting(false)
                             }
                         }
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(ThemeManager.shared.theme.palette.separator, lineWidth: 1)
-                        )
                     }
                 }
                 .padding(.horizontal, 20)
@@ -114,6 +117,7 @@ struct StepDetailEditView: View {
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .navigationTitle("Edit Step")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarColorScheme(.light, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Save") {

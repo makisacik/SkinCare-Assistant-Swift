@@ -1065,6 +1065,7 @@ struct RoutineStepDetailView: View {
             .background(ThemeManager.shared.theme.palette.background)
             .navigationTitle("Step Details")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarColorScheme(.light, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

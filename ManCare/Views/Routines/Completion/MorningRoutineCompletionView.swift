@@ -221,23 +221,14 @@ struct MorningRoutineCompletionView: View {
                 }
             }
         }
-        .overlay(
-            Group {
-                if let step = showingProductSelection {
-                    HalfScreenSheet(
-                        isPresented: .constant(true),
-                        onDismiss: {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                showingProductSelection = nil
-                            }                    }                ) {
-                        StepProductSelectionSheet(
-                            step: step,
-                            onDismiss: {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                    showingProductSelection = nil
-                                }                        }                    )
-                    }            }        }        .allowsHitTesting(showingProductSelection != nil)
-        )
+        .sheet(item: $showingProductSelection) { step in
+            StepProductSelectionSheet(
+                step: step,
+                onDismiss: {
+                    showingProductSelection = nil
+                }
+            )
+        }
         .sheet(item: $showingStepDetail) { stepDetail in
             RoutineStepDetailView(
                 stepDetail: stepDetail,
@@ -934,333 +925,368 @@ private struct StepProductSelectionSheet: View {
     @State private var selectedProductType: ProductType?
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Header with close button
-            HStack {
-                Text("Add Product to \(step.title)")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.primary)
-
-                Spacer()
-
-                Button {
-                    onDismiss()
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(.secondary)
-                }        }        .padding(.horizontal, 20)
-            .padding(.top, 16)
-            .padding(.bottom, 8)
-
-            Text("Choose from your products or add a new one")
-                .font(.system(size: 14))
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 16)
-
-            // Content
-            if getMatchingProducts().isEmpty {
-                // Empty state - show add product options
-                EmptyProductTypeView(
-                    productType: step.stepType,
-                    onAddProduct: {
-                        selectedProductType = step.stepType
-                        showingAddProduct = true
-                    }            )
-            } else {
-                // Show existing products
-                ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(getMatchingProducts(), id: \.id) { product in
-                            StepProductRow(
-                                product: product,
-                                step: step,
-                                onSelect: {
-                                    // Here you would attach the product to the step
-                                    // For now, just dismiss
-                                    onDismiss()
-                                }                        )
-                        }
-                        // Add new product option
-                        Button {
-                            selectedProductType = step.stepType
-                            showingAddProduct = true
-                        } label: {
-                            HStack(spacing: 12) {
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 20, weight: .medium))
-                                    .foregroundColor(.blue)
-
-                                Text("Add New \(step.stepType.displayName)")
-                                    .font(.system(size: 16, weight: .medium))
-                                    .foregroundColor(.blue)
-
-                                Spacer()
-                            }                        .padding(16)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(ThemeManager.shared.theme.palette.info.opacity(0.1))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(ThemeManager.shared.theme.palette.info.opacity(0.3), lineWidth: 1)
-                                    )
+        NavigationView {
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 0) {
+                    // Content area
+                    VStack(spacing: 16) {
+                        if getMatchingProducts().isEmpty {
+                            // Empty state - show add product options
+                            EmptyProductTypeView(
+                                productType: step.stepType,
+                                onAddProduct: {
+                                    selectedProductType = step.stepType
+                                    showingAddProduct = true
+                                }
                             )
-                        }                    .buttonStyle(PlainButtonStyle())
-                    }                .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
-                }        }    }    .sheet(isPresented: $showingAddProduct) {
-            if let productType = selectedProductType {
-                AddProductView(
-                    productService: productService,
-                    initialProductType: productType
-                ) { newProduct in
-                    // Product was added successfully
-                    // The product list will be updated automatically via ProductService
-                    showingAddProduct = false
-                }        }    }}
+                            .padding(.horizontal, 20)
+                        } else {
+                            // Show existing products
+                            LazyVStack(spacing: 12) {
+                                ForEach(getMatchingProducts(), id: \.id) { product in
+                                    StepProductRow(
+                                        product: product,
+                                        step: step,
+                                        onSelect: {
+                                            // Here you would attach the product to the step
+                                            // For now, just dismiss
+                                            onDismiss()
+                                        }
+                                    )
+                                }
 
-    private func getMatchingProducts() -> [Product] {
+                                // Add new product option
+                                Button {
+                                    selectedProductType = step.stepType
+                                    showingAddProduct = true
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        Image(systemName: "plus.circle.fill")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.info)
+
+                                        Text("Add New \(step.stepType.displayName)")
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.info)
+
+                                        Spacer()
+                                    }
+                                    .padding(16)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(ThemeManager.shared.theme.palette.info.opacity(0.1))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(ThemeManager.shared.theme.palette.info.opacity(0.3), lineWidth: 1)
+                                            )
+                                    )
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .padding(.horizontal, 20)
+                        }
+
+                        Spacer(minLength: 100)
+                    }
+                }
+                .padding(.top, 20)
+                .padding(.bottom, 20)
+            }
+            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarColorScheme(.light, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        onDismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            .symbolRenderingMode(.hierarchical)
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAddProduct) {
+                if let productType = selectedProductType {
+                    AddProductView(
+                        productService: productService,
+                        initialProductType: productType
+                    ) { newProduct in
+                        // Product was added successfully
+                        // The product list will be updated automatically via ProductService
+                        showingAddProduct = false
+                        selectedProductType = nil
+                    }
+                }
+            }
+        }
+        .modifier(PresentationModifier())
+    }
+
+    private var stepColor: Color {
+        switch step.stepType.color {
+        case "blue": return ThemeManager.shared.theme.palette.info
+        case "green": return ThemeManager.shared.theme.palette.success
+        case "yellow": return ThemeManager.shared.theme.palette.warning
+        case "orange": return ThemeManager.shared.theme.palette.warning
+        case "purple": return ThemeManager.shared.theme.palette.primary
+        case "red": return ThemeManager.shared.theme.palette.error
+        case "pink": return ThemeManager.shared.theme.palette.primary
+        case "teal": return ThemeManager.shared.theme.palette.info
+        case "indigo": return ThemeManager.shared.theme.palette.info
+        case "brown": return ThemeManager.shared.theme.palette.textMuted
+        case "gray": return ThemeManager.shared.theme.palette.textMuted
+        default: return ThemeManager.shared.theme.palette.primary
+        }
+    }
+
+    func getMatchingProducts() -> [Product] {
         return productService.userProducts.filter { product in
             product.tagging.productType == step.stepType
-        }}
+        }
+    }
 }
 
-// MARK: - Step Product Row
+    // MARK: - Step Product Row
 
-private struct StepProductRow: View {
+    private struct StepProductRow: View {
 
-    let product: Product
-    let step: RoutineStepDetail
-    let onSelect: () -> Void
+            let product: Product
+            let step: RoutineStepDetail
+            let onSelect: () -> Void
 
-    var body: some View {
-        Button {
-            onSelect()
-        } label: {
-            HStack(spacing: 16) {
-                // Product image placeholder
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(productColor.opacity(0.2))
-                    .frame(width: 50, height: 50)
-                    .overlay(
-                        Image(productIcon)
+            var body: some View {
+                Button {
+                    onSelect()
+                } label: {
+                    HStack(spacing: 16) {
+                        // Product image placeholder
+                        Circle()
+                            .fill(productColor.opacity(0.2))
+                            .frame(width: 50, height: 50)
+                            .overlay(
+                                Image(productIcon)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 20, height: 20)
+                            )
+                            .clipShape(Circle())
+
+                        // Product info
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(product.displayName)
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                            if let brand = product.brand {
+                                Text(brand)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            }            }
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color(.systemBackground))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color(.separator), lineWidth: 1)
+                                )
+                        )
+                }    .buttonStyle(PlainButtonStyle())
+            }
+            private var productColor: Color {
+                switch product.tagging.productType.color {
+                case "blue": return ThemeManager.shared.theme.palette.info
+                case "green": return ThemeManager.shared.theme.palette.success
+                case "yellow": return ThemeManager.shared.theme.palette.warning
+                case "orange": return ThemeManager.shared.theme.palette.warning
+                case "purple": return ThemeManager.shared.theme.palette.primary
+                case "red": return ThemeManager.shared.theme.palette.error
+                case "pink": return ThemeManager.shared.theme.palette.primary
+                case "teal": return ThemeManager.shared.theme.palette.info
+                case "indigo": return ThemeManager.shared.theme.palette.info
+                case "brown": return ThemeManager.shared.theme.palette.textMuted
+                case "gray": return ThemeManager.shared.theme.palette.textMuted
+                default: return ThemeManager.shared.theme.palette.textMuted
+                }}
+
+            private var productIcon: String {
+                product.tagging.productType.iconName
+            }
+        }
+
+    // MARK: - Empty Product Type View
+
+    private struct EmptyProductTypeView: View {
+
+            let productType: ProductType
+            let onAddProduct: () -> Void
+
+            private var productColor: Color {
+                switch productType.color {
+                case "blue": return ThemeManager.shared.theme.palette.info
+                case "green": return ThemeManager.shared.theme.palette.success
+                case "yellow": return ThemeManager.shared.theme.palette.warning
+                case "orange": return ThemeManager.shared.theme.palette.warning
+                case "purple": return ThemeManager.shared.theme.palette.primary
+                case "red": return ThemeManager.shared.theme.palette.error
+                case "pink": return ThemeManager.shared.theme.palette.primary
+                case "teal": return ThemeManager.shared.theme.palette.info
+                case "indigo": return ThemeManager.shared.theme.palette.info
+                case "brown": return ThemeManager.shared.theme.palette.textMuted
+                case "gray": return ThemeManager.shared.theme.palette.textMuted
+                default: return ThemeManager.shared.theme.palette.textMuted
+                }}
+
+            var body: some View {
+                VStack(spacing: 20) {
+                    // Icon
+                    ZStack {
+                        Circle()
+                            .fill(productColor.opacity(0.1))
+                            .frame(width: 60, height: 60)
+
+                        Image(productType.iconName)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
-                    )
-
-                // Product info
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(product.displayName)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.primary)
-
-                    if let brand = product.brand {
-                        Text(brand)
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-                    }            }
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.secondary)
-            }        .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemBackground))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color(.separator), lineWidth: 1)
-                    )
-            )
-        }    .buttonStyle(PlainButtonStyle())
-    }
-    private var productColor: Color {
-        switch product.tagging.productType.color {
-        case "blue": return ThemeManager.shared.theme.palette.info
-        case "green": return ThemeManager.shared.theme.palette.success
-        case "yellow": return ThemeManager.shared.theme.palette.warning
-        case "orange": return ThemeManager.shared.theme.palette.warning
-        case "purple": return ThemeManager.shared.theme.palette.primary
-        case "red": return ThemeManager.shared.theme.palette.error
-        case "pink": return ThemeManager.shared.theme.palette.primary
-        case "teal": return ThemeManager.shared.theme.palette.info
-        case "indigo": return ThemeManager.shared.theme.palette.info
-        case "brown": return ThemeManager.shared.theme.palette.textMuted
-        case "gray": return ThemeManager.shared.theme.palette.textMuted
-        default: return ThemeManager.shared.theme.palette.textMuted
-        }}
-
-    private var productIcon: String {
-        product.tagging.productType.iconName
-    }
-}
-
-// MARK: - Empty Product Type View
-
-private struct EmptyProductTypeView: View {
-
-    let productType: ProductType
-    let onAddProduct: () -> Void
-
-    private var productColor: Color {
-        switch productType.color {
-        case "blue": return ThemeManager.shared.theme.palette.info
-        case "green": return ThemeManager.shared.theme.palette.success
-        case "yellow": return ThemeManager.shared.theme.palette.warning
-        case "orange": return ThemeManager.shared.theme.palette.warning
-        case "purple": return ThemeManager.shared.theme.palette.primary
-        case "red": return ThemeManager.shared.theme.palette.error
-        case "pink": return ThemeManager.shared.theme.palette.primary
-        case "teal": return ThemeManager.shared.theme.palette.info
-        case "indigo": return ThemeManager.shared.theme.palette.info
-        case "brown": return ThemeManager.shared.theme.palette.textMuted
-        case "gray": return ThemeManager.shared.theme.palette.textMuted
-        default: return ThemeManager.shared.theme.palette.textMuted
-        }}
-
-    var body: some View {
-        VStack(spacing: 20) {
-            // Icon
-            ZStack {
-                Circle()
-                    .fill(productColor.opacity(0.1))
-                    .frame(width: 60, height: 60)
-
-                Image(productType.iconName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 24, height: 24)
-            }
-            // Text
-            VStack(spacing: 6) {
-                Text("No \(productType.displayName) Added")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(.primary)
-
-                Text("You don't have any \(productType.displayName.lowercased()) products yet. Add one to get started!")
-                    .font(.system(size: 14))
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 20)
-            }
-            // Add Product Options
-            VStack(spacing: 12) {
-                HStack(spacing: 12) {
-                    // Scan Product Card
-                    Button {
-                        // TODO: Implement scan functionality
-                        onAddProduct()
-                    } label: {
-                        VStack(spacing: 6) {
-                            Image(systemName: "camera.viewfinder")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-
-                            VStack(spacing: 2) {
-                                Text("Scan Product")
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-
-                                Text("Take a photo to automatically extract product information")
-                                    .font(.system(size: 11))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(2)
-                            }
-
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 11, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-                        }                    .padding(10)
-                        .frame(maxWidth: .infinity)
-                        .background(productColor)
-                        .cornerRadius(10)
-                    }                .buttonStyle(PlainButtonStyle())
-
-                    // Or Text
-                    VStack {
-                        Text("Or")
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(.secondary)
-                            .padding(.vertical, 6)
+                            .frame(width: 24, height: 24)
                     }
+                    .clipShape(Circle())
 
-                    // Add Manually Card
-                    Button {
-                        onAddProduct()
-                    } label: {
-                        VStack(spacing: 6) {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+                    // Text
+                    VStack(spacing: 6) {
+                        Text("No \(productType.displayName) Added")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                            VStack(spacing: 2) {
-                                Text("Add Manually")
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+                        Text("You don't have any \(productType.displayName.lowercased()) products yet. Add one to get started!")
+                            .font(.system(size: 14))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                    }
+                    // Add Product Options
+                    VStack(spacing: 12) {
+                        HStack(spacing: 12) {
+                            // Scan Product Card
+                            Button {
+                                // TODO: Implement scan functionality
+                                onAddProduct()
+                            } label: {
+                                VStack(spacing: 6) {
+                                    Image(systemName: "camera.viewfinder")
+                                        .font(.system(size: 18, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
-                                Text("Enter product details manually")
-                                    .font(.system(size: 11))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(2)
+                                    VStack(spacing: 2) {
+                                        Text("Scan Product")
+                                            .font(.system(size: 13, weight: .semibold))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+
+                                        Text("Take a photo to automatically extract product information")
+                                            .font(.system(size: 11))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
+                                            .multilineTextAlignment(.center)
+                                            .lineLimit(2)
+                                    }
+
+                                    Image(systemName: "arrow.right")
+                                        .font(.system(size: 11, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+                                }                    .padding(10)
+                                    .frame(maxWidth: .infinity)
+                                    .background(productColor)
+                                    .cornerRadius(10)
+                            }                .buttonStyle(PlainButtonStyle())
+
+                            // Or Text
+                            VStack {
+                                Text("Or")
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    .padding(.vertical, 6)
                             }
 
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 11, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-                        }                    .padding(10)
-                        .frame(maxWidth: .infinity)
-                        .background(productColor)
-                        .cornerRadius(10)
-                    }                .buttonStyle(PlainButtonStyle())
-                }            .padding(.horizontal, 20)
-            }    }    .padding(.vertical, 20)
-    }
-}
+                            // Add Manually Card
+                            Button {
+                                onAddProduct()
+                            } label: {
+                                VStack(spacing: 6) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.system(size: 18, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+
+                                    VStack(spacing: 2) {
+                                        Text("Add Manually")
+                                            .font(.system(size: 13, weight: .semibold))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+
+                                        Text("Enter product details manually")
+                                            .font(.system(size: 11))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
+                                            .multilineTextAlignment(.center)
+                                            .lineLimit(2)
+                                    }
+
+                                    Image(systemName: "arrow.right")
+                                        .font(.system(size: 11, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+                                }                    .padding(10)
+                                    .frame(maxWidth: .infinity)
+                                    .background(productColor)
+                                    .cornerRadius(10)
+                            }                .buttonStyle(PlainButtonStyle())
+                        }            .padding(.horizontal, 20)
+                    }    }    .padding(.vertical, 20)
+            }
+        }
 
 
 // MARK: - Preview
 
 #if DEBUG
-#Preview("MorningRoutineCompletionView") {
-    MorningRoutineCompletionView(
-        routineSteps: [
-            RoutineStepDetail(
-                id: UUID().uuidString,
-                title: "Gentle Cleanser",
-                description: "Oil-free gel cleanser – reduces shine, clears pores",
-                stepType: .cleanser,
-                timeOfDay: .morning,
-                why: "Removes overnight oil buildup and prepares skin for treatments",
-                how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
-            ),
-            RoutineStepDetail(
-                id: UUID().uuidString,
-                title: "Water-based Moisturizer",
-                description: "Lightweight gel moisturizer – hydrates without greasiness",
-                stepType: .moisturizer,
-                timeOfDay: .morning,
-                why: "Provides essential hydration and creates a protective barrier",
-                how: "Apply a pea-sized amount, massage in upward circular motions"
-            ),
-            RoutineStepDetail(
-                id: UUID().uuidString,
-                title: "Sunscreen SPF 30+",
-                description: "SPF 30+ broad spectrum – protects against sun damage",
-                stepType: .sunscreen,
-                timeOfDay: .morning,
-                why: "Prevents UV damage, premature aging, and skin cancer",
-                how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
-            )
-        ],
-        selectedDate: Date(),
-        completionViewModel: RoutineCompletionViewModel.preview,
-        cycleStore: CycleStore(),
-        onComplete: { print("Routine completed!") }
-    )
-}
+    #Preview("MorningRoutineCompletionView") {
+        MorningRoutineCompletionView(
+            routineSteps: [
+                RoutineStepDetail(
+                    id: UUID().uuidString,
+                    title: "Gentle Cleanser",
+                    description: "Oil-free gel cleanser – reduces shine, clears pores",
+                    stepType: .cleanser,
+                    timeOfDay: .morning,
+                    why: "Removes overnight oil buildup and prepares skin for treatments",
+                    how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
+                ),
+                RoutineStepDetail(
+                    id: UUID().uuidString,
+                    title: "Water-based Moisturizer",
+                    description: "Lightweight gel moisturizer – hydrates without greasiness",
+                    stepType: .moisturizer,
+                    timeOfDay: .morning,
+                    why: "Provides essential hydration and creates a protective barrier",
+                    how: "Apply a pea-sized amount, massage in upward circular motions"
+                ),
+                RoutineStepDetail(
+                    id: UUID().uuidString,
+                    title: "Sunscreen SPF 30+",
+                    description: "SPF 30+ broad spectrum – protects against sun damage",
+                    stepType: .sunscreen,
+                    timeOfDay: .morning,
+                    why: "Prevents UV damage, premature aging, and skin cancer",
+                    how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
+                )
+            ],
+            selectedDate: Date(),
+            completionViewModel: RoutineCompletionViewModel.preview,
+            cycleStore: CycleStore(),
+            onComplete: { print("Routine completed!") }
+        )
+    }
 #endif
