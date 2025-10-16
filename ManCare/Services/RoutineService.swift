@@ -222,10 +222,9 @@ final class RoutineService: RoutineServiceProtocol {
     // MARK: - Tracking Operations
 
     func toggleStepCompletion(stepId: String, stepTitle: String, stepType: ProductType, timeOfDay: TimeOfDay, date: Date = Date()) async throws {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
+        let startOfDay = DateUtils.startOfDay(for: date)
 
-        print("🔄 RoutineService: Toggling step completion: \(stepTitle) (ID: \(stepId)) for date: \(startOfDay)")
+        print("🔄 RoutineService: Toggling step completion: \(stepTitle) (ID: \(stepId)) for date: \(DateUtils.formatForLog(startOfDay))")
 
         try await store.toggleStepCompletion(
             stepId: stepId,
@@ -235,7 +234,7 @@ final class RoutineService: RoutineServiceProtocol {
             date: startOfDay
         )
 
-        print("📡 RoutineService: Emitting completion change notification for date: \(startOfDay)")
+        print("📡 RoutineService: Emitting completion change notification for date: \(DateUtils.formatForLog(startOfDay))")
         // Emit completion change notification for this date
         Task { @MainActor in
             self.completionChangeSubject.send(startOfDay)
@@ -246,14 +245,12 @@ final class RoutineService: RoutineServiceProtocol {
     }
 
     func isStepCompleted(stepId: String, date: Date = Date()) async throws -> Bool {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
+        let startOfDay = DateUtils.startOfDay(for: date)
         return try await store.isStepCompleted(stepId: stepId, date: startOfDay)
     }
 
     func getCompletedSteps(for date: Date = Date()) async throws -> Set<String> {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
+        let startOfDay = DateUtils.startOfDay(for: date)
         return try await store.getCompletedSteps(for: startOfDay)
     }
 

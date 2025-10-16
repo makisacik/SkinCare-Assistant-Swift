@@ -259,12 +259,12 @@ actor RoutineStore: RoutineStoreProtocol {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
-                    let calendar = Calendar.current
-                    let startOfDay = calendar.startOfDay(for: date)
+                    let startOfDay = DateUtils.startOfDay(for: date)
 
                     if let existingCompletion = self.getCompletionSync(stepId: stepId, date: startOfDay, in: self.backgroundContext) {
                         existingCompletion.isCompleted.toggle()
                         existingCompletion.createdAt = Date()
+                        print("✅ Store: Toggled \(stepTitle) -> \(existingCompletion.isCompleted) for \(DateUtils.formatForLog(startOfDay))")
                     } else {
                         let completion = RoutineCompletion(context: self.backgroundContext)
                         completion.stepId = stepId
@@ -274,6 +274,7 @@ actor RoutineStore: RoutineStoreProtocol {
                         completion.completionDate = startOfDay
                         completion.isCompleted = true
                         completion.createdAt = Date()
+                        print("✅ Store: Created \(stepTitle) for \(DateUtils.formatForLog(startOfDay))")
                     }
 
                     try self.backgroundContext.save()
@@ -289,8 +290,7 @@ actor RoutineStore: RoutineStoreProtocol {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
-                    let calendar = Calendar.current
-                    let startOfDay = calendar.startOfDay(for: date)
+                    let startOfDay = DateUtils.startOfDay(for: date)
 
                     let completion = self.getCompletionSync(stepId: stepId, date: startOfDay, in: self.backgroundContext)
                     continuation.resume(returning: completion?.isCompleted ?? false)
@@ -305,8 +305,7 @@ actor RoutineStore: RoutineStoreProtocol {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
-                    let calendar = Calendar.current
-                    let startOfDay = calendar.startOfDay(for: date)
+                    let startOfDay = DateUtils.startOfDay(for: date)
 
                     let request: NSFetchRequest<RoutineCompletion> = RoutineCompletion.fetchRequest()
                     request.predicate = NSPredicate(format: "completionDate == %@ AND isCompleted == YES", startOfDay as NSDate)
@@ -316,6 +315,8 @@ actor RoutineStore: RoutineStoreProtocol {
                         guard let stepId = completion.stepId, !stepId.isEmpty else { return nil }
                         return stepId
                     })
+
+                    print("📊 Store: Retrieved \(stepIds.count) completed steps for \(DateUtils.formatForLog(startOfDay))")
 
                     continuation.resume(returning: stepIds)
                 } catch {

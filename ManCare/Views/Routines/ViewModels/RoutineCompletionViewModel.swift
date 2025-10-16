@@ -122,8 +122,7 @@ final class RoutineCompletionViewModel: ObservableObject {
         Task {
             do {
                 // Normalize date to start of day for consistency
-                let calendar = Calendar.current
-                let normalizedDate = calendar.startOfDay(for: date)
+                let normalizedDate = DateUtils.startOfDay(for: date)
                 try await routineService.toggleStepCompletion(
                     stepId: stepId,
                     stepTitle: stepTitle,
@@ -135,7 +134,7 @@ final class RoutineCompletionViewModel: ObservableObject {
                 // Reload streak after completion change
                 await loadStreak()
 
-                print("✅ Successfully toggled step completion: \(stepTitle) (ID: \(stepId)) for date: \(normalizedDate)")
+                print("✅ ViewModel: Successfully toggled \(stepTitle) (ID: \(stepId)) for \(DateUtils.formatForLog(normalizedDate))")
             } catch {
                 await MainActor.run {
                     self.error = error
@@ -148,8 +147,7 @@ final class RoutineCompletionViewModel: ObservableObject {
     func isStepCompleted(stepId: String, date: Date = Date()) async -> Bool {
         do {
             // Normalize date to start of day for consistency
-            let calendar = Calendar.current
-            let normalizedDate = calendar.startOfDay(for: date)
+            let normalizedDate = DateUtils.startOfDay(for: date)
             return try await routineService.isStepCompleted(stepId: stepId, date: normalizedDate)
         } catch {
             print("❌ Failed to check step completion: \(error)")
@@ -160,10 +158,9 @@ final class RoutineCompletionViewModel: ObservableObject {
     func getCompletedSteps(for date: Date = Date()) async -> Set<String> {
         do {
             // Normalize date to start of day for consistency
-            let calendar = Calendar.current
-            let normalizedDate = calendar.startOfDay(for: date)
+            let normalizedDate = DateUtils.startOfDay(for: date)
             let steps = try await routineService.getCompletedSteps(for: normalizedDate)
-            print("📊 Retrieved \(steps.count) completed steps for \(normalizedDate): \(steps)")
+            print("📊 ViewModel: Retrieved \(steps.count) completed steps for \(DateUtils.formatForLog(normalizedDate))")
             return steps
         } catch {
             print("❌ Failed to get completed steps: \(error)")

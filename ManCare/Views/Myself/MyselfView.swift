@@ -14,7 +14,7 @@ struct MyselfView: View {
     @State private var showingGenerateConfirm = false
     @State private var showingDatePicker = false
     @State private var selectedTab = 0
-    @State private var selectedDate = Date()
+    @State private var selectedDate = DateUtils.todayStartOfDay
     @StateObject private var completionViewModel = RoutineCompletionViewModel(routineService: ServiceFactory.shared.createRoutineService())
 
     let routineService: RoutineServiceProtocol
@@ -166,15 +166,17 @@ struct MyselfView: View {
         .padding(.vertical, 12)
     }
 
-    @ViewBuilder
     private func dayButton(for date: Date) -> some View {
-        let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
-        let dayNumber = Calendar.current.component(.day, from: date)
+        let calendar = DateUtils.localCalendar
+        let isSelected = DateUtils.isDate(date, inSameDayAs: selectedDate)
+        let dayNumber = calendar.component(.day, from: date)
         let dayAbbr = dayAbbreviation(for: date)
 
-        Button {
+        return Button {
             withAnimation(.easeInOut(duration: 0.2)) {
-                selectedDate = date
+                // Normalize the selected date to start of day in local timezone
+                selectedDate = DateUtils.startOfDay(for: date)
+                print("📅 Selected date: \(DateUtils.formatForLog(selectedDate))")
             }
         } label: {
             VStack(spacing: 4) {
@@ -271,7 +273,7 @@ struct MyselfView: View {
     }
 
     private var weekDays: [Date] {
-        let calendar = Calendar.current
+        let calendar = DateUtils.localCalendar
         let today = selectedDate
         let startOfWeek = calendar.dateInterval(of: .weekOfYear, for: today)?.start ?? today
 
@@ -590,13 +592,39 @@ struct MyselfView: View {
     }
 }
 
+// MARK: - ProductType Color Extension
+
+extension ProductType {
+    var swiftUIColor: Color {
+        switch color {
+        case "blue": return ThemeManager.shared.theme.palette.info
+        case "green": return ThemeManager.shared.theme.palette.success
+        case "yellow": return ThemeManager.shared.theme.palette.warning
+        case "purple": return .purple
+        case "indigo": return .indigo
+        case "orange": return .orange
+        case "pink": return .pink
+        case "brown": return .brown
+        case "cyan": return .cyan
+        case "mint": return .mint
+        case "red": return .red
+        case "gray": return .gray
+        default: return .blue
+        }
+    }
+}
+
 // MARK: - Timeline Tab View
 
 struct TimelineTabView: View {
     let selectedDate: Date
     @ObservedObject var completionViewModel: RoutineCompletionViewModel
     @State private var completedSteps: Set<String> = []
+    @State private var completedStepDetails: [SavedStepDetailModel] = []
+    @State private var hasMorningCompletion = false
+    @State private var hasEveningCompletion = false
     @State private var isLoading = true
+    @State private var loadTask: Task<Void, Never>?
 
     var body: some View {
         ScrollView {
@@ -616,11 +644,37 @@ struct TimelineTabView: View {
             .padding(.bottom, 20)
         }
         .task {
-            await loadTimelineData()
+            await loadTimelineData(for: selectedDate)
         }
-        .onChange(of: selectedDate) { _ in
-            Task {
-                await loadTimelineData()
+        .onChange(of: selectedDate) { newDate in
+            print("📅 Timeline: Date changed to \(DateUtils.formatForLog(newDate)), cancelling previous load...")
+            // Cancel any pending load task
+            loadTask?.cancel()
+            // Start a new load task with the NEW date explicitly
+            loadTask = Task {
+                await loadTimelineData(for: newDate)
+            }
+        }
+        .onChange(of: completionViewModel.activeRoutine?.id) { _ in
+            print("📋 Timeline: Active routine changed, reloading...")
+            loadTask?.cancel()
+            loadTask = Task {
+                await loadTimelineData(for: selectedDate)
+            }
+        }
+        .onReceive(completionViewModel.completionChangesStream) { changedDate in
+            // Only reload if the changed date matches our selected date
+            let normalizedSelectedDate = DateUtils.startOfDay(for: selectedDate)
+            let normalizedChangedDate = DateUtils.startOfDay(for: changedDate)
+
+            if normalizedSelectedDate == normalizedChangedDate {
+                print("📡 Timeline: Received completion change for current date, reloading...")
+                loadTask?.cancel()
+                loadTask = Task {
+                    await loadTimelineData(for: selectedDate)
+                }
+            } else {
+                print("📡 Timeline: Received completion change for \(DateUtils.formatForLog(normalizedChangedDate)), but current date is \(DateUtils.formatForLog(normalizedSelectedDate)) - ignoring")
             }
         }
     }
@@ -632,16 +686,16 @@ struct TimelineTabView: View {
                 .font(ThemeManager.shared.theme.typo.h3.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-            if completedSteps.isEmpty {
+            if completedStepDetails.isEmpty {
                 emptyStateView(
                     icon: "drop.circle",
-                    title: "No products used today",
+                    title: "No products used",
                     subtitle: "Complete your routine steps to see them here"
                 )
             } else {
                 LazyVStack(spacing: 8) {
-                    ForEach(Array(completedSteps), id: \.self) { stepId in
-                        productUsedRow(stepId: stepId)
+                    ForEach(completedStepDetails, id: \.id) { step in
+                        productUsedRow(step: step)
                     }
                 }
             }
@@ -665,20 +719,30 @@ struct TimelineTabView: View {
                 .font(ThemeManager.shared.theme.typo.h3.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-            LazyVStack(spacing: 8) {
-                routineCompletedRow(
-                    icon: "sun.max.fill",
-                    title: "Morning routine",
-                    isCompleted: hasMorningCompletion,
-                    color: ThemeManager.shared.theme.palette.warning
+            if !hasMorningCompletion && !hasEveningCompletion {
+                emptyStateView(
+                    icon: "checkmark.circle",
+                    title: "No routines completed",
+                    subtitle: "Complete your routine steps to see them here"
                 )
+            } else {
+                LazyVStack(spacing: 8) {
+                    if hasMorningCompletion {
+                        routineCompletedRow(
+                            icon: "sun.max.fill",
+                            title: "Morning routine",
+                            color: ThemeManager.shared.theme.palette.warning
+                        )
+                    }
 
-                routineCompletedRow(
-                    icon: "moon.fill",
-                    title: "Evening routine",
-                    isCompleted: hasEveningCompletion,
-                    color: ThemeManager.shared.theme.palette.info
-                )
+                    if hasEveningCompletion {
+                        routineCompletedRow(
+                            icon: "moon.fill",
+                            title: "Evening routine",
+                            color: ThemeManager.shared.theme.palette.info
+                        )
+                    }
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -694,21 +758,26 @@ struct TimelineTabView: View {
     }
 
     @ViewBuilder
-    private func productUsedRow(stepId: String) -> some View {
-        HStack(spacing: 12) {
-            // Product icon placeholder
-            RoundedRectangle(cornerRadius: 8)
-                .fill(ThemeManager.shared.theme.palette.primary.opacity(0.1))
-                .frame(width: 32, height: 32)
-                .overlay(
-                    Image(systemName: "drop.fill")
-                        .font(.system(size: 16))
-                        .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                )
+    private func productUsedRow(step: SavedStepDetailModel) -> some View {
+        let productType = ProductType(rawValue: step.stepType) ?? .moisturizer
 
-            Text("Cleanser") // This would be the actual step title
-                .font(ThemeManager.shared.theme.typo.body)
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+        HStack(spacing: 12) {
+            // Product icon
+            Image(productType: productType)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 40, height: 40)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(step.title)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                Text(step.timeOfDay.capitalized)
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+            }
 
             Spacer()
 
@@ -720,7 +789,7 @@ struct TimelineTabView: View {
     }
 
     @ViewBuilder
-    private func routineCompletedRow(icon: String, title: String, isCompleted: Bool, color: Color) -> some View {
+    private func routineCompletedRow(icon: String, title: String, color: Color) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 20))
@@ -737,11 +806,9 @@ struct TimelineTabView: View {
 
             Spacer()
 
-            if isCompleted {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 16))
-                    .foregroundColor(ThemeManager.shared.theme.palette.success)
-            }
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 16))
+                .foregroundColor(ThemeManager.shared.theme.palette.success)
         }
         .padding(.vertical, 4)
     }
@@ -766,24 +833,98 @@ struct TimelineTabView: View {
         .padding(.vertical, 20)
     }
 
-    // MARK: - Computed Properties
-
-    private var hasMorningCompletion: Bool {
-        // This would check if morning routine is completed
-        return !completedSteps.isEmpty
-    }
-
-    private var hasEveningCompletion: Bool {
-        // This would check if evening routine is completed
-        return completedSteps.count > 1
-    }
-
     // MARK: - Data Loading
 
-    private func loadTimelineData() async {
-        isLoading = true
-        completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)
-        isLoading = false
+    private func loadTimelineData(for date: Date) async {
+        print("🔍 Timeline: loadTimelineData called for date: \(DateUtils.formatForLog(date))")
+
+        await MainActor.run {
+            isLoading = true
+        }
+
+        // Check if task was cancelled
+        guard !Task.isCancelled else {
+            print("⏹️ Timeline: Load cancelled before starting")
+            await MainActor.run { isLoading = false }
+            return
+        }
+
+        // Normalize the date to start of day for consistent comparison
+        let normalizedDate = DateUtils.startOfDay(for: date)
+        let today = DateUtils.todayStartOfDay
+
+        // Don't load completion data for future dates
+        if normalizedDate > today {
+            print("⚠️ Timeline: Skipping load for future date \(DateUtils.formatForLog(normalizedDate))")
+            await MainActor.run {
+                self.completedSteps = []
+                self.completedStepDetails = []
+                self.hasMorningCompletion = false
+                self.hasEveningCompletion = false
+                self.isLoading = false
+            }
+            return
+        }
+
+        // Get completed step IDs for the normalized date
+        let steps = await completionViewModel.getCompletedSteps(for: normalizedDate)
+
+        // Check if cancelled after async call
+        guard !Task.isCancelled else {
+            print("⏹️ Timeline: Load cancelled after fetching steps")
+            await MainActor.run { isLoading = false }
+            return
+        }
+
+        print("📊 Timeline loading for \(DateUtils.formatForLog(normalizedDate)): Found \(steps.count) completed steps")
+
+        // Get the actual step details from the active routine
+        let routine = completionViewModel.activeRoutine
+        let stepDetails: [SavedStepDetailModel]
+        let morningComplete: Bool
+        let eveningComplete: Bool
+
+        if let routine = routine {
+            stepDetails = routine.stepDetails.filter { step in
+                steps.contains(step.id.uuidString)
+            }
+
+            // Check if at least one step is completed for morning/evening
+            // Only show as completed if there are actual completed steps (not for future dates)
+            let morningSteps = routine.stepDetails.filter { $0.timeOfDayEnum == .morning }
+            let eveningSteps = routine.stepDetails.filter { $0.timeOfDayEnum == .evening }
+
+            let completedMorningSteps = stepDetails.filter { $0.timeOfDayEnum == .morning }
+            let completedEveningSteps = stepDetails.filter { $0.timeOfDayEnum == .evening }
+
+            // Show as completed if at least 1 step is done for that time of day
+            morningComplete = !completedMorningSteps.isEmpty && !morningSteps.isEmpty
+            eveningComplete = !completedEveningSteps.isEmpty && !eveningSteps.isEmpty
+
+            print("📊 Timeline: \(stepDetails.count) steps matched, Morning: \(completedMorningSteps.count)/\(morningSteps.count), Evening: \(completedEveningSteps.count)/\(eveningSteps.count)")
+        } else {
+            stepDetails = []
+            morningComplete = false
+            eveningComplete = false
+            print("⚠️ Timeline: No active routine found")
+        }
+
+        // Final check before updating state
+        guard !Task.isCancelled else {
+            print("⏹️ Timeline: Load cancelled before updating state")
+            await MainActor.run { isLoading = false }
+            return
+        }
+
+        // Update state on main thread
+        await MainActor.run {
+            self.completedSteps = steps
+            self.completedStepDetails = stepDetails
+            self.hasMorningCompletion = morningComplete
+            self.hasEveningCompletion = eveningComplete
+            self.isLoading = false
+            print("✅ Timeline: State updated successfully for \(DateUtils.formatForLog(normalizedDate))")
+        }
     }
 }
 
@@ -874,7 +1015,10 @@ struct DatePickerBottomSheet: View {
                 )
                 .datePickerStyle(.graphical)
                 .padding(.horizontal, 20)
-                .onChange(of: selectedDate) { _ in
+                .onChange(of: selectedDate) { newDate in
+                    // Normalize to start of day in local timezone
+                    selectedDate = DateUtils.startOfDay(for: newDate)
+
                     // Automatically dismiss when date changes
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         onDismiss()
@@ -884,7 +1028,7 @@ struct DatePickerBottomSheet: View {
                 // Today Button
                 Button {
                     withAnimation(.easeInOut(duration: 0.2)) {
-                        selectedDate = Date()
+                        selectedDate = DateUtils.todayStartOfDay
                     }
                     onDismiss()
                 } label: {
