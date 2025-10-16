@@ -246,7 +246,7 @@ struct MyselfView: View {
             case 1:
                 JournalTabView(selectedDate: selectedDate)
             case 2:
-                InsightsTabView(selectedDate: selectedDate)
+                InsightsTabView(selectedDate: selectedDate, completionViewModel: completionViewModel)
             default:
                 TimelineTabView(selectedDate: selectedDate, completionViewModel: completionViewModel)
             }
@@ -949,40 +949,381 @@ struct JournalTabView: View {
 
 struct InsightsTabView: View {
     let selectedDate: Date
+    @StateObject private var viewModel: InsightsViewModel
+    @ObservedObject var completionViewModel: RoutineCompletionViewModel
+
+    init(selectedDate: Date, completionViewModel: RoutineCompletionViewModel) {
+        self.selectedDate = selectedDate
+        self.completionViewModel = completionViewModel
+        self._viewModel = StateObject(wrappedValue: InsightsViewModel(completionViewModel: completionViewModel))
+    }
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                // Placeholder content for Insights tab
-                VStack(spacing: 16) {
-                    Image(systemName: "lightbulb.fill")
-                        .font(.system(size: 48))
-                        .foregroundColor(ThemeManager.shared.theme.palette.warning)
+            if viewModel.isLoading {
+                loadingView
+            } else {
+                LazyVStack(spacing: 16) {
+                    // Header
+                    insightsHeaderSection
 
-                    Text("Smart Insights")
-                        .font(ThemeManager.shared.theme.typo.h2.weight(.semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    // Streak Card
+                    streakCard
 
-                    Text("Get personalized insights about your skincare routine and recommendations for improvement.")
+                    // Completion Stats Section
+                    completionRatesSection
+
+                    // Morning/Evening Completion
+                    routineTimeCompletionSection
+
+                    // Most Consistent Period
+                    if !viewModel.mostConsistentPeriod.isEmpty {
+                        consistencyInsightCard
+                    }
+
+                    // Most Used Products
+                    mostUsedProductsSection
+
+                    // Tag Trends (if user has journal entries)
+                    if !viewModel.tagFrequencies.isEmpty {
+                        tagTrendsSection
+                    }
+
+                    // Adaptation Impact (if enabled)
+                    if let impact = viewModel.adaptationImpact {
+                        adaptationImpactCard(impact: impact)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+            }
+        }
+        .task {
+            await viewModel.loadAllInsights()
+        }
+    }
+
+    // MARK: - Loading View
+
+    @ViewBuilder
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .scaleEffect(1.5)
+
+            Text("Loading insights...")
+                .font(ThemeManager.shared.theme.typo.body)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 60)
+    }
+
+    // MARK: - Header Section
+
+    @ViewBuilder
+    private var insightsHeaderSection: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Your Insights")
+                    .font(ThemeManager.shared.theme.typo.h2.weight(.bold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                Text("Last 30 days")
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+            }
+
+            Spacer()
+        }
+        .padding(.top, 8)
+    }
+
+    // MARK: - Streak Card
+
+    @ViewBuilder
+    private var streakCard: some View {
+        InsightStatCard(
+            icon: "flame.fill",
+            title: "Current Streak",
+            value: "\(viewModel.currentStreak)",
+            subtitle: viewModel.currentStreak == 1 ? "Day in a row" : "Days in a row",
+            iconColor: ThemeManager.shared.theme.palette.success,
+            showGradient: true
+        )
+    }
+
+    // MARK: - Completion Rates Section
+
+    @ViewBuilder
+    private var completionRatesSection: some View {
+        HStack(spacing: 12) {
+            completionRateCard(
+                title: "Weekly",
+                rate: viewModel.weeklyCompletionRate,
+                totalDays: 7,
+                color: ThemeManager.shared.theme.palette.primary
+            )
+
+            completionRateCard(
+                title: "Monthly",
+                rate: viewModel.monthlyCompletionRate,
+                totalDays: 30,
+                color: ThemeManager.shared.theme.palette.secondary
+            )
+        }
+    }
+
+    @ViewBuilder
+    private func completionRateCard(title: String, rate: Double, totalDays: Int, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+            Text("\(Int(rate * 100))%")
+                .font(.system(size: 32, weight: .bold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+            // Progress bar
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(ThemeManager.shared.theme.palette.border.opacity(0.3))
+                    .frame(height: 8)
+
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(color)
+                    .frame(width: max(0, CGFloat(rate) * (UIScreen.main.bounds.width - 64) / 2), height: 8)
+            }
+
+            Text("Last \(totalDays) days")
+                .font(ThemeManager.shared.theme.typo.caption)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            ThemeManager.shared.theme.palette.surface,
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                )
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                    radius: 20,
+                    x: 0,
+                    y: 8
+                )
+        )
+    }
+
+    // MARK: - Routine Time Completion Section
+
+    @ViewBuilder
+    private var routineTimeCompletionSection: some View {
+        HStack(spacing: 12) {
+            timeCompletionCard(
+                icon: "sun.max.fill",
+                title: "Morning",
+                count: viewModel.morningCompletionCount,
+                total: viewModel.morningTotal,
+                color: ThemeManager.shared.theme.palette.warning
+            )
+
+            timeCompletionCard(
+                icon: "moon.fill",
+                title: "Evening",
+                count: viewModel.eveningCompletionCount,
+                total: viewModel.eveningTotal,
+                color: ThemeManager.shared.theme.palette.info
+            )
+        }
+    }
+
+    @ViewBuilder
+    private func timeCompletionCard(icon: String, title: String, count: Int, total: Int, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(color)
+
+                Text(title)
+                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+            }
+
+            Text("\(count) of \(total)")
+                .font(.system(size: 28, weight: .bold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+            Text("days completed")
+                .font(ThemeManager.shared.theme.typo.caption)
+                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            ThemeManager.shared.theme.palette.surface,
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                )
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                    radius: 20,
+                    x: 0,
+                    y: 8
+                )
+        )
+    }
+
+    // MARK: - Consistency Insight Card
+
+    @ViewBuilder
+    private var consistencyInsightCard: some View {
+        HStack(alignment: .top, spacing: 16) {
+            Image(systemName: "trophy.fill")
+                .font(.system(size: 28))
+                .foregroundColor(ThemeManager.shared.theme.palette.warning)
+                .frame(width: 44, height: 44)
+                .background(
+                    Circle()
+                        .fill(ThemeManager.shared.theme.palette.warning.opacity(0.15))
+                )
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Consistency Insight")
+                    .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                Text(viewModel.mostConsistentPeriod)
+                    .font(ThemeManager.shared.theme.typo.body)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            ThemeManager.shared.theme.palette.surface,
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                )
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                    radius: 20,
+                    x: 0,
+                    y: 8
+                )
+        )
+    }
+
+    // MARK: - Most Used Products Section
+
+    @ViewBuilder
+    private var mostUsedProductsSection: some View {
+        MostUsedProductsCard(products: viewModel.mostUsedProducts)
+    }
+
+    // MARK: - Tag Trends Section
+
+    @ViewBuilder
+    private var tagTrendsSection: some View {
+        TagTrendsCard(tagFrequencies: viewModel.tagFrequencies)
+    }
+
+    // MARK: - Adaptation Impact Card
+
+    @ViewBuilder
+    private func adaptationImpactCard(impact: Double) -> some View {
+        HStack(alignment: .top, spacing: 16) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 28))
+                .foregroundColor(ThemeManager.shared.theme.palette.secondaryLight)
+                .frame(width: 44, height: 44)
+                .background(
+                    Circle()
+                        .fill(ThemeManager.shared.theme.palette.secondaryLight.opacity(0.15))
+                )
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Adaptation Impact")
+                    .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                let sign = impact >= 0 ? "+" : ""
+                let color = impact >= 0 ? ThemeManager.shared.theme.palette.success : ThemeManager.shared.theme.palette.error
+
+                HStack(spacing: 4) {
+                    Text("\(sign)\(Int(impact))%")
+                        .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
+                        .foregroundColor(color)
+
+                    Text("this week vs last week")
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 20)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 40)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(ThemeManager.shared.theme.palette.surface)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
-                        )
-                )
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
+
+            Spacer(minLength: 0)
         }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            ThemeManager.shared.theme.palette.surface,
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                )
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                    radius: 20,
+                    x: 0,
+                    y: 8
+                )
+        )
     }
 }
 
