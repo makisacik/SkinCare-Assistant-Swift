@@ -537,19 +537,23 @@ private struct CalendarStripView: View {
     }()
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(getWeekDates(), id: \.self) { date in
-                    CalendarDayView(
-                        date: date,
-                        isSelected: calendar.isDate(date, inSameDayAs: selectedDate),
-                        completionViewModel: completionViewModel,
-                        onTap: {
-                            selectedDate = date
-                        })
-                }}
-            .padding(.horizontal, 20)
-        }.padding(.vertical, 12)
+        GeometryReader { geometry in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(getWeekDates(), id: \.self) { date in
+                        CalendarDayView(
+                            date: date,
+                            isSelected: calendar.isDate(date, inSameDayAs: selectedDate),
+                            completionViewModel: completionViewModel,
+                            onTap: {
+                                selectedDate = date
+                            })
+                        .frame(width: geometry.size.width / 7)
+                    }}
+            }
+            .padding(.vertical, 12)
+        }
+        .frame(height: 74)
     }
 
     private func getWeekDates() -> [Date] {
@@ -591,11 +595,13 @@ private struct CalendarDayView: View {
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
         }
-        .frame(width: 40, height: 50)
         .background(
                 RoundedRectangle(cornerRadius: 8)
                     .fill(isSelected ? ThemeManager.shared.theme.palette.textInverse.opacity(0.2) : Color.clear)
+                    .padding(.horizontal, 4)
             )
         .buttonStyle(PlainButtonStyle())
     }

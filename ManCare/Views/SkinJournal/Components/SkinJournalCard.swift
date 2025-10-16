@@ -71,7 +71,16 @@ struct SkinJournalCard: View {
             AddSkinJournalEntryView()
         }
         .sheet(isPresented: $showPremiumSheet) {
-            SkinJournalPremiumSheet()
+            PaywallView(
+                onSubscribe: {
+                    // Premium granted, refresh the view
+                    showPremiumSheet = false
+                },
+                onClose: {
+                    // User dismissed the paywall
+                    showPremiumSheet = false
+                }
+            )
         }
         .onAppear {
             print("🔄 SkinJournalCard appeared, refreshing entries...")
