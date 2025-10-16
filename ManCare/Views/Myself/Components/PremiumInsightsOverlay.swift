@@ -13,21 +13,20 @@ struct PremiumInsightsOverlay: View {
 
     var body: some View {
         ZStack {
-            // Semi-transparent overlay
-            Rectangle()
-                .fill(ThemeManager.shared.theme.palette.background.opacity(0.7))
+            // Solid background to prevent any content from showing through
+            ThemeManager.shared.theme.palette.background
                 .ignoresSafeArea()
 
-            // Blur effect
-            Rectangle()
-                .fill(.ultraThinMaterial)
-                .ignoresSafeArea()
-
-            // Premium content card
-            VStack(spacing: 0) {
-                premiumContentCard
+            // ScrollView structure matching Journal tab
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Premium content card
+                    premiumContentCard
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal, 24)
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView(

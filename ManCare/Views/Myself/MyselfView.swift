@@ -244,9 +244,9 @@ struct MyselfView: View {
             case 0:
                 TimelineTabView(selectedDate: selectedDate, completionViewModel: completionViewModel)
             case 1:
-                JournalTabView(selectedDate: selectedDate)
+                JournalTabView(selectedDate: selectedDate, premiumManager: premiumManager)
             case 2:
-                InsightsTabView(selectedDate: selectedDate, completionViewModel: completionViewModel)
+                InsightsTabView(selectedDate: selectedDate, completionViewModel: completionViewModel, premiumManager: premiumManager)
             default:
                 TimelineTabView(selectedDate: selectedDate, completionViewModel: completionViewModel)
             }
@@ -932,12 +932,13 @@ struct TimelineTabView: View {
 
 struct JournalTabView: View {
     let selectedDate: Date
+    @ObservedObject var premiumManager: PremiumManager
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 // Skin Journal Card
-                SkinJournalCard()
+                SkinJournalCard(premiumManager: premiumManager)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
@@ -951,64 +952,80 @@ struct InsightsTabView: View {
     let selectedDate: Date
     @StateObject private var viewModel: InsightsViewModel
     @ObservedObject var completionViewModel: RoutineCompletionViewModel
-    @StateObject private var premiumManager = PremiumManager.shared
+    @ObservedObject var premiumManager: PremiumManager
 
-    init(selectedDate: Date, completionViewModel: RoutineCompletionViewModel) {
+    init(selectedDate: Date, completionViewModel: RoutineCompletionViewModel, premiumManager: PremiumManager) {
         self.selectedDate = selectedDate
         self.completionViewModel = completionViewModel
+        self.premiumManager = premiumManager
         self._viewModel = StateObject(wrappedValue: InsightsViewModel(completionViewModel: completionViewModel))
     }
 
     var body: some View {
-        ZStack {
-            // Main content
-            ScrollView {
-                if viewModel.isLoading {
-                    loadingView
-                } else {
-                    LazyVStack(spacing: 16) {
-                        // Header
-                        insightsHeaderSection
-
-                        // Streak Card
-                        streakCard
-
-                        // Completion Stats Section
-                        completionRatesSection
-
-                        // Morning/Evening Completion
-                        routineTimeCompletionSection
-
-                        // Most Consistent Period
-                        if !viewModel.mostConsistentPeriod.isEmpty {
-                            consistencyInsightCard
-                        }
-
-                        // Most Used Products
-                        mostUsedProductsSection
-
-                        // Tag Trends (if user has journal entries)
-                        if !viewModel.tagFrequencies.isEmpty {
-                            tagTrendsSection
-                        }
-
-                        // Adaptation Impact (if enabled)
-                        if let impact = viewModel.adaptationImpact {
-                            adaptationImpactCard(impact: impact)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
-                }
-            }
- 
-            // Premium overlay (shown when user is not premium)
-            if !premiumManager.isPremium {
+        Group {
+            if premiumManager.isPremium {
+                premiumInsightsContent
+            } else {
+                // Show premium overlay for non-premium users
                 PremiumInsightsOverlay()
             }
         }
         .task {
-            await viewModel.loadAllInsights()
+            // Only load insights if user is premium
+            if premiumManager.isPremium {
+                await viewModel.loadAllInsights()
+            }
+        }
+        .onChange(of: premiumManager.isPremium) { isPremium in
+            // Reload insights when premium status changes
+            if isPremium {
+                Task {
+                    await viewModel.loadAllInsights()
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var premiumInsightsContent: some View {
+        ScrollView {
+            if viewModel.isLoading {
+                loadingView
+            } else {
+                LazyVStack(spacing: 16) {
+                    // Header
+                    insightsHeaderSection
+
+                    // Streak Card
+                    streakCard
+
+                    // Completion Stats Section
+                    completionRatesSection
+
+                    // Morning/Evening Completion
+                    routineTimeCompletionSection
+
+                    // Most Consistent Period
+                    if !viewModel.mostConsistentPeriod.isEmpty {
+                        consistencyInsightCard
+                    }
+
+                    // Most Used Products
+                    mostUsedProductsSection
+
+                    // Tag Trends (if user has journal entries)
+                    if !viewModel.tagFrequencies.isEmpty {
+                        tagTrendsSection
+                    }
+
+                    // Adaptation Impact (if enabled)
+                    if let impact = viewModel.adaptationImpact {
+                        adaptationImpactCard(impact: impact)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+            }
         }
     }
 

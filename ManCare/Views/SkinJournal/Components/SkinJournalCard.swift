@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SkinJournalCard: View {
+    @ObservedObject var premiumManager: PremiumManager
     @ObservedObject private var store = SkinJournalStore.shared
-    @ObservedObject private var premiumManager = PremiumManager.shared
     @StateObject private var moodStore = DailyMoodStore()
     @State private var showingTimeline = false
     @State private var showingAddEntry = false
@@ -232,13 +232,13 @@ struct SkinJournalCard: View {
     }
 
     private var viewJournalButton: some View {
-        Button {
-            if premiumManager.canUseSkinJournal() {
-                showingTimeline = true
-            } else {
-                showPremiumSheet = true
-            }
-        } label: {
+            Button {
+                if premiumManager.isPremium {
+                    showingTimeline = true
+                } else {
+                    showPremiumSheet = true
+                }
+            } label: {
             HStack(spacing: 8) {
                 Text("View Journal")
                     .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
@@ -289,7 +289,7 @@ struct SkinJournalCard: View {
             }
 
             Button {
-                if premiumManager.canUseSkinJournal() {
+                if premiumManager.isPremium {
                     showingAddEntry = true
                 } else {
                     showPremiumSheet = true

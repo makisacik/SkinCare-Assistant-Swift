@@ -12,15 +12,10 @@ struct InteractiveComparisonDemo: View {
     
     @State private var sliderPosition: CGFloat = 1.0
     @State private var demoPhase: DemoPhase = .idle
-    @State private var showBubble = false
-    @State private var interactionCount = 0
     @State private var isDragging = false
-    @State private var showUpgradePrompt = false
     @State private var shouldRunAnimation = false
     
-    private let upgradePromptShownKey = "skinJourneyUpgradePromptShown"
     private let demoVisitCountKey = "skinJourneyDemoVisitCount"
-    private let bubbleShownKey = "skinJourneyBubbleShown"
     
     enum DemoPhase {
         case idle
@@ -34,35 +29,105 @@ struct InteractiveComparisonDemo: View {
     private let afterImage = "after-3"
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            headerSection
+        VStack(spacing: 24) {
+            // Premium badge
+            HStack(spacing: 6) {
+                Image(systemName: "camera.on.rectangle.fill")
+                    .font(.system(size: 13, weight: .bold))
+                Text("SKIN JOURNEY")
+                    .font(.system(size: 13, weight: .bold))
+                    .tracking(1.2)
+            }
+            .foregroundColor(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                ThemeManager.shared.theme.palette.primary,
+                                ThemeManager.shared.theme.palette.secondary
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+            )
+            .shadow(color: ThemeManager.shared.theme.palette.primary.opacity(0.4), radius: 8, x: 0, y: 4)
             
-            Divider()
-                .background(ThemeManager.shared.theme.palette.border)
-            
-            // Comparison demo
+            // Tagline
             VStack(spacing: 8) {
-                comparisonSliderView
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12)
-                
-                // Upgrade prompt (shows after interaction or if previously shown)
-                if showUpgradePrompt {
-                    upgradePromptView
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-                        .padding(.bottom, 20)
-                        .transition(.scale.combined(with: .opacity))
+                Text("See your glow evolve")
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text("Track progress with before & after photos")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, 8)
+
+            // Comparison demo
+            comparisonSliderView
+
+            // Feature highlights
+            VStack(alignment: .leading, spacing: 16) {
+                featureRow(
+                    icon: "camera.fill",
+                    text: "Weekly progress selfies"
+                )
+
+                featureRow(
+                    icon: "chart.line.uptrend.xyaxis",
+                    text: "Visual timeline of changes"
+                )
+
+                featureRow(
+                    icon: "face.smiling.fill",
+                    text: "Mood & skin correlation"
+                )
+            }
+            .padding(.top, 8)
+
+            // CTA Button
+            Button {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                onUpgradeRequest()
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 16, weight: .semibold))
+
+                    Text("Try Premium Free for 7 Days")
+                        .font(.system(size: 17, weight: .semibold))
                 }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 56)
+                .background(
+                    LinearGradient(
+                        colors: [
+                            ThemeManager.shared.theme.palette.primary,
+                            ThemeManager.shared.theme.palette.secondary
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .cornerRadius(28)
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.primary.opacity(0.5),
+                    radius: 16,
+                    x: 0,
+                    y: 8
+                )
             }
         }
+        .padding(28)
         .onAppear {
-            // Check if upgrade prompt has been shown before
-            if UserDefaults.standard.bool(forKey: upgradePromptShownKey) {
-                showUpgradePrompt = true
-            }
-            
             // Increment visit count
             let currentCount = UserDefaults.standard.integer(forKey: demoVisitCountKey)
             let newCount = currentCount + 1
@@ -80,27 +145,26 @@ struct InteractiveComparisonDemo: View {
         }
     }
     
-    // MARK: - Header Section
+    // MARK: - Feature Row
     
-    private var headerSection: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Skin Journey")
-                    .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                
-                Text("See your glow evolve over time")
-                    .font(ThemeManager.shared.theme.typo.caption)
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-            }
+    @ViewBuilder
+    private func featureRow(icon: String, text: String) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                .frame(width: 44, height: 44)
+                .background(
+                    Circle()
+                        .fill(ThemeManager.shared.theme.palette.primary.opacity(0.12))
+                )
+            
+            Text(text)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             Spacer()
-            
-            Image(systemName: "sparkles")
-                .font(.system(size: 24))
-                .foregroundColor(ThemeManager.shared.theme.palette.primary.opacity(0.6))
         }
-        .padding(20)
     }
     
     // MARK: - Comparison Slider View
@@ -159,41 +223,14 @@ struct InteractiveComparisonDemo: View {
                                 
                                 let newPosition = min(max(0, value.location.x / geometry.size.width), 1)
                                 sliderPosition = newPosition
-                                
-                                // Hide bubble after first interaction
-                                if showBubble {
-                                    showBubble = false
-                                }
                             }
                             .onEnded { _ in
                                 isDragging = false
-                                interactionCount += 1
                                 
                                 // Haptic feedback
                                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                
-                                // Show upgrade prompt after first interaction
-                                if interactionCount == 1 && !showUpgradePrompt {
-                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                                        showUpgradePrompt = true
-                                        UserDefaults.standard.set(true, forKey: upgradePromptShownKey)
-                                    }
-                                }
                             }
                     )
-                
-                // Floating bubble
-                if showBubble && !showUpgradePrompt {
-                    VStack {
-                        Spacer()
-                        HStack {
-                            Spacer()
-                            DemoBubble(text: "Try moving the slider!", isVisible: $showBubble)
-                                .padding(.trailing, 8)
-                                .padding(.bottom, 8)
-                        }
-                    }
-                }
             }
         }
         .frame(height: 280)
@@ -201,68 +238,6 @@ struct InteractiveComparisonDemo: View {
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
-        )
-    }
-    
-    // MARK: - Upgrade Prompt View
-    
-    private var upgradePromptView: some View {
-        VStack(spacing: 12) {
-            Text("Unlock to compare your own photos")
-                .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                .multilineTextAlignment(.center)
-            
-            Button {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                onUpgradeRequest()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "crown.fill")
-                        .font(.system(size: 14))
-                    Text("Upgrade to Premium")
-                        .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(
-                    LinearGradient(
-                        colors: [
-                            ThemeManager.shared.theme.palette.primary,
-                            ThemeManager.shared.theme.palette.secondary
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .cornerRadius(16)
-                .shadow(
-                    color: ThemeManager.shared.theme.palette.primary.opacity(0.3),
-                    radius: 8,
-                    x: 0,
-                    y: 4
-                )
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(ThemeManager.shared.theme.palette.surface.opacity(0.5))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(
-                            LinearGradient(
-                                colors: [
-                                    ThemeManager.shared.theme.palette.primary.opacity(0.3),
-                                    ThemeManager.shared.theme.palette.secondary.opacity(0.3)
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 1
-                        )
-                )
         )
     }
     
@@ -286,17 +261,9 @@ struct InteractiveComparisonDemo: View {
                     sliderPosition = 0.5
                 }
                 
-                // Show bubble after animation completes (only if never shown before)
+                // Complete animation
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     demoPhase = .interactive
-                    
-                    // Only show bubble if it has never been shown before
-                    if !UserDefaults.standard.bool(forKey: bubbleShownKey) {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-                            showBubble = true
-                            UserDefaults.standard.set(true, forKey: bubbleShownKey)
-                        }
-                    }
                 }
             }
         }
