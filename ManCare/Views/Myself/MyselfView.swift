@@ -951,6 +951,7 @@ struct InsightsTabView: View {
     let selectedDate: Date
     @StateObject private var viewModel: InsightsViewModel
     @ObservedObject var completionViewModel: RoutineCompletionViewModel
+    @StateObject private var premiumManager = PremiumManager.shared
 
     init(selectedDate: Date, completionViewModel: RoutineCompletionViewModel) {
         self.selectedDate = selectedDate
@@ -959,43 +960,51 @@ struct InsightsTabView: View {
     }
 
     var body: some View {
-        ScrollView {
-            if viewModel.isLoading {
-                loadingView
-            } else {
-                LazyVStack(spacing: 16) {
-                    // Header
-                    insightsHeaderSection
+        ZStack {
+            // Main content
+            ScrollView {
+                if viewModel.isLoading {
+                    loadingView
+                } else {
+                    LazyVStack(spacing: 16) {
+                        // Header
+                        insightsHeaderSection
 
-                    // Streak Card
-                    streakCard
+                        // Streak Card
+                        streakCard
 
-                    // Completion Stats Section
-                    completionRatesSection
+                        // Completion Stats Section
+                        completionRatesSection
 
-                    // Morning/Evening Completion
-                    routineTimeCompletionSection
+                        // Morning/Evening Completion
+                        routineTimeCompletionSection
 
-                    // Most Consistent Period
-                    if !viewModel.mostConsistentPeriod.isEmpty {
-                        consistencyInsightCard
+                        // Most Consistent Period
+                        if !viewModel.mostConsistentPeriod.isEmpty {
+                            consistencyInsightCard
+                        }
+
+                        // Most Used Products
+                        mostUsedProductsSection
+
+                        // Tag Trends (if user has journal entries)
+                        if !viewModel.tagFrequencies.isEmpty {
+                            tagTrendsSection
+                        }
+
+                        // Adaptation Impact (if enabled)
+                        if let impact = viewModel.adaptationImpact {
+                            adaptationImpactCard(impact: impact)
+                        }
                     }
-
-                    // Most Used Products
-                    mostUsedProductsSection
-
-                    // Tag Trends (if user has journal entries)
-                    if !viewModel.tagFrequencies.isEmpty {
-                        tagTrendsSection
-                    }
-
-                    // Adaptation Impact (if enabled)
-                    if let impact = viewModel.adaptationImpact {
-                        adaptationImpactCard(impact: impact)
-                    }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 20)
+            }
+ 
+            // Premium overlay (shown when user is not premium)
+            if !premiumManager.isPremium {
+                PremiumInsightsOverlay()
             }
         }
         .task {
