@@ -72,11 +72,6 @@ struct DiscoverView: View {
                     ConfettiEffect(trigger: showConfetti)
                         .allowsHitTesting(false)
                 }
-
-                // Loading overlay
-                if viewModel.isLoading {
-                    LoadingView()
-                }
             }
             .navigationDestination(for: AllRoutinesDestination.self) { _ in
                 AllRoutinesSheet(listViewModel: listViewModel) { routine in

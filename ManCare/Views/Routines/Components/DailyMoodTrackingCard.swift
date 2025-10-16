@@ -29,6 +29,13 @@ struct DailyMoodTrackingCard: View {
     }
     
     private var shouldShowCard: Bool {
+        // Only show if selected date is today
+        let calendar = Calendar.current
+        let isToday = calendar.isDateInToday(selectedDate)
+        guard isToday else {
+            return false
+        }
+
         // Don't show if already completed for today
         if moodStore.isCompleted(for: selectedDate) {
             return false

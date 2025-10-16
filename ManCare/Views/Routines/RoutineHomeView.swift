@@ -580,22 +580,6 @@ private struct CalendarDayView: View {
         return formatter
     }()
 
-    @State private var hasCompletions: Bool = false
-    @State private var completionRate: Double = 0.0
-
-    private var indicatorColor: Color {
-        if completionRate >= 1.0 {
-            // Fully completed
-            return ThemeManager.shared.theme.palette.success
-        } else if completionRate >= 0.5 {
-            // Partially completed (50% or more)
-            return ThemeManager.shared.theme.palette.warning
-        } else {
-            // Started but low completion
-            return ThemeManager.shared.theme.palette.info
-        }
-    }
-
     var body: some View {
         Button(action: onTap) {
             VStack(spacing: 4) {
@@ -606,19 +590,6 @@ private struct CalendarDayView: View {
                 Text(dateFormatter.string(from: date))
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
-
-                // Completion indicator with different states (hidden when selected)
-                if hasCompletions && !isSelected {
-                    Circle()
-                        .fill(indicatorColor.opacity(0.8))
-                        .frame(width: 6, height: 6)
-                        .scaleEffect(completionRate >= 1.0 ? 1.2 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: completionRate)
-                } else {
-                    Circle()
-                        .fill(Color.clear)
-                        .frame(width: 6, height: 6)
-                }
             }
         }
         .frame(width: 40, height: 50)
@@ -627,47 +598,6 @@ private struct CalendarDayView: View {
                     .fill(isSelected ? ThemeManager.shared.theme.palette.textInverse.opacity(0.2) : Color.clear)
             )
         .buttonStyle(PlainButtonStyle())
-        .onAppear {
-            loadCompletionsForDate()
-        }
-        .task(id: date) {
-            loadCompletionsForDate()
-        }
-        .onReceive(completionViewModel.completionChangesStream) { changedDate in
-            let calendar = Calendar.current
-            if calendar.isDate(changedDate, inSameDayAs: date) {
-                print("📅 Calendar day received completion change for \(changedDate)")
-                loadCompletionsForDate()
-            }
-        }
-    }
-
-    private func loadCompletionsForDate() {
-        Task {
-            // Normalize date to start of day for consistency
-            let calendar = Calendar.current
-            let normalizedDate = calendar.startOfDay(for: date)
-
-            let completedSteps = await completionViewModel.getCompletedSteps(for: normalizedDate)
-
-            // Calculate completion rate based on active routine
-            var calculatedCompletionRate: Double = 0.0
-            var hasAnyCompletions = false
-            if let activeRoutine = completionViewModel.activeRoutine {
-                let totalSteps = activeRoutine.stepDetails.count
-                if totalSteps > 0 {
-                    calculatedCompletionRate = Double(completedSteps.count) / Double(totalSteps)
-                }
-                hasAnyCompletions = !completedSteps.isEmpty
-            } else {
-                hasAnyCompletions = !completedSteps.isEmpty
-                calculatedCompletionRate = hasAnyCompletions ? 1.0 : 0.0
-            }
-            await MainActor.run {
-                self.hasCompletions = hasAnyCompletions
-                self.completionRate = calculatedCompletionRate
-            }
-        }
     }
 }
 

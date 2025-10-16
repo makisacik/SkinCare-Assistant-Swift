@@ -12,6 +12,7 @@ struct MyselfView: View {
     @StateObject private var premiumManager = PremiumManager.shared
     @State private var showingEdit = false
     @State private var showingGenerateConfirm = false
+    @State private var showingDatePicker = false
     @State private var selectedTab = 0
     @State private var selectedDate = Date()
     @StateObject private var completionViewModel = RoutineCompletionViewModel(routineService: ServiceFactory.shared.createRoutineService())
@@ -46,51 +47,36 @@ struct MyselfView: View {
     @ViewBuilder
     private var headerSection: some View {
         VStack(spacing: 0) {
-            // Night background image header - extends into safe area
-            ZStack {
-                // Night background image
+            // Spacing for buttons
+            Spacer()
+                .frame(height: 50)
+
+            // Calendar Strip (only shown for Timeline tab)
+            if selectedTab == 0 {
+                calendarSection
+            } else {
+                // Empty space to maintain same header height
+                Color.clear
+                    .frame(height: 74) // Same height as calendarSection
+            }
+        }
+        .background(
+            GeometryReader { geometry in
                 Image("night-background")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .ignoresSafeArea(.all, edges: .top) // Extend into safe area
-
-                VStack(spacing: 8) {
-                    // Logo
-                    Image(systemName: "heart.fill")
-                        .font(.system(size: 28))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-                        .frame(width: 50, height: 50)
-                        .background(
-                            Circle()
-                                .fill(ThemeManager.shared.theme.palette.textInverse.opacity(0.2))
-                        )
-                        .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
-                        .padding(.top, -18)
-
-                    // Current Date
-                    Text(Date(), style: .date)
-                        .font(ThemeManager.shared.theme.typo.caption)
-                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
-                        .textCase(.uppercase)
-
-                    // Greeting
-                    Text(greetingText)
-                        .font(ThemeManager.shared.theme.typo.h2.weight(.semibold))
-                        .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
-                        .multilineTextAlignment(.center)
-                        .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
-
-                    // Calendar Section
-                    calendarSection
-                        .padding(.top, 6)
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 4)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .clipped()
             }
-            .frame(height: 190)
-            .overlay(alignment: .topTrailing) {
-                settingsMenuButton
+            .ignoresSafeArea(.all, edges: .top)
+        )
+        .overlay(alignment: .topLeading) {
+            if selectedTab == 0 {
+                datePickerButton
             }
+        }
+        .overlay(alignment: .topTrailing) {
+            settingsMenuButton
         }
         .sheet(isPresented: $showingEdit) {
             EditProfileView(
@@ -101,6 +87,14 @@ struct MyselfView: View {
                     showingEdit = false
                 }
             )
+        }
+        .sheet(isPresented: $showingDatePicker) {
+            DatePickerBottomSheet(
+                selectedDate: $selectedDate,
+                onDismiss: { showingDatePicker = false }
+            )
+            .presentationDetents([.height(500)])
+            .presentationDragIndicator(.visible)
         }
     }
 
@@ -141,16 +135,35 @@ struct MyselfView: View {
     }
 
     @ViewBuilder
+    private var datePickerButton: some View {
+        Button {
+            showingDatePicker = true
+        } label: {
+            Image(systemName: "calendar")
+                .font(.system(size: 20))
+                .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
+                .frame(width: 40, height: 40)
+                .background(
+                    Circle()
+                        .fill(ThemeManager.shared.theme.palette.textInverse.opacity(0.15))
+                )
+                .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.2), radius: 2, x: 0, y: 1)
+        }
+        .padding(.top, 10)
+        .padding(.leading, 10)
+    }
+
+    @ViewBuilder
     private var calendarSection: some View {
-        VStack(spacing: 8) {
-            // Week view
-            HStack(spacing: 12) {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
                 ForEach(weekDays, id: \.self) { date in
                     dayButton(for: date)
                 }
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, 20)
         }
+        .padding(.vertical, 12)
     }
 
     @ViewBuilder
@@ -159,25 +172,27 @@ struct MyselfView: View {
         let dayNumber = Calendar.current.component(.day, from: date)
         let dayAbbr = dayAbbreviation(for: date)
 
-        VStack(spacing: 4) {
-            Text(dayAbbr)
-                .font(ThemeManager.shared.theme.typo.caption)
-                .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
-
-            Text("\(dayNumber)")
-                .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
-                .frame(width: 32, height: 32)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(isSelected ? ThemeManager.shared.theme.palette.textInverse.opacity(0.2) : Color.clear)
-                )
-        }
-        .onTapGesture {
+        Button {
             withAnimation(.easeInOut(duration: 0.2)) {
                 selectedDate = date
             }
+        } label: {
+            VStack(spacing: 4) {
+                Text(dayAbbr)
+                    .font(ThemeManager.shared.theme.typo.caption)
+                    .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
+
+                Text("\(dayNumber)")
+                    .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                    .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
+            }
         }
+        .frame(width: 40, height: 50)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(isSelected ? ThemeManager.shared.theme.palette.textInverse.opacity(0.2) : Color.clear)
+        )
+        .buttonStyle(PlainButtonStyle())
     }
 
     @ViewBuilder
@@ -201,15 +216,17 @@ struct MyselfView: View {
                 selectedTab = index
             }
         } label: {
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 Image(systemName: iconForTab(tab))
                     .font(.system(size: 16, weight: .medium))
 
                 Text(tab)
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
             }
             .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.textSecondary)
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
             .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 20)
@@ -266,8 +283,7 @@ struct MyselfView: View {
     private func dayAbbreviation(for date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "E"
-        let day = formatter.string(from: date)
-        return String(day.prefix(2)) // Get first 2 characters (Mo, Tu, We, etc.)
+        return formatter.string(from: date)
     }
 
     private func iconForTab(_ tab: String) -> String {
@@ -781,8 +797,8 @@ struct JournalTabView: View {
             VStack(spacing: 20) {
                 // Skin Journal Card
                 SkinJournalCard()
-                    .padding(.top, 8)
             }
+            .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
     }
@@ -825,6 +841,72 @@ struct InsightsTabView: View {
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
+        }
+    }
+}
+
+// MARK: - Date Picker Bottom Sheet
+
+struct DatePickerBottomSheet: View {
+    @Binding var selectedDate: Date
+    let onDismiss: () -> Void
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 16) {
+                // Header
+                VStack(spacing: 8) {
+                    Text("Select Date")
+                        .font(ThemeManager.shared.theme.typo.h2.weight(.semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    Text("View your timeline for any date")
+                        .font(ThemeManager.shared.theme.typo.body)
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                }
+                .padding(.top, 20)
+
+                // Date Picker
+                DatePicker(
+                    "Select Date",
+                    selection: $selectedDate,
+                    displayedComponents: [.date]
+                )
+                .datePickerStyle(.graphical)
+                .padding(.horizontal, 20)
+                .onChange(of: selectedDate) { _ in
+                    // Automatically dismiss when date changes
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        onDismiss()
+                    }
+                }
+
+                // Today Button
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedDate = Date()
+                    }
+                    onDismiss()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "calendar.badge.clock")
+                            .font(.system(size: 16, weight: .semibold))
+
+                        Text("Go to Today")
+                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(ThemeManager.shared.theme.palette.primary)
+                    )
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+            }
+            .background(ThemeManager.shared.theme.palette.background)
         }
     }
 }

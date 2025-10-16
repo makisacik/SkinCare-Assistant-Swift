@@ -33,10 +33,6 @@ struct InteractiveComparisonDemo: View {
     private let beforeImage = "before-3"
     private let afterImage = "after-3"
     
-    // Colors
-    private let coralColor = Color(red: 0.9, green: 0.6, blue: 0.6)
-    private let mintColor = Color(red: 0.71, green: 0.88, blue: 0.78)
-    
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -47,14 +43,9 @@ struct InteractiveComparisonDemo: View {
             
             // Comparison demo
             VStack(spacing: 8) {
-                // Labels above the photo
-                labelsView
-                    .padding(.horizontal, 28)
-                    .padding(.top, 12)
-                    .padding(.bottom, 6)
-                
                 comparisonSliderView
                     .padding(.horizontal, 20)
+                    .padding(.top, 12)
                 
                 // Upgrade prompt (shows after interaction or if previously shown)
                 if showUpgradePrompt {
@@ -109,8 +100,7 @@ struct InteractiveComparisonDemo: View {
                 .font(.system(size: 24))
                 .foregroundColor(ThemeManager.shared.theme.palette.primary.opacity(0.6))
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 20)
+        .padding(20)
     }
     
     // MARK: - Comparison Slider View
@@ -212,35 +202,6 @@ struct InteractiveComparisonDemo: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
         )
-    }
-    
-    // MARK: - Labels View
-    
-    private var labelsView: some View {
-        HStack {
-            Label {
-                Text("Before")
-                    .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
-                    .foregroundColor(coralColor)
-            } icon: {
-                Image(systemName: "arrow.left")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(coralColor)
-            }
-            
-            Spacer()
-            
-            Label {
-                Text("After")
-                    .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
-                    .foregroundColor(mintColor)
-            } icon: {
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(mintColor)
-            }
-            .labelStyle(.trailingIcon)
-        }
     }
     
     // MARK: - Upgrade Prompt View
