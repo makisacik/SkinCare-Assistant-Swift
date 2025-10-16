@@ -24,7 +24,6 @@ struct PremiumInsightsOverlay: View {
                     premiumContentCard
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 20)
                 .padding(.bottom, 20)
             }
         }

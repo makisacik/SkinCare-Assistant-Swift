@@ -51,24 +51,19 @@ struct MyselfView: View {
             Spacer()
                 .frame(height: 50)
 
-            // Calendar Strip (only shown for Timeline tab)
+            // Show calendar for Timeline, title section for Journal/Insights
+            // Fixed height to ensure consistency
             if selectedTab == 0 {
                 calendarSection
             } else {
-                // Empty space to maintain same header height
-                Color.clear
-                    .frame(height: 74) // Same height as calendarSection
+                tabTitleSection
             }
         }
+        .frame(height: 124) // Fixed total height: 50 (spacer) + 74 (content)
         .background(
-            GeometryReader { geometry in
-                Image("night-background")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipped()
-            }
-            .ignoresSafeArea(.all, edges: .top)
+            // Use theme background instead of image
+            ThemeManager.shared.theme.palette.primary
+                .ignoresSafeArea(.all, edges: .top)
         )
         .overlay(alignment: .topLeading) {
             if selectedTab == 0 {
@@ -95,6 +90,49 @@ struct MyselfView: View {
             )
             .presentationDetents([.height(500)])
             .presentationDragIndicator(.visible)
+        }
+    }
+
+    @ViewBuilder
+    private var tabTitleSection: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(tabTitle)
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.white)
+
+                    Text(tabDescription)
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(.white.opacity(0.8))
+                }
+
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 12)
+        }
+    }
+
+    private var tabTitle: String {
+        switch selectedTab {
+        case 1:
+            return "Skin Journal"
+        case 2:
+            return "Insights"
+        default:
+            return ""
+        }
+    }
+
+    private var tabDescription: String {
+        switch selectedTab {
+        case 1:
+            return "Record your skin condition, mood, and skincare observations"
+        case 2:
+            return "Discover patterns and trends in your skincare journey"
+        default:
+            return ""
         }
     }
 
