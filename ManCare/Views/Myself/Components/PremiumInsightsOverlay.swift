@@ -136,7 +136,9 @@ struct PremiumInsightsOverlay: View {
             }
             .padding(.top, 8)
         }
-        .padding(28)
+        .padding(.horizontal, 28)
+        .padding(.bottom, 28)
+        .padding(.top, 20)
         .background(
             RoundedRectangle(cornerRadius: 28)
                 .fill(ThemeManager.shared.theme.palette.surface)

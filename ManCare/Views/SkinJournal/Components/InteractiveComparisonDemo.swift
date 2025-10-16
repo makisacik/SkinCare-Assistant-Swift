@@ -29,7 +29,7 @@ struct InteractiveComparisonDemo: View {
     private let afterImage = "after-3"
     
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 14) {
             // Premium badge
             HStack(spacing: 6) {
                 Image(systemName: "camera.on.rectangle.fill")
@@ -57,29 +57,17 @@ struct InteractiveComparisonDemo: View {
             .shadow(color: ThemeManager.shared.theme.palette.primary.opacity(0.4), radius: 8, x: 0, y: 4)
             
             // Tagline
-            VStack(spacing: 8) {
-                Text("See your glow evolve")
-                    .font(.system(size: 26, weight: .bold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    .multilineTextAlignment(.center)
-
-                Text("Track progress with before & after photos")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.horizontal, 8)
+            Text("See your glow evolve")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 8)
 
             // Comparison demo
             comparisonSliderView
 
             // Feature highlights
-            VStack(alignment: .leading, spacing: 16) {
-                featureRow(
-                    icon: "camera.fill",
-                    text: "Weekly progress selfies"
-                )
-
+            VStack(alignment: .leading, spacing: 10) {
                 featureRow(
                     icon: "chart.line.uptrend.xyaxis",
                     text: "Visual timeline of changes"
@@ -90,7 +78,7 @@ struct InteractiveComparisonDemo: View {
                     text: "Mood & skin correlation"
                 )
             }
-            .padding(.top, 8)
+            .padding(.top, 4)
 
             // CTA Button
             Button {
@@ -126,7 +114,7 @@ struct InteractiveComparisonDemo: View {
                 )
             }
         }
-        .padding(28)
+        .padding(20)
         .onAppear {
             // Increment visit count
             let currentCount = UserDefaults.standard.integer(forKey: demoVisitCountKey)
@@ -149,18 +137,18 @@ struct InteractiveComparisonDemo: View {
     
     @ViewBuilder
     private func featureRow(icon: String, text: String) -> some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.system(size: 20, weight: .semibold))
+                .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                .frame(width: 44, height: 44)
+                .frame(width: 32, height: 32)
                 .background(
                     Circle()
                         .fill(ThemeManager.shared.theme.palette.primary.opacity(0.12))
                 )
             
             Text(text)
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(size: 14, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             Spacer()
@@ -233,10 +221,10 @@ struct InteractiveComparisonDemo: View {
                     )
             }
         }
-        .frame(height: 280)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .frame(height: 260)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 16)
                 .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
         )
     }

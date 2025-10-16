@@ -128,7 +128,7 @@ struct MyselfView: View {
     private var tabDescription: String {
         switch selectedTab {
         case 1:
-            return "Record your skin condition, mood, and skincare observations"
+            return "See your skin glow evolve"
         case 2:
             return "Discover patterns and trends in your skincare journey"
         default:
