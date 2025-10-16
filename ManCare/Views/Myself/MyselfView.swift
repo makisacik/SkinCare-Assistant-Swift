@@ -1284,11 +1284,12 @@ struct InsightsTabView: View {
                     .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                let sign = impact >= 0 ? "+" : ""
-                let color = impact >= 0 ? ThemeManager.shared.theme.palette.success : ThemeManager.shared.theme.palette.error
+                let safeImpact = impact.isFinite ? impact : 0.0
+                let sign = safeImpact >= 0 ? "+" : ""
+                let color = safeImpact >= 0 ? ThemeManager.shared.theme.palette.success : ThemeManager.shared.theme.palette.error
 
                 HStack(spacing: 4) {
-                    Text("\(sign)\(Int(impact))%")
+                    Text("\(sign)\(Int(safeImpact))%")
                         .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                         .foregroundColor(color)
 

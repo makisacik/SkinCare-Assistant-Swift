@@ -122,21 +122,26 @@ struct WeatherAdaptationCard: View {
         }
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 24)
                 .fill(
                     LinearGradient(
                         gradient: Gradient(colors: [
                             ThemeManager.shared.theme.palette.surface,
-                            ThemeManager.shared.theme.palette.surface,
-                            ThemeManager.shared.theme.palette.surface.opacity(0.8),
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(ThemeManager.shared.theme.palette.border, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                )
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                    radius: 20,
+                    x: 0,
+                    y: 8
                 )
         )
     }
@@ -181,12 +186,16 @@ struct WeatherAdaptationCard: View {
                     HStack(spacing: 12) {
                         ZStack {
                             Circle()
-                                .fill(weather.uvLevel.color.opacity(0.2))
+                                .fill(weather.uvLevel.color.opacity(0.15))
+                                .overlay(
+                                    Circle()
+                                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.3), lineWidth: 1)
+                                )
                                 .frame(width: 44, height: 44)
 
                             Image(systemName: weather.uvLevel.icon)
                                 .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(weather.uvLevel.color)
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -204,10 +213,10 @@ struct WeatherAdaptationCard: View {
                     .padding(12)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(weather.uvLevel.color.opacity(0.1))
+                            .fill(weather.uvLevel.color.opacity(0.15))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(weather.uvLevel.color.opacity(0.3), lineWidth: 1)
+                                    .stroke(weather.uvLevel.color.opacity(0.5), lineWidth: 1)
                             )
                     )
 
@@ -258,21 +267,26 @@ struct WeatherAdaptationCard: View {
             }
             .padding(20)
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: 24)
                     .fill(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color(hex: "#E3F2FD"),
-                                Color(hex: "#BBDEFB"),
-                                Color(hex: "#90CAF9").opacity(0.5),
+                                ThemeManager.shared.theme.palette.surface,
+                                ThemeManager.shared.theme.palette.surface.opacity(0.8)
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color(hex: "#90CAF9"), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                    )
+                    .shadow(
+                        color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                        radius: 20,
+                        x: 0,
+                        y: 8
                     )
             )
         }
