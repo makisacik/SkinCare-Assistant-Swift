@@ -26,6 +26,7 @@ struct AddProductView: View {
     @State private var newIngredient = ""
     @State private var newClaim = ""
     @State private var showingProductTypeSelector = false
+    @State private var hasManuallySelectedProductType = false
 
     let onProductAdded: (Product) -> Void
 
@@ -210,6 +211,10 @@ struct AddProductView: View {
         }
         .sheet(isPresented: $showingProductTypeSelector) {
             ProductTypeSelectorSheet(selectedProductType: $selectedProductType)
+                .onDisappear {
+                    // Mark as manually selected when user closes the selector
+                    hasManuallySelectedProductType = true
+                }
         }
         .onAppear {
             // Set initial product type if provided
@@ -221,8 +226,8 @@ struct AddProductView: View {
             }
         }
         .onChange(of: productName) { newValue in
-            // Auto-detect product type when product name changes
-            if !newValue.isEmpty {
+            // Auto-detect product type only if user hasn't manually selected one
+            if !newValue.isEmpty && !hasManuallySelectedProductType {
                 selectedProductType = ProductAliasMapping.normalize(newValue)
             }
         }

@@ -193,15 +193,18 @@ struct MyselfView: View {
 
     @ViewBuilder
     private var calendarSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(weekDays, id: \.self) { date in
-                    dayButton(for: date)
+        GeometryReader { geometry in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(weekDays, id: \.self) { date in
+                        dayButton(for: date)
+                            .frame(width: geometry.size.width / 7)
+                    }
                 }
             }
-            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
         }
-        .padding(.vertical, 12)
+        .frame(height: 74)
     }
 
     private func dayButton(for date: Date) -> some View {
@@ -226,11 +229,13 @@ struct MyselfView: View {
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
         }
-        .frame(width: 40, height: 50)
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(isSelected ? ThemeManager.shared.theme.palette.textInverse.opacity(0.2) : Color.clear)
+                .padding(.horizontal, 4)
         )
         .buttonStyle(PlainButtonStyle())
     }
@@ -1442,7 +1447,7 @@ struct DatePickerBottomSheet: View {
                         Image(systemName: "calendar.badge.clock")
                             .font(.system(size: 16, weight: .semibold))
 
-                        Text("Go to Today")
+                        Text("Today")
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     }
                     .foregroundColor(.white)

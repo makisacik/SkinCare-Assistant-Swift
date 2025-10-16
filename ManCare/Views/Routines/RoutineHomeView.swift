@@ -152,9 +152,9 @@ struct RoutineHomeView: View {
             LazyVStack(spacing: 20) {
                 // Daily Routine Header
                 VStack(alignment: .leading, spacing: 8) {
-                    HStack {
+                    HStack(alignment: .center) {
                         Text("Your daily routine")
-                            .font(.system(size: 24, weight: .bold))
+                            .font(.system(size: 22, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         Spacer()
@@ -585,7 +585,11 @@ private struct CalendarDayView: View {
     }()
 
     var body: some View {
-        Button(action: onTap) {
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                onTap()
+            }
+        }) {
             VStack(spacing: 4) {
                 Text(dayFormatter.string(from: date))
                     .font(ThemeManager.shared.theme.typo.caption)

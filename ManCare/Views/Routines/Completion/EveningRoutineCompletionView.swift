@@ -162,6 +162,30 @@ struct EveningRoutineCompletionView: View {
                     print("🔍 [EveningCompletion] Adaptation enabled: \(activeRoutine?.adaptationEnabled ?? false)")
                     print("🔍 [EveningCompletion] Adaptation type: \(activeRoutine?.adaptationType?.rawValue ?? "none")")
 
+                    // Check if cycle data exists
+                    let calendar = Calendar.current
+                    let daysSinceLastPeriod = calendar.dateComponents([.day], from: cycleStore.cycleData.lastPeriodStartDate, to: Date()).day ?? 0
+                    hasCycleData = daysSinceLastPeriod >= 0 && daysSinceLastPeriod < 60
+
+                    // Auto-enable cycle adaptation for premium users with cycle data
+                    if let routine = activeRoutine {
+                        let cycleAlreadyEnabled = routine.adaptationEnabled && routine.activeAdaptationTypes.contains(.cycle)
+
+                        if !cycleAlreadyEnabled && premiumManager.isPremium && hasCycleData {
+                            print("🔄 [EveningCompletion] Auto-enabling cycle adaptation for premium user with cycle data")
+                            // Auto-enable cycle adaptation
+                            try await routineStore.updateAdaptationSettings(
+                                routineId: routine.id,
+                                enabled: true,
+                                type: .cycle
+                            )
+                            // Reload routine after enabling
+                            activeRoutine = try await routineStore.fetchActiveRoutine()
+                            print("✅ [EveningCompletion] Auto-enabled cycle adaptation")
+                        }
+                    }
+
+                    // Load snapshot if adaptation is enabled
                     if let routine = activeRoutine, routine.adaptationEnabled {
                         print("🔄 [EveningCompletion] Loading adapted snapshot for \(routine.adaptationType?.rawValue ?? "unknown") adaptation")
                         routineSnapshot = await adapterService.getSnapshot(routine: routine, for: selectedDate)
@@ -170,11 +194,6 @@ struct EveningRoutineCompletionView: View {
                     } else {
                         print("ℹ️ [EveningCompletion] No adaptation enabled or no active routine")
                     }
-
-                    // Check if cycle data exists
-                    let calendar = Calendar.current
-                    let daysSinceLastPeriod = calendar.dateComponents([.day], from: cycleStore.cycleData.lastPeriodStartDate, to: Date()).day ?? 0
-                    hasCycleData = daysSinceLastPeriod >= 0 && daysSinceLastPeriod < 60
                 } catch {
                     print("❌ Error loading active routine: \(error)")
                 }
@@ -378,31 +397,36 @@ struct EveningRoutineCompletionView: View {
                 Spacer()
 
                 // Cycle status or enable button
-                if activeRoutine?.adaptationEnabled ?? false, activeRoutine?.activeAdaptationTypes.contains(.cycle) ?? false {
+                let cycleIsEnabled = activeRoutine?.adaptationEnabled ?? false && activeRoutine?.activeAdaptationTypes.contains(.cycle) ?? false
+
+                if cycleIsEnabled {
                     // Cycle is enabled - show status
                     Text("Routine adapted to your cycle")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 } else {
-                    // Cycle not enabled - show enable button
-                    Button {
-                        handleEnableCycleAdaptation()
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text("✨")
-                                .font(.system(size: 12))
-                            Text("Enable Cycle-Adaptive Routines")
-                                .font(.system(size: 13, weight: .semibold))
+                    // Cycle not enabled - show enable button only if not premium or no cycle data
+                    // (Premium users with cycle data will have it auto-enabled on load)
+                    if !(premiumManager.isPremium && hasCycleData) {
+                        Button {
+                            handleEnableCycleAdaptation()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("✨")
+                                    .font(.system(size: 12))
+                                Text("Enable Cycle-Adaptive Routines")
+                                    .font(.system(size: 13, weight: .semibold))
+                            }
+                            .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                Capsule()
+                                    .fill(ThemeManager.shared.theme.palette.primary)
+                            )
                         }
-                        .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(
-                            Capsule()
-                                .fill(ThemeManager.shared.theme.palette.primary)
-                        )
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .buttonStyle(PlainButtonStyle())
                 }
             }
             // Steps list
@@ -623,7 +647,22 @@ struct EveningRoutineCompletionView: View {
     private func performEnableCycleTracking() async {
         guard let routine = activeRoutine else { return }
 
+        // Check if cycle is already enabled
+        let cycleAlreadyEnabled = routine.adaptationEnabled && routine.activeAdaptationTypes.contains(.cycle)
+
+        if cycleAlreadyEnabled {
+            print("ℹ️ [EveningCompletion] Cycle adaptation already enabled, skipping update")
+            await MainActor.run {
+                withAnimation {
+                    showCyclePromotion = false
+                }
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+            }
+            return
+        }
+
         do {
+            print("🔄 [EveningCompletion] Enabling cycle adaptation for routine \(routine.id)")
             try await routineStore.updateAdaptationSettings(
                 routineId: routine.id,
                 enabled: true,
@@ -638,6 +677,7 @@ struct EveningRoutineCompletionView: View {
                         routine: updated,
                         for: selectedDate
                     )
+                    print("✅ [EveningCompletion] Cycle adaptation enabled and snapshot generated")
                 }
             } catch {
                 print("❌ Error reloading routine: \(error)")
