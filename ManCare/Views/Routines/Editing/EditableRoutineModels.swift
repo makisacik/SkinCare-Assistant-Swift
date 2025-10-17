@@ -284,7 +284,8 @@ struct EditableRoutine: Codable {
                 forConcerns: [],
                 forPreferences: []
             ),
-            productSlots: []
+            productSlots: [],
+            i18n: nil
         )
     }
     

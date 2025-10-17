@@ -798,7 +798,8 @@ struct RoutineCreatorFlow: View {
                 forConcerns: concerns,
                 forPreferences: []
             ),
-            productSlots: []
+            productSlots: [],
+            i18n: nil
         )
     }
 

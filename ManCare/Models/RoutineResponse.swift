@@ -17,10 +17,12 @@ struct RoutineResponse: Codable {
     let guardrails: Guardrails
     let adaptation: Adaptation
     let productSlots: [ProductSlot]
+    let i18n: RoutineI18nPayload?
 
     enum CodingKeys: String, CodingKey {
         case version, locale, summary, routine, guardrails, adaptation
         case productSlots = "product_slots"
+        case i18n
     }
 }
 
@@ -167,4 +169,49 @@ struct ProductSlot: Codable, Identifiable {
 
 enum SlotTime: String, Codable { 
     case AM, PM, Weekly 
+}
+
+// MARK: - i18n (Batched Translations)
+// GPT returns i18n organized by language code first: { "en": {...}, "tr": {...} }
+
+typealias RoutineI18nPayload = [String: RoutineI18nLanguage]
+
+struct RoutineI18nLanguage: Codable {
+    let routine: RoutineI18nRoutine
+    let steps: RoutineI18nSteps
+    let guardrails: RoutineI18nGuardrails?
+}
+
+struct RoutineI18nRoutine: Codable {
+    let title: String
+    let oneLiner: String
+
+    enum CodingKeys: String, CodingKey {
+        case title
+        case oneLiner = "one_liner"
+    }
+}
+
+struct RoutineI18nSteps: Codable {
+    let morning: [RoutineI18nStepText]
+    let evening: [RoutineI18nStepText]
+    let weekly: [RoutineI18nStepText]?
+}
+
+struct RoutineI18nStepText: Codable {
+    let name: String
+    let why: String
+    let how: String
+}
+
+struct RoutineI18nGuardrails: Codable {
+    let cautions: [String]
+    let whenToStop: [String]
+    let sunNotes: String
+
+    enum CodingKeys: String, CodingKey {
+        case cautions
+        case whenToStop = "when_to_stop"
+        case sunNotes = "sun_notes"
+    }
 }

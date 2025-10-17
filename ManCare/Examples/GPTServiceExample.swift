@@ -67,7 +67,8 @@ extension GPTService {
         routineDepth: RoutineDepth? = nil,
         preferences: Preferences?,
         lifestyle: LifestyleAnswers? = nil,
-        locale: String = "en-US"
+        locale: String = "en-US",
+        i18nLanguages: [String]? = nil
     ) -> ManCareRoutineRequest {
 
         let preferencesPayload = preferences.map { prefs in
@@ -105,7 +106,9 @@ extension GPTService {
             routineDepth: routineDepth?.rawValue,
             selectedPreferences: preferencesPayload,
             lifestyle: lifestylePayload,
-            locale: locale
+            locale: locale,
+            customDetails: nil,
+            i18nLanguages: i18nLanguages
         )
     }
 }

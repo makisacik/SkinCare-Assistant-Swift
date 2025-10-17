@@ -599,16 +599,33 @@ struct EveningRoutineCompletionView: View {
         let oldRoutineSteps = routineSteps
 
         // Convert the updated routine to RoutineStepDetail array
-        routineSteps = routine.routine.evening.enumerated().map { (index, apiStep) in
-            RoutineStepDetail(
-                id: "evening_\(apiStep.step.rawValue)_\(index)", // Use consistent deterministic ID
-                title: apiStep.name,
-                description: "\(apiStep.why) - \(apiStep.how)",
-                stepType: apiStep.step,
-                timeOfDay: .evening,
-                why: apiStep.why,
-                how: apiStep.how
-            )
+        // IMPORTANT: Use saved routine's step details to preserve translations
+        if let activeRoutine = activeRoutine {
+            let eveningStepsFromSaved = activeRoutine.stepDetails.filter { $0.timeOfDay == "evening" }.sorted { $0.order < $1.order }
+            routineSteps = eveningStepsFromSaved.map { stepDetail in
+                RoutineStepDetail(
+                    id: stepDetail.id.uuidString,
+                    title: stepDetail.localizedTitle,
+                    description: stepDetail.localizedDescription,
+                    stepType: ProductType(rawValue: stepDetail.stepType) ?? .cleanser,
+                    timeOfDay: .evening,
+                    why: stepDetail.localizedWhy,
+                    how: stepDetail.localizedHow
+                )
+            }
+        } else {
+            // Fallback: use routine response without translations
+            routineSteps = routine.routine.evening.enumerated().map { (index, apiStep) in
+                RoutineStepDetail(
+                    id: "evening_\(apiStep.step.rawValue)_\(index)",
+                    title: apiStep.name,
+                    description: "\(apiStep.why) - \(apiStep.how)",
+                    stepType: apiStep.step,
+                    timeOfDay: .evening,
+                    why: apiStep.why,
+                    how: apiStep.how
+                )
+            }
         }
         // Preserve completion state by mapping old step IDs to new ones
         var newCompletedSteps: Set<String> = []

@@ -18,10 +18,10 @@ final class LanguageService {
 
     // MARK: - Initialization
 
-    init(gptService: GPTService = GPTService.shared) {
+    init(gptService: GPTService = GPTService.routineService) {
         self.gptService = gptService
         self.cache = TranslationCache()
-        print("🔧 LanguageService initialized")
+        print("🔧 LanguageService initialized with gpt-3.5-turbo")
     }
 
     // MARK: - Public Methods

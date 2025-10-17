@@ -255,7 +255,8 @@ struct PersonalizedRoutineFlowWrapper: View {
                 forConcerns: request.concerns.map { $0.rawValue },
                 forPreferences: []
             ),
-            productSlots: []
+            productSlots: [],
+            i18n: nil
         )
     }
 }

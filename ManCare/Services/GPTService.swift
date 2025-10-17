@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Public Input Types (match your flow)
-public struct ManCareRoutineRequest: Codable {
+    public struct ManCareRoutineRequest: Codable {
     public let selectedSkinType: String                // "oily" | "dry" | "combination" | "normal"
     public let selectedConcerns: [String]              // e.g. ["acne","blackheads"]
     public let selectedMainGoal: String                // "healthierOverall" | "reduceBreakouts" | "sootheIrritation" | "preventAging" | "ageSlower" | "shinySkin"
@@ -20,6 +20,7 @@ public struct ManCareRoutineRequest: Codable {
     public let lifestyle: LifestylePayload?
     public let locale: String                          // e.g. "en-US"
     public let customDetails: String?                  // Custom text/details from user
+        public let i18nLanguages: [String]?                // e.g. ["en","tr"]
 
     public init(selectedSkinType: String,
                 selectedConcerns: [String],
@@ -31,7 +32,8 @@ public struct ManCareRoutineRequest: Codable {
                 selectedPreferences: PreferencesPayload?,
                 lifestyle: LifestylePayload?,
                 locale: String = "en-US",
-                customDetails: String? = nil) {
+                customDetails: String? = nil,
+                i18nLanguages: [String]? = nil) {
         self.selectedSkinType = selectedSkinType
         self.selectedConcerns = selectedConcerns
         self.selectedMainGoal = selectedMainGoal
@@ -43,6 +45,7 @@ public struct ManCareRoutineRequest: Codable {
         self.lifestyle = lifestyle
         self.locale = locale
         self.customDetails = customDetails
+            self.i18nLanguages = i18nLanguages
     }
 }
 
@@ -112,7 +115,7 @@ public final class GPTService {
     /// High-level call: builds system+user prompts and returns a typed RoutineResponse.
     func generateRoutine(for request: ManCareRoutineRequest,
                          routineDepthFallback: String? = nil,
-                         timeout: TimeInterval = 30,
+                         timeout: TimeInterval = 40,
                          enhanceWithProductInfo: Bool = false) async throws -> RoutineResponse {
         // Check cache first for similar requests
         let cacheKey = createCacheKey(for: request)
@@ -181,7 +184,8 @@ public final class GPTService {
             routine: enhancedRoutine,
             guardrails: routine.guardrails,
             adaptation: routine.adaptation,
-            productSlots: routine.productSlots
+            productSlots: routine.productSlots,
+            i18n: routine.i18n
         )
     }
 
@@ -344,6 +348,7 @@ public final class GPTService {
                 - Morning: cleanser, moisturizer, sunscreen (+ optional faceSerum)
                 - Evening: cleanser, faceSerum, moisturizer
                 - Keep it minimal and focused on essentials
+                - NO weekly steps needed
                 """
             case "intermediate":
                 depthGuidance = """
@@ -352,6 +357,7 @@ public final class GPTService {
                 - Morning: cleanser, toner or essence, faceSerum, moisturizer, eyeCream (optional), sunscreen
                 - Evening: cleanser, toner, faceSerum, eyeCream (optional), moisturizer
                 - Balanced approach with key treatments
+                - NO weekly steps needed
                 """
             case "advanced":
                 depthGuidance = """
@@ -360,20 +366,30 @@ public final class GPTService {
                 - Morning: cleanser, toner, essence, multiple serums, eyeCream, moisturizer, facialOil (optional), sunscreen
                 - Evening: cleansingOil, cleanser, toner, essence, faceSerum, eyeCream, moisturizer, facialOil
                 - Comprehensive multi-step routine with layered treatments
+                - NO weekly steps needed
                 """
             default:
-                depthGuidance = "\n\nROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine)"
+                depthGuidance = "\n\nROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine) - NO weekly steps needed"
             }
         } else {
-            depthGuidance = "\n\nROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine) - Default if not specified"
+            depthGuidance = "\n\nROUTINE DEPTH: INTERMEDIATE (5-6 steps per routine) - Default if not specified - NO weekly steps needed"
         }
 
         return """
         You are a skincare expert. Return ONLY valid JSON matching the schema exactly.
 
-        Rules: Safe, realistic, comprehensive within depth constraints. Align to skin type, concerns, main goal, Fitzpatrick skin tone, age range, region, and preferences. Age-appropriate recommendations. No brand names. Include guardrails.\(depthGuidance)
+        Rules: Safe, realistic, comprehensive within depth constraints. Align to skin type, concerns, main goal, Fitzpatrick skin tone, age range, region, and preferences. Age-appropriate recommendations. No brand names. Include guardrails. DO NOT include weekly steps - only morning and evening routines.\(depthGuidance)
 
         \(Self.getProductTypeInfo())
+
+        LANGUAGE OUTPUT:
+        - The primary response fields (summary, routine, guardrails) should be in the request locale language.
+        - MANDATORY: Always include an "i18n" object with translations for the languages specified in the request (e.g., when "i18n:en,tr" is provided).
+        - The i18n object structure: for each language code (e.g., "en", "tr"), provide an object containing:
+          * "routine": {"title": "...", "one_liner": "..."}
+          * "steps": {"morning": [...], "evening": [...], "weekly": [...]}
+          * "guardrails": {"cautions": [...], "when_to_stop": [...], "sun_notes": "..."}
+        - This is CRITICAL for performance - do not skip the i18n field.
 
         CRITICAL:
         1. Use exact camelCase product type names (e.g., "cleansingOil" not "oil cleanser", "faceSerum" not "serum", "eyeCream" not "eye cream")
@@ -443,6 +459,9 @@ public final class GPTService {
         }
 
         parts.append("Locale:\(req.locale)")
+        if let langs = req.i18nLanguages, !langs.isEmpty {
+            parts.append("i18n:\(langs.joined(separator: ","))")
+        }
         return parts.joined(separator: " ")
     }
 
@@ -451,18 +470,24 @@ public final class GPTService {
         // Minimal schema to reduce token count
         return """
         {
-          "version": "string",
-          "locale": "string",
+          "version": "string (required)",
+          "locale": "string (required)",
           "summary": {"title": "string", "one_liner": "string"},
           "routine": {
             "depth": "simple|intermediate|advanced",
-            "morning": [{"step": "cleanser|toner|essence|faceSerum|eyeCream|moisturizer|sunscreen", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}],
-            "evening": [{"step": "cleansingOil|cleanser|toner|essence|faceSerum|exfoliator|eyeCream|moisturizer|facialOil", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}],
-            "weekly": [{"step": "faceMask|exfoliator|chemicalPeel", "name": "string", "why": "string", "how": "string", "constraints": {"spf": 0, "fragrance_free": true, "sensitive_safe": true, "vegan": true, "cruelty_free": true, "avoid_ingredients": [], "prefer_ingredients": []}}]
+            "morning": [{"step": "cleanser|toner|essence|faceSerum|eyeCream|moisturizer|sunscreen", "name": "string", "why": "string", "how": "string", "constraints": {}}],
+            "evening": [{"step": "cleansingOil|cleanser|toner|essence|faceSerum|exfoliator|eyeCream|moisturizer|facialOil", "name": "string", "why": "string", "how": "string", "constraints": {}}]
           },
           "guardrails": {"cautions": ["string"], "when_to_stop": ["string"], "sun_notes": "string"},
           "adaptation": {"for_skin_type": "string", "for_concerns": ["string"], "for_preferences": ["string"]},
-          "product_slots": []
+          "product_slots": [],
+          "i18n": {
+            "REQUIRED - MUST INCLUDE ALL LANGUAGES FROM REQUEST": "For each language code provided in i18n request parameter",
+            "example_structure": {
+              "en": {"routine": {"title": "...", "one_liner": "..."}, "steps": {"morning": [{"name": "...", "why": "...", "how": "..."}], "evening": [...]}, "guardrails": {"cautions": [...], "when_to_stop": [...], "sun_notes": "..."}},
+              "tr": {"routine": {"title": "...", "one_liner": "..."}, "steps": {"morning": [...], "evening": [...]}, "guardrails": {...}}
+            }
+          }
         }
         """
     }()

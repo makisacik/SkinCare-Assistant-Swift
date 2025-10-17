@@ -196,9 +196,17 @@ struct RoutineDetailView: View {
                     stepNumber: index + 1,
                     isCompleted: completedStepIds.contains(step.id),
                     onToggle: {
+                        // Use localized title from saved routine if available
+                        let localizedTitle: String = {
+                            if let routine = routine,
+                               let savedStep = routine.stepDetails.first(where: { $0.id.uuidString == step.id }) {
+                                return savedStep.localizedTitle
+                            }
+                            return step.title
+                        }()
                         completionViewModel.toggleStepCompletion(
                             stepId: step.id,
-                            stepTitle: step.title,
+                            stepTitle: localizedTitle,
                             stepType: step.stepType,
                             timeOfDay: step.timeOfDay,
                             date: selectedDate

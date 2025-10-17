@@ -25,7 +25,7 @@ final class ServiceFactory {
     }
 
     func createGPTService() -> GPTService {
-        return GPTService.shared // Keep using singleton for now
+        return GPTService.routineService // Use GPT-3.5-turbo for faster routine generation
     }
 
     func createRoutineStore() -> RoutineStoreProtocol {
@@ -172,7 +172,8 @@ class MockRoutineService: RoutineServiceProtocol {
             routine: mockRoutine,
             guardrails: mockGuardrails,
             adaptation: mockAdaptation,
-            productSlots: [mockProductSlot]
+            productSlots: [mockProductSlot],
+            i18n: nil
         )
     }
 

@@ -462,7 +462,8 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
                 forConcerns: [],
                 forPreferences: []
             ),
-            productSlots: []
+            productSlots: [],
+            i18n: nil
         )
     }
 
