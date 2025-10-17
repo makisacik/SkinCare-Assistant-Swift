@@ -1,0 +1,199 @@
+/* 
+  Adaptations.strings (Turkish)
+  ManCare - Döngü ve hava durumu adaptasyon rehberi
+*/
+
+/* ====== DÖNGÜ ADAPTASYONLARI ====== */
+
+/* Menstrüasyon Fazı - Temizleyici */
+"cycle.menstrual.cleanser.guidance" = "Nazik, dairesel hareketler kullanın. Sert ovmaktan kaçının çünkü cilt bariyeriniz daha zayıf.";
+"cycle.menstrual.barrierCompromised" = "Menstrüasyon fazında cilt bariyeri zayıflamış durumda";
+
+/* Menstrüasyon Fazı - Peeling */
+"cycle.menstrual.exfoliator.warning" = "Hassas menstrüasyon fazı cildi için çok sert";
+
+/* Menstrüasyon Fazı - Retinol */
+"cycle.menstrual.retinol.guidance" = "Sadece nohut büyüklüğünde miktar kullanın. Tahriş fark ederseniz atlayın.";
+"cycle.menstrual.retinol.warning" = "Bu fazda aktiflere karşı duyarlılık artmış durumda";
+
+/* Menstrüasyon Fazı - Yüz Serumu */
+"cycle.menstrual.faceSerum.guidance" = "Hyalüronik asit veya niasinamid içeren nemlendirici serumlar seçin. 2-3 damla uygulayın ve hafifçe bastırarak uygulayın.";
+
+/* Menstrüasyon Fazı - Essens */
+"cycle.menstrual.essence.guidance" = "Hafif vuruş hareketleri en iyisi. Essens bu hassas fazda cildinizi diğer ürünlere hazırlamaya yardımcı olur.";
+"cycle.menstrual.essence.warning" = "Hafif baskı kullanın - cilt bariyeri zayıflamış durumda";
+
+/* Menstrüasyon Fazı - Tonik */
+"cycle.menstrual.toner.guidance" = "Alkol içermeyen, nemlendirici tonikler kullanın. Bu hassas fazda sert büzücülerden kaçının.";
+"cycle.menstrual.toner.warning" = "Alkol veya güçlü asit içeren tonikleri atlayın";
+
+/* Menstrüasyon Fazı - Nemlendirici */
+"cycle.menstrual.moisturizer.guidance" = "Bariyer onarımını desteklemek için cömertçe katmanlayın. Daha kalın bir krem düşünün.";
+
+/* Menstrüasyon Fazı - Güneş Kremi */
+"cycle.menstrual.sunscreen.guidance" = "Her zamanki gibi uygulayın. Cilt hassas olduğunda koruma özellikle önemlidir.";
+
+/* Menstrüasyon Fazı - Göz Kremi */
+"cycle.menstrual.eyeCream.guidance" = "Nazikçe uygulayın. Ekstra nem, şişlik ve göz altı morluklarına yardımcı olur.";
+"cycle.menstrual.eyeCream.warning" = "Artan sıvı tutulması şişliğe neden olabilir";
+
+/* Menstrüasyon Fazı - Yüz Yağı */
+"cycle.menstrual.facialOil.guidance" = "Bariyer desteği için faydalı olabilir. 2-3 damla kullanın, daha fazla değil.";
+
+/* Foliküler Faz - Temizleyici */
+"cycle.follicular.cleanser.guidance" = "Cildiniz dayanıklı! Normal temizleme tekniğinizi kullanın.";
+
+/* Foliküler Faz - Peeling */
+"cycle.follicular.exfoliator.guidance" = "Daha derin peeling için harika bir zaman. Cildiniz daha yoğun tedaviyi kaldırabilir.";
+
+/* Foliküler Faz - Retinol */
+"cycle.follicular.retinol.guidance" = "Tam dozajınızı kullanmak için mükemmel zaman. Cilt emilimi optimal seviyede.";
+
+/* Foliküler Faz - Yüz Serumu */
+"cycle.follicular.faceSerum.guidance" = "C vitamini, retinol veya peptit serumları için mükemmel zaman. Cildiniz şimdi daha güçlü aktifleri kaldırabilir.";
+
+/* Foliküler Faz - Essens */
+"cycle.follicular.essence.guidance" = "Yoğun essens tedavileri için mükemmel zaman. Cildiniz şimdi besinleri optimal şekilde emiyor.";
+
+/* Foliküler Faz - Tonik */
+"cycle.follicular.toner.guidance" = "Cildiniz dayanıklı. Normal tonik rutininizi kullanın.";
+
+/* Foliküler Faz - Tedavi */
+"cycle.follicular.treatment.guidance" = "Yoğun tedaviler, peelingler veya yeni ürünler için ideal zaman.";
+
+/* Foliküler Faz - Nemlendirici */
+"cycle.follicular.moisturizer.guidance" = "Normal nemlendiricin mükemmel. Cilt dengeli.";
+
+/* Foliküler Faz - Göz Kremi */
+"cycle.follicular.eyeCream.guidance" = "Normal miktarınızı nazik vuruş hareketleriyle uygulayın.";
+
+/* Foliküler Faz - Yüz Yağı */
+"cycle.follicular.facialOil.guidance" = "Yüz yağlarını kullanmak için harika bir zaman. Cilt şimdi onları güzelce emiyor.";
+
+/* Ovülasyon Fazı - Temizleyici */
+"cycle.ovulation.cleanser.guidance" = "Rutininizi sürdürün. Cildiniz en iyi halinde!";
+
+/* Ovülasyon Fazı - Peeling */
+"cycle.ovulation.exfoliator.guidance" = "Normal peeling programınıza devam edin.";
+
+/* Ovülasyon Fazı - Retinol */
+"cycle.ovulation.retinol.guidance" = "Normal retinol rutininize devam edin.";
+
+/* Ovülasyon Fazı - Nemlendirici */
+"cycle.ovulation.moisturizer.guidance" = "Cildiniz iyi dengeli. Rutininize sadık kalın.";
+
+/* Ovülasyon Fazı - Essens */
+"cycle.ovulation.essence.guidance" = "Cildiniz doğal olarak parlıyor. Normal essens uygulamanıza devam edin.";
+
+/* Ovülasyon Fazı - Tonik */
+"cycle.ovulation.toner.guidance" = "Cildiniz en iyi görünüyor. Normal tonik rutininize devam edin.";
+
+/* Ovülasyon Fazı - Göz Kremi */
+"cycle.ovulation.eyeCream.guidance" = "Göz çevreniz parlak ve taze görünüyor. Normal uygulamaya devam edin.";
+
+/* Ovülasyon Fazı - Yüz Yağı */
+"cycle.ovulation.facialOil.guidance" = "Normal kullanıma devam edin. Cildiniz dengeli ve parlıyor.";
+
+/* Lüteal Faz - Temizleyici */
+"cycle.luteal.cleanser.guidance" = "Makyaj yapıyorsanız çift temizlik yapın. Bu fazda yağ üretimi artar.";
+
+/* Lüteal Faz - Peeling */
+"cycle.luteal.exfoliator.guidance" = "Tahrişten kaçınmak için haftada maksimum 2 kez ile sınırlayın.";
+"cycle.luteal.exfoliator.warning" = "Lüteal faz sırasında cilt daha reaktif hale gelebilir";
+
+/* Lüteal Faz - Retinol */
+"cycle.luteal.retinol.guidance" = "Artan hassasiyet fark ederseniz sıklığı veya miktarı azaltmayı düşünün.";
+"cycle.luteal.retinol.warning" = "Progesteron yükseldikçe tahrişe neden olabilir";
+
+/* Lüteal Faz - Yüz Maskesi */
+"cycle.luteal.faceMask.guidance" = "Kil veya aktif karbon maskeleri artan yağ üretimini yönetmek için mükemmel.";
+
+/* Lüteal Faz - Nemlendirici */
+"cycle.luteal.moisturizer.guidance" = "Çok yağlı hissediyorsanız daha hafif bir nemlendiriciyle değiştirmeyi düşünün.";
+
+/* Lüteal Faz - Leke Bakımı */
+"cycle.luteal.spotTreatment.guidance" = "Leke tedavilerini elinizin altında bulundurun. Sivilceler şimdi daha yaygın.";
+
+/* Lüteal Faz - Tonik */
+"cycle.luteal.toner.guidance" = "Yağı kontrol etmek için dengeleyici veya matlaştırıcı tonik kullanın.";
+
+/* Lüteal Faz - Essens */
+"cycle.luteal.essence.guidance" = "Daha hafif essens formülleri kullanın. Ağır essensler bu daha yağlı fazda çok zengin hissettirebilir.";
+"cycle.luteal.essence.warning" = "Tıkanmış hissediyorsanız ağır, yağ bazlı essensları atlayın";
+
+/* Lüteal Faz - Göz Kremi */
+"cycle.luteal.eyeCream.guidance" = "Göz altı bölgesi için ekstra ürüne ihtiyaç duyabilirsiniz. Şişliğe dikkat edin.";
+"cycle.luteal.eyeCream.warning" = "Hormonal değişiklikler göz altı morluklarına ve şişliğe neden olabilir";
+
+/* Lüteal Faz - Yüz Yağı */
+"cycle.luteal.facialOil.guidance" = "Az kullanın veya yağlı hissediyorsanız atlayın. Doğal sebum üretiminiz daha yüksek.";
+"cycle.luteal.facialOil.warning" = "Artan doğal yağ üretimi - tıkanmaya neden olabilir";
+
+/* ====== HAVA DURUMU ADAPTASYONLARI ====== */
+
+/* UV Aşırı */
+"weather.uv_extreme.sunscreen.note" = "UV aşırı seviyede. SPF 50+ kullanın ve her 1-2 saatte bir yenileyin. Yoğun saatlerde (10-16 arası) gölgede kalın.";
+"weather.uv_extreme.antioxidant.note" = "Aşırı UV hasarına karşı antioksidan koruma ekleyin.";
+"weather.uv_extreme.retinoid_skip.note" = "Sabah rutininde retinoidleri atlayın—aşırı UV fotoduyarlılığı artırır.";
+"weather.uv_extreme.exfoliant_skip.note" = "Sabah peelinglari atlayın—aşırı UV hassaslaşmış cildi zarar verir.";
+
+/* UV Yüksek */
+"weather.uv_high.sunscreen.note" = "UV yüksek seviyede. SPF 50+ kullanın ve her 2 saatte bir yenileyin. Antioksidan serum ekleyin.";
+"weather.uv_high.antioxidant.note" = "Antioksidanlar UV hasarına karşı korur. Güneş kreminden önce uygulayın.";
+"weather.uv_high.retinoid_reduce.note" = "UV yüksekken sabah rutininde retinoidlerden kaçının—akşam kullanın.";
+"weather.uv_high.exfoliant_reduce.note" = "Sabah peeling kullanımını azaltın—yüksek UV hassaslaşmış cildi zarar verebilir.";
+
+/* UV Orta */
+"weather.uv_moderate.sunscreen.note" = "UV orta seviyede. SPF 30-50 önerilir. Dışarıdaysanız yenileyin.";
+"weather.uv_moderate.antioxidant.note" = "Antioksidan serum orta UV koruması için faydalıdır.";
+
+/* UV Düşük */
+"weather.uv_low.sunscreen.note" = "UV düşük seviyede. SPF 30 yeterli. Retinoid gibi aktif kullanmak güvenli.";
+
+/* Düşük Nem */
+"weather.low_humidity.moisturizer.note" = "Hava kuru. Daha ağır nemlendirici kullanın veya tıkayıcı katman ekleyin.";
+"weather.low_humidity.hydration.note" = "Kuru havaya karşı nemlendirici tonik veya HA serumu ekleyin.";
+"weather.low_humidity.exfoliant_caution.note" = "Kuru koşullarda aşırı peeling yapmaktan kaçının—bariyeri zayıflatabilir.";
+
+/* Yüksek Nem */
+"weather.high_humidity.moisturizer.note" = "Nemli koşullar. Ağır kremler yerine daha hafif jel nemlendirici kullanın.";
+"weather.high_humidity.occlusive_skip.note" = "Nemli havada kalın tıkayıcıları veya ağır yağları atlayın.";
+
+/* Rüzgarlı */
+"weather.windy.barrier.note" = "Rüzgarlı koşullar nemi azaltır. Bariyer kremi veya balmı uygulayın.";
+"weather.windy.exfoliant_skip.note" = "Bugün sert peelinglari atlayın—rüzgar hassaslaşmış cildi tahriş edebilir.";
+"weather.windy.retinoid_caution.note" = "Rüzgar cildi tahriş edebilir. Bugün retinoidlerin gücünü azaltın.";
+
+/* Soğuk */
+"weather.cold.moisturizer.note" = "Soğuk hava daha zengin koruma gerektirir. Seramid veya squalane içeren daha ağır nemlendirici kullanın.";
+"weather.cold.barrier.note" = "Bariyer destekleyici içerikler ekleyin (seramid, squalane, niasinamid).";
+
+/* Sıcak */
+"weather.hot.moisturizer.note" = "Sıcak hava daha hafif formülasyonlar gerektirir. Yağsız, matlaştırıcı ürünler kullanın.";
+"weather.hot.spf_mattifying.note" = "Sıcak hava güneş maruziyetini artırır. Matlaştırıcı güneş kremi kullanın ve ter nedeniyle sık sık yenileyin.";
+
+/* Sıcak + Nemli */
+"weather.hot_humid.combo_spf.note" = "Sıcak ve nemli. Konfor için jel bazlı SPF seçin. Her 2 saatte bir yenileyin.";
+
+/* Kar */
+"weather.snow.spf_extreme.note" = "Kar UV ışınlarının %80'ini yansıtır—çift maruziyet. Aşırı UV günü gibi davranın.";
+"weather.snow.retinoid_caution.note" = "Sabah retinoidlerini atlayın—kar yansıması UV maruziyetini ikiye katlar.";
+
+/* ====== DÖNGÜ FAZ İSİMLERİ ====== */
+"adaptations.cycle.phase.menstrual" = "Menstrüasyon Fazı";
+"adaptations.cycle.phase.follicular" = "Foliküler Faz";
+"adaptations.cycle.phase.ovulation" = "Ovülasyon Fazı";
+"adaptations.cycle.phase.luteal" = "Lüteal Faz";
+
+/* ====== HAVA DURUMU BAĞLAM İSİMLERİ ====== */
+"adaptations.weather.context.uv_extreme" = "Aşırı UV";
+"adaptations.weather.context.uv_high" = "Yüksek UV";
+"adaptations.weather.context.uv_moderate" = "Orta UV";
+"adaptations.weather.context.uv_low" = "Düşük UV";
+"adaptations.weather.context.low_humidity" = "Düşük Nem";
+"adaptations.weather.context.high_humidity" = "Yüksek Nem";
+"adaptations.weather.context.windy" = "Rüzgarlı";
+"adaptations.weather.context.cold" = "Soğuk";
+"adaptations.weather.context.hot" = "Sıcak";
+"adaptations.weather.context.snow" = "Kar";
+

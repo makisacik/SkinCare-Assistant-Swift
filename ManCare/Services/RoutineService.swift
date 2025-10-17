@@ -148,7 +148,12 @@ final class RoutineService: RoutineServiceProtocol {
     ) async throws -> RoutineResponse {
         print("🤖 Generating routine with GPT")
 
+        // Get user's current language
+        let userLanguage = LocalizationManager.shared.currentLanguage
+        print("🌍 User language: \(userLanguage)")
+
         // Create the request using the convenience method
+        // GPT always processes in English for stability
         let request = GPTService.createRequest(
             skinType: skinType,
             concerns: concerns,
@@ -161,7 +166,172 @@ final class RoutineService: RoutineServiceProtocol {
             lifestyle: lifestyle
         )
 
-        return try await gptService.generateRoutine(for: request)
+        // Step 1: Generate routine in English (stable internal processing)
+        print("📝 Generating routine in English...")
+        var response = try await gptService.generateRoutine(for: request)
+
+        // Step 2: If user language is not English, translate the response
+        if userLanguage != "en" {
+            print("🔄 Translating routine to \(userLanguage)...")
+            response = try await translateRoutineResponse(response, to: userLanguage)
+            print("✅ Routine translated successfully")
+        }
+
+        return response
+    }
+
+    /// Translate a routine response to user's language
+    private func translateRoutineResponse(_ response: RoutineResponse, to targetLanguage: String) async throws -> RoutineResponse {
+        let languageService = LanguageService.shared
+
+        // Translate summary title and one-liner
+        let translatedSummary = Summary(
+            title: try await languageService.translateFromEnglish(response.summary.title, to: targetLanguage),
+            oneLiner: try await languageService.translateFromEnglish(response.summary.oneLiner, to: targetLanguage)
+        )
+
+        // Translate morning steps
+        let translatedMorningSteps = try await withThrowingTaskGroup(of: (Int, APIRoutineStep).self) { group in
+            for (index, step) in response.routine.morning.enumerated() {
+                group.addTask {
+                    let translatedName = try await languageService.translateFromEnglish(step.name, to: targetLanguage)
+                    let translatedWhy = try await languageService.translateFromEnglish(step.why, to: targetLanguage)
+                    let translatedHow = try await languageService.translateFromEnglish(step.how, to: targetLanguage)
+
+                    let translatedStep = APIRoutineStep(
+                        step: step.step, // Keep product type in English
+                        name: translatedName,
+                        why: translatedWhy,
+                        how: translatedHow,
+                        constraints: step.constraints
+                    )
+
+                    return (index, translatedStep)
+                }
+            }
+
+            var results: [(Int, APIRoutineStep)] = []
+            for try await result in group {
+                results.append(result)
+            }
+            return results.sorted { $0.0 < $1.0 }.map { $0.1 }
+        }
+
+        // Translate evening steps
+        let translatedEveningSteps = try await withThrowingTaskGroup(of: (Int, APIRoutineStep).self) { group in
+            for (index, step) in response.routine.evening.enumerated() {
+                group.addTask {
+                    let translatedName = try await languageService.translateFromEnglish(step.name, to: targetLanguage)
+                    let translatedWhy = try await languageService.translateFromEnglish(step.why, to: targetLanguage)
+                    let translatedHow = try await languageService.translateFromEnglish(step.how, to: targetLanguage)
+
+                    let translatedStep = APIRoutineStep(
+                        step: step.step, // Keep product type in English
+                        name: translatedName,
+                        why: translatedWhy,
+                        how: translatedHow,
+                        constraints: step.constraints
+                    )
+
+                    return (index, translatedStep)
+                }
+            }
+
+            var results: [(Int, APIRoutineStep)] = []
+            for try await result in group {
+                results.append(result)
+            }
+            return results.sorted { $0.0 < $1.0 }.map { $0.1 }
+        }
+
+        // Translate weekly steps if they exist
+        let translatedWeeklySteps: [APIRoutineStep]?
+        if let weeklySteps = response.routine.weekly {
+            let translated = try await withThrowingTaskGroup(of: (Int, APIRoutineStep).self) { group in
+                for (index, step) in weeklySteps.enumerated() {
+                    group.addTask {
+                        let translatedName = try await languageService.translateFromEnglish(step.name, to: targetLanguage)
+                        let translatedWhy = try await languageService.translateFromEnglish(step.why, to: targetLanguage)
+                        let translatedHow = try await languageService.translateFromEnglish(step.how, to: targetLanguage)
+
+                        let translatedStep = APIRoutineStep(
+                            step: step.step, // Keep product type in English
+                            name: translatedName,
+                            why: translatedWhy,
+                            how: translatedHow,
+                            constraints: step.constraints
+                        )
+
+                        return (index, translatedStep)
+                    }
+                }
+
+                var results: [(Int, APIRoutineStep)] = []
+                for try await result in group {
+                    results.append(result)
+                }
+                return results.sorted { $0.0 < $1.0 }.map { $0.1 }
+            }
+            translatedWeeklySteps = translated
+        } else {
+            translatedWeeklySteps = nil
+        }
+
+        // Translate guardrails
+        let translatedCautions = try await withThrowingTaskGroup(of: (Int, String).self) { group in
+            for (index, caution) in response.guardrails.cautions.enumerated() {
+                group.addTask {
+                    let translated = try await languageService.translateFromEnglish(caution, to: targetLanguage)
+                    return (index, translated)
+                }
+            }
+
+            var results: [(Int, String)] = []
+            for try await result in group {
+                results.append(result)
+            }
+            return results.sorted { $0.0 < $1.0 }.map { $0.1 }
+        }
+
+        let translatedWhenToStop = try await withThrowingTaskGroup(of: (Int, String).self) { group in
+            for (index, stop) in response.guardrails.whenToStop.enumerated() {
+                group.addTask {
+                    let translated = try await languageService.translateFromEnglish(stop, to: targetLanguage)
+                    return (index, translated)
+                }
+            }
+
+            var results: [(Int, String)] = []
+            for try await result in group {
+                results.append(result)
+            }
+            return results.sorted { $0.0 < $1.0 }.map { $0.1 }
+        }
+
+        let translatedGuardrails = Guardrails(
+            cautions: translatedCautions,
+            whenToStop: translatedWhenToStop,
+            sunNotes: try await languageService.translateFromEnglish(response.guardrails.sunNotes, to: targetLanguage)
+        )
+
+        // Create translated routine
+        let translatedRoutine = Routine(
+            depth: response.routine.depth,
+            morning: translatedMorningSteps,
+            evening: translatedEveningSteps,
+            weekly: translatedWeeklySteps
+        )
+
+        // Return translated response
+        return RoutineResponse(
+            version: response.version,
+            locale: targetLanguage, // Update locale to target language
+            summary: translatedSummary,
+            routine: translatedRoutine,
+            guardrails: translatedGuardrails,
+            adaptation: response.adaptation, // Keep adaptation in English for internal processing
+            productSlots: response.productSlots // Keep product slots in English for matching
+        )
     }
 
     // MARK: - Write Operations (Stateless)
@@ -169,7 +339,17 @@ final class RoutineService: RoutineServiceProtocol {
     func saveRoutine(_ template: RoutineTemplate) async throws -> SavedRoutineModel {
         print("💾 Saving routine: \(template.title)")
 
-        let savedRoutine = try await store.saveRoutine(SavedRoutineModel(from: template))
+        // Generate translations for both English and device locale
+        let translations = try await createTemplateTranslations(from: template)
+
+        // Create SavedRoutineModel with translations
+        let savedRoutine = try await store.saveRoutine(
+            SavedRoutineModel(
+                from: template,
+                stepTranslations: translations.steps,
+                routineTranslations: translations.routine
+            )
+        )
 
         // Emit updated state
         try await emitUpdatedState()
@@ -180,12 +360,273 @@ final class RoutineService: RoutineServiceProtocol {
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel {
         print("💾 Saving initial routine from response")
 
-        let savedRoutine = try await store.saveInitialRoutine(from: routineResponse)
+        // CRITICAL: Always save routines in English to database for consistency
+        // This ensures language switching works properly
+        let englishResponse: RoutineResponse
+        if routineResponse.locale != "en" {
+            print("🔄 Converting routine back to English for database storage...")
+            englishResponse = try await translateRoutineResponse(routineResponse, to: "en")
+        } else {
+            englishResponse = routineResponse
+        }
+
+        // Generate translations for both English and device locale
+        let translations = try await createRoutineTranslations(from: englishResponse)
+
+        let savedRoutine = try await store.saveInitialRoutine(from: englishResponse, translations: translations)
 
         // Emit updated state
         try await emitUpdatedState()
 
         return savedRoutine
+    }
+
+    /// Create translation objects for a routine response, including both English and device locale
+    private func createRoutineTranslations(from response: RoutineResponse) async throws -> (routine: RoutineTranslations, steps: [StepTranslations]) {
+        let deviceLanguage = LocalizationUtils.deviceLocaleLanguage()
+
+        // Start with English versions (from the response)
+        var routineTitleTranslations: [String: String] = ["en": response.summary.title]
+        var routineDescTranslations: [String: String] = ["en": response.summary.oneLiner]
+
+        // Benefits and tags - we'll use hardcoded values for "My Routine"
+        let benefitsEn = ["Personalized for your skin", "Based on your preferences", "Easy to follow"]
+        let tagsEn = ["Personalized", "Onboarding", "Custom"]
+        var benefitsTranslations: [String: [String]] = ["en": benefitsEn]
+        var tagsTranslations: [String: [String]] = ["en": tagsEn]
+
+        // Create step translations
+        var allStepTranslations: [StepTranslations] = []
+
+        // If device language is not English, translate
+        if deviceLanguage != "en" {
+            print("🌍 Creating translations for device language: \(deviceLanguage)")
+            let languageService = LanguageService.shared
+
+            do {
+                // Translate routine-level content
+                routineTitleTranslations[deviceLanguage] = try await languageService.translateFromEnglish(response.summary.title, to: deviceLanguage)
+                routineDescTranslations[deviceLanguage] = try await languageService.translateFromEnglish(response.summary.oneLiner, to: deviceLanguage)
+            } catch {
+                print("⚠️ Failed to translate routine title/description: \(error), using English only")
+            }
+
+            // Translate benefits
+            do {
+                let translatedBenefits = try await languageService.translateArray(benefitsEn, from: "en", to: deviceLanguage)
+                benefitsTranslations[deviceLanguage] = translatedBenefits
+            } catch {
+                print("⚠️ Failed to translate benefits: \(error), using English only")
+            }
+
+            // Translate tags
+            do {
+                let translatedTags = try await languageService.translateArray(tagsEn, from: "en", to: deviceLanguage)
+                tagsTranslations[deviceLanguage] = translatedTags
+            } catch {
+                print("⚠️ Failed to translate tags: \(error), using English only")
+            }
+
+            // Translate morning steps (with individual error handling)
+            for step in response.routine.morning {
+                var stepTitleTrans: [String: String] = ["en": step.name]
+                var stepDescTrans: [String: String] = ["en": "\(step.why) - \(step.how)"]
+                var stepWhyTrans: [String: String] = ["en": step.why]
+                var stepHowTrans: [String: String] = ["en": step.how]
+
+                do {
+                    stepTitleTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.name, to: deviceLanguage)
+                    stepDescTrans[deviceLanguage] = try await languageService.translateFromEnglish("\(step.why) - \(step.how)", to: deviceLanguage)
+                    stepWhyTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
+                    stepHowTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage)
+                } catch {
+                    print("⚠️ Failed to translate morning step '\(step.name)': \(error), using English only")
+                }
+
+                allStepTranslations.append(StepTranslations(
+                    title: stepTitleTrans,
+                    stepDescription: stepDescTrans,
+                    why: stepWhyTrans,
+                    how: stepHowTrans
+                ))
+            }
+
+            // Translate evening steps (with individual error handling)
+            for step in response.routine.evening {
+                var stepTitleTrans: [String: String] = ["en": step.name]
+                var stepDescTrans: [String: String] = ["en": "\(step.why) - \(step.how)"]
+                var stepWhyTrans: [String: String] = ["en": step.why]
+                var stepHowTrans: [String: String] = ["en": step.how]
+
+                do {
+                    stepTitleTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.name, to: deviceLanguage)
+                    stepDescTrans[deviceLanguage] = try await languageService.translateFromEnglish("\(step.why) - \(step.how)", to: deviceLanguage)
+                    stepWhyTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
+                    stepHowTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage)
+                } catch {
+                    print("⚠️ Failed to translate evening step '\(step.name)': \(error), using English only")
+                }
+
+                allStepTranslations.append(StepTranslations(
+                    title: stepTitleTrans,
+                    stepDescription: stepDescTrans,
+                    why: stepWhyTrans,
+                    how: stepHowTrans
+                ))
+            }
+
+            print("✅ Translations created for \(allStepTranslations.count) steps (some may be English-only if translation failed)")
+        } else {
+            // English only - still create translation objects for consistency
+            for step in response.routine.morning {
+                allStepTranslations.append(StepTranslations(
+                    title: ["en": step.name],
+                    stepDescription: ["en": "\(step.why) - \(step.how)"],
+                    why: ["en": step.why],
+                    how: ["en": step.how]
+                ))
+            }
+
+            for step in response.routine.evening {
+                allStepTranslations.append(StepTranslations(
+                    title: ["en": step.name],
+                    stepDescription: ["en": "\(step.why) - \(step.how)"],
+                    why: ["en": step.why],
+                    how: ["en": step.how]
+                ))
+            }
+        }
+
+        let routineTranslations = RoutineTranslations(
+            title: routineTitleTranslations,
+            description: routineDescTranslations,
+            benefits: benefitsTranslations,
+            tags: tagsTranslations
+        )
+
+        return (routine: routineTranslations, steps: allStepTranslations)
+    }
+
+    /// Create translation objects for a routine template, including both English and device locale
+    private func createTemplateTranslations(from template: RoutineTemplate) async throws -> (routine: RoutineTranslations, steps: [StepTranslations]) {
+        let deviceLanguage = LocalizationUtils.deviceLocaleLanguage()
+
+        // Start with English versions (from the template)
+        var routineTitleTranslations: [String: String] = ["en": template.title]
+        var routineDescTranslations: [String: String] = ["en": template.description]
+        var benefitsTranslations: [String: [String]] = ["en": template.benefits]
+        var tagsTranslations: [String: [String]] = ["en": template.tags]
+
+        // Create step translations
+        var allStepTranslations: [StepTranslations] = []
+
+        // If device language is not English, translate
+        if deviceLanguage != "en" {
+            print("🌍 Creating translations for template '\(template.title)' in language: \(deviceLanguage)")
+            let languageService = LanguageService.shared
+
+            // Translate routine-level content
+            do {
+                routineTitleTranslations[deviceLanguage] = try await languageService.translateFromEnglish(template.title, to: deviceLanguage)
+                routineDescTranslations[deviceLanguage] = try await languageService.translateFromEnglish(template.description, to: deviceLanguage)
+            } catch {
+                print("⚠️ Failed to translate template title/description: \(error), using English only")
+            }
+
+            // Translate benefits
+            do {
+                let translatedBenefits = try await languageService.translateArray(template.benefits, from: "en", to: deviceLanguage)
+                benefitsTranslations[deviceLanguage] = translatedBenefits
+            } catch {
+                print("⚠️ Failed to translate template benefits: \(error), using English only")
+            }
+
+            // Translate tags
+            do {
+                let translatedTags = try await languageService.translateArray(template.tags, from: "en", to: deviceLanguage)
+                tagsTranslations[deviceLanguage] = translatedTags
+            } catch {
+                print("⚠️ Failed to translate template tags: \(error), using English only")
+            }
+
+            // Translate morning steps (with individual error handling)
+            for step in template.morningSteps {
+                var stepTitleTrans: [String: String] = ["en": step.title]
+                var stepDescTrans: [String: String] = ["en": step.why]
+                var stepWhyTrans: [String: String] = ["en": step.why]
+                var stepHowTrans: [String: String] = ["en": step.how]
+
+                do {
+                    stepTitleTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.title, to: deviceLanguage)
+                    stepDescTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
+                    stepWhyTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
+                    stepHowTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage)
+                } catch {
+                    print("⚠️ Failed to translate template morning step '\(step.title)': \(error), using English only")
+                }
+
+                allStepTranslations.append(StepTranslations(
+                    title: stepTitleTrans,
+                    stepDescription: stepDescTrans,
+                    why: stepWhyTrans,
+                    how: stepHowTrans
+                ))
+            }
+
+            // Translate evening steps (with individual error handling)
+            for step in template.eveningSteps {
+                var stepTitleTrans: [String: String] = ["en": step.title]
+                var stepDescTrans: [String: String] = ["en": step.why]
+                var stepWhyTrans: [String: String] = ["en": step.why]
+                var stepHowTrans: [String: String] = ["en": step.how]
+
+                do {
+                    stepTitleTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.title, to: deviceLanguage)
+                    stepDescTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
+                    stepWhyTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
+                    stepHowTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage)
+                } catch {
+                    print("⚠️ Failed to translate template evening step '\(step.title)': \(error), using English only")
+                }
+
+                allStepTranslations.append(StepTranslations(
+                    title: stepTitleTrans,
+                    stepDescription: stepDescTrans,
+                    why: stepWhyTrans,
+                    how: stepHowTrans
+                ))
+            }
+
+            print("✅ Template translations created for \(allStepTranslations.count) steps (some may be English-only if translation failed)")
+        } else {
+            // English only - still create translation objects for consistency
+            for step in template.morningSteps {
+                allStepTranslations.append(StepTranslations(
+                    title: ["en": step.title],
+                    stepDescription: ["en": step.why],
+                    why: ["en": step.why],
+                    how: ["en": step.how]
+                ))
+            }
+
+            for step in template.eveningSteps {
+                allStepTranslations.append(StepTranslations(
+                    title: ["en": step.title],
+                    stepDescription: ["en": step.why],
+                    why: ["en": step.why],
+                    how: ["en": step.how]
+                ))
+            }
+        }
+
+        let routineTranslations = RoutineTranslations(
+            title: routineTitleTranslations,
+            description: routineDescTranslations,
+            benefits: benefitsTranslations,
+            tags: tagsTranslations
+        )
+
+        return (routine: routineTranslations, steps: allStepTranslations)
     }
 
     func removeRoutine(_ routine: SavedRoutineModel) async throws {

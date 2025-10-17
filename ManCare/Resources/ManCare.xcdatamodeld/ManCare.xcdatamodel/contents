@@ -32,6 +32,7 @@
         <attribute name="tags" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="templateId" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
+        <attribute name="translationsJSON" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <relationship name="stepDetails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SavedStepDetailEntity" inverseName="routine" inverseEntity="SavedStepDetailEntity"/>
     </entity>
     <entity name="SavedStepDetailEntity" representedClassName="SavedStepDetailEntity" syncable="YES" codeGenerationType="class">
@@ -43,6 +44,7 @@
         <attribute name="stepType" attributeType="String"/>
         <attribute name="timeOfDay" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
+        <attribute name="translationsJSON" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="why" optional="YES" attributeType="String"/>
         <relationship name="routine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SavedRoutineEntity" inverseName="stepDetails" inverseEntity="SavedRoutineEntity"/>
     </entity>

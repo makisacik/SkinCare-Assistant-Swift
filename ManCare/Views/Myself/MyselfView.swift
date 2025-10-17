@@ -10,6 +10,7 @@ import SwiftUI
 struct MyselfView: View {
     @StateObject private var profileStore = UserProfileStore.shared
     @StateObject private var premiumManager = PremiumManager.shared
+    @EnvironmentObject private var localizationManager: LocalizationManager
     @State private var showingEdit = false
     @State private var showingGenerateConfirm = false
     @State private var showingDatePicker = false
@@ -20,7 +21,9 @@ struct MyselfView: View {
     let routineService: RoutineServiceProtocol
     let onRoutineGenerated: (RoutineResponse) -> Void
 
-    private let tabs = ["Timeline", "Journal", "Insights"]
+    private var tabs: [String] {
+        [L10n.Completions.timeline, L10n.Completions.journal, L10n.Completions.insights]
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -142,7 +145,26 @@ struct MyselfView: View {
             Button {
                 showingEdit = true
             } label: {
-                Label("Edit Profile", systemImage: "person.circle")
+                Label(L10n.Settings.editProfile, systemImage: "person.circle")
+            }
+
+            // Language picker (English + device locale only)
+            Menu {
+                ForEach(LocalizationUtils.availableLanguagesForPicker()) { lang in
+                    Button {
+                        localizationManager.setLanguage(lang)
+                    } label: {
+                        HStack {
+                            Text(lang.nativeName)
+                            Spacer()
+                            if localizationManager.currentLanguage == lang.rawValue {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            } label: {
+                Label(L10n.Settings.language, systemImage: "globe")
             }
 
             Button {
@@ -153,7 +175,7 @@ struct MyselfView: View {
                 }
             } label: {
                 Label(
-                    premiumManager.isPremium ? "Disable Premium (Test)" : "Enable Premium (Test)",
+                    premiumManager.isPremium ? L10n.Settings.disablePremium : L10n.Settings.enablePremium,
                     systemImage: premiumManager.isPremium ? "crown.fill" : "crown"
                 )
             }
@@ -725,15 +747,15 @@ struct TimelineTabView: View {
     @ViewBuilder
     private var productsUsedSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Products used")
+            Text(L10n.Completions.productsUsed)
                 .font(ThemeManager.shared.theme.typo.h3.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
             if completedStepDetails.isEmpty {
                 emptyStateView(
                     icon: "drop.circle",
-                    title: "No products used",
-                    subtitle: "Complete your routine steps to see them here"
+                    title: L10n.Completions.noProductsUsed,
+                    subtitle: L10n.Completions.completeStepsToSee
                 )
             } else {
                 LazyVStack(spacing: 8) {
@@ -758,22 +780,22 @@ struct TimelineTabView: View {
     @ViewBuilder
     private var routinesCompletedSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Routines completed")
+            Text(L10n.Completions.routinesCompleted)
                 .font(ThemeManager.shared.theme.typo.h3.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
             if !hasMorningCompletion && !hasEveningCompletion {
                 emptyStateView(
                     icon: "checkmark.circle",
-                    title: "No routines completed",
-                    subtitle: "Complete your routine steps to see them here"
+                    title: L10n.Completions.noRoutinesCompleted,
+                    subtitle: L10n.Completions.completeStepsToSee
                 )
             } else {
                 LazyVStack(spacing: 8) {
                     if hasMorningCompletion {
                         routineCompletedRow(
                             icon: "sun.max.fill",
-                            title: "Morning routine",
+                            title: "\(completionViewModel.activeRoutine?.title ?? L10n.Completions.morningRoutine) - \(L10n.Completions.morning)",
                             color: ThemeManager.shared.theme.palette.warning
                         )
                     }
@@ -781,7 +803,7 @@ struct TimelineTabView: View {
                     if hasEveningCompletion {
                         routineCompletedRow(
                             icon: "moon.fill",
-                            title: "Evening routine",
+                            title: "\(completionViewModel.activeRoutine?.title ?? L10n.Completions.eveningRoutine) - \(L10n.Completions.evening)",
                             color: ThemeManager.shared.theme.palette.info
                         )
                     }
@@ -813,11 +835,11 @@ struct TimelineTabView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(step.title)
+                Text(translatedStepTitle(step.title))
                     .font(ThemeManager.shared.theme.typo.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                Text(step.timeOfDay.capitalized)
+                Text(translatedTimeOfDay(step.timeOfDay))
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -874,6 +896,58 @@ struct TimelineTabView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 20)
+    }
+
+    // MARK: - Translation Helpers
+
+    private func translatedStepTitle(_ title: String) -> String {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+
+        // If English, return as-is
+        if currentLanguage == "en" {
+            return title
+        }
+
+        // For other languages, we need to translate
+        // Since this is a synchronous method but translation is async,
+        // we'll use a simple mapping for common step names for now
+        // In a production app, you'd want to implement proper async translation
+
+        switch title.lowercased() {
+        case "gentle cleanser", "cleanser":
+            return currentLanguage == "tr" ? "Nazik Temizleyici" : title
+        case "moisturizer":
+            return currentLanguage == "tr" ? "Nemlendirici" : title
+        case "sunscreen", "spf":
+            return currentLanguage == "tr" ? "Güneş Kremi" : title
+        case "serum":
+            return currentLanguage == "tr" ? "Serum" : title
+        case "toner":
+            return currentLanguage == "tr" ? "Tonik" : title
+        case "essence":
+            return currentLanguage == "tr" ? "Essans" : title
+        case "exfoliator":
+            return currentLanguage == "tr" ? "Peeling" : title
+        case "retinol":
+            return currentLanguage == "tr" ? "Retinol" : title
+        case "eye cream":
+            return currentLanguage == "tr" ? "Göz Kremi" : title
+        case "face mask":
+            return currentLanguage == "tr" ? "Yüz Maskesi" : title
+        default:
+            return title
+        }
+    }
+
+    private func translatedTimeOfDay(_ timeOfDay: String) -> String {
+        switch timeOfDay.lowercased() {
+        case "morning":
+            return L10n.Completions.morning
+        case "evening":
+            return L10n.Completions.evening
+        default:
+            return timeOfDay.capitalized
+        }
     }
 
     // MARK: - Data Loading
@@ -1080,7 +1154,7 @@ struct InsightsTabView: View {
             ProgressView()
                 .scaleEffect(1.5)
 
-            Text("Loading insights...")
+            Text(L10n.Completions.loadingInsights)
                 .font(ThemeManager.shared.theme.typo.body)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }
@@ -1094,11 +1168,11 @@ struct InsightsTabView: View {
     private var insightsHeaderSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Your Insights")
+                Text(L10n.Completions.yourInsights)
                     .font(ThemeManager.shared.theme.typo.h2.weight(.bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                Text("Last 30 days")
+                Text(L10n.Completions.lastNDays)
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -1114,9 +1188,9 @@ struct InsightsTabView: View {
     private var streakCard: some View {
         InsightStatCard(
             icon: "flame.fill",
-            title: "Current Streak",
+            title: L10n.Completions.currentStreak,
             value: "\(viewModel.currentStreak)",
-            subtitle: viewModel.currentStreak == 1 ? "Day in a row" : "Days in a row",
+            subtitle: viewModel.currentStreak == 1 ? L10n.Completions.dayInRow : L10n.Completions.daysInRow,
             iconColor: ThemeManager.shared.theme.palette.success,
             showGradient: true
         )
@@ -1128,14 +1202,14 @@ struct InsightsTabView: View {
     private var completionRatesSection: some View {
         HStack(spacing: 12) {
             completionRateCard(
-                title: "Weekly",
+                title: L10n.Completions.weekly,
                 rate: viewModel.weeklyCompletionRate,
                 totalDays: 7,
                 color: ThemeManager.shared.theme.palette.primary
             )
 
             completionRateCard(
-                title: "Monthly",
+                title: L10n.Completions.monthly,
                 rate: viewModel.monthlyCompletionRate,
                 totalDays: 30,
                 color: ThemeManager.shared.theme.palette.secondary
@@ -1203,7 +1277,7 @@ struct InsightsTabView: View {
         HStack(spacing: 12) {
             timeCompletionCard(
                 icon: "sun.max.fill",
-                title: "Morning",
+                title: L10n.Completions.morning,
                 count: viewModel.morningCompletionCount,
                 total: viewModel.morningTotal,
                 color: ThemeManager.shared.theme.palette.warning
@@ -1211,7 +1285,7 @@ struct InsightsTabView: View {
 
             timeCompletionCard(
                 icon: "moon.fill",
-                title: "Evening",
+                title: L10n.Completions.evening,
                 count: viewModel.eveningCompletionCount,
                 total: viewModel.eveningTotal,
                 color: ThemeManager.shared.theme.palette.info
@@ -1236,7 +1310,7 @@ struct InsightsTabView: View {
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-            Text("days completed")
+            Text(L10n.Completions.daysCompleted)
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }
@@ -1282,7 +1356,7 @@ struct InsightsTabView: View {
                 )
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Consistency Insight")
+                Text(L10n.Completions.consistencyInsight)
                     .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -1349,7 +1423,7 @@ struct InsightsTabView: View {
                 )
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Adaptation Impact")
+                Text(L10n.Completions.adaptationImpact)
                     .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -1362,7 +1436,7 @@ struct InsightsTabView: View {
                         .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                         .foregroundColor(color)
 
-                    Text("this week vs last week")
+                    Text(L10n.Completions.thisWeekVsLastWeek)
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }

@@ -1,0 +1,30 @@
+/* 
+  Localizable.strings (English)
+  ManCare - Common strings
+*/
+
+/* Common */
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+"common.done" = "Done";
+"common.delete" = "Delete";
+"common.edit" = "Edit";
+"common.add" = "Add";
+"common.close" = "Close";
+"common.ok" = "OK";
+"common.yes" = "Yes";
+"common.no" = "No";
+
+/* Settings */
+"settings.editProfile" = "Edit Profile";
+"settings.language" = "Language";
+"settings.premium" = "Premium";
+"settings.enablePremium" = "Enable Premium (Test)";
+"settings.disablePremium" = "Disable Premium (Test)";
+
+/* Tabs */
+"tabs.routines" = "Routines";
+"tabs.discover" = "Discover";
+"tabs.products" = "My Products";
+"tabs.myself" = "Myself";
+

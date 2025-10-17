@@ -8,6 +8,10 @@
       "contextKey": "menstrual",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.cleanser.guidance",
+          "warningKeys": ["cycle.menstrual.barrierCompromised"]
+        },
         "guidanceTemplate": "Use gentle, circular motions. Avoid harsh scrubbing as your skin barrier is weaker.",
         "orderPriority": 1,
         "warnings": ["Skin barrier is compromised during menstrual phase"]
@@ -19,6 +23,9 @@
       "productType": "exfoliator",
       "action": {
         "emphasis": "skip",
+        "i18n": {
+          "warningKeys": ["cycle.menstrual.exfoliator.warning"]
+        },
         "guidanceTemplate": null,
         "orderPriority": null,
         "warnings": ["Too harsh for sensitive menstrual phase skin"]
@@ -30,6 +37,10 @@
       "productType": "retinol",
       "action": {
         "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.retinol.guidance",
+          "warningKeys": ["cycle.menstrual.retinol.warning"]
+        },
         "guidanceTemplate": "Use pea-sized amount only. Skip if you notice irritation.",
         "orderPriority": null,
         "warnings": ["Increased sensitivity to actives during this phase"]
@@ -41,6 +52,9 @@
       "productType": "faceSerum",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.faceSerum.guidance"
+        },
         "guidanceTemplate": "Choose hydrating serums with hyaluronic acid or niacinamide. Apply 2-3 drops and pat gently.",
         "orderPriority": 3,
         "warnings": []
@@ -52,6 +66,10 @@
       "productType": "essence",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.essence.guidance",
+          "warningKeys": ["cycle.menstrual.essence.warning"]
+        },
         "guidanceTemplate": "Gentle patting motions work best. Essence helps prepare skin for other products during this sensitive phase.",
         "orderPriority": 2,
         "warnings": ["Use gentle pressure - skin barrier is compromised"]
@@ -63,6 +81,10 @@
       "productType": "toner",
       "action": {
         "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.toner.guidance",
+          "warningKeys": ["cycle.menstrual.toner.warning"]
+        },
         "guidanceTemplate": "Use alcohol-free, hydrating toners. Avoid harsh astringents during this sensitive phase.",
         "orderPriority": 2,
         "warnings": ["Skip toners with alcohol or strong acids"]
@@ -74,6 +96,9 @@
       "productType": "moisturizer",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.moisturizer.guidance"
+        },
         "guidanceTemplate": "Layer generously to support barrier repair. Consider a thicker cream.",
         "orderPriority": 4,
         "warnings": []
@@ -85,6 +110,9 @@
       "productType": "sunscreen",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.sunscreen.guidance"
+        },
         "guidanceTemplate": "Apply as usual. Protection is especially important when skin is sensitive.",
         "orderPriority": 5,
         "warnings": []

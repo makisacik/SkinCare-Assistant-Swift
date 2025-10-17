@@ -26,6 +26,78 @@ enum TimeOfDay: String, Codable, CaseIterable {
     }
 }
 
+// MARK: - Translation Models
+
+/// Stores translations for a routine's user-facing content
+struct RoutineTranslations: Codable, Equatable {
+    let title: [String: String]         // Language code -> Title
+    let description: [String: String]   // Language code -> Description
+    let benefits: [String: [String]]    // Language code -> Benefits array
+    let tags: [String: [String]]        // Language code -> Tags array
+
+    init(title: [String: String], description: [String: String], benefits: [String: [String]], tags: [String: [String]]) {
+        self.title = title
+        self.description = description
+        self.benefits = benefits
+        self.tags = tags
+    }
+
+    /// Get localized title for current language with fallback to English
+    func localizedTitle(for language: String) -> String {
+        return title[language] ?? title["en"] ?? ""
+    }
+
+    /// Get localized description for current language with fallback to English
+    func localizedDescription(for language: String) -> String {
+        return description[language] ?? description["en"] ?? ""
+    }
+
+    /// Get localized benefits for current language with fallback to English
+    func localizedBenefits(for language: String) -> [String] {
+        return benefits[language] ?? benefits["en"] ?? []
+    }
+
+    /// Get localized tags for current language with fallback to English
+    func localizedTags(for language: String) -> [String] {
+        return tags[language] ?? tags["en"] ?? []
+    }
+}
+
+/// Stores translations for a step's user-facing content
+struct StepTranslations: Codable, Equatable {
+    let title: [String: String]             // Language code -> Title
+    let stepDescription: [String: String]   // Language code -> Description
+    let why: [String: String]               // Language code -> Why text
+    let how: [String: String]               // Language code -> How text
+
+    init(title: [String: String], stepDescription: [String: String], why: [String: String], how: [String: String]) {
+        self.title = title
+        self.stepDescription = stepDescription
+        self.why = why
+        self.how = how
+    }
+
+    /// Get localized title for current language with fallback to English
+    func localizedTitle(for language: String) -> String {
+        return title[language] ?? title["en"] ?? ""
+    }
+
+    /// Get localized description for current language with fallback to English
+    func localizedDescription(for language: String) -> String {
+        return stepDescription[language] ?? stepDescription["en"] ?? ""
+    }
+
+    /// Get localized why text for current language with fallback to English
+    func localizedWhy(for language: String) -> String {
+        return why[language] ?? why["en"] ?? ""
+    }
+
+    /// Get localized how text for current language with fallback to English
+    func localizedHow(for language: String) -> String {
+        return how[language] ?? how["en"] ?? ""
+    }
+}
+
 
 // MARK: - SavedStepDetailModel (Swift Model)
 
@@ -39,6 +111,7 @@ struct SavedStepDetailModel: Identifiable, Codable, Equatable {
     let why: String?
     let how: String?
     let order: Int
+    let translations: StepTranslations?
 
     // Computed property - iconName is derived from stepType, not stored
     var iconName: String {
@@ -57,7 +130,39 @@ struct SavedStepDetailModel: Identifiable, Codable, Equatable {
         return TimeOfDay(rawValue: timeOfDay) ?? .morning
     }
 
-    init(id: UUID = UUID(), title: String, stepDescription: String, stepType: String, timeOfDay: String, why: String? = nil, how: String? = nil, order: Int) {
+    // MARK: - Localized Properties
+
+    /// Get localized title based on current language
+    var localizedTitle: String {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        return translations?.localizedTitle(for: currentLanguage) ?? title
+    }
+
+    /// Get localized description based on current language
+    var localizedDescription: String {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        return translations?.localizedDescription(for: currentLanguage) ?? stepDescription
+    }
+
+    /// Get localized why text based on current language
+    var localizedWhy: String? {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        if let translations = translations {
+            return translations.localizedWhy(for: currentLanguage)
+        }
+        return why
+    }
+
+    /// Get localized how text based on current language
+    var localizedHow: String? {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        if let translations = translations {
+            return translations.localizedHow(for: currentLanguage)
+        }
+        return how
+    }
+
+    init(id: UUID = UUID(), title: String, stepDescription: String, stepType: String, timeOfDay: String, why: String? = nil, how: String? = nil, order: Int, translations: StepTranslations? = nil) {
         self.id = id
         self.title = title
         self.stepDescription = stepDescription
@@ -66,6 +171,7 @@ struct SavedStepDetailModel: Identifiable, Codable, Equatable {
         self.why = why
         self.how = how
         self.order = order
+        self.translations = translations
     }
 
     init(from entity: SavedStepDetailEntity) {
@@ -78,6 +184,13 @@ struct SavedStepDetailModel: Identifiable, Codable, Equatable {
         self.why = entity.why
         self.how = entity.how
         self.order = Int(entity.order)
+
+        // Decode translations from JSON if available
+        if let translationsData = entity.translationsJSON {
+            self.translations = try? JSONDecoder().decode(StepTranslations.self, from: translationsData)
+        } else {
+            self.translations = nil
+        }
     }
 }
 
@@ -111,6 +224,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
     let adaptationType: AdaptationType?  // Legacy: single type (backward compatible)
     let adaptationTypes: [AdaptationType]?  // New: multiple types for combined adaptations
     let imageName: String
+    let translations: RoutineTranslations?
 
     // Computed property to get all active adaptation types
     var activeAdaptationTypes: [AdaptationType] {
@@ -122,7 +236,33 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         return []
     }
 
-    init(from template: RoutineTemplate, isActive: Bool = false, adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil) {
+    // MARK: - Localized Properties
+
+    /// Get localized title based on current language
+    var localizedTitle: String {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        return translations?.localizedTitle(for: currentLanguage) ?? title
+    }
+
+    /// Get localized description based on current language
+    var localizedDescription: String {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        return translations?.localizedDescription(for: currentLanguage) ?? description
+    }
+
+    /// Get localized benefits based on current language
+    var localizedBenefits: [String] {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        return translations?.localizedBenefits(for: currentLanguage) ?? benefits
+    }
+
+    /// Get localized tags based on current language
+    var localizedTags: [String] {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        return translations?.localizedTags(for: currentLanguage) ?? tags
+    }
+
+    init(from template: RoutineTemplate, isActive: Bool = false, adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, stepTranslations: [StepTranslations]? = nil, routineTranslations: RoutineTranslations? = nil) {
         self.id = UUID()
         self.templateId = template.id
         self.title = template.title
@@ -143,12 +283,16 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.adaptationType = adaptationType
         self.adaptationTypes = adaptationType.map { [$0] }  // Convert single to array
         self.imageName = template.imageName
+        self.translations = routineTranslations
         // Create step details from template steps
         var allStepDetails: [SavedStepDetailModel] = []
+        var stepTranslationIndex = 0
 
         // Add morning steps
         for (index, step) in template.morningSteps.enumerated() {
             let stepType = ProductAliasMapping.normalize(step.title)
+            let stepTranslation = (stepTranslations != nil && stepTranslationIndex < stepTranslations!.count) ? stepTranslations![stepTranslationIndex] : nil
+
             allStepDetails.append(SavedStepDetailModel(
                 title: step.title,
                 stepDescription: step.why,
@@ -156,13 +300,17 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
                 timeOfDay: "morning",
                 why: step.why,
                 how: step.how,
-                order: index
+                order: index,
+                translations: stepTranslation
             ))
+            stepTranslationIndex += 1
         }
 
         // Add evening steps
         for (index, step) in template.eveningSteps.enumerated() {
             let stepType = ProductAliasMapping.normalize(step.title)
+            let stepTranslation = (stepTranslations != nil && stepTranslationIndex < stepTranslations!.count) ? stepTranslations![stepTranslationIndex] : nil
+
             allStepDetails.append(SavedStepDetailModel(
                 title: step.title,
                 stepDescription: step.why,
@@ -170,14 +318,16 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
                 timeOfDay: "evening",
                 why: step.why,
                 how: step.how,
-                order: index + template.morningSteps.count
+                order: index + template.morningSteps.count,
+                translations: stepTranslation
             ))
+            stepTranslationIndex += 1
         }
 
         self.stepDetails = allStepDetails
     }
 
-    init(id: UUID = UUID(), templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, adaptationTypes: [AdaptationType]? = nil, imageName: String = "routine-minimalist") {
+    init(id: UUID = UUID(), templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, adaptationTypes: [AdaptationType]? = nil, imageName: String = "routine-minimalist", translations: RoutineTranslations? = nil) {
         self.id = id
         self.templateId = templateId
         self.title = title
@@ -199,6 +349,7 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.adaptationType = adaptationType
         self.adaptationTypes = adaptationTypes ?? adaptationType.map { [$0] }
         self.imageName = imageName
+        self.translations = translations
     }
 
     init(from entity: SavedRoutineEntity) {
@@ -230,6 +381,13 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.adaptationType = entity.adaptationType.flatMap { AdaptationType(rawValue: $0) }
         self.adaptationTypes = self.adaptationType.map { [$0] }  // Convert to array for backward compat
         self.imageName = entity.imageName ?? "routine-minimalist"
+
+        // Decode translations from JSON if available
+        if let translationsData = entity.translationsJSON {
+            self.translations = try? JSONDecoder().decode(RoutineTranslations.self, from: translationsData)
+        } else {
+            self.translations = nil
+        }
     }
 
     // MARK: - Conversion to RoutineResponse
@@ -351,7 +509,8 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
             adaptationEnabled: false,
             adaptationType: nil,
             adaptationTypes: nil,
-            imageName: "routine-minimalist"
+            imageName: "routine-minimalist",
+            translations: nil
         )
     }
     #endif

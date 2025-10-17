@@ -1,0 +1,26 @@
+/* 
+  Routines.strings (Turkish)
+  ManCare - Rutin ile ilgili metinler
+*/
+
+/* General */
+"routines.title" = "Rutinler";
+"routines.morning" = "Sabah Rutini";
+"routines.evening" = "Akşam Rutini";
+"routines.create" = "Yeni Rutin Oluştur";
+"routines.noRoutines" = "Henüz rutin yok";
+
+/* Product Types / Step Titles */
+"routines.step.cleanser" = "Temizleyici";
+"routines.step.exfoliator" = "Peeling";
+"routines.step.retinol" = "Retinol";
+"routines.step.faceSerum" = "Yüz Serumu";
+"routines.step.essence" = "Essens";
+"routines.step.toner" = "Tonik";
+"routines.step.moisturizer" = "Nemlendirici";
+"routines.step.sunscreen" = "Güneş Kremi";
+"routines.step.faceMask" = "Yüz Maskesi";
+"routines.step.spotTreatment" = "Leke Bakımı";
+"routines.step.eyeCream" = "Göz Kremi";
+"routines.step.facialOil" = "Yüz Yağı";
+

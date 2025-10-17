@@ -1,0 +1,199 @@
+/* 
+  Adaptations.strings (English)
+  ManCare - Cycle and weather adaptation guidance
+*/
+
+/* ====== CYCLE ADAPTATIONS ====== */
+
+/* Menstrual Phase - Cleanser */
+"cycle.menstrual.cleanser.guidance" = "Use gentle, circular motions. Avoid harsh scrubbing as your skin barrier is weaker.";
+"cycle.menstrual.barrierCompromised" = "Skin barrier is compromised during menstrual phase";
+
+/* Menstrual Phase - Exfoliator */
+"cycle.menstrual.exfoliator.warning" = "Too harsh for sensitive menstrual phase skin";
+
+/* Menstrual Phase - Retinol */
+"cycle.menstrual.retinol.guidance" = "Use pea-sized amount only. Skip if you notice irritation.";
+"cycle.menstrual.retinol.warning" = "Increased sensitivity to actives during this phase";
+
+/* Menstrual Phase - Face Serum */
+"cycle.menstrual.faceSerum.guidance" = "Choose hydrating serums with hyaluronic acid or niacinamide. Apply 2-3 drops and pat gently.";
+
+/* Menstrual Phase - Essence */
+"cycle.menstrual.essence.guidance" = "Gentle patting motions work best. Essence helps prepare skin for other products during this sensitive phase.";
+"cycle.menstrual.essence.warning" = "Use gentle pressure - skin barrier is compromised";
+
+/* Menstrual Phase - Toner */
+"cycle.menstrual.toner.guidance" = "Use alcohol-free, hydrating toners. Avoid harsh astringents during this sensitive phase.";
+"cycle.menstrual.toner.warning" = "Skip toners with alcohol or strong acids";
+
+/* Menstrual Phase - Moisturizer */
+"cycle.menstrual.moisturizer.guidance" = "Layer generously to support barrier repair. Consider a thicker cream.";
+
+/* Menstrual Phase - Sunscreen */
+"cycle.menstrual.sunscreen.guidance" = "Apply as usual. Protection is especially important when skin is sensitive.";
+
+/* Menstrual Phase - Eye Cream */
+"cycle.menstrual.eyeCream.guidance" = "Apply gently. Extra hydration helps with puffiness and dark circles.";
+"cycle.menstrual.eyeCream.warning" = "Increased fluid retention may cause puffiness";
+
+/* Menstrual Phase - Facial Oil */
+"cycle.menstrual.facialOil.guidance" = "Can be beneficial for barrier support. Use 2-3 drops, not more.";
+
+/* Follicular Phase - Cleanser */
+"cycle.follicular.cleanser.guidance" = "Your skin is resilient! Use your regular cleansing technique.";
+
+/* Follicular Phase - Exfoliator */
+"cycle.follicular.exfoliator.guidance" = "Great time for deeper exfoliation. Your skin can handle more intensive treatment.";
+
+/* Follicular Phase - Retinol */
+"cycle.follicular.retinol.guidance" = "Perfect time to use your full dosage. Skin absorption is optimal.";
+
+/* Follicular Phase - Face Serum */
+"cycle.follicular.faceSerum.guidance" = "Perfect time for vitamin C, retinol, or peptide serums. Your skin can handle stronger actives now.";
+
+/* Follicular Phase - Essence */
+"cycle.follicular.essence.guidance" = "Perfect time for intensive essence treatments. Your skin absorbs nutrients optimally now.";
+
+/* Follicular Phase - Toner */
+"cycle.follicular.toner.guidance" = "Your skin is resilient. Use your regular toner routine.";
+
+/* Follicular Phase - Treatment */
+"cycle.follicular.treatment.guidance" = "Ideal time for intensive treatments, peels, or new products.";
+
+/* Follicular Phase - Moisturizer */
+"cycle.follicular.moisturizer.guidance" = "Your regular moisturizer is perfect. Skin is balanced.";
+
+/* Follicular Phase - Eye Cream */
+"cycle.follicular.eyeCream.guidance" = "Apply your regular amount with gentle patting motions.";
+
+/* Follicular Phase - Facial Oil */
+"cycle.follicular.facialOil.guidance" = "Great time to use facial oils. Skin absorbs them beautifully now.";
+
+/* Ovulation Phase - Cleanser */
+"cycle.ovulation.cleanser.guidance" = "Maintain your routine. Your skin is at its best!";
+
+/* Ovulation Phase - Exfoliator */
+"cycle.ovulation.exfoliator.guidance" = "Continue your regular exfoliation schedule.";
+
+/* Ovulation Phase - Retinol */
+"cycle.ovulation.retinol.guidance" = "Keep up your regular retinol routine.";
+
+/* Ovulation Phase - Moisturizer */
+"cycle.ovulation.moisturizer.guidance" = "Your skin is well-balanced. Stick with your routine.";
+
+/* Ovulation Phase - Essence */
+"cycle.ovulation.essence.guidance" = "Your skin is glowing naturally. Continue your regular essence application.";
+
+/* Ovulation Phase - Toner */
+"cycle.ovulation.toner.guidance" = "Your skin looks its best. Continue your regular toner routine.";
+
+/* Ovulation Phase - Eye Cream */
+"cycle.ovulation.eyeCream.guidance" = "Your eye area looks bright and fresh. Continue normal application.";
+
+/* Ovulation Phase - Facial Oil */
+"cycle.ovulation.facialOil.guidance" = "Continue regular use. Your skin is balanced and glowing.";
+
+/* Luteal Phase - Cleanser */
+"cycle.luteal.cleanser.guidance" = "Double cleanse if wearing makeup. Oil production increases during this phase.";
+
+/* Luteal Phase - Exfoliator */
+"cycle.luteal.exfoliator.guidance" = "Limit to 2x per week maximum to avoid irritation.";
+"cycle.luteal.exfoliator.warning" = "Skin can become more reactive during luteal phase";
+
+/* Luteal Phase - Retinol */
+"cycle.luteal.retinol.guidance" = "Consider reducing frequency or amount if you notice increased sensitivity.";
+"cycle.luteal.retinol.warning" = "May cause irritation as progesterone rises";
+
+/* Luteal Phase - Face Mask */
+"cycle.luteal.faceMask.guidance" = "Clay or charcoal masks are excellent for managing increased oil production.";
+
+/* Luteal Phase - Moisturizer */
+"cycle.luteal.moisturizer.guidance" = "Consider switching to a lighter moisturizer if feeling too oily.";
+
+/* Luteal Phase - Spot Treatment */
+"cycle.luteal.spotTreatment.guidance" = "Keep spot treatments handy. Breakouts are more common now.";
+
+/* Luteal Phase - Toner */
+"cycle.luteal.toner.guidance" = "Use a balancing or mattifying toner to control oil.";
+
+/* Luteal Phase - Essence */
+"cycle.luteal.essence.guidance" = "Use lighter essence formulas. Heavy essences may feel too rich during this oilier phase.";
+"cycle.luteal.essence.warning" = "Skip heavy, oil-based essences if feeling congested";
+
+/* Luteal Phase - Eye Cream */
+"cycle.luteal.eyeCream.guidance" = "May need extra product for under-eye area. Watch for puffiness.";
+"cycle.luteal.eyeCream.warning" = "Hormonal changes may cause dark circles and puffiness";
+
+/* Luteal Phase - Facial Oil */
+"cycle.luteal.facialOil.guidance" = "Use sparingly or skip if feeling oily. Your natural sebum production is higher.";
+"cycle.luteal.facialOil.warning" = "Increased natural oil production - may cause congestion";
+
+/* ====== WEATHER ADAPTATIONS ====== */
+
+/* UV Extreme */
+"weather.uv_extreme.sunscreen.note" = "UV is extreme. Use SPF 50+ and reapply every 1-2 hours. Stay in shade during peak hours (10am-4pm).";
+"weather.uv_extreme.antioxidant.note" = "Add antioxidant protection against extreme UV damage.";
+"weather.uv_extreme.retinoid_skip.note" = "Skip retinoids in morning routine—extreme UV increases photosensitivity.";
+"weather.uv_extreme.exfoliant_skip.note" = "Skip exfoliants in morning—extreme UV will damage sensitized skin.";
+
+/* UV High */
+"weather.uv_high.sunscreen.note" = "UV is high. Use SPF 50+ and reapply every 2 hours. Add antioxidant serum.";
+"weather.uv_high.antioxidant.note" = "Antioxidants protect against UV damage. Apply before sunscreen.";
+"weather.uv_high.retinoid_reduce.note" = "Avoid retinoids in morning routine when UV is high—use in PM instead.";
+"weather.uv_high.exfoliant_reduce.note" = "Reduce exfoliant use in morning—high UV can damage sensitized skin.";
+
+/* UV Moderate */
+"weather.uv_moderate.sunscreen.note" = "UV is moderate. SPF 30-50 recommended. Reapply if outdoors.";
+"weather.uv_moderate.antioxidant.note" = "Antioxidant serum is beneficial for moderate UV protection.";
+
+/* UV Low */
+"weather.uv_low.sunscreen.note" = "UV is low. SPF 30 is sufficient. Safe to use actives like retinoids.";
+
+/* Low Humidity */
+"weather.low_humidity.moisturizer.note" = "Air is dry. Use heavier moisturizer or add occlusive layer.";
+"weather.low_humidity.hydration.note" = "Add hydrating toner or HA serum to combat dry air.";
+"weather.low_humidity.exfoliant_caution.note" = "Avoid over-exfoliating in dry conditions—can compromise barrier.";
+
+/* High Humidity */
+"weather.high_humidity.moisturizer.note" = "Humid conditions. Use lighter gel moisturizer instead of heavy creams.";
+"weather.high_humidity.occlusive_skip.note" = "Skip thick occlusives or heavy oils in humid weather.";
+
+/* Windy */
+"weather.windy.barrier.note" = "Windy conditions strip moisture. Apply barrier cream or balm.";
+"weather.windy.exfoliant_skip.note" = "Skip harsh peels today—wind can irritate sensitized skin.";
+"weather.windy.retinoid_caution.note" = "Wind can irritate skin. Reduce strength of retinoids today.";
+
+/* Cold */
+"weather.cold.moisturizer.note" = "Cold weather requires richer protection. Use heavier moisturizer with ceramides or squalane.";
+"weather.cold.barrier.note" = "Add barrier-supporting ingredients (ceramides, squalane, niacinamide).";
+
+/* Hot */
+"weather.hot.moisturizer.note" = "Hot weather calls for lighter products. Use oil-free, mattifying formulations.";
+"weather.hot.spf_mattifying.note" = "Hot weather increases sun exposure. Use mattifying sunscreen and reapply frequently due to sweat.";
+
+/* Hot + Humid */
+"weather.hot_humid.combo_spf.note" = "Hot and humid. Choose gel-based SPF for comfort. Reapply every 2 hours.";
+
+/* Snow */
+"weather.snow.spf_extreme.note" = "Snow reflects up to 80% of UV rays—double exposure. Treat as extreme UV day.";
+"weather.snow.retinoid_caution.note" = "Skip morning retinoids—snow reflection doubles UV exposure.";
+
+/* ====== CYCLE PHASE NAMES ====== */
+"adaptations.cycle.phase.menstrual" = "Menstrual Phase";
+"adaptations.cycle.phase.follicular" = "Follicular Phase";
+"adaptations.cycle.phase.ovulation" = "Ovulation Phase";
+"adaptations.cycle.phase.luteal" = "Luteal Phase";
+
+/* ====== WEATHER CONTEXT NAMES ====== */
+"adaptations.weather.context.uv_extreme" = "Extreme UV";
+"adaptations.weather.context.uv_high" = "High UV";
+"adaptations.weather.context.uv_moderate" = "Moderate UV";
+"adaptations.weather.context.uv_low" = "Low UV";
+"adaptations.weather.context.low_humidity" = "Low Humidity";
+"adaptations.weather.context.high_humidity" = "High Humidity";
+"adaptations.weather.context.windy" = "Windy";
+"adaptations.weather.context.cold" = "Cold";
+"adaptations.weather.context.hot" = "Hot";
+"adaptations.weather.context.snow" = "Snow";
+

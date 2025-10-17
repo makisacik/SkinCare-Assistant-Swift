@@ -166,7 +166,7 @@ struct RoutineHomeView: View {
                                 showingRoutineSwitcher = true
                             } label: {
                                 HStack(spacing: 4) {
-                                    Text(activeRoutine.title)
+                                    Text(activeRoutine.localizedTitle)
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     Image(systemName: "chevron.right")
@@ -277,12 +277,12 @@ struct RoutineHomeView: View {
             return morningSteps.map { stepDetail in
                 RoutineStepDetail(
                     id: stepDetail.id.uuidString, // FIXED: Use actual UUID from saved routine
-                    title: stepDetail.title,
-                    description: stepDetail.stepDescription,
+                    title: stepDetail.localizedTitle,
+                    description: stepDetail.localizedDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                     timeOfDay: .morning,
-                    why: stepDetail.why,
-                    how: stepDetail.how
+                    why: stepDetail.localizedWhy,
+                    how: stepDetail.localizedHow
                 )
             }
         }
@@ -340,12 +340,12 @@ struct RoutineHomeView: View {
             return eveningSteps.map { stepDetail in
                 RoutineStepDetail(
                     id: stepDetail.id.uuidString, // FIXED: Use actual UUID from saved routine
-                    title: stepDetail.title,
-                    description: stepDetail.stepDescription,
+                    title: stepDetail.localizedTitle,
+                    description: stepDetail.localizedDescription,
                     stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                     timeOfDay: .evening,
-                    why: stepDetail.why,
-                    how: stepDetail.how
+                    why: stepDetail.localizedWhy,
+                    how: stepDetail.localizedHow
                 )
             }
         }
@@ -395,12 +395,12 @@ struct RoutineHomeView: View {
         return weeklySteps.map { stepDetail in
             RoutineStepDetail(
                 id: stepDetail.id.uuidString,
-                title: stepDetail.title,
-                description: stepDetail.stepDescription,
+                title: stepDetail.localizedTitle,
+                description: stepDetail.localizedDescription,
                 stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                 timeOfDay: .weekly,
-                why: stepDetail.why,
-                how: stepDetail.how
+                why: stepDetail.localizedWhy,
+                how: stepDetail.localizedHow
             )
         }
     }
@@ -641,12 +641,12 @@ private struct RoutineCard: View {
         return routineSteps.map { stepDetail in
             RoutineStepDetail(
                 id: stepDetail.id.uuidString, // FIXED: Use actual UUID
-                title: stepDetail.title,
-                description: stepDetail.stepDescription,
+                title: stepDetail.localizedTitle,
+                description: stepDetail.localizedDescription,
                 stepType: ProductType(rawValue: stepDetail.stepType) ?? .faceSerum,
                 timeOfDay: timeOfDay,
-                why: stepDetail.why,
-                how: stepDetail.how
+                why: stepDetail.localizedWhy,
+                how: stepDetail.localizedHow
             )
         }
     }
@@ -1250,7 +1250,7 @@ private struct RoutineSwitcherCard: View {
                 // Content
                 VStack(alignment: .leading, spacing: 2) {
                     HStack {
-                        Text(routine.title)
+                        Text(routine.localizedTitle)
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .multilineTextAlignment(.leading)
@@ -1264,7 +1264,7 @@ private struct RoutineSwitcherCard: View {
                                 .foregroundColor(ThemeManager.shared.theme.palette.success)
                         }            }
 
-                    Text(routine.description)
+                    Text(routine.localizedDescription)
                         .font(.system(size: 13))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.leading)

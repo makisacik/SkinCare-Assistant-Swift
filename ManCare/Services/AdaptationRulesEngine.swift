@@ -85,18 +85,53 @@ class AdaptationRulesEngine {
         guard let action = matchingRule.action else { return nil }
 
         print("✅ [AdaptationRulesEngine] Found legacy rule: '\(matchingRule.id)' for '\(step.stepType)' -> '\(action.emphasis)'")
-        print("📝 [AdaptationRulesEngine] Guidance: '\(action.guidanceTemplate ?? "No guidance")'")
+
+        // Get localized guidance and warnings
+        let localizedGuidance = getLocalizedGuidance(from: action)
+        let localizedWarnings = getLocalizedWarnings(from: action)
+
+        print("📝 [AdaptationRulesEngine] Guidance: '\(localizedGuidance ?? "No guidance")'")
 
         // Build StepAdaptation from rule
         return StepAdaptation(
             stepId: step.id,
             contextKey: contextKey,
             emphasis: action.emphasis,
-            guidance: action.guidanceTemplate,
+            guidance: localizedGuidance,
             orderOverride: action.orderPriority,
-            warnings: action.warnings,
+            warnings: localizedWarnings,
             origin: .default
         )
+    }
+
+    /// Get localized guidance from rule action
+    private func getLocalizedGuidance(from action: RuleAction) -> String? {
+        // Try i18n key first
+        if let guidanceKey = action.i18n?.guidanceKey {
+            let localized = L10n.Adaptations.guidance(guidanceKey)
+            // If localization returns the key itself, it means translation is missing
+            if localized != guidanceKey {
+                return localized
+            }
+        }
+
+        // Fall back to legacy template
+        return action.guidanceTemplate
+    }
+
+    /// Get localized warnings from rule action
+    private func getLocalizedWarnings(from action: RuleAction) -> [String] {
+        // Try i18n keys first
+        if let warningKeys = action.i18n?.warningKeys, !warningKeys.isEmpty {
+            let localized = warningKeys.map { L10n.Adaptations.warning($0) }
+            // Only use if at least one translation succeeded
+            if localized.contains(where: { !warningKeys.contains($0) }) {
+                return localized
+            }
+        }
+
+        // Fall back to legacy warnings
+        return action.warnings
     }
 
     /// Resolve adaptation using new format v1.1 (weather rules)
@@ -168,8 +203,9 @@ class AdaptationRulesEngine {
                 }
             }
 
-            // Accumulate notes
-            if let note = effects.note {
+            // Accumulate notes (localized if i18n key available)
+            let localizedNote = getLocalizedNote(from: effects)
+            if let note = localizedNote {
                 if finalGuidance == nil {
                     finalGuidance = note
                 } else {
@@ -196,6 +232,21 @@ class AdaptationRulesEngine {
             warnings: finalWarnings,
             origin: .default
         )
+    }
+
+    /// Get localized note from rule effects
+    private func getLocalizedNote(from effects: RuleEffects) -> String? {
+        // Try i18n key first
+        if let noteKey = effects.i18n?.noteKey {
+            let localized = L10n.Adaptations.note(noteKey)
+            // If localization returns the key itself, it means translation is missing
+            if localized != noteKey {
+                return localized
+            }
+        }
+
+        // Fall back to legacy note
+        return effects.note
     }
 
     /// Determine if new emphasis should override current emphasis

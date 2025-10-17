@@ -1,0 +1,26 @@
+/* 
+  Routines.strings (English)
+  ManCare - Routine-related strings
+*/
+
+/* General */
+"routines.title" = "Routines";
+"routines.morning" = "Morning Routine";
+"routines.evening" = "Evening Routine";
+"routines.create" = "Create New Routine";
+"routines.noRoutines" = "No routines yet";
+
+/* Product Types / Step Titles */
+"routines.step.cleanser" = "Cleanser";
+"routines.step.exfoliator" = "Exfoliator";
+"routines.step.retinol" = "Retinol";
+"routines.step.faceSerum" = "Face Serum";
+"routines.step.essence" = "Essence";
+"routines.step.toner" = "Toner";
+"routines.step.moisturizer" = "Moisturizer";
+"routines.step.sunscreen" = "Sunscreen";
+"routines.step.faceMask" = "Face Mask";
+"routines.step.spotTreatment" = "Spot Treatment";
+"routines.step.eyeCream" = "Eye Cream";
+"routines.step.facialOil" = "Facial Oil";
+

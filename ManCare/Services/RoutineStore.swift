@@ -23,7 +23,7 @@ protocol RoutineStoreProtocol: Sendable {
     func fetchSavedRoutines() async throws -> [SavedRoutineModel]
     func fetchActiveRoutine() async throws -> SavedRoutineModel?
     func saveRoutine(_ routine: SavedRoutineModel) async throws -> SavedRoutineModel
-    func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel
+    func saveInitialRoutine(from routineResponse: RoutineResponse, translations: (routine: RoutineTranslations, steps: [StepTranslations])) async throws -> SavedRoutineModel
     func removeRoutine(_ routine: SavedRoutineModel) async throws
     func removeRoutineTemplate(_ template: RoutineTemplate) async throws
     func setActiveRoutine(_ routine: SavedRoutineModel) async throws
@@ -135,11 +135,11 @@ actor RoutineStore: RoutineStoreProtocol {
         }
     }
 
-    func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel {
+    func saveInitialRoutine(from routineResponse: RoutineResponse, translations: (routine: RoutineTranslations, steps: [StepTranslations])) async throws -> SavedRoutineModel {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
-                    let initialRoutine = self.createInitialRoutineModel(from: routineResponse)
+                    let initialRoutine = self.createInitialRoutineModel(from: routineResponse, translations: translations)
 
                     // Check if we already have a "My Routine"
                     let existingRequest: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
@@ -464,6 +464,13 @@ actor RoutineStore: RoutineStoreProtocol {
         entity.adaptationType = routine.adaptationType?.rawValue
         entity.imageName = routine.imageName
 
+        // Encode translations to JSON if available
+        if let translations = routine.translations {
+            entity.translationsJSON = try? JSONEncoder().encode(translations)
+        } else {
+            entity.translationsJSON = nil
+        }
+
         // Delete existing step details
         if let existingSteps = entity.stepDetails as? Set<SavedStepDetailEntity> {
             for step in existingSteps {
@@ -483,14 +490,24 @@ actor RoutineStore: RoutineStoreProtocol {
             stepEntity.how = stepDetail.how
             stepEntity.order = Int16(stepDetail.order)
             stepEntity.routine = entity
+
+            // Encode step translations to JSON if available
+            if let stepTranslations = stepDetail.translations {
+                stepEntity.translationsJSON = try? JSONEncoder().encode(stepTranslations)
+            } else {
+                stepEntity.translationsJSON = nil
+            }
         }
     }
 
-    private func createInitialRoutineModel(from routineResponse: RoutineResponse) -> SavedRoutineModel {
+    private func createInitialRoutineModel(from routineResponse: RoutineResponse, translations: (routine: RoutineTranslations, steps: [StepTranslations])) -> SavedRoutineModel {
         var stepDetails: [SavedStepDetailModel] = []
         var order = 0
+        var stepTranslationIndex = 0
 
         for step in routineResponse.routine.morning {
+            let stepTranslation = stepTranslationIndex < translations.steps.count ? translations.steps[stepTranslationIndex] : nil
+
             stepDetails.append(SavedStepDetailModel(
                 title: step.name,
                 stepDescription: "\(step.why) - \(step.how)",
@@ -498,12 +515,16 @@ actor RoutineStore: RoutineStoreProtocol {
                 timeOfDay: "morning",
                 why: step.why,
                 how: step.how,
-                order: order
+                order: order,
+                translations: stepTranslation
             ))
             order += 1
+            stepTranslationIndex += 1
         }
 
         for step in routineResponse.routine.evening {
+            let stepTranslation = stepTranslationIndex < translations.steps.count ? translations.steps[stepTranslationIndex] : nil
+
             stepDetails.append(SavedStepDetailModel(
                 title: step.name,
                 stepDescription: "\(step.why) - \(step.how)",
@@ -511,9 +532,11 @@ actor RoutineStore: RoutineStoreProtocol {
                 timeOfDay: "evening",
                 why: step.why,
                 how: step.how,
-                order: order
+                order: order,
+                translations: stepTranslation
             ))
             order += 1
+            stepTranslationIndex += 1
         }
 
         let morningSteps = routineResponse.routine.morning.map { $0.name }
@@ -536,7 +559,12 @@ actor RoutineStore: RoutineStoreProtocol {
             isPremium: false,
             savedDate: Date(),
             isActive: true,
-            stepDetails: stepDetails
+            stepDetails: stepDetails,
+            adaptationEnabled: false,
+            adaptationType: nil,
+            adaptationTypes: nil,
+            imageName: "routine-minimalist",
+            translations: translations.routine
         )
     }
 

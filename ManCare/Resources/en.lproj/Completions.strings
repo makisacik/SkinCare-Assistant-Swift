@@ -1,0 +1,40 @@
+/* 
+  Completions.strings (English)
+  ManCare - Completion views and timeline
+*/
+
+/* General */
+"completions.productsUsed" = "Products used";
+"completions.routinesCompleted" = "Routines completed";
+"completions.morningRoutine" = "Morning routine";
+"completions.eveningRoutine" = "Evening routine";
+"completions.noProductsUsed" = "No products used";
+"completions.noRoutinesCompleted" = "No routines completed";
+"completions.completeStepsToSee" = "Complete your routine steps to see them here";
+
+/* Timeline */
+"completions.timeline" = "Timeline";
+"completions.journal" = "Journal";
+"completions.insights" = "Insights";
+
+/* Insights */
+"completions.yourInsights" = "Your Insights";
+"completions.lastNDays" = "Last 30 days";
+"completions.currentStreak" = "Current Streak";
+"completions.dayInRow" = "Day in a row";
+"completions.daysInRow" = "Days in a row";
+"completions.weekly" = "Weekly";
+"completions.monthly" = "Monthly";
+"completions.morning" = "Morning";
+"completions.evening" = "Evening";
+"completions.daysCompleted" = "days completed";
+"completions.loadingInsights" = "Loading insights...";
+"completions.consistencyInsight" = "Consistency Insight";
+"completions.adaptationImpact" = "Adaptation Impact";
+"completions.thisWeekVsLastWeek" = "this week vs last week";
+
+/* Journal */
+"completions.skinJournal" = "Skin Journal";
+"completions.seeYourSkinGlowEvolve" = "See your skin glow evolve";
+"completions.discoverPatterns" = "Discover patterns and trends in your skincare journey";
+

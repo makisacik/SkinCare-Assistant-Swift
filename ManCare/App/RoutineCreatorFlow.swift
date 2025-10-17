@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RoutineCreatorFlow: View {
     @Environment(\.colorScheme) private var cs
-    
+
     @State private var showMainApp = false
     @State private var currentStep: FlowStep = .skinType
     @State private var selectedSkinType: SkinType?
@@ -25,6 +25,11 @@ struct RoutineCreatorFlow: View {
     @State private var isLoadingRoutine = false
     @State private var routineError: Error?
     @State private var cycleData: CycleData?
+
+    // Background routine generation
+    @State private var backgroundGenerationTask: Task<SavedRoutineModel, Error>?
+    @State private var generatedRoutine: SavedRoutineModel?
+    @State private var generationStarted = false
 
     // Use RoutineService for proper Core Data handling
     private let routineService = ServiceFactory.shared.createRoutineService()
@@ -62,7 +67,7 @@ struct RoutineCreatorFlow: View {
             }
         }
     }
-    
+
     private var routineCreatorContent: some View {
         NavigationView {
             ZStack {
@@ -142,6 +147,26 @@ struct RoutineCreatorFlow: View {
                     onContinue: { region in
                         selectedRegion = region
                         withAnimation(.easeInOut(duration: 0.3)) {
+                            currentStep = .routineDepth
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal:   .move(edge: .leading).combined(with: .opacity)
+                ))
+
+            case .routineDepth:
+                RoutineDepthView(
+                    onContinue: { depth in
+                        selectedRoutineDepth = depth
+
+                        // Start background routine generation immediately
+                        if !generationStarted {
+                            startBackgroundRoutineGeneration()
+                        }
+
+                        withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .cycleSetup
                         }
                     }
@@ -160,20 +185,6 @@ struct RoutineCreatorFlow: View {
                             let store = CycleStore()
                             store.updateCycleData(data)
                         }
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .routineDepth
-                        }
-                    }
-                )
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing).combined(with: .opacity),
-                    removal:   .move(edge: .leading).combined(with: .opacity)
-                ))
-
-            case .routineDepth:
-                RoutineDepthView(
-                    onContinue: { depth in
-                        selectedRoutineDepth = depth
                         withAnimation(.easeInOut(duration: 0.3)) {
                             currentStep = .preferences
                         }
@@ -242,11 +253,12 @@ struct RoutineCreatorFlow: View {
                 )
                 .transition(.opacity) // loading can just fade
                 .onAppear {
-                    generateRoutine()
+                    checkBackgroundGenerationOrGenerate()
                 }
                 .onTapGesture {
                     // Debug: Tap to retry routine generation
                     print("🔄 Retrying routine generation...")
+                    cancelBackgroundGeneration()
                     generateRoutine()
                 }
 
@@ -307,9 +319,9 @@ struct RoutineCreatorFlow: View {
             }
         }
     }
-    
+
     // MARK: - Back Navigation
-    
+
     /// Determines if the back button should be shown for the current step
     private var shouldShowBackButton: Bool {
         switch currentStep {
@@ -320,7 +332,7 @@ struct RoutineCreatorFlow: View {
             return true
         }
     }
-    
+
     /// Back button view
     private var backButton: some View {
         Button(action: handleBackNavigation) {
@@ -329,7 +341,7 @@ struct RoutineCreatorFlow: View {
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }
     }
-    
+
     /// Handles back navigation based on the current step
     private func handleBackNavigation() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -348,12 +360,14 @@ struct RoutineCreatorFlow: View {
                 currentStep = .fitzpatrickSkinTone
             case .region:
                 currentStep = .ageRange
-            case .cycleSetup:
-                currentStep = .region
             case .routineDepth:
-                currentStep = .cycleSetup
-            case .preferences:
+                currentStep = .region
+                // Cancel background generation if user goes back before it completes
+                cancelBackgroundGeneration()
+            case .cycleSetup:
                 currentStep = .routineDepth
+            case .preferences:
+                currentStep = .cycleSetup
             case .loading:
                 currentStep = .preferences
             case .results:
@@ -361,14 +375,14 @@ struct RoutineCreatorFlow: View {
             }
         }
     }
-    
+
     /// Setup navigation bar appearance with theme colors
     private func setupNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = UIColor(ThemeManager.shared.theme.palette.accentBackground)
         appearance.shadowImage = UIImage() // Remove shadow
-        
+
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
@@ -385,7 +399,7 @@ struct RoutineCreatorFlow: View {
             routineError = GPTService.GPTServiceError.requestFailed(-1, "Missing required data")
             return
         }
-        
+
         // Validate that we have either a selected main goal or custom goal text
         guard selectedMainGoal != nil || !customGoalText.isEmpty else {
             routineError = GPTService.GPTServiceError.requestFailed(-1, "Missing main goal")
@@ -417,7 +431,7 @@ struct RoutineCreatorFlow: View {
             if !customConcernText.isEmpty {
                 concernsToSend.append(customConcernText)
             }
-            
+
             // For main goal: if card is selected, use it; otherwise use custom text
             let goalToSend: String
             if let selectedGoal = selectedMainGoal {
@@ -430,7 +444,7 @@ struct RoutineCreatorFlow: View {
                 // Fallback to default
                 goalToSend = MainGoal.healthierOverall.rawValue
             }
-            
+
             // Create the request outside try-catch so it's accessible in error handling
             let request = ManCareRoutineRequest(
                 selectedSkinType: skinType.rawValue,
@@ -578,6 +592,119 @@ struct RoutineCreatorFlow: View {
                 }
             }
         }
+    }
+
+    // MARK: - Background Generation Functions
+
+    /// Start routine generation in the background right after routine depth selection
+    private func startBackgroundRoutineGeneration() {
+        guard !generationStarted else {
+            print("⚠️ Background generation already started, skipping")
+            return
+        }
+
+        guard let skinType = selectedSkinType,
+              let fitzpatrickSkinTone = selectedFitzpatrickSkinTone,
+              let ageRange = selectedAgeRange,
+              let region = selectedRegion,
+              let routineDepth = selectedRoutineDepth else {
+            print("⚠️ Missing required data for background generation")
+            return
+        }
+
+        guard Config.hasValidAPIKey else {
+            print("⚠️ No API key, background generation skipped")
+            return
+        }
+
+        generationStarted = true
+        print("🚀 Starting background routine generation...")
+
+        backgroundGenerationTask = Task {
+            do {
+                // Use preferences if already selected, otherwise nil
+                let savedRoutine = try await routineService.generateAndSaveInitialRoutine(
+                    skinType: skinType,
+                    concerns: selectedConcerns,
+                    mainGoal: selectedMainGoal ?? .healthierOverall,
+                    fitzpatrickSkinTone: fitzpatrickSkinTone,
+                    ageRange: ageRange,
+                    region: region,
+                    routineDepth: routineDepth,
+                    preferences: selectedPreferences,
+                    lifestyle: nil
+                )
+
+                print("✅ Background routine generation completed!")
+
+                await MainActor.run {
+                    self.generatedRoutine = savedRoutine
+                    self.routineError = nil
+                }
+
+                return savedRoutine
+            } catch {
+                print("❌ Background routine generation failed: \(error)")
+
+                await MainActor.run {
+                    self.routineError = error
+                    self.generatedRoutine = nil
+                }
+
+                throw error
+            }
+        }
+    }
+
+    /// Check if background generation is complete, or start a new generation if needed
+    private func checkBackgroundGenerationOrGenerate() {
+        Task {
+            // Check if we already have a generated routine from background
+            if let routine = generatedRoutine {
+                print("✅ Routine already generated in background, showing results immediately!")
+                await MainActor.run {
+                    self.isLoadingRoutine = false
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        self.currentStep = .results
+                    }
+                }
+                return
+            }
+
+            // Check if background generation is still running
+            if let task = backgroundGenerationTask {
+                print("⏳ Waiting for background generation to complete...")
+                do {
+                    let routine = try await task.value
+                    print("✅ Background generation completed, showing results!")
+                    await MainActor.run {
+                        self.generatedRoutine = routine
+                        self.isLoadingRoutine = false
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            self.currentStep = .results
+                        }
+                    }
+                } catch {
+                    print("❌ Background generation failed, starting new generation...")
+                    // Background generation failed, start a new one
+                    generateRoutine()
+                }
+                return
+            }
+
+            // No background generation was started, generate now
+            print("⚠️ No background generation found, starting now...")
+            generateRoutine()
+        }
+    }
+
+    /// Cancel background generation if user goes back
+    private func cancelBackgroundGeneration() {
+        backgroundGenerationTask?.cancel()
+        backgroundGenerationTask = nil
+        generatedRoutine = nil
+        generationStarted = false
+        print("🛑 Background generation cancelled")
     }
 
     // MARK: - Fallback Functions
@@ -1010,8 +1137,8 @@ private struct ProgressIndicator: View {
         case .fitzpatrickSkinTone: return 4
         case .ageRange: return 5
         case .region: return 6
-        case .cycleSetup: return 7
-        case .routineDepth: return 8
+        case .routineDepth: return 7
+        case .cycleSetup: return 8
         case .preferences: return 9
         case .loading: return 10
         case .results: return 11
@@ -1026,8 +1153,8 @@ private struct ProgressIndicator: View {
         case .fitzpatrickSkinTone: return "Skin Tone"
         case .ageRange: return "Age Range"
         case .region: return "Region"
-        case .cycleSetup: return "Cycle Setup"
         case .routineDepth: return "Routine Level"
+        case .cycleSetup: return "Cycle Setup"
         case .preferences: return "Preferences"
         case .loading: return "Analyzing"
         case .results: return "Results"

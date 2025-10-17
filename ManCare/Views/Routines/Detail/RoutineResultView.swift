@@ -15,6 +15,7 @@ struct RoutineResultView: View {
     var showStartButton: Bool = true
 
     @State private var savedRoutine: SavedRoutineModel? = nil
+    @State private var isLoadingRoutine = true
     private let routineStore = RoutineStore()
 
     var body: some View {
@@ -22,41 +23,58 @@ struct RoutineResultView: View {
             // Background gradient
             backgroundGradient
 
-            VStack(spacing: 0) {
-                // Header
-                headerView
+            if isLoadingRoutine {
+                // Loading indicator while routine is being fetched
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .tint(ThemeManager.shared.theme.palette.primary)
 
-                // Content
-                ScrollView {
-                    VStack(spacing: 24) {
-                        // Cycle Tracking Badge (if enabled)
-                        if cycleData != nil {
-                            cycleAdaptationCard
-                        }
-
-                        // Steps Section
-                        stepsSection
-
-                        // Start Your Journey Button (optional)
-                        if showStartButton {
-                            startJourneyButton
-                                .padding(.top, 20)
-                                .padding(.bottom, 40)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
+                    Text("Loading your routine...")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
-                .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea(.all, edges: .bottom))
+            } else {
+                VStack(spacing: 0) {
+                    // Header
+                    headerView
+
+                    // Content
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            // Cycle Tracking Badge (if enabled)
+                            if cycleData != nil {
+                                cycleAdaptationCard
+                            }
+
+                            // Steps Section
+                            stepsSection
+
+                            // Start Your Journey Button (optional)
+                            if showStartButton {
+                                startJourneyButton
+                                    .padding(.top, 20)
+                                    .padding(.bottom, 40)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
+                    }
+                    .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea(.all, edges: .bottom))
+                }
             }
         }
         .task {
             // Load the saved routine from Core Data (single source of truth)
             do {
+                // Add a small delay to ensure translations are saved
+                try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
                 savedRoutine = try await routineStore.fetchActiveRoutine()
                 print("✅ [RoutineResultView] Loaded active routine from Core Data: \(savedRoutine?.title ?? "none")")
+                isLoadingRoutine = false
             } catch {
                 print("❌ [RoutineResultView] Error loading routine from Core Data: \(error)")
+                isLoadingRoutine = false
             }
         }
     }
@@ -312,8 +330,8 @@ struct RoutineResultView: View {
         return morningSteps.sorted { $0.order < $1.order }.map { stepDetail in
             RoutineStep(
                 productType: ProductType(rawValue: stepDetail.stepType) ?? .cleanser,
-                title: stepDetail.title,
-                instructions: stepDetail.stepDescription
+                title: stepDetail.localizedTitle,
+                instructions: stepDetail.localizedDescription
             )
         }
     }
@@ -329,8 +347,8 @@ struct RoutineResultView: View {
         return eveningSteps.sorted { $0.order < $1.order }.map { stepDetail in
             RoutineStep(
                 productType: ProductType(rawValue: stepDetail.stepType) ?? .cleanser,
-                title: stepDetail.title,
-                instructions: stepDetail.stepDescription
+                title: stepDetail.localizedTitle,
+                instructions: stepDetail.localizedDescription
             )
         }
     }

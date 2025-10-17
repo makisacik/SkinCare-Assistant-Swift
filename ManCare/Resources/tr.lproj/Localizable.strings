@@ -1,0 +1,30 @@
+/* 
+  Localizable.strings (Turkish)
+  ManCare - Genel metinler
+*/
+
+/* Common */
+"common.cancel" = "İptal";
+"common.save" = "Kaydet";
+"common.done" = "Tamam";
+"common.delete" = "Sil";
+"common.edit" = "Düzenle";
+"common.add" = "Ekle";
+"common.close" = "Kapat";
+"common.ok" = "Tamam";
+"common.yes" = "Evet";
+"common.no" = "Hayır";
+
+/* Settings */
+"settings.editProfile" = "Profili Düzenle";
+"settings.language" = "Dil";
+"settings.premium" = "Premium";
+"settings.enablePremium" = "Premium'u Aç (Test)";
+"settings.disablePremium" = "Premium'u Kapat (Test)";
+
+/* Tabs */
+"tabs.routines" = "Rutinler";
+"tabs.discover" = "Keşfet";
+"tabs.products" = "Ürünlerim";
+"tabs.myself" = "Ben";
+

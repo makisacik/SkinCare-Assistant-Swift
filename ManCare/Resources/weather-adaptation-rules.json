@@ -49,6 +49,9 @@
           "title": "Sunscreen SPF 50+"
         },
         "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.uv_extreme.sunscreen.note"
+        },
         "note": "UV is extreme. Use SPF 50+ and reapply every 1-2 hours. Stay in shade during peak hours (10am-4pm).",
         "priority": 150,
         "userOverrideAllowed": false
@@ -67,6 +70,9 @@
           "title": "Antioxidant Serum (Vit C/EGCG)"
         },
         "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.uv_extreme.antioxidant.note"
+        },
         "note": "Add antioxidant protection against extreme UV damage.",
         "priority": 140,
         "userOverrideAllowed": true
@@ -81,6 +87,9 @@
       },
       "effects": {
         "suppress": true,
+        "i18n": {
+          "noteKey": "weather.uv_extreme.retinoid_skip.note"
+        },
         "note": "Skip retinoids in morning routine—extreme UV increases photosensitivity.",
         "priority": 160,
         "userOverrideAllowed": false
@@ -215,6 +224,9 @@
       "effects": {
         "emphasis": "emphasize",
         "weightHint": "cream",
+        "i18n": {
+          "noteKey": "weather.low_humidity.moisturizer.note"
+        },
         "note": "Air is dry. Use heavier moisturizer or add occlusive layer.",
         "priority": 90,
         "userOverrideAllowed": true

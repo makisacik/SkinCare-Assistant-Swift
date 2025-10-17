@@ -187,16 +187,34 @@ struct AdaptationRule: Codable, Identifiable, Equatable {
     }
 }
 
+// MARK: - Adaptation I18n
+
+struct AdaptationI18n: Codable, Equatable {
+    let guidanceKey: String?
+    let warningKeys: [String]?
+    let noteKey: String?
+
+    init(guidanceKey: String? = nil, warningKeys: [String]? = nil, noteKey: String? = nil) {
+        self.guidanceKey = guidanceKey
+        self.warningKeys = warningKeys
+        self.noteKey = noteKey
+    }
+}
+
 // MARK: - Rule Action (Legacy)
 
 struct RuleAction: Codable, Equatable {
     let emphasis: StepEmphasis
+    let i18n: AdaptationI18n?
+
+    // Legacy fields - kept for backward compatibility
     let guidanceTemplate: String?
     let orderPriority: Int?
     let warnings: [String]
 
-    init(emphasis: StepEmphasis, guidanceTemplate: String? = nil, orderPriority: Int? = nil, warnings: [String] = []) {
+    init(emphasis: StepEmphasis, i18n: AdaptationI18n? = nil, guidanceTemplate: String? = nil, orderPriority: Int? = nil, warnings: [String] = []) {
         self.emphasis = emphasis
+        self.i18n = i18n
         self.guidanceTemplate = guidanceTemplate
         self.orderPriority = orderPriority
         self.warnings = warnings
@@ -209,15 +227,19 @@ struct RuleEffects: Codable, Equatable {
     let ensure: EnsureEffect?
     let suppress: Bool?
     let emphasis: StepEmphasis?
+    let i18n: AdaptationI18n?
+
+    // Legacy field - kept for backward compatibility
     let note: String?
     let weightHint: String? // "gel", "cream", "balm"
     let priority: Int
     let userOverrideAllowed: Bool?
 
-    init(ensure: EnsureEffect? = nil, suppress: Bool? = nil, emphasis: StepEmphasis? = nil, note: String? = nil, weightHint: String? = nil, priority: Int, userOverrideAllowed: Bool? = nil) {
+    init(ensure: EnsureEffect? = nil, suppress: Bool? = nil, emphasis: StepEmphasis? = nil, i18n: AdaptationI18n? = nil, note: String? = nil, weightHint: String? = nil, priority: Int, userOverrideAllowed: Bool? = nil) {
         self.ensure = ensure
         self.suppress = suppress
         self.emphasis = emphasis
+        self.i18n = i18n
         self.note = note
         self.weightHint = weightHint
         self.priority = priority
