@@ -226,6 +226,33 @@ struct MorningRoutineCompletionView: View {
                 step: step,
                 onDismiss: {
                     showingProductSelection = nil
+                },
+                activeRoutine: activeRoutine,
+                routineStore: routineStore,
+                onProductSelected: { product in
+                    // Update the local routineSteps state
+                    if let index = routineSteps.firstIndex(where: { $0.id == step.id }) {
+                        var updatedSteps = routineSteps
+                        updatedSteps[index] = RoutineStepDetail(
+                            id: step.id,
+                            title: product.displayName,
+                            description: step.description,
+                            stepType: step.stepType,
+                            timeOfDay: step.timeOfDay,
+                            why: step.why,
+                            how: step.how
+                        )
+                        routineSteps = updatedSteps
+                    }
+
+                    // Reload the active routine to reflect changes
+                    Task {
+                        do {
+                            activeRoutine = try await routineStore.fetchActiveRoutine()
+                        } catch {
+                            print("❌ Error reloading routine: \(error)")
+                        }
+                    }
                 }
             )
         }
@@ -920,6 +947,9 @@ private struct StepProductSelectionSheet: View {
     @ObservedObject private var productService = ProductService.shared
     let step: RoutineStepDetail
     let onDismiss: () -> Void
+    let activeRoutine: SavedRoutineModel?
+    let routineStore: RoutineStore
+    let onProductSelected: (Product) -> Void
 
     @State private var showingAddProduct = false
     @State private var selectedProductType: ProductType?
@@ -948,9 +978,7 @@ private struct StepProductSelectionSheet: View {
                                         product: product,
                                         step: step,
                                         onSelect: {
-                                            // Here you would attach the product to the step
-                                            // For now, just dismiss
-                                            onDismiss()
+                                            handleProductSelection(product)
                                         }
                                     )
                                 }
@@ -1045,6 +1073,77 @@ private struct StepProductSelectionSheet: View {
     func getMatchingProducts() -> [Product] {
         return productService.userProducts.filter { product in
             product.tagging.productType == step.stepType
+        }
+    }
+
+    private func handleProductSelection(_ product: Product) {
+        Task {
+            await updateStepWithProduct(product)
+            onProductSelected(product)
+            onDismiss()
+        }
+    }
+
+    private func updateStepWithProduct(_ product: Product) async {
+        guard let routine = activeRoutine else {
+            print("❌ No active routine to update")
+            return
+        }
+
+        // Find the step in the routine's stepDetails
+        guard let stepIndex = routine.stepDetails.firstIndex(where: { $0.id.uuidString == step.id }) else {
+            print("❌ Step not found in routine")
+            return
+        }
+
+        // Create updated step with product name
+        var updatedStepDetails = routine.stepDetails
+        let currentStep = updatedStepDetails[stepIndex]
+
+        let updatedStep = SavedStepDetailModel(
+            id: currentStep.id,
+            title: product.displayName,
+            stepDescription: currentStep.stepDescription,
+            stepType: currentStep.stepType,
+            timeOfDay: currentStep.timeOfDay,
+            why: currentStep.why,
+            how: currentStep.how,
+            order: currentStep.order
+        )
+
+        updatedStepDetails[stepIndex] = updatedStep
+
+        // Create updated routine
+        let updatedRoutine = SavedRoutineModel(
+            id: routine.id,
+            templateId: routine.templateId,
+            title: routine.title,
+            description: routine.description,
+            category: routine.category,
+            stepCount: routine.stepCount,
+            duration: routine.duration,
+            difficulty: routine.difficulty,
+            tags: routine.tags,
+            morningSteps: routine.morningSteps,
+            eveningSteps: routine.eveningSteps,
+            benefits: routine.benefits,
+            isFeatured: routine.isFeatured,
+            isPremium: routine.isPremium,
+            savedDate: routine.savedDate,
+            isActive: routine.isActive,
+            stepDetails: updatedStepDetails,
+            adaptationEnabled: routine.adaptationEnabled,
+            adaptationType: routine.adaptationType,
+            adaptationTypes: routine.adaptationTypes,
+            imageName: routine.imageName
+        )
+
+        // Save the updated routine
+        do {
+            _ = try await routineStore.saveRoutine(updatedRoutine)
+            print("✅ Updated step '\(currentStep.title)' to '\(product.displayName)'")
+        } catch {
+            print("❌ Error saving updated routine: \(error)")
         }
     }
 }

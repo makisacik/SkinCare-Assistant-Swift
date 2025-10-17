@@ -106,7 +106,24 @@ actor RoutineStore: RoutineStoreProtocol {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
-                    let savedRoutineEntity = SavedRoutineEntity(context: self.backgroundContext)
+                    // Check if routine already exists
+                    let request: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+                    request.predicate = NSPredicate(format: "id == %@", routine.id as CVarArg)
+                    request.fetchLimit = 1
+
+                    let results = try self.backgroundContext.fetch(request)
+
+                    let savedRoutineEntity: SavedRoutineEntity
+                    if let existingEntity = results.first {
+                        // Update existing entity
+                        savedRoutineEntity = existingEntity
+                        print("🔄 Updating existing routine: \(routine.title)")
+                    } else {
+                        // Create new entity
+                        savedRoutineEntity = SavedRoutineEntity(context: self.backgroundContext)
+                        print("✨ Creating new routine: \(routine.title)")
+                    }
+
                     self.populateRoutineEntity(savedRoutineEntity, with: routine, in: self.backgroundContext)
 
                     try self.backgroundContext.save()

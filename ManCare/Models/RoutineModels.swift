@@ -177,8 +177,8 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
         self.stepDetails = allStepDetails
     }
 
-    init(templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, adaptationTypes: [AdaptationType]? = nil, imageName: String = "routine-minimalist") {
-        self.id = UUID()
+    init(id: UUID = UUID(), templateId: UUID, title: String, description: String, category: RoutineCategory, stepCount: Int, duration: String, difficulty: RoutineTemplate.Difficulty, tags: [String], morningSteps: [String], eveningSteps: [String], benefits: [String], isFeatured: Bool, isPremium: Bool, savedDate: Date, isActive: Bool, stepDetails: [SavedStepDetailModel] = [], adaptationEnabled: Bool = false, adaptationType: AdaptationType? = nil, adaptationTypes: [AdaptationType]? = nil, imageName: String = "routine-minimalist") {
+        self.id = id
         self.templateId = templateId
         self.title = title
         self.description = description
