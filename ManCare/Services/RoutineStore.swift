@@ -139,23 +139,26 @@ actor RoutineStore: RoutineStoreProtocol {
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.perform {
                 do {
-                    let initialRoutine = self.createInitialRoutineModel(from: routineResponse, translations: translations)
+                    // Generate localized routine name with auto-increment
+                    let countRequest: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
+                    let existingCount = (try? self.backgroundContext.count(for: countRequest)) ?? 0
 
-                    // Check if we already have a "My Routine"
-                    let existingRequest: NSFetchRequest<SavedRoutineEntity> = SavedRoutineEntity.fetchRequest()
-                    existingRequest.predicate = NSPredicate(format: "title == %@", "My Routine")
-
-                    let existingResults = try self.backgroundContext.fetch(existingRequest)
-
-                    if let existing = existingResults.first {
-                        print("🔄 Updating existing 'My Routine' (ID: \(existing.id?.uuidString ?? "nil"))")
-                        self.populateRoutineEntity(existing, with: initialRoutine, in: self.backgroundContext)
+                    // First routine is "My Routine", subsequent ones are "My Routine 2", "My Routine 3", etc.
+                    let routineTitle: String
+                    if existingCount == 0 {
+                        routineTitle = L10n.Discover.Personalized.defaultName
+                        print("✨ Creating first routine: '\(routineTitle)'")
                     } else {
-                        print("✨ Creating new 'My Routine'")
-                        try self.deactivateAllRoutines(in: self.backgroundContext)
-                        let newEntity = SavedRoutineEntity(context: self.backgroundContext)
-                        self.populateRoutineEntity(newEntity, with: initialRoutine, in: self.backgroundContext)
+                        routineTitle = L10n.Discover.Personalized.defaultNameNumbered(existingCount + 1)
+                        print("✨ Creating routine #\(existingCount + 1): '\(routineTitle)'")
                     }
+
+                    let initialRoutine = self.createInitialRoutineModel(from: routineResponse, translations: translations, title: routineTitle)
+
+                    // Always create a new routine for onboarding/personalized creation
+                    try self.deactivateAllRoutines(in: self.backgroundContext)
+                    let newEntity = SavedRoutineEntity(context: self.backgroundContext)
+                    self.populateRoutineEntity(newEntity, with: initialRoutine, in: self.backgroundContext)
 
                     // Update UserDefaults consistently
                     UserDefaults.standard.set(initialRoutine.id.uuidString, forKey: "activeRoutineId")
@@ -500,7 +503,7 @@ actor RoutineStore: RoutineStoreProtocol {
         }
     }
 
-    private func createInitialRoutineModel(from routineResponse: RoutineResponse, translations: (routine: RoutineTranslations, steps: [StepTranslations])) -> SavedRoutineModel {
+    private func createInitialRoutineModel(from routineResponse: RoutineResponse, translations: (routine: RoutineTranslations, steps: [StepTranslations]), title: String) -> SavedRoutineModel {
         var stepDetails: [SavedStepDetailModel] = []
         var order = 0
         var stepTranslationIndex = 0
@@ -545,7 +548,7 @@ actor RoutineStore: RoutineStoreProtocol {
 
         return SavedRoutineModel(
             templateId: UUID(),
-            title: "My Routine",
+            title: title,
             description: "Your personalized skincare routine created during onboarding",
             category: .all,
             stepCount: allSteps.count,

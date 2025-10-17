@@ -149,148 +149,143 @@ struct WeatherAdaptationCard: View {
     // MARK: - State 2: Active Weather Card
 
     private var activeWeatherCard: some View {
-        Button {
-            showingDetailSheet = true
-        } label: {
-            VStack(alignment: .leading, spacing: 16) {
-                // Header with toggle
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L10n.Routines.Weather.adaptedRoutine)
-                            .font(.system(size: 18, weight: .semibold))
+        VStack(alignment: .leading, spacing: 16) {
+            // Header with disable button
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L10n.Routines.Weather.adaptedRoutine)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+
+                    if let weather = weatherData {
+                        Text(weather.condition ?? L10n.Routines.Weather.currentConditions)
+                            .font(.system(size: 13))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+                }
+
+                Spacer()
+
+                // Disable button
+                Button {
+                    preferencesStore.setWeatherAdaptationEnabled(false)
+                    weatherData = nil
+                } label: {
+                    Image(systemName: "circle.slash")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+
+            if let weather = weatherData {
+                // UV Index - Most Important
+                HStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(weather.uvLevel.color.opacity(0.15))
+                            .overlay(
+                                Circle()
+                                    .stroke(ThemeManager.shared.theme.palette.border.opacity(0.3), lineWidth: 1)
+                            )
+                            .frame(width: 44, height: 44)
+
+                        Image(systemName: weather.uvLevel.icon)
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(L10n.Routines.Weather.uvIndex(weather.uvIndex))
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        if let weather = weatherData {
-                            Text(weather.condition ?? L10n.Routines.Weather.currentConditions)
-                                .font(.system(size: 13))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        }
+                        Text("\(weather.uvLevel.displayName) - \(WeatherRecommendation.from(weatherData: weather).spfLevel)")
+                            .font(.system(size: 13))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
 
                     Spacer()
+                }
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(weather.uvLevel.color.opacity(0.15))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(weather.uvLevel.color.opacity(0.5), lineWidth: 1)
+                        )
+                )
 
-                    // Disable button
-                    Button {
-                        preferencesStore.setWeatherAdaptationEnabled(false)
-                        weatherData = nil
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                // Weather summary
+                HStack(spacing: 16) {
+                    WeatherMetric(
+                        icon: "thermometer",
+                        value: String(format: "%.0f°C", weather.temperature),
+                        color: .red
+                    )
+
+                    WeatherMetric(
+                        icon: "humidity.fill",
+                        value: String(format: "%.0f%%", weather.humidity),
+                        color: .blue
+                    )
+
+                    WeatherMetric(
+                        icon: "wind",
+                        value: String(format: "%.0f km/h", weather.windSpeed),
+                        color: .cyan
+                    )
                 }
 
-                if let weather = weatherData {
-                    // UV Index - Most Important
-                    HStack(spacing: 12) {
-                        ZStack {
-                            Circle()
-                                .fill(weather.uvLevel.color.opacity(0.15))
-                                .overlay(
-                                    Circle()
-                                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.3), lineWidth: 1)
-                                )
-                                .frame(width: 44, height: 44)
+                // Today's tip
+                let recommendation = WeatherRecommendation.from(weatherData: weather)
+                if let tip = recommendation.generalTips.first {
+                    HStack(spacing: 8) {
+                        Image(systemName: "lightbulb.fill")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(ThemeManager.shared.theme.palette.info)
 
-                            Image(systemName: weather.uvLevel.icon)
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        }
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(L10n.Routines.Weather.uvIndex(weather.uvIndex))
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                            Text("\(weather.uvLevel.displayName) - \(WeatherRecommendation.from(weatherData: weather).spfLevel)")
-                                .font(.system(size: 13))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        }
+                        Text(tip)
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            .lineLimit(2)
 
                         Spacer()
                     }
-                    .padding(12)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
                     .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(weather.uvLevel.color.opacity(0.15))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(weather.uvLevel.color.opacity(0.5), lineWidth: 1)
-                            )
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(ThemeManager.shared.theme.palette.info.opacity(0.1))
                     )
-
-                    // Weather summary
-                    HStack(spacing: 16) {
-                        WeatherMetric(
-                            icon: "thermometer",
-                            value: String(format: "%.0f°C", weather.temperature),
-                            color: .red
-                        )
-
-                        WeatherMetric(
-                            icon: "humidity.fill",
-                            value: String(format: "%.0f%%", weather.humidity),
-                            color: .blue
-                        )
-
-                        WeatherMetric(
-                            icon: "wind",
-                            value: String(format: "%.0f km/h", weather.windSpeed),
-                            color: .cyan
-                        )
-                    }
-
-                    // Today's tip
-                    let recommendation = WeatherRecommendation.from(weatherData: weather)
-                    if let tip = recommendation.generalTips.first {
-                        HStack(spacing: 8) {
-                            Image(systemName: "lightbulb.fill")
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.info)
-
-                            Text(tip)
-                                .font(.system(size: 13, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                .lineLimit(2)
-
-                            Spacer()
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(ThemeManager.shared.theme.palette.info.opacity(0.1))
-                        )
-                    }
                 }
             }
-            .padding(20)
-            .background(
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                ThemeManager.shared.theme.palette.surface,
-                                ThemeManager.shared.theme.palette.surface.opacity(0.8)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 24)
-                            .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
-                    )
-                    .shadow(
-                        color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
-                        radius: 20,
-                        x: 0,
-                        y: 8
-                    )
-            )
         }
-        .buttonStyle(PlainButtonStyle())
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            ThemeManager.shared.theme.palette.surface,
+                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(ThemeManager.shared.theme.palette.border.opacity(0.5), lineWidth: 1)
+                )
+                .shadow(
+                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.08),
+                    radius: 20,
+                    x: 0,
+                    y: 8
+                )
+        )
     }
 
     // MARK: - Actions

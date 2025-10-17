@@ -145,10 +145,6 @@ struct DailyMoodTrackingCard: View {
             VStack(spacing: 6) {
                 Text(mood.emoji)
                     .font(.system(size: 40))
-                
-                Text(mood.label)
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)

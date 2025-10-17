@@ -161,32 +161,16 @@ struct RoutineHomeView: View {
                         Spacer()
 
                         // Current Routine Display
-                        if let activeRoutine = routineViewModel.activeRoutine {
-                            let _ = print("🎯 Displaying active routine: \(activeRoutine.title)")
-                            Button {
-                                showingRoutineSwitcher = true
-                            } label: {
-                                HStack(spacing: 4) {
-                                    Text(activeRoutine.localizedTitle)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                    Image(systemName: "chevron.right")
-                                        .font(.system(size: 12, weight: .medium))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                }
-                        }
-                } else {
-                            Button {
-                                showingRoutineSwitcher = true
-                            } label: {
-                                HStack(spacing: 4) {
-                                    Text(L10n.Routines.myRoutines)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                    Image(systemName: "chevron.right")
-                                        .font(.system(size: 12, weight: .medium))
-                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                }
+                        Button {
+                            showingRoutineSwitcher = true
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text(L10n.Routines.chooseRoutine)
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             }
                         }
                     }
@@ -238,6 +222,9 @@ struct RoutineHomeView: View {
 
                 // Weather Adaptation Card
                 WeatherAdaptationCard()
+
+                // Menstruation Cycle Card
+                MenstruationCycleCard()
 
                 // Weekly Routine (if available)
                 if let weeklySteps = generateWeeklyRoutine(), !weeklySteps.isEmpty {
