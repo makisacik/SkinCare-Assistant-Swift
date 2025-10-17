@@ -33,6 +33,7 @@ struct AllRoutinesSheet: View {
         }
         .navigationTitle(L10n.Discover.allRoutines)
         .navigationBarTitleDisplayMode(.large)
+        .toolbarColorScheme(.light, for: .navigationBar)
     }
 
     // MARK: - Category Filter Section

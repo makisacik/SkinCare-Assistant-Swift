@@ -1,98 +1,98 @@
 /*
-Guides.strings (Turkish)
-ManCare - Kılavuz içeriği ve keşfet sayfası dinamik metinleri
+ Guides.strings (Turkish)
+ ManCare - Guide content and discover page dynamic content
 */
 
 /* ===================================
-MARK: - Hero Banner
-=================================== */
+ MARK: - Hero Banner
+ =================================== */
 
 "guides.hero.barrierReset.title" = "Bariyer Sıfırlama Haftası";
 "guides.hero.barrierReset.subtitle" = "Kızarıklığı yatıştırın + nem kalkanınızı yeniden inşa edin";
-"guides.hero.barrierReset.cta" = "Rutinleri Keşfet";
+"guides.hero.barrierReset.cta" = "Rutinleri keşfet";
 
 /* ===================================
-MARK: - Seasonal Playbook Articles
-=================================== */
+ MARK: - Seasonal Playbook Articles
+ =================================== */
 
-"guides.seasonal.article.barrierFirst" = "Önce Bariyer: neden önemli?";
-"guides.seasonal.article.humectants" = "Nemlendiriciler (Humectants) vs Yumuşatıcılar (Emollients) vs Tıkayıcılar (Occlusives)";
-"guides.seasonal.article.windProof" = "Rüzgâra Karşı Etkili Gece Rutini";
+"guides.seasonal.article.barrierFirst" = "Önce Bariyer: neden önemli";
+"guides.seasonal.article.humectants" = "Nemlendiriciler vs Yumuşatıcılar vs Kapatıcılar";
+"guides.seasonal.article.windProof" = "Rüzgâra Dayanıklı Gece Rutini";
 "guides.seasonal.cta" = "Mevsimlik planımı oluştur";
 
 /* ===================================
-MARK: - Routine Badges
-=================================== */
+ MARK: - Routine Badges
+ =================================== */
 
 "guides.badge.new" = "Yeni";
 "guides.badge.updated" = "Güncellendi";
-"guides.badge.trending" = "Trend";
+"guides.badge.trending" = "Popüler";
 
 /* ===================================
-MARK: - Trending Period
-=================================== */
+ MARK: - Trending Period
+ =================================== */
 
 "guides.trendingPeriod.thisWeek" = "Bu hafta";
 "guides.trendingPeriod.thisMonth" = "Bu ay";
 
 /* ===================================
-MARK: - Refresh Time Display
-=================================== */
+ MARK: - Refresh Time Display
+ =================================== */
 
 "guides.refresh.justNow" = "Şimdi güncellendi • her sabah yeni ipuçları ☀️";
 "guides.refresh.minutesAgo" = "%d dakika önce güncellendi • her sabah yeni ipuçları ☀️";
 "guides.refresh.hoursAgo" = "%d saat önce güncellendi";
 "guides.refresh.daysAgo" = "%d gün önce güncellendi";
-"guides.refresh.hourSuffix" = "";
+"guides.refresh.hourSuffix" = ""; // Turkish uses a single word for "saat" regardless of number
 "guides.refresh.hoursSuffix" = "";
-"guides.refresh.daySuffix" = "";
+"guides.refresh.daySuffix" = ""; // Turkish uses a single word for "gün" regardless of number
 "guides.refresh.daysSuffix" = "";
 
 /* ===================================
-MARK: - Ticker Display
-=================================== */
+ MARK: - Ticker Display
+ =================================== */
 
-"guides.ticker.newThisWeek" = "Bu hafta eklenenler: +%d rutin · +%d rehber";
+"guides.ticker.newThisWeek" = "Bu hafta yeni: +%d rutin · +%d rehber";
 
 /* ===================================
-MARK: - Mini Guide: Cycle & Skin
-=================================== */
+ MARK: - Mini Guide: Cycle & Skin
+ =================================== */
 
 "guides.cycleSkin.id" = "22222222-2222-2222-2222-222222222222";
-"guides.cycleSkin.title" = "Adet döngünüz cildinizi nasıl etkiler?";
-"guides.cycleSkin.subtitle" = "Dönemler arası sivilce, hassasiyet ve parlaklık";
+"guides.cycleSkin.title" = "Döngünüz cildi nasıl etkiler";
+"guides.cycleSkin.subtitle" = "Evreler boyunca sivilce, hassasiyet ve ışıltı";
 "guides.cycleSkin.category" = "Adet Sağlığı";
 
 /* ===================================
-MARK: - Mini Guide: AM vs PM
-=================================== */
+ MARK: - Mini Guide: AM vs PM
+ =================================== */
 
 "guides.ampmRoutine.id" = "44444444-4444-4444-4444-444444444444";
 "guides.ampmRoutine.title" = "Sabah vs Akşam Rutini";
-"guides.ampmRoutine.subtitle" = "Gündüz koruma, gece onarım";
+"guides.ampmRoutine.subtitle" = "Gündüz koruması, gece onarımı";
 "guides.ampmRoutine.category" = "Temel Bilgiler";
 
 /* ===================================
-MARK: - Mini Guide: Acids
-================================== */s
+ MARK: - Mini Guide: Acids
+ =================================== */
 
 "guides.acidsExplained.id" = "55555555-5555-5555-5555-555555555555";
-"guides.acidsExplained.title" = "Asitler";
+"guides.acidsExplained.title" = "Asitler Açıklandı";
 "guides.acidsExplained.subtitle" = "AHA vs BHA vs PHA—kimin neye ihtiyacı var";
 "guides.acidsExplained.category" = "İçerikler";
 
 /* ===================================
-MARK: - Mini Guide: Retinoids
-=================================== */
+ MARK: - Mini Guide: Retinoids
+ =================================== */
 
 "guides.retinoids101.id" = "66666666-6666-6666-6666-666666666666";
 "guides.retinoids101.title" = "Retinoidler";
-"guides.retinoids101.subtitle" = "Güçleri, 'arınma' dönemi ve nasıl tamponlanır";
+"guides.retinoids101.subtitle" = "Güçleri, arınma dönemi ve tamponlama yolları";
 "guides.retinoids101.category" = "İçerikler";
 
 /* ===================================
-MARK: - Mini Guide: Skinimalism
-=================================== */
+ MARK: - Mini Guide: Skinimalism
+ =================================== */
 
 "guides.skinimalism.id" = "33333333-3333-3333-3333-333333333333";
 "guides.skinimalism.title" = "Skinimalizm ve Minimal Rutinler";
@@ -100,11 +100,11 @@ MARK: - Mini Guide: Skinimalism
 "guides.skinimalism.category" = "Temel Bilgiler";
 
 /* ===================================
-MARK: - Inspirational Quotes
-=================================== */
+ MARK: - Inspirational Quotes
+ =================================== */
 
-"guides.quote.khalilGibran" = "Güzellik yüzde değil; güzellik kalpteki bir ışıktır.";
-"guides.quote.khalilGibran.author" = "Halil Cibran";
+"guides.quote.khalilGibran" = "Güzellik yüzde değil, kalpteki bir ışıktır.";
+"guides.quote.khalilGibran.author" = "Kahlil Gibran";
 
 "guides.quote.drMurad" = "Cildiniz en büyük organınızdır. Ona sevgi ve sabırla bakın.";
 "guides.quote.drMurad.author" = "Dr. Howard Murad";
@@ -112,28 +112,28 @@ MARK: - Inspirational Quotes
 "guides.quote.aliciaKeys" = "Gerçek güzellik mükemmellik değil, eşsiz benliğinizi kucaklamaktır.";
 "guides.quote.aliciaKeys.author" = "Alicia Keys";
 
-"guides.quote.breatheSilence" = "Bırakın cildiniz bakımın sessizliğini solusun, ışıltınız özgüven fısıldayacaktır.";
-"guides.quote.breatheSilence.author" = "Anonim";
+"guides.quote.breatheSilence" = "Cildinizin bakımın sessizliğini solumasına izin verin ve ışıltınız güven fısıldayacaktır.";
+"guides.quote.breatheSilence.author" = "Bilinmiyor";
 
-"guides.quote.gentleness" = "Güzellik, nezaket anlarında yaşar — yumuşak bir dokunuş, sakin bir nefes, sabırlı bir kalp.";
-"guides.quote.gentleness.author" = "Anonim";
+"guides.quote.gentleness" = "Güzellik, şefkat anlarında yaşar — yumuşak bir dokunuş, sakin bir nefes, sabırlı bir kalp.";
+"guides.quote.gentleness.author" = "Bilinmiyor";
 
 "guides.quote.memory" = "Cildinize bir anıya bakar gibi bakın — şefkatle, acele etmeden, sevgiyle.";
-"guides.quote.memory.author" = "Anonim";
+"guides.quote.memory.author" = "Bilinmiyor";
 
 "guides.quote.bloom" = "Vücudunuzu dinlemeyi öğrendiğinizde sessizce çiçek açarsınız.";
-"guides.quote.bloom.author" = "Anonim";
+"guides.quote.bloom.author" = "Bilinmiyor";
 
-"guides.quote.radiance" = "Işıltı aceleden değil, dinlenmeden doğar.";
-"guides.quote.radiance.author" = "Anonim";
+"guides.quote.radiance" = "Işıltı, aceleden değil, dinlenmekten doğar.";
+"guides.quote.radiance.author" = "Bilinmiyor";
 
-"guides.quote.slowTime" = "Cildinize bakarak, zamanı yavaşlatma sanatını uygularsınız.";
-"guides.quote.slowTime.author" = "Anonim";
+"guides.quote.slowTime" = "Cildinize bakarken, zamanı yavaşlatma sanatını uygularsınız.";
+"guides.quote.slowTime.author" = "Bilinmiyor";
 
 "guides.quote.peaceGlow" = "Aradığınız ışıltı, koruduğunuz huzurdur.";
-"guides.quote.peaceGlow.author" = "Anonim";
+"guides.quote.peaceGlow.author" = "Bilinmiyor";
 
-"guides.quote.softBeauty" = "Güzellik görünmek istemez — o sadece yumuşakça var olur.";
+"guides.quote.softBeauty" = "Güzellik görülmeyi istemez — sadece usulca var olur.";
 "guides.quote.softBeauty.author" = "Bilinmiyor";
 
 "guides.quote.quietConversation" = "Her bakım ritüeli, kendinizle sessiz bir sohbettir.";
@@ -142,179 +142,180 @@ MARK: - Inspirational Quotes
 "guides.quote.kindReflection" = "Yansımanız gördüğünüz şey değil, onu ne kadar nazik gördüğünüzdür.";
 "guides.quote.kindReflection.author" = "Bilinmiyor";
 
-"guides.quote.drewBarrymore" = "Mutluluk en iyi makyajdır. Önce iç ışıltınıza iyi bakın.";
+"guides.quote.drewBarrymore" = "Mutluluk en iyi makyajdır. Önce iç ışıltınıza özen gösterin.";
 "guides.quote.drewBarrymore.author" = "Drew Barrymore";
 
-"guides.quote.blakeLively" = "Özgüven, güzelliği besler. Kendinizi iyi hissettiğinizde, daha da iyi görünürsünüz.";
+"guides.quote.blakeLively" = "Özgüven güzelliği doğurur. Kendinizi iyi hissettiğinizde, daha da iyi görünürsünüz.";
 "guides.quote.blakeLively.author" = "Blake Lively";
 
-"guides.quote.coveringUp" = "Cildinize bakmak, onu kapatmaktan daha önemlidir.";
+"guides.quote.coveringUp" = "Cildinize bakmak, onu örtmekten daha önemlidir.";
 "guides.quote.coveringUp.author" = "Bilinmiyor";
 
 "guides.quote.lalahDelia" = "Öz bakım, gücünüzü geri alma şeklinizdir.";
 "guides.quote.lalahDelia.author" = "Lalah Delia";
 
 /* ===================================
-MARK: - Guide Content
-=================================== */
+ MARK: - Guide Content
+ =================================== */
 
 /* Guide: Cycle & Skin (cycleSkin) */
-"guides.cycleSkin.intro" = "Adet döngünüzdeki hormonal değişimler; nem, yağlılık, hassasiyet ve parlaklığı etkiler. Neyi beklemeniz gerektiğini bilmek, rutininizi her faza göre ayarlamanıza yardımcı olur.";
-"guides.cycleSkin.h2_1" = "Döngü Fazları ve Cilt Durumu";
-"guides.cycleSkin.list1_item1" = "Adet Dönemi (1-5. Günler): Cilt kuru, gergin ve kırılgandır";
-"guides.cycleSkin.list1_item2" = "Foliküler Faz (6-13. Günler): Cilt sakinleşir ve daha dayanıklı hale gelir";
-"guides.cycleSkin.list1_item3" = "Yumurtlama Fazı (≈ 14. Gün): Doğal ışıltı artar, T bölgesinde parlama olabilir";
-"guides.cycleSkin.list1_item4" = "Luteal Faz (15-28. Günler): Yağlılık, sivilceler ve hassasiyet artabilir";
-"guides.cycleSkin.h3_1" = "Adet Dönemi – Onarım ve Nemlendirme";
-"guides.cycleSkin.p1" = "Östrojen ve progesteron seviyeleri düşük olduğundan, cilt daha savunmasızdır. Hafif, nemlendirici temizleyiciler ve bariyeri onaran nemlendiriciler kullanın.";
-"guides.cycleSkin.p2" = "Retinoidler veya güçlü asitler gibi aktif içerikleri atlayın — cildiniz strese değil, sakinleşmeye ihtiyacı var.";
-"guides.cycleSkin.tip1" = "İpucu: İltihabı azaltmak için yatıştırıcı bir maske veya kompres kullanın.";
-"guides.cycleSkin.h3_2" = "Foliküler Faz – Dengeleme ve Aydınlatma";
-"guides.cycleSkin.p3" = "Östrojen yükseldikçe, cilt daha berrak ve tepkisel hale gelir. Bu, C vitamini veya hafif peelingler gibi nazik aktifleri rutine yeniden dahil etmek için iyi bir zamandır.";
+"guides.cycleSkin.intro" = "Adet döngünüzdeki hormonal değişimler, hidrasyonu, yağlılığı, hassasiyeti ve ışıltıyı etkiler. Neler bekleyeceğinizi bilmek, rutininizi her evreye göre ayarlamanıza yardımcı olur.";
+"guides.cycleSkin.h2_1" = "Döngü Evreleri ve Cilde Bir Bakış";
+"guides.cycleSkin.list1_item1" = "Adet Görme (1-5. Günler): Cilt kuru, gergin, kırılgan hissedilir";
+"guides.cycleSkin.list1_item2" = "Foliküler (6-13. Günler): Cilt sakinleşir ve daha dayanıklı hale gelir";
+"guides.cycleSkin.list1_item3" = "Yumurtlama (≈ 14. Gün): Doğal ışıltı, T-bölgesinde olası parlama";
+"guides.cycleSkin.list1_item4" = "Luteal (15-28. Günler): Yağlılık, sivilce ve hassasiyet artabilir";
+"guides.cycleSkin.h3_1" = "Adet Görme – Onarım ve Hidrasyon";
+"guides.cycleSkin.p1" = "Östrojen ve progesteronun düşük olmasıyla cilt daha savunmasızdır. Hafif, nemlendirici temizleyiciler ve bariyer onarıcı nemlendiriciler kullanın.";
+"guides.cycleSkin.p2" = "Retinoidler veya güçlü asitler gibi aktif içerikleri atlayın — cildinizin strese değil, sakinliğe ihtiyacı var.";
+"guides.cycleSkin.tip1" = "İpucu: İltihabı azaltmak için sakinleştirici bir maske veya kompres kullanın.";
+"guides.cycleSkin.h3_2" = "Foliküler – Yeniden Dengeleme ve Aydınlatma";
+"guides.cycleSkin.p3" = "Östrojen yükseldikçe cilt daha net ve daha tepkili hale gelir. Bu, C vitamini veya hafif peelingler gibi nazik aktifleri yeniden rutine eklemek için iyi bir zamandır.";
 "guides.cycleSkin.list2_item1" = "Haftada 1-2 kez hafif peeling (AHA/BHA) kullanın";
 "guides.cycleSkin.list2_item2" = "Aydınlatıcı serumlar uygulayın";
-"guides.cycleSkin.list2_item3" = "Sürekli nemlendirmeyi sürdürün";
-"guides.cycleSkin.h3_3" = "Yumurtlama Fazı – Işıltı ve Koruma";
-"guides.cycleSkin.p4" = "Hormon seviyelerinin zirvede olduğu bu dönemde, cilt genellikle parlak görünür. Ancak T bölgesinde fazla yağlanma ortaya çıkabilir.";
+"guides.cycleSkin.list2_item3" = "Tutarlı hidrasyonu sürdürün";
+"guides.cycleSkin.h3_3" = "Yumurtlama – Işıltı ve Bakım";
+"guides.cycleSkin.p4" = "Hormon seviyelerinin zirvede olduğu bu dönemde cilt genellikle parlak görünür. Ancak T-bölgesinde fazla yağlanma görülebilir.";
 "guides.cycleSkin.p5" = "Daha hafif nemlendiricilere geçin, makyaj yapıyorsanız çift temizleme yapın ve gerekirse kil maskesi kullanın.";
-"guides.cycleSkin.tip2" = "Profesyonel İpucu: Fotoğraf veya etkinlikler için harika bir zaman — cildiniz en iyi halindedir.";
-"guides.cycleSkin.h3_4" = "Luteal Faz – Yatıştırma ve Önleme";
-"guides.cycleSkin.p6" = "Yükselen progesteron, yağlanmayı ve iltihabı artırarak sivilceleri tetikleyebilir.";
-"guides.cycleSkin.p7" = "Yatıştırıcı içeriklere (niasinamid, çinko), sivilce kurutuculara (salisilik asit, benzoil peroksit) odaklanın ve yeni bir ürün eklemekten kaçının.";
-"guides.cycleSkin.h2_2" = "Adaptif Rutin İpuçları";
-"guides.cycleSkin.p8" = "Faza bağlı olarak birkaç formülü (nemlendirici, aydınlatıcı, arındırıcı) rotasyonlu kullanmayı düşünün. Bu, cildinizin ay boyunca dengede kalmasına yardımcı olur.";
+"guides.cycleSkin.tip2" = "Profesyonel İpucu: Fotoğraf veya etkinlikler için harika bir zaman — cildiniz genellikle en iyi halinde görünür.";
+"guides.cycleSkin.h3_4" = "Luteal – Yatıştırma ve Önleme";
+"guides.cycleSkin.p6" = "Yükselen progesteron, sivilceleri tetikleyebilecek yağlanma ve iltihabı artırır.";
+"guides.cycleSkin.p7" = "Yatıştırıcı içeriklere (niasinamid, çinko), bölgesel sivilce tedavilerine (salisilik asit, benzoil peroksit) odaklanın ve yeni bir ürün eklemekten kaçının.";
+"guides.cycleSkin.h2_2" = "Uyarlanabilir Rutin İpuçları";
+"guides.cycleSkin.p8" = "Evreye bağlı olarak birkaç farklı formülü (nemlendirici, aydınlatıcı, arındırıcı) dönüşümlü kullanmayı düşünün. Bu, cildinizi ay boyunca dengede tutmaya yardımcı olur.";
 
 /* Guide: AM vs PM Routine (ampmRoutine) */
-"guides.ampmRoutine.intro" = "Cildiniz tüm gün boyunca aynı değildir — gündüz ve karanlıkta farklı davranır. Bu değişimleri anlayarak, rutininizi cildinizin yapmaya çalıştığı şeye destek olacak şekilde eşleştirebilirsiniz.";
+"guides.ampmRoutine.intro" = "Cildiniz tüm gün aynı değildir — **gün ışığında** ve **karanlıkta** farklı davranır. Bu değişimleri anlayarak, rutininizi cildinizin yapmaya çalıştığı şeyi destekleyecek şekilde eşleştirebilirsiniz.";
 "guides.ampmRoutine.h2_1" = "Sabah: Savunma ve Stabilizasyon";
-"guides.ampmRoutine.p1" = "Güneş tepedeyken, cildinizin görevi korunmadır. UV ışınları, kirlilik, mavi ışık ve çevresel stres faktörleriyle yüzleşir. Antioksidan içerikler ve güçlü bir bariyer kullanmak, hasara direnmesine yardımcı olur.";
+"guides.ampmRoutine.p1" = "Güneş tepedeyken, cildinizin görevi **korumadır**. UV ışınlarına, kirliliğe, mavi ışığa ve çevresel stres faktörlerine karşı koyar. Antioksidan içerikler ve iyi bir bariyer kullanmak, hasara karşı direncine yardımcı olur.";
 "guides.ampmRoutine.h3_1" = "Önce Temizliğin Önemi";
-"guides.ampmRoutine.p2" = "Gece boyunca cildiniz yağ salgılar ve minik döküntüler atar. Nazik bir temizleme veya sadece suyla yıkama, cildinizi soymadan bu birikintiyi temizler ve koruyucu ürünleri emmeye hazırlar.";
+"guides.ampmRoutine.p2" = "Gece boyunca cildiniz yağ salgılar ve minik döküntüler atar. **Nazik bir temizlik** veya hatta sadece su ile yıkama, cildi soymadan bu birikintiyi temizler — koruyucu ürünleri emmeye hazırlar.";
 "guides.ampmRoutine.h3_2" = "Antioksidanlar ve Hafif Serumlar";
-"guides.ampmRoutine.p3" = "Antioksidanlar (C vitamini veya niasinamid gibi), UV ve kirlilikten kaynaklanan serbest radikallere karşı kalkan görevi görür. Bunları sabah kullanmak, stres faktörlerini nötralize etmeleri için maksimum maruz kalma süresi sağlar.";
-"guides.ampmRoutine.tip1" = "Profesyonel İpucu: C vitamini serumunu hafif nemli cilde uygulayın, bu daha iyi emilim sağlar. Nemlendiriciyi sürmeden önce 1-2 dakika bekleyin.";
-"guides.ampmRoutine.h3_3" = "Bariyeri Güçlendirmek için Nemlendirme";
-"guides.ampmRoutine.p4" = "İyi bir nemlendirici, cildinizin nemi hapsetmesine ve bariyer bütünlüğünü korumasına yardımcı olur — dış stres nemi dışarı çekmeye çalışırken bu hayati önem taşır.";
+"guides.ampmRoutine.p3" = "**Antioksidanlar** (C vitamini veya niasinamid gibi), UV ve kirlilikten kaynaklanan serbest radikallere karşı kalkan görevi görür. Bunları sabah kullanmak, stres faktörlerini nötralize etmeleri için maksimum maruz kalma süresi sağlar.";
+"guides.ampmRoutine.tip1" = "**Profesyonel İpucu**: C vitamini serumunu hafif nemli cilde daha iyi emilim için uygulayın. Nemlendiriciyi sürmeden önce 1-2 dakika bekleyin.";
+"guides.ampmRoutine.h3_3" = "Bariyeri Güçlendirmek İçin Nemlendirme";
+"guides.ampmRoutine.p4" = "İyi bir nemlendirici, cildinizin **nemi hapsetmesine** ve bariyer bütünlüğünü korumasına yardımcı olur — dış stres nemi dışarı çekmeye çalışırken bu hayati önem taşır.";
 "guides.ampmRoutine.h3_4" = "Güneş Kremi: Vazgeçilmez Adım";
-"guides.ampmRoutine.p5" = "Diğer her şey zemin hazırlar, ancak güneş kremi doğrudan savunmanızdır. Geniş spektrumlu bir SPF, cildi yaşlanmayı ve pigmentasyonu hızlandıran UV hasarından korur.";
+"guides.ampmRoutine.p5" = "Diğer her şey sahneyi hazırlar — ancak **güneş kremi doğrudan savunmanızdır**. Geniş spektrumlu bir SPF, cildi yaşlanmayı ve pigmentasyonu hızlandıran UV hasarından korur.";
 "guides.ampmRoutine.h2_2" = "Akşam: Onarım ve Yenilenme";
-"guides.ampmRoutine.p6" = "Geceleri cildiniz iyileşme moduna geçer. Kan akışı artar, onarım enzimleri aktive olur ve bariyeriniz daha geçirgen hale gelir — bu, yoğun tedaviler için fırsat pencerenizdir.";
+"guides.ampmRoutine.p6" = "Geceleri cildiniz **iyileşme moduna** geçer. Kan akışı artar, onarım enzimleri aktive olur ve bariyeriniz daha geçirgen hale gelir — bu, tedavi için pencerenizdir.";
 "guides.ampmRoutine.h3_5" = "Gerektiğinde Çift Temizleme";
-"guides.ampmRoutine.p7" = "Makyaj, güneş kremi kullandıysanız veya yoğun kirliliğe maruz kaldıysanız, önce yağ veya balsam temizleyici ile başlayın, ardından nazik bir temizleyici ile devam edin. Aktiflerin daha iyi çalışması için temiz bir zemine ihtiyacınız var.";
-"guides.ampmRoutine.h3_6" = "Cilt Daha Alıcıyken Aktifleri Uygulama";
-"guides.ampmRoutine.p8" = "Akşamları cildiniz; retinoidler, asitler, peptitler veya büyüme faktörleri gibi aktifleri daha kolay emer. Koruma talepleri düşük olduğundan, daha güçlü içerikleri kullanmak daha güvenlidir.";
-"guides.ampmRoutine.tip2" = "Zamanlama İpucu: Retinoidler gibi aktifleri tamamen kuru cilde uygulayın. Tahrişi en aza indirmek için temizlemeden sonra 20-30 dakika bekleyin.";
-"guides.ampmRoutine.h3_7" = "Daha Zengin Nemlendiricilerle Kilitleme";
-"guides.ampmRoutine.p9" = "Geceleri bariyer geçirgenliği daha yüksek olduğundan, daha zengin bir nemlendirici veya krem uygulamak, aşırı su kaybını önler ve onarım süreçlerini destekler.";
+"guides.ampmRoutine.p7" = "Makyaj, güneş kremi kullandıysanız veya yoğun kirliliğe maruz kaldıysanız, bir **yağ veya balsam temizleyici** ile başlayın, ardından nazik bir temizleyici ile devam edin. Aktiflerin daha iyi çalışması için temiz bir tuval istersiniz.";
+"guides.ampmRoutine.h3_6" = "Cilt Daha Alıcıyken Aktifleri Uygulayın";
+"guides.ampmRoutine.p8" = "Akşam, cildiniz retinoidler, asitler, peptitler veya büyüme faktörleri gibi **aktifleri** daha kolay emer. Koruyucu taleplerin düşük olması nedeniyle, daha güçlü içerikleri kullanmak daha güvenlidir.";
+"guides.ampmRoutine.tip2" = "**Zamanlama İpucu**: Retinoidler gibi aktifleri tamamen kuru cilde uygulayın. Tahrişi en aza indirmek için temizlemeden sonra 20-30 dakika bekleyin.";
+"guides.ampmRoutine.h3_7" = "Daha Zengin Nemlendiricilerle Kilitleyin";
+"guides.ampmRoutine.p9" = "Gece bariyer geçirgenliği daha yüksek olduğundan, **daha zengin bir nemlendirici** veya krem uygulamak aşırı su kaybını önlemeye yardımcı olur ve onarım süreçlerini destekler.";
 "guides.ampmRoutine.h2_3" = "Örnek Gündüz vs Gece Senaryoları";
-"guides.ampmRoutine.p10" = "Diyelim ki bir C vitamini serumu kullanıyorsunuz: Sabah kullanıldığında, tüm gün UV kaynaklı serbest radikalleri nötralize etmeye çalışır. Aynı C vitaminini onarıcı bir ürün yerine gece kullanırsanız, o günlük koruyucu pencereyi kaçırmış olursunuz.";
-"guides.ampmRoutine.p11" = "Ya da retinolü düşünün: UV ışığında etkinliğini kaybeder. Sabah kullanılırsa daha az etkili olur ve tahriş etme olasılığı artar. Gece ise daha az riskle kolajen onarımını uyarabilir.";
+"guides.ampmRoutine.p10" = "Diyelim ki bir **C vitamini serumu** kullanıyorsunuz: sabah kullanıldığında, tüm gün UV kaynaklı serbest radikalleri nötralize etmek için çalışır. Aynı C vitaminini daha onarıcı bir şey yerine gece kullanırsanız, o günlük koruyucu pencereyi kaçırmış olursunuz.";
+"guides.ampmRoutine.p11" = "Ya da **retinolü** ele alalım: UV ışığında bozulur. Sabah kullanılırsa, daha az etkili olur ve tahriş etme olasılığı artar. Gece, daha az riskle kolajen onarımını uyarabilir.";
 "guides.ampmRoutine.h2_4" = "Hatırlanması Gereken Temel İlkeler";
-"guides.ampmRoutine.list1_item1" = "İçeriği cildin önceliğine eşleştirin: gündüz koruyun, gece onarın.";
-"guides.ampmRoutine.list1_item2" = "Emilimin düzgün olması için hafiften → daha ağır dokulara doğru ilerleyin (serum → krem).";
-"guides.ampmRoutine.list1_item3" = "Tek bir seansta çok fazla aktifi üst üste sürmekten kaçının; cildin dinlenmesine izin verin.";
-"guides.ampmRoutine.list1_item4" = "Cildiniz tahriş olmuşsa, temellere geri dönün (temizleme + nemlendirme) ve aktifleri yavaşça yeniden başlatın.";
-"guides.ampmRoutine.p12" = "Sabah ve akşam rutinlerini sadece kontrol listeleri olarak değil, birer destek sistemi olarak gördüğünüzde, her ürüne doğru zamanı ve amacı vermiş olursunuz. Cildiniz saygı duyulduğunu ve anlaşıldığını hissettiğinde daha iyi tepki verecektir.";
+"guides.ampmRoutine.list1_item1" = "**İçeriği cildin önceliğiyle eşleştirin**: gündüz koruma, gece onarım.";
+"guides.ampmRoutine.list1_item2" = "Emilimin düzgün çalışması için **hafiften → daha ağır dokulara** doğru ilerleyin (serum → krem).";
+"guides.ampmRoutine.list1_item3" = "Tek bir seansta **çok fazla aktif içeriği üst üste sürmekten** kaçının; cildin dinlenmesine izin verin.";
+"guides.ampmRoutine.list1_item4" = "Cildiniz tahriş olmuş hissediyorsa, **temellere** (temizleme + nemlendirme) geri dönün ve aktifleri yavaşça yeniden ekleyin.";
+"guides.ampmRoutine.p12" = "Sabah ve akşam rutinlerini sadece kontrol listeleri olarak değil, **destek sistemleri** olarak gördüğünüzde, her ürüne doğru zamanı ve amacı vermiş olursunuz. Cildiniz saygı duyulduğunu ve anlaşıldığını hissettiğinde daha iyi yanıt verecektir.";
 
 /* Guide: Acids Explained (acidsExplained) */
-"guides.acidsExplained.intro" = "Kimyasal peelingler (veya cilt bakımındaki asitler), ölü cilt hücreleri arasındaki bağları nazikçe çözer. Doğru kullanıldığında, dokuyu iyileştirmeye, aydınlatmaya ve gözenekleri temizlemeye yardımcı olabilirler. Ancak bunları etkili kullanmak için nasıl çalıştıklarını ve ne zaman kullanılmaları gerektiğini anlamak gerekir.";
+"guides.acidsExplained.intro" = "Kimyasal peelingler — veya cilt bakımındaki **\"asitler\"** — ölü cilt hücreleri arasındaki bağları nazikçe çözer. İyi kullanıldığında, dokuyu düzeltmeye, aydınlatmaya ve gözenekleri temizlemeye yardımcı olabilirler. Ancak bunları etkili kullanmak için, nasıl çalıştıklarını ve her bir türü ne zaman kullanacağınızı anlamak faydalıdır.";
 "guides.acidsExplained.h2_1" = "Peeling Asidi Kullandığınızda Ne Olur?";
-"guides.acidsExplained.p1" = "Cildiniz zamanla doğal olarak ölü hücreleri döker, ancak bazen bu süreç yavaşlar ve donukluğa, pürüzlülüğe ve tıkanmış gözeneklere yol açar. Asitler, bu hücreler arasındaki yapıştırıcıyı (desmozomları) parçalayarak nazik bir açıcı görevi görür ve dökülmeyi daha pürüzsüz hale getirir. Doğru kullanıldığında, sert ovma olmadan yenilenmeyi destekler.";
-"guides.acidsExplained.h2_2" = "Ana Kategoriler ve Öne Çıktıkları Noktalar";
-"guides.acidsExplained.h3_1" = "AHA'lar — Alfa Hidroksi Asitler";
-"guides.acidsExplained.p2" = "AHA'lar suda çözünür ve çoğunlukla cildin yüzeyinde çalışır. Dokuyu pürüzsüzleştirmek, renk eşitsizliklerini gidermek ve ışıltıyı artırmak için harikadırlar. Ancak nispeten derin nüfuz ettikleri için, özellikle ince veya kuru ciltlerde hassasiyete neden olabilirler.";
-"guides.acidsExplained.list1_item1" = "Glikolik asit — en küçük molekül, en güçlü; doku, donukluk, ince çizgiler için iyidir";
-"guides.acidsExplained.list1_item2" = "Laktik asit — daha nazik ve nemlendirici; hassas veya kuru ciltler için daha iyidir";
-"guides.acidsExplained.list1_item3" = "Mandelik asit — daha büyük molekül, daha yavaş nüfuz; tepkisel ciltler tarafından genellikle daha iyi tolere edilir";
-"guides.acidsExplained.p3" = "Örnek: Cildiniz pürüzlü veya eşit değilse, aşamalı olarak yüzeyi yenilemeye yardımcı olmak için haftada birkaç gece %5–10 glikolik veya laktik ürün kullanabilirsiniz.";
-"guides.acidsExplained.tip1" = "Başlangıç İpucu: Hassas veya kuru bir cildiniz varsa glikolik yerine laktik asit (%5-8) ile başlayın — daha nazik ve daha nemlendiricidir.";
-"guides.acidsExplained.h3_2" = "BHA'lar — Beta Hidroksi Asitler";
-"guides.acidsExplained.p4" = "BHA'lar (başlıca salisilik asit) yağda çözünür, yani gözeneklerin içindeki sebuma nüfuz edebilirler. Bu, onları özellikle yağlı, sivilceye eğilimli veya tıkanık cilt tipleri için faydalı kılar.";
-"guides.acidsExplained.list2_item1" = "Salisilik asit: yağı çözer, iltihabı azaltabilir, gözenekleri temizler";
-"guides.acidsExplained.list2_item2" = "Siyah nokta, tıkanmış gözenekler ve lezyonlar için kullanılır";
-"guides.acidsExplained.list2_item3" = "Daha düşük konsantrasyonlar (%0.5–2), tolere edilirse daha düzenli kullanılabilir";
-"guides.acidsExplained.p5" = "Örnek: Sık sık tıkanmış gözenekleriniz veya sivilceleriniz varsa, bir BHA toniği veya serumu (örneğin ~%1), aşırı peeling yapmadan cildinizi pürüzsüzleştirmeye ve arındırmaya yardımcı olabilir.";
-"guides.acidsExplained.h3_3" = "PHA'lar — Polihidroksi Asitler";
-"guides.acidsExplained.p6" = "PHA'lar, peeling asitlerinin en nazikidir. Daha büyük molekül boyutları, daha az derin nüfuz ettikleri anlamına gelir, bu da onları hassas, bariyeri zayıflamış veya tepkisel ciltler için iyi seçenekler yapar.";
-"guides.acidsExplained.list3_item1" = "Glukonolakton, laktobiyonik asit, galaktoz — yaygın PHA tipleri";
-"guides.acidsExplained.list3_item2" = "Hafif peeling sağlarken aynı zamanda nem çekebilir veya antioksidan görevi görebilirler";
-"guides.acidsExplained.list3_item3" = "Hassas veya duyarlı ciltler için bile daha düşük tahriş riski";
-"guides.acidsExplained.p7" = "Örnek: Cildiniz kolayca tepki veriyorsa, haftada birkaç kez %2–5 PHA ile başlamak, daha az riskle daha nazik bir peeling sağlar.";
+"guides.acidsExplained.p1" = "Cildiniz zamanla doğal olarak ölü hücreleri döker — ancak bazen bu süreç yavaşlar, bu da **matlık, pürüzlülük ve tıkanmış gözeneklere** yol açar. Asitler nazik açıcılar gibi davranarak, bu hücreler arasındaki yapıştırıcıyı (desmozomları) parçalar, böylece daha pürüzsüz bir şekilde dökülebilirler. Doğru kullanıldığında, bu, sert ovalama olmadan yenilenmeyi destekler.";
+"guides.acidsExplained.h2_2" = "Başlıca Kategoriler ve Parladıkları Anlar";
+"guides.acidsExplained.h3_1" = "AHAs — Alfa Hidroksi Asitler";
+"guides.acidsExplained.p2" = "AHA'lar **suda çözünür** olup, çoğunlukla cildin yüzeyinde çalışır. Dokuyu yumuşatmak, renk bozulmasını gidermek ve ışıltıyı artırmak için harikadırlar. Ancak nispeten derine nüfuz ettikleri için, özellikle ince veya kuru ciltlerde hassasiyete neden olabilirler.";
+"guides.acidsExplained.list1_item1" = "**Glikolik asit** — en küçük molekül, en güçlü; doku, matlık, ince çizgiler için iyi";
+"guides.acidsExplained.list1_item2" = "**Laktik asit** — daha nazik ve nemlendirici; hassas veya kuru ciltler için daha iyi";
+"guides.acidsExplained.list1_item3" = "**Mandelik asit** — daha büyük molekül, daha yavaş nüfuz; reaktif ciltler tarafından genellikle daha iyi tolere edilir";
+"guides.acidsExplained.p3" = "**Örnek**: Cildiniz pürüzlü veya düzensiz hissediyorsa, kademeli olarak yüzeyi yenilemeye yardımcı olmak için haftada birkaç gece %5–10 glikolik veya laktik ürün kullanabilirsiniz.";
+"guides.acidsExplained.tip1" = "**Başlangıç İpucu**: Hassas veya kuru cildiniz varsa, glikolik yerine laktik asit (%5-8) ile başlayın — daha nazik ve daha nemlendiricidir.";
+"guides.acidsExplained.h3_2" = "BHAs — Beta Hidroksi Asitler";
+"guides.acidsExplained.p4" = "BHA'lar (başlıca salisilik asit) **yağda çözünür**, bu da gözeneklerin içindeki yağa nüfuz edebilecekleri anlamına gelir. Bu, onları özellikle yağlı, sivilceye eğilimli veya tıkanmış cilt tipleri için faydalı kılar.";
+"guides.acidsExplained.list2_item1" = "**Salisilik asit**: yağı çözer, iltihabı azaltabilir, gözenekleri temizler";
+"guides.acidsExplained.list2_item2" = "**Siyah noktalar**, tıkanmış gözenekler ve lekeler için kullanılır";
+"guides.acidsExplained.list2_item3" = "Daha düşük konsantrasyonlar (%0,5–2) tolere edilirse daha düzenli kullanılabilir";
+"guides.acidsExplained.p5" = "**Örnek**: Sık sık tıkanmış gözenekler veya sivilceleriniz varsa, bir BHA toniği veya serumu (örn. yaklaşık %1) aşırı peeling yapmadan cildinizi pürüzsüzleştirmeye ve arındırmaya yardımcı olabilir.";
+"guides.acidsExplained.h3_3" = "PHAs — Polihidroksi Asitler";
+"guides.acidsExplained.p6" = "PHA'lar, peeling asitlerinin **en nazik olanlarıdır**. Daha büyük molekül boyutları, daha az derine nüfuz ettikleri anlamına gelir, bu da onları hassas, bariyeri zayıflamış veya reaktif ciltler için iyi seçenekler yapar.";
+"guides.acidsExplained.list3_item1" = "**Glukonolakton, laktobiyonik asit, galaktoz** — yaygın PHA türleri";
+"guides.acidsExplained.list3_item2" = "Hafif peeling sağlarken aynı zamanda **nem** çekebilir veya antioksidan görevi görebilir";
+"guides.acidsExplained.list3_item3" = "Hassas veya duyarlı hale gelmiş ciltler için bile daha düşük tahriş riski";
+"guides.acidsExplained.p7" = "**Örnek**: Cildiniz kolayca alevleniyorsa, haftada birkaç kez %2–5 PHA ile başlamak, daha az riskle daha nazik bir peeling sağlar.";
 "guides.acidsExplained.h2_3" = "Akıllı Stratejiler ve Güvenlik İpuçları";
-"guides.acidsExplained.p8" = "Tahrişi düşük tutarken faydalarından yararlanmak için şu temel ilkelere uyun:";
-"guides.acidsExplained.list4_item1" = "Yavaş başlayın: Sıklığı veya gücü artırmadan önce düşük konsantrasyon, haftada daha az gece (örneğin 2–3 kez)";
-"guides.acidsExplained.list4_item2" = "Cildinizin adapte olması için bir seferde yalnızca tek bir asit veya aktifi rutine dahil edin";
-"guides.acidsExplained.list4_item3" = "Başlangıçta aynı gece güçlü aktifleri (retinoidler veya birden fazla asit gibi) üst üste kullanmaktan kaçının";
-"guides.acidsExplained.list4_item4" = "Daima geniş spektrumlu SPF kullanın — asitler güneşe karşı hassasiyeti artırır";
-"guides.acidsExplained.list4_item5" = "Cildinizin sinyallerini izleyin — hafif karıncalanma normaldir, yanma veya sürekli kızarıklık normal değildir";
-"guides.acidsExplained.tip2" = "İyileşme İpucu: Tahriş yaşarsanız, 3-5 gün boyunca asitleri atlayın ve nazik temizleme + bariyer onarımına (seramidler, hyaluronik asit) odaklanın. Cildinizin onarıma ihtiyacı var, daha fazla peeling'e değil.";
-"guides.acidsExplained.h2_4" = "Asitleri Rutininize Nasıl Dahil Edersiniz?";
-"guides.acidsExplained.p9" = "İşte temel bakımınızı aksatmadan asitleri rutininize yerleştirmenize yardımcı olacak birkaç örnek desen:";
-"guides.acidsExplained.p10" = "• Gece Rutini (Haftada 3 kez): Temizleme → asit uygulayın → birkaç dakika bekleyin → nemlendirici serum → nemlendirici\n\n• Gece Alternatifleri: Bir gece BHA, başka bir gece AHA kullanın ve bazı geceleri bariyer onarımı için saklayın (aktif kullanmayın)\n\n• Ayırma: Bir asit ve bir retinoid kullanıyorsanız, cildiniz alışana kadar bunları farklı gecelerde kullanmayı düşünün.";
-"guides.acidsExplained.p11" = "Zamanla cildiniz daha güçlü formülleri veya daha sık kullanımı tolere edebilir — ancak daima yavaş ilerleyin. Cildin adapte olmasına izin verin. Peeling bir araçtır, yarış değil.";
+"guides.acidsExplained.p8" = "Tahrişi düşük tutarken faydalarından yararlanmak için şu temel ilkeleri izleyin:";
+"guides.acidsExplained.list4_item1" = "**Düşükten başlayın**: sıklığı veya gücü artırmadan önce düşük konsantrasyon, haftada daha az gece (örn. 2–3 kez)";
+"guides.acidsExplained.list4_item2" = "Cildinizin adapte olabilmesi için bir seferde **yalnızca bir asit** veya aktif içerik ekleyin";
+"guides.acidsExplained.list4_item3" = "Başlangıçta aynı gece **güçlü aktifleri** (retinoidler veya birden fazla asit gibi) üst üste sürmekten kaçının";
+"guides.acidsExplained.list4_item4" = "**Her zaman geniş spektrumlu SPF kullanın** — asitler güneşe karşı hassasiyeti artırır";
+"guides.acidsExplained.list4_item5" = "Cildinizin sinyallerini izleyin — **hafif karıncalanma normaldir**, yanma veya kalıcı kızarıklık değildir";
+"guides.acidsExplained.tip2" = "**İyileşme İpucu**: Tahriş yaşarsanız, 3-5 gün asitleri atlayın ve nazik temizlik + bariyer onarımına (seramidler, hyaluronik asit) odaklanın. Cildinizin daha fazla peelinge değil, iyileşmeye ihtiyacı var.";
+"guides.acidsExplained.h2_4" = "Asitleri Rutininize Nasıl Dahil Edersiniz";
+"guides.acidsExplained.p9" = "Çekirdek bakımınızı bozmadan asitleri yerleştirmenize yardımcı olacak birkaç örnek desen aşağıdadır:";
+"guides.acidsExplained.p10" = "• **Gece Rutini (Haftada 3 Kez)**: Temizle → asit uygula → birkaç dakika bekle → nemlendirici serum → nemlendirici\n\n• **Alternatif Geceler**: Bir gece BHA, başka bir gece AHA kullanın ve bazı geceleri bariyer onarımı için ayırın (aktif yok)\n\n• **Ayırma**: Bir asit ve bir retinoid kullanıyorsanız, cildiniz alışana kadar bunları farklı gecelerde kullanmayı düşünün.";
+"guides.acidsExplained.p11" = "Zamanla cildiniz daha güçlü formülleri veya daha sık kullanımı tolere edebilir — ancak her zaman **yavaş** ilerleyin. Cildin adapte olmasına izin verin. **Peeling bir araçtır, yarış değil**.";
 
 /* Guide: Retinoids 101 (retinoids101) */
-"guides.retinoids101.intro" = "Retinoidler (A vitamini türevleri), dokuyu pürüzsüzleştirmek, renk bozukluklarını gidermek ve sivilceleri yönetmek için en çok çalışılmış ve etkili araçlardan biridir. Ancak faydaları incelik gerektirir: onları bilinçli bir şekilde rutine dahil etmeli ve zamanla çalışmalarına izin vermelisiniz.";
-"guides.retinoids101.h2_1" = "Retinoidler Ne Yapar ve Neden Güçlüdür?";
-"guides.retinoids101.p1" = "Retinoidler, hücre döngüsünü hızlandırarak (yaşlı hücrelerin atılmasını teşvik ederek), kolajen üretimini uyararak ve pigmentasyonu düzenlemeye yardımcı olarak cildi iyileştirir. Haftalar ve aylar içinde bu, daha pürüzsüz bir cilde, daha az tıkanmış gözeneklere ve daha eşit bir tona dönüşebilir.";
-"guides.retinoids101.h2_2" = "Retinoid Çeşitleri ve Gücü";
+"guides.retinoids101.intro" = "**Retinoidler** — A vitamininin türevleri — dokuyu düzeltmek, renk bozukluğunu gidermek ve sivilceleri yönetmek için en çok çalışılmış ve etkili araçlar arasındadır. Ancak faydaları inceliklerle birlikte gelir: onları **düşünceli bir şekilde** rutininize eklemeli ve zamanla çalışmalarına izin vermelisiniz.";
+"guides.retinoids101.h2_1" = "Retinoidler Ne Yapar ve Neden Bu Kadar Güçlüler";
+"guides.retinoids101.p1" = "Retinoidler, **hücresel döngüyü hızlandırarak** (daha eski hücrelerin dökülmesini teşvik ederek), **kolajen üretimini uyararak** ve pigmentasyonu düzenlemeye yardımcı olarak cildi iyileştirir. Haftalar ve aylar içinde bu, daha pürüzsüz bir cilt, daha az tıkanmış gözenekler ve daha eşit bir tona dönüşebilir.";
+"guides.retinoids101.h2_2" = "Retinoid Türleri ve Güçleri";
 "guides.retinoids101.h3_1" = "Retinol";
-"guides.retinoids101.p2" = "Reçetesiz temin edilebilen retinol, daha hafiftir ve aktif hale gelmek için cildinizde retinoik aside dönüşmelidir. Bu dönüşüm adımı nedeniyle, daha naziktir ve yeni başlayanlar tarafından daha iyi tolere edilir.";
+"guides.retinoids101.p2" = "Reçetesiz temin edilebilen **retinol** daha hafiftir ve aktif hale gelmek için cildinizde retinoik aside dönüşmelidir. Bu dönüşüm adımı nedeniyle, **daha naziktir** ve yeni başlayanlar tarafından daha iyi tolere edilir.";
 "guides.retinoids101.h3_2" = "Retinaldehit (Retinal)";
-"guides.retinoids101.p3" = "Orta kuvvette bir seçenektir. Retinolden daha az dönüşüm adımı gerektirir, bu nedenle orta düzeyde tahriş riski ile daha hızlı etki etme eğilimindedir.";
-"guides.retinoids101.h3_3" = "Reçeteli Retinoidler (örneğin Tretinoin)";
-"guides.retinoids101.p4" = "Bunlar zaten aktif formda (retinoik asit) oldukları için en güçlüdürler. Genellikle daha hızlı sonuç verirler, ancak özellikle başlangıç aşamalarında daha yüksek tahriş riski taşırlar.";
-"guides.retinoids101.h2_3" = "Nasıl Başlanır ve Tolerans Nasıl Oluşturulur?";
-"guides.retinoids101.p5" = "Retinoidler başlangıçta kuruluğa, pul pul dökülmeye veya hassasiyete neden olabileceği için, anahtar yavaş başlamak ve zamanla toleransı artırmaktır.";
-"guides.retinoids101.list1_item1" = "Haftada 2–3 gece düşük güçlü bir formülasyonla (örneğin %0.1 retinol) başlayın";
-"guides.retinoids101.list1_item2" = "Sandviç yöntemini kullanın: ince bir kat nemlendirici sürün → retinoid → tamponlamak için ince bir kat daha nemlendirici sürün";
-"guides.retinoids101.list1_item3" = "Daima gece uygulayın (retinoidler ışığa duyarlıdır ve gün ışığında etkinliğini kaybedebilir)";
-"guides.retinoids101.list1_item4" = "Ertesi gün geniş spektrumlu SPF kullanın — retinoidler cildinizi UV'ye karşı daha hassas hale getirir";
-"guides.retinoids101.tip1" = "Başlangıç İpucu: Retinoidlere tamamen yeni başlıyorsanız, ilk 2 hafta boyunca sadece haftada bir kez %0.1 retinol ile başlayın. Bu, cildinizin aşırı yüklenmeden tolerans geliştirmesine yardımcı olur.";
-"guides.retinoids101.h2_4" = "Arınma Dönemi ve Ne Beklenmeli";
-"guides.retinoids101.p6" = "İlk birkaç hafta içinde, retinoid hücre döngüsünü hızlandırdığı için cildiniz sivilcelerde alevlenme, soyulma veya kuruluk yaşayabilir. Bu genellikle arınma dönemi olarak adlandırılır. Cildin hassasiyetine ve formülasyonun gücüne bağlı olarak genellikle 2-6 hafta sürer.";
+"guides.retinoids101.p3" = "**Orta kuvvette bir seçenektir**. Retinolden daha az dönüşüm adımı gerektirir, bu yüzden orta düzeyde tahriş riskiyle daha hızlı hareket etme eğilimindedir.";
+"guides.retinoids101.h3_3" = "Reçeteli Retinoidler (örn. Tretinoin)";
+"guides.retinoids101.p4" = "Bunlar zaten **aktif formdadır** (retinoik asit), bu yüzden **en güçlü** olanlardır. Genellikle daha hızlı sonuç verirler, ancak özellikle erken aşamalarda daha yüksek tahriş riski de taşırlar.";
+"guides.retinoids101.h2_3" = "Nasıl Başlanır ve Tolerans Nasıl Oluşturulur";
+"guides.retinoids101.p5" = "Retinoidler başlangıçta **kuruluk, pullanma veya hassasiyete** neden olabileceğinden, anahtar yavaş başlamak ve zamanla artırmaktır.";
+"guides.retinoids101.list1_item1" = "Haftada 2–3 gece düşük güçlü bir formülasyonla (örn. %0,1 retinol) başlayın";
+"guides.retinoids101.list1_item2" = "**\"Sandviç\" yöntemini** kullanın: ince bir kat nemlendirici sürün → retinoid → tamponlamak için başka bir ince kat nemlendirici";
+"guides.retinoids101.list1_item3" = "**Her zaman gece uygulayın** (retinoidler ışığa duyarlıdır ve gün ışığında bozulabilir)";
+"guides.retinoids101.list1_item4" = "Ertesi gün **geniş spektrumlu SPF kullanın** — retinoidler cildinizi UV'ye karşı daha hassas hale getirir";
+"guides.retinoids101.tip1" = "**Yeni Başlayanlar İçin İpucu**: Retinoidlere tamamen yeniyseniz, ilk 2 hafta boyunca haftada sadece bir kez %0,1 retinol ile başlayın. Bu, cildinizin aşırı yüklenmeden tolerans geliştirmesine yardımcı olur.";
+"guides.retinoids101.h2_4" = "Arınma Dönemi ve Neler Beklenmeli";
+"guides.retinoids101.p6" = "İlk birkaç hafta içinde, retinoidin hücre döngüsünü hızlandırmasıyla cildinizde **sivilce, soyulma veya kuruluk** görülebilir. Buna genellikle **\"arınma\" dönemi** denir. Cilt hassasiyetine ve formülasyonun gücüne bağlı olarak genellikle 2–6 hafta sürer.";
 "guides.retinoids101.h3_4" = "Arınma Sırasında İpuçları";
-"guides.retinoids101.p7" = "Rutininize devam edin (şiddetli tahriş olmadığı sürece). Nazik, rahatlatıcı ürünler (nemlendirici, bariyer desteği) kullanın. Cildiniz alışana kadar çok fazla aktifi (örneğin güçlü asitler + retinoidler aynı gece) üst üste kullanmaktan kaçının.";
-"guides.retinoids101.tip2" = "Arınma vs. Reaksiyon: Arınma, genellikle sivilce çıkan bölgelerde olur ve 4-6 hafta içinde geçer. Yeni bölgelerde sivilce çıkarsa veya tahriş 8 haftadan fazla sürerse, bu muhtemelen bir reaksiyondur — sıklığı azaltın veya bırakın.";
+"guides.retinoids101.p7" = "**Rutininize sadık kalın** (şiddetli tahriş olmadığı sürece). **Nazik, rahatlatıcı ürünler** (nemlendirici, bariyer destekleyici) kullanın. Cildiniz alışana kadar çok fazla aktifi üst üste sürmeyin (örn. güçlü asitler + retinoidler aynı gece).";
+"guides.retinoids101.tip2" = "**Arınma vs. Reaksiyon**: Arınma, genellikle sivilce çıkan bölgelerde olur ve 4-6 hafta içinde geçer. Yeni bölgelerde sivilce çıkarsa veya tahriş 8 haftadan fazla sürerse, bu muhtemelen bir reaksiyondur — sıklığı azaltın veya kullanmayı bırakın.";
 "guides.retinoids101.h2_5" = "Örnekler ve Senaryolar";
-"guides.retinoids101.p8" = "• Yeniyseniz: haftada 3 gece %0.1 retinol ile başlayın, öncesinde ve sonrasında nemlendirici kullanın.\n• 2 aylık toleranstan sonra, 4 geceye çıkarabilir veya biraz daha yüksek bir güç deneyebilirsiniz.\n• Cildiniz pul pul dökülür veya hassaslaşırsa, sıklığı azaltın veya tamponlayıcılar (nemlendiriciler veya nemlendirici serumlar) kullanın.";
+"guides.retinoids101.p8" = "• Yeniyseniz: %0,1 retinol ile haftada 3 gece başlayın, öncesinde ve sonrasında nemlendirin.\n• 2 aylık tolerans sonrası, haftada 4 geceye çıkarabilir veya biraz daha yüksek bir gücü deneyebilirsiniz.\n• Cildiniz pul pul dökülür veya hassaslaşırsa, sıklığı azaltın veya tamponlayıcılar (nemlendiriciler veya nemlendirici serumlar) kullanın.";
 "guides.retinoids101.h2_6" = "Hatırlanması Gereken Faydalı İlkeler";
-"guides.retinoids101.list2_item1" = "Yavaş ilerleyin — tutarlılık, agresiflikten üstündür";
-"guides.retinoids101.list2_item2" = "Az, çoktur — küçük bir miktar yeterlidir (yüz için bezelye büyüklüğünde)";
-"guides.retinoids101.list2_item3" = "Tahriş yoğun veya kalıcıysa, geri adım atın ve yeniden toparlanın";
-"guides.retinoids101.list2_item4" = "Sabır anahtardır — gözle görülür sonuçlar genellikle 8-12 hafta sonra başlar";
-"guides.retinoids101.p9" = "Yalnızca ne kullanacağınızı değil, neden ve nasıl kullanacağınızı anladığınızda, cildinize gereksiz stres veya aksaklıklar olmadan adapte olma, tepki verme ve iyileşme şansı vermiş olursunuz.";
+"guides.retinoids101.list2_item1" = "**Yavaş ilerleyin** — tutarlılık, saldırganlıktan daha önemlidir";
+"guides.retinoids101.list2_item2" = "**Az daha çoktur** — küçük bir miktar yeterlidir (yüz için bezelye büyüklüğünde)";
+"guides.retinoids101.list2_item3" = "Tahriş **yoğun veya kalıcıysa**, geri adım atın ve yeniden toparlanın";
+"guides.retinoids101.list2_item4" = "**Sabır anahtardır** — görünür sonuçlar genellikle 8–12 hafta sonra başlar";
+"guides.retinoids101.p9" = "Sadece ne kullanacağınızı değil, **neden** ve **nasıl** kullanacağınızı anladığınızda, cildinize gereksiz stres veya aksaklık olmadan adapte olması, tepki vermesi ve iyileşmesi için daha iyi bir şans verirsiniz.";
 
 /* Guide: Skinimalism (skinimalism) */
-"guides.skinimalism.intro" = "Skinimalizm, ürün aşırı yüklemesinden, kasıtlı basitliğe doğru bir geçişi teşvik eder — cildinizin doğal ritmini desteklemek için daha az, daha akıllı seçimler kullanmak.";
-"guides.skinimalism.h2_1" = "Neden Minimal Bazen Daha İyi Çalışır";
-"guides.skinimalism.p1" = "Cildiniz zaten çok şey yapıyor: koruyor, onarıyor, yenileniyor. Çok fazla aktif veya katman, bariyerini strese sokabilir, sinyalleri karıştırabilir veya içerik çatışmalarına neden olabilir. Minimal rutinler bu stres yükünü azaltır.";
-"guides.skinimalism.p2" = "Ayrıca, daha az ürün kullandığınızda, cildinizin her birine nasıl tepki verdiğini görebilirsiniz — bu, sorunları teşhis etmeyi kolaylaştırır.";
-"guides.skinimalism.tip1" = "Basitleştirme İpucu: 10 adımlı bir rutinden bunaldıysanız, 2 hafta boyunca sadece temizleme + nemlendirme + SPF'e indirin. Cildinizin nasıl tepki verdiğini izleyin, ardından birer birer ürünleri yeniden ekleyin.";
+"guides.skinimalism.intro" = "**Skinimalizm**, ürün fazlalığından **kasıtlı sadeliğe** geçişi teşvik eder — cildinizin doğal ritmini desteklemek için daha az, daha akıllı seçimler kullanmak.";
+"guides.skinimalism.h2_1" = "Minimal Neden Bazen Daha İyi Çalışır";
+"guides.skinimalism.p1" = "Cildiniz zaten çok şey yapıyor: **koruyor, onarıyor, yeniliyor**. Çok fazla aktif veya katman, bariyerini strese sokabilir, sinyalleri karıştırabilir veya içerik çatışmalarına neden olabilir. Minimal rutinler bu stres yüklerini azaltır.";
+"guides.skinimalism.p2" = "Ayrıca, **daha az ürün** kullandığınızda, cildinizin her birine nasıl tepki verdiğini görebilirsiniz — bu, sorunları teşhis etmeyi kolaylaştırır.";
+"guides.skinimalism.tip1" = "**Basitleştirme İpucu**: 10 adımlı bir rutinden bunalıyorsanız, 2 hafta boyunca temizle + nemlendir + SPF'ye indirin. Cildinizin nasıl tepki verdiğini izleyin, ardından her seferinde bir ürünü yeniden ekleyin.";
 "guides.skinimalism.h2_2" = "Temel Üçlü";
-"guides.skinimalism.list1_item1" = "Nazikçe temizleyin — cildi soymadan kir, yağ ve kirliliği giderin";
-"guides.skinimalism.list1_item2" = "Nemlendirin — lipit, su ve bariyer desteği sağlayın";
-"guides.skinimalism.list1_item3" = "Güneşten koruma (gündüz) — yaşlanmayı hızlandıran UV'den koruyun";
-"guides.skinimalism.p3" = "İyi formüle edilmiş, cilt dostu versiyonları seçerseniz, bu üç adım bile çok şey yapabilir.";
-"guides.skinimalism.h2_3" = "Bir Kahraman Ürün Nasıl ve Ne Zaman Eklenir?";
-"guides.skinimalism.p4" = "Cildiniz ekstra bir şeye (aydınlatma, hafif peeling, nem takviyesi) ihtiyaç duyuyorsa, birden fazla işi yapabilen tek bir ürün seçin. Örneğin, niasinamid + antioksidan serum veya nemlendirici destekli nazik bir peeling.";
-"guides.skinimalism.p5" = "Yeni ürünleri birer birer rutine dahil edin ve cildinize 4-8 hafta adapte olma süresi verin.";
-"guides.skinimalism.tip2" = "Çok Amaçlı Ürün Seçimi: Faydaları birleştiren ürünler arayın — örneğin, SPF'li bir nemlendirici veya niasinamid + C vitamini içeren bir serum. Bu, sonuçlardan ödün vermeden adım sayısını azaltır.";
+"guides.skinimalism.list1_item1" = "**Nazikçe temizleyin** — cildi soymadan kir, yağ ve kirliliği giderin";
+"guides.skinimalism.list1_item2" = "**Nemlendirin** — lipid, su ve bariyer desteği sağlayın";
+"guides.skinimalism.list1_item3" = "**Güneş koruması (gündüz)** — yaşlanmayı hızlandıran UV'den koruyun";
+"guides.skinimalism.p3" = "İyi formüle edilmiş, cilt dostu versiyonları seçerseniz, bu **üç adım** bile çok şey yapabilir.";
+"guides.skinimalism.h2_3" = "Bir \"Kahraman\" Ürün Ne Zaman ve Nasıl Eklenir";
+"guides.skinimalism.p4" = "Cildiniz fazladan bir şeye (aydınlatma, hafif peeling, nem takviyesi) ihtiyaç duyuyorsa, **birden fazla iş yapabilen bir ürün** seçin. Örneğin, niasinamid + antioksidan serum veya nemlendirici destekli nazik bir peeling.";
+"guides.skinimalism.p5" = "Yeni ürünleri **birer birer** ekleyin ve cildinize **4–8 hafta adapte olma süresi** tanıyın.";
+"guides.skinimalism.tip2" = "**Çok Amaçlı Seçim**: Faydaları birleştiren ürünler arayın — SPF'li bir nemlendirici veya niasinamid + C vitamini içeren bir serum gibi. Bu, sonuçlardan ödün vermeden adımları azaltır.";
 "guides.skinimalism.h2_4" = "Örnek Minimal Rutin";
-"guides.skinimalism.p6" = "• Sabah: Nazik temizleyici → hafif nemlendirici → SPF\n• Akşam: Hafif temizleyici → (isteğe bağlı) kahraman serum → daha zengin nemlendirici veya bariyer destek kremi";
-"guides.skinimalism.p7" = "Cildiniz tolere edebiliyorsa, aktifler için geceleri alternatifler kullanabilirsiniz (örneğin peeling gecesi, onarım gecesi) — ancak katmanları hafif tutun.";
+"guides.skinimalism.p6" = "• **Sabah**: Nazik temizleyici → hafif nemlendirici → SPF\n• **Akşam**: Hafif temizleyici → (isteğe bağlı) kahraman serum → daha zengin nemlendirici veya bariyer destekleyici krem";
+"guides.skinimalism.p7" = "Cildiniz tolere ediyorsa, aktifler için **geceleri değiştirebilirsiniz** (örn. peeling gecesi, onarım gecesi) — ancak katmanlamayı hafif tutun.";
 "guides.skinimalism.h2_5" = "Yaygın Zorluklar ve Çözümler";
-"guides.skinimalism.list2_item1" = "Cildim tepkisel → daha yavaş ilerleyin, ekstra nemlendirici ile tamponlayın";
-"guides.skinimalism.list2_item2" = "Daha fazla ışıltı istiyorum → çok sayıda serum katmanı yerine antioksidanları veya aydınlatıcı içerikleri seçin";
-"guides.skinimalism.list2_item3" = "Adımları atlamak riskli geliyor → unutmayın: temel üçlünüz zaten olmazsa olmazları kapsıyor";
-"guides.skinimalism.list2_item4" = "Hala sivilce / pigmentasyon tedavisi istiyorum → günlük katmanlama yerine sivilce kurutucular kullanın veya geceleri rotasyon yapın";
-"guides.skinimalism.p8" = "Minimal, yetersiz demek değildir — kasıtlı demektir. Her ürünün bir amacı olduğunda, cildiniz nefes alabilir, adapte olabilir ve gelişebilir.";
+"guides.skinimalism.list2_item1" = "**Cildim reaktif** → daha yavaş ilerleyin, ekstra nemlendirici ile tamponlayın";
+"guides.skinimalism.list2_item2" = "**Daha fazla ışıltı istiyorum** → çok sayıda serumu üst üste sürmek yerine antioksidan veya aydınlatıcı içerikler seçin";
+"guides.skinimalism.list2_item3" = "**Adımları atlamak riskli geliyor** → unutmayın: temel üçlünüz zaten temel ihtiyaçları karşılıyor";
+"guides.skinimalism.list2_item4" = "**Hala sivilce / pigmentasyonu tedavi etmek istiyorum** → günlük katmanlama yerine bölgesel tedaviler kullanın veya geceleri değiştirin";
+"guides.skinimalism.p8" = "**Minimal, yetersiz demek değildir** — kasıtlı demektir. Her ürünün bir amacı olduğunda, cildiniz **nefes alabilir, adapte olabilir ve gelişebilir**.";
 
 /* Default guide content */
 "guides.default.intro" = "%@ hakkında ve cilt bakımı rutininizle nasıl ilişkili olduğu hakkında daha fazla bilgi edinin.";
-"guides.default.p1" = "Bu rehber, temelleri anlamanıza ve cilt bakımı rutininiz hakkında bilinçli kararlar vermenize yardımcı olacaktır.";
+"guides.default.p1" = "Bu rehber, temel bilgileri anlamanıza ve cilt bakımı rutininiz hakkında bilinçli kararlar vermenize yardımcı olacaktır.";
 "guides.default.h2_1" = "Temel Çıkarımlar";
-"guides.default.list1_item1" = "Temel bilgilerle başlayın ve kademeli olarak geliştirin";
-"guides.default.list1_item2" = "Cildinizi dinleyin ve gerektiğinde ayarlayın";
+"guides.default.list1_item1" = "Temel bilgilerle başlayın ve kademeli olarak inşa edin";
+"guides.default.list1_item2" = "Cildinizi dinleyin ve gerektiğinde ayarlama yapın";
 "guides.default.list1_item3" = "Tutarlılık, karmaşıklıktan daha önemlidir";
 "guides.default.disclaimer" = "Bireysel sonuçlar değişebilir. Kişiselleştirilmiş tavsiye için bir uzmana danışın.";
+```
