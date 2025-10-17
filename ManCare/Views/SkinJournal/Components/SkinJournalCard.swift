@@ -93,11 +93,11 @@ struct SkinJournalCard: View {
     private var premiumHeaderSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Skin Journey")
+                Text(L10n.SkinJournal.Journey.title)
                     .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                Text("\(store.totalEntries) entr\(store.totalEntries == 1 ? "y" : "ies")")
+                Text(L10n.SkinJournal.Journey.entriesCount(store.totalEntries))
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -119,16 +119,16 @@ struct SkinJournalCard: View {
                 // Header
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Skin Journey")
+                        Text(L10n.SkinJournal.Journey.title)
                             .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         if store.totalEntries > 0 {
-                            Text("\(store.totalEntries) entr\(store.totalEntries == 1 ? "y" : "ies")")
+                            Text(L10n.SkinJournal.Journey.entriesCount(store.totalEntries))
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         } else {
-                            Text("Track your skin progress")
+                            Text(L10n.SkinJournal.Journey.trackProgress)
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
@@ -171,7 +171,7 @@ struct SkinJournalCard: View {
 
             // "More on journal" text if more than 3 entries
             if store.totalEntries > 3 {
-                Text("More on journal")
+                Text(L10n.SkinJournal.Journey.moreOnJournal)
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     .padding(.top, 4)
@@ -224,7 +224,7 @@ struct SkinJournalCard: View {
                         Text(mood)
                             .font(.system(size: 20))
 
-                        Text("Mood")
+                        Text(L10n.SkinJournal.Journey.mood)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
@@ -249,7 +249,7 @@ struct SkinJournalCard: View {
                 }
             } label: {
             HStack(spacing: 8) {
-                Text("View Journal")
+                Text(L10n.SkinJournal.Journey.viewJournal)
                     .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
 
                 Image(systemName: "arrow.right")
@@ -287,11 +287,11 @@ struct SkinJournalCard: View {
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted.opacity(0.6))
 
             VStack(spacing: 6) {
-                Text("Start tracking your skin")
+                Text(L10n.SkinJournal.Journey.startTracking)
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                Text("Take progress selfies and journal entries")
+                Text(L10n.SkinJournal.Journey.takeProgressSelfies)
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
@@ -307,7 +307,7 @@ struct SkinJournalCard: View {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 16))
-                    Text("Add First Entry")
+                    Text(L10n.SkinJournal.Journey.addFirstEntry)
                         .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                 }
                 .foregroundColor(.white)
@@ -362,11 +362,11 @@ struct SkinJournalCard: View {
             }
 
             VStack(spacing: 8) {
-                Text("Premium Feature")
+                Text(L10n.SkinJournal.Premium.title)
                     .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                Text("Track your skin journey with progress photos and detailed entries")
+                Text(L10n.SkinJournal.Premium.description)
                     .font(ThemeManager.shared.theme.typo.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
@@ -379,7 +379,7 @@ struct SkinJournalCard: View {
                 HStack(spacing: 8) {
                     Image(systemName: "sparkles")
                         .font(.system(size: 14, weight: .semibold))
-                    Text("Upgrade to Premium")
+                    Text(L10n.SkinJournal.Premium.upgrade)
                         .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                 }
                 .foregroundColor(.white)

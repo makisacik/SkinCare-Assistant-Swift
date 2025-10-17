@@ -21,9 +21,9 @@ struct PremiumDebugView: View {
                             .foregroundColor(premiumManager.isPremium ? .yellow : .gray)
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Premium Status")
+                            Text(L10n.Debug.premiumStatus)
                                 .font(.headline)
-                            Text(premiumManager.isPremium ? "Active" : "Inactive")
+                            Text(premiumManager.isPremium ? L10n.Debug.active : L10n.Debug.inactive)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -36,7 +36,7 @@ struct PremiumDebugView: View {
                             .frame(width: 12, height: 12)
                     }
                 } header: {
-                    Text("Current Status")
+                    Text(L10n.Debug.currentStatus)
                 }
                 
                 // Actions Section
@@ -46,7 +46,7 @@ struct PremiumDebugView: View {
                     } label: {
                         HStack {
                             Image(systemName: "cart.fill")
-                            Text("Show Paywall")
+                            Text(L10n.Debug.showPaywall)
                             Spacer()
                             Image(systemName: "chevron.right")
                                 .font(.caption)
@@ -60,7 +60,7 @@ struct PremiumDebugView: View {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.green)
-                            Text("Grant Premium (Test)")
+                            Text(L10n.Debug.grantPremium)
                         }
                     }
                     .disabled(premiumManager.isPremium)
@@ -71,7 +71,7 @@ struct PremiumDebugView: View {
                         HStack {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.red)
-                            Text("Revoke Premium (Test)")
+                            Text(L10n.Debug.revokePremium)
                         }
                     }
                     .disabled(!premiumManager.isPremium)
@@ -83,45 +83,45 @@ struct PremiumDebugView: View {
                     } label: {
                         HStack {
                             Image(systemName: "arrow.clockwise")
-                            Text("Restore Purchases")
+                            Text(L10n.Debug.restorePurchases)
                         }
                     }
                 } header: {
-                    Text("Actions")
+                    Text(L10n.Debug.actions)
                 }
                 
                 // Features Section
                 Section {
                     FeatureStatusRow(
                         icon: "list.bullet",
-                        title: "Create Routines",
-                        status: premiumManager.isPremium ? "Unlimited" : "2 max"
+                        title: L10n.Debug.featureCreateRoutines,
+                        status: premiumManager.isPremium ? L10n.Debug.statusUnlimited : L10n.Debug.statusMaxTwo
                     )
                     
                     FeatureStatusRow(
                         icon: "drop.fill",
-                        title: "Cycle Adaptation",
-                        status: premiumManager.canUseCycleAdaptation() ? "Available" : "Premium Only"
+                        title: L10n.Debug.featureCycleAdaptation,
+                        status: premiumManager.canUseCycleAdaptation() ? L10n.Debug.statusAvailable : L10n.Debug.statusPremiumOnly
                     )
                     
                     FeatureStatusRow(
                         icon: "camera.on.rectangle.fill",
-                        title: "Skin Journal",
-                        status: premiumManager.canUseSkinJournal() ? "Available" : "Premium Only"
+                        title: L10n.Debug.featureSkinJournal,
+                        status: premiumManager.canUseSkinJournal() ? L10n.Debug.statusAvailable : L10n.Debug.statusPremiumOnly
                     )
                     
                     FeatureStatusRow(
                         icon: "sun.max.fill",
-                        title: "Weather Adaptation",
-                        status: premiumManager.canUseWeatherAdaptation() ? "Available" : "Locked"
+                        title: L10n.Debug.featureWeatherAdaptation,
+                        status: premiumManager.canUseWeatherAdaptation() ? L10n.Debug.statusAvailable : L10n.Debug.statusLocked
                     )
                 } header: {
-                    Text("Feature Access")
+                    Text(L10n.Debug.featureAccess)
                 } footer: {
-                    Text("Test premium features by toggling the premium status above. In production, features will be locked behind real StoreKit purchases.")
+                    Text(L10n.Debug.testPremiumFooter)
                 }
             }
-            .navigationTitle("Premium Debug")
+            .navigationTitle(L10n.Debug.premiumTitle)
             .sheet(isPresented: $showingPaywall) {
                 PaywallView(
                     onSubscribe: {

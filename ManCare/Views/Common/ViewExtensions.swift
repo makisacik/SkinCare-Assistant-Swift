@@ -70,10 +70,10 @@ extension View {
     }
     
     func handleRoutineError(_ error: Error?) -> some View {
-        self.alert("Error", isPresented: .constant(error != nil)) {
-            Button("OK") { }
+        self.alert(L10n.Common.error, isPresented: .constant(error != nil)) {
+            Button(L10n.Common.ok) { }
         } message: {
-            Text(error?.localizedDescription ?? "Unknown error")
+            Text(error?.localizedDescription ?? L10n.Common.unknownError)
         }
     }
     

@@ -21,7 +21,7 @@ struct TrendingRoutineRow: View {
                         .font(.system(size: 12, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.success)
                     
-                    Text("\(increase)%")
+                    Text(L10n.Discover.Community.increase(increase))
                         .font(.system(size: 11, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.success)
                 }

@@ -50,7 +50,7 @@ struct CyclePromotionBanner: View {
             // Title and subtitle
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
-                    Text("Adapt Your Routine to Your Cycle")
+                    Text(L10n.Routines.CyclePromotion.title)
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
 
@@ -61,17 +61,17 @@ struct CyclePromotionBanner: View {
                     }
                 }
 
-                Text(premiumManager.isPremium ? "Get personalized skincare for each phase" : "Premium feature - Upgrade to unlock")
+                Text(premiumManager.isPremium ? L10n.Routines.CyclePromotion.subtitlePremium : L10n.Routines.CyclePromotion.subtitleNonPremium)
                     .font(.system(size: 15))
                     .foregroundColor(.white.opacity(0.9))
             }
 
             // Phase icons with descriptions
             HStack(spacing: 12) {
-                phaseIcon(icon: "drop.fill", color: ThemeManager.shared.theme.palette.error, text: "Gentle")
-                phaseIcon(icon: "sparkles", color: ThemeManager.shared.theme.palette.success, text: "Active")
-                phaseIcon(icon: "sun.max.fill", color: ThemeManager.shared.theme.palette.warning, text: "Balanced")
-                phaseIcon(icon: "moon.fill", color: ThemeManager.shared.theme.palette.primary, text: "Control")
+                phaseIcon(icon: "drop.fill", color: ThemeManager.shared.theme.palette.error, text: L10n.Routines.CyclePromotion.phaseGentle)
+                phaseIcon(icon: "sparkles", color: ThemeManager.shared.theme.palette.success, text: L10n.Routines.CyclePromotion.phaseActive)
+                phaseIcon(icon: "sun.max.fill", color: ThemeManager.shared.theme.palette.warning, text: L10n.Routines.CyclePromotion.phaseBalanced)
+                phaseIcon(icon: "moon.fill", color: ThemeManager.shared.theme.palette.primary, text: L10n.Routines.CyclePromotion.phaseControl)
             }
 
             // Enable button
@@ -86,7 +86,7 @@ struct CyclePromotionBanner: View {
                         Image(systemName: "crown.fill")
                             .font(.system(size: 14, weight: .bold))
                     }
-                    Text(premiumManager.isPremium ? "Enable Cycle Tracking" : "Upgrade to Premium")
+                    Text(premiumManager.isPremium ? L10n.Routines.CyclePromotion.enableCycleTracking : L10n.Routines.CyclePromotion.upgradeToPremium)
                         .font(.system(size: 16, weight: .semibold))
                 }
                 .foregroundColor(ThemeManager.shared.theme.palette.primary)

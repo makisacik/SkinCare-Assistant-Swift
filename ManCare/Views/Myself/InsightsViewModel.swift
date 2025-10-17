@@ -285,15 +285,15 @@ class InsightsViewModel: ObservableObject {
         let insight: String
         if morningRate > eveningRate && morningRate > 0 {
             let percentage = Int(morningRate * 100)
-            insight = "You're most consistent in the mornings! 🌅 (\(percentage)% completion rate)"
+            insight = L10n.Myself.Insights.morningConsistent(percentage: percentage)
         } else if eveningRate > morningRate && eveningRate > 0 {
             let percentage = Int(eveningRate * 100)
-            insight = "Your evening routine shines! 🌙 (\(percentage)% completion rate)"
+            insight = L10n.Myself.Insights.eveningShines(percentage: percentage)
         } else if morningRate == eveningRate && morningRate > 0 {
             let percentage = Int(morningRate * 100)
-            insight = "You're equally consistent! Both routines at \(percentage)%"
+            insight = L10n.Myself.Insights.equallyConsistent(percentage: percentage)
         } else {
-            insight = "Start building consistency with your routine!"
+            insight = L10n.Myself.Insights.buildConsistency
         }
         
         await MainActor.run {

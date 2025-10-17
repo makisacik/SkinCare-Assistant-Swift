@@ -24,11 +24,11 @@ struct AddStepView: View {
             VStack(spacing: 24) {
                 // Header
                 VStack(spacing: 12) {
-                    Text("Add New Step")
+                    Text(L10n.Routines.Edit.addNewStep)
                         .font(ThemeManager.shared.theme.typo.h1)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Add a new step to your \(timeOfDay.displayName.lowercased()) routine")
+                    Text(L10n.Routines.Edit.addStepDescription(timeOfDay.displayName.lowercased()))
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -46,11 +46,11 @@ struct AddStepView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Title
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Step Name")
+                        Text(L10n.Routines.Edit.stepName)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        TextField("Enter step name", text: $customTitle)
+                        TextField(L10n.Routines.Edit.enterStepName, text: $customTitle)
                             .font(ThemeManager.shared.theme.typo.body)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .padding(16)
@@ -67,7 +67,7 @@ struct AddStepView: View {
 
                     // Description - multiline
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Description")
+                        Text(L10n.Routines.Edit.description)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -88,7 +88,7 @@ struct AddStepView: View {
                                 .colorScheme(.light)
 
                             if customDescription.isEmpty {
-                                Text("Enter step description...")
+                                Text(L10n.Routines.Edit.enterDescription)
                                     .font(ThemeManager.shared.theme.typo.body)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                                     .padding(.horizontal, 20)
@@ -104,7 +104,7 @@ struct AddStepView: View {
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Add") {
+                Button(L10n.Common.add) {
                     addStep()
                 }
                 .foregroundColor(ThemeManager.shared.theme.palette.secondary)
@@ -163,86 +163,15 @@ struct AddStepView: View {
     }
 
     private func getDefaultDescription(for stepType: ProductType) -> String {
-        switch stepType {
-        case .cleanser:
-            return "Removes dirt, oil, and makeup without stripping skin"
-        case .faceSerum:
-            return "Targeted treatment for your specific skin concerns"
-        case .essence:
-            return "Lightweight hydrating treatment that boosts absorption"
-        case .moisturizer:
-            return "Provides essential hydration and skin barrier support"
-        case .sunscreen:
-            return "Protects against UV damage and premature aging"
-        case .toner:
-            return "Balances skin pH and preps for next steps"
-        case .exfoliator:
-            return "Gently removes dead skin cells for smoother texture"
-        case .faceMask:
-            return "Intensive treatment for deep nourishment"
-        case .eyeCream:
-            return "Targets fine lines and dark circles around eyes"
-        case .facialOil:
-            return "Nourishes and seals in moisture"
-        case .spotTreatment:
-            return "Targets blemishes and problem areas"
-        case .retinol:
-            return "Anti-aging treatment that promotes cell turnover"
-        case .vitaminC:
-            return "Brightens and evens skin tone"
-        case .niacinamide:
-            return "Minimizes pores and improves skin texture"
-        case .cleansingOil:
-            return "Dissolves makeup and sunscreen effectively"
-        case .cleansingBalm:
-            return "Melts away makeup and impurities"
-        case .micellarWater:
-            return "Gentle no-rinse cleanser for sensitive skin"
-        case .makeupRemover:
-            return "Removes makeup quickly and effectively"
-        case .faceWash:
-            return "Daily facial cleanser for fresh clean skin"
-        case .faceSunscreen:
-            return "Lightweight sun protection for face"
-        case .lipBalm:
-            return "Keeps lips moisturized and protected"
-        case .shaveCream:
-            return "Provides smooth glide for comfortable shaving"
-        case .aftershave:
-            return "Soothes skin after shaving"
-        case .shaveGel:
-            return "Cushions skin during shaving"
-        case .bodyLotion:
-            return "Hydrates and softens body skin"
-        case .bodyWash:
-            return "Cleanses and refreshes body"
-        case .bodySunscreen:
-            return "Full body sun protection"
-        case .handCream:
-            return "Moisturizes and protects hands"
-        case .facialMist:
-            return "Refreshes and hydrates throughout the day"
-        case .chemicalPeel:
-            return "Deep exfoliation for skin renewal"
-        case .shampoo:
-            return "Cleanses hair and scalp"
-        case .conditioner:
-            return "Softens and detangles hair"
-        case .hairOil:
-            return "Nourishes and adds shine to hair"
-        case .hairMask:
-            return "Deep conditioning treatment for hair"
-        }
+        return L10n.Routines.ProductType.description(stepType.rawValue)
     }
 
     private func getDefaultWhy(for stepType: ProductType) -> String {
-        // Return a generic why for all product types
-        return "Essential step in your skincare routine"
+        return L10n.Routines.ProductType.defaultWhy
     }
 
     private func getDefaultHow(for stepType: ProductType) -> String {
-        // Return a generic how for all product types
-        return "Apply as directed on product packaging"
+        return L10n.Routines.ProductType.defaultHow
     }
 
     // iconName is computed from stepType in the model, not in helper functions

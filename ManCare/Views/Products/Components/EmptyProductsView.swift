@@ -20,11 +20,11 @@ struct EmptyProductsView: View {
                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
 
                 VStack(spacing: 8) {
-                    Text("No Products Yet")
+                    Text(L10n.Products.Empty.title)
                         .font(ThemeManager.shared.theme.typo.h2)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Add your first product to get started")
+                    Text(L10n.Products.Empty.subtitle)
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)

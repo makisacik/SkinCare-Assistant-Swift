@@ -1,0 +1,750 @@
+/*
+  Templates.strings (English)
+  ManCare - Routine Template content
+*/
+
+/* ===================================
+   MARK: - Categories
+   =================================== */
+
+"templates.category.all.title" = "All";
+"templates.category.all.description" = "All routine types";
+"templates.category.korean.title" = "Korean";
+"templates.category.korean.description" = "Korean skincare philosophy";
+"templates.category.antiAging.title" = "Anti-Aging";
+"templates.category.antiAging.description" = "Target fine lines and wrinkles";
+"templates.category.acne.title" = "Acne";
+"templates.category.acne.description" = "Clear and prevent breakouts";
+"templates.category.minimalist.title" = "Minimalist";
+"templates.category.minimalist.description" = "Simple, essential steps";
+"templates.category.sensitive.title" = "Sensitive";
+"templates.category.sensitive.description" = "Gentle, soothing care";
+"templates.category.oily.title" = "Oily Skin";
+"templates.category.oily.description" = "Control excess oil";
+"templates.category.dry.title" = "Dry Skin";
+"templates.category.dry.description" = "Intensive hydration";
+"templates.category.combination.title" = "Combination";
+"templates.category.combination.description" = "Balance different skin zones";
+
+/* ===================================
+   MARK: - Difficulty Levels
+   =================================== */
+
+"templates.difficulty.beginner" = "Beginner";
+"templates.difficulty.intermediate" = "Intermediate";
+"templates.difficulty.advanced" = "Advanced";
+
+/* ===================================
+   MARK: - Korean Glass Skin Routine
+   =================================== */
+
+"templates.routine.koreanGlassSkin.title" = "Korean Glass Skin";
+"templates.routine.koreanGlassSkin.description" = "Achieve that coveted dewy, glass-like complexion with this comprehensive Korean skincare routine.";
+"templates.routine.koreanGlassSkin.duration" = "15-20 min";
+
+/* Tags */
+"templates.routine.koreanGlassSkin.tag1" = "Hydration";
+"templates.routine.koreanGlassSkin.tag2" = "Glow";
+"templates.routine.koreanGlassSkin.tag3" = "Multi-step";
+"templates.routine.koreanGlassSkin.tag4" = "Popular";
+
+/* Benefits */
+"templates.routine.koreanGlassSkin.benefit1" = "Deep hydration";
+"templates.routine.koreanGlassSkin.benefit2" = "Improved skin texture";
+"templates.routine.koreanGlassSkin.benefit3" = "Radiant glow";
+"templates.routine.koreanGlassSkin.benefit4" = "Reduced fine lines";
+
+/* Morning Steps */
+"templates.routine.koreanGlassSkin.morning.step1.title" = "Water-based Cleanser";
+"templates.routine.koreanGlassSkin.morning.step1.why" = "Removes overnight sebum and impurities without stripping skin's natural moisture barrier, preparing it for optimal product absorption";
+"templates.routine.koreanGlassSkin.morning.step1.how" = "Wet your face with lukewarm water. Apply a small amount and gently massage in circular motions for 30-60 seconds. Rinse thoroughly and pat dry with a clean towel.";
+
+"templates.routine.koreanGlassSkin.morning.step2.title" = "Toner";
+"templates.routine.koreanGlassSkin.morning.step2.why" = "Balances skin's pH level after cleansing and creates the perfect environment for subsequent products to penetrate deeply";
+"templates.routine.koreanGlassSkin.morning.step2.how" = "Pour toner onto your palms or a cotton pad. Gently pat or sweep across your face and neck, avoiding the eye area. Let it absorb for 30 seconds.";
+
+"templates.routine.koreanGlassSkin.morning.step3.title" = "Essence";
+"templates.routine.koreanGlassSkin.morning.step3.why" = "Delivers the first layer of lightweight hydration and preps skin for better absorption of serums and treatments";
+"templates.routine.koreanGlassSkin.morning.step3.how" = "Pour a few drops into your palms. Gently pat into skin from the center of your face moving outward. Press lightly to help absorption.";
+
+"templates.routine.koreanGlassSkin.morning.step4.title" = "Serum";
+"templates.routine.koreanGlassSkin.morning.step4.why" = "Provides concentrated active ingredients targeting specific concerns like brightening, anti-aging, or hydration";
+"templates.routine.koreanGlassSkin.morning.step4.how" = "Apply 2-3 drops to your face and neck. Gently press and pat the serum in, avoiding tugging. Wait 60 seconds before next step.";
+
+"templates.routine.koreanGlassSkin.morning.step5.title" = "Moisturizer";
+"templates.routine.koreanGlassSkin.morning.step5.why" = "Seals in all previous layers of hydration and creates a protective barrier to prevent transepidermal water loss";
+"templates.routine.koreanGlassSkin.morning.step5.how" = "Warm a dime-sized amount between your palms. Apply using gentle upward and outward motions on face and neck. Don't forget your neck!";
+
+"templates.routine.koreanGlassSkin.morning.step6.title" = "Sunscreen";
+"templates.routine.koreanGlassSkin.morning.step6.why" = "Protects skin from UV damage that causes 90% of visible aging, dark spots, and texture issues";
+"templates.routine.koreanGlassSkin.morning.step6.how" = "Apply two finger-lengths of sunscreen to all exposed areas. Wait 15 minutes before sun exposure. Reapply every 2 hours when outdoors.";
+
+/* Evening Steps */
+"templates.routine.koreanGlassSkin.evening.step1.title" = "Oil Cleanser";
+"templates.routine.koreanGlassSkin.evening.step1.why" = "Dissolves makeup, sunscreen, and oil-based impurities that water-based cleansers can't remove effectively";
+"templates.routine.koreanGlassSkin.evening.step1.how" = "Apply to dry skin and massage for 1-2 minutes. Add water to emulsify into a milky texture, then rinse thoroughly with lukewarm water.";
+
+"templates.routine.koreanGlassSkin.evening.step2.title" = "Water-based Cleanser";
+"templates.routine.koreanGlassSkin.evening.step2.why" = "Second cleanse removes remaining water-based debris and ensures completely clean skin for maximum treatment absorption";
+"templates.routine.koreanGlassSkin.evening.step2.how" = "Apply to damp skin and massage gently in circular motions for 60 seconds. Rinse thoroughly with lukewarm water and pat dry.";
+
+"templates.routine.koreanGlassSkin.evening.step3.title" = "Exfoliant";
+"templates.routine.koreanGlassSkin.evening.step3.why" = "Gently removes dead skin cells that can cause dullness and clog pores, revealing brighter, smoother skin underneath";
+"templates.routine.koreanGlassSkin.evening.step3.how" = "Apply to clean, dry skin avoiding the eye area. Leave on for 10-15 minutes, then rinse. Use 2-3 times per week, not daily.";
+
+"templates.routine.koreanGlassSkin.evening.step4.title" = "Sheet Mask";
+"templates.routine.koreanGlassSkin.evening.step4.why" = "Provides intensive hydration and nutrients in a concentrated treatment that penetrates deeply for maximum glow";
+"templates.routine.koreanGlassSkin.evening.step4.how" = "Apply mask to clean face, smoothing out air bubbles. Relax for 15-20 minutes. Remove and pat in remaining essence. Use 2-3x per week.";
+
+"templates.routine.koreanGlassSkin.evening.step5.title" = "Eye Cream";
+"templates.routine.koreanGlassSkin.evening.step5.why" = "Targets the delicate eye area with specialized ingredients to reduce puffiness, dark circles, and fine lines";
+"templates.routine.koreanGlassSkin.evening.step5.how" = "Gently dab a rice grain-sized amount around the orbital bone using your ring finger. Pat from inner to outer corner. Never pull or tug.";
+
+"templates.routine.koreanGlassSkin.evening.step6.title" = "Moisturizer";
+"templates.routine.koreanGlassSkin.evening.step6.why" = "Locks in all the layered treatments and provides overnight hydration while your skin is in repair mode";
+"templates.routine.koreanGlassSkin.evening.step6.how" = "Apply a generous amount using upward and outward motions. Your evening moisturizer can be richer than your morning one.";
+
+/* ===================================
+   MARK: - Acne Clear Routine
+   =================================== */
+
+"templates.routine.acneClear.title" = "Acne Clear Routine";
+"templates.routine.acneClear.description" = "Combat breakouts and prevent future acne with this targeted routine for clear, healthy skin.";
+"templates.routine.acneClear.duration" = "8-12 min";
+
+/* Tags */
+"templates.routine.acneClear.tag1" = "Acne";
+"templates.routine.acneClear.tag2" = "Salicylic Acid";
+"templates.routine.acneClear.tag3" = "Gentle";
+"templates.routine.acneClear.tag4" = "Effective";
+
+/* Benefits */
+"templates.routine.acneClear.benefit1" = "Reduces active breakouts";
+"templates.routine.acneClear.benefit2" = "Prevents new acne";
+"templates.routine.acneClear.benefit3" = "Minimizes pores";
+"templates.routine.acneClear.benefit4" = "Soothes inflammation";
+
+/* Morning Steps */
+"templates.routine.acneClear.morning.step1.title" = "Gentle Cleanser";
+"templates.routine.acneClear.morning.step1.why" = "Removes excess oil and impurities without over-stripping, which can trigger more oil production and worsen acne";
+"templates.routine.acneClear.morning.step1.how" = "Use lukewarm water and massage gently for 60 seconds. Avoid hot water and harsh scrubbing. Pat dry with a clean towel.";
+
+"templates.routine.acneClear.morning.step2.title" = "Salicylic Acid Toner";
+"templates.routine.acneClear.morning.step2.why" = "Penetrates into pores to dissolve oil and debris, preventing clogs that lead to blackheads and breakouts";
+"templates.routine.acneClear.morning.step2.how" = "Apply to a cotton pad or directly to palms. Gently sweep or pat across face, focusing on acne-prone areas. Start every other day if new to BHA.";
+
+"templates.routine.acneClear.morning.step3.title" = "Niacinamide Serum";
+"templates.routine.acneClear.morning.step3.why" = "Reduces inflammation, regulates oil production, and helps fade post-acne marks without irritation";
+"templates.routine.acneClear.morning.step3.how" = "Apply 2-3 drops to face and neck. Pat gently to absorb. Wait 60 seconds before moisturizer. Can be used morning and night.";
+
+"templates.routine.acneClear.morning.step4.title" = "Lightweight Moisturizer";
+"templates.routine.acneClear.morning.step4.why" = "Maintains skin barrier health without clogging pores. Even oily, acne-prone skin needs hydration to prevent overproduction of oil";
+"templates.routine.acneClear.morning.step4.how" = "Use a gel or water-based moisturizer. Apply a thin layer and let it absorb fully. Look for non-comedogenic labels.";
+
+"templates.routine.acneClear.morning.step5.title" = "Sunscreen";
+"templates.routine.acneClear.morning.step5.why" = "Prevents dark spots from healing acne and protects skin from damage. Many acne treatments increase sun sensitivity";
+"templates.routine.acneClear.morning.step5.how" = "Apply oil-free, non-comedogenic SPF 30+. Use two finger-lengths and reapply if spending time outdoors.";
+
+/* Evening Steps */
+"templates.routine.acneClear.evening.step1.title" = "Gentle Cleanser";
+"templates.routine.acneClear.evening.step1.why" = "Removes the day's accumulation of oil, dirt, and bacteria without stripping or irritating compromised skin";
+"templates.routine.acneClear.evening.step1.how" = "Massage for 60 seconds with lukewarm water. Be gentle around active breakouts. Rinse thoroughly and pat dry.";
+
+"templates.routine.acneClear.evening.step2.title" = "Salicylic Acid Toner";
+"templates.routine.acneClear.evening.step2.why" = "Evening application allows BHA to work overnight, unclogging pores and preventing new breakouts while you sleep";
+"templates.routine.acneClear.evening.step2.how" = "Apply to clean, dry skin. Focus on T-zone and acne-prone areas. Skip if using other strong actives like retinol tonight.";
+
+"templates.routine.acneClear.evening.step3.title" = "Niacinamide Serum";
+"templates.routine.acneClear.evening.step3.why" = "Calms inflammation from the day, reduces redness, and works synergistically with BHA to control breakouts";
+"templates.routine.acneClear.evening.step3.how" = "Apply 2-3 drops after toner. Pat gently and let absorb. Wait a minute before next step.";
+
+"templates.routine.acneClear.evening.step4.title" = "Spot Treatment";
+"templates.routine.acneClear.evening.step4.why" = "Delivers concentrated acne-fighting ingredients directly to active breakouts for faster healing";
+"templates.routine.acneClear.evening.step4.how" = "Apply a small amount directly to active pimples only, not all over. Use a clean finger or cotton swab. Let dry completely.";
+
+"templates.routine.acneClear.evening.step5.title" = "Lightweight Moisturizer";
+"templates.routine.acneClear.evening.step5.why" = "Seals in treatments and prevents skin from getting too dry, which paradoxically can make acne worse";
+"templates.routine.acneClear.evening.step5.how" = "Apply after spot treatment has dried. Use a thin layer. Choose gel or water-based formulas for acne-prone skin.";
+
+/* ===================================
+   MARK: - Anti-Aging Essentials
+   =================================== */
+
+"templates.routine.antiAging.title" = "Anti-Aging Essentials";
+"templates.routine.antiAging.description" = "Combat signs of aging with this powerful routine featuring proven anti-aging ingredients.";
+"templates.routine.antiAging.duration" = "12-15 min";
+
+/* Tags */
+"templates.routine.antiAging.tag1" = "Retinol";
+"templates.routine.antiAging.tag2" = "Vitamin C";
+"templates.routine.antiAging.tag3" = "Anti-aging";
+"templates.routine.antiAging.tag4" = "Firming";
+
+/* Benefits */
+"templates.routine.antiAging.benefit1" = "Reduces fine lines";
+"templates.routine.antiAging.benefit2" = "Improves skin firmness";
+"templates.routine.antiAging.benefit3" = "Brightens complexion";
+"templates.routine.antiAging.benefit4" = "Stimulates collagen";
+
+/* Morning Steps */
+"templates.routine.antiAging.morning.step1.title" = "Gentle Cleanser";
+"templates.routine.antiAging.morning.step1.why" = "Removes overnight buildup without stripping mature skin, which tends to be drier and more delicate";
+"templates.routine.antiAging.morning.step1.how" = "Use a cream or oil-based cleanser with lukewarm water. Massage gently for 60 seconds, rinse thoroughly, and pat dry.";
+
+"templates.routine.antiAging.morning.step2.title" = "Vitamin C Serum";
+"templates.routine.antiAging.morning.step2.why" = "Powerful antioxidant that brightens, evens tone, boosts collagen production, and protects against free radical damage from UV and pollution";
+"templates.routine.antiAging.morning.step2.how" = "Apply 3-4 drops to clean skin in the morning. Gently press into face and neck. Wait 60-90 seconds before next step. Store in cool, dark place.";
+
+"templates.routine.antiAging.morning.step3.title" = "Hyaluronic Acid";
+"templates.routine.antiAging.morning.step3.why" = "Attracts and holds up to 1000x its weight in water, plumping fine lines and maintaining skin's youthful bounce";
+"templates.routine.antiAging.morning.step3.how" = "Apply to slightly damp skin for best absorption. Use 2-3 drops and pat gently. Follow quickly with moisturizer to seal in hydration.";
+
+"templates.routine.antiAging.morning.step4.title" = "Rich Moisturizer";
+"templates.routine.antiAging.morning.step4.why" = "Provides essential lipids and ceramides that decline with age, strengthening skin barrier and preventing moisture loss";
+"templates.routine.antiAging.morning.step4.how" = "Warm a generous amount between palms. Press and pat into skin using upward motions. Focus on areas prone to dryness and lines.";
+
+"templates.routine.antiAging.morning.step5.title" = "Sunscreen";
+"templates.routine.antiAging.morning.step5.why" = "UV exposure causes 90% of visible aging. Daily SPF is the single most effective anti-aging measure you can take";
+"templates.routine.antiAging.morning.step5.how" = "Apply broad-spectrum SPF 50 as final step. Use two finger-lengths and reapply every 2 hours if outdoors. Don't skip on cloudy days.";
+
+/* Evening Steps */
+"templates.routine.antiAging.evening.step1.title" = "Gentle Cleanser";
+"templates.routine.antiAging.evening.step1.why" = "Removes the day's sunscreen, pollution, and makeup without disrupting your skin's protective barrier";
+"templates.routine.antiAging.evening.step1.how" = "Double cleanse if wearing sunscreen: first with oil cleanser, then water-based. Massage for 60 seconds each, rinse with lukewarm water.";
+
+"templates.routine.antiAging.evening.step2.title" = "Retinol Treatment";
+"templates.routine.antiAging.evening.step2.why" = "Gold-standard anti-aging ingredient that increases cell turnover, boosts collagen, reduces wrinkles, and evens skin tone";
+"templates.routine.antiAging.evening.step2.how" = "Apply pea-sized amount to dry skin, avoiding eye area. Start 2x per week, gradually increase. Always use sunscreen the next day. Wait 20 min before moisturizer.";
+
+"templates.routine.antiAging.evening.step3.title" = "Peptide Serum";
+"templates.routine.antiAging.evening.step3.why" = "Peptides signal skin to produce more collagen and elastin, improving firmness and reducing the appearance of fine lines";
+"templates.routine.antiAging.evening.step3.how" = "Apply 2-3 drops after retinol has absorbed. Pat gently into face and neck. Peptides work well with retinol for enhanced results.";
+
+"templates.routine.antiAging.evening.step4.title" = "Eye Cream";
+"templates.routine.antiAging.evening.step4.why" = "Eye area skin is thinner and shows aging signs first. Specialized ingredients target crow's feet, dark circles, and puffiness";
+"templates.routine.antiAging.evening.step4.how" = "Use ring finger to gently pat a rice grain amount around orbital bone. Never tug or pull. Apply from inner to outer corner.";
+
+"templates.routine.antiAging.evening.step5.title" = "Rich Moisturizer";
+"templates.routine.antiAging.evening.step5.why" = "Nighttime is when skin repairs itself. A rich moisturizer supports this process with nourishing ingredients and deep hydration";
+"templates.routine.antiAging.evening.step5.how" = "Apply generously as the final step to seal in all treatments. Can be slightly richer than morning moisturizer. Don't forget neck and chest.";
+
+/* ===================================
+   MARK: - Minimalist Daily
+   =================================== */
+
+"templates.routine.minimalist.title" = "Minimalist Daily";
+"templates.routine.minimalist.description" = "Keep it simple with just the essentials for busy mornings and evenings.";
+"templates.routine.minimalist.duration" = "3-5 min";
+
+/* Tags */
+"templates.routine.minimalist.tag1" = "Quick";
+"templates.routine.minimalist.tag2" = "Simple";
+"templates.routine.minimalist.tag3" = "Essential";
+"templates.routine.minimalist.tag4" = "Beginner";
+
+/* Benefits */
+"templates.routine.minimalist.benefit1" = "Quick and easy";
+"templates.routine.minimalist.benefit2" = "Perfect for beginners";
+"templates.routine.minimalist.benefit3" = "Covers basics";
+"templates.routine.minimalist.benefit4" = "Time-efficient";
+
+/* Morning Steps */
+"templates.routine.minimalist.morning.step1.title" = "Gentle Cleanser";
+"templates.routine.minimalist.morning.step1.why" = "Removes overnight oil and prepares skin for the day. A simple cleanse is all most people need in the morning";
+"templates.routine.minimalist.morning.step1.how" = "Wet face, apply cleanser, massage for 30 seconds, rinse with lukewarm water, pat dry. That's it!";
+
+"templates.routine.minimalist.morning.step2.title" = "Moisturizer";
+"templates.routine.minimalist.morning.step2.why" = "Hydrates and protects your skin barrier. Essential for all skin types, even if you have oily skin";
+"templates.routine.minimalist.morning.step2.how" = "Apply a dime-sized amount to face and neck while skin is slightly damp for better absorption. Let it sink in.";
+
+"templates.routine.minimalist.morning.step3.title" = "Sunscreen";
+"templates.routine.minimalist.morning.step3.why" = "The single most important anti-aging step. Protects from UV damage that causes wrinkles, dark spots, and skin cancer";
+"templates.routine.minimalist.morning.step3.how" = "Apply SPF 30+ as your final morning step. Use about two finger-lengths for face and neck. Reapply if outdoors for extended periods.";
+
+/* Evening Steps */
+"templates.routine.minimalist.evening.step1.title" = "Gentle Cleanser";
+"templates.routine.minimalist.evening.step1.why" = "Removes the day's buildup of oil, dirt, sweat, and sunscreen so your skin can breathe and repair overnight";
+"templates.routine.minimalist.evening.step1.how" = "Massage cleanser for 60 seconds to thoroughly remove sunscreen and impurities. Rinse well with lukewarm water and pat dry.";
+
+"templates.routine.minimalist.evening.step2.title" = "Moisturizer";
+"templates.routine.minimalist.evening.step2.why" = "Nighttime hydration supports your skin's natural repair process while you sleep. Can be slightly richer than morning version";
+"templates.routine.minimalist.evening.step2.how" = "Apply to clean, slightly damp skin. Use gentle upward strokes. This is the perfect time for your skin to absorb nutrients.";
+
+/* ===================================
+   MARK: - Sensitive Skin Soother
+   =================================== */
+
+"templates.routine.sensitive.title" = "Sensitive Skin Soother";
+"templates.routine.sensitive.description" = "Gentle, calming routine designed for sensitive and reactive skin types.";
+"templates.routine.sensitive.duration" = "6-8 min";
+
+/* Tags */
+"templates.routine.sensitive.tag1" = "Gentle";
+"templates.routine.sensitive.tag2" = "Calming";
+"templates.routine.sensitive.tag3" = "Fragrance-free";
+"templates.routine.sensitive.tag4" = "Sensitive";
+
+/* Benefits */
+"templates.routine.sensitive.benefit1" = "Reduces irritation";
+"templates.routine.sensitive.benefit2" = "Strengthens skin barrier";
+"templates.routine.sensitive.benefit3" = "Gentle on sensitive skin";
+"templates.routine.sensitive.benefit4" = "Calming ingredients";
+
+/* Morning Steps */
+"templates.routine.sensitive.morning.step1.title" = "Cream Cleanser";
+"templates.routine.sensitive.morning.step1.why" = "Cleanses without stripping or irritating sensitive skin. Cream formulas are gentler than foaming ones that can disrupt the barrier";
+"templates.routine.sensitive.morning.step1.how" = "Use lukewarm (not hot) water. Massage gently without rubbing hard. Rinse thoroughly and pat (don't rub) dry with a soft towel.";
+
+"templates.routine.sensitive.morning.step2.title" = "Soothing Toner";
+"templates.routine.sensitive.morning.step2.why" = "Calms inflammation and redness while delivering gentle hydration. Look for centella, green tea, or colloidal oatmeal";
+"templates.routine.sensitive.morning.step2.how" = "Apply with clean hands by gently patting into skin. Avoid rubbing or using cotton pads which can cause friction and irritation.";
+
+"templates.routine.sensitive.morning.step3.title" = "Hyaluronic Acid";
+"templates.routine.sensitive.morning.step3.why" = "Provides gentle, non-irritating hydration. Works for all skin types without risk of sensitivity or breakouts";
+"templates.routine.sensitive.morning.step3.how" = "Apply to damp skin for maximum absorption. Use gentle patting motions. Follow with moisturizer to lock in hydration.";
+
+"templates.routine.sensitive.morning.step4.title" = "Barrier Repair Cream";
+"templates.routine.sensitive.morning.step4.why" = "Strengthens compromised skin barrier with ceramides and niacinamide. Reduces sensitivity over time and protects against irritants";
+"templates.routine.sensitive.morning.step4.how" = "Apply a generous layer to lock in previous products. Look for fragrance-free formulas with ceramides. Use morning and night.";
+
+"templates.routine.sensitive.morning.step5.title" = "Mineral Sunscreen";
+"templates.routine.sensitive.morning.step5.why" = "Physical sunscreens with zinc oxide or titanium dioxide are less likely to irritate than chemical filters";
+"templates.routine.sensitive.morning.step5.how" = "Apply SPF 30+ as final step. Mineral sunscreens sit on top of skin rather than absorbing, making them ideal for sensitive skin.";
+
+/* Evening Steps */
+"templates.routine.sensitive.evening.step1.title" = "Cream Cleanser";
+"templates.routine.sensitive.evening.step1.why" = "Removes the day's buildup gently without causing irritation or compromising your skin's protective barrier";
+"templates.routine.sensitive.evening.step1.how" = "Double cleanse if needed: oil cleanser first for sunscreen, then cream cleanser. Be extra gentle around irritated areas.";
+
+"templates.routine.sensitive.evening.step2.title" = "Soothing Toner";
+"templates.routine.sensitive.evening.step2.why" = "Evening application helps calm any daytime irritation and preps skin for better absorption of repair ingredients";
+"templates.routine.sensitive.evening.step2.how" = "Pat gently into clean skin. This is the perfect time to use cooling, soothing ingredients to reduce redness from the day.";
+
+"templates.routine.sensitive.evening.step3.title" = "Hyaluronic Acid";
+"templates.routine.sensitive.evening.step3.why" = "Nighttime hydration supports barrier repair while you sleep without risk of irritation or sensitivity";
+"templates.routine.sensitive.evening.step3.how" = "Apply to slightly damp skin. Layer under your barrier cream for maximum hydration and healing overnight.";
+
+"templates.routine.sensitive.evening.step4.title" = "Barrier Repair Cream";
+"templates.routine.sensitive.evening.step4.why" = "Overnight is when skin repairs itself. A rich barrier cream supports this with ceramides, cholesterol, and fatty acids";
+"templates.routine.sensitive.evening.step4.how" = "Apply generously as your final step. Can use a heavier layer than morning. Wake up to calmer, stronger skin.";
+
+/* ===================================
+   MARK: - Oily Skin Control
+   =================================== */
+
+"templates.routine.oily.title" = "Oily Skin Control";
+"templates.routine.oily.description" = "Manage excess oil and shine while maintaining healthy, balanced skin.";
+"templates.routine.oily.duration" = "8-10 min";
+
+/* Tags */
+"templates.routine.oily.tag1" = "Oil Control";
+"templates.routine.oily.tag2" = "Mattifying";
+"templates.routine.oily.tag3" = "Pore Care";
+"templates.routine.oily.tag4" = "Lightweight";
+
+/* Benefits */
+"templates.routine.oily.benefit1" = "Controls excess oil";
+"templates.routine.oily.benefit2" = "Minimizes pores";
+"templates.routine.oily.benefit3" = "Reduces shine";
+"templates.routine.oily.benefit4" = "Prevents breakouts";
+
+/* Morning Steps */
+"templates.routine.oily.morning.step1.title" = "Gel Cleanser";
+"templates.routine.oily.morning.step1.why" = "Removes excess sebum and overnight oil without over-stripping, which can trigger even more oil production";
+"templates.routine.oily.morning.step1.how" = "Use a gentle gel or foaming cleanser. Massage for 60 seconds with lukewarm water. Avoid hot water which stimulates oil glands.";
+
+"templates.routine.oily.morning.step2.title" = "BHA Toner";
+"templates.routine.oily.morning.step2.why" = "Salicylic acid penetrates oil-filled pores to prevent clogs and breakouts while controlling shine";
+"templates.routine.oily.morning.step2.how" = "Apply with cotton pad or hands to clean skin. Focus on T-zone. Start with every other day if new to BHAs to avoid irritation.";
+
+"templates.routine.oily.morning.step3.title" = "Niacinamide Serum";
+"templates.routine.oily.morning.step3.why" = "Clinically proven to regulate sebum production by up to 50% while reducing pore appearance";
+"templates.routine.oily.morning.step3.how" = "Apply 2-3 drops to entire face. Pairs well with BHA. Works best with consistent daily use over 4-8 weeks.";
+
+"templates.routine.oily.morning.step4.title" = "Lightweight Moisturizer";
+"templates.routine.oily.morning.step4.why" = "Even oily skin needs hydration. Skipping moisturizer signals skin to produce MORE oil to compensate";
+"templates.routine.oily.morning.step4.how" = "Use gel or water-based formula. Apply thin layer while skin is slightly damp. Look for oil-free, non-comedogenic labels.";
+
+"templates.routine.oily.morning.step5.title" = "Oil-free Sunscreen";
+"templates.routine.oily.morning.step5.why" = "Protects without adding grease. Many acne treatments increase sun sensitivity, making SPF essential";
+"templates.routine.oily.morning.step5.how" = "Choose mattifying or gel sunscreen formulas. Apply SPF 30+ as final step. Reapply if outdoors.";
+
+/* Evening Steps */
+"templates.routine.oily.evening.step1.title" = "Gel Cleanser";
+"templates.routine.oily.evening.step1.why" = "Removes the day's oil, sunscreen, and impurities that can clog pores and cause breakouts overnight";
+"templates.routine.oily.evening.step1.how" = "Double cleanse if wearing heavy sunscreen: oil cleanser first, then gel cleanser. Massage thoroughly for 60 seconds.";
+
+"templates.routine.oily.evening.step2.title" = "BHA Toner";
+"templates.routine.oily.evening.step2.why" = "Evening application allows salicylic acid to work overnight, unclogging pores and preventing morning shine";
+"templates.routine.oily.evening.step2.how" = "Apply to clean, dry skin. Can use daily in PM if skin tolerates it. Skip if using retinol on same night.";
+
+"templates.routine.oily.evening.step3.title" = "Niacinamide Serum";
+"templates.routine.oily.evening.step3.why" = "Nighttime is when skin repairs. Niacinamide reduces oil production and inflammation while you sleep";
+"templates.routine.oily.evening.step3.how" = "Apply after toner. Can layer with BHA safely. Use nightly for best results in controlling daytime oil.";
+
+"templates.routine.oily.evening.step4.title" = "Lightweight Moisturizer";
+"templates.routine.oily.evening.step4.why" = "Prevents overnight moisture loss which can trigger rebound oil production the next day";
+"templates.routine.oily.evening.step4.how" = "Apply thin layer. Evening moisturizer can be same as morning or slightly more hydrating if needed.";
+
+"templates.routine.oily.evening.step5.title" = "Clay Mask";
+"templates.routine.oily.evening.step5.why" = "Weekly deep treatment absorbs excess oil, unclogs pores, and provides deep cleansing for clearer skin";
+"templates.routine.oily.evening.step5.how" = "Use 1-2x per week after cleansing. Apply thin layer, leave 10-15 minutes. Don't let it completely dry out. Rinse thoroughly.";
+
+/* ===================================
+   MARK: - Dry Skin Hydration
+   =================================== */
+
+"templates.routine.dry.title" = "Dry Skin Hydration";
+"templates.routine.dry.description" = "Intensive hydration routine to quench thirsty, dry skin and restore moisture barrier.";
+"templates.routine.dry.duration" = "10-12 min";
+
+/* Tags */
+"templates.routine.dry.tag1" = "Hydration";
+"templates.routine.dry.tag2" = "Moisture";
+"templates.routine.dry.tag3" = "Rich";
+"templates.routine.dry.tag4" = "Nourishing";
+
+/* Benefits */
+"templates.routine.dry.benefit1" = "Deep hydration";
+"templates.routine.dry.benefit2" = "Restores moisture barrier";
+"templates.routine.dry.benefit3" = "Soothes dryness";
+"templates.routine.dry.benefit4" = "Long-lasting moisture";
+
+/* Morning Steps */
+"templates.routine.dry.morning.step1.title" = "Cream Cleanser";
+"templates.routine.dry.morning.step1.why" = "Hydrating cream formula cleanses without stripping natural oils that dry skin desperately needs";
+"templates.routine.dry.morning.step1.how" = "Massage cream cleanser onto dry or damp skin for 60 seconds. Use lukewarm water to rinse. Pat dry gently - never rub.";
+
+"templates.routine.dry.morning.step2.title" = "Hydrating Toner";
+"templates.routine.dry.morning.step2.why" = "Delivers first layer of hydration and preps skin to absorb more moisture from subsequent products";
+"templates.routine.dry.morning.step2.how" = "Apply to damp skin by patting with hands. Look for glycerin, hyaluronic acid, or ceramides. Layer multiple times if very dry.";
+
+"templates.routine.dry.morning.step3.title" = "Hyaluronic Acid";
+"templates.routine.dry.morning.step3.why" = "Attracts up to 1000x its weight in water, providing intense hydration that plumps and smooths dry, flaky skin";
+"templates.routine.dry.morning.step3.how" = "Apply to damp skin for maximum efficacy. Use 2-3 drops. Follow immediately with moisturizer to lock in the water it attracts.";
+
+"templates.routine.dry.morning.step4.title" = "Rich Serum";
+"templates.routine.dry.morning.step4.why" = "Delivers concentrated nourishing ingredients that penetrate deep into dry, dehydrated skin";
+"templates.routine.dry.morning.step4.how" = "Apply 3-4 drops after hyaluronic acid. Look for ceramides, peptides, or nourishing oils. Pat gently to absorb.";
+
+"templates.routine.dry.morning.step5.title" = "Heavy Moisturizer";
+"templates.routine.dry.morning.step5.why" = "Creates protective barrier to prevent transepidermal water loss, the main cause of dry skin";
+"templates.routine.dry.morning.step5.how" = "Apply generously while skin is still damp. Look for thick creams with ceramides, shea butter, or squalane. Don't be stingy!";
+
+"templates.routine.dry.morning.step6.title" = "Sunscreen";
+"templates.routine.dry.morning.step6.why" = "UV damage breaks down skin barrier, making dryness worse. Choose hydrating SPF formulas";
+"templates.routine.dry.morning.step6.how" = "Use cream-based SPF 30+, not gel formulas. Apply generously. Many moisturizing sunscreens can double as extra hydration.";
+
+/* Evening Steps */
+"templates.routine.dry.evening.step1.title" = "Cream Cleanser";
+"templates.routine.dry.evening.step1.why" = "Evening cleanse removes the day's buildup while maintaining essential moisture your dry skin needs overnight";
+"templates.routine.dry.evening.step1.how" = "Use oil cleanser first for sunscreen, then cream cleanser. Be extra gentle - dry skin is more prone to irritation.";
+
+"templates.routine.dry.evening.step2.title" = "Hydrating Toner";
+"templates.routine.dry.evening.step2.why" = "Nighttime toner delivers hydration and prepares skin for maximum absorption of rich treatments";
+"templates.routine.dry.evening.step2.how" = "Apply multiple layers (7-skin method) for extra hydration. Pat each layer until absorbed before adding next.";
+
+"templates.routine.dry.evening.step3.title" = "Hyaluronic Acid";
+"templates.routine.dry.evening.step3.why" = "Overnight hydration allows HA to work while skin is in repair mode, waking up to plumper, dewier skin";
+"templates.routine.dry.evening.step3.how" = "Apply to damp skin. For very dry skin, mix a drop with your moisturizer for extra boost.";
+
+"templates.routine.dry.evening.step4.title" = "Rich Serum";
+"templates.routine.dry.evening.step4.why" = "Night is when skin repairs itself. Rich serums provide nutrients and moisture to support this process";
+"templates.routine.dry.evening.step4.how" = "Apply generously after HA. Can use more at night than morning. Focus on extra dry areas.";
+
+"templates.routine.dry.evening.step5.title" = "Heavy Moisturizer";
+"templates.routine.dry.evening.step5.why" = "Overnight occlusive moisturizer prevents water loss while you sleep, the most critical time for dry skin";
+"templates.routine.dry.evening.step5.how" = "Apply thick layer as last step before oil. Look for sleeping masks or night creams specifically for dry skin.";
+
+"templates.routine.dry.evening.step6.title" = "Facial Oil";
+"templates.routine.dry.evening.step6.why" = "Seals everything in with nourishing oils. Last step ensures maximum moisture retention through the night";
+"templates.routine.dry.evening.step6.how" = "Warm 3-5 drops between palms. Press gently onto face and neck. Use jojoba, argan, or rosehip oil.";
+
+/* ===================================
+   MARK: - Combination Skin Balance
+   =================================== */
+
+"templates.routine.combination.title" = "Combination Skin Balance";
+"templates.routine.combination.description" = "Address different needs across your face - oily T-zone and dry cheeks.";
+"templates.routine.combination.duration" = "8-10 min";
+
+/* Tags */
+"templates.routine.combination.tag1" = "Balanced";
+"templates.routine.combination.tag2" = "Multi-zone";
+"templates.routine.combination.tag3" = "Adaptive";
+"templates.routine.combination.tag4" = "Versatile";
+
+/* Benefits */
+"templates.routine.combination.benefit1" = "Balances different zones";
+"templates.routine.combination.benefit2" = "Addresses multiple concerns";
+"templates.routine.combination.benefit3" = "Versatile approach";
+"templates.routine.combination.benefit4" = "Customizable application";
+
+/* Morning Steps */
+"templates.routine.combination.morning.step1.title" = "Balancing Cleanser";
+"templates.routine.combination.morning.step1.why" = "Cleanses oily T-zone without over-drying cheeks. The key is finding middle-ground formulas";
+"templates.routine.combination.morning.step1.how" = "Use gel-cream hybrid cleanser. Spend extra time on oily areas, be gentle on dry zones. Lukewarm water only.";
+
+"templates.routine.combination.morning.step2.title" = "Toner";
+"templates.routine.combination.morning.step2.why" = "Balances pH across different zones and prepares skin for targeted treatments";
+"templates.routine.combination.morning.step2.how" = "Apply all over. Can layer extra on dry areas or use hydrating toner on cheeks, mattifying on T-zone for multi-masking approach.";
+
+"templates.routine.combination.morning.step3.title" = "Lightweight Serum";
+"templates.routine.combination.morning.step3.why" = "Provides treatment benefits without overloading oily zones or leaving dry areas thirsty";
+"templates.routine.combination.morning.step3.how" = "Apply evenly across face. Niacinamide works great for combination skin as it balances oil and hydrates simultaneously.";
+
+"templates.routine.combination.morning.step4.title" = "Adaptive Moisturizer";
+"templates.routine.combination.morning.step4.why" = "Modern formulas adapt to different moisture levels across your face, providing what each zone needs";
+"templates.routine.combination.morning.step4.how" = "Apply thin layer on T-zone, more generous on cheeks. Or use two products: gel on oily areas, cream on dry areas.";
+
+"templates.routine.combination.morning.step5.title" = "Broad Spectrum Sunscreen";
+"templates.routine.combination.morning.step5.why" = "All zones need equal UV protection. Choose formula that works for both oily and dry areas";
+"templates.routine.combination.morning.step5.how" = "Use lightweight, non-greasy SPF 30+. Gel or fluid formulas work best. Apply evenly across all zones.";
+
+/* Evening Steps */
+"templates.routine.combination.evening.step1.title" = "Balancing Cleanser";
+"templates.routine.combination.evening.step1.why" = "Removes the day's varied buildup - excess oil from T-zone, environmental stress from dry areas";
+"templates.routine.combination.evening.step1.how" = "Double cleanse if needed. Oil cleanser removes sunscreen, then balancing cleanser. Focus on needs of each zone.";
+
+"templates.routine.combination.evening.step2.title" = "Toner";
+"templates.routine.combination.evening.step2.why" = "Evening toner can be more targeted - use different ones for different zones if needed";
+"templates.routine.combination.evening.step2.how" = "Apply with hands or cotton pad. This is great time to multi-mask: hydrating toner on cheeks, BHA on T-zone.";
+
+"templates.routine.combination.evening.step3.title" = "Lightweight Serum";
+"templates.routine.combination.evening.step3.why" = "Nighttime serum addresses concerns across all zones without overwhelming any particular area";
+"templates.routine.combination.evening.step3.how" = "Apply to entire face. Retinol or niacinamide work well for combination skin's varied needs.";
+
+"templates.routine.combination.evening.step4.title" = "Zone-specific Treatment";
+"templates.routine.combination.evening.step4.why" = "This is where you customize - address oily T-zone concerns AND dry cheek needs separately";
+"templates.routine.combination.evening.step4.how" = "Apply BHA or spot treatment to oily/acne-prone areas. Use hydrating serum or oil on dry patches. Customize to your needs.";
+
+"templates.routine.combination.evening.step5.title" = "Adaptive Moisturizer";
+"templates.routine.combination.evening.step5.why" = "Locks in treatments while providing balanced hydration that won't cause excess oil or dryness";
+"templates.routine.combination.evening.step5.how" = "Apply according to each zone's needs. Thin layer on T-zone, richer on cheeks. Listen to your skin's feedback.";
+
+/* ===================================
+   MARK: - Advanced Korean Routine
+   =================================== */
+
+"templates.routine.advancedKorean.title" = "Advanced Korean Routine";
+"templates.routine.advancedKorean.description" = "The complete Korean skincare ritual for ultimate skin transformation.";
+"templates.routine.advancedKorean.duration" = "25-30 min";
+
+/* Tags */
+"templates.routine.advancedKorean.tag1" = "Complete";
+"templates.routine.advancedKorean.tag2" = "Luxury";
+"templates.routine.advancedKorean.tag3" = "Comprehensive";
+"templates.routine.advancedKorean.tag4" = "Advanced";
+
+/* Benefits */
+"templates.routine.advancedKorean.benefit1" = "Complete skin transformation";
+"templates.routine.advancedKorean.benefit2" = "Maximum hydration";
+"templates.routine.advancedKorean.benefit3" = "Advanced anti-aging";
+"templates.routine.advancedKorean.benefit4" = "Luxury experience";
+
+/* Morning Steps */
+"templates.routine.advancedKorean.morning.step1.title" = "Water Cleanser";
+"templates.routine.advancedKorean.morning.step1.why" = "Morning second cleanse removes overnight oils and prepares skin for multiple treatment layers";
+"templates.routine.advancedKorean.morning.step1.how" = "Use gentle, low-pH cleanser. Massage for 60 seconds. The foundation of successful layering starts with clean canvas.";
+
+"templates.routine.advancedKorean.morning.step2.title" = "Toner";
+"templates.routine.advancedKorean.morning.step2.why" = "Balances pH and creates optimal environment for the many treatment layers to follow";
+"templates.routine.advancedKorean.morning.step2.how" = "Pat toner into skin with hands, using 7-skin method if desired. First layer of hydration in this multi-step ritual.";
+
+"templates.routine.advancedKorean.morning.step3.title" = "Essence";
+"templates.routine.advancedKorean.morning.step3.why" = "Core of K-beauty: delivers lightweight hydration that enhances absorption of subsequent products";
+"templates.routine.advancedKorean.morning.step3.how" = "Pour into palms and press gently into skin. This watery layer is key to that glass skin glow.";
+
+"templates.routine.advancedKorean.morning.step4.title" = "Treatment Essence";
+"templates.routine.advancedKorean.morning.step4.why" = "Contains fermented ingredients and active components for skin renewal and brightening";
+"templates.routine.advancedKorean.morning.step4.how" = "Pat 2-3 drops across face. Treatment essences are more concentrated than regular essence. Premium K-beauty secret.";
+
+"templates.routine.advancedKorean.morning.step5.title" = "Serum";
+"templates.routine.advancedKorean.morning.step5.why" = "Targeted treatment for specific concerns - brightening, anti-aging, or hydration";
+"templates.routine.advancedKorean.morning.step5.how" = "Apply 2-3 drops. Press and pat to absorb. Can use multiple serums for different concerns.";
+
+"templates.routine.advancedKorean.morning.step6.title" = "Ampoule";
+"templates.routine.advancedKorean.morning.step6.why" = "Most concentrated treatment product with highest active ingredient levels for maximum results";
+"templates.routine.advancedKorean.morning.step6.how" = "Use 1-2 drops only - very potent. Pat gently. Reserve for key concerns. Often used for special occasions or treatments.";
+
+"templates.routine.advancedKorean.morning.step7.title" = "Eye Cream";
+"templates.routine.advancedKorean.morning.step7.why" = "Delicate eye area needs specialized treatment before facial moisturizer";
+"templates.routine.advancedKorean.morning.step7.how" = "Use ring finger to tap tiny amount around orbital bone. Never pull or tug the delicate skin.";
+
+"templates.routine.advancedKorean.morning.step8.title" = "Moisturizer";
+"templates.routine.advancedKorean.morning.step8.why" = "Seals in all the treatment layers and provides lasting hydration throughout the day";
+"templates.routine.advancedKorean.morning.step8.how" = "Apply to lock in all previous steps. Korean moisturizers are often gel-based for lightweight finish.";
+
+"templates.routine.advancedKorean.morning.step9.title" = "Sunscreen";
+"templates.routine.advancedKorean.morning.step9.why" = "Final step protects all that investment in skincare. K-beauty has world's best cosmetically elegant sunscreens";
+"templates.routine.advancedKorean.morning.step9.how" = "Apply generously as final step. Korean sunscreens are famous for elegant, non-greasy finishes that work under makeup.";
+
+/* Evening Steps */
+"templates.routine.advancedKorean.evening.step1.title" = "Oil Cleanser";
+"templates.routine.advancedKorean.evening.step1.why" = "First cleanse dissolves makeup, sunscreen, and oil-based impurities. Foundation of double cleanse method";
+"templates.routine.advancedKorean.evening.step1.how" = "Massage onto dry skin for 1-2 minutes. Add water to emulsify into milky texture, then rinse thoroughly.";
+
+"templates.routine.advancedKorean.evening.step2.title" = "Water Cleanser";
+"templates.routine.advancedKorean.evening.step2.why" = "Second cleanse removes remaining water-based impurities for perfectly clean skin";
+"templates.routine.advancedKorean.evening.step2.how" = "Massage onto wet skin. The double cleanse is non-negotiable in K-beauty for truly clean, product-ready skin.";
+
+"templates.routine.advancedKorean.evening.step3.title" = "Exfoliant";
+"templates.routine.advancedKorean.evening.step3.why" = "Removes dead skin cells so all the treatment products can penetrate effectively";
+"templates.routine.advancedKorean.evening.step3.how" = "Apply chemical exfoliant (AHA/BHA). Leave on 10-15 minutes, rinse. Use 2-3x per week, not daily.";
+
+"templates.routine.advancedKorean.evening.step4.title" = "Toner";
+"templates.routine.advancedKorean.evening.step4.why" = "Rebalances pH after exfoliation and preps for the treatment layers";
+"templates.routine.advancedKorean.evening.step4.how" = "Pat generously into skin. Can do multiple layers. Evening routine has even more layers than morning.";
+
+"templates.routine.advancedKorean.evening.step5.title" = "Essence";
+"templates.routine.advancedKorean.evening.step5.why" = "Delivers first wave of hydration and treatment ingredients into freshly exfoliated skin";
+"templates.routine.advancedKorean.evening.step5.how" = "Press into skin gently. Freshly exfoliated skin absorbs essence more effectively for enhanced results.";
+
+"templates.routine.advancedKorean.evening.step6.title" = "Treatment Essence";
+"templates.routine.advancedKorean.evening.step6.why" = "Night is optimal time for treatment essences to work their renewal magic during skin's repair cycle";
+"templates.routine.advancedKorean.evening.step6.how" = "Pat 2-3 drops across face. These work while you sleep for that morning glow.";
+
+"templates.routine.advancedKorean.evening.step7.title" = "Serum";
+"templates.routine.advancedKorean.evening.step7.why" = "Evening serums can be more intensive - retinol, peptides, or intensive hydration for overnight repair";
+"templates.routine.advancedKorean.evening.step7.how" = "Apply targeted serum. Can use different one than morning. Night is for anti-aging actives.";
+
+"templates.routine.advancedKorean.evening.step8.title" = "Ampoule";
+"templates.routine.advancedKorean.evening.step8.why" = "Concentrated treatment works overnight when skin is in peak repair mode";
+"templates.routine.advancedKorean.evening.step8.how" = "Use 1-2 drops of your most powerful treatment. This is your premium step for special skin needs.";
+
+"templates.routine.advancedKorean.evening.step9.title" = "Sheet Mask";
+"templates.routine.advancedKorean.evening.step9.why" = "Weekly intensive hydration and treatment in a relaxing ritual. K-beauty's signature step";
+"templates.routine.advancedKorean.evening.step9.how" = "Apply after essences/serums, before moisturizer. Relax for 15-20 minutes. Pat in remaining essence. Use 2-3x per week.";
+
+"templates.routine.advancedKorean.evening.step10.title" = "Eye Cream";
+"templates.routine.advancedKorean.evening.step10.why" = "Nighttime eye cream can be richer with intensive ingredients for overnight renewal";
+"templates.routine.advancedKorean.evening.step10.how" = "Tap gently around eye area. Can use more generous amount than morning. Focus on concerns like fine lines.";
+
+"templates.routine.advancedKorean.evening.step11.title" = "Moisturizer";
+"templates.routine.advancedKorean.evening.step11.why" = "Final occlusive layer seals in all treatments and provides overnight hydration";
+"templates.routine.advancedKorean.evening.step11.how" = "Apply generously. Can use sleeping mask 2-3x per week for extra overnight boost. Wake up to glowing skin.";
+
+/* ===================================
+   MARK: - Teen Acne Fighter
+   =================================== */
+
+"templates.routine.teenAcne.title" = "Teen Acne Fighter";
+"templates.routine.teenAcne.description" = "Gentle yet effective routine designed specifically for teenage skin and hormonal acne.";
+"templates.routine.teenAcne.duration" = "6-8 min";
+
+/* Tags */
+"templates.routine.teenAcne.tag1" = "Teen";
+"templates.routine.teenAcne.tag2" = "Hormonal";
+"templates.routine.teenAcne.tag3" = "Gentle";
+"templates.routine.teenAcne.tag4" = "Preventive";
+
+/* Benefits */
+"templates.routine.teenAcne.benefit1" = "Prevents teen acne";
+"templates.routine.teenAcne.benefit2" = "Gentle on young skin";
+"templates.routine.teenAcne.benefit3" = "Builds good habits";
+"templates.routine.teenAcne.benefit4" = "Easy to follow";
+
+/* Morning Steps */
+"templates.routine.teenAcne.morning.step1.title" = "Gentle Foaming Cleanser";
+"templates.routine.teenAcne.morning.step1.why" = "Removes morning oil without harsh ingredients that can irritate young skin and trigger more breakouts";
+"templates.routine.teenAcne.morning.step1.how" = "Wet face with lukewarm water. Apply cleanser, massage for 30-60 seconds. Rinse well and pat dry. Do this EVERY morning!";
+
+"templates.routine.teenAcne.morning.step2.title" = "Salicylic Acid Toner";
+"templates.routine.teenAcne.morning.step2.why" = "Keeps pores clear and prevents the blackheads and whiteheads that turn into pimples";
+"templates.routine.teenAcne.morning.step2.how" = "Apply with cotton pad or hands. Start every other day to let skin adjust. Can use daily once skin tolerates it.";
+
+"templates.routine.teenAcne.morning.step3.title" = "Lightweight Moisturizer";
+"templates.routine.teenAcne.morning.step3.why" = "Yes, even oily teen skin needs moisture! Skipping it makes skin produce MORE oil to compensate";
+"templates.routine.teenAcne.morning.step3.how" = "Use gel or water-based moisturizer. Apply thin layer. Won't make you break out if oil-free and non-comedogenic.";
+
+"templates.routine.teenAcne.morning.step4.title" = "Oil-free Sunscreen";
+"templates.routine.teenAcne.morning.step4.why" = "Protects skin and prevents dark spots from healing pimples. Many acne products make sun sensitivity worse";
+"templates.routine.teenAcne.morning.step4.how" = "Apply SPF 30+ every morning. Choose oil-free formulas. This prevents acne scars from getting darker!";
+
+/* Evening Steps */
+"templates.routine.teenAcne.evening.step1.title" = "Gentle Foaming Cleanser";
+"templates.routine.teenAcne.evening.step1.why" = "Removes the day's oil, sweat, dirt, and sunscreen that clog pores overnight";
+"templates.routine.teenAcne.evening.step1.how" = "Wash for full 60 seconds in evening - you need to remove sunscreen! Use lukewarm water and gentle circular motions.";
+
+"templates.routine.teenAcne.evening.step2.title" = "Salicylic Acid Toner";
+"templates.routine.teenAcne.evening.step2.why" = "Works overnight to unclog pores and prevent tomorrow's breakouts while you sleep";
+"templates.routine.teenAcne.evening.step2.how" = "Apply after cleansing. Let it dry for a minute before moisturizer. This is your pimple prevention step!";
+
+"templates.routine.teenAcne.evening.step3.title" = "Lightweight Moisturizer";
+"templates.routine.teenAcne.evening.step3.why" = "Nighttime hydration prevents your skin from overproducing oil in the morning";
+"templates.routine.teenAcne.evening.step3.how" = "Apply to slightly damp skin for better absorption. Don't skip this even if you have oily skin!";
+
+"templates.routine.teenAcne.evening.step4.title" = "Spot Treatment";
+"templates.routine.teenAcne.evening.step4.why" = "Targets active pimples with concentrated ingredients to make them go away faster";
+"templates.routine.teenAcne.evening.step4.how" = "Apply ONLY to active pimples, not all over your face. Use clean hands or cotton swab. Let it dry before touching your face.";
+
+/* ===================================
+   MARK: - Mature Skin Revival
+   =================================== */
+
+"templates.routine.matureSkin.title" = "Mature Skin Revival";
+"templates.routine.matureSkin.description" = "Comprehensive routine targeting multiple signs of aging for mature skin.";
+"templates.routine.matureSkin.duration" = "15-18 min";
+
+/* Tags */
+"templates.routine.matureSkin.tag1" = "Mature";
+"templates.routine.matureSkin.tag2" = "Comprehensive";
+"templates.routine.matureSkin.tag3" = "Luxury";
+"templates.routine.matureSkin.tag4" = "Advanced";
+
+/* Benefits */
+"templates.routine.matureSkin.benefit1" = "Targets multiple aging signs";
+"templates.routine.matureSkin.benefit2" = "Improves skin texture";
+"templates.routine.matureSkin.benefit3" = "Restores firmness";
+"templates.routine.matureSkin.benefit4" = "Comprehensive care";
+
+/* Morning Steps */
+"templates.routine.matureSkin.morning.step1.title" = "Gentle Cleanser";
+"templates.routine.matureSkin.morning.step1.why" = "Mature skin requires gentle cleansing that doesn't strip the natural oils that decline with age";
+"templates.routine.matureSkin.morning.step1.how" = "Use rich cream or oil-based cleanser. Massage gently with lukewarm water for 60 seconds. Mature skin is more delicate.";
+
+"templates.routine.matureSkin.morning.step2.title" = "Vitamin C Serum";
+"templates.routine.matureSkin.morning.step2.why" = "Antioxidant powerhouse that brightens age spots, boosts collagen, and protects against environmental damage";
+"templates.routine.matureSkin.morning.step2.how" = "Apply 4-5 drops to clean skin each morning. Use L-ascorbic acid formula for maximum efficacy. Store in cool, dark place.";
+
+"templates.routine.matureSkin.morning.step3.title" = "Hyaluronic Acid";
+"templates.routine.matureSkin.morning.step3.why" = "Mature skin produces less hyaluronic acid naturally. Supplementing plumps fine lines and restores youthful moisture";
+"templates.routine.matureSkin.morning.step3.how" = "Apply to damp skin for maximum water-binding. Use 3-4 drops. Follow immediately with moisturizer to lock in hydration.";
+
+"templates.routine.matureSkin.morning.step4.title" = "Rich Eye Cream";
+"templates.routine.matureSkin.morning.step4.why" = "Eye area shows aging first and needs specialized rich treatment for crow's feet, hollowing, and crepiness";
+"templates.routine.matureSkin.morning.step4.how" = "Use ring finger to gently tap generous amount around entire eye area. Don't skimp - mature eyes need more product.";
+
+"templates.routine.matureSkin.morning.step5.title" = "Luxury Moisturizer";
+"templates.routine.matureSkin.morning.step5.why" = "Rich moisturizer with ceramides and peptides rebuilds barrier that weakens with age, providing essential nourishment";
+"templates.routine.matureSkin.morning.step5.how" = "Apply generously to face, neck, and chest. These areas show aging too! Mature skin needs richer formulas than younger skin.";
+
+"templates.routine.matureSkin.morning.step6.title" = "Anti-aging Sunscreen";
+"templates.routine.matureSkin.morning.step6.why" = "SPF is THE most important anti-aging step. Prevents further damage and protects against skin cancer risk";
+"templates.routine.matureSkin.morning.step6.how" = "Apply SPF 50 broad-spectrum. Use three finger-lengths for face and neck. Reapply every 2 hours outdoors. Non-negotiable!";
+
+/* Evening Steps */
+"templates.routine.matureSkin.evening.step1.title" = "Gentle Cleanser";
+"templates.routine.matureSkin.evening.step1.why" = "Evening cleanse removes the day's environmental damage and prepares skin for powerful overnight treatments";
+"templates.routine.matureSkin.evening.step1.how" = "Double cleanse: oil cleanser first for sunscreen, then cream cleanser. Be extra gentle - mature skin bruises more easily.";
+
+"templates.routine.matureSkin.evening.step2.title" = "Retinol Treatment";
+"templates.routine.matureSkin.evening.step2.why" = "Gold standard anti-aging ingredient. Increases cell turnover, boosts collagen, improves texture and tone";
+"templates.routine.matureSkin.evening.step2.how" = "Start with 0.25% if new to retinol. Apply pea-sized amount to dry skin. Wait 20 minutes before moisturizer. Use 3-4x per week initially.";
+
+"templates.routine.matureSkin.evening.step3.title" = "Peptide Complex";
+"templates.routine.matureSkin.evening.step3.why" = "Peptides signal skin to produce more collagen and elastin, directly addressing loss of firmness and structure";
+"templates.routine.matureSkin.evening.step3.how" = "Apply 2-3 drops after retinol. Peptides work synergistically with retinol for enhanced anti-aging benefits.";
+
+"templates.routine.matureSkin.evening.step4.title" = "Hyaluronic Acid";
+"templates.routine.matureSkin.evening.step4.why" = "Overnight hydration while skin is in repair mode. Plumps lines and restores bounce that mature skin loses";
+"templates.routine.matureSkin.evening.step4.how" = "Apply to slightly damp skin. Can use more at night than morning. Essential for mature skin's hydration needs.";
+
+"templates.routine.matureSkin.evening.step5.title" = "Rich Eye Cream";
+"templates.routine.matureSkin.evening.step5.why" = "Nighttime eye cream with retinol or peptides works during sleep to reduce crow's feet and firm delicate area";
+"templates.routine.matureSkin.evening.step5.how" = "Apply generously around entire eye area including upper lid. Night is when these ingredients work their magic.";
+
+"templates.routine.matureSkin.evening.step6.title" = "Luxury Moisturizer";
+"templates.routine.matureSkin.evening.step6.why" = "Rich night cream supports overnight repair with ceramides, peptides, and nourishing oils mature skin craves";
+"templates.routine.matureSkin.evening.step6.how" = "Apply thick layer to face, neck, and chest. Can use facial oil on top for extra nourishment. Wake up to renewed skin.";
+

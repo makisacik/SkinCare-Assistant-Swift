@@ -101,8 +101,8 @@ struct RoutineDetailSheet: View {
                     adaptedStep: nil
                 )
             }
-            .alert("Error", isPresented: $showingErrorAlert) {
-                Button("OK", role: .cancel) {}
+            .alert(L10n.Common.error, isPresented: $showingErrorAlert) {
+                Button(L10n.Common.ok, role: .cancel) {}
             } message: {
                 Text(errorMessage)
             }
@@ -181,11 +181,14 @@ struct RoutineDetailSheet: View {
         // Use ProductAliasMapping.normalize to intelligently extract product type
         let productType = ProductAliasMapping.normalize(step.title)
 
+        // Get localized time of day string
+        let timeOfDayString = selectedTimeOfDay == .morning ? L10n.Discover.TimeOfDay.morning : L10n.Discover.TimeOfDay.evening
+
         // Create a RoutineStepDetail from the template step
         let stepDetail = RoutineStepDetail(
             id: "template_\(routine.id)_\(selectedTimeOfDay == .morning ? "morning" : "evening")_\(index)",
             title: step.title,
-            description: "Step \(index + 1) of your \(selectedTimeOfDay == .morning ? "morning" : "evening") routine",
+            description: L10n.Discover.Detail.stepDescription(step: index + 1, timeOfDay: timeOfDayString),
             stepType: productType,
             timeOfDay: selectedTimeOfDay == .morning ? .morning : .evening,
             why: step.why,
@@ -248,7 +251,7 @@ private struct TagsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Tags")
+            Text(L10n.Discover.Detail.tags)
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(palette.textPrimary)
 
@@ -276,13 +279,13 @@ private struct TimeOfDayPicker: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            option(title: "Morning", icon: "sun.max.fill", isActive: selectedTimeOfDay == .morning, activeFill: palette.warning) {
+            option(title: L10n.Discover.TimeOfDay.morning, icon: "sun.max.fill", isActive: selectedTimeOfDay == .morning, activeFill: palette.warning) {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 withAnimation(.spring(response: 0.28, dampingFraction: 0.8)) {
                     selectedTimeOfDay = .morning
                 }
             }
-            option(title: "Evening", icon: "moon.fill", isActive: selectedTimeOfDay == .evening, activeFill: palette.primary) {
+            option(title: L10n.Discover.TimeOfDay.evening, icon: "moon.fill", isActive: selectedTimeOfDay == .evening, activeFill: palette.primary) {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 withAnimation(.spring(response: 0.28, dampingFraction: 0.8)) {
                     selectedTimeOfDay = .evening
@@ -329,7 +332,7 @@ private struct StepsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Routine Steps")
+            Text(L10n.Discover.Detail.routineSteps)
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(palette.textPrimary)
 
@@ -359,7 +362,7 @@ private struct StepRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text("\(index + 1)")
+            Text(L10n.Discover.Detail.stepNumber(index + 1))
                 .font(.system(size: 13, weight: .bold))
                 .foregroundColor(.white)
                 .frame(width: 24, height: 24)
@@ -410,7 +413,7 @@ private struct BenefitsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Benefits")
+            Text(L10n.Discover.Detail.benefits)
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(palette.textPrimary)
 
@@ -438,7 +441,7 @@ private struct MetricsPills: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Pill(text: "\(stepCount) steps", icon: "list.number")
+            Pill(text: "\(stepCount) \(L10n.Discover.Metrics.steps)", icon: "list.number")
             Pill(text: duration, icon: "clock")
         }
     }

@@ -179,6 +179,11 @@
 "weather.snow.spf_extreme.note" = "Snow reflects up to 80% of UV rays—double exposure. Treat as extreme UV day.";
 "weather.snow.retinoid_caution.note" = "Skip morning retinoids—snow reflection doubles UV exposure.";
 
+/* ====== ENSURE TITLES (Product Suggestions) ====== */
+"ensure.sunscreen_spf50" = "Sunscreen SPF 50+";
+"ensure.antioxidant_serum" = "Antioxidant Serum";
+"ensure.antioxidant_serum_vitc" = "Antioxidant Serum (Vit C/EGCG)";
+
 /* ====== CYCLE PHASE NAMES ====== */
 "adaptations.cycle.phase.menstrual" = "Menstrual Phase";
 "adaptations.cycle.phase.follicular" = "Follicular Phase";
@@ -196,4 +201,128 @@
 "adaptations.weather.context.cold" = "Cold";
 "adaptations.weather.context.hot" = "Hot";
 "adaptations.weather.context.snow" = "Snow";
+
+/* ====== CYCLE PHASE BRIEFINGS ====== */
+
+/* Menstrual Phase Briefing */
+"briefing.menstrual.title" = "Menstrual Phase (Days 1-5)";
+"briefing.menstrual.summary" = "Your skin is more sensitive right now. Focus on gentle, hydrating care and barrier support.";
+"briefing.menstrual.tip.1" = "Avoid harsh actives and exfoliation";
+"briefing.menstrual.tip.2" = "Prioritize barrier repair with gentle, hydrating products";
+"briefing.menstrual.tip.3" = "Use calming ingredients like ceramides and niacinamide";
+"briefing.menstrual.tip.4" = "Be extra gentle with cleansing";
+"briefing.menstrual.warning.1" = "Skin barrier is compromised";
+"briefing.menstrual.warning.2" = "Increased sensitivity to actives";
+
+/* Follicular Phase Briefing */
+"briefing.follicular.title" = "Follicular Phase (Days 6-13)";
+"briefing.follicular.summary" = "Your skin is resilient and glowing! This is the perfect time for intensive treatments and trying new products.";
+"briefing.follicular.tip.1" = "Perfect time for intensive treatments and peels";
+"briefing.follicular.tip.2" = "Try new products or increase active concentration";
+"briefing.follicular.tip.3" = "Maximize use of exfoliants and retinoids";
+"briefing.follicular.tip.4" = "Skin has optimal absorption and resilience";
+
+/* Ovulation Phase Briefing */
+"briefing.ovulation.title" = "Ovulation Phase (Days 14-16)";
+"briefing.ovulation.summary" = "Your skin looks its best! Maintain your routine and enjoy your natural glow.";
+"briefing.ovulation.tip.1" = "Skin is at peak radiance and firmness";
+"briefing.ovulation.tip.2" = "Maintain your current routine";
+"briefing.ovulation.tip.3" = "Great time for photos and events";
+"briefing.ovulation.tip.4" = "Natural glow is maximized";
+
+/* Luteal Phase Briefing */
+"briefing.luteal.title" = "Luteal Phase (Days 17-28)";
+"briefing.luteal.summary" = "Oil production increases and breakouts may appear. Focus on balancing and oil control.";
+"briefing.luteal.tip.1" = "Use mattifying or balancing toners";
+"briefing.luteal.tip.2" = "Add clay masks to control shine";
+"briefing.luteal.tip.3" = "Keep spot treatments ready";
+"briefing.luteal.tip.4" = "Consider lighter moisturizers";
+"briefing.luteal.tip.5" = "Limit harsh actives to avoid irritation";
+"briefing.luteal.warning.1" = "Increased oil production";
+"briefing.luteal.warning.2" = "Higher breakout risk";
+"briefing.luteal.warning.3" = "Possible increased sensitivity";
+
+/* ====== WEATHER BRIEFINGS ====== */
+
+/* UV Extreme Briefing */
+"briefing.uv_extreme.title" = "Extreme UV Protection";
+"briefing.uv_extreme.summary" = "UV index is extremely high today. Maximum sun protection is critical.";
+"briefing.uv_extreme.tip.1" = "Use SPF 50+ and reapply every 1-2 hours";
+"briefing.uv_extreme.tip.2" = "Add antioxidant serum (Vit C, EGCG)";
+"briefing.uv_extreme.tip.3" = "Avoid peak sun hours (10am-4pm)";
+"briefing.uv_extreme.tip.4" = "Wear protective clothing and sunglasses";
+"briefing.uv_extreme.warning.1" = "Skip retinoids and strong acids in morning routine";
+"briefing.uv_extreme.warning.2" = "Reapply sunscreen frequently if outdoors";
+
+/* UV High Briefing */
+"briefing.uv_high.title" = "High UV Protection";
+"briefing.uv_high.summary" = "UV index is high. Extra sun protection is recommended.";
+"briefing.uv_high.tip.1" = "Use SPF 50+ and reapply every 2 hours";
+"briefing.uv_high.tip.2" = "Add antioxidant serum for extra protection";
+"briefing.uv_high.tip.3" = "Limit direct sun exposure";
+"briefing.uv_high.warning.1" = "Avoid retinoids and acids in morning routine";
+
+/* UV Moderate Briefing */
+"briefing.uv_moderate.title" = "Moderate UV Protection";
+"briefing.uv_moderate.summary" = "UV index is moderate. Standard sun protection applies.";
+"briefing.uv_moderate.tip.1" = "SPF 30-50 is recommended";
+"briefing.uv_moderate.tip.2" = "Antioxidant serum is optional but beneficial";
+"briefing.uv_moderate.tip.3" = "Reapply sunscreen if spending time outdoors";
+
+/* UV Low Briefing */
+"briefing.uv_low.title" = "Low UV - Safe for Actives";
+"briefing.uv_low.summary" = "UV index is low. Good day for active ingredients.";
+"briefing.uv_low.tip.1" = "SPF 30 is sufficient";
+"briefing.uv_low.tip.2" = "Safe to use retinoids and acids";
+"briefing.uv_low.tip.3" = "Good day for treatments that increase sun sensitivity";
+
+/* Low Humidity Briefing */
+"briefing.low_humidity.title" = "Dry Air - Extra Hydration";
+"briefing.low_humidity.summary" = "Low humidity can dehydrate your skin.";
+"briefing.low_humidity.tip.1" = "Use heavier moisturizers";
+"briefing.low_humidity.tip.2" = "Add hydrating toner or HA serum";
+"briefing.low_humidity.tip.3" = "Consider occlusive layer to seal in moisture";
+"briefing.low_humidity.tip.4" = "Drink plenty of water";
+"briefing.low_humidity.warning.1" = "Avoid over-exfoliating in dry conditions";
+
+/* High Humidity Briefing */
+"briefing.high_humidity.title" = "Humid Air - Lighter Products";
+"briefing.high_humidity.summary" = "High humidity means your skin needs less occlusion.";
+"briefing.high_humidity.tip.1" = "Use lighter gel moisturizers";
+"briefing.high_humidity.tip.2" = "Avoid thick occlusives";
+"briefing.high_humidity.tip.3" = "Mattifying products work well";
+"briefing.high_humidity.tip.4" = "Focus on water-based formulations";
+
+/* Windy Briefing */
+"briefing.windy.title" = "Windy - Barrier Protection";
+"briefing.windy.summary" = "Wind strips moisture and can irritate skin.";
+"briefing.windy.tip.1" = "Apply barrier cream or balm";
+"briefing.windy.tip.2" = "Use soothing ingredients (ceramide, squalane)";
+"briefing.windy.tip.3" = "Protect face from direct wind exposure";
+"briefing.windy.warning.1" = "Skip harsh peels and strong retinoids";
+
+/* Cold Briefing */
+"briefing.cold.title" = "Cold Weather - Rich Protection";
+"briefing.cold.summary" = "Cold temperatures require barrier-focused skincare.";
+"briefing.cold.tip.1" = "Use richer, more protective moisturizers";
+"briefing.cold.tip.2" = "Add ceramides or squalane";
+"briefing.cold.tip.3" = "Protect skin barrier from harsh elements";
+"briefing.cold.tip.4" = "Don't skip sunscreen (UV still present)";
+
+/* Hot Briefing */
+"briefing.hot.title" = "Hot Weather - Light & Mattifying";
+"briefing.hot.summary" = "Hot temperatures call for lighter formulations.";
+"briefing.hot.tip.1" = "Use oil-free, lightweight products";
+"briefing.hot.tip.2" = "Choose mattifying sunscreen";
+"briefing.hot.tip.3" = "Keep skin clean to prevent breakouts";
+"briefing.hot.tip.4" = "Reapply sunscreen more frequently due to sweat";
+
+/* Snow Briefing */
+"briefing.snow.title" = "Snow - Double UV Exposure";
+"briefing.snow.summary" = "Snow reflects UV rays, significantly increasing exposure.";
+"briefing.snow.tip.1" = "Treat as a high UV day";
+"briefing.snow.tip.2" = "Use SPF 50+";
+"briefing.snow.tip.3" = "Wear sunglasses to protect eyes";
+"briefing.snow.tip.4" = "Reapply sunscreen frequently";
+"briefing.snow.warning.1" = "Snow reflects up to 80% of UV rays";
 

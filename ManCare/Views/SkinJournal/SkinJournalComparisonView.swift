@@ -35,11 +35,11 @@ struct SkinJournalComparisonView: View {
                 }
             }
             .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
-            .navigationTitle("Compare Progress")
+            .navigationTitle(L10n.SkinJournal.Comparison.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Close") {
+                    Button(L10n.SkinJournal.Comparison.close) {
                         dismiss()
                     }
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
@@ -47,7 +47,7 @@ struct SkinJournalComparisonView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if beforeEntry != nil && afterEntry != nil {
-                        Picker("View", selection: $viewMode) {
+                        Picker(L10n.SkinJournal.Comparison.view, selection: $viewMode) {
                             Image(systemName: "slider.horizontal.3")
                                 .tag(ComparisonMode.slider)
                             Image(systemName: "square.split.2x1")
@@ -71,7 +71,7 @@ struct SkinJournalComparisonView: View {
             HStack(spacing: 16) {
                 // Before selector
                 entrySelector(
-                    label: "Before",
+                    label: L10n.SkinJournal.Timeline.before,
                     entry: beforeEntry,
                     color: .red
                 ) {
@@ -80,7 +80,7 @@ struct SkinJournalComparisonView: View {
                 
                 // After selector
                 entrySelector(
-                    label: "After",
+                    label: L10n.SkinJournal.Timeline.after,
                     entry: afterEntry,
                     color: .green
                 ) {
@@ -136,7 +136,7 @@ struct SkinJournalComparisonView: View {
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                     } else {
-                        Text("Select Entry")
+                        Text(L10n.SkinJournal.Timeline.selectEntry)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
@@ -169,7 +169,7 @@ struct SkinJournalComparisonView: View {
                 .font(.system(size: 14))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("\(abs(days)) day\(abs(days) == 1 ? "" : "s") apart")
+            Text(L10n.SkinJournal.Comparison.daysApart(days: days))
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }
@@ -264,13 +264,13 @@ struct SkinJournalComparisonView: View {
             
             // Labels
             HStack {
-                Label("Before", systemImage: "arrow.left")
+                Label(L10n.SkinJournal.Comparison.before, systemImage: "arrow.left")
                     .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                     .foregroundColor(.red)
                 
                 Spacer()
                 
-                Label("After", systemImage: "arrow.right")
+                Label(L10n.SkinJournal.Comparison.after, systemImage: "arrow.right")
                     .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                     .foregroundColor(.green)
                     .labelStyle(.trailingIcon)
@@ -290,7 +290,7 @@ struct SkinJournalComparisonView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
                 
-                Text("Before")
+                Text(L10n.SkinJournal.Comparison.before)
                     .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                     .foregroundColor(.red)
             }
@@ -304,7 +304,7 @@ struct SkinJournalComparisonView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
                 
-                Text("After")
+                Text(L10n.SkinJournal.Comparison.after)
                     .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                     .foregroundColor(.green)
             }
@@ -313,25 +313,25 @@ struct SkinJournalComparisonView: View {
     
     private func tagsComparisonView(before: SkinJournalEntryModel, after: SkinJournalEntryModel) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Skin Feel")
+            Text(L10n.SkinJournal.Comparison.skinFeel)
                 .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             HStack(alignment: .top, spacing: 12) {
                 // Before tags
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Before")
+                    Text(L10n.SkinJournal.Comparison.before)
                         .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                         .foregroundColor(.red)
                     
                     if !before.skinFeelTags.isEmpty {
                         ForEach(before.skinFeelTags, id: \.self) { tag in
-                            Text("• \(tag.rawValue)")
+                            Text(L10n.SkinJournal.Comparison.tagBullet(tag.displayName))
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                     } else {
-                        Text("No tags")
+                        Text(L10n.SkinJournal.Comparison.noTags)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                             .italic()
@@ -341,18 +341,18 @@ struct SkinJournalComparisonView: View {
                 
                 // After tags
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("After")
+                    Text(L10n.SkinJournal.Comparison.after)
                         .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                         .foregroundColor(.green)
                     
                     if !after.skinFeelTags.isEmpty {
                         ForEach(after.skinFeelTags, id: \.self) { tag in
-                            Text("• \(tag.rawValue)")
+                            Text(L10n.SkinJournal.Comparison.tagBullet(tag.displayName))
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
                     } else {
-                        Text("No tags")
+                        Text(L10n.SkinJournal.Comparison.noTags)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                             .italic()
@@ -380,7 +380,7 @@ struct SkinJournalComparisonView: View {
                 .font(.system(size: 60))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("Select entries to compare")
+            Text(L10n.SkinJournal.Comparison.selectEntries)
                 .font(ThemeManager.shared.theme.typo.body)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }

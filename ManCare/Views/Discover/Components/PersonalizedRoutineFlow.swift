@@ -100,11 +100,11 @@ struct PersonalizedRoutineFlowWrapper: View {
                 case .loading:
                     RoutineLoadingView(
                         statuses: [
-                            "Analyzing your preferences...",
-                            "Processing custom details...",
-                            "Generating personalized routine...",
-                            "Optimizing for your skin type...",
-                            "Finalizing recommendations..."
+                            L10n.Discover.Personalized.loadingAnalyzing,
+                            L10n.Discover.Personalized.loadingProcessing,
+                            L10n.Discover.Personalized.loadingGenerating,
+                            L10n.Discover.Personalized.loadingOptimizing,
+                            L10n.Discover.Personalized.loadingFinalizing
                         ],
                         stepInterval: 1.6,
                         autoFinish: false,
@@ -286,7 +286,7 @@ struct PersonalizedRoutineResultView: View {
                 HStack {
                     Image(systemName: "pencil")
                         .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                    TextField("Routine name", text: $routineName)
+                    TextField(L10n.Discover.Personalized.routineNamePlaceholder, text: $routineName)
                         .textInputAutocapitalization(.words)
                         .disableAutocorrection(true)
                         .colorScheme(.light)
@@ -308,7 +308,7 @@ struct PersonalizedRoutineResultView: View {
                         Task {
                             let store = RoutineStore()
                             let count = (try? await store.fetchSavedRoutines().count) ?? 0
-                            let finalName = count == 0 ? "My Routine" : "My Routine \(count + 1)"
+                            let finalName = count == 0 ? L10n.Discover.Personalized.defaultName : L10n.Discover.Personalized.defaultNameNumbered(count + 1)
                             onSave(finalName)
                         }
                     } else {
@@ -318,7 +318,7 @@ struct PersonalizedRoutineResultView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "tray.and.arrow.down")
                             .font(.system(size: 18, weight: .semibold))
-                        Text("Save Routine")
+                        Text(L10n.Discover.Personalized.saveRoutine)
                             .font(.system(size: 18, weight: .semibold))
                     }
                     .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
@@ -349,9 +349,9 @@ struct PersonalizedRoutineResultView: View {
                     let store = RoutineStore()
                     if let count = try? await store.fetchSavedRoutines().count {
                         // First one is "My Routine" without number; subsequent are "My Routine N"
-                        routineName = count == 0 ? "My Routine" : "My Routine \(count + 1)"
+                        routineName = count == 0 ? L10n.Discover.Personalized.defaultName : L10n.Discover.Personalized.defaultNameNumbered(count + 1)
                     } else {
-                        routineName = "My Routine"
+                        routineName = L10n.Discover.Personalized.defaultName
                     }
                 }
             }
@@ -441,14 +441,14 @@ struct PersonalizedRoutinePreferencesView: View {
                     .font(.system(size: 24, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.primary)
 
-                Text("Create Your Personalized Routine")
+                Text(L10n.Discover.Personalized.createTitle)
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 Spacer()
             }
 
-            Text("Customize your preferences below, or skip sections you don't want to change. Tap anywhere on a section card to expand it.")
+            Text(L10n.Discover.Personalized.customizeInstructions)
                 .font(.system(size: 16))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .multilineTextAlignment(.leading)
@@ -460,11 +460,11 @@ struct PersonalizedRoutinePreferencesView: View {
             // Section header - chevron only tappable
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Skin Type")
+                    Text(L10n.Discover.Personalized.skinType)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Currently: \(skinType.title)")
+                    Text(L10n.Discover.Personalized.currently(skinType.title))
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -541,11 +541,11 @@ struct PersonalizedRoutinePreferencesView: View {
             // Section header - chevron only tappable
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Skin Concerns")
+                    Text(L10n.Discover.Personalized.skinConcerns)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Selected: \(selectedConcerns.isEmpty ? "None" : selectedConcerns.map { $0.title }.joined(separator: ", "))")
+                    Text(selectedConcerns.isEmpty ? L10n.Discover.Personalized.selectedNone : L10n.Discover.Personalized.selected(selectedConcerns.map { $0.title }.joined(separator: ", ")))
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -624,11 +624,11 @@ struct PersonalizedRoutinePreferencesView: View {
             // Section header - chevron only tappable
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Main Goal")
+                    Text(L10n.Discover.Personalized.mainGoal)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Currently: \(mainGoal.title)")
+                    Text(L10n.Discover.Personalized.currently(mainGoal.title))
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -705,11 +705,11 @@ struct PersonalizedRoutinePreferencesView: View {
             // Section header - chevron only tappable
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Routine Complexity")
+                    Text(L10n.Discover.Personalized.routineComplexity)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Selected: \(routineDepth?.title ?? "Not selected")")
+                    Text(routineDepth == nil ? L10n.Discover.Personalized.notSelected : L10n.Discover.Personalized.selected(routineDepth!.title))
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -802,11 +802,11 @@ struct PersonalizedRoutinePreferencesView: View {
             // Section header - chevron only tappable
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Additional Details")
+                    Text(L10n.Discover.Personalized.additionalDetails)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Custom notes: \(customDetails.isEmpty ? "None" : "\(customDetails.count) characters")")
+                    Text(customDetails.isEmpty ? L10n.Discover.Personalized.customNotesNone : L10n.Discover.Personalized.customNotesCount(customDetails.count))
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -839,7 +839,7 @@ struct PersonalizedRoutinePreferencesView: View {
                     Divider()
                         .padding(.horizontal, 20)
 
-                    Text("Share any specific concerns, allergies, or preferences")
+                    Text(L10n.Discover.Personalized.shareDetails)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .padding(.horizontal, 20)
@@ -867,7 +867,7 @@ struct PersonalizedRoutinePreferencesView: View {
                                 }
 
                             if customDetails.isEmpty {
-                                Text("e.g., I have sensitive skin, prefer natural products, or I'm allergic to fragrances...")
+                                Text(L10n.Discover.Personalized.detailsPlaceholder)
                                     .font(.system(size: 16))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                                     .padding(.horizontal, 20)
@@ -878,7 +878,7 @@ struct PersonalizedRoutinePreferencesView: View {
 
                         HStack {
                             Spacer()
-                            Text("\(customDetails.count)/100")
+                            Text(L10n.Discover.Personalized.characterCount(customDetails.count))
                                 .font(.system(size: 12))
                                 .foregroundColor(customDetails.count > 90 ? ThemeManager.shared.theme.palette.error : ThemeManager.shared.theme.palette.textMuted)
                         }
@@ -913,7 +913,7 @@ struct PersonalizedRoutinePreferencesView: View {
                 Image(systemName: "wand.and.stars")
                     .font(.system(size: 18, weight: .semibold))
 
-                Text("Generate My Routine")
+                Text(L10n.Discover.Personalized.generateRoutine)
                     .font(.system(size: 18, weight: .semibold))
             }
             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)

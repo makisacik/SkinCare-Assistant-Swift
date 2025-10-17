@@ -1,0 +1,178 @@
+/*
+Products.strings (Turkish)
+ManCare - Ürünler sekmesi ile ilgili metinler
+*/
+
+/* General */
+"products.title" = "Ürünlerim";
+"products.subtitle" = "Cilt bakımı koleksiyonunuzu depolayın ve yönetin";
+"products.empty.title" = "Henüz Ürün Yok";
+"products.empty.subtitle" = "Başlamak için ilk ürününüzü ekleyin";
+
+/* Add Product */
+"products.add.title" = "Yeni Ürün Ekle";
+"products.add.subtitle" = "Koleksiyonunuza bir ürün ekleyin";
+"products.add.scanOption" = "Ürünü Tara";
+"products.add.scanDescription" = "Ürün bilgilerini otomatik olarak çıkarmak için fotoğraf çekin";
+"products.add.manualOption" = "Manuel Ekle";
+"products.add.manualDescription" = "Tam kontrol için ürün detaylarını manuel girin";
+"products.add.getStarted" = "Başla";
+
+/* Product Form */
+"products.form.basicInfo" = "Temel Bilgiler";
+"products.form.productName" = "Ürün Adı";
+"products.form.productNamePlaceholder" = "Örn: Nazik Köpüren Temizleyici";
+"products.form.brand" = "Marka";
+"products.form.brandPlaceholder" = "Örn: CeraVe";
+"products.form.size" = "Boyut/Miktar";
+"products.form.sizePlaceholder" = "Örn: 150";
+"products.form.productCategory" = "Ürün Kategorisi";
+"products.form.ingredients" = "İçerikler";
+"products.form.addIngredient" = "İçerik Ekle";
+"products.form.productClaims" = "Ürün İddiaları";
+"products.form.description" = "Açıklama";
+"products.form.productDescription" = "Ürün Açıklaması";
+"products.form.descriptionPlaceholder" = "Örn: Temel faydaları, dokusu, hissi, önemli notlar...";
+"products.form.characterCount" = "%d/150";
+"products.form.unitMilliliters" = "mL";
+"products.form.unitOunces" = "oz";
+
+/* Product Type */
+"products.type.title" = "Ürün Tipi";
+"products.type.tapToChange" = "Ürün tipini değiştirmek için dokunun";
+"products.type.selectType" = "Ürün Tipi Seçin";
+"products.type.searchPlaceholder" = "Ürün tiplerinde ara...";
+
+/* Product Scanning */
+"products.scan.title" = "Ürünü Tara";
+"products.scan.instruction" = "Ürün etiketini çerçeve içine konumlandırın";
+"products.scan.photoCapture" = "Fotoğraf yakalandı!";
+"products.scan.processing" = "İşleniyor...";
+"products.scan.extracted" = "Çıkarılan: %@";
+"products.scan.success" = "Ürün Başarıyla Eklendi!";
+"products.scan.byBrand" = "markası: %@";
+"products.scan.retakePhoto" = "Fotoğrafı Tekrar Çek";
+"products.scan.done" = "Bitti";
+
+/* Product Scanning Steps */
+"products.scan.step.extractedText" = "Çıkarılan Metin";
+"products.scan.step.reviewText" = "Devam etmeden önce metni inceleyin ve düzenleyin";
+"products.scan.step.productInfo" = "Ürün Bilgileri";
+"products.scan.step.normalizedProduct" = "Normalleştirilmiş Ürün";
+"products.scan.step.brand" = "Marka:";
+"products.scan.step.name" = "İsim:";
+"products.scan.step.type" = "Tip:";
+"products.scan.step.confidence" = "Güven:";
+"products.scan.step.normalizationError" = "Normalleştirme Hatası: %@";
+"products.scan.step.normalizeWithGPT" = "GPT ile Normalleştir";
+"products.scan.step.normalizing" = "GPT ile normalleştiriliyor...";
+"products.scan.step.continueNormalized" = "Normalleştirilmiş Ürünle Devam Et";
+"products.scan.step.continueRaw" = "Ham Metinle Devam Et";
+"products.scan.step.cancel" = "İptal";
+"products.scan.step.unknown" = "Bilinmiyor";
+"products.scan.step1" = "Adım 1: Görselden metin çıkarılıyor...";
+"products.scan.step2" = "Adım 2: GPT ile normalleştiriliyor...";
+"products.scan.step3" = "Adım 3: Ürün oluşturuluyor ve ekleniyor...";
+"products.scan.step3Database" = "Adım 3: Open Beauty Facts veritabanında aranıyor...";
+
+/* Product Scanning Status Messages */
+"products.scan.status.ocrFailed" = "OCR başarısız oldu";
+"products.scan.status.normalizationFailed" = "GPT normalleştirmesi başarısız oldu";
+"products.scan.status.noData" = "Normalleştirilmiş ürün verisi yok";
+"products.scan.status.lookupCompleted" = "Ürün araması tamamlandı!";
+"products.scan.status.productAdded" = "Ürün başarıyla eklendi!";
+
+/* Product Detail */
+"products.detail.description" = "Açıklama";
+"products.detail.editProduct" = "Ürünü Düzenle";
+"products.detail.updateInfo" = "Ürün bilgilerini güncelle";
+"products.detail.close" = "Kapat";
+"products.detail.ingredients" = "İçindekiler (INCI)";
+"products.detail.productType" = "Ürün Tipi";
+"products.detail.size" = "Miktar";
+"products.detail.deleteProduct" = "Ürünü Sil";
+"products.detail.deleteConfirmTitle" = "Ürünü Sil";
+"products.detail.deleteConfirmMessage" = "“%@” ürününü silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"products.detail.ingredientBullet" = "• %@";
+"products.detail.ingredientNumber" = "%d";
+"products.detail.sizeBullet" = "• %@";
+"products.detail.keyIngredients" = "Temel içerikler: %@";
+
+/* Product Summary */
+"products.summary.title" = "Ürün Özeti";
+"products.summary.subtitle" = "Çıkarılan ürün bilgilerini gözden geçirin ve düzenleyin";
+
+/* Product Confirmation */
+"products.confirm.noneOfThese" = "Bunlardan hiçbiri değil";
+"products.confirm.title" = "Ürününüzü seçin";
+
+/* Actions */
+"products.action.cancel" = "İptal";
+"products.action.save" = "Kaydet";
+"products.action.edit" = "Düzenle";
+"products.action.delete" = "Sil";
+"products.action.adding" = "Ekleniyor...";
+"products.action.confirmProduct" = "Ürünü Onayla";
+
+/* Product Slot Edit */
+"products.slot.edit.title" = "Ürün Slotunu Düzenle";
+"products.slot.edit.subtitle" = "Bu özellik, ürün slotunu düzenlemenize olanak tanır: %@";
+"products.slot.edit.navTitle" = "Slotu Düzenle";
+
+/* Product Claims */
+"products.claim.fragranceFree" = "Parfümsüz";
+"products.claim.sensitiveSafe" = "Hassas Cilde Uygun";
+"products.claim.vegan" = "Vegan";
+"products.claim.crueltyFree" = "Hayvanlar Üzerinde Test Edilmemiştir";
+"products.claim.dermatologistTested" = "Dermatolog Onaylı";
+"products.claim.nonComedogenic" = "Komedojenik Değil";
+"products.claim.parabenFree" = "Paraben İçermez";
+"products.claim.sulfateFree" = "Sülfat İçermez";
+"products.claim.oilFree" = "Yağsız";
+
+/* Product Type Names */
+"products.type.cleanser" = "Temizleyici";
+"products.type.moisturizer" = "Nemlendirici";
+"products.type.sunscreen" = "Güneş Kremi";
+"products.type.toner" = "Tonik";
+"products.type.faceSerum" = "Yüz Serumu";
+"products.type.essence" = "Esans";
+"products.type.exfoliator" = "Peeling/Cilt Yenileyici";
+"products.type.faceMask" = "Yüz Maskesi";
+"products.type.facialOil" = "Yüz Yağı";
+"products.type.facialMist" = "Yüz Spreyi/Misti";
+"products.type.eyeCream" = "Göz Kremi";
+"products.type.spotTreatment" = "Sivilce/Leke Bakımı";
+"products.type.retinol" = "Retinol";
+"products.type.vitaminC" = "C Vitamini Serumu";
+"products.type.niacinamide" = "Niasinamid Serumu";
+"products.type.faceSunscreen" = "Yüz Güneş Kremi";
+"products.type.bodySunscreen" = "Vücut Güneş Kremi";
+"products.type.lipBalm" = "Dudak Balsamı";
+"products.type.shaveCream" = "Tıraş Kremi";
+"products.type.aftershave" = "Tıraş Sonrası Losyon";
+"products.type.shaveGel" = "Tıraş Jeli";
+"products.type.bodyLotion" = "Vücut Losyonu";
+"products.type.bodyWash" = "Vücut Şampuanı/Jeli";
+"products.type.handCream" = "El Kremi";
+"products.type.shampoo" = "Şampuan";
+"products.type.conditioner" = "Saç Kremi";
+"products.type.hairOil" = "Saç Yağı";
+"products.type.hairMask" = "Saç Maskesi";
+"products.type.chemicalPeel" = "Kimyasal Peeling";
+"products.type.micellarWater" = "Misel Su";
+"products.type.makeupRemover" = "Makyaj Temizleyici";
+"products.type.faceWash" = "Yüz Yıkama Jeli/Köpüğü";
+"products.type.cleansingOil" = "Temizleme Yağı";
+"products.type.cleansingBalm" = "Temizleme Balmı";
+
+/* Product Categories */
+"products.category.cleansing" = "Temizleme";
+"products.category.toning" = "Tonikleme";
+"products.category.treatment" = "Bakım Ürünleri";
+"products.category.moisturizing" = "Nemlendirme";
+"products.category.sunProtection" = "Güneş Koruma";
+"products.category.masks" = "Maskeler";
+"products.category.shaving" = "Tıraş";
+"products.category.bodyCare" = "Vücut Bakımı";
+"products.category.hairCare" = "Saç Bakımı";

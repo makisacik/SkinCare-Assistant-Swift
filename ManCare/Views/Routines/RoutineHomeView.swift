@@ -14,6 +14,7 @@ struct RoutineHomeView: View {
 
     @StateObject private var routineViewModel: RoutineHomeViewModel
     @StateObject private var cycleStore = CycleStore()
+    @EnvironmentObject private var localizationManager: LocalizationManager
     @State private var selectedDate = Date()
 
     init(selectedTab: Binding<MainTabView.CurrentTab>, routineService: RoutineServiceProtocol) {
@@ -153,7 +154,7 @@ struct RoutineHomeView: View {
                 // Daily Routine Header
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(alignment: .center) {
-                        Text("Your daily routine")
+                        Text(L10n.Routines.yourDailyRoutine)
                             .font(.system(size: 22, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -179,7 +180,7 @@ struct RoutineHomeView: View {
                                 showingRoutineSwitcher = true
                             } label: {
                                 HStack(spacing: 4) {
-                                    Text("My routines")
+                                    Text(L10n.Routines.myRoutines)
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     Image(systemName: "chevron.right")
@@ -190,7 +191,7 @@ struct RoutineHomeView: View {
                         }
                     }
 
-                    Text("Tap on a routine to complete")
+                    Text(L10n.Routines.tapToComplete)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
@@ -200,7 +201,7 @@ struct RoutineHomeView: View {
 
                 // Morning Routine Card
                 RoutineCard(
-                    title: "Morning routine",
+                    title: L10n.Routines.morningRoutine,
                     iconName: "sun.max.fill",
                     iconColor: ThemeManager.shared.theme.palette.primary,
                     timeOfDay: .morning,
@@ -220,7 +221,7 @@ struct RoutineHomeView: View {
 
                 // Evening Routine Card
                 RoutineCard(
-                    title: "Evening routine",
+                    title: L10n.Routines.eveningRoutine,
                     iconName: "moon.fill",
                     iconColor: ThemeManager.shared.theme.palette.primary,
                     timeOfDay: .evening,
@@ -241,7 +242,7 @@ struct RoutineHomeView: View {
                 // Weekly Routine (if available)
                 if let weeklySteps = generateWeeklyRoutine(), !weeklySteps.isEmpty {
                     RoutineCard(
-                        title: "Weekly routine",
+                        title: L10n.Routines.weeklyRoutine,
                         iconName: "calendar",
                         iconColor: ThemeManager.shared.theme.palette.secondary,
                         timeOfDay: .weekly,
@@ -250,7 +251,7 @@ struct RoutineHomeView: View {
                         selectedDate: selectedDate,
                         onRoutineTap: {
                             showingRoutineDetail = RoutineDetailData(
-                                title: "Weekly routine",
+                                title: L10n.Routines.weeklyRoutine,
                                 iconName: "calendar",
                                 iconColor: ThemeManager.shared.theme.palette.secondary,
                                 steps: weeklySteps
@@ -292,39 +293,39 @@ struct RoutineHomeView: View {
         return [
             RoutineStepDetail(
                 id: "morning_cleanser_0",
-                title: "Gentle Cleanser",
-                description: "Oil-free gel cleanser – reduces shine, clears pores",
+                title: L10n.Routines.Fallback.Title.morningCleanser,
+                description: L10n.Routines.Fallback.Desc.morningCleanser,
                 stepType: .cleanser,
                 timeOfDay: .morning,
-                why: "Removes overnight oil buildup and prepares skin for treatments",
-                how: "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water"
+                why: L10n.Routines.Fallback.Why.morningCleanser,
+                how: L10n.Routines.Fallback.How.morningCleanser
             ),
             RoutineStepDetail(
                 id: "morning_faceSerum_1",
-                title: "Toner",
-                description: "Balances pH and prepares skin for next steps",
+                title: L10n.Routines.Fallback.Title.morningToner,
+                description: L10n.Routines.Fallback.Desc.morningToner,
                 stepType: .faceSerum,
                 timeOfDay: .morning,
-                why: "Restores skin's natural pH balance and enhances product absorption",
-                how: "Apply with cotton pad or hands, pat gently until absorbed"
+                why: L10n.Routines.Fallback.Why.morningToner,
+                how: L10n.Routines.Fallback.How.morningToner
             ),
             RoutineStepDetail(
                 id: "morning_moisturizer_2",
-                title: "Moisturizer",
-                description: "Lightweight gel moisturizer – hydrates without greasiness",
+                title: L10n.Routines.Fallback.Title.morningMoisturizer,
+                description: L10n.Routines.Fallback.Desc.morningMoisturizer,
                 stepType: .moisturizer,
                 timeOfDay: .morning,
-                why: "Provides essential hydration and creates a protective barrier",
-                how: "Apply a pea-sized amount, massage in upward circular motions"
+                why: L10n.Routines.Fallback.Why.morningMoisturizer,
+                how: L10n.Routines.Fallback.How.morningMoisturizer
             ),
             RoutineStepDetail(
                 id: "morning_sunscreen_3",
-                title: "Sunscreen",
-                description: "SPF 30+ broad spectrum – protects against sun damage",
+                title: L10n.Routines.Fallback.Title.morningSunscreen,
+                description: L10n.Routines.Fallback.Desc.morningSunscreen,
                 stepType: .sunscreen,
                 timeOfDay: .morning,
-                why: "Prevents UV damage, premature aging, and skin cancer",
-                how: "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
+                why: L10n.Routines.Fallback.Why.morningSunscreen,
+                how: L10n.Routines.Fallback.How.morningSunscreen
             )
         ]
     }
@@ -355,30 +356,30 @@ struct RoutineHomeView: View {
         return [
             RoutineStepDetail(
                 id: "evening_cleanser_0",
-                title: "Gentle Cleanser",
-                description: "Oil-free gel cleanser – removes daily buildup",
+                title: L10n.Routines.Fallback.Title.eveningCleanser,
+                description: L10n.Routines.Fallback.Desc.eveningCleanser,
                 stepType: .cleanser,
                 timeOfDay: .evening,
-                why: "Removes makeup, sunscreen, and daily pollutants",
-                how: "Apply to dry skin first, then add water and massage, rinse thoroughly"
+                why: L10n.Routines.Fallback.Why.eveningCleanser,
+                how: L10n.Routines.Fallback.How.eveningCleanser
             ),
             RoutineStepDetail(
                 id: "evening_faceSerum_1",
-                title: "Face Serum",
-                description: "Targeted serum for your skin concerns",
+                title: L10n.Routines.Fallback.Title.eveningSerum,
+                description: L10n.Routines.Fallback.Desc.eveningSerum,
                 stepType: .faceSerum,
                 timeOfDay: .evening,
-                why: "Active ingredients work best overnight when skin is in repair mode",
-                how: "Apply 2-3 drops, pat gently until absorbed, avoid eye area"
+                why: L10n.Routines.Fallback.Why.eveningSerum,
+                how: L10n.Routines.Fallback.How.eveningSerum
             ),
             RoutineStepDetail(
                 id: "evening_moisturizer_2",
-                title: "Night Moisturizer",
-                description: "Rich cream moisturizer – repairs while you sleep",
+                title: L10n.Routines.Fallback.Title.eveningMoisturizer,
+                description: L10n.Routines.Fallback.Desc.eveningMoisturizer,
                 stepType: .moisturizer,
                 timeOfDay: .evening,
-                why: "Provides deep hydration and supports overnight skin repair",
-                how: "Apply generously, massage in upward motions, let absorb before bed"
+                why: L10n.Routines.Fallback.Why.eveningMoisturizer,
+                how: L10n.Routines.Fallback.How.eveningMoisturizer
             )
         ]
     }
@@ -411,19 +412,19 @@ struct RoutineHomeView: View {
         if hour < 12 {
             // Morning messages
             let morningMessages = [
-                "Today's focus: hydration — don't skip your moisturizer 💧",
-                "It's sunny outside, SPF is your best defense ☀️",
-                "Start your day with clean, refreshed skin ✨",
-                "Your morning routine sets the tone for the day 🌅"
+                L10n.Routines.Coach.Morning.hydration,
+                L10n.Routines.Coach.Morning.spf,
+                L10n.Routines.Coach.Morning.refresh,
+                L10n.Routines.Coach.Morning.tone
             ]
             return morningMessages.randomElement() ?? morningMessages[0]
         } else {
             // Evening messages
             let eveningMessages = [
-                "Time to unwind and treat your skin 🌙",
-                "Your skin repairs while you sleep — give it the best care 💤",
-                "Evening routine is your skin's recovery time 🛌",
-                "End the day with a relaxing skincare ritual 🧴"
+                L10n.Routines.Coach.Evening.unwind,
+                L10n.Routines.Coach.Evening.repair,
+                L10n.Routines.Coach.Evening.recovery,
+                L10n.Routines.Coach.Evening.ritual
             ]
             return eveningMessages.randomElement() ?? eveningMessages[0]
         }}
@@ -509,7 +510,7 @@ private struct RoutineHeaderView: View {
                         .font(ThemeManager.shared.theme.typo.h2.weight(.semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
-                    Text("Today")
+                    Text(L10n.Routines.today)
                         .font(ThemeManager.shared.theme.typo.caption)
                         .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
                 }    }        .padding(.top, 8)
@@ -704,7 +705,7 @@ private struct RoutineCard: View {
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .multilineTextAlignment(.leading)
 
-                        Text("\(completedCount)/\(productCount) completed")
+                        Text(L10n.Routines.progressFormat(completed: completedCount, total: productCount, completedText: L10n.Routines.completed))
                             .font(.system(size: 14))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -714,7 +715,7 @@ private struct RoutineCard: View {
                     // Progress indicator and arrow
                     HStack(spacing: 8) {
                         VStack(spacing: 2) {
-                            Text("\(Int(progressPercentage * 100))%")
+                            Text(L10n.Routines.progressPercentage(Int(progressPercentage * 100)))
                                 .font(.system(size: 12, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         }
@@ -871,12 +872,12 @@ private struct UVIndexCard: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Do you want to see daily UV index here?")
+                    Text(L10n.Routines.UV.question)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.leading)
 
-                    Text("See crucial information about the UV levels based on your location and skin characteristics.")
+                    Text(L10n.Routines.UV.description)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.leading)
@@ -891,7 +892,7 @@ private struct UVIndexCard: View {
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.info)
 
-                Text("Recommended 50 SPF")
+                Text(L10n.Routines.UV.recommended)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -1063,7 +1064,7 @@ struct RoutineStepDetailView: View {
                 .padding(.bottom, 20)
             }
             .background(ThemeManager.shared.theme.palette.background)
-            .navigationTitle("Step Details")
+            .navigationTitle(L10n.Routines.Detail.stepDetails)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.light, for: .navigationBar)
             .toolbar {
@@ -1085,9 +1086,9 @@ struct RoutineStepDetailView: View {
 
     private func adaptationSection(adapted: AdaptedStepDetail) -> some View {
         let isCycleAdaptation = ["menstrual", "follicular", "ovulatory", "luteal"].contains(adapted.adaptation?.contextKey ?? "")
-        let sectionTitle = isCycleAdaptation ? "Cycle Adaptation" : "Weather Adaptation"
+        let sectionTitle = isCycleAdaptation ? L10n.Routines.Detail.cycleAdaptation : L10n.Routines.Detail.weatherAdaptation
         let sectionIcon = isCycleAdaptation ? "waveform.path.ecg" : "sun.max.fill"
-        let sectionSubtitle = isCycleAdaptation ? "Based on your cycle" : "Based on weather"
+        let sectionSubtitle = isCycleAdaptation ? L10n.Routines.Detail.basedOnCycle : L10n.Routines.Detail.basedOnWeather
 
         return VStack(alignment: .leading, spacing: 10) {
             // Section Header with Badge
@@ -1124,7 +1125,7 @@ struct RoutineStepDetailView: View {
                     .font(.system(size: 11, weight: .bold))
                     .foregroundColor(adapted.emphasisLevel.color)
 
-                Text("• \(sectionSubtitle)")
+                Text(L10n.Routines.sectionSubtitleBullet(sectionSubtitle))
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             }
@@ -1173,18 +1174,18 @@ struct RoutineSwitcherView: View {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Choose Routine")
+                    Text(L10n.Routines.chooseRoutine)
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Select your active routine")
+                    Text(L10n.Routines.selectActiveRoutine)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }.padding(.top, 15)
 
                 Spacer()
 
-                Button("Cancel") {
+                Button(L10n.Common.cancel) {
                     dismiss()
                 }        .font(.system(size: 16, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.primary)
@@ -1198,11 +1199,11 @@ struct RoutineSwitcherView: View {
                         .font(.system(size: 32, weight: .light))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
 
-                    Text("No saved routines")
+                    Text(L10n.Routines.noSavedRoutines)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Save routines from the Discover tab to see them here")
+                    Text(L10n.Routines.saveFromDiscover)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -1281,7 +1282,7 @@ private struct RoutineSwitcherCard: View {
                         HStack(spacing: 4) {
                             Image(systemName: "list.bullet")
                                 .font(.system(size: 10, weight: .medium))
-                            Text("\(routine.stepCount) steps")
+                            Text(L10n.Routines.stepsCount(routine.stepCount))
                                 .font(.system(size: 11, weight: .medium))
                         }                .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
 

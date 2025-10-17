@@ -34,10 +34,10 @@ struct CycleSetupView: View {
             VStack(alignment: .leading, spacing: 0) {
                 // Title section
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Track Your Cycle")
+                    Text(L10n.Onboarding.Cycle.title)
                         .font(ThemeManager.shared.theme.typo.h1)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    Text("Your skincare evolves with you — routines adapt to each phase.")
+                    Text(L10n.Onboarding.Cycle.subtitle)
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -76,7 +76,7 @@ struct CycleSetupView: View {
                         VStack(spacing: 16) {
                             // Last Period Start Date
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("When did your last period start?")
+                                Text(L10n.Onboarding.Cycle.lastPeriodQuestion)
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -111,7 +111,7 @@ struct CycleSetupView: View {
 
                                 if showDatePicker {
                                     DatePicker(
-                                        "Select Date",
+                                        L10n.Onboarding.Cycle.selectDate,
                                         selection: $lastPeriodDate,
                                         in: ...Date(),
                                         displayedComponents: .date
@@ -135,13 +135,13 @@ struct CycleSetupView: View {
                             // Cycle Length
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
-                                    Text("Average cycle length")
+                                    Text(L10n.Onboarding.Cycle.averageCycleLength)
                                         .font(.system(size: 14, weight: .semibold))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                                     Spacer()
 
-                                    Text("\(Int(cycleLength)) days")
+                                    Text(L10n.Onboarding.Cycle.cycleLengthValue(Int(cycleLength)))
                                         .font(.system(size: 14, weight: .bold))
                                         .foregroundColor(hasEditedCycleLength ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.textMuted)
                                 }
@@ -153,7 +153,7 @@ struct CycleSetupView: View {
                                         hasUserEditedCycleData = true
                                     }
 
-                                Text("Typical range: 21-35 days")
+                                Text(L10n.Onboarding.Cycle.cycleLengthRange)
                                     .font(.system(size: 11))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                             }
@@ -170,13 +170,13 @@ struct CycleSetupView: View {
                             // Period Length
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
-                                    Text("Period length")
+                                    Text(L10n.Onboarding.Cycle.periodLength)
                                         .font(.system(size: 14, weight: .semibold))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                                     Spacer()
 
-                                    Text("\(Int(periodLength)) days")
+                                    Text(L10n.Onboarding.Cycle.periodLengthValue(Int(periodLength)))
                                         .font(.system(size: 14, weight: .bold))
                                         .foregroundColor(hasEditedPeriodLength ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.textMuted)
                                 }
@@ -188,7 +188,7 @@ struct CycleSetupView: View {
                                         hasUserEditedCycleData = true
                                     }
 
-                                Text("Typical range: 3-7 days")
+                                Text(L10n.Onboarding.Cycle.periodLengthRange)
                                     .font(.system(size: 11))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                             }
@@ -208,7 +208,7 @@ struct CycleSetupView: View {
                                     .font(.system(size: 12))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
 
-                                Text("Your cycle data stays private on your device")
+                                Text(L10n.Onboarding.Cycle.privacyNote)
                                     .font(.system(size: 12))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             }
@@ -237,7 +237,7 @@ struct CycleSetupView: View {
                         HStack(spacing: 8) {
                             Text("✨")
                                 .font(.system(size: 16))
-                            Text("Enable Cycle-Adaptive Routines")
+                            Text(L10n.Onboarding.Cycle.enableAdaptive)
                                 .font(.system(size: 16, weight: .semibold))
                         }
                     }
@@ -250,7 +250,7 @@ struct CycleSetupView: View {
                         saveCycleDataLocally()
                         onNext(nil)
                     } label: {
-                        Text("Skip for now")
+                        Text(L10n.Onboarding.Cycle.skipForNow)
                     }
                     .buttonStyle(GhostButtonStyle())
                 }
@@ -261,18 +261,18 @@ struct CycleSetupView: View {
         }
         .onChange(of: cs) { ThemeManager.shared.refreshForSystemChange($0) }
         .animation(.easeInOut, value: showDatePicker)
-        .alert("Use Default Averages?", isPresented: $showDefaultDataAlert) {
-            Button("Edit First", role: .cancel) {
+        .alert(L10n.Onboarding.Cycle.Alert.title, isPresented: $showDefaultDataAlert) {
+            Button(L10n.Onboarding.Cycle.Alert.editFirst, role: .cancel) {
                 // Just close the alert
             }
-            Button("Continue") {
+            Button(L10n.Onboarding.Cycle.Alert.continue) {
                 // User confirmed to use defaults
                 saveCycleDataLocally()
                 // Show paywall
                 showPaywall = true
             }
         } message: {
-            Text("Would you like to use these default averages (28-day cycle, 5-day period) or update them first to match your cycle?")
+            Text(L10n.Onboarding.Cycle.Alert.message)
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView(

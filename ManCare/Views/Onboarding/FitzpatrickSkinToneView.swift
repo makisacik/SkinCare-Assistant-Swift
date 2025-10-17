@@ -28,10 +28,10 @@ struct FitzpatrickSkinToneView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Title section
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("What's your skin tone?")
+                        Text(L10n.Onboarding.Fitzpatrick.title)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        Text("This helps us recommend the right SPF and UV protection for your skin.")
+                        Text(L10n.Onboarding.Fitzpatrick.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -48,7 +48,7 @@ struct FitzpatrickSkinToneView: View {
                                 }
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel(Text(skinTone.title))
-                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityHint(Text(L10n.Onboarding.SkinType.tapToSelect))
                                 .accessibilityAddTraits(selection == skinTone ? .isSelected : [])
                         }
                     }
@@ -61,7 +61,7 @@ struct FitzpatrickSkinToneView: View {
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                         onContinue(picked)
                     } label: {
-                        Text("Continue")
+                        Text(L10n.Onboarding.Fitzpatrick.continue)
                     }
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(selection == nil)

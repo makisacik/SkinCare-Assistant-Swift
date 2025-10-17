@@ -309,9 +309,9 @@ struct EveningRoutineCompletionView: View {
                 }
             )
         }
-        .alert("Enable Cycle-Adaptive Routine?", isPresented: $showEnableConfirmation) {
-            Button("Cancel", role: .cancel) { }
-            Button("Enable") {
+        .alert(L10n.Routines.CyclePromotion.alertTitle, isPresented: $showEnableConfirmation) {
+            Button(L10n.Common.cancel, role: .cancel) { }
+            Button(L10n.Common.enable) {
                 Task {
                     await performEnableCycleTracking()
                 }
@@ -319,12 +319,12 @@ struct EveningRoutineCompletionView: View {
         } message: {
             let phase = cycleStore.cycleData.currentPhase(for: selectedDate)
             let day = currentCycleDay
-            Text("Your routine will automatically adapt based on your cycle phase.\n\nCurrent Phase: \(phase.title) (Day \(day))")
+            Text(L10n.Routines.Adaptation.cycleInfo(phase: phase.title, day: day))
         }
         .fullScreenCover(item: $companionLaunch) { launch in
             CompanionSessionView(
                 routineId: "evening_routine",
-                routineName: "Evening Routine",
+                routineName: L10n.Routines.eveningRoutine,
                 steps: launch.steps,
                 selectedDate: launch.selectedDate,
                 completionViewModel: completionViewModel,
@@ -356,7 +356,7 @@ struct EveningRoutineCompletionView: View {
                 VStack(spacing: 16) {
                     // Title and decorations
                     HStack {
-                        Text("EVENING ROUTINE")
+                        Text(L10n.Routines.eveningRoutine.uppercased())
                             .font(.system(size: 24, weight: .black))
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
@@ -390,7 +390,7 @@ struct EveningRoutineCompletionView: View {
             Spacer()
 
             // Completion percentage
-            Text("\(totalSteps > 0 ? Int((Double(completedStepsCount) / Double(totalSteps)) * 100) : 0)%")
+            Text(L10n.Routines.progressPercentage(totalSteps > 0 ? Int((Double(completedStepsCount) / Double(totalSteps)) * 100) : 0))
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
         }    .padding(.horizontal, 20)
@@ -404,11 +404,11 @@ struct EveningRoutineCompletionView: View {
             // Section header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Steps")
+                    Text(L10n.Routines.steps)
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("\(totalSteps) products")
+                    Text(L10n.Routines.productsCount(totalSteps))
                         .font(.system(size: 16))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
@@ -419,7 +419,7 @@ struct EveningRoutineCompletionView: View {
 
                 if cycleIsEnabled {
                     // Cycle is enabled - show status
-                    Text("Routine adapted to your cycle")
+                    Text(L10n.Routines.Adaptation.adaptedToCycle)
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 } else {
@@ -432,7 +432,7 @@ struct EveningRoutineCompletionView: View {
                             HStack(spacing: 4) {
                                 Text("✨")
                                     .font(.system(size: 12))
-                                Text("Enable Cycle-Adaptive Routines")
+                                Text(L10n.Routines.Adaptation.enableCycleAdaptive)
                                     .font(.system(size: 13, weight: .semibold))
                             }
                             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
@@ -821,7 +821,7 @@ private struct DetailedStepRow: View {
                 Button {
                     onAddProduct()
                 } label: {
-                    Text("+ Add your own product")
+                    Text(L10n.Routines.Completion.addYourProduct)
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .padding(.horizontal, 10)
@@ -848,11 +848,11 @@ private struct DetailedStepRow: View {
 
                             // Show label based on adaptation source
                             if ["menstrual", "follicular", "ovulatory", "luteal"].contains(adapted.adaptation?.contextKey ?? "") {
-                                Text("• Cycle Adapted")
+                                Text(L10n.Routines.Completion.cycleAdapted)
                                     .font(.system(size: 10, weight: .medium))
                                     .foregroundColor(adapted.emphasisLevel.color.opacity(0.7))
                             } else {
-                                Text("• Based on Weather")
+                                Text(L10n.Routines.Completion.basedOnWeather)
                                     .font(.system(size: 10, weight: .medium))
                                     .foregroundColor(adapted.emphasisLevel.color.opacity(0.7))
                             }
@@ -927,7 +927,7 @@ private struct DetailedStepRow: View {
                 }        }
 
             // Completion text
-            Text(isCompleted ? "Done" : "Tap to complete")
+            Text(isCompleted ? L10n.Routines.stepCompleted : L10n.Routines.stepTapToComplete)
                 .font(.system(size: 12, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 .padding(.top, 4)
@@ -1011,7 +1011,7 @@ private struct StepProductSelectionSheet: View {
                                             .font(.system(size: 20, weight: .medium))
                                             .foregroundColor(ThemeManager.shared.theme.palette.info)
 
-                                        Text("Add New \(step.stepType.displayName)")
+                                        Text(L10n.Routines.Products.addNew(step.stepType.displayName))
                                             .font(.system(size: 16, weight: .medium))
                                             .foregroundColor(ThemeManager.shared.theme.palette.info)
 
@@ -1279,11 +1279,11 @@ private struct StepProductSelectionSheet: View {
 
                     // Text
                     VStack(spacing: 6) {
-                        Text("No \(productType.displayName) Added")
+                        Text(L10n.Routines.Products.noProductAdded(productType.displayName))
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("You don't have any \(productType.displayName.lowercased()) products yet. Add one to get started!")
+                        Text(L10n.Routines.Products.noProductsYet(productType.displayName.lowercased()))
                             .font(.system(size: 14))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             .multilineTextAlignment(.center)
@@ -1303,11 +1303,11 @@ private struct StepProductSelectionSheet: View {
                                         .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
                                     VStack(spacing: 2) {
-                                        Text("Scan Product")
+                                        Text(L10n.Routines.Products.scanProduct)
                                             .font(.system(size: 13, weight: .semibold))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
-                                        Text("Take a photo to automatically extract product information")
+                                        Text(L10n.Routines.Products.scanDescription)
                                             .font(.system(size: 11))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
                                             .multilineTextAlignment(.center)
@@ -1325,7 +1325,7 @@ private struct StepProductSelectionSheet: View {
 
                             // Or Text
                             VStack {
-                                Text("Or")
+                                Text(L10n.Routines.Completion.or)
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     .padding(.vertical, 6)
@@ -1341,11 +1341,11 @@ private struct StepProductSelectionSheet: View {
                                         .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
                                     VStack(spacing: 2) {
-                                        Text("Add Manually")
+                                        Text(L10n.Routines.Products.addManually)
                                             .font(.system(size: 13, weight: .semibold))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
-                                        Text("Enter product details manually")
+                                        Text(L10n.Routines.Products.addManuallyDescription)
                                             .font(.system(size: 11))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
                                             .multilineTextAlignment(.center)

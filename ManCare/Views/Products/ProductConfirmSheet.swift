@@ -39,11 +39,11 @@ struct ProductConfirmSheet: View {
                     }
                 }
                 Section {
-                    Button(role: .cancel) { onPick(nil) } label: { Text("None of these") }
+                    Button(role: .cancel) { onPick(nil) } label: { Text(L10n.Products.Confirm.noneOfThese) }
                 }
             }
-            .navigationTitle("Pick your product")
-            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { onPick(nil) } } }
+            .navigationTitle(L10n.Products.Confirm.title)
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button(L10n.Common.cancel) { onPick(nil) } } }
         }
     }
 }

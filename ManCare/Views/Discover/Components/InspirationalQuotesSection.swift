@@ -17,7 +17,7 @@ struct InspirationalQuotesSection: View {
         VStack(spacing: 24) {
             // Section Header
             VStack(spacing: 8) {
-                Text("DAILY DOSE OF INSPIRATION")
+                Text(L10n.Discover.Quotes.title)
                     .font(.system(size: 12, weight: .medium, design: .default))
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .tracking(1.2)
@@ -82,7 +82,7 @@ struct InspirationalQuotesSection: View {
         }
         .sheet(isPresented: $showingShareSheet) {
             ShareSheet(activityItems: [
-                "\(currentQuote.displayText)\n\(currentQuote.displayAuthor)\n\nShared from ManCare"
+                "\(currentQuote.displayText)\n\(currentQuote.displayAuthor)\n\n\(L10n.Discover.Quotes.shareFooter)"
             ])
         }
     }
@@ -91,9 +91,10 @@ struct InspirationalQuotesSection: View {
         guard !quotes.isEmpty else {
             return InspirationalQuote(
                 id: UUID(),
-                text: "Beauty begins the moment you decide to be yourself.",
-                author: "Coco Chanel",
-                category: "Beauty"
+                text: L10n.Discover.Quotes.Fallback.text,
+                author: L10n.Discover.Quotes.Fallback.author,
+                category: L10n.Discover.Quotes.Fallback.category,
+                localizationKey: nil
             )
         }
         return quotes[currentQuoteIndex]
@@ -147,15 +148,17 @@ struct ShareSheet: UIViewControllerRepresentable {
     InspirationalQuotesSection(quotes: [
         InspirationalQuote(
             id: UUID(),
-            text: "My definition of beauty is happiness. I believe that when you are happy, it shines through and makes you a more attractive and beautiful person!",
-            author: "Bianca Balti",
-            category: "Beauty"
+            text: nil,
+            author: nil,
+            category: nil,
+            localizationKey: "quote1"
         ),
         InspirationalQuote(
             id: UUID(),
-            text: "Beauty is not in the face; beauty is a light in the heart.",
-            author: "Kahlil Gibran",
-            category: "Philosophy"
+            text: nil,
+            author: nil,
+            category: nil,
+            localizationKey: "quote2"
         )
     ])
     .background(ThemeManager.shared.theme.palette.background)

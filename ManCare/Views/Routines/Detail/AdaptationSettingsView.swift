@@ -35,25 +35,25 @@ struct AdaptationSettingsView: View {
                 Section {
                     Toggle(isOn: $adaptationEnabled) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Adaptive Mode")
+                            Text(L10n.Routines.Adaptation.adaptiveMode)
                                 .font(.headline)
 
-                            Text("Automatically adjust routine based on context")
+                            Text(L10n.Routines.Adaptation.autoAdjust)
                                 .font(.caption)
                                 .foregroundColor(theme.theme.palette.textSecondary)
                         }
                     }
                     .tint(theme.theme.palette.primary)
                 } header: {
-                    Text("Adaptation")
+                    Text(L10n.Routines.Adaptation.adaptation)
                 } footer: {
-                    Text("When enabled, your routine will adapt based on the selected context type.")
+                    Text(L10n.Routines.Adaptation.whenEnabled)
                 }
 
                 // Adaptation Type Selection
                 if adaptationEnabled {
                     Section {
-                        Picker("Adaptation Type", selection: $selectedAdaptationType) {
+                        Picker(L10n.Routines.AdaptationSettings.adaptationType, selection: $selectedAdaptationType) {
                             ForEach(AdaptationType.allCases, id: \.self) { type in
                                 Text(type.displayName).tag(type)
                             }
@@ -64,7 +64,7 @@ struct AdaptationSettingsView: View {
                             .font(.caption)
                             .foregroundColor(theme.theme.palette.textSecondary)
                     } header: {
-                        Text("Type")
+                        Text(L10n.Routines.Adaptation.type)
                     } footer: {
                         adaptationTypeFooter
                     }
@@ -73,21 +73,21 @@ struct AdaptationSettingsView: View {
                     Section {
                         adaptationPreview
                     } header: {
-                        Text("Preview")
+                        Text(L10n.Routines.Adaptation.preview)
                     }
                 }
             }
-            .navigationTitle("Adaptation Settings")
+            .navigationTitle(L10n.Routines.AdaptationSettings.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(L10n.Routines.AdaptationSettings.cancel) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button(L10n.Routines.AdaptationSettings.save) {
                         Task {
                             await saveSettings()
                         }
@@ -95,8 +95,8 @@ struct AdaptationSettingsView: View {
                     .disabled(isSaving)
                 }
             }
-            .alert("Error", isPresented: $showError) {
-                Button("OK", role: .cancel) {}
+            .alert(L10n.Routines.AdaptationSettings.error, isPresented: $showError) {
+                Button(L10n.Routines.AdaptationSettings.ok, role: .cancel) {}
             } message: {
                 Text(errorMessage)
             }
@@ -107,11 +107,11 @@ struct AdaptationSettingsView: View {
     private var adaptationTypeFooter: some View {
         switch selectedAdaptationType {
         case .cycle:
-            Text("Your routine will adapt based on your menstruation cycle phase.")
+            Text(L10n.Routines.Adaptation.cycleDescription)
         case .seasonal:
-            Text("Your routine will adapt based on real-time weather including UV index, humidity, wind, and temperature. Location permission required.")
+            Text(L10n.Routines.Adaptation.weatherDescription)
         case .skinState:
-            Text("Your routine will adapt based on your current skin condition.")
+            Text(L10n.Routines.Adaptation.skinStateDescription)
         }
     }
 
@@ -122,7 +122,7 @@ struct AdaptationSettingsView: View {
                 Image(systemName: selectedAdaptationType == .cycle ? "drop.fill" : "sun.max.fill")
                     .foregroundColor(theme.theme.palette.primary)
 
-                Text("Today's Adaptation")
+                Text(L10n.Routines.Adaptation.todaysAdaptation)
                     .font(.subheadline)
                     .fontWeight(.semibold)
             }
@@ -145,11 +145,11 @@ struct AdaptationSettingsView: View {
     private var previewText: String {
         switch selectedAdaptationType {
         case .cycle:
-            return "Your routine will be customized based on your current cycle phase, with emphasis on gentle care during sensitive phases and intensive treatments during resilient phases."
+            return L10n.Routines.AdaptationSettings.cyclePreview
         case .seasonal:
-            return "Your routine will adapt based on real-time weather conditions including UV index, humidity, wind, and temperature. Get SPF recommendations, texture adjustments, and active ingredient warnings tailored to today's weather."
+            return L10n.Routines.AdaptationSettings.weatherPreview
         case .skinState:
-            return "Your routine will respond to your current skin condition, adapting to breakouts, dryness, or sensitivity."
+            return L10n.Routines.AdaptationSettings.skinStatePreview
         }
     }
 
@@ -161,7 +161,7 @@ struct AdaptationSettingsView: View {
         if adaptationEnabled && selectedAdaptationType == .cycle {
             if !premiumManager.canUseCycleAdaptation() {
                 await MainActor.run {
-                    errorMessage = "Cycle adaptation requires a premium subscription"
+                    errorMessage = L10n.Routines.AdaptationSettings.premiumRequired
                     showError = true
                 }
                 return
@@ -208,7 +208,8 @@ struct AdaptationSettingsView: View {
             benefits: ["Hydrated skin"],
             isFeatured: false,
             isPremium: false,
-            imageName: "routine-minimalist"
+            imageName: "routine-minimalist",
+            translations: nil
         ),
         isActive: true,
         adaptationEnabled: false

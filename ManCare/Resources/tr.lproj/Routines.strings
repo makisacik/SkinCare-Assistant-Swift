@@ -1,26 +1,594 @@
-/* 
-  Routines.strings (Turkish)
-  ManCare - Rutin ile ilgili metinler
+/*
+Routines.strings (Turkish)
+ManCare - Rutinler ile ilgili metinler
 */
 
 /* General */
 "routines.title" = "Rutinler";
 "routines.morning" = "Sabah Rutini";
 "routines.evening" = "Akşam Rutini";
+"routines.weekly" = "Haftalık Rutin";
+"routines.morningOnly" = "Sabah";
+"routines.eveningOnly" = "Akşam";
+"routines.weeklyOnly" = "Haftalık";
 "routines.create" = "Yeni Rutin Oluştur";
 "routines.noRoutines" = "Henüz rutin yok";
+"routines.yourDailyRoutine" = "Günlük rutininiz";
+"routines.myRoutines" = "Rutinlerim";
+"routines.tapToComplete" = "Tamamlamak için rutine dokunun";
+"routines.today" = "Bugün";
+"routines.chooseRoutine" = "Rutin Seç";
+"routines.selectActiveRoutine" = "Aktif rutininizi seçin";
+"routines.noSavedRoutines" = "Kaydedilmiş rutin yok";
+"routines.saveFromDiscover" = "Rutinleri Keşfet sekmesinden kaydederek burada görün";
+"routines.progressFormat" = "%d/%d %@";
+"routines.progressPercentage" = "%%%d";
+"routines.sectionSubtitleBullet" = "• %@";
+
+/* Steps */
+"routines.steps" = "Adımlar";
+"routines.completed" = "tamamlandı";
+"routines.stepsCount" = "%d adım";
+"routines.stepsCountSingle" = "%d adım";
+"routines.products" = "ürün";
+"routines.productsCount" = "%d ürün";
+"routines.stepsCompleted" = "%d/%d adım tamamlandı";
+"routines.stepCompleted" = "Tamamlandı";
+"routines.stepTapToComplete" = "Tamamlamak için dokun";
+
+/* Step Frequency */
+"routines.frequency.daily" = "Günlük";
+"routines.frequency.everyOtherDay" = "İki günde bir";
+"routines.frequency.twiceWeekly" = "Haftada 2 kez";
+"routines.frequency.weekly" = "Haftalık";
+"routines.frequency.custom" = "Özel";
+
+/* Step Frequency Descriptions */
+"routines.frequency.daily.description" = "Her gün kullanın";
+"routines.frequency.everyOtherDay.description" = "İki günde bir kullanın";
+"routines.frequency.twiceWeekly.description" = "Haftada iki kez kullanın";
+"routines.frequency.weekly.description" = "Haftada bir kez kullanın";
+"routines.frequency.custom.description" = "Özel sıklık ayarla";
+
+/* Generation Errors */
+"routines.generation.error.noRoutineToSave" = "Kaydedilecek rutin yok";
+"routines.generation.error.missingSkinType" = "Lütfen cilt tipinizi seçin";
+"routines.generation.error.missingConcerns" = "Lütfen en az bir cilt probleminizi seçin";
+"routines.generation.error.missingMainGoal" = "Lütfen temel cilt bakımı hedefinizi seçin";
+"routines.generation.error.missingSkinTone" = "Lütfen cilt tonunuzu seçin";
+"routines.generation.error.missingAgeRange" = "Lütfen yaş aralığınızı seçin";
+"routines.generation.error.missingRegion" = "Lütfen bölgenizi seçin";
+"routines.generation.error.generationFailed" = "Rutin oluşturulamadı";
+"routines.generation.error.saveFailed" = "Rutin kaydedilemedi";
 
 /* Product Types / Step Titles */
 "routines.step.cleanser" = "Temizleyici";
-"routines.step.exfoliator" = "Peeling";
+"routines.step.exfoliator" = "Peeling/Cilt Yenileyici";
 "routines.step.retinol" = "Retinol";
 "routines.step.faceSerum" = "Yüz Serumu";
-"routines.step.essence" = "Essens";
+"routines.step.essence" = "Esans";
 "routines.step.toner" = "Tonik";
 "routines.step.moisturizer" = "Nemlendirici";
 "routines.step.sunscreen" = "Güneş Kremi";
 "routines.step.faceMask" = "Yüz Maskesi";
-"routines.step.spotTreatment" = "Leke Bakımı";
+"routines.step.spotTreatment" = "Leke/Sivilce Bakımı";
 "routines.step.eyeCream" = "Göz Kremi";
 "routines.step.facialOil" = "Yüz Yağı";
 
+/* Routine Results */
+"routines.result.personalizedRoutine" = "KİŞİSELLEŞTİRİLMİŞ RUTİNİNİZ";
+"routines.result.basedOnProfile" = "Cilt tipiniz ve seçtiğiniz problemlere göre hazırlandı";
+"routines.result.morningRoutine" = "Sabah Rutini";
+"routines.result.eveningRoutine" = "Akşam Rutini";
+"routines.result.loadingRoutine" = "Rutininiz yükleniyor...";
+"routines.result.startJourney" = "Yolculuğunuza Başlayın";
+"routines.result.stepsCount" = "%d adım";
+"routines.result.stepsCountSingle" = "%d adım";
+
+/* Adaptation */
+"routines.adaptation.cycleAdaptive" = "Döngüye Uyumlu Rutin";
+"routines.adaptation.automaticallyAdapts" = "Her gün otomatik olarak adapte edilir";
+"routines.adaptation.howItAdapts" = "Rutininiz nasıl adapte olur:";
+"routines.adaptation.adaptedToCycle" = "Rutin, döngünüze uyarlandı";
+"routines.adaptation.enableCycleAdaptive" = "Döngüye Uyumlu Rutinleri Etkinleştir";
+"routines.adaptation.adaptiveMode" = "Uyarlanabilir Mod";
+"routines.adaptation.autoAdjust" = "Rutinleri bağlama göre otomatik ayarla";
+"routines.adaptation.adaptation" = "Adaptasyon";
+"routines.adaptation.whenEnabled" = "Etkinleştirildiğinde, rutininiz seçilen bağlam tipine göre adapte olacaktır.";
+"routines.adaptation.type" = "Tip";
+"routines.adaptation.preview" = "Önizleme";
+"routines.adaptation.todaysAdaptation" = "Bugünün Adaptasyonu";
+
+/* Cycle Adaptation Info */
+"routines.adaptation.cycle.info" = "Rutininiz, döngü fazınıza göre otomatik olarak adapte olacaktır.\n\nMevcut Faz: %@ (Gün %d)";
+"routines.adaptation.cycle.description" = "Rutininiz, regl döngüsü fazınıza göre adapte olacaktır.";
+
+/* Cycle Phase Descriptions (for RoutineResultView) */
+"routines.adaptation.cycle.menstrualPhase" = "Menstrüasyon Fazı: Nazik bakım, sert ürünleri atla";
+"routines.adaptation.cycle.follicularPhase" = "Foliküler Faz: Bakım ve yeni ürünler için harika";
+"routines.adaptation.cycle.ovulationPhase" = "Yumurtlama Fazı: Rutininizi sürdürün, doğal ışıltının tadını çıkarın";
+"routines.adaptation.cycle.lutealPhase" = "Luteal Faz: Yağ kontrolü ve sivilce önleme";
+
+/* Weather Adaptation Info */
+"routines.adaptation.weather.description" = "Rutininiz UV indeksi, nem, rüzgar ve sıcaklık dahil gerçek zamanlı hava durumuna göre adapte olacaktır. Konum izni gereklidir.";
+
+/* Skin State Adaptation Info */
+"routines.adaptation.skinState.description" = "Rutininiz mevcut cilt durumunuza göre adapte olacaktır.";
+
+/* Adaptation Settings */
+"routines.adaptationSettings.title" = "Adaptasyon Ayarları";
+"routines.adaptationSettings.adaptationType" = "Adaptasyon Tipi";
+"routines.adaptationSettings.cancel" = "İptal";
+"routines.adaptationSettings.save" = "Kaydet";
+"routines.adaptationSettings.error" = "Hata";
+"routines.adaptationSettings.ok" = "Tamam";
+"routines.adaptationSettings.cyclePreview" = "Rutininiz mevcut döngü fazınıza göre kişiselleştirilecektir; hassas fazlarda nazik bakıma, dirençli fazlarda ise yoğun bakıma odaklanılacaktır.";
+"routines.adaptationSettings.weatherPreview" = "Rutininiz UV indeksi, nem, rüzgar ve sıcaklık dahil gerçek zamanlı hava koşullarına göre adapte edilecektir. Bugüne özel SPF önerileri, doku ayarlamaları ve aktif içerik uyarıları alacaksınız.";
+"routines.adaptationSettings.skinStatePreview" = "Rutininiz, mevcut cilt durumunuza (sivilce, kuruluk veya hassasiyet) yanıt verecek şekilde adapte olacaktır.";
+"routines.adaptationSettings.premiumRequired" = "Döngü adaptasyonu Premium abonelik gerektirir";
+
+/* Detail View */
+"routines.detail.routineComplete" = "Rutin Tamamlandı! 🎉";
+"routines.detail.greatJob" = "Cildinize harika baktınız, tebrikler!";
+"routines.detail.back" = "Geri";
+
+/* Adaptation Detail */
+"routines.adaptationDetail.whyThis" = "Neden Bu?";
+"routines.adaptationDetail.adaptationLevel" = "Adaptasyon Seviyesi";
+"routines.adaptationDetail.guidance" = "Rehberlik";
+"routines.adaptationDetail.source" = "Kaynak";
+"routines.adaptationDetail.warnings" = "Uyarılar";
+"routines.adaptationDetail.originalInstructions" = "Orijinal Talimatlar";
+
+/* Routine Detail */
+"routines.detail.stepDetails" = "Adım Detayları";
+"routines.detail.adaptedRoutine" = "Uyarlanmış Rutin";
+"routines.detail.whyThis" = "Neden Bu?";
+
+/* Phase Briefing */
+"routines.phaseBriefing.dayOfTotal" = "%d/%d. Gün";
+"routines.phaseBriefing.cycleAdaptiveRoutines" = "Döngüye Uyumlu Rutinler";
+"routines.phaseBriefing.personalizeForEachPhase" = "Rutininizi her faza özel kişiselleştirin";
+"routines.phaseBriefing.premium" = "Premium";
+
+/* Products */
+"routines.products.noProductAdded" = "Eklenmiş %@ Yok";
+"routines.products.noProductsYet" = "Henüz koleksiyonunuzda hiç %@ ürününüz yok. Başlamak için bir tane ekleyin!";
+"routines.products.scanProduct" = "Ürünü Tara";
+"routines.products.scanDescription" = "Ürün bilgilerini otomatik olarak çıkarmak için fotoğraf çekin";
+"routines.products.addManually" = "Manuel Ekle";
+"routines.products.addManuallyDescription" = "Ürün detaylarını manuel girin";
+"routines.products.addNew" = "Yeni %@ Ekle";
+
+/* Editing */
+"routines.edit.title" = "Adım Detaylarını Düzenle";
+"routines.edit.stepName" = "Adım Adı";
+"routines.edit.description" = "Açıklama";
+"routines.edit.enterDescription" = "Adım açıklamasını girin...";
+"routines.edit.addNewStep" = "Yeni Adım Ekle";
+"routines.edit.addStepDescription" = "Sabah rutininize yeni bir adım ekleyin";
+"routines.edit.enterStepName" = "Adım adını girin";
+"routines.edit.editStep" = "Adımı Düzenle";
+"routines.edit.editedRoutineTitle" = "Düzenlenmiş Rutin";
+"routines.edit.editedRoutineOneLiner" = "Kişiselleştirilmiş cilt bakımı rutininiz";
+
+/* Mood Tracking */
+"routines.mood.title" = "Bugün nasıl hissediyorsunuz?";
+"routines.mood.description" = "Cilt yolculuğunuzu takip etmek için ruh halinizi seçin";
+
+/* UV Index */
+"routines.uv.question" = "Günlük UV indeksini burada görmek ister misiniz?";
+"routines.uv.description" = "Konumunuza ve cilt özelliklerinize göre UV seviyeleri hakkında önemli bilgileri görün.";
+"routines.uv.recommended" = "Önerilen 50 SPF";
+
+/* Routine Editing */
+"routines.editing.title" = "Rutini Düzenle";
+"routines.editing.save" = "Kaydet";
+"routines.editing.add" = "Ekle";
+"routines.editing.noStepsYet" = "Henüz Adım Yok";
+"routines.editing.addFirstStepDescription" = "Sabah rutininizi oluşturmak için ilk adımınızı ekleyin";
+"routines.editing.addFirstStep" = "İlk Adımı Ekle";
+"routines.editing.routineTitle" = "%@ Rutini";
+"routines.editing.editedRoutineTitle" = "Düzenlenmiş Rutin";
+"routines.editing.editedRoutineOneLiner" = "Kişiselleştirilmiş cilt bakımı rutininiz";
+
+/* Routine Preview */
+"routines.preview.title" = "Değişikliklerinizi Önizleyin";
+"routines.preview.subtitle" = "Kaydetmeden önce kişiselleştirilmiş rutininizi gözden geçirin";
+"routines.preview.saveChanges" = "Değişiklikleri Kaydet";
+"routines.preview.cancel" = "İptal";
+"routines.preview.activeSteps" = "aktif adım";
+"routines.preview.amPm" = "SABAH & AKŞAM";
+"routines.preview.am" = "SABAH";
+"routines.preview.pm" = "AKŞAM";
+
+/* Weather Adaptation */
+"routines.weather.autoAdapt" = "Hava/UV’ye göre otomatik uyum";
+"routines.weather.description" = "Bölgenizdeki gerçek zamanlı hava koşullarına göre kişiselleştirilmiş öneriler alın.";
+"routines.weather.uv" = "UV";
+"routines.weather.humidity" = "Nem";
+"routines.weather.wind" = "Rüzgar";
+"routines.weather.temp" = "Sıcaklık";
+"routines.weather.enableInSettings" = "Ayarlarda Etkinleştir";
+"routines.weather.enableAdaptation" = "Hava Durumu Adaptasyonunu Etkinleştir";
+"routines.weather.adaptedRoutine" = "Hava Durumuna Uyarlanmış Rutin";
+"routines.weather.currentConditions" = "Mevcut koşullar";
+"routines.weather.unableToEnable" = "Etkinleştirilemiyor: %@";
+"routines.weather.recommendedSPF" = "Önerilen SPF";
+"routines.weather.temperature" = "Sıcaklık";
+"routines.weather.windSpeed" = "Rüzgar Hızı";
+"routines.weather.details" = "Hava Durumu Detayları";
+"routines.weather.snow" = "Kar";
+"routines.weather.snowWarning" = "Evet - UV yansıma riski";
+"routines.weather.uvIndex" = "UV İndeksi: %d";
+"routines.weather.uvIndexTitle" = "UV İndeksi";
+"routines.weather.environmentalConditions" = "Çevresel Koşullar";
+"routines.weather.todaysTips" = "Bugünün İpuçları";
+"routines.weather.level" = "Seviye: %d";
+"routines.weather.uvLevelDisplay" = "(%@)";
+"routines.weather.warnings" = "⚠️ Uyarılar";
+"routines.weather.warningBullet" = "• %@";
+"routines.weather.tipBullet" = "•";
+
+/* Completion View */
+"routines.completion.or" = "Veya";
+"routines.completion.addYourProduct" = "+ Kendi ürününüzü ekleyin";
+"routines.completion.cycleAdapted" = "• Döngüye Uyarlandı";
+"routines.completion.basedOnWeather" = "• Hava Durumuna Göre";
+
+/* Product Selection */
+"routines.productSelection.title" = "Ürün Ekle";
+"routines.productSelection.subtitle" = "%@ adımınız için bir ürün seçin";
+"routines.productSelection.searchPlaceholder" = "Ürünlerde ara...";
+"routines.productSelection.attach" = "Ürünü Ekle: %@";
+"routines.productSelection.addNew" = "Yeni Ürün Ekle";
+"routines.productSelection.perfectMatch" = "Mükemmel Eşleşme";
+"routines.productSelection.noCompatible" = "Uyumlu Ürün Yok";
+"routines.productSelection.noCompatibleDescription" = "Koleksiyonunuzda henüz hiç %@ ürününüz yok. Bu adıma eklemek için bir tane ekleyin.";
+"routines.productSelection.addType" = "Yeni %@ Ekle";
+
+/* Companion Mode */
+"routines.companion.preparing" = "Asistan Modu Hazırlanıyor...";
+"routines.companion.loadingStep" = "Adım yükleniyor...";
+"routines.companion.instructions" = "Talimatlar";
+"routines.companion.startTimer" = "Zamanlayıcıyı Başlat (%d s)";
+"routines.companion.done" = "Tamam";
+"routines.companion.skip" = "Atla";
+"routines.companion.pause" = "Durdur";
+"routines.companion.resume" = "Devam Et";
+"routines.companion.proTips" = "Profesyonel İpuçları";
+"routines.companion.adjust" = "Ayarlar";
+"routines.companion.complete" = "Rutin Tamamlandı! 🎉";
+"routines.companion.stepsCompleted" = "%d/%d adımı tamamladınız";
+"routines.companion.doneForToday" = "Bu rutin bugün için tamamlandı";
+"routines.companion.doAgain" = "Tekrar yapmak ister misiniz?";
+"routines.companion.doAgainButton" = "Tekrar Yap";
+"routines.companion.totalTime" = "Toplam Süre";
+"routines.companion.stepsSkipped" = "Atlanan Adımlar";
+"routines.companion.completionRate" = "Tamamlanma Oranı";
+"routines.companion.notification.timerComplete" = "Zamanlayıcı Tamamlandı";
+"routines.companion.notification.timeToApply" = "%@ uygulama zamanı";
+
+/* Cycle Promotion Banner */
+"routines.cyclePromotion.title" = "Rutininizi Döngünüze Uyarlayın";
+"routines.cyclePromotion.subtitlePremium" = "Her faza özel kişiselleştirilmiş cilt bakımı edinin";
+"routines.cyclePromotion.subtitleNonPremium" = "Premium özellik - Kilidi açmak için yükseltin";
+"routines.cyclePromotion.phaseGentle" = "Nazik";
+"routines.cyclePromotion.phaseActive" = "Aktif";
+"routines.cyclePromotion.phaseBalanced" = "Dengeli";
+"routines.cyclePromotion.phaseControl" = "Kontrol";
+"routines.cyclePromotion.enableCycleTracking" = "Döngü Takibini Etkinleştir";
+"routines.cyclePromotion.upgradeToPremium" = "Premium'a Yükselt";
+"routines.cyclePromotion.alertTitle" = "Döngüye Uyumlu Rutini Etkinleştirelim mi?";
+
+/* Adaptation Briefing */
+"routines.adaptationBriefing.tips" = "İpuçları";
+
+/* Routine Result Summary */
+"routines.resultSummary.title" = "Profil Özetiniz";
+"routines.resultSummary.skinType" = "Cilt Tipi";
+"routines.resultSummary.mainGoal" = "Temel Hedef";
+"routines.resultSummary.focusAreas" = "Odak Alanları";
+"routines.resultSummary.selectedCount" = "%d adet seçildi";
+
+/* Step Adaptation Badge */
+"routines.adaptationBadge.skip" = "Atla";
+"routines.adaptationBadge.reduce" = "Azalt";
+"routines.adaptationBadge.normal" = "Normal";
+"routines.adaptationBadge.emphasize" = "Vurgula";
+
+/* Cycle Card */
+"routines.cycleCard.dayNumber" = "%d. Gün";
+"routines.cycleCard.ofTotal" = "/ %d";
+"routines.cycleCard.day" = "gün";
+
+/* Default Product Type Descriptions */
+"routines.productType.description.cleanser" = "Cilt bariyerini soymadan kiri, yağı ve makyajı temizler";
+"routines.productType.description.faceSerum" = "Belirli cilt sorunlarınıza yönelik hedeflenmiş bakım sağlar";
+"routines.productType.description.essence" = "Emilimi artıran, hafif yapılı nemlendirici bakım";
+"routines.productType.description.moisturizer" = "Temel nemlendirme ve cilt bariyeri desteği sağlar";
+"routines.productType.description.sunscreen" = "UV hasarına ve erken yaşlanmaya karşı korur";
+"routines.productType.description.toner" = "Cilt pH'ını dengeler ve sonraki adımlar için hazırlar";
+"routines.productType.description.exfoliator" = "Daha pürüzsüz bir doku için ölü cilt hücrelerini nazikçe temizler";
+"routines.productType.description.faceMask" = "Yoğun beslenme için derinlemesine bakım";
+"routines.productType.description.eyeCream" = "Göz çevresindeki ince çizgilere ve koyu halkalara odaklanır";
+"routines.productType.description.facialOil" = "Besler ve nemi cilde hapseder";
+"routines.productType.description.spotTreatment" = "Sivilceleri ve sorunlu bölgeleri hedefler";
+"routines.productType.description.retinol" = "Hücre yenilenmesini destekleyen yaşlanma karşıtı bakım";
+"routines.productType.description.vitaminC" = "Cilt tonunu aydınlatır ve eşitler";
+"routines.productType.description.niacinamide" = "Gözenekleri küçültür ve cilt dokusunu iyileştirir";
+"routines.productType.description.cleansingOil" = "Makyajı ve güneş kremini etkili bir şekilde çözer";
+"routines.productType.description.cleansingBalm" = "Makyajı ve kirleri eriterek temizler";
+"routines.productType.description.micellarWater" = "Hassas ciltler için durulama gerektirmeyen nazik temizleyici";
+"routines.productType.description.makeupRemover" = "Makyajı hızlı ve etkili bir şekilde çıkarır";
+"routines.productType.description.faceWash" = "Taze ve temiz bir cilt için günlük yüz temizleyici";
+"routines.productType.description.faceSunscreen" = "Yüz için hafif güneş koruması";
+"routines.productType.description.lipBalm" = "Dudakları nemli ve korumalı tutar";
+"routines.productType.description.shaveCream" = "Konforlu tıraş için pürüzsüz kayganlık sağlar";
+"routines.productType.description.aftershave" = "Tıraş sonrası cildi yatıştırır";
+"routines.productType.description.shaveGel" = "Tıraş sırasında cildi destekler";
+"routines.productType.description.bodyLotion" = "Vücut cildini nemlendirir ve yumuşatır";
+"routines.productType.description.bodyWash" = "Vücudu temizler ve ferahlatır";
+"routines.productType.description.bodySunscreen" = "Tüm vücut için güneş koruması";
+"routines.productType.description.handCream" = "Elleri nemlendirir ve korur";
+"routines.productType.description.facialMist" = "Gün boyunca ferahlatır ve nemlendirir";
+"routines.productType.description.chemicalPeel" = "Cilt yenilenmesi için derinlemesine peeling";
+"routines.productType.description.shampoo" = "Saçı ve saç derisini temizler";
+"routines.productType.description.conditioner" = "Saçı yumuşatır ve düğümlerini açar";
+"routines.productType.description.hairOil" = "Saçı besler ve parlaklık katar";
+"routines.productType.description.hairMask" = "Saç için yoğun bakım tedavisi";
+
+/* Default Product Type Why */
+"routines.productType.why.default" = "Cilt bakımı rutininizin temel adımı";
+
+/* Default Product Type How */
+"routines.productType.how.default" = "Ürün ambalajındaki talimatlara göre uygulayın";
+
+/* Weather - UV Levels */
+"routines.weather.uvLevel.low" = "Düşük";
+"routines.weather.uvLevel.moderate" = "Orta";
+"routines.weather.uvLevel.high" = "Yüksek";
+"routines.weather.uvLevel.extreme" = "Çok Yüksek";
+
+/* Weather - SPF Recommendations */
+"routines.weather.spf.30" = "SPF 30";
+"routines.weather.spf.3050" = "SPF 30-50";
+"routines.weather.spf.50plus" = "SPF 50+";
+
+/* Weather - Tips */
+"routines.weather.tip.activeSafe" = "Retinol gibi aktifler güvenle kullanılabilir";
+"routines.weather.tip.antioxidant" = "Antioksidan serum önerilir";
+"routines.weather.tip.reapply2h" = "Güneş kremini 2 saatte bir yenileyin";
+"routines.weather.tip.addAntioxidant" = "Antioksidan serum ekleyin (C Vitamini, EGCG)";
+"routines.weather.tip.stayInShade" = "En yoğun saatlerde (10:00-16:00) gölgede kalın";
+"routines.weather.tip.protectiveClothing" = "Koruyucu giysiler giyin";
+"routines.weather.tip.addHydratingToner" = "Nemlendirici tonik veya Hyaluronik Asit (HA) serum ekleyin";
+"routines.weather.tip.avoidHeavyOils" = "Kalın kapatıcıları veya ağır yağları kullanmaktan kaçının";
+"routines.weather.tip.barrierCream" = "Bariyer kremi veya balmı uygulayın";
+"routines.weather.tip.addCeramide" = "Bariyer desteği için seramid veya skualan ekleyin";
+"routines.weather.tip.oilFree" = "Yağsız formülasyonları tercih edin";
+
+/* Weather - Warnings */
+"routines.weather.warning.avoidMorningActives" = "Sabah rutininizde retinol ve asitlerden kaçının";
+"routines.weather.warning.skipActives" = "Bugün retinol ve güçlü asitleri atlayın";
+"routines.weather.warning.reapply" = "Güneş kremini 1-2 saatte bir yenileyin";
+"routines.weather.warning.avoidOverExfoliating" = "Kuru koşullarda aşırı peeling yapmaktan kaçının";
+"routines.weather.warning.skipHarshPeels" = "Sert peeling ve güçlü retinoidleri atlayın";
+"routines.weather.warning.snowReflection" = "Kar UV ışınlarını yansıtır - Çok Yüksek UV günü gibi davranın";
+
+/* Weather - Texture Adjustments */
+"routines.weather.texture.heavyMoisturizers" = "Daha yoğun nemlendiriciler ve kapatıcılar kullanın";
+"routines.weather.texture.lightGel" = "Daha hafif jel nemlendiriciler kullanın";
+"routines.weather.texture.richProtective" = "Daha zengin, koruyucu nemlendiriciler kullanın";
+"routines.weather.texture.lightMattifying" = "Daha hafif, matlaştırıcı ürünler kullanın";
+"routines.weather.productTexture" = "Ürün Dokusu";
+
+/* Cycle Phases */
+"routines.cycle.phase.menstrual" = "Menstrüasyon (Regl)";
+"routines.cycle.phase.follicular" = "Foliküler";
+"routines.cycle.phase.ovulation" = "Yumurtlama";
+"routines.cycle.phase.luteal" = "Luteal";
+
+/* Cycle Phase Descriptions */
+"routines.cycle.phaseDesc.menstrual" = "1-5. Günler";
+"routines.cycle.phaseDesc.follicular" = "6-13. Günler";
+"routines.cycle.phaseDesc.ovulation" = "14-16. Günler";
+"routines.cycle.phaseDesc.luteal" = "17-28. Günler";
+
+/* Cycle Phase Skincare Tips */
+"routines.cycle.tip.menstrual" = "Cildiniz daha hassas olabilir. Nazik, nemlendirici ürünlere odaklanın ve sert bakımlardan kaçının.";
+"routines.cycle.tip.follicular" = "Cildiniz ışıl ışıl! Yeni ürünleri veya bakımları denemek için harika bir zaman.";
+"routines.cycle.tip.ovulation" = "Cilt en iyi halinde! Rutininizi sürdürün ve doğal ışıltınızın tadını çıkarın.";
+"routines.cycle.tip.luteal" = "Yağ üretimi artar. Daha hafif nemlendiriciler kullanın ve parlamayı kontrol etmek için kil maskeleri ekleyin.";
+
+/* Adaptation Types */
+"routines.adaptation.type.cycleTracking" = "Döngü Takibi";
+"routines.adaptation.type.seasonal" = "Mevsimsel";
+"routines.adaptation.type.skinState" = "Cilt Durumu";
+
+/* Adaptation Type Descriptions */
+"routines.adaptation.typeDesc.cycle" = "Regl döngüsü fazınıza göre rutini uyarlar";
+"routines.adaptation.typeDesc.seasonal" = "Hava ve mevsime göre rutini uyarlar";
+"routines.adaptation.typeDesc.skinState" = "Mevcut cilt durumunuza göre rutini uyarlar";
+
+/* Adaptation Origin */
+"routines.adaptation.origin.default" = "Varsayılan";
+"routines.adaptation.origin.aiRecommended" = "Yapay Zeka Önerisi";
+"routines.adaptation.origin.custom" = "Özel";
+
+/* Session Status */
+"routines.companion.status.active" = "Aktif";
+"routines.companion.status.paused" = "Duraklatıldı";
+"routines.companion.status.completed" = "Tamamlandı";
+"routines.companion.status.abandoned" = "Terk Edildi";
+
+/* Step Types */
+"routines.companion.stepType.instruction" = "Talimat";
+"routines.companion.stepType.timed" = "Zamanlı";
+
+/* Tip Categories */
+"routines.tips.category.application" = "Uygulama";
+"routines.tips.category.technique" = "Teknik";
+"routines.tips.category.timing" = "Zamanlama";
+"routines.tips.category.benefits" = "Faydaları";
+"routines.tips.category.commonMistakes" = "Sık Yapılan Hatalar";
+"routines.tips.category.proTips" = "Profesyonel İpuçları";
+
+/* Fallback Routine Titles */
+"routines.fallback.title.morningCleanser" = "Nazik Temizleyici";
+"routines.fallback.title.morningToner" = "Tonik";
+"routines.fallback.title.morningMoisturizer" = "Nemlendirici";
+"routines.fallback.title.morningSunscreen" = "Güneş Kremi";
+"routines.fallback.title.eveningCleanser" = "Nazik Temizleyici";
+"routines.fallback.title.eveningSerum" = "Yüz Serumu";
+"routines.fallback.title.eveningMoisturizer" = "Gece Nemlendiricisi";
+
+/* Fallback Routine Descriptions */
+"routines.fallback.desc.morningCleanser" = "Yağsız jel temizleyici – parlamayı azaltır, gözenekleri temizler";
+"routines.fallback.desc.morningToner" = "pH'ı dengeler ve cildi sonraki adımlar için hazırlar";
+"routines.fallback.desc.morningMoisturizer" = "Hafif jel nemlendirici – yağlı his bırakmadan nemlendirir";
+"routines.fallback.desc.morningSunscreen" = "SPF 30+ geniş spektrumlu – güneş hasarına karşı korur";
+"routines.fallback.desc.eveningCleanser" = "Yağsız jel temizleyici – günlük kir ve birikintileri temizler";
+"routines.fallback.desc.eveningSerum" = "Cilt sorunlarınıza yönelik hedeflenmiş serum";
+"routines.fallback.desc.eveningMoisturizer" = "Zengin krem nemlendirici – siz uyurken cildi onarır";
+
+/* Fallback Routine Why */
+"routines.fallback.why.morningCleanser" = "Gece biriken yağı temizler ve cildi bakımlara hazırlar";
+"routines.fallback.why.morningToner" = "Cildin doğal pH dengesini geri kazandırır ve ürün emilimini artırır";
+"routines.fallback.why.morningMoisturizer" = "Temel nemlendirmeyi sağlar ve koruyucu bir bariyer oluşturur";
+"routines.fallback.why.morningSunscreen" = "UV hasarını, erken yaşlanmayı ve cilt kanserini önler";
+"routines.fallback.why.eveningCleanser" = "Makyajı, güneş kremini ve günlük kirleticileri temizler";
+"routines.fallback.why.eveningSerum" = "Cilt onarım modundayken aktif içerikler gece boyunca en iyi şekilde çalışır";
+"routines.fallback.why.eveningMoisturizer" = "Derin nemlendirme sağlar ve gece boyunca cilt onarımını destekler";
+
+/* Fallback Routine How */
+"routines.fallback.how.morningCleanser" = "Nemli cilde uygulayın, 30 saniye nazikçe masaj yapın, ılık suyla durulayın";
+"routines.fallback.how.morningToner" = "Pamuk ped veya ellerinizle uygulayın, emilene kadar nazikçe tampon hareketler yapın";
+"routines.fallback.how.morningMoisturizer" = "Bezelye büyüklüğünde uygulayın, yukarı doğru dairesel hareketlerle masaj yapın";
+"routines.fallback.how.morningSunscreen" = "Güneşe çıkmadan 15 dakika önce bolca uygulayın, her 2 saatte bir yenileyin";
+"routines.fallback.how.eveningCleanser" = "Önce kuru cilde uygulayın, sonra su ekleyip masaj yapın, iyice durulayın";
+"routines.fallback.how.eveningSerum" = "2-3 damla uygulayın, emilene kadar nazikçe tampon hareketler yapın, göz çevresinden kaçının";
+"routines.fallback.how.eveningMoisturizer" = "Cömertçe uygulayın, yukarı doğru hareketlerle masaj yapın, yatmadan önce emilmesini bekleyin";
+
+/* Routine Editing Service - Default Titles */
+"routines.editing.defaultTitle.cleanser" = "Nazik Temizleyici";
+"routines.editing.defaultTitle.faceSerum" = "Yüz Serumu";
+"routines.editing.defaultTitle.moisturizer" = "Nemlendirici";
+"routines.editing.defaultTitle.sunscreen" = "Güneş Kremi SPF 30+";
+
+/* Routine Editing Service - Default Descriptions */
+"routines.editing.defaultDesc.cleanser" = "Cilt bariyerini soymadan kiri, yağı ve makyajı temizler";
+"routines.editing.defaultDesc.faceSerum" = "Belirli cilt sorunlarınıza yönelik hedeflenmiş bakım sağlar";
+"routines.editing.defaultDesc.moisturizer" = "Temel nemlendirme ve cilt bariyeri desteği sağlar";
+"routines.editing.defaultDesc.sunscreen" = "UV hasarına ve erken yaşlanmaya karşı korur";
+
+/* Routine Editing Service - Default Why */
+"routines.editing.defaultWhy.cleanser" = "Günlük birikintileri temizlemek ve cildi diğer ürünlere hazırlamak için esastır";
+"routines.editing.defaultWhy.faceSerum" = "Belirli cilt sorunlarınız için hedeflenmiş faydalar sağlar";
+"routines.editing.defaultWhy.moisturizer" = "Cilt nemini korur ve cilt bariyerini destekler";
+"routines.editing.defaultWhy.sunscreen" = "UV hasarını, erken yaşlanmayı ve cilt kanserini önler";
+
+/* Routine Editing Service - Default How */
+"routines.editing.defaultHow.cleanser" = "Nemli cilde uygulayın, 30 saniye nazikçe masaj yapın, iyice durulayın";
+"routines.editing.defaultHow.faceSerum" = "Temiz cilde 2-3 damla uygulayın, emilene kadar nazikçe tampon hareketler yapın";
+"routines.editing.defaultHow.moisturizer" = "Bezelye büyüklüğünde uygulayın, yukarı doğru dairesel hareketlerle masaj yapın";
+"routines.editing.defaultHow.sunscreen" = "Güneşe çıkmadan 15 dakika önce bolca uygulayın, her 2 saatte bir yenileyin";
+
+/* Routine Editing Service - Coach Messages */
+"routines.editing.coach.perfectMatch" = "Mükemmel Eşleşme!";
+"routines.editing.coach.perfectMatchMessage" = "Harika seçim! %@, %@ adımınız için mükemmel bir eşleşme.";
+"routines.editing.coach.typeMismatch" = "Ürün Tipi Uyuşmazlığı";
+"routines.editing.coach.typeMismatchMessage" = "‘%@’ bir %@ ürünü, ancak bu adım %@ için. Adım tipine uygun bir ürün kullanmayı düşünün.";
+"routines.editing.coach.findCompatible" = "Uyumlu Ürün Bul";
+
+/* Coach Tips - Morning */
+"routines.coach.morning.hydration" = "Bugünün odağı: nemlendirme — nemlendiricinizi atlamayın 💧";
+"routines.coach.morning.spf" = "Hava güneşli, SPF en iyi savunmanızdır ☀️";
+"routines.coach.morning.refresh" = "Güne temiz, ferahlamış bir ciltle başlayın ✨";
+"routines.coach.morning.tone" = "Sabah rutininiz günün tonunu belirler 🌅";
+
+/* Coach Tips - Evening */
+"routines.coach.evening.unwind" = "Rahatlama ve cildinizi şımartma zamanı 🌙";
+"routines.coach.evening.repair" = "Siz uyurken cildiniz onarılır — ona en iyi bakımı verin 💤";
+"routines.coach.evening.recovery" = "Akşam rutini cildinizin iyileşme zamanıdır 🛌";
+"routines.coach.evening.ritual" = "Günü rahatlatıcı bir cilt bakımı ritüeliyle sonlandırın 🧴";
+
+/* Adaptation Detail View */
+"routines.adaptationDetail.cycleAdaptation" = "Döngü Adaptasyonu";
+"routines.adaptationDetail.weatherAdaptation" = "Hava Durumu Adaptasyonu";
+"routines.adaptationDetail.basedOnCycle" = "Döngünüze Göre";
+"routines.adaptationDetail.basedOnWeather" = "Hava Durumuna Göre";
+
+/* Frequency Display Names */
+"routines.frequency.dailyAM" = "Günlük (Sabah)";
+"routines.frequency.dailyPM" = "Günlük (Akşam)";
+"routines.frequency.both" = "Günlük (Sabah & Akşam)";
+"routines.frequency.weekly" = "Haftada %d kez";
+"routines.frequency.custom" = "Özel (%@)";
+
+/* Frequency Descriptions */
+"routines.frequency.description.dailyAM" = "Her sabah kullanın";
+"routines.frequency.description.dailyPM" = "Her akşam kullanın";
+"routines.frequency.description.both" = "Sabah ve akşam kullanın";
+"routines.frequency.description.weekly" = "Haftada %d kez kullanın";
+"routines.frequency.description.custom" = "%@ günlerinde kullanın";
+
+/* Product Tips - Cleanser */
+"routines.tips.cleanser.gentleCircular.title" = "Gentle Circular Motion";
+"routines.tips.cleanser.gentleCircular.content" = "Use gentle circular motions when massaging your cleanser. This helps remove dirt and oil without irritating your skin.";
+"routines.tips.cleanser.dampSkin.title" = "Damp Skin First";
+"routines.tips.cleanser.dampSkin.content" = "Always apply cleanser to damp skin. This helps the product spread evenly and work more effectively.";
+"routines.tips.cleanser.thirtySecond.title" = "30-Second Rule";
+"routines.tips.cleanser.thirtySecond.content" = "Massage your cleanser for at least 30 seconds. This gives it time to break down makeup, sunscreen, and impurities.";
+"routines.tips.cleanser.avoidEye.title" = "Avoid Eye Area";
+"routines.tips.cleanser.avoidEye.content" = "Be careful around the delicate eye area. Use a separate gentle eye makeup remover for that region.";
+"routines.tips.cleanser.lukewarm.title" = "Lukewarm Water";
+"routines.tips.cleanser.lukewarm.content" = "Rinse with lukewarm water. Hot water can strip your skin of natural oils, while cold water won't remove the cleanser effectively.";
+
+/* Product Tips - Face Serum */
+"routines.tips.serum.patDontRub.title" = "Pat, Don't Rub";
+"routines.tips.serum.patDontRub.content" = "Gently pat your serum into your skin rather than rubbing. This helps the active ingredients penetrate better.";
+"routines.tips.serum.waitAbsorption.title" = "Wait for Absorption";
+"routines.tips.serum.waitAbsorption.content" = "Wait 1-2 minutes for your serum to fully absorb before applying moisturizer. This prevents pilling and ensures maximum effectiveness.";
+"routines.tips.serum.lessMore.title" = "Less is More";
+"routines.tips.serum.lessMore.content" = "Use only 2-3 drops of serum. More product doesn't mean better results and can cause irritation.";
+"routines.tips.serum.targetAreas.title" = "Target Problem Areas";
+"routines.tips.serum.targetAreas.content" = "Focus on areas that need the most attention, like fine lines, dark spots, or areas of concern.";
+"routines.tips.serum.morningEvening.title" = "Morning vs Evening";
+"routines.tips.serum.morningEvening.content" = "Use vitamin C serums in the morning and retinol serums at night for optimal results.";
+
+/* Product Tips - Moisturizer */
+"routines.tips.moisturizer.upward.title" = "Upward Motion";
+"routines.tips.moisturizer.upward.content" = "Apply moisturizer using upward, outward motions. This helps fight gravity and keeps your skin looking lifted.";
+"routines.tips.moisturizer.peaSized.title" = "Pea-Sized Amount";
+"routines.tips.moisturizer.peaSized.content" = "A pea-sized amount is usually enough for your face. Too much can clog pores and feel heavy.";
+"routines.tips.moisturizer.neckDeco.title" = "Neck and Décolletage";
+"routines.tips.moisturizer.neckDeco.content" = "Don't forget your neck and décolletage! These areas show signs of aging just like your face.";
+"routines.tips.moisturizer.lockMoisture.title" = "Lock in Moisture";
+"routines.tips.moisturizer.lockMoisture.content" = "Apply moisturizer while your skin is still slightly damp from cleansing. This helps lock in extra moisture.";
+"routines.tips.moisturizer.morningNight.title" = "Morning vs Night";
+"routines.tips.moisturizer.morningNight.content" = "Use lighter moisturizers in the morning and richer ones at night when your skin repairs itself.";
+
+/* Product Tips - Sunscreen */
+"routines.tips.sunscreen.quarter.title" = "Quarter Teaspoon Rule";
+"routines.tips.sunscreen.quarter.content" = "Use about a quarter teaspoon of sunscreen for your face. This ensures you get the full SPF protection.";
+"routines.tips.sunscreen.reapply.title" = "Reapply Every 2 Hours";
+"routines.tips.sunscreen.reapply.content" = "Reapply sunscreen every 2 hours when outdoors. Even water-resistant formulas need regular reapplication.";
+"routines.tips.sunscreen.ears.title" = "Don't Forget Ears";
+"routines.tips.sunscreen.ears.content" = "Apply sunscreen to your ears, neck, and any exposed skin. These areas are often forgotten but still need protection.";
+"routines.tips.sunscreen.waitMakeup.title" = "Wait Before Makeup";
+"routines.tips.sunscreen.waitMakeup.content" = "Wait 2-3 minutes after applying sunscreen before putting on makeup. This prevents pilling and ensures even coverage.";
+"routines.tips.sunscreen.yearRound.title" = "Year-Round Protection";
+"routines.tips.sunscreen.yearRound.content" = "Wear sunscreen every day, even in winter and on cloudy days. UV rays can penetrate clouds and cause damage.";
+
+/* Product Tips - Face Sunscreen */
+"routines.tips.faceSunscreen.gentle.title" = "Gentle Application";
+"routines.tips.faceSunscreen.gentle.content" = "Use gentle patting motions when applying face sunscreen. This prevents tugging on delicate facial skin.";
+"routines.tips.faceSunscreen.underMakeup.title" = "Under Makeup";
+"routines.tips.faceSunscreen.underMakeup.content" = "Face sunscreen works great under makeup. Look for formulas labeled 'primer' or 'makeup-friendly'.";
+"routines.tips.faceSunscreen.tzone.title" = "T-Zone Focus";
+"routines.tips.faceSunscreen.tzone.content" = "Pay extra attention to your T-zone (forehead, nose, chin) as these areas tend to be oilier and need more protection.";
+"routines.tips.faceSunscreen.nonComedogenic.title" = "Non-Comedogenic";
+"routines.tips.faceSunscreen.nonComedogenic.content" = "Choose non-comedogenic face sunscreens to avoid clogging pores and causing breakouts.";
+"routines.tips.faceSunscreen.hairline.title" = "Blend to Hairline";
+"routines.tips.faceSunscreen.hairline.content" = "Blend sunscreen all the way to your hairline and jawline. Don't stop at obvious boundaries.";

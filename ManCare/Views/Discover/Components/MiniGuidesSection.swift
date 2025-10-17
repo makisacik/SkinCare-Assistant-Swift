@@ -16,11 +16,11 @@ struct MiniGuidesSection: View {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Mini Guides")
+                    Text(L10n.Discover.Guides.title)
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Quick reads on skincare fundamentals")
+                    Text(L10n.Discover.Guides.subtitle)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -49,19 +49,21 @@ struct MiniGuidesSection: View {
         guides: [
             MiniGuide(
                 id: UUID(),
-                title: "Skincare 101: Build a basic routine",
-                subtitle: "Cleanse, treat, moisturize, protect",
-                minutes: 5,
-                imageName: "skincare-products/basic-kit",
-                category: "Basics"
+                guideKey: "cycleSkin",
+                minutes: 2,
+                imageName: "placeholder",
+                title: nil,
+                subtitle: nil,
+                category: nil
             ),
             MiniGuide(
                 id: UUID(),
-                title: "How your cycle affects skin",
-                subtitle: "Breakouts, sensitivity and glow across phases",
-                minutes: 7,
-                imageName: "skincare-products/cycle-care",
-                category: "Menstrual Health"
+                guideKey: "ampmRoutine",
+                minutes: 4,
+                imageName: "placeholder",
+                title: nil,
+                subtitle: nil,
+                category: nil
             )
         ],
         onTap: { _ in }

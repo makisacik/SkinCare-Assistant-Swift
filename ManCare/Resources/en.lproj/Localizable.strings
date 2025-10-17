@@ -14,6 +14,26 @@
 "common.ok" = "OK";
 "common.yes" = "Yes";
 "common.no" = "No";
+"common.error" = "Error";
+"common.back" = "Back";
+"common.unknownError" = "Unknown error";
+"common.loading" = "Loading…";
+"common.pleaseWait" = "Please wait while we prepare your results";
+"common.noTipsAvailable" = "No tips available";
+"common.tipCounter" = "%d of %d";
+"common.stepCounter" = "%d of %d";
+"common.enable" = "Enable";
+"common.thisMayTakeAFewSeconds" = "This may take a few seconds.";
+"common.pageIndicator" = "Page %d of %d";
+"common.timeOfDay" = "Time of Day";
+"common.bullet" = "•";
+
+/* Seasons */
+"common.season.spring" = "Spring";
+"common.season.summer" = "Summer";
+"common.season.autumn" = "Autumn";
+"common.season.winter" = "Winter";
+"common.season.playbookFormat" = "%@ Skin Playbook";
 
 /* Settings */
 "settings.editProfile" = "Edit Profile";
@@ -22,9 +42,49 @@
 "settings.enablePremium" = "Enable Premium (Test)";
 "settings.disablePremium" = "Disable Premium (Test)";
 
+/* Theme */
+"theme.system" = "System";
+"theme.light" = "Light";
+"theme.dark" = "Dark";
+
 /* Tabs */
 "tabs.routines" = "Routines";
 "tabs.discover" = "Discover";
 "tabs.products" = "My Products";
 "tabs.myself" = "Myself";
+
+/* Debug */
+"debug.premiumTitle" = "Premium Debug";
+"debug.premiumStatus" = "Premium Status";
+"debug.currentStatus" = "Current Status";
+"debug.actions" = "Actions";
+"debug.featureAccess" = "Feature Access";
+"debug.active" = "Active";
+"debug.inactive" = "Inactive";
+"debug.showPaywall" = "Show Paywall";
+"debug.grantPremium" = "Grant Premium (Test)";
+"debug.revokePremium" = "Revoke Premium (Test)";
+"debug.restorePurchases" = "Restore Purchases";
+"debug.featureCreateRoutines" = "Create Routines";
+"debug.featureCycleAdaptation" = "Cycle Adaptation";
+"debug.featureSkinJournal" = "Skin Journal";
+"debug.featureWeatherAdaptation" = "Weather Adaptation";
+"debug.statusUnlimited" = "Unlimited";
+"debug.statusMaxTwo" = "2 max";
+"debug.statusAvailable" = "Available";
+"debug.statusPremiumOnly" = "Premium Only";
+"debug.statusLocked" = "Locked";
+"debug.testPremiumFooter" = "Test premium features by toggling the premium status above. In production, features will be locked behind real StoreKit purchases.";
+
+/* Premium Errors */
+"premium.error.notImplemented" = "This feature is not yet implemented";
+"premium.error.failedVerification" = "Transaction verification failed";
+"premium.error.purchaseFailed" = "Purchase failed";
+"premium.error.restoreFailed" = "Restore failed";
+"premium.error.routineLimitReached" = "You've reached your routine limit. Upgrade to premium to create unlimited routines.";
+"premium.error.featureRequiresPremium" = "%@ requires a premium subscription";
+
+/* Language Names */
+"language.english" = "English";
+"language.turkish" = "Turkish";
 

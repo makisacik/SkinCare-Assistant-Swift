@@ -14,11 +14,11 @@ struct PersonalizedRoutineCard: View {
         Button(action: onTap) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Create your personalized routine")
+                    Text(L10n.Discover.Personalized.title)
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
                     
-                    Text("Intelligent routine creation just for you")
+                    Text(L10n.Discover.Personalized.subtitle)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.leading)

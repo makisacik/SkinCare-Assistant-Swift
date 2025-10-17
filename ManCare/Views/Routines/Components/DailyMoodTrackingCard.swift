@@ -93,11 +93,11 @@ struct DailyMoodTrackingCard: View {
         VStack(alignment: .leading, spacing: 16) {
             // Header
             VStack(alignment: .leading, spacing: 4) {
-                Text("How are you feeling today?")
+                Text(L10n.Routines.Mood.title)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
-                Text("Select your mood to track your skin journey")
+                Text(L10n.Routines.Mood.description)
                     .font(.system(size: 14))
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -184,11 +184,11 @@ struct DailyMoodTrackingCard: View {
                 
                 // Content
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Daily Skin Log")
+                    Text(L10n.SkinJournal.DailyLog.title)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
-                    Text("Capture your skin today")
+                    Text(L10n.SkinJournal.DailyLog.capture)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -257,7 +257,7 @@ struct DailyMoodTrackingCard: View {
             // Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
-                    Text("Daily Skin Log")
+                    Text(L10n.SkinJournal.DailyLog.title)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
@@ -266,7 +266,7 @@ struct DailyMoodTrackingCard: View {
                         .foregroundColor(ThemeManager.shared.theme.palette.success)
                 }
                 
-                Text("Completed for today")
+                Text(L10n.SkinJournal.DailyLog.completed)
                     .font(.system(size: 14))
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }

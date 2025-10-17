@@ -112,6 +112,19 @@ final class RoutineGenerationViewModel: ObservableObject {
         
         Task {
             do {
+                // Check premium status before generating (API call costs money)
+                let premiumManager = PremiumManager.shared
+                let canGenerate = await premiumManager.canCreateRoutine()
+
+                if !canGenerate {
+                    await MainActor.run {
+                        self.error = PremiumError.routineLimitReached
+                        self.isGenerating = false
+                    }
+                    print("❌ Cannot generate routine: limit reached for non-premium user (2 routine max)")
+                    return
+                }
+
                 let savedRoutine = try await routineService.generateAndSaveInitialRoutine(
                     skinType: skinType,
                     concerns: concerns,
@@ -251,23 +264,23 @@ enum RoutineGenerationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noRoutineToSave:
-            return "No routine available to save"
+            return L10n.Routines.GenerationError.noRoutineToSave
         case .missingSkinType:
-            return "Please select your skin type"
+            return L10n.Routines.GenerationError.missingSkinType
         case .missingConcerns:
-            return "Please select at least one skin concern"
+            return L10n.Routines.GenerationError.missingConcerns
         case .missingMainGoal:
-            return "Please select your main skincare goal"
+            return L10n.Routines.GenerationError.missingMainGoal
         case .missingFitzpatrickSkinTone:
-            return "Please select your skin tone"
+            return L10n.Routines.GenerationError.missingSkinTone
         case .missingAgeRange:
-            return "Please select your age range"
+            return L10n.Routines.GenerationError.missingAgeRange
         case .missingRegion:
-            return "Please select your region"
+            return L10n.Routines.GenerationError.missingRegion
         case .generationFailed:
-            return "Failed to generate routine"
+            return L10n.Routines.GenerationError.generationFailed
         case .saveFailed:
-            return "Failed to save routine"
+            return L10n.Routines.GenerationError.saveFailed
         }
     }
 }

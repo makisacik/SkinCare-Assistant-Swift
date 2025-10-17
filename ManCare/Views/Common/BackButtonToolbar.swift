@@ -23,7 +23,7 @@ struct BackButtonToolbar: ViewModifier {
                         HStack(spacing: 6) {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Back")
+                            Text(L10n.Common.back)
                                 .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                         }
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)

@@ -283,15 +283,15 @@ enum SkinJournalError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .photoSaveFailed:
-            return "Failed to save photo"
+            return L10n.SkinJournal.Error.photoSaveFailed
         case .saveFailed:
-            return "Failed to save journal entry"
+            return L10n.SkinJournal.Error.saveFailed
         case .updateFailed:
-            return "Failed to update journal entry"
+            return L10n.SkinJournal.Error.updateFailed
         case .deleteFailed:
-            return "Failed to delete journal entry"
+            return L10n.SkinJournal.Error.deleteFailed
         case .entryNotFound:
-            return "Journal entry not found"
+            return L10n.SkinJournal.Error.entryNotFound
         }
     }
 }

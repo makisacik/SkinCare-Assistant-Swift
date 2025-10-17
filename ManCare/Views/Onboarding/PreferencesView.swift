@@ -30,10 +30,10 @@ struct PreferencesView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Title section
             VStack(alignment: .leading, spacing: 6) {
-                Text("Any preferences?")
+                Text(L10n.Onboarding.Preferences.title)
                     .font(ThemeManager.shared.theme.typo.h1)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                Text("These are optional but help us personalize your routine better.")
+                Text(L10n.Onboarding.Preferences.subtitle)
                     .font(ThemeManager.shared.theme.typo.sub)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -41,36 +41,36 @@ struct PreferencesView: View {
             // Preferences toggles
             VStack(spacing: 16) {
                 PreferenceToggle(
-                    title: "Fragrance-free only",
-                    subtitle: "Avoid products with added fragrances",
+                    title: L10n.Onboarding.Preferences.FragranceFree.title,
+                    subtitle: L10n.Onboarding.Preferences.FragranceFree.subtitle,
                     iconName: "leaf.fill",
                     isOn: $fragranceFreeOnly
                 )
 
                 PreferenceToggle(
-                    title: "Suitable for sensitive skin",
-                    subtitle: "Gentle, non-irritating formulas",
+                    title: L10n.Onboarding.Preferences.SensitiveSkin.title,
+                    subtitle: L10n.Onboarding.Preferences.SensitiveSkin.subtitle,
                     iconName: "heart.fill",
                     isOn: $suitableForSensitiveSkin
                 )
 
                 PreferenceToggle(
-                    title: "Natural ingredients",
-                    subtitle: "Prefer plant-based and natural components",
+                    title: L10n.Onboarding.Preferences.Natural.title,
+                    subtitle: L10n.Onboarding.Preferences.Natural.subtitle,
                     iconName: "leaf.circle.fill",
                     isOn: $naturalIngredients
                 )
 
                 PreferenceToggle(
-                    title: "Cruelty-free",
-                    subtitle: "No animal testing",
+                    title: L10n.Onboarding.Preferences.CrueltyFree.title,
+                    subtitle: L10n.Onboarding.Preferences.CrueltyFree.subtitle,
                     iconName: "pawprint.fill",
                     isOn: $crueltyFree
                 )
 
                 PreferenceToggle(
-                    title: "Vegan-friendly",
-                    subtitle: "No animal-derived ingredients",
+                    title: L10n.Onboarding.Preferences.Vegan.title,
+                    subtitle: L10n.Onboarding.Preferences.Vegan.subtitle,
                     iconName: "leaf.arrow.circlepath",
                     isOn: $veganFriendly
                 )
@@ -91,7 +91,7 @@ struct PreferencesView: View {
                     )
                     onContinue(preferences)
                 } label: {
-                    Text("Continue with Preferences")
+                    Text(L10n.Onboarding.Preferences.continueWithPreferences)
                 }
                 .buttonStyle(PrimaryButtonStyle())
 
@@ -99,7 +99,7 @@ struct PreferencesView: View {
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     onSkip()
                 } label: {
-                    Text("Skip for now")
+                    Text(L10n.Onboarding.Preferences.skipForNow)
                 }
                 .buttonStyle(GhostButtonStyle())
                 
@@ -111,7 +111,7 @@ struct PreferencesView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "bolt.fill")
                             .font(.system(size: 14, weight: .semibold))
-                        Text("Continue without API call")
+                        Text(L10n.Onboarding.Preferences.continueWithoutAPI)
                             .font(.system(size: 14, weight: .medium))
                     }
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)

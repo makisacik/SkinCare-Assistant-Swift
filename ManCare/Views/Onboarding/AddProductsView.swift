@@ -26,7 +26,7 @@ struct AddProductsView: View {
                         // Spacer removed - now handled by page indicator in OnboardingFlowView
                         
                         // Main headline
-                        Text("Add or Scan Products")
+                        Text(L10n.Onboarding.AddProducts.title)
                             .font(.system(size: 32, weight: .bold, design: .serif))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .multilineTextAlignment(.center)
@@ -47,7 +47,7 @@ struct AddProductsView: View {
                         .padding(.horizontal, 20)
                     
                     // Descriptive text below image
-                    Text("Upload or photograph your skincare products — Glowie identifies them and explains what's inside.")
+                    Text(L10n.Onboarding.AddProducts.description)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -64,7 +64,7 @@ struct AddProductsView: View {
                         onNext()
                     } label: {
                         HStack(spacing: 8) {
-                            Text("Next")
+                            Text(L10n.Onboarding.AddProducts.next)
                                 .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 16, weight: .semibold))

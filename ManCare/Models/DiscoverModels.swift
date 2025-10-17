@@ -27,7 +27,7 @@ struct HeroBanner: Codable, Identifiable {
         // Generate consistent ID from title for Identifiable conformance
         UUID(uuidString: title.hash.magnitude.description.padding(toLength: 32, withPad: "0", startingAt: 0)) ?? UUID()
     }
-    
+
     let title: String
     let subtitle: String
     let ctaText: String
@@ -35,16 +35,16 @@ struct HeroBanner: Codable, Identifiable {
     let startDate: Date
     let endDate: Date
     let ticker: TickerStats
-    
+
     enum CodingKeys: String, CodingKey {
         case title, subtitle, ctaText, themeColor, startDate, endDate, ticker
     }
-    
+
     var isActive: Bool {
         let now = Date()
         return now >= startDate && now <= endDate
     }
-    
+
     var gradientColors: [Color] {
         let baseColor = Color(hex: themeColor)
         return [
@@ -60,9 +60,9 @@ struct HeroBanner: Codable, Identifiable {
 struct TickerStats: Codable {
     let routines: Int
     let guides: Int
-    
+
     var displayText: String {
-        "New this week: +\(routines) routines · +\(guides) guides"
+        L10n.Discover.Ticker.newThisWeek(routines: routines, guides: guides)
     }
 }
 
@@ -73,10 +73,10 @@ struct FreshRoutine: Codable, Identifiable {
     let templateId: UUID
     let badge: RoutineBadge
     let updatedAt: Date
-    
+
     func shouldShow(relativeTo now: Date = Date()) -> Bool {
         let daysSinceUpdate = Calendar.current.dateComponents([.day], from: updatedAt, to: now).day ?? 0
-        
+
         switch badge {
         case .new:
             return daysSinceUpdate <= 7
@@ -94,15 +94,15 @@ enum RoutineBadge: String, Codable, CaseIterable {
     case new = "new"
     case updated = "updated"
     case trending = "trending"
-    
+
     var displayText: String {
         switch self {
-        case .new: return "New"
-        case .updated: return "Updated"
-        case .trending: return "Trending"
+        case .new: return L10n.Discover.Badge.new
+        case .updated: return L10n.Discover.Badge.updated
+        case .trending: return L10n.Discover.Badge.trending
         }
     }
-    
+
     var color: Color {
         switch self {
         case .new: return Color(hex: "#4A7D5A") // Green
@@ -110,7 +110,7 @@ enum RoutineBadge: String, Codable, CaseIterable {
         case .trending: return Color(hex: "#B5828C") // Primary/Pink
         }
     }
-    
+
     var icon: String {
         switch self {
         case .new: return "sparkles"
@@ -126,11 +126,11 @@ struct SeasonalPlaybook: Codable {
     let season: Season
     let articles: [String]
     let ctaText: String
-    
+
     var displayTitle: String {
-        "\(season.emoji) \(season.displayName) Skin Playbook"
+        String(format: L10n.Common.Season.playbookFormat, "\(season.emoji) \(season.displayName)")
     }
-    
+
     var gradientColors: [Color] {
         season.gradientColors
     }
@@ -143,16 +143,16 @@ enum Season: String, Codable, CaseIterable {
     case summer = "summer"
     case autumn = "autumn"
     case winter = "winter"
-    
+
     var displayName: String {
         switch self {
-        case .spring: return "Spring"
-        case .summer: return "Summer"
-        case .autumn: return "Autumn"
-        case .winter: return "Winter"
+        case .spring: return L10n.Common.Season.spring
+        case .summer: return L10n.Common.Season.summer
+        case .autumn: return L10n.Common.Season.autumn
+        case .winter: return L10n.Common.Season.winter
         }
     }
-    
+
     var emoji: String {
         switch self {
         case .spring: return "🌸"
@@ -161,7 +161,7 @@ enum Season: String, Codable, CaseIterable {
         case .winter: return "❄️"
         }
     }
-    
+
     var gradientColors: [Color] {
         switch self {
         case .spring:
@@ -174,7 +174,7 @@ enum Season: String, Codable, CaseIterable {
             return [Color(hex: "#E6F3FF"), Color(hex: "#F0F8FF")]
         }
     }
-    
+
     static func from(date: Date) -> Season {
         let month = Calendar.current.component(.month, from: date)
         switch month {
@@ -192,11 +192,11 @@ struct TrendingRoutine: Codable, Identifiable {
     var id: UUID {
         templateId
     }
-    
+
     let templateId: UUID
     let saveIncrease: Int
     let period: TrendingPeriod
-    
+
     var displayIncrease: String {
         "↑ \(saveIncrease)%"
     }
@@ -207,11 +207,11 @@ struct TrendingRoutine: Codable, Identifiable {
 enum TrendingPeriod: String, Codable, CaseIterable {
     case thisWeek = "thisWeek"
     case thisMonth = "thisMonth"
-    
+
     var displayText: String {
         switch self {
-        case .thisWeek: return "This week"
-        case .thisMonth: return "This month"
+        case .thisWeek: return L10n.Discover.Trending.thisWeek
+        case .thisMonth: return L10n.Discover.Trending.thisMonth
         }
     }
 }
@@ -222,19 +222,19 @@ struct RefreshTimeHelper {
     static func formatRefreshTime(from date: Date) -> String {
         let now = Date()
         let timeInterval = now.timeIntervalSince(date)
-        
+
         let minutes = Int(timeInterval / 60)
         let hours = Int(timeInterval / 3600)
-        
+
         if minutes < 5 {
-            return "Refreshed just now • new tips every morning ☀️"
+            return L10n.Discover.Refresh.justNow
         } else if minutes < 60 {
-            return "Refreshed \(minutes) min ago • new tips every morning ☀️"
+            return L10n.Discover.Refresh.minutesAgo(minutes)
         } else if hours < 24 {
-            return "Refreshed \(hours) hour\(hours == 1 ? "" : "s") ago"
+            return L10n.Discover.Refresh.hoursAgo(hours)
         } else {
             let days = hours / 24
-            return "Refreshed \(days) day\(days == 1 ? "" : "s") ago"
+            return L10n.Discover.Refresh.daysAgo(days)
         }
     }
 }
@@ -243,27 +243,69 @@ struct RefreshTimeHelper {
 
 struct MiniGuide: Codable, Identifiable {
     let id: UUID
-    let title: String
-    let subtitle: String
+    let guideKey: String // Key to access localized strings (e.g., "cycleSkin", "ampmRoutine")
     let minutes: Int
     let imageName: String
-    let category: String
+
+    // Legacy fields for backward compatibility during migration
+    let title: String?
+    let subtitle: String?
+    let category: String?
+
+    // Localized properties
+    var localizedTitle: String {
+        L10n.Guides.guideTitle(guideKey)
+    }
+
+    var localizedSubtitle: String {
+        L10n.Guides.guideSubtitle(guideKey)
+    }
+
+    var localizedCategory: String {
+        L10n.Guides.guideCategory(guideKey)
+    }
+
+    // Coding keys for custom decoding
+    enum CodingKeys: String, CodingKey {
+        case id, guideKey, minutes, imageName, title, subtitle, category
+    }
 }
 
 // MARK: - Inspirational Quote
 
 struct InspirationalQuote: Codable, Identifiable {
     let id: UUID
-    let text: String
-    let author: String
-    let category: String
+    let text: String?
+    let author: String?
+    let category: String?
+    let localizationKey: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, text, author, category, localizationKey
+    }
 
     var displayText: String {
-        return text
+        if let key = localizationKey {
+            return L10n.Discover.Quotes.text(for: key)
+        }
+        return text ?? ""
     }
 
     var displayAuthor: String {
-        return "- \(author)"
+        let authorName: String
+        if let key = localizationKey {
+            authorName = L10n.Discover.Quotes.author(for: key)
+        } else {
+            authorName = author ?? ""
+        }
+        return "- \(authorName)"
+    }
+
+    var displayCategory: String {
+        if let key = localizationKey {
+            return L10n.Discover.Quotes.category(for: key)
+        }
+        return category ?? ""
     }
 }
 

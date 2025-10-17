@@ -23,7 +23,7 @@ struct MostUsedProductsCard: View {
                             .fill(ThemeManager.shared.theme.palette.primary.opacity(0.15))
                     )
                 
-                Text("Most Used Products")
+                Text(L10n.Myself.MostUsedProducts.title)
                     .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
@@ -76,7 +76,7 @@ struct MostUsedProductsCard: View {
     private func productRow(rank: Int, name: String, productType: ProductType, count: Int) -> some View {
         HStack(spacing: 12) {
             // Rank badge
-            Text("\(rank)")
+            Text(L10n.Myself.MostUsedProducts.rank(rank))
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.white)
                 .frame(width: 28, height: 28)
@@ -102,7 +102,7 @@ struct MostUsedProductsCard: View {
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
-                Text("Used \(count) time\(count == 1 ? "" : "s")")
+                Text(L10n.Myself.MostUsedProducts.usedCount(count))
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
@@ -123,11 +123,11 @@ struct MostUsedProductsCard: View {
                 .font(.system(size: 32))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("No products used yet")
+            Text(L10n.Myself.MostUsedProducts.empty)
                 .font(ThemeManager.shared.theme.typo.body)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
-            Text("Complete your routine to see your favorites")
+            Text(L10n.Myself.MostUsedProducts.emptySubtitle)
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 .multilineTextAlignment(.center)

@@ -60,7 +60,7 @@ struct WeatherAdaptationCard: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Auto-adapt by weather/UV")
+                    Text(L10n.Routines.Weather.autoAdapt)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.leading)
@@ -71,7 +71,7 @@ struct WeatherAdaptationCard: View {
                             .foregroundColor(ThemeManager.shared.theme.palette.error)
                             .multilineTextAlignment(.leading)
                     } else {
-                        Text("Get personalized recommendations based on real-time weather conditions in your area.")
+                        Text(L10n.Routines.Weather.description)
                             .font(.system(size: 14))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             .multilineTextAlignment(.leading)
@@ -83,10 +83,10 @@ struct WeatherAdaptationCard: View {
 
             // Weather factors badges
             HStack(spacing: 8) {
-                WeatherFactorBadge(icon: "sun.max.fill", label: "UV", color: .orange)
-                WeatherFactorBadge(icon: "humidity.fill", label: "Humidity", color: .blue)
-                WeatherFactorBadge(icon: "wind", label: "Wind", color: .cyan)
-                WeatherFactorBadge(icon: "thermometer", label: "Temp", color: .red)
+                WeatherFactorBadge(icon: "sun.max.fill", label: L10n.Routines.Weather.uv, color: .orange)
+                WeatherFactorBadge(icon: "humidity.fill", label: L10n.Routines.Weather.humidity, color: .blue)
+                WeatherFactorBadge(icon: "wind", label: L10n.Routines.Weather.wind, color: .cyan)
+                WeatherFactorBadge(icon: "thermometer", label: L10n.Routines.Weather.temp, color: .red)
             }
 
             // Enable button
@@ -104,7 +104,7 @@ struct WeatherAdaptationCard: View {
                         Image(systemName: locationService.permissionState == .denied ? "location.slash.fill" : "location.fill")
                             .font(.system(size: 14, weight: .semibold))
 
-                        Text(locationService.permissionState == .denied ? "Enable in Settings" : "Enable Weather Adaptation")
+                        Text(locationService.permissionState == .denied ? L10n.Routines.Weather.enableInSettings : L10n.Routines.Weather.enableAdaptation)
                             .font(.system(size: 15, weight: .semibold))
                     }
                 }
@@ -156,12 +156,12 @@ struct WeatherAdaptationCard: View {
                 // Header with toggle
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Weather-Adapted Routine")
+                        Text(L10n.Routines.Weather.adaptedRoutine)
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         if let weather = weatherData {
-                            Text(weather.condition ?? "Current conditions")
+                            Text(weather.condition ?? L10n.Routines.Weather.currentConditions)
                                 .font(.system(size: 13))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         }
@@ -199,7 +199,7 @@ struct WeatherAdaptationCard: View {
                         }
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("UV Index: \(weather.uvIndex)")
+                            Text(L10n.Routines.Weather.uvIndex(weather.uvIndex))
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -312,7 +312,7 @@ struct WeatherAdaptationCard: View {
             _ = try await weatherService.requestLocationPermissionAndFetch()
             await loadWeatherData()
         } catch {
-            errorMessage = "Unable to enable: \(error.localizedDescription)"
+            errorMessage = L10n.Routines.Weather.unableToEnable(error: error.localizedDescription)
             print("❌ Failed to enable weather adaptation: \(error)")
         }
 
@@ -395,31 +395,31 @@ private struct WeatherDetailSheet: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // UV Section
                     WeatherDetailSection(
-                        title: "UV Index",
+                        title: L10n.Routines.Weather.uvIndexTitle,
                         icon: weatherData.uvLevel.icon,
                         iconColor: weatherData.uvLevel.color,
                         content: {
                             VStack(alignment: .leading, spacing: 12) {
                                 HStack {
-                                    Text("Level: \(weatherData.uvIndex)")
+                                    Text(L10n.Routines.Weather.level(weatherData.uvIndex))
                                         .font(.system(size: 24, weight: .bold))
-                                    Text("(\(weatherData.uvLevel.displayName))")
+                                    Text(L10n.Routines.Weather.uvLevelDisplay(weatherData.uvLevel.displayName))
                                         .font(.system(size: 16))
                                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 }
 
                                 let recommendation = WeatherRecommendation.from(weatherData: weatherData)
 
-                                WeatherDetailRow(label: "Recommended SPF", value: recommendation.spfLevel)
+                                WeatherDetailRow(label: L10n.Routines.Weather.recommendedSPF, value: recommendation.spfLevel)
 
                                 if !recommendation.activeIngredientWarnings.isEmpty {
                                     VStack(alignment: .leading, spacing: 8) {
-                                        Text("⚠️ Warnings")
+                                        Text(L10n.Routines.Weather.warnings)
                                             .font(.system(size: 14, weight: .semibold))
                                             .foregroundColor(ThemeManager.shared.theme.palette.error)
 
                                         ForEach(recommendation.activeIngredientWarnings, id: \.self) { warning in
-                                            Text("• \(warning)")
+                                            Text(L10n.Routines.Weather.warningBullet(warning))
                                                 .font(.system(size: 13))
                                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                         }
@@ -436,25 +436,25 @@ private struct WeatherDetailSheet: View {
 
                     // Environmental Conditions
                     WeatherDetailSection(
-                        title: "Environmental Conditions",
+                        title: L10n.Routines.Weather.environmentalConditions,
                         icon: "cloud.fill",
                         iconColor: .blue,
                         content: {
                             VStack(spacing: 8) {
                                 WeatherDetailRow(
-                                    label: "Temperature",
+                                    label: L10n.Routines.Weather.temperature,
                                     value: String(format: "%.1f°C", weatherData.temperature)
                                 )
                                 WeatherDetailRow(
-                                    label: "Humidity",
+                                    label: L10n.Routines.Weather.humidity,
                                     value: String(format: "%.0f%%", weatherData.humidity)
                                 )
                                 WeatherDetailRow(
-                                    label: "Wind Speed",
+                                    label: L10n.Routines.Weather.windSpeed,
                                     value: String(format: "%.1f km/h", weatherData.windSpeed)
                                 )
                                 if weatherData.hasSnow {
-                                    WeatherDetailRow(label: "Snow", value: "Yes - UV reflection risk")
+                                    WeatherDetailRow(label: L10n.Routines.Weather.snow, value: L10n.Routines.Weather.snowWarning)
                                 }
                             }
                         }
@@ -464,14 +464,14 @@ private struct WeatherDetailSheet: View {
                     let recommendation = WeatherRecommendation.from(weatherData: weatherData)
                     if !recommendation.generalTips.isEmpty {
                         WeatherDetailSection(
-                            title: "Today's Tips",
+                            title: L10n.Routines.Weather.todaysTips,
                             icon: "lightbulb.fill",
                             iconColor: .yellow,
                             content: {
                                 VStack(alignment: .leading, spacing: 8) {
                                     ForEach(recommendation.generalTips, id: \.self) { tip in
                                         HStack(alignment: .top, spacing: 8) {
-                                            Text("•")
+                                            Text(L10n.Routines.Weather.tipBullet)
                                             Text(tip)
                                                 .font(.system(size: 14))
                                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -484,7 +484,7 @@ private struct WeatherDetailSheet: View {
 
                     if let textureAdjustment = recommendation.textureAdjustment {
                         WeatherDetailSection(
-                            title: "Product Texture",
+                            title: L10n.Routines.Weather.productTexture,
                             icon: "drop.fill",
                             iconColor: .purple,
                             content: {
@@ -498,11 +498,11 @@ private struct WeatherDetailSheet: View {
                 .padding(20)
             }
             .background(ThemeManager.shared.theme.palette.background)
-            .navigationTitle("Weather Details")
+            .navigationTitle(L10n.Routines.Weather.details)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(L10n.Common.done) {
                         dismiss()
                     }
                 }

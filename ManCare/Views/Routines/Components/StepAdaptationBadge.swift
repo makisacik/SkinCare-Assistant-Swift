@@ -47,25 +47,25 @@ struct StepAdaptationBadge: View {
         HStack(spacing: 20) {
             VStack {
                 StepAdaptationBadge(emphasis: .skip)
-                Text("Skip")
+                Text(StepEmphasis.skip.displayName)
                     .font(.caption)
             }
             
             VStack {
                 StepAdaptationBadge(emphasis: .reduce)
-                Text("Reduce")
+                Text(StepEmphasis.reduce.displayName)
                     .font(.caption)
             }
             
             VStack {
                 StepAdaptationBadge(emphasis: .normal)
-                Text("Normal")
+                Text(StepEmphasis.normal.displayName)
                     .font(.caption)
             }
             
             VStack {
                 StepAdaptationBadge(emphasis: .emphasize)
-                Text("Emphasize")
+                Text(StepEmphasis.emphasize.displayName)
                     .font(.caption)
             }
         }

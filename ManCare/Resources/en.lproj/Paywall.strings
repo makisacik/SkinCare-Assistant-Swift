@@ -1,0 +1,27 @@
+/* 
+  Paywall.strings (English)
+  ManCare - Premium paywall and subscription
+*/
+
+/* Badge & Title */
+"paywall.premium" = "PREMIUM";
+"paywall.title" = "Try for free";
+
+/* Pricing */
+"paywall.pricing.trial" = "Try 7 days free, then just ₺199,99 / year";
+"paywall.pricing.monthly" = "Only ₺16,66/month, billed annually.";
+
+/* Features */
+"paywall.features.freeWeek" = "Enjoy your first week for free!";
+"paywall.features.cancelAnytime" = "Cancel anytime with ease";
+"paywall.features.createRoutines" = "Create and track skincare routines";
+"paywall.features.syncCycle" = "Sync routines with your cycle";
+"paywall.features.noLimits" = "All content, no limits, no ads";
+
+/* Actions */
+"paywall.action.startFreeTrial" = "Start my free week";
+"paywall.action.processing" = "Processing...";
+
+/* Footer */
+"paywall.footer.secure" = "Secured by the App Store. Cancel at any time.";
+

@@ -19,7 +19,7 @@ struct CommunityHeatSection: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 6) {
-                        Text("Community Heat")
+                        Text(L10n.Discover.Community.title)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
@@ -28,7 +28,7 @@ struct CommunityHeatSection: View {
                             .foregroundColor(Color.orange)
                     }
                     
-                    Text("What people save most")
+                    Text(L10n.Discover.Community.subtitle)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -76,7 +76,7 @@ struct CommunityHeatSection: View {
                         .font(.system(size: 11))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     
-                    Text("Updated \(Date().formatted(date: .abbreviated, time: .omitted))")
+                    Text(L10n.Discover.Community.updated(Date().formatted(date: .abbreviated, time: .omitted)))
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 }
@@ -92,7 +92,7 @@ struct CommunityHeatSection: View {
                 .font(.system(size: 32))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("No trending data yet")
+            Text(L10n.Discover.Community.empty)
                 .font(.system(size: 15, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }

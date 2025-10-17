@@ -1,12 +1,12 @@
-/* 
-  Localizable.strings (Turkish)
-  ManCare - Genel metinler
+/*
+  Localizable.strings (Turkish)
+  ManCare - Common strings
 */
 
 /* Common */
 "common.cancel" = "İptal";
 "common.save" = "Kaydet";
-"common.done" = "Tamam";
+"common.done" = "Bitti";
 "common.delete" = "Sil";
 "common.edit" = "Düzenle";
 "common.add" = "Ekle";
@@ -14,13 +14,38 @@
 "common.ok" = "Tamam";
 "common.yes" = "Evet";
 "common.no" = "Hayır";
+"common.error" = "Hata";
+"common.back" = "Geri";
+"common.unknownError" = "Bilinmeyen hata";
+"common.loading" = "Yükleniyor…";
+"common.pleaseWait" = "Sonuçlarınızı hazırlarken lütfen bekleyin";
+"common.noTipsAvailable" = "İpucu mevcut değil";
+"common.tipCounter" = "%d / %d";
+"common.stepCounter" = "%d / %d";
+"common.enable" = "Etkinleştir";
+"common.thisMayTakeAFewSeconds" = "Bu birkaç saniye sürebilir.";
+"common.pageIndicator" = "Sayfa %d / %d";
+"common.timeOfDay" = "Günün Saati";
+"common.bullet" = "•";
+
+/* Seasons */
+"common.season.spring" = "İlkbahar";
+"common.season.summer" = "Yaz";
+"common.season.autumn" = "Sonbahar";
+"common.season.winter" = "Kış";
+"common.season.playbookFormat" = "%@ Cilt El Kitabı";
 
 /* Settings */
 "settings.editProfile" = "Profili Düzenle";
 "settings.language" = "Dil";
 "settings.premium" = "Premium";
-"settings.enablePremium" = "Premium'u Aç (Test)";
-"settings.disablePremium" = "Premium'u Kapat (Test)";
+"settings.enablePremium" = "Premium'u Etkinleştir (Test)";
+"settings.disablePremium" = "Premium'u Devre Dışı Bırak (Test)";
+
+/* Theme */
+"theme.system" = "Sistem";
+"theme.light" = "Açık";
+"theme.dark" = "Koyu";
 
 /* Tabs */
 "tabs.routines" = "Rutinler";
@@ -28,3 +53,37 @@
 "tabs.products" = "Ürünlerim";
 "tabs.myself" = "Ben";
 
+/* Debug */
+"debug.premiumTitle" = "Premium Hata Ayıklama";
+"debug.premiumStatus" = "Premium Durumu";
+"debug.currentStatus" = "Mevcut Durum";
+"debug.actions" = "Eylemler";
+"debug.featureAccess" = "Özellik Erişimi";
+"debug.active" = "Aktif";
+"debug.inactive" = "Pasif";
+"debug.showPaywall" = "Ödeme Ekranını Göster";
+"debug.grantPremium" = "Premium Tanımla (Test)";
+"debug.revokePremium" = "Premium'u İptal Et (Test)";
+"debug.restorePurchases" = "Satın Almaları Geri Yükle";
+"debug.featureCreateRoutines" = "Rutin Oluşturma";
+"debug.featureCycleAdaptation" = "Döngü Adaptasyonu";
+"debug.featureSkinJournal" = "Cilt Günlüğü";
+"debug.featureWeatherAdaptation" = "Hava Adaptasyonu";
+"debug.statusUnlimited" = "Sınırsız";
+"debug.statusMaxTwo" = "En fazla 2";
+"debug.statusAvailable" = "Mevcut";
+"debug.statusPremiumOnly" = "Sadece Premium";
+"debug.statusLocked" = "Kilitli";
+"debug.testPremiumFooter" = "Premium özelliklerini, yukarıdaki Premium durumunu değiştirerek test edin. Üretimde, özellikler gerçek StoreKit satın alımlarıyla kilitlenecektir.";
+
+/* Premium Errors */
+"premium.error.notImplemented" = "Bu özellik henüz uygulanmadı";
+"premium.error.failedVerification" = "İşlem doğrulanamadı";
+"premium.error.purchaseFailed" = "Satın alma başarısız oldu";
+"premium.error.restoreFailed" = "Geri yükleme başarısız oldu";
+"premium.error.routineLimitReached" = "Rutin limitinize ulaştınız. Sınırsız rutin oluşturmak için Premium'a yükseltin.";
+"premium.error.featureRequiresPremium" = "%@ özelliği Premium abonelik gerektirir";
+
+/* Language Names */
+"language.english" = "İngilizce";
+"language.turkish" = "Türkçe";

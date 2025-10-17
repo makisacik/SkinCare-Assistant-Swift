@@ -26,7 +26,7 @@ struct DiscoverProgressView: View {
                         // Spacer removed - now handled by page indicator in OnboardingFlowView
                         
                         // Main headline
-                        Text("Discover & Track")
+                        Text(L10n.Onboarding.DiscoverTrack.title)
                             .font(.system(size: 32, weight: .bold, design: .serif))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .multilineTextAlignment(.center)
@@ -47,7 +47,7 @@ struct DiscoverProgressView: View {
                         .padding(.horizontal, 20)
                     
                     // Descriptive text below image
-                    Text("Find new skincare routines, learn from others, and watch your glow evolve over time.")
+                    Text(L10n.Onboarding.DiscoverTrack.description)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -64,7 +64,7 @@ struct DiscoverProgressView: View {
                         onGetStarted()
                     } label: {
                         HStack(spacing: 8) {
-                            Text("Get Started")
+                            Text(L10n.Onboarding.DiscoverTrack.getStarted)
                                 .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 16, weight: .semibold))

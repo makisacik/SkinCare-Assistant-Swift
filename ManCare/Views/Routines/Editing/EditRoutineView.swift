@@ -45,13 +45,13 @@ struct EditRoutineView: View {
 
                         Spacer()
 
-                        Text("Edit Routine")
+                        Text(L10n.Routines.Editing.title)
                             .font(ThemeManager.shared.theme.typo.h2)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         Spacer()
 
-                        Button("Save") {
+                        Button(L10n.Routines.Editing.save) {
                             Task {
                                 if let updatedRoutine = await editingService.saveRoutine() {
                                     onRoutineUpdated?(updatedRoutine)
@@ -174,7 +174,7 @@ private struct EditableRoutineSection: View {
             LazyVStack(spacing: 12) {
                 // Section header with add button
                 HStack {
-                    Text("\(timeOfDay.displayName) Routine")
+                    Text(L10n.Routines.Editing.routineTitle(timeOfDay.displayName))
                         .font(ThemeManager.shared.theme.typo.h2)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
@@ -186,7 +186,7 @@ private struct EditableRoutineSection: View {
                         HStack(spacing: 6) {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Add")
+                            Text(L10n.Routines.Editing.add)
                                 .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                         }
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
@@ -243,11 +243,11 @@ private struct EmptyRoutineState: View {
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted.opacity(0.5))
             
             VStack(spacing: 8) {
-                Text("No Steps Yet")
+                Text(L10n.Routines.Editing.noStepsYet)
                     .font(ThemeManager.shared.theme.typo.h2)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                Text("Add your first step to build your \(timeOfDay.displayName.lowercased()) routine")
+                Text(L10n.Routines.Editing.addFirstStepDescription(timeOfDay.displayName.lowercased()))
                     .font(ThemeManager.shared.theme.typo.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
@@ -259,7 +259,7 @@ private struct EmptyRoutineState: View {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 18, weight: .semibold))
-                    Text("Add First Step")
+                    Text(L10n.Routines.Editing.addFirstStep)
                         .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 }
                 .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)

@@ -49,10 +49,10 @@ struct PhaseBriefingCard: View {
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(theme.theme.palette.textPrimary)
 
-                            Text("•")
+                            Text(L10n.Common.bullet)
                                 .foregroundColor(theme.theme.palette.textMuted)
 
-                            Text("Day \(currentDay) of \(totalDays)")
+                            Text(L10n.Routines.PhaseBriefing.dayOfTotal(day: currentDay, total: totalDays))
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(theme.theme.palette.textSecondary)
                         }
@@ -67,7 +67,7 @@ struct PhaseBriefingCard: View {
                 }
 
                 // Status indicator
-                Text("Routine adapted to your cycle")
+                Text(L10n.Routines.Adaptation.adaptedToCycle)
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(theme.theme.palette.textSecondary)
                     .padding(.top, 4)
@@ -86,11 +86,11 @@ struct PhaseBriefingCard: View {
                     }
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Cycle-Adaptive Routines")
+                        Text(L10n.Routines.PhaseBriefing.cycleAdaptiveRoutines)
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(theme.theme.palette.textPrimary)
 
-                        Text("Personalize your routine for each phase")
+                        Text(L10n.Routines.PhaseBriefing.personalizeForEachPhase)
                             .font(.system(size: 13))
                             .foregroundColor(theme.theme.palette.textSecondary)
                             .lineLimit(2)
@@ -107,7 +107,7 @@ struct PhaseBriefingCard: View {
                             HStack(spacing: 4) {
                                 Text("👑")
                                     .font(.system(size: 12))
-                                Text("Premium")
+                                        Text(L10n.Routines.PhaseBriefing.premium)
                                     .font(.system(size: 13, weight: .semibold))
                             }
                             .foregroundColor(theme.theme.palette.onPrimary)
@@ -207,7 +207,8 @@ struct PhaseBriefingCard: View {
             benefits: [],
             isFeatured: false,
             isPremium: false,
-            imageName: "routine-minimalist"
+            imageName: "routine-minimalist",
+            translations: nil
         )
     )
 

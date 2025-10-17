@@ -28,10 +28,10 @@ struct RegionView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // Title section
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("What's your climate like?")
+                        Text(L10n.Onboarding.Region.title)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        Text("Your environment affects your skin's UV exposure and hydration needs.")
+                        Text(L10n.Onboarding.Region.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -48,7 +48,7 @@ struct RegionView: View {
                                 }
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel(Text(region.title))
-                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityHint(Text(L10n.Onboarding.SkinType.tapToSelect))
                                 .accessibilityAddTraits(selection == region ? .isSelected : [])
                         }
                     }
@@ -61,7 +61,7 @@ struct RegionView: View {
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                         onContinue(picked)
                     } label: {
-                        Text("Continue")
+                        Text(L10n.Onboarding.Region.continue)
                     }
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(selection == nil)

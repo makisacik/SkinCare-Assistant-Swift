@@ -12,27 +12,27 @@ enum Concern: String, CaseIterable, Identifiable, Codable {
 
     var title: String {
         switch self {
-        case .acne:                return "Acne"
-        case .redness:             return "Redness"
-        case .blackheads:          return "Blackheads"
-        case .largePores:          return "Large Pores"
-        case .sensitive:           return "Sensitive"
-        case .wrinkles:            return "Wrinkles"
-        case .dryness:             return "Dryness"
-        case .none:                return "None"
+        case .acne:                return L10n.Onboarding.ConcernTypes.acne
+        case .redness:             return L10n.Onboarding.ConcernTypes.redness
+        case .blackheads:          return L10n.Onboarding.ConcernTypes.blackheads
+        case .largePores:          return L10n.Onboarding.ConcernTypes.largePores
+        case .sensitive:           return L10n.Onboarding.ConcernTypes.sensitive
+        case .wrinkles:            return L10n.Onboarding.ConcernTypes.wrinkles
+        case .dryness:             return L10n.Onboarding.ConcernTypes.dryness
+        case .none:                return L10n.Onboarding.ConcernTypes.none
         }
     }
 
     var subtitle: String {
         switch self {
-        case .acne:                return "Breakouts, whiteheads"
-        case .redness:             return "Sensitivity, flushing"
-        case .blackheads:          return "Clogged pores, oil build-up"
-        case .largePores:          return "Texture, visible pores"
-        case .sensitive:           return "Easily irritated skin"
-        case .wrinkles:            return "Fine lines, aging signs"
-        case .dryness:             return "Flaky, dehydrated skin"
-        case .none:                return "No specific concerns"
+        case .acne:                return L10n.Onboarding.ConcernTypes.acneSubtitle
+        case .redness:             return L10n.Onboarding.ConcernTypes.rednessSubtitle
+        case .blackheads:          return L10n.Onboarding.ConcernTypes.blackheadsSubtitle
+        case .largePores:          return L10n.Onboarding.ConcernTypes.largePoresSubtitle
+        case .sensitive:           return L10n.Onboarding.ConcernTypes.sensitiveSubtitle
+        case .wrinkles:            return L10n.Onboarding.ConcernTypes.wrinklesSubtitle
+        case .dryness:             return L10n.Onboarding.ConcernTypes.drynessSubtitle
+        case .none:                return L10n.Onboarding.ConcernTypes.noneSubtitle
         }
     }
 
@@ -82,10 +82,10 @@ struct ConcernSelectionView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Title section
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("What concerns you?")
+                        Text(L10n.Onboarding.Concerns.title)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        Text("Pick what you want to focus on.")
+                        Text(L10n.Onboarding.Concerns.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -106,7 +106,7 @@ struct ConcernSelectionView: View {
                         }
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text(c.title))
-                        .accessibilityHint(Text("Tap to select"))
+                        .accessibilityHint(Text(L10n.Onboarding.SkinType.tapToSelect))
                         .accessibilityAddTraits(selections.contains(c) ? .isSelected : [])
                     }
                 }
@@ -117,7 +117,7 @@ struct ConcernSelectionView: View {
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(isEditingCustomConcern || !customConcern.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
                     
-                    TextField("Type your own concern...", text: $customConcern, onEditingChanged: { editing in
+                    TextField(L10n.Onboarding.Concerns.customPlaceholder, text: $customConcern, onEditingChanged: { editing in
                         isEditingCustomConcern = editing
                     })
                     .font(ThemeManager.shared.theme.typo.body)
@@ -152,7 +152,7 @@ struct ConcernSelectionView: View {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     onContinue(selections, customConcern.trimmingCharacters(in: .whitespacesAndNewlines))
                 } label: {
-                    Text("Continue")
+                    Text(L10n.Onboarding.Concerns.continue)
                 }
                 .buttonStyle(PrimaryButtonStyle())
                 .disabled(!isContinueEnabled)

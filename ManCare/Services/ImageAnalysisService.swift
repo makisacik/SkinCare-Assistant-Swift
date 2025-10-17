@@ -89,27 +89,27 @@ class ImageAnalysisService {
     
     private func analyzeSkinTone(_ image: UIImage) -> String {
         guard let cgImage = image.cgImage else {
-            return "Unable to analyze"
+            return L10n.SkinJournal.Analysis.unableToAnalyze
         }
         
         // Use Vision to detect face
         let faceDetected = detectFace(in: cgImage)
         
         if !faceDetected {
-            return "No face detected - ensure photo shows face clearly"
+            return L10n.SkinJournal.Analysis.noFaceDetected
         }
         
         // Analyze color variance for evenness
         let variance = calculateColorVariance(image)
         
         if variance < 0.02 {
-            return "Even skin tone"
+            return L10n.SkinJournal.Analysis.evenSkinTone
         } else if variance < 0.05 {
-            return "Mostly even with minor variations"
+            return L10n.SkinJournal.Analysis.mostlyEvenSkinTone
         } else if variance < 0.08 {
-            return "Some unevenness detected"
+            return L10n.SkinJournal.Analysis.someUnevenness
         } else {
-            return "Significant variation - possible redness or discoloration"
+            return L10n.SkinJournal.Analysis.significantVariation
         }
     }
     
@@ -229,22 +229,22 @@ class ImageAnalysisService {
         let absDiff = abs(brightnessDiff)
         
         if absDiff < 0.05 {
-            return "Similar brightness"
+            return L10n.SkinJournal.Analysis.similarBrightness
         } else if brightnessDiff > 0 {
             if absDiff < 0.15 {
-                return "Slightly brighter"
+                return L10n.SkinJournal.Analysis.slightlyBrighter
             } else if absDiff < 0.3 {
-                return "Noticeably brighter"
+                return L10n.SkinJournal.Analysis.noticeablyBrighter
             } else {
-                return "Much brighter"
+                return L10n.SkinJournal.Analysis.muchBrighter
             }
         } else {
             if absDiff < 0.15 {
-                return "Slightly darker"
+                return L10n.SkinJournal.Analysis.slightlyDarker
             } else if absDiff < 0.3 {
-                return "Noticeably darker"
+                return L10n.SkinJournal.Analysis.noticeablyDarker
             } else {
-                return "Much darker"
+                return L10n.SkinJournal.Analysis.muchDarker
             }
         }
     }

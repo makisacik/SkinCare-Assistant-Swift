@@ -22,12 +22,12 @@ struct RoutinePreviewView: View {
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 16) {
-                    Text("Preview Your Changes")
+                    Text(L10n.Routines.Preview.title)
                         .font(ThemeManager.shared.theme.typo.h1)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         .multilineTextAlignment(.center)
                     
-                    Text("Review your customized routine before saving")
+                    Text(L10n.Routines.Preview.subtitle)
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -37,7 +37,7 @@ struct RoutinePreviewView: View {
                 .padding(.bottom, 20)
                 
                 // Time of day selector
-                Picker("Time of Day", selection: $selectedTimeOfDay) {
+                Picker(L10n.Common.timeOfDay, selection: $selectedTimeOfDay) {
                     ForEach(TimeOfDay.allCases, id: \.self) { timeOfDay in
                         Text(timeOfDay.displayName).tag(timeOfDay)
                     }
@@ -50,7 +50,7 @@ struct RoutinePreviewView: View {
                     RoutinePreviewSection(
                         timeOfDay: .morning,
                         editedSteps: editedRoutine.morningSteps,
-                        title: "Morning Routine"
+                        title: L10n.Routines.morningRoutine
                     )
                     .tag(TimeOfDay.morning)
 
@@ -58,7 +58,7 @@ struct RoutinePreviewView: View {
                     RoutinePreviewSection(
                         timeOfDay: .evening,
                         editedSteps: editedRoutine.eveningSteps,
-                        title: "Evening Routine"
+                        title: L10n.Routines.eveningRoutine
                     )
                     .tag(TimeOfDay.evening)
 
@@ -66,7 +66,7 @@ struct RoutinePreviewView: View {
                     RoutinePreviewSection(
                         timeOfDay: .weekly,
                         editedSteps: editedRoutine.weeklySteps,
-                        title: "Weekly Routine"
+                        title: L10n.Routines.weeklyRoutine
                     )
                     .tag(TimeOfDay.weekly)
                 }
@@ -80,7 +80,7 @@ struct RoutinePreviewView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Save Changes")
+                            Text(L10n.Routines.Preview.saveChanges)
                                 .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                         }
                         .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
@@ -97,7 +97,7 @@ struct RoutinePreviewView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "xmark.circle")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Cancel")
+                            Text(L10n.Routines.Preview.cancel)
                                 .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                         }
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -138,7 +138,7 @@ private struct RoutinePreviewSection: View {
                         .font(ThemeManager.shared.theme.typo.h2)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("\(editedSteps.filter { $0.isEnabled }.count) active steps")
+                    Text("\(editedSteps.filter { $0.isEnabled }.count) \(L10n.Routines.Preview.activeSteps)")
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -233,7 +233,7 @@ private struct EditedStepCard: View {
                         }
                         
                         if step.morningEnabled && step.eveningEnabled {
-                            Text("AM & PM")
+                            Text(L10n.Routines.Preview.amPm)
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 .padding(.horizontal, 6)
@@ -241,7 +241,7 @@ private struct EditedStepCard: View {
                                 .background(ThemeManager.shared.theme.palette.info.opacity(0.1))
                                 .cornerRadius(4)
                         } else if step.morningEnabled {
-                            Text("AM")
+                            Text(L10n.Routines.Preview.am)
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.warning)
                                 .padding(.horizontal, 6)
@@ -249,7 +249,7 @@ private struct EditedStepCard: View {
                                 .background(ThemeManager.shared.theme.palette.warning.opacity(0.1))
                                 .cornerRadius(4)
                         } else if step.eveningEnabled {
-                            Text("PM")
+                            Text(L10n.Routines.Preview.pm)
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 .padding(.horizontal, 6)

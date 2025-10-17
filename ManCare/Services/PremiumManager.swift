@@ -106,17 +106,25 @@ final class PremiumManager: ObservableObject {
     // MARK: - Feature Checks
     
     /// Check if user can create more routines
+    /// NOTE: This should ONLY be used for:
+    /// 1. Generating NEW routines via GPT API (uses API credits)
+    /// 2. Personalized routine generation
+    ///
+    /// Do NOT use this for:
+    /// - Onboarding/initial routine (always allowed)
+    /// - Saving premade templates from Discover tab (no API cost)
     func canCreateRoutine() async -> Bool {
         if isPremium {
             return true
         }
         
-        // Non-premium users can only have 2 routines
+        // Non-premium users can only have 2 routines total
+        // This prevents excessive API usage for routine generation
         do {
             let store = RoutineStore()
             let routines = try await store.fetchSavedRoutines()
             let canCreate = routines.count < 2
-            print("🔍 Can create routine: \(canCreate) (current: \(routines.count)/2)")
+            print("🔍 Can create routine via API: \(canCreate) (current: \(routines.count)/2)")
             return canCreate
         } catch {
             print("❌ Error checking routine count: \(error)")
@@ -196,17 +204,17 @@ enum PremiumError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notImplemented:
-            return "This feature is not yet implemented"
+            return L10n.Premium.Error.notImplemented
         case .failedVerification:
-            return "Transaction verification failed"
+            return L10n.Premium.Error.failedVerification
         case .purchaseFailed:
-            return "Purchase failed"
+            return L10n.Premium.Error.purchaseFailed
         case .restoreFailed:
-            return "Restore failed"
+            return L10n.Premium.Error.restoreFailed
         case .routineLimitReached:
-            return "You've reached your routine limit. Upgrade to premium to create unlimited routines."
+            return L10n.Premium.Error.routineLimitReached
         case .featureRequiresPremium(let featureName):
-            return "\(featureName) requires a premium subscription"
+            return L10n.Premium.Error.featureRequiresPremium(featureName)
         }
     }
 }

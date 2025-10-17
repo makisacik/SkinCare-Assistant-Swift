@@ -120,9 +120,9 @@ struct MyselfView: View {
     private var tabTitle: String {
         switch selectedTab {
         case 1:
-            return "Skin Journal"
+            return L10n.Myself.Tabs.journal
         case 2:
-            return "Insights"
+            return L10n.Myself.Tabs.insights
         default:
             return ""
         }
@@ -131,9 +131,9 @@ struct MyselfView: View {
     private var tabDescription: String {
         switch selectedTab {
         case 1:
-            return "See your skin glow evolve"
+            return L10n.Myself.Tabs.journalDescription
         case 2:
-            return "Discover patterns and trends in your skincare journey"
+            return L10n.Myself.Tabs.insightsDescription
         default:
             return ""
         }
@@ -247,7 +247,7 @@ struct MyselfView: View {
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
 
-                Text("\(dayNumber)")
+                Text(L10n.Myself.Completion.dayNumber(dayNumber))
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
             }
@@ -327,13 +327,13 @@ struct MyselfView: View {
 
         switch hour {
         case 5..<12:
-            return "Good Morning, \(name)!"
+            return L10n.Myself.Greeting.morning(name)
         case 12..<17:
-            return "Good Afternoon, \(name)!"
+            return L10n.Myself.Greeting.afternoon(name)
         case 17..<22:
-            return "Good Evening, \(name)!"
+            return L10n.Myself.Greeting.evening(name)
         default:
-            return "Good Night, \(name)!"
+            return L10n.Myself.Greeting.night(name)
         }
     }
 
@@ -349,19 +349,20 @@ struct MyselfView: View {
 
     private func dayAbbreviation(for date: Date) -> String {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: LocalizationManager.shared.currentLanguage)
         formatter.dateFormat = "E"
         return formatter.string(from: date)
     }
 
     private func iconForTab(_ tab: String) -> String {
-        switch tab {
-        case "Timeline":
+        // Compare with localized strings to handle different languages
+        if tab == L10n.Completions.timeline {
             return "calendar"
-        case "Journal":
+        } else if tab == L10n.Completions.journal {
             return "book.fill"
-        case "Insights":
+        } else if tab == L10n.Completions.insights {
             return "lightbulb"
-        default:
+        } else {
             return "circle"
         }
     }
@@ -377,7 +378,7 @@ struct MyselfView: View {
     @ViewBuilder
     private var profileHeader: some View {
         HStack(alignment: .center) {
-            Text("Profile")
+            Text(L10n.Myself.profile)
                 .font(ThemeManager.shared.theme.typo.h2.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -389,7 +390,7 @@ struct MyselfView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "pencil")
                         .font(.system(size: 14, weight: .semibold))
-                    Text("Edit")
+                    Text(L10n.Myself.edit)
                         .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                 }
                 .foregroundColor(ThemeManager.shared.theme.palette.primary)
@@ -417,19 +418,19 @@ struct MyselfView: View {
             GridItem(.flexible(), spacing: 12)
         ], spacing: 12) {
             if let skinType = profile?.skinType {
-                statCard(icon: "drop.fill", title: "Skin Type", value: skinType.title, color: .blue)
+                statCard(icon: "drop.fill", title: L10n.Myself.Stats.skinType, value: skinType.title, color: .blue)
             }
 
             if let ageRange = profile?.ageRange {
-                statCard(icon: "calendar", title: "Age Range", value: ageRange.title, color: .purple)
+                statCard(icon: "calendar", title: L10n.Myself.Stats.ageRange, value: ageRange.title, color: .purple)
             }
 
             if let tone = profile?.fitzpatrickSkinTone {
-                statCard(icon: "sun.max.fill", title: "Skin Tone", value: tone.title, color: tone.skinColor)
+                statCard(icon: "sun.max.fill", title: L10n.Myself.Stats.skinTone, value: tone.title, color: tone.skinColor)
             }
 
             if let region = profile?.region {
-                statCard(icon: region.iconName, title: "Climate", value: region.title, color: region.climateColor)
+                statCard(icon: region.iconName, title: L10n.Myself.Stats.climate, value: region.title, color: region.climateColor)
             }
         }
     }
@@ -489,7 +490,7 @@ struct MyselfView: View {
     private var smartInsights: some View {
         let profile = profileStore.currentProfile
         VStack(alignment: .leading, spacing: 12) {
-            Text("Insights & Tips")
+            Text(L10n.Myself.Insights.title)
                 .font(ThemeManager.shared.theme.typo.h2.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -500,8 +501,8 @@ struct MyselfView: View {
                     if profile.skinType == .combination && profile.concerns.contains(.largePores) {
                         insightCard(
                             icon: "sparkles",
-                            title: "Combination + Large Pores",
-                            body: "Look for niacinamide and BHA to refine texture.",
+                            title: L10n.Myself.Insights.CombinationLargePores.title,
+                            body: L10n.Myself.Insights.CombinationLargePores.body,
                             color: .purple
                         )
                     }
@@ -513,8 +514,8 @@ struct MyselfView: View {
             } else {
                 insightCard(
                     icon: "info.circle.fill",
-                    title: "Complete your profile",
-                    body: "Add your details to get personalized skincare tips.",
+                    title: L10n.Myself.Insights.CompleteProfile.title,
+                    body: L10n.Myself.Insights.CompleteProfile.body,
                     color: .blue
                 )
             }
@@ -573,11 +574,11 @@ struct MyselfView: View {
     private func climateTipCard(for profile: UserProfile) -> some View {
         let spf = profile.fitzpatrickSkinTone.recommendedSPF
         let region = profile.region
-        let text = "You're in a \(region.temperatureLevel.lowercased()) climate. Aim for SPF \(spf)+ daily protection."
+        let text = L10n.Myself.Insights.ClimateTip.body(climate: region.temperatureLevel.lowercased(), spf: spf)
 
         insightCard(
             icon: "sun.max.fill",
-            title: "Climate Tip",
+            title: L10n.Myself.Insights.ClimateTip.title,
             body: text,
             color: .orange
         )
@@ -590,7 +591,7 @@ struct MyselfView: View {
         if !activePrefs.isEmpty {
             insightCard(
                 icon: "heart.fill",
-                title: "Your Preferences",
+                title: L10n.Myself.Insights.yourPreferencesTitle,
                 body: activePrefs.joined(separator: " • "),
                 color: .pink
             )
@@ -599,11 +600,11 @@ struct MyselfView: View {
 
     private func buildActivePreferences(_ preferences: Preferences) -> [String] {
         var activePrefs: [String] = []
-        if preferences.fragranceFreeOnly { activePrefs.append("Fragrance-free") }
-        if preferences.suitableForSensitiveSkin { activePrefs.append("Sensitive skin") }
-        if preferences.naturalIngredients { activePrefs.append("Natural") }
-        if preferences.crueltyFree { activePrefs.append("Cruelty-free") }
-        if preferences.veganFriendly { activePrefs.append("Vegan") }
+        if preferences.fragranceFreeOnly { activePrefs.append(L10n.Myself.Preferences.fragranceFree) }
+        if preferences.suitableForSensitiveSkin { activePrefs.append(L10n.Myself.Preferences.sensitiveSkin) }
+        if preferences.naturalIngredients { activePrefs.append(L10n.Myself.Preferences.natural) }
+        if preferences.crueltyFree { activePrefs.append(L10n.Myself.Preferences.crueltyFree) }
+        if preferences.veganFriendly { activePrefs.append(L10n.Myself.Preferences.vegan) }
         return activePrefs
     }
 
@@ -615,7 +616,7 @@ struct MyselfView: View {
             HStack(spacing: 12) {
                 Image(systemName: "wand.and.stars")
                     .font(.system(size: 20))
-                Text("Create New Routine")
+                Text(L10n.Myself.createNewRoutine)
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 Spacer()
             }
@@ -1224,7 +1225,7 @@ struct InsightsTabView: View {
                 .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-            Text("\(Int(rate * 100))%")
+            Text(L10n.Myself.Completion.percentage(Int(rate * 100)))
                 .font(.system(size: 32, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -1239,7 +1240,7 @@ struct InsightsTabView: View {
                     .frame(width: max(0, CGFloat(rate) * (UIScreen.main.bounds.width - 64) / 2), height: 8)
             }
 
-            Text("Last \(totalDays) days")
+            Text(L10n.Myself.Completion.lastDays(totalDays))
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }
@@ -1306,7 +1307,7 @@ struct InsightsTabView: View {
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             }
 
-            Text("\(count) of \(total)")
+            Text(L10n.Myself.Completion.countOfTotal(count: count, total: total))
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -1432,7 +1433,7 @@ struct InsightsTabView: View {
                 let color = safeImpact >= 0 ? ThemeManager.shared.theme.palette.success : ThemeManager.shared.theme.palette.error
 
                 HStack(spacing: 4) {
-                    Text("\(sign)\(Int(safeImpact))%")
+                    Text(L10n.Myself.Completion.impactChange(sign: sign, value: Int(safeImpact)))
                         .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                         .foregroundColor(color)
 
@@ -1482,11 +1483,11 @@ struct DatePickerBottomSheet: View {
             VStack(spacing: 16) {
                 // Header
                 VStack(spacing: 8) {
-                    Text("Select Date")
+                    Text(L10n.Myself.DatePicker.title)
                         .font(ThemeManager.shared.theme.typo.h2.weight(.semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("View your timeline for any date")
+                    Text(L10n.Myself.DatePicker.subtitle)
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -1494,7 +1495,7 @@ struct DatePickerBottomSheet: View {
 
                 // Date Picker
                 DatePicker(
-                    "Select Date",
+                    L10n.Myself.DatePicker.selectDate,
                     selection: $selectedDate,
                     displayedComponents: [.date]
                 )
@@ -1521,7 +1522,7 @@ struct DatePickerBottomSheet: View {
                         Image(systemName: "calendar.badge.clock")
                             .font(.system(size: 16, weight: .semibold))
 
-                        Text("Today")
+                        Text(L10n.Myself.DatePicker.today)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     }
                     .foregroundColor(.white)

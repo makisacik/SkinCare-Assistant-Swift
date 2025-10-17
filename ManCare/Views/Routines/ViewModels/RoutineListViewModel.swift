@@ -183,18 +183,10 @@ final class RoutineListViewModel: ObservableObject {
         
         Task {
             do {
-                // Check premium status before saving
-                let premiumManager = PremiumManager.shared
-                let canCreate = await premiumManager.canCreateRoutine()
-
-                if !canCreate {
-                    await MainActor.run {
-                        self.error = PremiumError.routineLimitReached
-                        self.isLoading = false
-                    }
-                    print("❌ Cannot save routine: limit reached for non-premium user")
-                    return
-                }
+                // NOTE: Saving premade templates does NOT count against routine generation limit
+                // The limit only applies to generating new routines via GPT API
+                // Premade templates can be saved unlimited times as they don't use API
+                print("💾 Saving premade template '\(template.title)' (no API calls, no limit)")
 
                 let savedRoutine = try await routineService.saveRoutine(template)
 

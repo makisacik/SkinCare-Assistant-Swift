@@ -46,7 +46,7 @@ struct PremiumInsightsOverlay: View {
             HStack(spacing: 6) {
                 Image(systemName: "brain.head.profile")
                     .font(.system(size: 13, weight: .bold))
-                Text("AI-POWERED")
+                Text(L10n.Myself.Premium.aiPowered)
                     .font(.system(size: 13, weight: .bold))
                     .tracking(1.2)
             }
@@ -70,12 +70,12 @@ struct PremiumInsightsOverlay: View {
             
             // Tagline
             VStack(spacing: 8) {
-                Text("Get AI-powered insights")
+                Text(L10n.Myself.Premium.getInsights)
                     .font(.system(size: 26, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                Text("on your routines and skin progress")
+                Text(L10n.Myself.Premium.onRoutines)
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
@@ -86,17 +86,17 @@ struct PremiumInsightsOverlay: View {
             VStack(alignment: .leading, spacing: 16) {
                 featureRow(
                     icon: "chart.line.uptrend.xyaxis",
-                    text: "Smart routine analysis"
+                    text: L10n.Myself.Premium.smartAnalysis
                 )
-                
+
                 featureRow(
                     icon: "chart.bar.fill",
-                    text: "Most used product trends"
+                    text: L10n.Myself.Premium.productTrends
                 )
-                
+
                 featureRow(
                     icon: "drop.fill",
-                    text: "Mood & skin pattern correlation"
+                    text: L10n.Myself.Premium.moodCorrelation
                 )
             }
             .padding(.top, 8)
@@ -110,7 +110,7 @@ struct PremiumInsightsOverlay: View {
                     Image(systemName: "sparkles")
                         .font(.system(size: 16, weight: .semibold))
                     
-                    Text("Try Premium Free for 7 Days")
+                    Text(L10n.Myself.Premium.tryFree)
                         .font(.system(size: 17, weight: .semibold))
                 }
                 .foregroundColor(.white)

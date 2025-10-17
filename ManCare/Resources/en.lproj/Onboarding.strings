@@ -1,0 +1,324 @@
+/*
+  Onboarding.strings (English)
+  ManCare - Onboarding and routine creation flow
+*/
+
+/* Welcome Screen */
+"onboarding.welcome.appName" = "Glowie";
+"onboarding.welcome.description" = "Transform your skincare routine with personalized recommendations";
+"onboarding.welcome.getStarted" = "Get Started";
+"onboarding.welcome.skipToHome" = "Skip to Home";
+
+/* Create Routine Page */
+"onboarding.createRoutine.title" = "Create Your Routine";
+"onboarding.createRoutine.description" = "Glowie personalizes your morning and night routines based on your skin type and environment.";
+"onboarding.createRoutine.next" = "Next";
+
+/* Add Products Page */
+"onboarding.addProducts.title" = "Add or Scan Products";
+"onboarding.addProducts.description" = "Upload or photograph your skincare products — Glowie identifies them and explains what's inside.";
+"onboarding.addProducts.next" = "Next";
+
+/* Discover & Track Page */
+"onboarding.discoverTrack.title" = "Discover & Track";
+"onboarding.discoverTrack.description" = "Find new skincare routines, learn from others, and watch your glow evolve over time.";
+"onboarding.discoverTrack.getStarted" = "Get Started";
+
+/* Skin Type Selection */
+"onboarding.skinType.title" = "What's your skin type?";
+"onboarding.skinType.subtitle" = "Select your base type to build a simple routine.";
+"onboarding.skinType.continue" = "Continue";
+"onboarding.skinType.tapToSelect" = "Tap to select";
+
+/* Skin Type Options */
+"onboarding.skinType.oily" = "Oily";
+"onboarding.skinType.oily.subtitle" = "Shiny, enlarged pores";
+"onboarding.skinType.dry" = "Dry";
+"onboarding.skinType.dry.subtitle" = "Tightness, flakiness";
+"onboarding.skinType.combination" = "Combination";
+"onboarding.skinType.combination.subtitle" = "Oily T-zone, dry cheeks";
+"onboarding.skinType.normal" = "Normal";
+"onboarding.skinType.normal.subtitle" = "Balanced skin";
+
+/* Concern Selection */
+"onboarding.concerns.title" = "What concerns you?";
+"onboarding.concerns.subtitle" = "Pick what you want to focus on.";
+"onboarding.concerns.continue" = "Continue";
+"onboarding.concerns.customPlaceholder" = "Type your own concern...";
+
+/* Concern Options */ 
+"onboarding.concerns.acne" = "Acne";
+"onboarding.concerns.acne.subtitle" = "Breakouts, whiteheads";
+"onboarding.concerns.redness" = "Redness";
+"onboarding.concerns.redness.subtitle" = "Sensitivity, flushing";
+"onboarding.concerns.blackheads" = "Blackheads";
+"onboarding.concerns.blackheads.subtitle" = "Clogged pores, oil build-up";
+"onboarding.concerns.largePores" = "Large Pores";
+"onboarding.concerns.largePores.subtitle" = "Texture, visible pores";
+"onboarding.concerns.sensitive" = "Sensitive";
+"onboarding.concerns.sensitive.subtitle" = "Easily irritated skin";
+"onboarding.concerns.wrinkles" = "Wrinkles";
+"onboarding.concerns.wrinkles.subtitle" = "Fine lines, aging signs";
+"onboarding.concerns.dryness" = "Dryness";
+"onboarding.concerns.dryness.subtitle" = "Flaky, dehydrated skin";
+"onboarding.concerns.none" = "None";
+"onboarding.concerns.none.subtitle" = "No specific concerns";
+
+/* Main Goal Selection */
+"onboarding.mainGoal.title" = "What's your main goal?";
+"onboarding.mainGoal.subtitle" = "Choose the primary focus for your skincare routine.";
+"onboarding.mainGoal.continue" = "Continue";
+"onboarding.mainGoal.customPlaceholder" = "Type your own goal...";
+
+/* Main Goal Options */
+"onboarding.mainGoal.healthierOverall" = "Healthier skin overall";
+"onboarding.mainGoal.healthierOverall.subtitle" = "Build a solid foundation for better skin";
+"onboarding.mainGoal.reduceBreakouts" = "Reduce breakouts";
+"onboarding.mainGoal.reduceBreakouts.subtitle" = "Clear acne and prevent future breakouts";
+"onboarding.mainGoal.sootheIrritation" = "Soothe irritation";
+"onboarding.mainGoal.sootheIrritation.subtitle" = "Calm redness and sensitivity";
+"onboarding.mainGoal.preventAging" = "Prevent sun damage";
+"onboarding.mainGoal.preventAging.subtitle" = "Protect against UV damage and aging";
+"onboarding.mainGoal.ageSlower" = "Age slower";
+"onboarding.mainGoal.ageSlower.subtitle" = "Slow down aging with targeted care";
+"onboarding.mainGoal.shinySkin" = "Shiny, glowing skin";
+"onboarding.mainGoal.shinySkin.subtitle" = "Achieve a radiant, healthy glow";
+
+/* Fitzpatrick Skin Tone */
+"onboarding.fitzpatrick.title" = "What's your skin tone?";
+"onboarding.fitzpatrick.subtitle" = "This helps us recommend the right SPF and UV protection for your skin.";
+"onboarding.fitzpatrick.continue" = "Continue";
+
+/* Fitzpatrick Skin Tone Options */
+"onboarding.fitzpatrick.type1" = "Type I - Very Fair";
+"onboarding.fitzpatrick.type1.description" = "Always burns, never tans";
+"onboarding.fitzpatrick.type1.uvSensitivity" = "Extremely high";
+"onboarding.fitzpatrick.type2" = "Type II - Fair";
+"onboarding.fitzpatrick.type2.description" = "Usually burns, tans minimally";
+"onboarding.fitzpatrick.type2.uvSensitivity" = "High";
+"onboarding.fitzpatrick.type3" = "Type III - Light Olive";
+"onboarding.fitzpatrick.type3.description" = "Sometimes burns, tans gradually";
+"onboarding.fitzpatrick.type3.uvSensitivity" = "Moderate";
+"onboarding.fitzpatrick.type4" = "Type IV - Moderate Brown";
+"onboarding.fitzpatrick.type4.description" = "Rarely burns, tans easily";
+"onboarding.fitzpatrick.type4.uvSensitivity" = "Low";
+"onboarding.fitzpatrick.type5" = "Type V - Dark Brown";
+"onboarding.fitzpatrick.type5.description" = "Very rarely burns, tans very easily";
+"onboarding.fitzpatrick.type5.uvSensitivity" = "Very low";
+"onboarding.fitzpatrick.type6" = "Type VI - Very Dark";
+"onboarding.fitzpatrick.type6.description" = "Never burns, tans very easily";
+"onboarding.fitzpatrick.type6.uvSensitivity" = "Minimal";
+
+/* Age Range */
+"onboarding.ageRange.title" = "What's your age range?";
+"onboarding.ageRange.subtitle" = "This helps us tailor the routine to your skin's current needs.";
+"onboarding.ageRange.continue" = "Continue";
+
+/* Age Range Options */
+"onboarding.ageRange.teens" = "Teens (13-19)";
+"onboarding.ageRange.teens.description" = "Focus on prevention and gentle care";
+"onboarding.ageRange.twenties" = "20s";
+"onboarding.ageRange.twenties.description" = "Build healthy habits and prevent early aging";
+"onboarding.ageRange.thirties" = "30s";
+"onboarding.ageRange.thirties.description" = "Address first signs of aging";
+"onboarding.ageRange.forties" = "40s";
+"onboarding.ageRange.forties.description" = "Target fine lines and skin texture";
+"onboarding.ageRange.fifties" = "50s";
+"onboarding.ageRange.fifties.description" = "Combat deeper wrinkles and loss of firmness";
+"onboarding.ageRange.sixtiesPlus" = "60+";
+"onboarding.ageRange.sixtiesPlus.description" = "Maintain skin health and hydration";
+
+/* Region/Climate */
+"onboarding.region.title" = "What's your climate like?";
+"onboarding.region.subtitle" = "Your environment affects your skin's UV exposure and hydration needs.";
+"onboarding.region.continue" = "Continue";
+
+/* Region Options */
+"onboarding.region.tropical" = "Tropical";
+"onboarding.region.tropical.description" = "Hot, humid climate year-round";
+"onboarding.region.subtropical" = "Subtropical";
+"onboarding.region.subtropical.description" = "Warm, humid summers, mild winters";
+"onboarding.region.temperate" = "Temperate";
+"onboarding.region.temperate.description" = "Moderate temperatures, four seasons";
+"onboarding.region.continental" = "Continental";
+"onboarding.region.continental.description" = "Hot summers, cold winters";
+"onboarding.region.mediterranean" = "Mediterranean";
+"onboarding.region.mediterranean.description" = "Hot, dry summers, mild winters";
+"onboarding.region.arctic" = "Arctic/Cold";
+"onboarding.region.arctic.description" = "Very cold, dry climate";
+"onboarding.region.desert" = "Desert";
+"onboarding.region.desert.description" = "Hot, dry climate with low humidity";
+"onboarding.region.mountain" = "Mountain/High Altitude";
+"onboarding.region.mountain.description" = "High altitude, intense UV exposure";
+
+/* Region UV Index */
+"onboarding.region.tropical.uvIndex" = "Very High (8-11)";
+"onboarding.region.subtropical.uvIndex" = "High (6-8)";
+"onboarding.region.temperate.uvIndex" = "Moderate (3-6)";
+"onboarding.region.continental.uvIndex" = "Moderate to High (4-7)";
+"onboarding.region.mediterranean.uvIndex" = "High (6-9)";
+"onboarding.region.arctic.uvIndex" = "Low to Moderate (1-4)";
+"onboarding.region.desert.uvIndex" = "Very High (8-11)";
+"onboarding.region.mountain.uvIndex" = "Extreme (9-12)";
+
+/* Region Humidity Level */
+"onboarding.region.tropical.humidity" = "Very High";
+"onboarding.region.subtropical.humidity" = "High";
+"onboarding.region.temperate.humidity" = "Moderate";
+"onboarding.region.continental.humidity" = "Low to Moderate";
+"onboarding.region.mediterranean.humidity" = "Low";
+"onboarding.region.arctic.humidity" = "Very Low";
+"onboarding.region.desert.humidity" = "Very Low";
+"onboarding.region.mountain.humidity" = "Low";
+
+/* Region Temperature Level */
+"onboarding.region.tropical.temperature" = "Hot & Humid";
+"onboarding.region.subtropical.temperature" = "Warm & Humid";
+"onboarding.region.temperate.temperature" = "Moderate";
+"onboarding.region.continental.temperature" = "Hot/Cold";
+"onboarding.region.mediterranean.temperature" = "Warm & Dry";
+"onboarding.region.arctic.temperature" = "Very Cold";
+"onboarding.region.desert.temperature" = "Hot & Dry";
+"onboarding.region.mountain.temperature" = "Cool & Dry";
+
+/* Routine Depth */
+"onboarding.routineDepth.title" = "Routine Level";
+"onboarding.routineDepth.subtitle" = "How detailed would you like your skincare routine to be?";
+"onboarding.routineDepth.continue" = "Continue";
+
+/* Routine Depth Options */
+"onboarding.routineDepth.simple" = "Simple";
+"onboarding.routineDepth.simple.subtitle" = "Quick & essential";
+"onboarding.routineDepth.simple.description" = "Perfect for busy mornings.";
+"onboarding.routineDepth.simple.stepCount" = "3-4 steps";
+"onboarding.routineDepth.simple.timeEstimate" = "~3-5 minutes";
+"onboarding.routineDepth.simple.stepGuidance" = "Generate a minimal routine with 3-4 essential steps (cleanser, moisturizer, sunscreen AM only, and one targeted treatment if needed)";
+"onboarding.routineDepth.intermediate" = "Intermediate";
+"onboarding.routineDepth.intermediate.subtitle" = "Balanced approach";
+"onboarding.routineDepth.intermediate.description" = "A balanced routine.";
+"onboarding.routineDepth.intermediate.stepCount" = "5-6 steps";
+"onboarding.routineDepth.intermediate.timeEstimate" = "~6-8 minutes";
+"onboarding.routineDepth.intermediate.stepGuidance" = "Generate a balanced routine with 5-6 steps including cleanser, toner/essence, serum, eye cream (optional), moisturizer, and sunscreen (AM only)";
+"onboarding.routineDepth.advanced" = "Advanced";
+"onboarding.routineDepth.advanced.subtitle" = "Comprehensive care";
+"onboarding.routineDepth.advanced.description" = "For those who love detailed routines.";
+"onboarding.routineDepth.advanced.stepCount" = "7-9 steps";
+"onboarding.routineDepth.advanced.timeEstimate" = "~10-15 minutes";
+"onboarding.routineDepth.advanced.stepGuidance" = "Generate a comprehensive routine with 7-9 steps including double cleanse (PM), toner, essence, multiple serums/treatments, eye cream, moisturizer, sleeping mask/oil (PM), and sunscreen (AM only)";
+
+/* Preferences */
+"onboarding.preferences.title" = "Any preferences?";
+"onboarding.preferences.subtitle" = "These are optional but help us personalize your routine better.";
+"onboarding.preferences.continueWithPreferences" = "Continue with Preferences";
+"onboarding.preferences.skipForNow" = "Skip for now";
+"onboarding.preferences.continueWithoutAPI" = "Continue without API call";
+
+/* Preference Toggles */
+"onboarding.preferences.fragranceFree.title" = "Fragrance-free only";
+"onboarding.preferences.fragranceFree.subtitle" = "Avoid products with added fragrances";
+"onboarding.preferences.sensitiveSkin.title" = "Suitable for sensitive skin";
+"onboarding.preferences.sensitiveSkin.subtitle" = "Gentle, non-irritating formulas";
+"onboarding.preferences.natural.title" = "Natural ingredients";
+"onboarding.preferences.natural.subtitle" = "Prefer plant-based and natural components";
+"onboarding.preferences.crueltyFree.title" = "Cruelty-free";
+"onboarding.preferences.crueltyFree.subtitle" = "No animal testing";
+"onboarding.preferences.vegan.title" = "Vegan-friendly";
+"onboarding.preferences.vegan.subtitle" = "No animal-derived ingredients";
+
+/* Cycle Setup */
+"onboarding.cycle.title" = "Track Your Cycle";
+"onboarding.cycle.subtitle" = "Your skincare evolves with you — routines adapt to each phase.";
+"onboarding.cycle.lastPeriodQuestion" = "When did your last period start?";
+"onboarding.cycle.averageCycleLength" = "Average cycle length";
+"onboarding.cycle.cycleLengthValue" = "%d days";
+"onboarding.cycle.cycleLengthRange" = "Typical range: 21-35 days";
+"onboarding.cycle.periodLength" = "Period length";
+"onboarding.cycle.periodLengthValue" = "%d days";
+"onboarding.cycle.periodLengthRange" = "Typical range: 3-7 days";
+"onboarding.cycle.privacyNote" = "Your cycle data stays private on your device";
+"onboarding.cycle.enableAdaptive" = "Enable Cycle-Adaptive Routines";
+"onboarding.cycle.skipForNow" = "Skip for now";
+"onboarding.cycle.selectDate" = "Select Date";
+
+/* Cycle Setup Alert */
+"onboarding.cycle.alert.title" = "Use Default Averages?";
+"onboarding.cycle.alert.message" = "Would you like to use these default averages (28-day cycle, 5-day period) or update them first to match your cycle?";
+"onboarding.cycle.alert.editFirst" = "Edit First";
+"onboarding.cycle.alert.continue" = "Continue";
+
+/* Lifestyle Questions */
+"onboarding.lifestyle.title" = "Lifestyle Questions";
+"onboarding.lifestyle.subtitle" = "Help us understand your daily habits and preferences to create a more personalized routine.";
+"onboarding.lifestyle.back" = "Back";
+
+/* Lifestyle Sections */
+"onboarding.lifestyle.section.lifestyle" = "Lifestyle";
+"onboarding.lifestyle.section.skinHabits" = "Skin Habits & Goals";
+"onboarding.lifestyle.section.productPreferences" = "Product Preferences";
+"onboarding.lifestyle.section.sensitivity" = "Sensitivity & Sun";
+
+/* Lifestyle Questions */
+"onboarding.lifestyle.question.sleepQuality" = "Sleep Quality";
+"onboarding.lifestyle.question.outdoorHours" = "Time outdoors (hrs/day)";
+"onboarding.lifestyle.question.smoke" = "Do you smoke?";
+"onboarding.lifestyle.question.alcohol" = "Do you drink alcohol?";
+"onboarding.lifestyle.question.exercise" = "Exercise Frequency";
+"onboarding.lifestyle.question.routineDepth" = "Desired Routine Depth";
+"onboarding.lifestyle.question.fragranceFree" = "Fragrance-free only";
+"onboarding.lifestyle.question.naturalPreference" = "Prefer natural/clean formulas";
+"onboarding.lifestyle.question.sensitiveSkin" = "Sensitive skin";
+"onboarding.lifestyle.question.sunResponse" = "In the sun, your skin…";
+
+/* Sleep Quality Options */
+"onboarding.lifestyle.sleepQuality.poor" = "Poor";
+"onboarding.lifestyle.sleepQuality.average" = "Average";
+"onboarding.lifestyle.sleepQuality.good" = "Good";
+
+/* Exercise Frequency Options */
+"onboarding.lifestyle.exerciseFreq.none" = "None";
+"onboarding.lifestyle.exerciseFreq.oneToTwo" = "1–2 / week";
+"onboarding.lifestyle.exerciseFreq.threeToFour" = "3–4 / week";
+"onboarding.lifestyle.exerciseFreq.fivePlus" = "5+ / week";
+
+/* Routine Depth Options */
+"onboarding.lifestyle.routineDepth.minimal" = "2–3 steps";
+"onboarding.lifestyle.routineDepth.standard" = "3–4 steps";
+"onboarding.lifestyle.routineDepth.detailed" = "4–5 steps";
+
+/* Sun Response Options */
+"onboarding.lifestyle.sunResponse.rarely" = "Rarely burns";
+"onboarding.lifestyle.sunResponse.sometimes" = "Sometimes burns";
+"onboarding.lifestyle.sunResponse.easily" = "Easily burns";
+
+/* Routine Loading */
+"onboarding.loading.thinking" = "Thinking...";
+"onboarding.loading.analyzingSkinType" = "Analyzing your skin type…";
+"onboarding.loading.processingConcerns" = "Processing your concerns…";
+"onboarding.loading.evaluatingGoal" = "Evaluating your main goal…";
+"onboarding.loading.assessingEnvironment" = "Assessing environmental factors…";
+"onboarding.loading.preparingResults" = "Preparing routine results…";
+"onboarding.loading.creatingSlots" = "Creating product slots…";
+"onboarding.loading.optimizing" = "Optimizing for your preferences…";
+"onboarding.loading.finalizing" = "Almost done! Finalizing your results…";
+
+/* Common Actions */
+"onboarding.common.continue" = "Continue";
+"onboarding.common.next" = "Next";
+"onboarding.common.skip" = "Skip";
+"onboarding.common.back" = "Back";
+"onboarding.common.getStarted" = "Get Started";
+
+/* Flow Progress */
+"onboarding.flow.stepProgress" = "%d of %d";
+"onboarding.flow.stepSkinType" = "Skin Type";
+"onboarding.flow.stepConcerns" = "Concerns";
+"onboarding.flow.stepMainGoal" = "Main Goal";
+"onboarding.flow.stepSkinTone" = "Skin Tone";
+"onboarding.flow.stepAgeRange" = "Age Range";
+"onboarding.flow.stepRegion" = "Region";
+"onboarding.flow.stepRoutineLevel" = "Routine Level";
+"onboarding.flow.stepCycleSetup" = "Cycle Setup";
+"onboarding.flow.stepPreferences" = "Preferences";
+"onboarding.flow.stepAnalyzing" = "Analyzing";
+"onboarding.flow.stepResults" = "Results";
+

@@ -42,10 +42,10 @@ enum SessionStatus: String, Codable, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .active: return "Active"
-        case .paused: return "Paused"
-        case .completed: return "Completed"
-        case .abandoned: return "Abandoned"
+        case .active: return L10n.Routines.Companion.Status.active
+        case .paused: return L10n.Routines.Companion.Status.paused
+        case .completed: return L10n.Routines.Companion.Status.completed
+        case .abandoned: return L10n.Routines.Companion.Status.abandoned
         }
     }
 }
@@ -85,8 +85,8 @@ enum StepType: String, Codable, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .instruction: return "Instruction"
-        case .timed: return "Timed"
+        case .instruction: return L10n.Routines.Companion.StepType.instruction
+        case .timed: return L10n.Routines.Companion.StepType.timed
         }
     }
 }

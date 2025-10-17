@@ -46,7 +46,7 @@ struct StepDetailEditView: View {
                             .font(ThemeManager.shared.theme.typo.h2)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Edit step details")
+                        Text(L10n.Routines.Edit.title)
                             .font(ThemeManager.shared.theme.typo.body)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -57,11 +57,11 @@ struct StepDetailEditView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Title
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Step Name")
+                        Text(L10n.Routines.Edit.stepName)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        TextField("Enter step name", text: $title)
+                        TextField(L10n.Routines.Edit.enterStepName, text: $title)
                             .font(ThemeManager.shared.theme.typo.body)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .padding(16)
@@ -78,7 +78,7 @@ struct StepDetailEditView: View {
 
                     // Description - multiline
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Description")
+                        Text(L10n.Routines.Edit.description)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -99,7 +99,7 @@ struct StepDetailEditView: View {
                                 .colorScheme(.light)
 
                             if description.isEmpty {
-                                Text("Enter step description...")
+                                Text(L10n.Routines.Edit.enterDescription)
                                     .font(ThemeManager.shared.theme.typo.body)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                                     .padding(.horizontal, 20)
@@ -115,12 +115,12 @@ struct StepDetailEditView: View {
             }
         }
         .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
-        .navigationTitle("Edit Step")
+        .navigationTitle(L10n.Routines.Edit.editStep)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.light, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Save") {
+                Button(L10n.Common.save) {
                     saveChanges()
                     dismiss()
                 }

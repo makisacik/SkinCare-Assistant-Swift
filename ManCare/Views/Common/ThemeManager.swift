@@ -12,9 +12,9 @@ public enum AppTheme: String, CaseIterable, Identifiable, Codable {
     public var id: String { rawValue }
     public var title: String {
         switch self {
-        case .system: return "System"
-        case .light:  return "Light"
-        case .dark:   return "Dark"
+        case .system: return L10n.Theme.system
+        case .light:  return L10n.Theme.light
+        case .dark:   return L10n.Theme.dark
         }
     }
 }

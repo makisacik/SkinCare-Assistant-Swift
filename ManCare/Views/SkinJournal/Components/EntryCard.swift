@@ -58,7 +58,7 @@ struct EntryCard: View {
                         Text(mood)
                             .font(.system(size: 24))
                         
-                        Text("Mood")
+                        Text(L10n.SkinJournal.Journey.mood)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
@@ -71,7 +71,7 @@ struct EntryCard: View {
                             HStack(spacing: 4) {
                                 Text(tag.emoji)
                                     .font(.system(size: 10))
-                                Text(tag.rawValue)
+                                Text(tag.displayName)
                                     .font(ThemeManager.shared.theme.typo.caption)
                             }
                             .padding(.horizontal, 6)
@@ -82,7 +82,7 @@ struct EntryCard: View {
                         }
                         
                         if entry.skinFeelTags.count > 2 {
-                            Text("+\(entry.skinFeelTags.count - 2)")
+                            Text(L10n.SkinJournal.AddEntry.tagPrefix(entry.skinFeelTags.count - 2))
                                 .font(ThemeManager.shared.theme.typo.caption)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                         }

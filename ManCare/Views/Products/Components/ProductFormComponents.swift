@@ -115,7 +115,7 @@ struct SizeField: View {
                     Button(action: {
                         selectedUnit = .mL
                     }) {
-                        Text("mL")
+                        Text(L10n.Products.Form.unitMilliliters)
                             .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
                             .foregroundColor(selectedUnit == .mL ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
                             .padding(.horizontal, 12)
@@ -127,7 +127,7 @@ struct SizeField: View {
                     Button(action: {
                         selectedUnit = .oz
                     }) {
-                        Text("oz")
+                        Text(L10n.Products.Form.unitOunces)
                             .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
                             .foregroundColor(selectedUnit == .oz ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
                             .padding(.horizontal, 12)

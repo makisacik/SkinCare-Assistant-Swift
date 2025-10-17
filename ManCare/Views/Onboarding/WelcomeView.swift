@@ -26,7 +26,7 @@ struct WelcomeView: View {
                         // Spacer removed - now handled by page indicator in OnboardingFlowView
                         
                         ShimmerText(
-                            text: "Glowie",
+                            text: L10n.Onboarding.Welcome.appName,
                             baseColor: ThemeManager.shared.theme.palette.secondary
                         )
                         .font(.system(size: 42, weight: .light, design: .serif))
@@ -68,7 +68,7 @@ struct WelcomeView: View {
                     .padding(.horizontal, 20)
                     
                     // Descriptive text below image
-                    Text("Transform your skincare routine with personalized recommendations")
+                    Text(L10n.Onboarding.Welcome.description)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -85,7 +85,7 @@ struct WelcomeView: View {
                         onGetStarted()
                     } label: {
                         HStack(spacing: 8) {
-                            Text("Get Started")
+                            Text(L10n.Onboarding.Welcome.getStarted)
                                 .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 16, weight: .semibold))
@@ -110,7 +110,7 @@ struct WelcomeView: View {
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         onSkipToHome()
                     } label: {
-                        Text("Skip to Home")
+                        Text(L10n.Onboarding.Welcome.skipToHome)
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }

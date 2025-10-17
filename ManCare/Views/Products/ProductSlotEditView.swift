@@ -16,11 +16,11 @@ struct ProductSlotEditView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("Edit Product Slot")
+                Text(L10n.Products.Slot.Edit.title)
                     .font(ThemeManager.shared.theme.typo.h1)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
-                Text("This feature will allow you to edit the product slot: \(slot.step.displayName)")
+                Text(L10n.Products.Slot.Edit.subtitle(slot.step.displayName))
                     .font(ThemeManager.shared.theme.typo.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
@@ -28,12 +28,12 @@ struct ProductSlotEditView: View {
                 Spacer()
             }
             .padding(20)
-            .navigationTitle("Edit Slot")
+            .navigationTitle(L10n.Products.Slot.Edit.navTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(L10n.Common.done) {
                         dismiss()
                     }
                     .foregroundColor(ThemeManager.shared.theme.palette.secondary)

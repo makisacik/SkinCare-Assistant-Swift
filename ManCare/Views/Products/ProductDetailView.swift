@@ -48,17 +48,17 @@ struct ProductDetailView: View {
                     
                     VStack(spacing: 20) {
                         // Basic Information
-                        ProductDetailSection(title: "Basic Information") {
+                        ProductDetailSection(title: L10n.Products.Form.basicInfo) {
                             VStack(spacing: 12) {
-                                DetailRow(label: "Product Type", value: product.tagging.productType.displayName)
+                                DetailRow(label: L10n.Products.Detail.productType, value: product.tagging.productType.displayName)
                                 
                                 if let size = product.size {
-                                    DetailRow(label: "Size", value: size)
+                                    DetailRow(label: L10n.Products.Detail.size, value: size)
                                 }
                                 
                                 if let description = product.description {
                                     VStack(alignment: .leading, spacing: 8) {
-                                        Text("Description")
+                                        Text(L10n.Products.Detail.description)
                                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                         
@@ -72,7 +72,7 @@ struct ProductDetailView: View {
                         
                         // Ingredients
                         if !product.tagging.ingredients.isEmpty {
-                            ProductDetailSection(title: "Ingredients") {
+                            ProductDetailSection(title: L10n.Products.Form.ingredients) {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 8) {
                                     ForEach(product.tagging.ingredients, id: \.self) { ingredient in
                                         IngredientTag(ingredient: ingredient) {
@@ -85,7 +85,7 @@ struct ProductDetailView: View {
                         
                         // Claims
                         if !product.tagging.claims.isEmpty {
-                            ProductDetailSection(title: "Product Claims") {
+                            ProductDetailSection(title: L10n.Products.Form.productClaims) {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 8) {
                                     ForEach(product.tagging.claims, id: \.self) { claim in
                                         ClaimToggle(claim: claim, isSelected: true) {
@@ -106,7 +106,7 @@ struct ProductDetailView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Text("Close")
+                        Text(L10n.Products.Detail.close)
                             .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -117,13 +117,13 @@ struct ProductDetailView: View {
                         Button {
                             showingEditView = true
                         } label: {
-                            Label("Edit Product", systemImage: "pencil")
+                            Label(L10n.Products.Detail.editProduct, systemImage: "pencil")
                         }
                         
                         Button(role: .destructive) {
                             showingDeleteAlert = true
                         } label: {
-                            Label("Delete Product", systemImage: "trash")
+                            Label(L10n.Products.Detail.deleteProduct, systemImage: "trash")
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -142,14 +142,14 @@ struct ProductDetailView: View {
                 }
             )
         }
-        .alert("Delete Product", isPresented: $showingDeleteAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
+        .alert(L10n.Products.Detail.deleteConfirmTitle, isPresented: $showingDeleteAlert) {
+            Button(L10n.Common.cancel, role: .cancel) { }
+            Button(L10n.Common.delete, role: .destructive) {
                 onDeleteProduct(product)
                 dismiss()
             }
         } message: {
-            Text("Are you sure you want to delete \"\(product.displayName)\"? This action cannot be undone.")
+            Text(L10n.Products.Detail.deleteConfirmMessage(product.displayName))
         }
     }
 }
@@ -247,11 +247,11 @@ struct EditProductView: View {
                 VStack(spacing: 24) {
                     // Header
                     VStack(spacing: 8) {
-                        Text("Edit Product")
+                        Text(L10n.Products.Detail.editProduct)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
-                        Text("Update product information")
+                        Text(L10n.Products.Detail.updateInfo)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -259,16 +259,16 @@ struct EditProductView: View {
                     
                     VStack(spacing: 20) {
                         // Basic Information
-                        ProductFormSection(title: "Basic Information") {
+                        ProductFormSection(title: L10n.Products.Form.basicInfo) {
                             VStack(spacing: 16) {
-                                FormField(title: "Product Name", text: $productName, placeholder: "e.g., Gentle Foaming Cleanser")
-                                FormField(title: "Brand", text: $brand, placeholder: "e.g., CeraVe")
-                                FormField(title: "Size", text: $size, placeholder: "e.g., 150ml")
+                                FormField(title: L10n.Products.Form.productName, text: $productName, placeholder: L10n.Products.Form.productNamePlaceholder)
+                                FormField(title: L10n.Products.Form.brand, text: $brand, placeholder: L10n.Products.Form.brandPlaceholder)
+                                FormField(title: L10n.Products.Form.size, text: $size, placeholder: L10n.Products.Form.sizePlaceholder)
                             }
                         }
                         
                         // Product Category
-                        ProductFormSection(title: "Product Category") {
+                        ProductFormSection(title: L10n.Products.Form.productCategory) {
                             VStack(spacing: 16) {
                                 ProductTypeSelectorButton(selectedProductType: $selectedProductType) {
                                     showingProductTypeSelector = true
@@ -277,10 +277,10 @@ struct EditProductView: View {
                         }
                         
                         // Ingredients
-                        ProductFormSection(title: "Ingredients") {
+                        ProductFormSection(title: L10n.Products.Form.ingredients) {
                             VStack(spacing: 16) {
                                 HStack(spacing: 12) {
-                                    TextField("Add ingredient", text: $newIngredient)
+                                    TextField(L10n.Products.Form.addIngredient, text: $newIngredient)
                                         .font(ThemeManager.shared.theme.typo.body)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 12)
@@ -317,7 +317,7 @@ struct EditProductView: View {
                         }
                         
                         // Claims
-                        ProductFormSection(title: "Product Claims") {
+                        ProductFormSection(title: L10n.Products.Form.productClaims) {
                             VStack(spacing: 16) {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 8) {
                                     ForEach(availableClaims, id: \.self) { claim in
@@ -334,9 +334,9 @@ struct EditProductView: View {
                         }
                         
                         // Description
-                        ProductFormSection(title: "Description") {
+                        ProductFormSection(title: L10n.Products.Form.description) {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Product Description")
+                                Text(L10n.Products.Form.productDescription)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
@@ -363,7 +363,7 @@ struct EditProductView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Products.Action.cancel)
                             .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -373,7 +373,7 @@ struct EditProductView: View {
                     Button {
                         saveProduct()
                     } label: {
-                        Text("Save")
+                        Text(L10n.Products.Action.save)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(productName.isEmpty ? ThemeManager.shared.theme.palette.textMuted : ThemeManager.shared.theme.palette.secondary)
                     }

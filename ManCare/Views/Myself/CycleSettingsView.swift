@@ -33,11 +33,11 @@ struct CycleSettingsView: View {
                             .font(.system(size: 50))
                             .foregroundColor(ThemeManager.shared.theme.palette.primary)
                         
-                        Text("Cycle Tracking Settings")
+                        Text(L10n.Myself.Cycle.title)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
-                        Text("Help us understand your cycle for personalized skincare recommendations")
+                        Text(L10n.Myself.Cycle.subtitle)
                             .font(.system(size: 14))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             .multilineTextAlignment(.center)
@@ -48,12 +48,12 @@ struct CycleSettingsView: View {
                     VStack(spacing: 20) {
                         // Last Period Start Date
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Last Period Start Date")
+                            Text(L10n.Myself.Cycle.lastPeriodStart)
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             
                             DatePicker(
-                                "Select Date",
+                                L10n.Myself.Cycle.selectDate,
                                 selection: $lastPeriodDate,
                                 in: ...Date(),
                                 displayedComponents: .date
@@ -74,13 +74,13 @@ struct CycleSettingsView: View {
                         // Cycle Length
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
-                                Text("Average Cycle Length")
+                                Text(L10n.Myself.Cycle.averageCycleLength)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
                                 Spacer()
                                 
-                                Text("\(Int(cycleLength)) days")
+                                Text(L10n.Myself.Cycle.cycleLengthValue(Int(cycleLength)))
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.primary)
                             }
@@ -88,7 +88,7 @@ struct CycleSettingsView: View {
                             Slider(value: $cycleLength, in: 21...35, step: 1)
                                 .accentColor(ThemeManager.shared.theme.palette.primary)
                             
-                            Text("Typical range: 21-35 days")
+                            Text(L10n.Myself.Cycle.cycleLengthRange)
                                 .font(.system(size: 12))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                         }
@@ -105,13 +105,13 @@ struct CycleSettingsView: View {
                         // Period Length
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
-                                Text("Period Length")
+                                Text(L10n.Myself.Cycle.periodLength)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
                                 Spacer()
                                 
-                                Text("\(Int(periodLength)) days")
+                                Text(L10n.Myself.Cycle.periodLengthValue(Int(periodLength)))
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.primary)
                             }
@@ -119,7 +119,7 @@ struct CycleSettingsView: View {
                             Slider(value: $periodLength, in: 3...7, step: 1)
                                 .accentColor(ThemeManager.shared.theme.palette.primary)
                             
-                            Text("Typical range: 3-7 days")
+                            Text(L10n.Myself.Cycle.periodLengthRange)
                                 .font(.system(size: 12))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                         }
@@ -139,7 +139,7 @@ struct CycleSettingsView: View {
                                 .font(.system(size: 20))
                                 .foregroundColor(ThemeManager.shared.theme.palette.info)
                             
-                            Text("Your cycle data is stored securely on your device and used to provide personalized skincare recommendations.")
+                            Text(L10n.Myself.Cycle.privacyInfo)
                                 .font(.system(size: 13))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 .lineLimit(nil)
@@ -156,7 +156,7 @@ struct CycleSettingsView: View {
                     Button {
                         showPaywall = true
                     } label: {
-                        Text("Save Settings")
+                        Text(L10n.Myself.Cycle.saveSettings)
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                             .frame(maxWidth: .infinity)
@@ -172,7 +172,7 @@ struct CycleSettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(L10n.Myself.Cycle.cancel) {
                         dismiss()
                     }
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)

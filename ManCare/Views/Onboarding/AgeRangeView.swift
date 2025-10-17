@@ -27,10 +27,10 @@ struct AgeRangeView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Title section
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("What's your age range?")
+                        Text(L10n.Onboarding.AgeRange.title)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        Text("This helps us tailor the routine to your skin's current needs.")
+                        Text(L10n.Onboarding.AgeRange.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -47,7 +47,7 @@ struct AgeRangeView: View {
                                 }
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel(Text(ageRange.title))
-                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityHint(Text(L10n.Onboarding.SkinType.tapToSelect))
                                 .accessibilityAddTraits(selection == ageRange ? .isSelected : [])
                         }
                     }
@@ -60,7 +60,7 @@ struct AgeRangeView: View {
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                         onContinue(picked)
                     } label: {
-                        Text("Continue")
+                        Text(L10n.Onboarding.AgeRange.continue)
                     }
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(selection == nil)

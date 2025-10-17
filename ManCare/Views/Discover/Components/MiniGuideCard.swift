@@ -16,16 +16,17 @@ struct MiniGuideCard: View {
     private let imageTimer = Timer.publish(every: 2.5, on: .main, in: .common).autoconnect()
 
     private var guideImages: [String] {
-        switch guide.title {
-        case "How your cycle affects skin":
+        // Use guideKey to determine image set
+        switch guide.guideKey {
+        case "cycleSkin":
             return ["guide-cycle-1", "guide-cycle-2", "guide-cycle-3", "guide-cycle-4"]
-        case "AM vs PM Routine":
+        case "ampmRoutine":
             return ["guide-ampm-1", "guide-ampm-2", "guide-ampm-3", "guide-ampm-4"]
-        case "Acids, Explained":
+        case "acidsExplained":
             return ["guide-acids-1", "guide-acids-2", "guide-acids-3", "guide-acids-4"]
-        case "Retinoids":
+        case "retinoids101":
             return ["guide-retinol-1", "guide-retinol-2", "guide-retinol-3", "guide-retinol-4"]
-        case "Skinimalism & Minimal Routines":
+        case "skinimalism":
             return ["guide-minimalist-1", "guide-minimalist-2", "guide-minimalist-3", "guide-minimalist-4"]
         default:
             return []
@@ -81,7 +82,7 @@ struct MiniGuideCard: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "book.fill")
                                     .font(.system(size: 10, weight: .semibold))
-                                Text("\(guide.minutes) MIN")
+                                Text(L10n.Discover.Guides.minutes(guide.minutes))
                                     .font(.system(size: 12, weight: .semibold))
                             }
                             .foregroundColor(.white)
@@ -101,12 +102,12 @@ struct MiniGuideCard: View {
                         Spacer()
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(guide.title)
+                                Text(guide.localizedTitle)
                                     .font(.system(size: 18, weight: .bold))
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.leading)
                                 
-                                Text(guide.category)
+                                Text(guide.localizedCategory)
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(.white.opacity(0.9))
                             }
@@ -132,11 +133,12 @@ struct MiniGuideCard: View {
     MiniGuideCard(
         guide: MiniGuide(
             id: UUID(),
-            title: "Skincare 101: Build a basic routine",
-            subtitle: "Cleanse, treat, moisturize, protect",
-            minutes: 5,
-            imageName: "skincare-products/basic-kit",
-            category: "Basics"
+            guideKey: "cycleSkin",
+            minutes: 2,
+            imageName: "placeholder",
+            title: nil,
+            subtitle: nil,
+            category: nil
         ),
         onTap: {}
     )

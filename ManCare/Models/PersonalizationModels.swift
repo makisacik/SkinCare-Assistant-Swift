@@ -16,34 +16,34 @@ enum FitzpatrickSkinTone: String, CaseIterable, Identifiable, Codable {
     
     var title: String {
         switch self {
-        case .type1: return "Type I - Very Fair"
-        case .type2: return "Type II - Fair"
-        case .type3: return "Type III - Light Olive"
-        case .type4: return "Type IV - Moderate Brown"
-        case .type5: return "Type V - Dark Brown"
-        case .type6: return "Type VI - Very Dark"
+        case .type1: return L10n.Onboarding.FitzpatrickTypes.type1
+        case .type2: return L10n.Onboarding.FitzpatrickTypes.type2
+        case .type3: return L10n.Onboarding.FitzpatrickTypes.type3
+        case .type4: return L10n.Onboarding.FitzpatrickTypes.type4
+        case .type5: return L10n.Onboarding.FitzpatrickTypes.type5
+        case .type6: return L10n.Onboarding.FitzpatrickTypes.type6
         }
     }
     
     var description: String {
         switch self {
-        case .type1: return "Always burns, never tans"
-        case .type2: return "Usually burns, tans minimally"
-        case .type3: return "Sometimes burns, tans gradually"
-        case .type4: return "Rarely burns, tans easily"
-        case .type5: return "Very rarely burns, tans very easily"
-        case .type6: return "Never burns, tans very easily"
+        case .type1: return L10n.Onboarding.FitzpatrickTypes.type1Description
+        case .type2: return L10n.Onboarding.FitzpatrickTypes.type2Description
+        case .type3: return L10n.Onboarding.FitzpatrickTypes.type3Description
+        case .type4: return L10n.Onboarding.FitzpatrickTypes.type4Description
+        case .type5: return L10n.Onboarding.FitzpatrickTypes.type5Description
+        case .type6: return L10n.Onboarding.FitzpatrickTypes.type6Description
         }
     }
     
     var uvSensitivity: String {
         switch self {
-        case .type1: return "Extremely high"
-        case .type2: return "High"
-        case .type3: return "Moderate"
-        case .type4: return "Low"
-        case .type5: return "Very low"
-        case .type6: return "Minimal"
+        case .type1: return L10n.Onboarding.FitzpatrickTypes.type1UvSensitivity
+        case .type2: return L10n.Onboarding.FitzpatrickTypes.type2UvSensitivity
+        case .type3: return L10n.Onboarding.FitzpatrickTypes.type3UvSensitivity
+        case .type4: return L10n.Onboarding.FitzpatrickTypes.type4UvSensitivity
+        case .type5: return L10n.Onboarding.FitzpatrickTypes.type5UvSensitivity
+        case .type6: return L10n.Onboarding.FitzpatrickTypes.type6UvSensitivity
         }
     }
     
@@ -96,23 +96,23 @@ enum AgeRange: String, CaseIterable, Identifiable, Codable {
     
     var title: String {
         switch self {
-        case .teens: return "Teens (13-19)"
-        case .twenties: return "20s"
-        case .thirties: return "30s"
-        case .forties: return "40s"
-        case .fifties: return "50s"
-        case .sixtiesPlus: return "60+"
+        case .teens: return L10n.Onboarding.AgeRangeTypes.teens
+        case .twenties: return L10n.Onboarding.AgeRangeTypes.twenties
+        case .thirties: return L10n.Onboarding.AgeRangeTypes.thirties
+        case .forties: return L10n.Onboarding.AgeRangeTypes.forties
+        case .fifties: return L10n.Onboarding.AgeRangeTypes.fifties
+        case .sixtiesPlus: return L10n.Onboarding.AgeRangeTypes.sixtiesPlus
         }
     }
     
     var description: String {
         switch self {
-        case .teens: return "Focus on prevention and gentle care"
-        case .twenties: return "Build healthy habits and prevent early aging"
-        case .thirties: return "Address first signs of aging"
-        case .forties: return "Target fine lines and skin texture"
-        case .fifties: return "Combat deeper wrinkles and loss of firmness"
-        case .sixtiesPlus: return "Maintain skin health and hydration"
+        case .teens: return L10n.Onboarding.AgeRangeTypes.teensDescription
+        case .twenties: return L10n.Onboarding.AgeRangeTypes.twentiesDescription
+        case .thirties: return L10n.Onboarding.AgeRangeTypes.thirtiesDescription
+        case .forties: return L10n.Onboarding.AgeRangeTypes.fortiesDescription
+        case .fifties: return L10n.Onboarding.AgeRangeTypes.fiftiesDescription
+        case .sixtiesPlus: return L10n.Onboarding.AgeRangeTypes.sixtiesPlusDescription
         }
     }
     
@@ -136,53 +136,53 @@ enum Region: String, CaseIterable, Identifiable, Codable {
     
     var title: String {
         switch self {
-        case .tropical: return "Tropical"
-        case .subtropical: return "Subtropical"
-        case .temperate: return "Temperate"
-        case .continental: return "Continental"
-        case .mediterranean: return "Mediterranean"
-        case .arctic: return "Arctic/Cold"
-        case .desert: return "Desert"
-        case .mountain: return "Mountain/High Altitude"
+        case .tropical: return L10n.Onboarding.RegionTypes.tropical
+        case .subtropical: return L10n.Onboarding.RegionTypes.subtropical
+        case .temperate: return L10n.Onboarding.RegionTypes.temperate
+        case .continental: return L10n.Onboarding.RegionTypes.continental
+        case .mediterranean: return L10n.Onboarding.RegionTypes.mediterranean
+        case .arctic: return L10n.Onboarding.RegionTypes.arctic
+        case .desert: return L10n.Onboarding.RegionTypes.desert
+        case .mountain: return L10n.Onboarding.RegionTypes.mountain
         }
     }
     
     var description: String {
         switch self {
-        case .tropical: return "Hot, humid climate year-round"
-        case .subtropical: return "Warm, humid summers, mild winters"
-        case .temperate: return "Moderate temperatures, four seasons"
-        case .continental: return "Hot summers, cold winters"
-        case .mediterranean: return "Hot, dry summers, mild winters"
-        case .arctic: return "Very cold, dry climate"
-        case .desert: return "Hot, dry climate with low humidity"
-        case .mountain: return "High altitude, intense UV exposure"
+        case .tropical: return L10n.Onboarding.RegionTypes.tropicalDescription
+        case .subtropical: return L10n.Onboarding.RegionTypes.subtropicalDescription
+        case .temperate: return L10n.Onboarding.RegionTypes.temperateDescription
+        case .continental: return L10n.Onboarding.RegionTypes.continentalDescription
+        case .mediterranean: return L10n.Onboarding.RegionTypes.mediterraneanDescription
+        case .arctic: return L10n.Onboarding.RegionTypes.arcticDescription
+        case .desert: return L10n.Onboarding.RegionTypes.desertDescription
+        case .mountain: return L10n.Onboarding.RegionTypes.mountainDescription
         }
     }
     
     var averageUVIndex: String {
         switch self {
-        case .tropical: return "Very High (8-11)"
-        case .subtropical: return "High (6-8)"
-        case .temperate: return "Moderate (3-6)"
-        case .continental: return "Moderate to High (4-7)"
-        case .mediterranean: return "High (6-9)"
-        case .arctic: return "Low to Moderate (1-4)"
-        case .desert: return "Very High (8-11)"
-        case .mountain: return "Extreme (9-12)"
+        case .tropical: return L10n.Onboarding.RegionTypes.tropicalUvIndex
+        case .subtropical: return L10n.Onboarding.RegionTypes.subtropicalUvIndex
+        case .temperate: return L10n.Onboarding.RegionTypes.temperateUvIndex
+        case .continental: return L10n.Onboarding.RegionTypes.continentalUvIndex
+        case .mediterranean: return L10n.Onboarding.RegionTypes.mediterraneanUvIndex
+        case .arctic: return L10n.Onboarding.RegionTypes.arcticUvIndex
+        case .desert: return L10n.Onboarding.RegionTypes.desertUvIndex
+        case .mountain: return L10n.Onboarding.RegionTypes.mountainUvIndex
         }
     }
     
     var humidityLevel: String {
         switch self {
-        case .tropical: return "Very High"
-        case .subtropical: return "High"
-        case .temperate: return "Moderate"
-        case .continental: return "Low to Moderate"
-        case .mediterranean: return "Low"
-        case .arctic: return "Very Low"
-        case .desert: return "Very Low"
-        case .mountain: return "Low"
+        case .tropical: return L10n.Onboarding.RegionTypes.tropicalHumidity
+        case .subtropical: return L10n.Onboarding.RegionTypes.subtropicalHumidity
+        case .temperate: return L10n.Onboarding.RegionTypes.temperateHumidity
+        case .continental: return L10n.Onboarding.RegionTypes.continentalHumidity
+        case .mediterranean: return L10n.Onboarding.RegionTypes.mediterraneanHumidity
+        case .arctic: return L10n.Onboarding.RegionTypes.arcticHumidity
+        case .desert: return L10n.Onboarding.RegionTypes.desertHumidity
+        case .mountain: return L10n.Onboarding.RegionTypes.mountainHumidity
         }
     }
     
@@ -214,14 +214,14 @@ enum Region: String, CaseIterable, Identifiable, Codable {
 
     var temperatureLevel: String {
         switch self {
-        case .tropical: return "Hot & Humid"
-        case .subtropical: return "Warm & Humid"
-        case .temperate: return "Moderate"
-        case .continental: return "Hot/Cold"
-        case .mediterranean: return "Warm & Dry"
-        case .arctic: return "Very Cold"
-        case .desert: return "Hot & Dry"
-        case .mountain: return "Cool & Dry"
+        case .tropical: return L10n.Onboarding.RegionTypes.tropicalTemperature
+        case .subtropical: return L10n.Onboarding.RegionTypes.subtropicalTemperature
+        case .temperate: return L10n.Onboarding.RegionTypes.temperateTemperature
+        case .continental: return L10n.Onboarding.RegionTypes.continentalTemperature
+        case .mediterranean: return L10n.Onboarding.RegionTypes.mediterraneanTemperature
+        case .arctic: return L10n.Onboarding.RegionTypes.arcticTemperature
+        case .desert: return L10n.Onboarding.RegionTypes.desertTemperature
+        case .mountain: return L10n.Onboarding.RegionTypes.mountainTemperature
         }
     }
 }

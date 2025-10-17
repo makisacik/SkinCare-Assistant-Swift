@@ -23,7 +23,7 @@ struct TagTrendsCard: View {
                             .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
                     )
                 
-                Text("Skin Feel Trends")
+                Text(L10n.Myself.SkinFeel.title)
                     .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
@@ -89,7 +89,7 @@ struct TagTrendsCard: View {
                 Text(tag.emoji)
                     .font(.system(size: 20))
                 
-                Text(tag.rawValue)
+                Text(tag.displayName)
                     .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .lineLimit(1)
@@ -105,11 +105,11 @@ struct TagTrendsCard: View {
                 .font(.system(size: 32))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("No skin journal entries yet")
+            Text(L10n.Myself.SkinFeel.empty)
                 .font(ThemeManager.shared.theme.typo.body)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
-            Text("Start tracking how your skin feels")
+            Text(L10n.Myself.SkinFeel.emptySubtitle)
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                 .multilineTextAlignment(.center)

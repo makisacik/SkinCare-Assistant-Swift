@@ -1,0 +1,187 @@
+/*
+  Discover.strings (English)
+  ManCare - Discover tab related strings
+*/
+
+/* General */
+"discover.title" = "Discover";
+"discover.subtitle" = "Expert-curated routines and trending favorites";
+"discover.allRoutines" = "All Routines";
+"discover.viewAll" = "View All";
+
+/* Error Handling */
+"discover.error" = "Error";
+"discover.retry" = "Retry";
+"discover.dismiss" = "Dismiss";
+
+/* Fresh Drops Section */
+"discover.freshDrops.title" = "Fresh Drops";
+"discover.freshDrops.subtitle" = "Updated every few days — save your favorites";
+"discover.freshDrops.empty" = "Check back soon for fresh routines!";
+"discover.freshDrops.stepsAndDuration" = "%d steps • %@";
+
+/* Routine Metrics */
+"discover.metrics.steps" = "steps";
+
+/* Personalized Routine */
+"discover.personalized.title" = "Create your personalized routine";
+"discover.personalized.subtitle" = "Intelligent routine creation just for you";
+"discover.personalized.createTitle" = "Create Your Personalized Routine";
+"discover.personalized.customizeInstructions" = "Customize your preferences below, or skip sections you don't want to change. Tap anywhere on a section card to expand it.";
+"discover.personalized.saveRoutine" = "Save Routine";
+"discover.personalized.generateRoutine" = "Generate My Routine";
+"discover.personalized.routineName" = "Routine Name";
+"discover.personalized.defaultName" = "My Routine";
+"discover.personalized.defaultNameNumbered" = "My Routine %d";
+"discover.personalized.routineNamePlaceholder" = "Routine name";
+
+/* Personalized Routine Sections */
+"discover.personalized.skinType" = "Skin Type";
+"discover.personalized.currently" = "Currently: %@";
+"discover.personalized.skinConcerns" = "Skin Concerns";
+"discover.personalized.mainGoal" = "Main Goal";
+"discover.personalized.routineComplexity" = "Routine Complexity";
+"discover.personalized.additionalDetails" = "Additional Details";
+"discover.personalized.shareDetails" = "Share any specific concerns, allergies, or preferences";
+"discover.personalized.detailsPlaceholder" = "e.g., I have sensitive skin, prefer natural products, or I'm allergic to fragrances...";
+"discover.personalized.characterCount" = "%d/100";
+"discover.personalized.selected" = "Selected: %@";
+"discover.personalized.selectedNone" = "Selected: None";
+"discover.personalized.notSelected" = "Not selected";
+"discover.personalized.customNotes" = "Custom notes: %@";
+"discover.personalized.customNotesNone" = "Custom notes: None";
+"discover.personalized.customNotesCount" = "Custom notes: %d characters";
+
+/* Mini Guides */
+"discover.guides.title" = "Mini Guides";
+"discover.guides.subtitle" = "Quick reads on skincare fundamentals";
+"discover.guides.minutes" = "%d MIN";
+"discover.guides.minRead" = "%d min read";
+
+/* Inspirational Quotes */
+"discover.quotes.title" = "A LITTLE GLOW FOR YOUR DAY";
+
+/* Community Heat */
+"discover.community.title" = "Community Heat";
+"discover.community.subtitle" = "What people save most";
+"discover.community.updated" = "Updated %@";
+"discover.community.empty" = "No trending data yet";
+"discover.community.increase" = "%d%%";
+
+/* Routine Detail */
+"discover.detail.tags" = "Tags";
+"discover.detail.routineSteps" = "Routine Steps";
+"discover.detail.benefits" = "Benefits";
+"discover.detail.morning" = "Morning";
+"discover.detail.evening" = "Evening";
+"discover.detail.stepNumber" = "%d";
+"discover.detail.listBullet" = "•";
+"discover.detail.stepDescription" = "Step %d of your %@ routine";
+
+/* Time of Day */
+"discover.timeOfDay.morning" = "Morning";
+"discover.timeOfDay.evening" = "Evening";
+
+/* Routine Badges */
+"discover.badge.new" = "New";
+"discover.badge.updated" = "Updated";
+"discover.badge.trending" = "Trending";
+
+/* Trending Period */
+"discover.trending.thisWeek" = "This week";
+"discover.trending.thisMonth" = "This month";
+
+/* Refresh Time */
+"discover.refresh.justNow" = "Refreshed just now • new tips every morning ☀️";
+"discover.refresh.minutesAgo" = "Refreshed %d min ago • new tips every morning ☀️";
+"discover.refresh.hoursAgo" = "Refreshed %d hour%@ ago";
+"discover.refresh.daysAgo" = "Refreshed %d day%@ ago";
+"discover.refresh.hoursSuffix" = "s";
+"discover.refresh.daysSuffix" = "s";
+
+/* Ticker Stats */
+"discover.ticker.newThisWeek" = "New this week: +%d routines · +%d guides";
+
+/* Personalized Routine Loading Statuses */
+"discover.personalized.loading.analyzing" = "Analyzing your preferences...";
+"discover.personalized.loading.processing" = "Processing custom details...";
+"discover.personalized.loading.generating" = "Generating personalized routine...";
+"discover.personalized.loading.optimizing" = "Optimizing for your skin type...";
+"discover.personalized.loading.finalizing" = "Finalizing recommendations...";
+
+/* Inspirational Quotes */
+"discover.quotes.shareFooter" = "Shared from ManCare";
+"discover.quotes.fallback.text" = "Beauty begins the moment you decide to be yourself.";
+"discover.quotes.fallback.author" = "Coco Chanel";
+"discover.quotes.fallback.category" = "Beauty";
+
+/* Individual Quotes */
+"discover.quotes.quote1.text" = "Beauty is not in the face; beauty is a light in the heart.";
+"discover.quotes.quote1.author" = "Kahlil Gibran";
+"discover.quotes.quote1.category" = "Philosophy";
+
+"discover.quotes.quote2.text" = "Your skin is your largest organ. Take care of it with love and patience.";
+"discover.quotes.quote2.author" = "Dr. Howard Murad";
+"discover.quotes.quote2.category" = "Skincare";
+
+"discover.quotes.quote3.text" = "True beauty is not about perfection, it's about embracing your unique self.";
+"discover.quotes.quote3.author" = "Alicia Keys";
+"discover.quotes.quote3.category" = "Self-Love";
+
+"discover.quotes.quote4.text" = "Let your skin breathe the silence of care, and your glow will whisper confidence.";
+"discover.quotes.quote4.author" = "Unknown";
+"discover.quotes.quote4.category" = "Skincare";
+
+"discover.quotes.quote5.text" = "Beauty lives in moments of gentleness — a soft touch, a calm breath, a patient heart.";
+"discover.quotes.quote5.author" = "Unknown";
+"discover.quotes.quote5.category" = "Beauty";
+
+"discover.quotes.quote6.text" = "Care for your skin as you would a memory — tenderly, without rush, with love.";
+"discover.quotes.quote6.author" = "Unknown";
+"discover.quotes.quote6.category" = "Philosophy";
+
+"discover.quotes.quote7.text" = "You bloom quietly when you learn to listen to your body.";
+"discover.quotes.quote7.author" = "Unknown";
+"discover.quotes.quote7.category" = "Self-Love";
+
+"discover.quotes.quote8.text" = "Radiance is born from rest, not rush.";
+"discover.quotes.quote8.author" = "Unknown";
+"discover.quotes.quote8.category" = "Beauty";
+
+"discover.quotes.quote9.text" = "In caring for your skin, you practice the art of slowing time.";
+"discover.quotes.quote9.author" = "Unknown";
+"discover.quotes.quote9.category" = "Skincare";
+
+"discover.quotes.quote10.text" = "The glow you seek is the peace you keep.";
+"discover.quotes.quote10.author" = "Unknown";
+"discover.quotes.quote10.category" = "Self-Love";
+
+"discover.quotes.quote11.text" = "Beauty doesn't ask to be seen — it simply exists, softly.";
+"discover.quotes.quote11.author" = "Unknown";
+"discover.quotes.quote11.category" = "Philosophy";
+
+"discover.quotes.quote12.text" = "Every ritual of care is a quiet conversation with yourself.";
+"discover.quotes.quote12.author" = "Unknown";
+"discover.quotes.quote12.category" = "Skincare";
+
+"discover.quotes.quote13.text" = "Your reflection is not what you see, but how kindly you see it.";
+"discover.quotes.quote13.author" = "Unknown";
+"discover.quotes.quote13.category" = "Self-Love";
+
+"discover.quotes.quote14.text" = "Happiness is the best makeup. Take care of your inner glow first.";
+"discover.quotes.quote14.author" = "Drew Barrymore";
+"discover.quotes.quote14.category" = "Self-Love";
+
+"discover.quotes.quote15.text" = "Confidence breeds beauty. When you feel good, you look even better.";
+"discover.quotes.quote15.author" = "Blake Lively";
+"discover.quotes.quote15.category" = "Beauty";
+
+"discover.quotes.quote16.text" = "Taking care of your skin is more important than covering it up.";
+"discover.quotes.quote16.author" = "Unknown";
+"discover.quotes.quote16.category" = "Skincare";
+
+"discover.quotes.quote17.text" = "Self-care is how you take your power back.";
+"discover.quotes.quote17.author" = "Lalah Delia";
+"discover.quotes.quote17.category" = "Self-Love";
+
+

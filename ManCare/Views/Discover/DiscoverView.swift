@@ -14,6 +14,7 @@ struct AllRoutinesDestination: Hashable {}
 struct DiscoverView: View {
     @StateObject private var viewModel: DiscoverViewModel
     @StateObject private var listViewModel: RoutineListViewModel
+    @EnvironmentObject private var localizationManager: LocalizationManager
     @State private var showingRoutineDetail: RoutineTemplate?
     @State private var showingGuideDetail: Guide?
     @State private var showConfetti = false
@@ -99,13 +100,13 @@ struct DiscoverView: View {
             .onAppear {
                 // Any setup needed
             }
-            .alert("Error", isPresented: .constant(viewModel.error != nil)) {
-                Button("Retry") {
+            .alert(L10n.Discover.error, isPresented: .constant(viewModel.error != nil)) {
+                Button(L10n.Discover.retry) {
                     Task {
                         await viewModel.retry()
                     }
                 }
-                Button("Dismiss") {
+                Button(L10n.Discover.dismiss) {
                     viewModel.clearError()
                 }
             } message: {
@@ -146,7 +147,7 @@ struct DiscoverView: View {
 
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Expert-curated routines and trending favorites")
+            Text(L10n.Discover.subtitle)
                 .font(.system(size: 16))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .leading)

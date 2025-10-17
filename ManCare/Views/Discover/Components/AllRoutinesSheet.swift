@@ -31,7 +31,7 @@ struct AllRoutinesSheet: View {
                 .padding(.bottom, 40)
             }
         }
-        .navigationTitle("All Routines")
+        .navigationTitle(L10n.Discover.allRoutines)
         .navigationBarTitleDisplayMode(.large)
     }
 

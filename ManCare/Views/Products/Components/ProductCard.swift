@@ -86,7 +86,7 @@ struct ProductCard: View {
                         }
                         
                         if let size = product.size {
-                            Text("• \(size)")
+                            Text(L10n.Products.Detail.sizeBullet(size))
                                 .font(.system(size: 12))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                         }
@@ -100,7 +100,7 @@ struct ProductCard: View {
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
                     } else if !product.tagging.ingredients.isEmpty {
-                        Text("Key ingredients: \(product.tagging.ingredients.prefix(2).joined(separator: ", "))")
+                        Text(L10n.Products.Detail.keyIngredients(product.tagging.ingredients.prefix(2).joined(separator: ", ")))
                             .font(.system(size: 12))
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                             .lineLimit(2)
@@ -112,7 +112,7 @@ struct ProductCard: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 4) {
                                 ForEach(product.tagging.claims.prefix(3), id: \.self) { claim in
-                                    Text(claim.displayName)
+                                    Text(L10n.Products.Claim.displayName(for: claim))
                                         .font(.system(size: 9, weight: .medium))
                                         .foregroundColor(ThemeManager.shared.theme.palette.success)
                                         .padding(.horizontal, 4)
@@ -159,32 +159,6 @@ struct ProductCard: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
-    }
-}
-
-// Extension to format claim names
-extension String {
-    var displayName: String {
-        switch self.lowercased() {
-        case "fragrancefree":
-            return "Fragrance Free"
-        case "sensitivesafe":
-            return "Sensitive Safe"
-        case "vegan":
-            return "Vegan"
-        case "crueltyfree":
-            return "Cruelty Free"
-        case "parabenfree":
-            return "Paraben Free"
-        case "sulfatefree":
-            return "Sulfate Free"
-        case "oilfree":
-            return "Oil Free"
-        case "noncomedogenic":
-            return "Non-comedogenic"
-        default:
-            return self.capitalized
-        }
     }
 }
 

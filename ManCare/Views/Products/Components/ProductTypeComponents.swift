@@ -16,7 +16,7 @@ struct ProductTypeSelectorButton: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Product Type")
+            Text(L10n.Products.ProductType.title)
                 .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -37,7 +37,7 @@ struct ProductTypeSelectorButton: View {
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .lineLimit(1)
 
-                        Text("Tap to change product type")
+                        Text(L10n.Products.ProductType.tapToChange)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }

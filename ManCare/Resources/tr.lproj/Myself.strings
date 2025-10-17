@@ -1,0 +1,132 @@
+/*
+Myself.strings (Turkish)
+ManCare - Myself tab related strings
+*/
+
+/* General */
+"myself.title" = "Ben";
+"myself.profile" = "Profil";
+"myself.edit" = "Düzenle";
+"myself.createNewRoutine" = "Yeni Rutin Oluştur";
+
+/* Greetings */
+"myself.greeting.morning" = "Günaydın, %@!";
+"myself.greeting.afternoon" = "Tünaydın, %@!";
+"myself.greeting.evening" = "İyi Akşamlar, %@!";
+"myself.greeting.night" = "İyi Geceler, %@!";
+
+/* Tab Titles */
+"myself.tabs.timeline" = "Zaman Çizelgesi";
+"myself.tabs.journal" = "Cilt Günlüğü";
+"myself.tabs.insights" = "Analizler";
+
+/* Tab Descriptions */
+"myself.tabs.journal.description" = "Cildinizin ışıltısının nasıl geliştiğini görün";
+"myself.tabs.insights.description" = "Cilt bakım yolculuğunuzdaki örüntüleri ve trendleri keşfedin";
+
+/* Profile Stats */
+"myself.stats.skinType" = "Cilt Tipi";
+"myself.stats.ageRange" = "Yaş Aralığı";
+"myself.stats.skinTone" = "Cilt Tonu";
+"myself.stats.climate" = "İklim";
+
+/* Insights & Tips */
+"myself.insights.title" = "Analizler ve İpuçları";
+"myself.insights.combinationLargePores.title" = "Karma + Geniş Gözenekler";
+"myself.insights.combinationLargePores.body" = "Cilt dokusunu iyileştirmek için niasinamid ve BHA içeren ürünlere bakın.";
+"myself.insights.completeProfile.title" = "Profilinizi tamamlayın";
+"myself.insights.completeProfile.body" = "Size özel cilt bakım ipuçları almak için bilgilerinizi ekleyin.";
+"myself.insights.climateTip.title" = "İklim İpucu";
+"myself.insights.climateTip.body" = "Şu anda %@ iklimindesiniz. Günlük koruma için SPF %d+ hedefleyin.";
+"myself.insights.yourPreferences.title" = "Tercihleriniz";
+"myself.insights.morningConsistent" = "En çok sabahları tutarlısınız! 🌅 (%d%% tamamlama oranı)";
+"myself.insights.eveningShines" = "Akşam rutininiz harika! 🌙 (%d%% tamamlama oranı)";
+"myself.insights.equallyConsistent" = "Eşit derecede tutarlısınız! Her iki rutinde de %d%%";
+"myself.insights.buildConsistency" = "Rutinlerinizle tutarlılık oluşturmaya başlayın!";
+
+/* Preferences */
+"myself.preferences.fragranceFree" = "Parfümsüz";
+"myself.preferences.sensitiveSkin" = "Hassas cilt";
+"myself.preferences.natural" = "Doğal";
+"myself.preferences.crueltyFree" = "Hayvanlar Üzerinde Test Edilmemiştir";
+"myself.preferences.vegan" = "Vegan";
+
+/* Completion Stats */
+"myself.completion.percentage" = "%d%%";
+"myself.completion.lastDays" = "Son %d gün";
+"myself.completion.countOfTotal" = "%d / %d";
+"myself.completion.dayNumber" = "%d";
+"myself.completion.impactChange" = "%@%d%%";
+
+/* Premium Insights */
+"myself.premium.aiPowered" = "YAPAY ZEKÂ DESTEKLİ";
+"myself.premium.getInsights" = "Yapay zekâ destekli analizler alın";
+"myself.premium.onRoutines" = "rutinleriniz ve cilt gelişiminiz hakkında";
+"myself.premium.tryFree" = "7 Gün Ücretsiz Premium Deneyin";
+"myself.premium.smartAnalysis" = "Akıllı rutin analizi";
+"myself.premium.productTrends" = "En çok kullanılan ürün trendleri";
+"myself.premium.moodCorrelation" = "Ruh hali ve cilt örüntüsü korelasyonu";
+
+/* Most Used Products */
+"myself.products.title" = "En Çok Kullanılan Ürünler";
+"myself.products.rank" = "%d";
+"myself.products.empty" = "Henüz ürün kullanılmadı";
+"myself.products.emptySubtitle" = "Favorilerinizi görmek için rutininizi tamamlayın";
+"myself.products.usedCount" = "%d kez kullanıldı"; // Tekil ve çoğul aynı cümlede birleştirildi.
+"myself.products.usedCountPlural" = "%d kez kullanıldı"; // Tekil ve çoğul aynı cümlede birleştirildi.
+
+/* Skin Feel Trends */
+"myself.skinFeel.title" = "Cilt Hissi Trendleri";
+"myself.skinFeel.empty" = "Henüz cilt günlüğü girişi yok";
+"myself.skinFeel.emptySubtitle" = "Cildinizin nasıl hissettiğini takip etmeye başlayın";
+
+/* Date Picker */
+"myself.datePicker.title" = "Tarih Seçin";
+"myself.datePicker.subtitle" = "Herhangi bir tarihe ait zaman çizelgenizi görüntüleyin";
+"myself.datePicker.today" = "Bugün";
+"myself.datePicker.selectDate" = "Tarih Seç";
+
+/* Edit Profile */
+"myself.editProfile.title" = "Profili Düzenle";
+"myself.editProfile.save" = "Kaydet";
+"myself.editProfile.cancel" = "İptal";
+
+/* Edit Profile Sections */
+"myself.editProfile.skin" = "Cilt";
+"myself.editProfile.skinType" = "Cilt Tipi";
+"myself.editProfile.fitzpatrickTone" = "Fitzpatrick Tonu";
+"myself.editProfile.concerns" = "Kaygılar";
+"myself.editProfile.goalAndPreferences" = "Hedef ve Tercihler";
+"myself.editProfile.mainGoal" = "Ana Hedef";
+"myself.editProfile.preferences" = "Tercihler";
+"myself.editProfile.demographics" = "Demografi ve İklim";
+"myself.editProfile.ageRange" = "Yaş Aralığı";
+"myself.editProfile.regionClimate" = "Bölge/İklim";
+"myself.editProfile.menstruationCycle" = "Menstrüasyon Döngüsü";
+"myself.editProfile.lastPeriodStart" = "Son Adet Başlangıcı";
+"myself.editProfile.cycleLength" = "Döngü Uzunluğu: %d gün";
+"myself.editProfile.periodLength" = "Adet Süresi: %d gün";
+"myself.editProfile.currentPhase" = "Mevcut Aşama: %@";
+"myself.editProfile.dayOfCycle" = "Döngünün %d. günü / %d";
+
+/* Preferences Editor */
+"myself.editProfile.preferences.fragranceFree" = "Parfümsüz";
+"myself.editProfile.preferences.sensitiveSkin" = "Hassas Cilde Uygun";
+"myself.editProfile.preferences.natural" = "Doğal İçerikler";
+"myself.editProfile.preferences.crueltyFree" = "Hayvanlar Üzerinde Test Edilmemiştir";
+"myself.editProfile.preferences.vegan" = "Vegan Dostu";
+
+/* Cycle Settings */
+"myself.cycle.title" = "Döngü Takibi Ayarları";
+"myself.cycle.subtitle" = "Kişiselleştirilmiş cilt bakımı önerileri için döngünüzü anlamamıza yardımcı olun";
+"myself.cycle.lastPeriodStart" = "Son Adet Başlangıç Tarihi";
+"myself.cycle.averageCycleLength" = "Ortalama Döngü Uzunluğu";
+"myself.cycle.cycleLengthValue" = "%d gün";
+"myself.cycle.cycleLengthRange" = "Tipik aralık: 21-35 gün";
+"myself.cycle.periodLength" = "Adet Süresi";
+"myself.cycle.periodLengthValue" = "%d gün";
+"myself.cycle.periodLengthRange" = "Tipik aralık: 3-7 gün";
+"myself.cycle.privacyInfo" = "Döngü verileriniz cihazınızda güvenli bir şekilde saklanır ve kişiselleştirilmiş cilt bakımı önerileri sunmak için kullanılır.";
+"myself.cycle.saveSettings" = "Ayarları Kaydet";
+"myself.cycle.cancel" = "İptal";
+"myself.cycle.selectDate" = "Tarih Seç";

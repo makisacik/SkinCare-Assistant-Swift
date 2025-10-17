@@ -21,32 +21,32 @@ enum CyclePhase: String, CaseIterable, Identifiable, Codable {
     
     var title: String {
         switch self {
-        case .menstrual: return "Menstrual"
-        case .follicular: return "Follicular"
-        case .ovulation: return "Ovulation"
-        case .luteal: return "Luteal"
+        case .menstrual: return L10n.Routines.Cycle.Phase.menstrual
+        case .follicular: return L10n.Routines.Cycle.Phase.follicular
+        case .ovulation: return L10n.Routines.Cycle.Phase.ovulation
+        case .luteal: return L10n.Routines.Cycle.Phase.luteal
         }
     }
     
     var description: String {
         switch self {
-        case .menstrual: return "Days 1-5"
-        case .follicular: return "Days 6-13"
-        case .ovulation: return "Days 14-16"
-        case .luteal: return "Days 17-28"
+        case .menstrual: return L10n.Routines.Cycle.PhaseDesc.menstrual
+        case .follicular: return L10n.Routines.Cycle.PhaseDesc.follicular
+        case .ovulation: return L10n.Routines.Cycle.PhaseDesc.ovulation
+        case .luteal: return L10n.Routines.Cycle.PhaseDesc.luteal
         }
     }
     
     var skincareTip: String {
         switch self {
         case .menstrual:
-            return "Your skin may be more sensitive. Focus on gentle, hydrating products and avoid harsh treatments."
+            return L10n.Routines.Cycle.Tip.menstrual
         case .follicular:
-            return "Your skin is glowing! This is a great time to try new products or treatments."
+            return L10n.Routines.Cycle.Tip.follicular
         case .ovulation:
-            return "Skin looks its best! Maintain your routine and enjoy your natural glow."
+            return L10n.Routines.Cycle.Tip.ovulation
         case .luteal:
-            return "Oil production increases. Use lighter moisturizers and add clay masks to control shine."
+            return L10n.Routines.Cycle.Tip.luteal
         }
     }
     

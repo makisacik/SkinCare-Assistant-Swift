@@ -41,7 +41,7 @@ struct LoadingView: View {
                     }
 
                 // Loading text
-                Text("Loading…")
+                Text(L10n.Common.loading)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             }

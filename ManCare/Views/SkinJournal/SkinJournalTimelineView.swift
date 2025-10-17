@@ -43,7 +43,7 @@ struct SkinJournalTimelineView: View {
                     .padding(24)
             }
             .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
-            .navigationTitle("Skin Journey")
+            .navigationTitle(L10n.SkinJournal.Timeline.title)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -64,7 +64,7 @@ struct SkinJournalTimelineView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "arrow.left.and.right")
                                     .font(.system(size: 14, weight: .semibold))
-                                Text("Compare")
+                                Text(L10n.SkinJournal.Timeline.compare)
                                     .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                             }
                             .foregroundColor(ThemeManager.shared.theme.palette.primary)
@@ -76,7 +76,7 @@ struct SkinJournalTimelineView: View {
                     }
                 }
             }
-            .searchable(text: $searchText, prompt: "Search notes...")
+            .searchable(text: $searchText, prompt: L10n.SkinJournal.Timeline.searchNotes)
             .sheet(isPresented: $showingAddEntry) {
                 AddSkinJournalEntryView()
             }
@@ -114,19 +114,19 @@ struct SkinJournalTimelineView: View {
             statBox(
                 icon: "photo.on.rectangle.angled",
                 value: "\(store.totalEntries)",
-                label: "Entries"
+                label: L10n.SkinJournal.Timeline.entries
             )
             
             statBox(
                 icon: "flame.fill",
                 value: "\(store.getCurrentStreak())",
-                label: "Day Streak"
+                label: L10n.SkinJournal.Timeline.dayStreak
             )
         }
         .padding(.horizontal)
     }
     
-    private func statBox(icon: String, value: String, label: String) -> some View {
+    private func statBox(icon: String, value: String, label labelKey: String) -> some View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.system(size: 20))
@@ -136,7 +136,7 @@ struct SkinJournalTimelineView: View {
                 .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
-            Text(label)
+            Text(labelKey)
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }
@@ -161,11 +161,11 @@ struct SkinJournalTimelineView: View {
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
             VStack(spacing: 8) {
-                Text("Start Your Skin Journey")
+                Text(L10n.SkinJournal.Timeline.startJourney)
                     .font(ThemeManager.shared.theme.typo.h2.weight(.bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
-                Text("Track your skin progress with selfies and notes")
+                Text(L10n.SkinJournal.Journey.trackProgressWithSelfies)
                     .font(ThemeManager.shared.theme.typo.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
@@ -178,7 +178,7 @@ struct SkinJournalTimelineView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 20))
-                    Text("Add Your First Entry")
+                    Text(L10n.SkinJournal.Journey.addFirstEntry)
                         .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 }
                 .foregroundColor(.white)

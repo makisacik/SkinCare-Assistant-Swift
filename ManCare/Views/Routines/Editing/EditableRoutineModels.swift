@@ -134,30 +134,30 @@ enum StepFrequency: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .daily:
-            return "Daily"
+            return L10n.Routines.Frequency.daily
         case .everyOtherDay:
-            return "Every other day"
+            return L10n.Routines.Frequency.everyOtherDay
         case .twiceWeekly:
-            return "2x per week"
+            return L10n.Routines.Frequency.twiceWeekly
         case .weekly:
-            return "Weekly"
+            return L10n.Routines.Frequency.weekly
         case .custom:
-            return "Custom"
+            return L10n.Routines.Frequency.custom
         }
     }
     
     var description: String {
         switch self {
         case .daily:
-            return "Use every day"
+            return L10n.Routines.Frequency.Description.daily
         case .everyOtherDay:
-            return "Use every other day"
+            return L10n.Routines.Frequency.Description.everyOtherDay
         case .twiceWeekly:
-            return "Use twice per week"
+            return L10n.Routines.Frequency.Description.twiceWeekly
         case .weekly:
-            return "Use once per week"
+            return L10n.Routines.Frequency.Description.weekly
         case .custom:
-            return "Set custom frequency"
+            return L10n.Routines.Frequency.Description.custom
         }
     }
     
@@ -265,8 +265,8 @@ struct EditableRoutine: Codable {
             version: "1.0",
             locale: "en-US",
             summary: Summary(
-                title: "Edited Routine",
-                oneLiner: "Your customized skincare routine"
+                title: L10n.Routines.Edit.editedRoutineTitle,
+                oneLiner: L10n.Routines.Edit.editedRoutineOneLiner
             ),
             routine: Routine(
                 depth: .simple,

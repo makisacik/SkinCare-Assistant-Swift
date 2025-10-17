@@ -40,8 +40,8 @@ struct AddSkinJournalEntryView: View {
                 savingOverlay
             }
         }
-        .alert("Error", isPresented: $showError) {
-            Button("OK", role: .cancel) { }
+        .alert(L10n.Common.error, isPresented: $showError) {
+            Button(L10n.Common.ok, role: .cancel) { }
         } message: {
             Text(errorMessage)
         }
@@ -87,7 +87,7 @@ struct AddSkinJournalEntryView: View {
                 .padding()
             }
             .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
-            .navigationTitle("Add Entry")
+            .navigationTitle(L10n.SkinJournal.AddEntry.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbarBackground(ThemeManager.shared.theme.palette.surface, for: .navigationBar)
@@ -111,7 +111,7 @@ struct AddSkinJournalEntryView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Back") {
+                    Button(L10n.SkinJournal.AddEntry.back) {
                         print("🔙 Back button tapped, returning to camera")
                         withAnimation {
                             currentStep = .camera
@@ -120,7 +120,7 @@ struct AddSkinJournalEntryView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button(L10n.SkinJournal.AddEntry.save) {
                         print("💾 Save button tapped!")
                         saveEntry()
                     }
@@ -134,7 +134,7 @@ struct AddSkinJournalEntryView: View {
     private func photoPreview(_ photo: UIImage) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Your Photo")
+                Text(L10n.SkinJournal.AddEntry.yourPhoto)
                     .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
@@ -194,11 +194,11 @@ struct AddSkinJournalEntryView: View {
     
     private var moodTagsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("How are you feeling?")
+            Text(L10n.SkinJournal.AddEntry.howAreYouFeeling)
                 .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
-            Text("Select your mood for today")
+            Text(L10n.SkinJournal.AddEntry.selectMood)
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
@@ -251,11 +251,11 @@ struct AddSkinJournalEntryView: View {
     
     private var skinFeelTagsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Skin Feel")
+            Text(L10n.SkinJournal.AddEntry.skinFeel)
                 .font(ThemeManager.shared.theme.typo.h3.weight(.bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
-            Text("Describe how your skin feels")
+            Text(L10n.SkinJournal.AddEntry.describeSkinFeel)
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             
@@ -280,7 +280,7 @@ struct AddSkinJournalEntryView: View {
             HStack(spacing: 6) {
                 Text(tag.emoji)
                     .font(.system(size: 16))
-                Text(tag.rawValue)
+                Text(tag.displayName)
                     .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
             }
             .padding(.horizontal, 14)
@@ -320,11 +320,11 @@ struct AddSkinJournalEntryView: View {
                     .scaleEffect(1.5)
                     .tint(.white)
                 
-                Text("Analyzing your photo...")
+                Text(L10n.SkinJournal.AddEntry.analyzingPhoto)
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(.white)
                 
-                Text("This may take a moment")
+                Text(L10n.SkinJournal.AddEntry.takingAMoment)
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(.white.opacity(0.8))
             }
@@ -342,7 +342,7 @@ struct AddSkinJournalEntryView: View {
     private func saveEntry() {
         guard var photo = capturedPhoto else {
             print("❌ No photo captured")
-            errorMessage = "No photo captured"
+            errorMessage = L10n.SkinJournal.AddEntry.noPhotoCaptured
             showError = true
             return
         }

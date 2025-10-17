@@ -632,6 +632,10 @@ final class RoutineService: RoutineServiceProtocol {
 
     /// Create translation objects for a routine template, including both English and device locale
     private func createTemplateTranslations(from template: RoutineTemplate) async throws -> (routine: RoutineTranslations, steps: [StepTranslations]) {
+        // IMPORTANT: Premade templates should NOT call translation APIs
+        // For now, we only store English until we add proper template translations to JSON
+        print("📦 Creating template translations (English-only, no API calls)")
+
         let deviceLanguage = LocalizationUtils.deviceLocaleLanguage()
 
         // Start with English versions (from the template)
@@ -640,106 +644,64 @@ final class RoutineService: RoutineServiceProtocol {
         var benefitsTranslations: [String: [String]] = ["en": template.benefits]
         var tagsTranslations: [String: [String]] = ["en": template.tags]
 
+        // Merge embedded translations if available (NO API calls)
+        if let templateTrans = template.translations {
+            for (lang, title) in templateTrans.title {
+                routineTitleTranslations[lang] = title
+            }
+            for (lang, desc) in templateTrans.description {
+                routineDescTranslations[lang] = desc
+            }
+            for (lang, benefits) in templateTrans.benefits {
+                benefitsTranslations[lang] = benefits
+            }
+            for (lang, tags) in templateTrans.tags {
+                tagsTranslations[lang] = tags
+            }
+            print("✅ Found embedded translations for: \(templateTrans.title.keys.sorted())")
+        }
+
         // Create step translations
         var allStepTranslations: [StepTranslations] = []
 
-        // If device language is not English, translate
-        if deviceLanguage != "en" {
-            print("🌍 Creating translations for template '\(template.title)' in language: \(deviceLanguage)")
-            let languageService = LanguageService.shared
+        // Process morning steps with embedded translations
+        for step in template.morningSteps {
+            var titleTrans: [String: String] = ["en": step.title]
+            var whyTrans: [String: String] = ["en": step.why]
+            var howTrans: [String: String] = ["en": step.how]
 
-            // Translate routine-level content
-            do {
-                routineTitleTranslations[deviceLanguage] = try await languageService.translateFromEnglish(template.title, to: deviceLanguage)
-                routineDescTranslations[deviceLanguage] = try await languageService.translateFromEnglish(template.description, to: deviceLanguage)
-            } catch {
-                print("⚠️ Failed to translate template title/description: \(error), using English only")
+            if let stepTrans = step.translations {
+                for (lang, title) in stepTrans.title { titleTrans[lang] = title }
+                for (lang, why) in stepTrans.why { whyTrans[lang] = why }
+                for (lang, how) in stepTrans.how { howTrans[lang] = how }
             }
 
-            // Translate benefits
-            do {
-                let translatedBenefits = try await languageService.translateArray(template.benefits, from: "en", to: deviceLanguage)
-                benefitsTranslations[deviceLanguage] = translatedBenefits
-            } catch {
-                print("⚠️ Failed to translate template benefits: \(error), using English only")
+            allStepTranslations.append(StepTranslations(
+                title: titleTrans,
+                stepDescription: whyTrans, // Use why as description
+                why: whyTrans,
+                how: howTrans
+            ))
+        }
+
+        // Process evening steps with embedded translations
+        for step in template.eveningSteps {
+            var titleTrans: [String: String] = ["en": step.title]
+            var whyTrans: [String: String] = ["en": step.why]
+            var howTrans: [String: String] = ["en": step.how]
+
+            if let stepTrans = step.translations {
+                for (lang, title) in stepTrans.title { titleTrans[lang] = title }
+                for (lang, why) in stepTrans.why { whyTrans[lang] = why }
+                for (lang, how) in stepTrans.how { howTrans[lang] = how }
             }
 
-            // Translate tags
-            do {
-                let translatedTags = try await languageService.translateArray(template.tags, from: "en", to: deviceLanguage)
-                tagsTranslations[deviceLanguage] = translatedTags
-            } catch {
-                print("⚠️ Failed to translate template tags: \(error), using English only")
-            }
-
-            // Translate morning steps (with individual error handling)
-            for step in template.morningSteps {
-                var stepTitleTrans: [String: String] = ["en": step.title]
-                var stepDescTrans: [String: String] = ["en": step.why]
-                var stepWhyTrans: [String: String] = ["en": step.why]
-                var stepHowTrans: [String: String] = ["en": step.how]
-
-                do {
-                    stepTitleTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.title, to: deviceLanguage)
-                    stepDescTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
-                    stepWhyTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
-                    stepHowTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage)
-                } catch {
-                    print("⚠️ Failed to translate template morning step '\(step.title)': \(error), using English only")
-                }
-
-                allStepTranslations.append(StepTranslations(
-                    title: stepTitleTrans,
-                    stepDescription: stepDescTrans,
-                    why: stepWhyTrans,
-                    how: stepHowTrans
-                ))
-            }
-
-            // Translate evening steps (with individual error handling)
-            for step in template.eveningSteps {
-                var stepTitleTrans: [String: String] = ["en": step.title]
-                var stepDescTrans: [String: String] = ["en": step.why]
-                var stepWhyTrans: [String: String] = ["en": step.why]
-                var stepHowTrans: [String: String] = ["en": step.how]
-
-                do {
-                    stepTitleTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.title, to: deviceLanguage)
-                    stepDescTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
-                    stepWhyTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage)
-                    stepHowTrans[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage)
-                } catch {
-                    print("⚠️ Failed to translate template evening step '\(step.title)': \(error), using English only")
-                }
-
-                allStepTranslations.append(StepTranslations(
-                    title: stepTitleTrans,
-                    stepDescription: stepDescTrans,
-                    why: stepWhyTrans,
-                    how: stepHowTrans
-                ))
-            }
-
-            print("✅ Template translations created for \(allStepTranslations.count) steps (some may be English-only if translation failed)")
-        } else {
-            // English only - still create translation objects for consistency
-            for step in template.morningSteps {
-                allStepTranslations.append(StepTranslations(
-                    title: ["en": step.title],
-                    stepDescription: ["en": step.why],
-                    why: ["en": step.why],
-                    how: ["en": step.how]
-                ))
-            }
-
-            for step in template.eveningSteps {
-                allStepTranslations.append(StepTranslations(
-                    title: ["en": step.title],
-                    stepDescription: ["en": step.why],
-                    why: ["en": step.why],
-                    how: ["en": step.how]
-                ))
-            }
+            allStepTranslations.append(StepTranslations(
+                title: titleTrans,
+                stepDescription: whyTrans,
+                why: whyTrans,
+                how: howTrans
+            ))
         }
 
         let routineTranslations = RoutineTranslations(

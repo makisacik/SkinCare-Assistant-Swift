@@ -45,6 +45,6 @@ struct PageIndicator: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Page \(index + 1) of \(total)")
+        .accessibilityLabel(L10n.Common.pageIndicator(current: index + 1, total: total))
     }
 }

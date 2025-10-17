@@ -29,7 +29,7 @@ struct ProductTypeSelectorSheet: View {
                 // Header
                 VStack(spacing: 16) {
                     HStack {
-                        Text("Select Product Type")
+                        Text(L10n.Products.ProductType.selectType)
                             .font(ThemeManager.shared.theme.typo.h2)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -41,7 +41,7 @@ struct ProductTypeSelectorSheet: View {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
 
-                        TextField("Search product types...", text: $searchText)
+                        TextField(L10n.Products.ProductType.searchPlaceholder, text: $searchText)
                             .font(ThemeManager.shared.theme.typo.body)
                             .textFieldStyle(PlainTextFieldStyle())
                     }
@@ -67,7 +67,7 @@ struct ProductTypeSelectorSheet: View {
                                             .font(.system(size: 16, weight: .medium))
                                             .foregroundColor(ThemeManager.shared.theme.palette.secondary)
 
-                                        Text(category.rawValue)
+                                        Text(category.displayName)
                                             .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -99,7 +99,7 @@ struct ProductTypeSelectorSheet: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Done") {
+                Button(L10n.Common.done) {
                     dismiss()
                 }
                 .font(ThemeManager.shared.theme.typo.body.weight(.semibold))

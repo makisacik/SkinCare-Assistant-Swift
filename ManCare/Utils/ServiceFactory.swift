@@ -209,7 +209,8 @@ class MockRoutineService: RoutineServiceProtocol {
             benefits: ["Mock benefit"],
             isFeatured: false,
             isPremium: false,
-            imageName: "routine-minimalist"
+            imageName: "routine-minimalist",
+            translations: nil
         )
 
         return try await saveRoutine(template)

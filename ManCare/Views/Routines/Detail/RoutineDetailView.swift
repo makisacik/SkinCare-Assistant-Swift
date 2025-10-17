@@ -160,7 +160,7 @@ struct RoutineDetailView: View {
                 .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                 .multilineTextAlignment(.center)
 
-            Text("\(completedCount) of \(steps.count) steps completed")
+            Text(L10n.Routines.stepsCompleted(completed: completedCount, total: steps.count))
                 .font(.system(size: 16))
                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.7))
 
@@ -230,11 +230,11 @@ struct RoutineDetailView: View {
                     .font(.system(size: 48, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.success)
 
-                Text("Routine Complete! 🎉")
+                Text(L10n.Routines.Detail.routineComplete)
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
 
-                Text("Great job taking care of your skin today!")
+                Text(L10n.Routines.Detail.greatJob)
                     .font(.system(size: 16))
                     .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.7))
                     .multilineTextAlignment(.center)
@@ -259,7 +259,7 @@ struct RoutineDetailView: View {
             HStack(spacing: 4) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 16, weight: .semibold))
-                Text("Back")
+                Text(L10n.Routines.Detail.back)
                     .font(.system(size: 16, weight: .medium))
             }
             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)

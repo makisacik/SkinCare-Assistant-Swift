@@ -44,11 +44,11 @@ struct AddProductView: View {
                 VStack(spacing: 24) {
                     // Header
                     VStack(spacing: 8) {
-                        Text("Add New Product")
+                        Text(L10n.Products.Add.title)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Add a product to your collection")
+                        Text(L10n.Products.Add.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -56,16 +56,16 @@ struct AddProductView: View {
 
                     VStack(spacing: 20) {
                         // Basic Information
-                        ProductFormSection(title: "Basic Information") {
+                        ProductFormSection(title: L10n.Products.Form.basicInfo) {
                             VStack(spacing: 16) {
-                                FormField(title: "Product Name", text: $productName, placeholder: "e.g., Gentle Foaming Cleanser")
-                                FormField(title: "Brand", text: $brand, placeholder: "e.g., CeraVe")
-                                SizeField(title: "Size", sizeValue: $sizeValue, selectedUnit: $selectedSizeUnit, placeholder: "e.g., 150")
+                                FormField(title: L10n.Products.Form.productName, text: $productName, placeholder: L10n.Products.Form.productNamePlaceholder)
+                                FormField(title: L10n.Products.Form.brand, text: $brand, placeholder: L10n.Products.Form.brandPlaceholder)
+                                SizeField(title: L10n.Products.Form.size, sizeValue: $sizeValue, selectedUnit: $selectedSizeUnit, placeholder: L10n.Products.Form.sizePlaceholder)
                             }
                         }
 
                         // Product Category
-                        ProductFormSection(title: "Product Category") {
+                        ProductFormSection(title: L10n.Products.Form.productCategory) {
                             VStack(spacing: 16) {
                                 ProductTypeSelectorButton(selectedProductType: $selectedProductType) {
                                     showingProductTypeSelector = true
@@ -74,10 +74,10 @@ struct AddProductView: View {
                         }
 
                         // Ingredients
-                        ProductFormSection(title: "Ingredients") {
+                        ProductFormSection(title: L10n.Products.Form.ingredients) {
                             VStack(spacing: 16) {
                                 HStack(spacing: 12) {
-                                    TextField("Add ingredient", text: $newIngredient)
+                                    TextField(L10n.Products.Form.addIngredient, text: $newIngredient)
                                         .font(ThemeManager.shared.theme.typo.body)
                                         .colorScheme(.light)
                                         .padding(.horizontal, 16)
@@ -117,7 +117,7 @@ struct AddProductView: View {
                         }
 
                         // Claims
-                        ProductFormSection(title: "Product Claims") {
+                        ProductFormSection(title: L10n.Products.Form.productClaims) {
                             VStack(spacing: 16) {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 8) {
                                     ForEach(availableClaims, id: \.self) { claim in
@@ -134,9 +134,9 @@ struct AddProductView: View {
                         }
 
                         // Description
-                        ProductFormSection(title: "Description") {
+                        ProductFormSection(title: L10n.Products.Form.description) {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Product Description")
+                                Text(L10n.Products.Form.productDescription)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -162,7 +162,7 @@ struct AddProductView: View {
                                             }
 
                                         if description.isEmpty {
-                                            Text("e.g., Key benefits, texture, how it feels, any notable notes...")
+                                            Text(L10n.Products.Form.descriptionPlaceholder)
                                                 .font(ThemeManager.shared.theme.typo.body)
                                                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                                                 .padding(.horizontal, 16)
@@ -173,7 +173,7 @@ struct AddProductView: View {
 
                                     HStack {
                                         Spacer()
-                                        Text("\(description.count)/150")
+                                        Text(L10n.Products.Form.characterCount(description.count))
                                             .font(.system(size: 12))
                                             .foregroundColor(description.count > 135 ? ThemeManager.shared.theme.palette.error : ThemeManager.shared.theme.palette.textMuted)
                                     }
@@ -191,7 +191,7 @@ struct AddProductView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Products.Action.cancel)
                             .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -201,7 +201,7 @@ struct AddProductView: View {
                     Button {
                         saveProduct()
                     } label: {
-                        Text("Save")
+                        Text(L10n.Products.Action.save)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(productName.isEmpty ? ThemeManager.shared.theme.palette.textMuted : ThemeManager.shared.theme.palette.secondary)
                     }

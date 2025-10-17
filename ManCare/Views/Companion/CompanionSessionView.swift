@@ -100,7 +100,7 @@ struct CompanionSessionView: View {
                 if let session = sessionViewModel.session {
                     HStack(spacing: 8) {
                         let displayIndex = min(session.currentStepIndex + 1, session.steps.count)
-                        Text("\(displayIndex) of \(session.steps.count)")
+                        Text(L10n.Common.stepCounter(current: displayIndex, total: session.steps.count))
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .onAppear {
@@ -134,7 +134,7 @@ struct CompanionSessionView: View {
         case .idle:
             VStack(spacing: 16) {
                 ProgressView()
-                Text("Preparing Companion Mode...")
+                Text(L10n.Routines.Companion.preparing)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
             .padding()
@@ -167,7 +167,7 @@ struct CompanionSessionView: View {
                     }
                 )
             } else {
-                Text("Loading step...")
+                Text(L10n.Routines.Companion.loadingStep)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
 
@@ -188,7 +188,7 @@ struct CompanionSessionView: View {
                     }
                 )
             } else {
-                Text("Loading step...")
+                Text(L10n.Routines.Companion.loadingStep)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
             }
 
@@ -294,7 +294,7 @@ struct StepIntroView: View {
 
                 // Instruction
                 VStack(spacing: 16) {
-                    Text("Instructions")
+                    Text(L10n.Routines.Companion.instructions)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -322,7 +322,7 @@ struct StepIntroView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "timer")
-                                Text("Start Timer (\(step.waitSeconds ?? 0)s)")
+                                Text(L10n.Routines.Companion.startTimer(step.waitSeconds ?? 0))
                             }
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.white)
@@ -342,7 +342,7 @@ struct StepIntroView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "checkmark.circle.fill")
-                                Text("Done")
+                                Text(L10n.Routines.Companion.done)
                             }
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.success)
@@ -360,7 +360,7 @@ struct StepIntroView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "forward.fill")
-                                Text("Skip")
+                                Text(L10n.Routines.Companion.skip)
                             }
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -440,7 +440,7 @@ struct TimerView: View {
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.warning)
 
-                        Text("Pro Tips")
+                        Text(L10n.Routines.Companion.proTips)
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -467,7 +467,7 @@ struct TimerView: View {
                                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             }
 
-                            Text("Adjust")
+                            Text(L10n.Routines.Companion.adjust)
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
 
@@ -489,7 +489,7 @@ struct TimerView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "checkmark.circle.fill")
-                                Text("Done")
+                                Text(L10n.Routines.Companion.done)
                             }
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.white)
@@ -509,7 +509,7 @@ struct TimerView: View {
                             } label: {
                                 HStack {
                                     Image(systemName: timerState.isPaused ? "play.fill" : "pause.fill")
-                                    Text(timerState.isPaused ? "Resume" : "Pause")
+                                    Text(timerState.isPaused ? L10n.Routines.Companion.resume : L10n.Routines.Companion.pause)
                                 }
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(.white)
@@ -529,7 +529,7 @@ struct TimerView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "forward.fill")
-                                Text("Skip")
+                                Text(L10n.Routines.Companion.skip)
                             }
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -579,13 +579,13 @@ struct CompletionView: View {
             }
 
             VStack(spacing: 16) {
-                Text("Routine Complete! 🎉")
+                Text(L10n.Routines.Companion.complete)
                     .font(.system(size: 32, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
 
                 if let session = session {
-                    Text("You completed \(session.stepsCompleted.count) of \(session.steps.count) steps")
+                    Text(L10n.Routines.Companion.stepsCompleted(completed: session.stepsCompleted.count, total: session.steps.count))
                         .font(.system(size: 16))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -595,9 +595,9 @@ struct CompletionView: View {
             // Stats
             if let session = session {
                 VStack(spacing: 12) {
-                    StatRow(title: "Total Time", value: formatDuration(session.totalDurationSeconds))
-                    StatRow(title: "Steps Skipped", value: "\(session.skips)")
-                    StatRow(title: "Completion Rate", value: "\(session.steps.count > 0 ? Int((Double(session.stepsCompleted.count) / Double(session.steps.count)) * 100) : 0)%")
+                    StatRow(title: L10n.Routines.Companion.totalTime, value: formatDuration(session.totalDurationSeconds))
+                    StatRow(title: L10n.Routines.Companion.stepsSkipped, value: "\(session.skips)")
+                    StatRow(title: L10n.Routines.Companion.completionRate, value: "\(session.steps.count > 0 ? Int((Double(session.stepsCompleted.count) / Double(session.steps.count)) * 100) : 0)%")
                 }
                 .padding(20)
                 .background(
@@ -614,7 +614,7 @@ struct CompletionView: View {
             Button {
                 onComplete()
             } label: {
-                Text("Done")
+                Text(L10n.Routines.Companion.done)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -685,17 +685,17 @@ struct RoutineAlreadyCompletedView: View {
             }
 
             VStack(spacing: 16) {
-                Text("Routine Complete! 🎉")
+                Text(L10n.Routines.Companion.complete)
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("This routine is done for today")
+                Text(L10n.Routines.Companion.doneForToday)
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
 
-                Text("Wanna do again?")
+                Text(L10n.Routines.Companion.doAgain)
                     .font(.system(size: 16))
                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     .multilineTextAlignment(.center)
@@ -707,7 +707,7 @@ struct RoutineAlreadyCompletedView: View {
                 } label: {
                     HStack {
                         Image(systemName: "arrow.clockwise")
-                        Text("Do Again")
+                        Text(L10n.Routines.Companion.doAgainButton)
                     }
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.white)
@@ -723,7 +723,7 @@ struct RoutineAlreadyCompletedView: View {
                 Button {
                     onDismiss()
                 } label: {
-                    Text("Done")
+                    Text(L10n.Routines.Companion.done)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .frame(maxWidth: .infinity)

@@ -14,7 +14,7 @@ struct ClaimToggle: View {
     let onTap: () -> Void
 
     var body: some View {
-        Text(claimDisplayName(claim))
+        Text(L10n.Products.Claim.displayName(for: claim))
             .font(ThemeManager.shared.theme.typo.caption.weight(.medium))
             .foregroundColor(isSelected ? ThemeManager.shared.theme.palette.textInverse : ThemeManager.shared.theme.palette.textSecondary)
             .padding(.horizontal, 12)
@@ -28,18 +28,6 @@ struct ClaimToggle: View {
             .onTapGesture {
                 onTap()
             }
-    }
-
-    private func claimDisplayName(_ claim: String) -> String {
-        switch claim {
-        case "fragranceFree": return "Fragrance Free"
-        case "sensitiveSafe": return "Sensitive Safe"
-        case "vegan": return "Vegan"
-        case "crueltyFree": return "Cruelty Free"
-        case "dermatologistTested": return "Dermatologist Tested"
-        case "nonComedogenic": return "Non-Comedogenic"
-        default: return claim
-        }
     }
 }
 

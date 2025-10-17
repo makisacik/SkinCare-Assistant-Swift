@@ -1,0 +1,322 @@
+/*
+  Guides.strings (English)
+  ManCare - Guide content and discover page dynamic content
+*/
+
+/* ===================================
+   MARK: - Hero Banner
+   =================================== */
+
+"guides.hero.barrierReset.title" = "Barrier Reset Week";
+"guides.hero.barrierReset.subtitle" = "Soothe redness + rebuild your moisture shield";
+"guides.hero.barrierReset.cta" = "Explore routines";
+
+/* ===================================
+   MARK: - Seasonal Playbook Articles
+   =================================== */
+
+"guides.seasonal.article.barrierFirst" = "Barrier First: why it matters";
+"guides.seasonal.article.humectants" = "Humectants vs Emollients vs Occlusives";
+"guides.seasonal.article.windProof" = "Wind-Proof Night Routine";
+"guides.seasonal.cta" = "Build my seasonal plan";
+
+/* ===================================
+   MARK: - Routine Badges
+   =================================== */
+
+"guides.badge.new" = "New";
+"guides.badge.updated" = "Updated";
+"guides.badge.trending" = "Trending";
+
+/* ===================================
+   MARK: - Trending Period
+   =================================== */
+
+"guides.trendingPeriod.thisWeek" = "This week";
+"guides.trendingPeriod.thisMonth" = "This month";
+
+/* ===================================
+   MARK: - Refresh Time Display
+   =================================== */
+
+"guides.refresh.justNow" = "Refreshed just now • new tips every morning ☀️";
+"guides.refresh.minutesAgo" = "Refreshed %d min ago • new tips every morning ☀️";
+"guides.refresh.hoursAgo" = "Refreshed %d hour%@ ago";
+"guides.refresh.daysAgo" = "Refreshed %d day%@ ago";
+"guides.refresh.hourSuffix" = "";
+"guides.refresh.hoursSuffix" = "s";
+"guides.refresh.daySuffix" = "";
+"guides.refresh.daysSuffix" = "s";
+
+/* ===================================
+   MARK: - Ticker Display
+   =================================== */
+
+"guides.ticker.newThisWeek" = "New this week: +%d routines · +%d guides";
+
+/* ===================================
+   MARK: - Mini Guide: Cycle & Skin
+   =================================== */
+
+"guides.cycleSkin.id" = "22222222-2222-2222-2222-222222222222";
+"guides.cycleSkin.title" = "How your cycle affects skin";
+"guides.cycleSkin.subtitle" = "Breakouts, sensitivity and glow across phases";
+"guides.cycleSkin.category" = "Menstrual Health";
+
+/* ===================================
+   MARK: - Mini Guide: AM vs PM
+   =================================== */
+
+"guides.ampmRoutine.id" = "44444444-4444-4444-4444-444444444444";
+"guides.ampmRoutine.title" = "AM vs PM Routine";
+"guides.ampmRoutine.subtitle" = "Day protection, night repair";
+"guides.ampmRoutine.category" = "Basics";
+
+/* ===================================
+   MARK: - Mini Guide: Acids
+   =================================== */
+
+"guides.acidsExplained.id" = "55555555-5555-5555-5555-555555555555";
+"guides.acidsExplained.title" = "Acids, Explained";
+"guides.acidsExplained.subtitle" = "AHA vs BHA vs PHA—who needs what";
+"guides.acidsExplained.category" = "Ingredients";
+
+/* ===================================
+   MARK: - Mini Guide: Retinoids
+   =================================== */
+
+"guides.retinoids101.id" = "66666666-6666-6666-6666-666666666666";
+"guides.retinoids101.title" = "Retinoids";
+"guides.retinoids101.subtitle" = "Strengths, purging, and how to buffer";
+"guides.retinoids101.category" = "Ingredients";
+
+/* ===================================
+   MARK: - Mini Guide: Skinimalism
+   =================================== */
+
+"guides.skinimalism.id" = "33333333-3333-3333-3333-333333333333";
+"guides.skinimalism.title" = "Skinimalism & Minimal Routines";
+"guides.skinimalism.subtitle" = "Fewer products, more intentional care";
+"guides.skinimalism.category" = "Basics";
+
+/* ===================================
+   MARK: - Inspirational Quotes
+   =================================== */
+
+"guides.quote.khalilGibran" = "Beauty is not in the face; beauty is a light in the heart.";
+"guides.quote.khalilGibran.author" = "Kahlil Gibran";
+
+"guides.quote.drMurad" = "Your skin is your largest organ. Take care of it with love and patience.";
+"guides.quote.drMurad.author" = "Dr. Howard Murad";
+
+"guides.quote.aliciaKeys" = "True beauty is not about perfection, it's about embracing your unique self.";
+"guides.quote.aliciaKeys.author" = "Alicia Keys";
+
+"guides.quote.breatheSilence" = "Let your skin breathe the silence of care, and your glow will whisper confidence.";
+"guides.quote.breatheSilence.author" = "Unknown";
+
+"guides.quote.gentleness" = "Beauty lives in moments of gentleness — a soft touch, a calm breath, a patient heart.";
+"guides.quote.gentleness.author" = "Unknown";
+
+"guides.quote.memory" = "Care for your skin as you would a memory — tenderly, without rush, with love.";
+"guides.quote.memory.author" = "Unknown";
+
+"guides.quote.bloom" = "You bloom quietly when you learn to listen to your body.";
+"guides.quote.bloom.author" = "Unknown";
+
+"guides.quote.radiance" = "Radiance is born from rest, not rush.";
+"guides.quote.radiance.author" = "Unknown";
+
+"guides.quote.slowTime" = "In caring for your skin, you practice the art of slowing time.";
+"guides.quote.slowTime.author" = "Unknown";
+
+"guides.quote.peaceGlow" = "The glow you seek is the peace you keep.";
+"guides.quote.peaceGlow.author" = "Unknown";
+
+"guides.quote.softBeauty" = "Beauty doesn't ask to be seen — it simply exists, softly.";
+"guides.quote.softBeauty.author" = "Unknown";
+
+"guides.quote.quietConversation" = "Every ritual of care is a quiet conversation with yourself.";
+"guides.quote.quietConversation.author" = "Unknown";
+
+"guides.quote.kindReflection" = "Your reflection is not what you see, but how kindly you see it.";
+"guides.quote.kindReflection.author" = "Unknown";
+
+"guides.quote.drewBarrymore" = "Happiness is the best makeup. Take care of your inner glow first.";
+"guides.quote.drewBarrymore.author" = "Drew Barrymore";
+
+"guides.quote.blakeLively" = "Confidence breeds beauty. When you feel good, you look even better.";
+"guides.quote.blakeLively.author" = "Blake Lively";
+
+"guides.quote.coveringUp" = "Taking care of your skin is more important than covering it up.";
+"guides.quote.coveringUp.author" = "Unknown";
+
+"guides.quote.lalahDelia" = "Self-care is how you take your power back.";
+"guides.quote.lalahDelia.author" = "Lalah Delia";
+
+/* ===================================
+   MARK: - Guide Content
+   =================================== */
+
+/* Guide: Cycle & Skin (cycleSkin) */
+"guides.cycleSkin.intro" = "Hormonal shifts across your menstrual cycle influence hydration, oiliness, sensitivity, and glow. Knowing what to expect helps you tailor your routine each phase.";
+"guides.cycleSkin.h2_1" = "Cycle Phases & Skin at a Glance";
+"guides.cycleSkin.list1_item1" = "Menstruation (Days 1–5): Skin feels dry, tight, fragile";
+"guides.cycleSkin.list1_item2" = "Follicular (Days 6–13): Skin calms and becomes more resilient";
+"guides.cycleSkin.list1_item3" = "Ovulation (≈ Day 14): Natural glow, possible shine in T-zone";
+"guides.cycleSkin.list1_item4" = "Luteal (Days 15–28): Oiliness, breakouts, sensitivity may rise";
+"guides.cycleSkin.h3_1" = "Menstruation – Repair & Hydrate";
+"guides.cycleSkin.p1" = "With estrogen and progesterone low, skin is more vulnerable. Use mild, hydrating cleansers and barrier-repair moisturizers.";
+"guides.cycleSkin.p2" = "Skip actives like retinoids or strong acids — your skin needs calm, not stress.";
+"guides.cycleSkin.tip1" = "Tip: Use a calming mask or compress to reduce inflammation.";
+"guides.cycleSkin.h3_2" = "Follicular – Rebalance & Brighten";
+"guides.cycleSkin.p3" = "As estrogen rises, skin becomes clearer and more responsive. This is a good window to reintroduce gentle actives like vitamin C or mild exfoliants.";
+"guides.cycleSkin.list2_item1" = "Use mild exfoliation (AHA/BHA) 1–2× per week";
+"guides.cycleSkin.list2_item2" = "Apply brightening serums";
+"guides.cycleSkin.list2_item3" = "Keep consistent hydration";
+"guides.cycleSkin.h3_3" = "Ovulation – Glow & Maintain";
+"guides.cycleSkin.p4" = "At peak hormone levels, skin often looks radiant. But excess oil in the T-zone may appear.";
+"guides.cycleSkin.p5" = "Switch to lighter moisturizers, double-cleanse if wearing makeup, and use a clay mask if needed.";
+"guides.cycleSkin.tip2" = "Pro Tip: It's a great time for photos or events — your skin tends to look its best.";
+"guides.cycleSkin.h3_4" = "Luteal – Soothe & Prevent";
+"guides.cycleSkin.p6" = "Rising progesterone increases oil and inflammation, which can trigger breakouts.";
+"guides.cycleSkin.p7" = "Focus on calming ingredients (niacinamide, zinc), spot treatments (salicylic acid, benzoyl peroxide), and avoid introducing anything new.";
+"guides.cycleSkin.h2_2" = "Adaptive Routine Tips";
+"guides.cycleSkin.p8" = "Consider rotating a few formulas (hydrating, brightening, clarifying) depending on phase. This helps keep your skin balanced all month.";
+
+/* Guide: AM vs PM Routine (ampmRoutine) */
+"guides.ampmRoutine.intro" = "Your skin isn't the same all day — it behaves differently in **daylight** and **darkness**. By understanding those shifts, you can match your routine to support what your skin is trying to do.";
+"guides.ampmRoutine.h2_1" = "Morning: Defense & Stabilization";
+"guides.ampmRoutine.p1" = "When the sun is up, your skin's job is **protection**. It faces UV rays, pollution, blue light, and environmental stressors. Using antioxidant ingredients and a good barrier helps it resist damage.";
+"guides.ampmRoutine.h3_1" = "Why Cleansing First Matters";
+"guides.ampmRoutine.p2" = "Overnight, your skin secretes oils and sheds tiny debris. A **gentle cleanse** or even a splash of water clears that buildup without stripping — prepping your skin to absorb protective products.";
+"guides.ampmRoutine.h3_2" = "Antioxidants & Lightweight Serums";
+"guides.ampmRoutine.p3" = "**Antioxidants** (like vitamin C or niacinamide) act like shields against free radicals from UV and pollution. Using them in the morning gives them maximum exposure time to neutralize stressors.";
+"guides.ampmRoutine.tip1" = "**Pro Tip**: Apply vitamin C serum on slightly damp skin for better absorption. Wait 1-2 minutes before layering moisturizer.";
+"guides.ampmRoutine.h3_3" = "Moisturize to Reinforce the Barrier";
+"guides.ampmRoutine.p4" = "A good moisturizer helps your skin **lock in hydration** and maintain barrier integrity — essential when outer stress is trying to pull moisture out.";
+"guides.ampmRoutine.h3_4" = "Sunscreen: The Non-Negotiable Step";
+"guides.ampmRoutine.p5" = "Everything else sets the stage — but **sunscreen is your direct defense**. A broad-spectrum SPF shields skin from UV damage, which accelerates aging and pigmentation.";
+"guides.ampmRoutine.h2_2" = "Evening: Repair & Renewal";
+"guides.ampmRoutine.p6" = "At night, your skin shifts into **recovery mode**. Blood flow increases, repair enzymes activate, and your barrier becomes more permeable — this is your window for treatments.";
+"guides.ampmRoutine.h3_5" = "Double Cleanse When Needed";
+"guides.ampmRoutine.p7" = "If you wore makeup, sunscreen, or encountered heavy pollution, start with an **oil or balm cleanser**, then follow with a gentle cleanser. You want a clean canvas so actives work better.";
+"guides.ampmRoutine.h3_6" = "Apply Actives When Skin Is More Receptive";
+"guides.ampmRoutine.p8" = "In the evening, your skin more readily absorbs **actives** like retinoids, acids, peptides, or growth factors. Because protective demands are low, it's safer to use stronger ingredients.";
+"guides.ampmRoutine.tip2" = "**Timing Tip**: Apply actives like retinoids on completely dry skin. Wait 20-30 minutes after cleansing to minimize irritation.";
+"guides.ampmRoutine.h3_7" = "Lock in with Richer Moisturizers";
+"guides.ampmRoutine.p9" = "As barrier permeability is higher at night, applying a **richer moisturizer** or cream helps prevent excessive water loss and supports repair processes.";
+"guides.ampmRoutine.h2_3" = "Example Day vs Night Scenarios";
+"guides.ampmRoutine.p10" = "Say you use a **vitamin C serum**: in the morning, it works to neutralize UV-induced free radicals all day. If you used that same vitamin C at night instead of something more reparative, you'd miss that daily protective window.";
+"guides.ampmRoutine.p11" = "Or consider **retinol**: it degrades in UV light. If used in the morning, it's less effective and more likely to irritate. At night, it can stimulate collagen repair with less risk.";
+"guides.ampmRoutine.h2_4" = "Key Principles to Remember";
+"guides.ampmRoutine.list1_item1" = "**Match ingredient to skin's priority**: protect in the day, repair at night.";
+"guides.ampmRoutine.list1_item2" = "Go from **lightweight → heavier textures** (serum → cream) so absorption works.";
+"guides.ampmRoutine.list1_item3" = "Avoid **layering too many actives** in one session; let skin rest.";
+"guides.ampmRoutine.list1_item4" = "If your skin feels irritated, revert to **basics** (cleanse + hydrate) and reintroduce actives slowly.";
+"guides.ampmRoutine.p12" = "When you see morning and evening routines as **support systems** — not just checklists — you give each product the right time and purpose. Your skin will respond better when it feels respected and understood.";
+
+/* Guide: Acids Explained (acidsExplained) */
+"guides.acidsExplained.intro" = "Chemical exfoliants — or **\"acids\"** in skincare — gently dissolve the bonds between dead skin cells. Used well, they can help refine texture, brighten, and unclog pores. But to use them effectively, it helps to understand how they work and when to use each kind.";
+"guides.acidsExplained.h2_1" = "What Happens When You Use an Exfoliating Acid?";
+"guides.acidsExplained.p1" = "Your skin naturally sheds dead cells over time — but sometimes that process slows, leading to **dullness, roughness, and clogged pores**. Acids act like gentle unlockers, breaking down the glue (desmosomes) between those cells so they can slough off more smoothly. When used properly, this supports renewal without harsh scrubbing.";
+"guides.acidsExplained.h2_2" = "Major Categories & When They Shine";
+"guides.acidsExplained.h3_1" = "AHAs — Alpha Hydroxy Acids";
+"guides.acidsExplained.p2" = "AHAs are **water-soluble**, working mostly on the skin's surface. They're great for smoothing texture, fading discoloration, and improving radiance. But because they penetrate relatively deeply, they may cause sensitivity — especially on thinner or drier skin.";
+"guides.acidsExplained.list1_item1" = "**Glycolic acid** — smallest molecule, most potent; good for texture, dullness, fine lines";
+"guides.acidsExplained.list1_item2" = "**Lactic acid** — gentler and hydrating; better for sensitive or dry skin";
+"guides.acidsExplained.list1_item3" = "**Mandelic acid** — larger molecule, slower penetration; often better tolerated by reactive skin";
+"guides.acidsExplained.p3" = "**Example**: If your skin feels rough or uneven, you might use a 5–10% glycolic or lactic product a few nights a week to help resurface gradually.";
+"guides.acidsExplained.tip1" = "**Starter Tip**: Begin with lactic acid (5-8%) instead of glycolic if you have sensitive or dry skin — it's gentler and more hydrating.";
+"guides.acidsExplained.h3_2" = "BHAs — Beta Hydroxy Acids";
+"guides.acidsExplained.p4" = "BHAs (mainly salicylic acid) are **oil-soluble**, which means they can penetrate into sebum within the pores. This makes them especially useful for oily, acne-prone, or congested skin types.";
+"guides.acidsExplained.list2_item1" = "**Salicylic acid**: dissolves oil, can reduce inflammation, unclogs pores";
+"guides.acidsExplained.list2_item2" = "Used for **blackheads**, clogged pores, and blemishes";
+"guides.acidsExplained.list2_item3" = "Lower concentrations (0.5–2%) can be used more regularly if tolerated";
+"guides.acidsExplained.p5" = "**Example**: If you often get clogged pores or breakouts, a BHA toner or serum (e.g. ~1%) can help smooth and purify your skin without over-exfoliating.";
+"guides.acidsExplained.h3_3" = "PHAs — Polyhydroxy Acids";
+"guides.acidsExplained.p6" = "PHAs are the **gentlest** of the exfoliating acids. Their larger molecular size means they penetrate less deeply, making them good options for sensitive, barrier-weakened, or reactive skin.";
+"guides.acidsExplained.list3_item1" = "**Gluconolactone, lactobionic acid, galactose** — common PHA types";
+"guides.acidsExplained.list3_item2" = "Provide mild exfoliation while also attracting **moisture** or acting as antioxidants";
+"guides.acidsExplained.list3_item3" = "Lower irritation risk, even for delicate or sensitized skin";
+"guides.acidsExplained.p7" = "**Example**: If your skin flares easily, starting with a 2–5% PHA a few times a week gives you gentler exfoliation with reduced risk.";
+"guides.acidsExplained.h2_3" = "Smart Strategies & Safety Tips";
+"guides.acidsExplained.p8" = "To enjoy the benefits while keeping irritation low, follow these guiding principles:";
+"guides.acidsExplained.list4_item1" = "**Start low**: low concentration, fewer nights a week (e.g. 2–3×) before increasing frequency or strength";
+"guides.acidsExplained.list4_item2" = "Introduce **only one acid** or active at a time so your skin can adjust";
+"guides.acidsExplained.list4_item3" = "Avoid layering **strong actives** (like retinoids or multiple acids) on the same night initially";
+"guides.acidsExplained.list4_item4" = "**Always use broad-spectrum SPF** — acids increase sun sensitivity";
+"guides.acidsExplained.list4_item5" = "Watch your skin's signals — **tingling is normal**, burning or persistent redness is not";
+"guides.acidsExplained.tip2" = "**Recovery Tip**: If you experience irritation, skip acids for 3-5 days and focus on gentle cleansing + barrier repair (ceramides, hyaluronic acid). Your skin needs recovery, not more exfoliation.";
+"guides.acidsExplained.h2_4" = "How to Fit Acids Into Your Routine";
+"guides.acidsExplained.p9" = "Here are a few example patterns to help you slot in acids without disrupting your core care:";
+"guides.acidsExplained.p10" = "• **Night Routine (3×/week)**: Cleanse → apply acid → wait a few minutes → hydrating serum → moisturizer\n\n• **Alternate Nights**: Use BHA one night, AHA another, and keep some nights for barrier recovery (no actives)\n\n• **Separation**: If you use an acid and a retinoid, consider using them on different nights until your skin adjusts.";
+"guides.acidsExplained.p11" = "Over time, your skin may tolerate stronger formulas or more frequent use — but always move **slowly**. Let the skin adapt. **Exfoliation is a tool, not a race**.";
+
+/* Guide: Retinoids 101 (retinoids101) */
+"guides.retinoids101.intro" = "**Retinoids** — derivatives of vitamin A — are among the most studied and effective tools for smoothing texture, fading discoloration, and managing breakouts. But the benefits come with nuance: you need to introduce them **thoughtfully** and let them work over time.";
+"guides.retinoids101.h2_1" = "What Retinoids Do & Why They're Powerful";
+"guides.retinoids101.p1" = "Retinoids improve skin by **accelerating cellular turnover** (encouraging older cells to shed), **stimulating collagen production**, and helping regulate pigmentation. Over weeks and months, this can translate to smoother skin, fewer clogged pores, and a more even tone.";
+"guides.retinoids101.h2_2" = "Types of Retinoids & Potency";
+"guides.retinoids101.h3_1" = "Retinol";
+"guides.retinoids101.p2" = "Available over the counter, **retinol** is milder and must convert in your skin to retinoic acid to become active. Because of this conversion step, it's **gentler** and better tolerated by beginners.";
+"guides.retinoids101.h3_2" = "Retinaldehyde (Retinal)";
+"guides.retinoids101.p3" = "A **mid-strength option**. It requires fewer conversion steps than retinol, so it tends to act faster with moderate irritation risk.";
+"guides.retinoids101.h3_3" = "Prescription Retinoids (e.g. Tretinoin)";
+"guides.retinoids101.p4" = "These are already in the **active form** (retinoic acid), so they are the **strongest**. They often deliver faster results, but also higher risk of irritation, especially in early phases.";
+"guides.retinoids101.h2_3" = "How to Start & Build Tolerance";
+"guides.retinoids101.p5" = "Because retinoids can cause **dryness, flaking, or sensitivity** initially, the key is to start slow and build over time.";
+"guides.retinoids101.list1_item1" = "Begin with a low-strength formulation (e.g. 0.1 % retinol) 2–3 nights per week";
+"guides.retinoids101.list1_item2" = "Use the **\"sandwich\" method**: apply a thin layer of moisturizer → retinoid → another thin layer of moisturizer to buffer";
+"guides.retinoids101.list1_item3" = "**Always apply at night** (retinoids are photosensitive and can degrade in daylight)";
+"guides.retinoids101.list1_item4" = "Use **broad-spectrum SPF** the next day — retinoids make your skin more sensitive to UV";
+"guides.retinoids101.tip1" = "**Beginner's Tip**: If you're completely new to retinoids, start with retinol 0.1% only once a week for the first 2 weeks. This helps your skin build tolerance without overwhelming it.";
+"guides.retinoids101.h2_4" = "The Purging Phase & What to Expect";
+"guides.retinoids101.p6" = "In the first few weeks, your skin may flare with **breakouts, peeling, or dryness** as the retinoid accelerates cell turnover. This is often called the **\"purging\" period**. It usually lasts 2–6 weeks, depending on skin sensitivity and the formulation strength.";
+"guides.retinoids101.h3_4" = "Tips During Purging";
+"guides.retinoids101.p7" = "**Stick with your routine** (unless there's severe irritation). Use **gentle, comforting products** (hydrating, barrier support). Don't layer too many actives (e.g. strong acids + retinoids on same night) until your skin adjusts.";
+"guides.retinoids101.tip2" = "**Purging vs. Reaction**: Purging happens in areas where you usually break out and subsides in 4-6 weeks. If new areas break out or irritation persists beyond 8 weeks, it's likely a reaction — reduce frequency or stop.";
+"guides.retinoids101.h2_5" = "Examples & Scenarios";
+"guides.retinoids101.p8" = "• If you're new: start with 0.1 % retinol 3 nights/week, moisturize before and after.\n• After 2 months of tolerance, you might increase to 4 nights or try a slightly higher strength.\n• If your skin becomes flaky or sensitive, reduce frequency or use buffers (moisturizers or hydrating serums).";
+"guides.retinoids101.h2_6" = "Helpful Principles to Remember";
+"guides.retinoids101.list2_item1" = "**Progress slowly** — consistency trumps aggression";
+"guides.retinoids101.list2_item2" = "**Less can be more** — a small amount is enough (pea-sized for face)";
+"guides.retinoids101.list2_item3" = "If irritation is **intense or persistent**, scale back and regroup";
+"guides.retinoids101.list2_item4" = "**Patience is key** — visible results often begin after 8–12 weeks";
+"guides.retinoids101.p9" = "When you understand not just **what** to use but **why** and **how**, you give your skin a better chance to adapt, respond, and improve — without undue stress or setbacks.";
+
+/* Guide: Skinimalism (skinimalism) */
+"guides.skinimalism.intro" = "**Skinimalism** encourages a shift from product overload to **deliberate simplicity** — using fewer, smarter choices to support your skin's natural rhythm.";
+"guides.skinimalism.h2_1" = "Why Minimal Works Better Sometimes";
+"guides.skinimalism.p1" = "Your skin is already doing a lot: **protecting, repairing, renewing**. Too many actives or layers can stress its barrier, confuse signals, or cause ingredient conflicts. Minimal routines reduce these stress hits.";
+"guides.skinimalism.p2" = "Plus, when you use **fewer products**, you can see how your skin reacts to each one — this makes diagnosing issues easier.";
+"guides.skinimalism.tip1" = "**Simplification Tip**: If you're overwhelmed by a 10-step routine, strip it down to cleanse + moisturize + SPF for 2 weeks. Watch how your skin responds, then reintroduce one product at a time.";
+"guides.skinimalism.h2_2" = "The Foundation Trio";
+"guides.skinimalism.list1_item1" = "**Cleanse gently** — remove dirt, oil, and pollution without stripping";
+"guides.skinimalism.list1_item2" = "**Moisturize** — supply lipids, water, and barrier support";
+"guides.skinimalism.list1_item3" = "**Sun protection (daytime)** — shield from UV, which accelerates aging";
+"guides.skinimalism.p3" = "Even these **three steps** can do a lot if you choose well-formulated, skin-friendly versions.";
+"guides.skinimalism.h2_3" = "When & How to Add a \"Hero\" Product";
+"guides.skinimalism.p4" = "If your skin needs something extra (brightening, mild exfoliation, hydration boost), pick **one product that can do multiple jobs**. For example, a niacinamide + antioxidant serum or a gentle exfoliant with hydrating support.";
+"guides.skinimalism.p5" = "Introduce new products **one at a time**, and give your skin **4–8 weeks to adapt**.";
+"guides.skinimalism.tip2" = "**Multi-Tasker Pick**: Look for products that combine benefits — like a moisturizer with SPF, or a serum with niacinamide + vitamin C. This reduces steps without sacrificing results.";
+"guides.skinimalism.h2_4" = "Example Minimal Routine";
+"guides.skinimalism.p6" = "• **Morning**: Gentle cleanser → lightweight moisturizer → SPF\n• **Evening**: Mild cleanser → (optional) hero serum → richer moisturizer or barrier support cream";
+"guides.skinimalism.p7" = "If your skin tolerates it, you can **alternate nights** for actives (e.g. exfoliant night, recovery night) — but keep layering light.";
+"guides.skinimalism.h2_5" = "Common Challenges & Solutions";
+"guides.skinimalism.list2_item1" = "**My skin is reactive** → go slower, buffer with extra moisturizer";
+"guides.skinimalism.list2_item2" = "**I want more glow** → choose antioxidants or brightening ingredients rather than layering many serums";
+"guides.skinimalism.list2_item3" = "**Skipping steps feels risky** → remember: your foundation trio already covers the essentials";
+"guides.skinimalism.list2_item4" = "**I still want to treat acne / pigmentation** → use spot treatments or alternate nights rather than daily layering";
+"guides.skinimalism.p8" = "**Minimal doesn't mean underpowered** — it means intentional. When each product has a purpose, your skin can **breathe, adapt, and thrive**.";
+
+/* Default guide content */
+"guides.default.intro" = "Learn more about %@ and how it relates to your skincare routine.";
+"guides.default.p1" = "This guide will help you understand the fundamentals and make informed decisions about your skincare routine.";
+"guides.default.h2_1" = "Key Takeaways";
+"guides.default.list1_item1" = "Start with the basics and build gradually";
+"guides.default.list1_item2" = "Listen to your skin and adjust as needed";
+"guides.default.list1_item3" = "Consistency is more important than complexity";
+"guides.default.disclaimer" = "Individual results may vary. Consult a professional for personalized advice.";
+
+

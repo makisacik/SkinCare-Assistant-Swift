@@ -1,0 +1,134 @@
+/*
+  Myself.strings (English)
+  ManCare - Myself tab related strings
+*/
+
+/* General */
+"myself.title" = "Myself";
+"myself.profile" = "Profile";
+"myself.edit" = "Edit";
+"myself.createNewRoutine" = "Create New Routine";
+
+/* Greetings */
+"myself.greeting.morning" = "Good Morning, %@!";
+"myself.greeting.afternoon" = "Good Afternoon, %@!";
+"myself.greeting.evening" = "Good Evening, %@!";
+"myself.greeting.night" = "Good Night, %@!";
+
+/* Tab Titles */
+"myself.tabs.timeline" = "Timeline";
+"myself.tabs.journal" = "Skin Journal";
+"myself.tabs.insights" = "Insights";
+
+/* Tab Descriptions */
+"myself.tabs.journal.description" = "See your skin glow evolve";
+"myself.tabs.insights.description" = "Discover patterns and trends in your skincare journey";
+
+/* Profile Stats */
+"myself.stats.skinType" = "Skin Type";
+"myself.stats.ageRange" = "Age Range";
+"myself.stats.skinTone" = "Skin Tone";
+"myself.stats.climate" = "Climate";
+
+/* Insights & Tips */
+"myself.insights.title" = "Insights & Tips";
+"myself.insights.combinationLargePores.title" = "Combination + Large Pores";
+"myself.insights.combinationLargePores.body" = "Look for niacinamide and BHA to refine texture.";
+"myself.insights.completeProfile.title" = "Complete your profile";
+"myself.insights.completeProfile.body" = "Add your details to get personalized skincare tips.";
+"myself.insights.climateTip.title" = "Climate Tip";
+"myself.insights.climateTip.body" = "You're in a %@ climate. Aim for SPF %d+ daily protection.";
+"myself.insights.yourPreferences.title" = "Your Preferences";
+"myself.insights.morningConsistent" = "You're most consistent in the mornings! 🌅 (%d%% completion rate)";
+"myself.insights.eveningShines" = "Your evening routine shines! 🌙 (%d%% completion rate)";
+"myself.insights.equallyConsistent" = "You're equally consistent! Both routines at %d%%";
+"myself.insights.buildConsistency" = "Start building consistency with your routine!";
+
+/* Preferences */
+"myself.preferences.fragranceFree" = "Fragrance-free";
+"myself.preferences.sensitiveSkin" = "Sensitive skin";
+"myself.preferences.natural" = "Natural";
+"myself.preferences.crueltyFree" = "Cruelty-free";
+"myself.preferences.vegan" = "Vegan";
+
+/* Completion Stats */
+"myself.completion.percentage" = "%d%%";
+"myself.completion.lastDays" = "Last %d days";
+"myself.completion.countOfTotal" = "%d of %d";
+"myself.completion.dayNumber" = "%d";
+"myself.completion.impactChange" = "%@%d%%";
+
+/* Premium Insights */
+"myself.premium.aiPowered" = "AI-POWERED";
+"myself.premium.getInsights" = "Get AI-powered insights";
+"myself.premium.onRoutines" = "on your routines and skin progress";
+"myself.premium.tryFree" = "Try Premium Free for 7 Days";
+"myself.premium.smartAnalysis" = "Smart routine analysis";
+"myself.premium.productTrends" = "Most used product trends";
+"myself.premium.moodCorrelation" = "Mood & skin pattern correlation";
+
+/* Most Used Products */
+"myself.products.title" = "Most Used Products";
+"myself.products.rank" = "%d";
+"myself.products.empty" = "No products used yet";
+"myself.products.emptySubtitle" = "Complete your routine to see your favorites";
+"myself.products.usedCount" = "Used %d time";
+"myself.products.usedCountPlural" = "Used %d times";
+
+/* Skin Feel Trends */
+"myself.skinFeel.title" = "Skin Feel Trends";
+"myself.skinFeel.empty" = "No skin journal entries yet";
+"myself.skinFeel.emptySubtitle" = "Start tracking how your skin feels";
+
+/* Date Picker */
+"myself.datePicker.title" = "Select Date";
+"myself.datePicker.subtitle" = "View your timeline for any date";
+"myself.datePicker.today" = "Today";
+"myself.datePicker.selectDate" = "Select Date";
+
+/* Edit Profile */
+"myself.editProfile.title" = "Edit Profile";
+"myself.editProfile.save" = "Save";
+"myself.editProfile.cancel" = "Cancel";
+
+/* Edit Profile Sections */
+"myself.editProfile.skin" = "Skin";
+"myself.editProfile.skinType" = "Skin Type";
+"myself.editProfile.fitzpatrickTone" = "Fitzpatrick Tone";
+"myself.editProfile.concerns" = "Concerns";
+"myself.editProfile.goalAndPreferences" = "Goal & Preferences";
+"myself.editProfile.mainGoal" = "Main Goal";
+"myself.editProfile.preferences" = "Preferences";
+"myself.editProfile.demographics" = "Demographics & Climate";
+"myself.editProfile.ageRange" = "Age Range";
+"myself.editProfile.regionClimate" = "Region/Climate";
+"myself.editProfile.menstruationCycle" = "Menstruation Cycle";
+"myself.editProfile.lastPeriodStart" = "Last Period Start";
+"myself.editProfile.cycleLength" = "Cycle Length: %d days";
+"myself.editProfile.periodLength" = "Period Length: %d days";
+"myself.editProfile.currentPhase" = "Current Phase: %@";
+"myself.editProfile.dayOfCycle" = "Day %d of %d";
+
+/* Preferences Editor */
+"myself.editProfile.preferences.fragranceFree" = "Fragrance-free";
+"myself.editProfile.preferences.sensitiveSkin" = "Suitable for sensitive skin";
+"myself.editProfile.preferences.natural" = "Natural ingredients";
+"myself.editProfile.preferences.crueltyFree" = "Cruelty-free";
+"myself.editProfile.preferences.vegan" = "Vegan-friendly";
+
+/* Cycle Settings */
+"myself.cycle.title" = "Cycle Tracking Settings";
+"myself.cycle.subtitle" = "Help us understand your cycle for personalized skincare recommendations";
+"myself.cycle.lastPeriodStart" = "Last Period Start Date";
+"myself.cycle.averageCycleLength" = "Average Cycle Length";
+"myself.cycle.cycleLengthValue" = "%d days";
+"myself.cycle.cycleLengthRange" = "Typical range: 21-35 days";
+"myself.cycle.periodLength" = "Period Length";
+"myself.cycle.periodLengthValue" = "%d days";
+"myself.cycle.periodLengthRange" = "Typical range: 3-7 days";
+"myself.cycle.privacyInfo" = "Your cycle data is stored securely on your device and used to provide personalized skincare recommendations.";
+"myself.cycle.saveSettings" = "Save Settings";
+"myself.cycle.cancel" = "Cancel";
+"myself.cycle.selectDate" = "Select Date";
+
+

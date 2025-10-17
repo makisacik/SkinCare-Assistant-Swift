@@ -124,6 +124,9 @@
       "productType": "cleanser",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.cleanser.guidance"
+        },
         "guidanceTemplate": "Your skin is resilient! Use your regular cleansing technique.",
         "orderPriority": 1,
         "warnings": []
@@ -135,6 +138,9 @@
       "productType": "exfoliator",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.exfoliator.guidance"
+        },
         "guidanceTemplate": "Great time for deeper exfoliation. Your skin can handle more intensive treatment.",
         "orderPriority": 2,
         "warnings": []
@@ -146,6 +152,9 @@
       "productType": "retinol",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.retinol.guidance"
+        },
         "guidanceTemplate": "Perfect time to use your full dosage. Skin absorption is optimal.",
         "orderPriority": 3,
         "warnings": []
@@ -157,6 +166,9 @@
       "productType": "faceSerum",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.faceSerum.guidance"
+        },
         "guidanceTemplate": "Perfect time for vitamin C, retinol, or peptide serums. Your skin can handle stronger actives now.",
         "orderPriority": 4,
         "warnings": []
@@ -168,6 +180,9 @@
       "productType": "essence",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.essence.guidance"
+        },
         "guidanceTemplate": "Perfect time for intensive essence treatments. Your skin absorbs nutrients optimally now.",
         "orderPriority": 2,
         "warnings": []
@@ -179,6 +194,9 @@
       "productType": "toner",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.toner.guidance"
+        },
         "guidanceTemplate": "Your skin is resilient. Use your regular toner routine.",
         "orderPriority": 2,
         "warnings": []
@@ -190,6 +208,9 @@
       "productType": "faceSerum",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.treatment.guidance"
+        },
         "guidanceTemplate": "Ideal time for intensive treatments, peels, or new products.",
         "orderPriority": 2,
         "warnings": []
@@ -201,6 +222,9 @@
       "productType": "moisturizer",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.moisturizer.guidance"
+        },
         "guidanceTemplate": "Your regular moisturizer is perfect. Skin is balanced.",
         "orderPriority": 5,
         "warnings": []
@@ -212,6 +236,9 @@
       "productType": "cleanser",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.cleanser.guidance"
+        },
         "guidanceTemplate": "Maintain your routine. Your skin is at its best!",
         "orderPriority": 1,
         "warnings": []
@@ -223,6 +250,9 @@
       "productType": "exfoliator",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.exfoliator.guidance"
+        },
         "guidanceTemplate": "Continue your regular exfoliation schedule.",
         "orderPriority": 2,
         "warnings": []
@@ -234,6 +264,9 @@
       "productType": "retinol",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.retinol.guidance"
+        },
         "guidanceTemplate": "Keep up your regular retinol routine.",
         "orderPriority": 3,
         "warnings": []
@@ -245,6 +278,9 @@
       "productType": "moisturizer",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.moisturizer.guidance"
+        },
         "guidanceTemplate": "Your skin is well-balanced. Stick with your routine.",
         "orderPriority": 4,
         "warnings": []
@@ -256,6 +292,9 @@
       "productType": "essence",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.essence.guidance"
+        },
         "guidanceTemplate": "Your skin is glowing naturally. Continue your regular essence application.",
         "orderPriority": 2,
         "warnings": []
@@ -267,6 +306,9 @@
       "productType": "toner",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.toner.guidance"
+        },
         "guidanceTemplate": "Your skin looks its best. Continue your regular toner routine.",
         "orderPriority": 2,
         "warnings": []
@@ -278,6 +320,9 @@
       "productType": "cleanser",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.cleanser.guidance"
+        },
         "guidanceTemplate": "Double cleanse if wearing makeup. Oil production increases during this phase.",
         "orderPriority": 1,
         "warnings": []
@@ -289,6 +334,10 @@
       "productType": "exfoliator",
       "action": {
         "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.exfoliator.guidance",
+          "warningKeys": ["cycle.luteal.exfoliator.warning"]
+        },
         "guidanceTemplate": "Limit to 2x per week maximum to avoid irritation.",
         "orderPriority": 2,
         "warnings": ["Skin can become more reactive during luteal phase"]
@@ -300,6 +349,10 @@
       "productType": "retinol",
       "action": {
         "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.retinol.guidance",
+          "warningKeys": ["cycle.luteal.retinol.warning"]
+        },
         "guidanceTemplate": "Consider reducing frequency or amount if you notice increased sensitivity.",
         "orderPriority": 4,
         "warnings": ["May cause irritation as progesterone rises"]
@@ -311,6 +364,9 @@
       "productType": "faceMask",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.faceMask.guidance"
+        },
         "guidanceTemplate": "Clay or charcoal masks are excellent for managing increased oil production.",
         "orderPriority": 2,
         "warnings": []
@@ -322,6 +378,9 @@
       "productType": "moisturizer",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.moisturizer.guidance"
+        },
         "guidanceTemplate": "Consider switching to a lighter moisturizer if feeling too oily.",
         "orderPriority": 5,
         "warnings": []
@@ -333,6 +392,9 @@
       "productType": "spotTreatment",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.spotTreatment.guidance"
+        },
         "guidanceTemplate": "Keep spot treatments handy. Breakouts are more common now.",
         "orderPriority": 3,
         "warnings": []
@@ -344,6 +406,9 @@
       "productType": "toner",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.toner.guidance"
+        },
         "guidanceTemplate": "Use a balancing or mattifying toner to control oil.",
         "orderPriority": 2,
         "warnings": []
@@ -355,6 +420,10 @@
       "productType": "essence",
       "action": {
         "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.essence.guidance",
+          "warningKeys": ["cycle.luteal.essence.warning"]
+        },
         "guidanceTemplate": "Use lighter essence formulas. Heavy essences may feel too rich during this oilier phase.",
         "orderPriority": 3,
         "warnings": ["Skip heavy, oil-based essences if feeling congested"]
@@ -366,6 +435,10 @@
       "productType": "eyeCream",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.eyeCream.guidance",
+          "warningKeys": ["cycle.menstrual.eyeCream.warning"]
+        },
         "guidanceTemplate": "Apply gently. Extra hydration helps with puffiness and dark circles.",
         "orderPriority": null,
         "warnings": ["Increased fluid retention may cause puffiness"]
@@ -377,6 +450,9 @@
       "productType": "eyeCream",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.eyeCream.guidance"
+        },
         "guidanceTemplate": "Apply your regular amount with gentle patting motions.",
         "orderPriority": null,
         "warnings": []
@@ -388,6 +464,9 @@
       "productType": "eyeCream",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.eyeCream.guidance"
+        },
         "guidanceTemplate": "Your eye area looks bright and fresh. Continue normal application.",
         "orderPriority": null,
         "warnings": []
@@ -399,6 +478,10 @@
       "productType": "eyeCream",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.eyeCream.guidance",
+          "warningKeys": ["cycle.luteal.eyeCream.warning"]
+        },
         "guidanceTemplate": "May need extra product for under-eye area. Watch for puffiness.",
         "orderPriority": null,
         "warnings": ["Hormonal changes may cause dark circles and puffiness"]
@@ -410,6 +493,9 @@
       "productType": "facialOil",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.facialOil.guidance"
+        },
         "guidanceTemplate": "Can be beneficial for barrier support. Use 2-3 drops, not more.",
         "orderPriority": null,
         "warnings": []
@@ -421,6 +507,9 @@
       "productType": "facialOil",
       "action": {
         "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.facialOil.guidance"
+        },
         "guidanceTemplate": "Great time to use facial oils. Skin absorbs them beautifully now.",
         "orderPriority": null,
         "warnings": []
@@ -432,6 +521,9 @@
       "productType": "facialOil",
       "action": {
         "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.facialOil.guidance"
+        },
         "guidanceTemplate": "Continue regular use. Your skin is balanced and glowing.",
         "orderPriority": null,
         "warnings": []
@@ -443,6 +535,10 @@
       "productType": "facialOil",
       "action": {
         "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.facialOil.guidance",
+          "warningKeys": ["cycle.luteal.facialOil.warning"]
+        },
         "guidanceTemplate": "Use sparingly or skip if feeling oily. Your natural sebum production is higher.",
         "orderPriority": null,
         "warnings": ["Increased natural oil production - may cause congestion"]

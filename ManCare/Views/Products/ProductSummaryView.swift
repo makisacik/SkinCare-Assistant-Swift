@@ -65,11 +65,11 @@ struct ProductSummaryView: View {
                             .font(.system(size: 40, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.success)
                         
-                        Text("Product Summary")
+                        Text(L10n.Products.Summary.title)
                             .font(ThemeManager.shared.theme.typo.h2)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
-                        Text("Review and edit the extracted product information")
+                        Text(L10n.Products.Summary.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             .multilineTextAlignment(.center)
@@ -79,16 +79,16 @@ struct ProductSummaryView: View {
                     // Editable Product Information
                     VStack(spacing: 20) {
                         // Basic Information
-                        ProductFormSection(title: "Product Information") {
+                        ProductFormSection(title: L10n.Products.Form.basicInfo) {
                             VStack(spacing: 16) {
-                                FormField(title: "Product Name", text: $productName, placeholder: "e.g., Gentle Foaming Cleanser")
-                                FormField(title: "Brand", text: $brand, placeholder: "e.g., CeraVe")
-                                SizeField(title: "Size", sizeValue: $sizeValue, selectedUnit: $selectedSizeUnit, placeholder: "e.g., 150")
+                                FormField(title: L10n.Products.Form.productName, text: $productName, placeholder: L10n.Products.Form.productNamePlaceholder)
+                                FormField(title: L10n.Products.Form.brand, text: $brand, placeholder: L10n.Products.Form.brandPlaceholder)
+                                SizeField(title: L10n.Products.Form.size, sizeValue: $sizeValue, selectedUnit: $selectedSizeUnit, placeholder: L10n.Products.Form.sizePlaceholder)
                             }
                         }
                         
                         // Product Category
-                        ProductFormSection(title: "Product Category") {
+                        ProductFormSection(title: L10n.Products.Form.productCategory) {
                             VStack(spacing: 16) {
                                 ProductTypeSelectorButton(selectedProductType: $selectedProductType) {
                                     showingProductTypeSelector = true
@@ -97,10 +97,10 @@ struct ProductSummaryView: View {
                         }
                         
                         // Ingredients
-                        ProductFormSection(title: "Ingredients") {
+                        ProductFormSection(title: L10n.Products.Form.ingredients) {
                             VStack(spacing: 16) {
                                 HStack(spacing: 12) {
-                                    TextField("Add ingredient", text: $newIngredient)
+                                    TextField(L10n.Products.Form.addIngredient, text: $newIngredient)
                                         .font(ThemeManager.shared.theme.typo.body)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 12)
@@ -137,7 +137,7 @@ struct ProductSummaryView: View {
                         }
                         
                         // Claims
-                        ProductFormSection(title: "Product Claims") {
+                        ProductFormSection(title: L10n.Products.Form.productClaims) {
                             VStack(spacing: 16) {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 8) {
                                     ForEach(availableClaims, id: \.self) { claim in
@@ -154,9 +154,9 @@ struct ProductSummaryView: View {
                         }
                         
                         // Description
-                        ProductFormSection(title: "Description") {
+                        ProductFormSection(title: L10n.Products.Form.description) {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Product Description")
+                                Text(L10n.Products.Form.productDescription)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 
@@ -182,7 +182,7 @@ struct ProductSummaryView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(L10n.Common.cancel) {
                         onCancel()
                     }
                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))
@@ -202,7 +202,7 @@ struct ProductSummaryView: View {
                             } else {
                                 Image(systemName: "checkmark.circle.fill")
                             }
-                            Text(isAdding ? "Adding..." : "Confirm Product")
+                            Text(isAdding ? L10n.Products.Action.adding : L10n.Products.Action.confirmProduct)
                         }
                     }
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))

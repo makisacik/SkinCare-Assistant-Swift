@@ -34,7 +34,7 @@ struct InteractiveComparisonDemo: View {
             HStack(spacing: 6) {
                 Image(systemName: "camera.on.rectangle.fill")
                     .font(.system(size: 13, weight: .bold))
-                Text("SKIN JOURNEY")
+                Text(L10n.SkinJournal.Journey.titleBadge)
                     .font(.system(size: 13, weight: .bold))
                     .tracking(1.2)
             }
@@ -57,7 +57,7 @@ struct InteractiveComparisonDemo: View {
             .shadow(color: ThemeManager.shared.theme.palette.primary.opacity(0.4), radius: 8, x: 0, y: 4)
             
             // Tagline
-            Text("See your glow evolve")
+            Text(L10n.SkinJournal.Journey.tagline)
                 .font(.system(size: 20, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 .multilineTextAlignment(.center)
@@ -70,12 +70,12 @@ struct InteractiveComparisonDemo: View {
             VStack(alignment: .leading, spacing: 10) {
                 featureRow(
                     icon: "chart.line.uptrend.xyaxis",
-                    text: "Visual timeline of changes"
+                    text: L10n.SkinJournal.Demo.visualTimeline
                 )
 
                 featureRow(
                     icon: "face.smiling.fill",
-                    text: "Mood & skin correlation"
+                    text: L10n.SkinJournal.Demo.moodCorrelation
                 )
             }
             .padding(.top, 4)
@@ -89,7 +89,7 @@ struct InteractiveComparisonDemo: View {
                     Image(systemName: "sparkles")
                         .font(.system(size: 16, weight: .semibold))
 
-                    Text("Try Premium Free for 7 Days")
+                    Text(L10n.SkinJournal.Premium.tryFree)
                         .font(.system(size: 17, weight: .semibold))
                 }
                 .foregroundColor(.white)

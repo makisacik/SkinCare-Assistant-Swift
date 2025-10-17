@@ -11,15 +11,23 @@ import SwiftUI
 
 struct LifestyleAnswers: Codable, Equatable {
     enum SleepQuality: String, CaseIterable, Identifiable, Codable { case poor, average, good
-        var id: String { rawValue }; var label: String { rawValue.capitalized } }
+        var id: String { rawValue }
+        var label: String {
+            switch self {
+            case .poor: return L10n.Onboarding.Lifestyle.SleepQuality.poor
+            case .average: return L10n.Onboarding.Lifestyle.SleepQuality.average
+            case .good: return L10n.Onboarding.Lifestyle.SleepQuality.good
+            }
+        }
+    }
     enum ExerciseFreq: String, CaseIterable, Identifiable, Codable { case none, oneToTwo, threeToFour, fivePlus
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .none: return "None"
-            case .oneToTwo: return "1–2 / week"
-            case .threeToFour: return "3–4 / week"
-            case .fivePlus: return "5+ / week"
+            case .none: return L10n.Onboarding.Lifestyle.ExerciseFreq.none
+            case .oneToTwo: return L10n.Onboarding.Lifestyle.ExerciseFreq.oneToTwo
+            case .threeToFour: return L10n.Onboarding.Lifestyle.ExerciseFreq.threeToFour
+            case .fivePlus: return L10n.Onboarding.Lifestyle.ExerciseFreq.fivePlus
             }
         }
     }
@@ -27,9 +35,9 @@ struct LifestyleAnswers: Codable, Equatable {
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .minimal:  return "2–3 steps"
-            case .standard: return "3–4 steps"
-            case .detailed: return "4–5 steps"
+            case .minimal:  return L10n.Onboarding.Lifestyle.RoutineDepthOption.minimal
+            case .standard: return L10n.Onboarding.Lifestyle.RoutineDepthOption.standard
+            case .detailed: return L10n.Onboarding.Lifestyle.RoutineDepthOption.detailed
             }
         }
     }
@@ -37,9 +45,9 @@ struct LifestyleAnswers: Codable, Equatable {
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .rarely:   return "Rarely burns"
-            case .sometimes:return "Sometimes burns"
-            case .easily:   return "Easily burns"
+            case .rarely:   return L10n.Onboarding.Lifestyle.SunResponse.rarely
+            case .sometimes:return L10n.Onboarding.Lifestyle.SunResponse.sometimes
+            case .easily:   return L10n.Onboarding.Lifestyle.SunResponse.easily
             }
         }
     }
@@ -84,7 +92,7 @@ struct LifestyleQuestionsView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 16, weight: .semibold))
-                                Text("Back")
+                                Text(L10n.Onboarding.Lifestyle.back)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                             }
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -97,35 +105,35 @@ struct LifestyleQuestionsView: View {
 
                 // Title section
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Lifestyle Questions")
+                    Text(L10n.Onboarding.Lifestyle.title)
                         .font(ThemeManager.shared.theme.typo.h1)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    Text("Help us understand your daily habits and preferences to create a more personalized routine.")
+                    Text(L10n.Onboarding.Lifestyle.subtitle)
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 .padding(.top, 8)
 
                 Group { // Lifestyle
-                    SectionHeader(title: "Lifestyle")
-                    SegmentedCard(title: "Sleep Quality",
+                    SectionHeader(title: L10n.Onboarding.Lifestyle.Section.lifestyle)
+                    SegmentedCard(title: L10n.Onboarding.Lifestyle.Question.sleepQuality,
                                   items: LifestyleAnswers.SleepQuality.allCases.map(\.label),
                                   selectionIndex: bindingIndex(
                                     from: answers.sleep,
                                     allCases: LifestyleAnswers.SleepQuality.allCases
                                   ) { answers.sleep = $0 })
-                    StepRow(title: "Time outdoors (hrs/day)",
+                    StepRow(title: L10n.Onboarding.Lifestyle.Question.outdoorHours,
                             value: Binding(
                                 get: { answers.outdoorHours ?? 0 },
                                 set: { answers.outdoorHours = $0 }
                             ),
                             range: 0...10,
                             step: 1)
-                    ToggleRow(title: "Do you smoke?", value: Binding(get: { answers.smokes ?? false },
+                    ToggleRow(title: L10n.Onboarding.Lifestyle.Question.smoke, value: Binding(get: { answers.smokes ?? false },
                                                                      set: { answers.smokes = $0 }))
-                    ToggleRow(title: "Do you drink alcohol?", value: Binding(get: { answers.drinksAlcohol ?? false },
+                    ToggleRow(title: L10n.Onboarding.Lifestyle.Question.alcohol, value: Binding(get: { answers.drinksAlcohol ?? false },
                                                                               set: { answers.drinksAlcohol = $0 }))
-                    SegmentedCard(title: "Exercise Frequency",
+                    SegmentedCard(title: L10n.Onboarding.Lifestyle.Question.exercise,
                                   items: LifestyleAnswers.ExerciseFreq.allCases.map(\.label),
                                   selectionIndex: bindingIndex(
                                     from: answers.exercise,
@@ -135,8 +143,8 @@ struct LifestyleQuestionsView: View {
                 .themedCard()
 
                 Group { // Skin habits & goals
-                    SectionHeader(title: "Skin Habits & Goals")
-                    SegmentedCard(title: "Desired Routine Depth",
+                    SectionHeader(title: L10n.Onboarding.Lifestyle.Section.skinHabits)
+                    SegmentedCard(title: L10n.Onboarding.Lifestyle.Question.routineDepth,
                                   items: LifestyleAnswers.RoutineDepth.allCases.map(\.label),
                                   selectionIndex: bindingIndex(
                                     from: answers.routineDepth,
@@ -146,22 +154,22 @@ struct LifestyleQuestionsView: View {
                 .themedCard()
 
                 Group { // Product preferences
-                    SectionHeader(title: "Product Preferences")
-                    ToggleRow(title: "Fragrance-free only",
+                    SectionHeader(title: L10n.Onboarding.Lifestyle.Section.productPreferences)
+                    ToggleRow(title: L10n.Onboarding.Lifestyle.Question.fragranceFree,
                               value: Binding(get: { answers.fragranceFree ?? false },
                                              set: { answers.fragranceFree = $0 }))
-                    ToggleRow(title: "Prefer natural/clean formulas",
+                    ToggleRow(title: L10n.Onboarding.Lifestyle.Question.naturalPreference,
                               value: Binding(get: { answers.naturalPreference ?? false },
                                              set: { answers.naturalPreference = $0 }))
                 }
                 .themedCard()
 
                 Group { // Sensitivities & sun
-                    SectionHeader(title: "Sensitivity & Sun")
-                    ToggleRow(title: "Sensitive skin",
+                    SectionHeader(title: L10n.Onboarding.Lifestyle.Section.sensitivity)
+                    ToggleRow(title: L10n.Onboarding.Lifestyle.Question.sensitiveSkin,
                               value: Binding(get: { answers.sensitiveSkin ?? false },
                                              set: { answers.sensitiveSkin = $0 }))
-                    SegmentedCard(title: "In the sun, your skin…",
+                    SegmentedCard(title: L10n.Onboarding.Lifestyle.Question.sunResponse,
                                   items: LifestyleAnswers.SunResponse.allCases.map(\.label),
                                   selectionIndex: bindingIndex(
                                     from: answers.sunResponse,
@@ -172,14 +180,14 @@ struct LifestyleQuestionsView: View {
 
                 // Actions
                 VStack(spacing: 12) {
-                    Button("Continue") {
+                    Button(L10n.Onboarding.Common.continue) {
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                         onContinue(answers)
                     }
                     .buttonStyle(PrimaryButtonStyle())
 
                     if let onSkip {
-                        Button("Skip for now") {
+                        Button(L10n.Onboarding.Preferences.skipForNow) {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             onSkip()
                         }
@@ -261,7 +269,7 @@ private struct StepRow: View {
                     .font(ThemeManager.shared.theme.typo.body)
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 Spacer()
-                Text("\(value)")
+                Text(String(value))
                     .font(ThemeManager.shared.theme.typo.title)
                     .foregroundColor(ThemeManager.shared.theme.palette.secondary)
             }

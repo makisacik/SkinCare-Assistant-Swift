@@ -37,7 +37,7 @@ struct PaywallView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "star.fill")
                                 .font(.system(size: 11, weight: .bold))
-                            Text("PREMIUM")
+                            Text(L10n.Paywall.premium)
                                 .font(.system(size: 12, weight: .bold))
                                 .tracking(1.2)
                         }
@@ -61,29 +61,29 @@ struct PaywallView: View {
                         .padding(.top, 12)
                         
                         // Title
-                        Text("Try for free")
+                        Text(L10n.Paywall.title)
                             .font(.system(size: 34, weight: .bold, design: .serif))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .padding(.top, 4)
                         
                         // Features List
                         VStack(alignment: .leading, spacing: 12) {
-                            FeatureRow(text: "Enjoy your first week for free!")
-                            FeatureRow(text: "Cancel anytime with ease")
-                            FeatureRow(text: "Create and track skincare routines")
-                            FeatureRow(text: "Sync routines with your cycle")
-                            FeatureRow(text: "All content, no limits, no ads")
+                            FeatureRow(text: L10n.Paywall.Features.freeWeek)
+                            FeatureRow(text: L10n.Paywall.Features.cancelAnytime)
+                            FeatureRow(text: L10n.Paywall.Features.createRoutines)
+                            FeatureRow(text: L10n.Paywall.Features.syncCycle)
+                            FeatureRow(text: L10n.Paywall.Features.noLimits)
                         }
                         .padding(.horizontal, 24)
                         
                         // Pricing
                         VStack(spacing: 4) {
-                            Text("Try 7 days free, then just ₺199,99 / year")
+                            Text(L10n.Paywall.Pricing.trial)
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .multilineTextAlignment(.center)
                             
-                            Text("Only ₺16,66/month, billed annually.")
+                            Text(L10n.Paywall.Pricing.monthly)
                                 .font(.system(size: 14))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                 .multilineTextAlignment(.center)
@@ -112,7 +112,7 @@ struct PaywallView: View {
                                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                         .scaleEffect(0.9)
                                 }
-                                Text(isPurchasing ? "Processing..." : "Start my free week")
+                                Text(isPurchasing ? L10n.Paywall.Action.processing : L10n.Paywall.Action.startFreeTrial)
                                     .font(.system(size: 17, weight: .semibold))
                             }
                             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
@@ -141,7 +141,7 @@ struct PaywallView: View {
                                 .font(.system(size: 11))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                             
-                            Text("Secured by the App Store. Cancel at any time.")
+                            Text(L10n.Paywall.Footer.secure)
                                 .font(.system(size: 12))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                         }

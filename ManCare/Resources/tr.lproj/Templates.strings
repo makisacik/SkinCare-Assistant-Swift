@@ -1,0 +1,749 @@
+/*
+Templates.strings (Turkish)
+ManCare - Rutin Şablonu içeriği
+*/
+
+/* ===================================
+MARK: - Categories
+=================================== */
+
+"templates.category.all.title" = "Tümü";
+"templates.category.all.description" = "Tüm rutin tipleri";
+"templates.category.korean.title" = "Kore";
+"templates.category.korean.description" = "Kore cilt bakımı felsefesi";
+"templates.category.antiAging.title" = "Yaşlanma Karşıtı";
+"templates.category.antiAging.description" = "İnce çizgi ve kırışıklıkları hedefle";
+"templates.category.acne.title" = "Sivilce";
+"templates.category.acne.description" = "Sivilceleri temizle ve oluşumunu önle";
+"templates.category.minimalist.title" = "Minimalist";
+"templates.category.minimalist.description" = "Basit, temel adımlar";
+"templates.category.sensitive.title" = "Hassas Cilt";
+"templates.category.sensitive.description" = "Nazik, yatıştırıcı bakım";
+"templates.category.oily.title" = "Yağlı Cilt";
+"templates.category.oily.description" = "Aşırı yağı kontrol et";
+"templates.category.dry.title" = "Kuru Cilt";
+"templates.category.dry.description" = "Yoğun nemlendirme";
+"templates.category.combination.title" = "Karma Cilt";
+"templates.category.combination.description" = "Farklı cilt bölgelerini dengele";
+
+/* ===================================
+MARK: - Difficulty Levels
+=================================== */
+
+"templates.difficulty.beginner" = "Başlangıç";
+"templates.difficulty.intermediate" = "Orta Seviye";
+"templates.difficulty.advanced" = "İleri Seviye";
+
+/* ===================================
+MARK: - Korean Glass Skin Routine
+=================================== */
+
+"templates.routine.koreanGlassSkin.title" = "Kore Cam Cilt Rutini";
+"templates.routine.koreanGlassSkin.description" = "Bu kapsamlı Kore cilt bakımı rutini ile o imrenilen nemli, cam görünümlü cilde ulaşın.";
+"templates.routine.koreanGlassSkin.duration" = "15-20 dk";
+
+/* Tags */
+"templates.routine.koreanGlassSkin.tag1" = "Nemlendirme";
+"templates.routine.koreanGlassSkin.tag2" = "Işıltı";
+"templates.routine.koreanGlassSkin.tag3" = "Çok Adımlı";
+"templates.routine.koreanGlassSkin.tag4" = "Popüler";
+
+/* Benefits */
+"templates.routine.koreanGlassSkin.benefit1" = "Derin nemlendirme";
+"templates.routine.koreanGlassSkin.benefit2" = "Gelişmiş cilt dokusu";
+"templates.routine.koreanGlassSkin.benefit3" = "Işıl ışıl ışıltı";
+"templates.routine.koreanGlassSkin.benefit4" = "İnce çizgilerde azalma";
+
+/* Morning Steps */
+"templates.routine.koreanGlassSkin.morning.step1.title" = "Su Bazlı Temizleyici";
+"templates.routine.koreanGlassSkin.morning.step1.why" = "Gece biriken yağı ve kirleri cildin doğal nem bariyerini soymadan temizler, ürünlerin optimal emilimine hazırlar";
+"templates.routine.koreanGlassSkin.morning.step1.how" = "Yüzünüzü ılık suyla ıslatın. Az miktarda ürün uygulayın ve dairesel hareketlerle 30-60 saniye nazikçe masaj yapın. İyice durulayın ve temiz bir havluyla hafifçe kurulayın.";
+
+"templates.routine.koreanGlassSkin.morning.step2.title" = "Tonik";
+"templates.routine.koreanGlassSkin.morning.step2.why" = "Temizleme sonrası cildin pH seviyesini dengeler ve sonraki ürünlerin derinlemesine nüfuz etmesi için mükemmel bir ortam yaratır";
+"templates.routine.koreanGlassSkin.morning.step2.how" = "Toniği avucunuza veya bir pamuk ped üzerine dökün. Göz çevresinden kaçınarak yüzünüze ve boynunuza nazikçe uygulayın veya yayın. 30 saniye emilmesini bekleyin.";
+
+"templates.routine.koreanGlassSkin.morning.step3.title" = "Esans";
+"templates.routine.koreanGlassSkin.morning.step3.why" = "İlk katman hafif nemlendirme sağlar ve cildi serum ve bakımların daha iyi emilmesi için hazırlar";
+"templates.routine.koreanGlassSkin.morning.step3.how" = "Birkaç damlayı avucunuza dökün. Yüzünüzün ortasından dışa doğru hareketlerle nazikçe cilde uygulayın. Emilime yardımcı olmak için hafifçe bastırın.";
+
+"templates.routine.koreanGlassSkin.morning.step4.title" = "Serum";
+"templates.routine.koreanGlassSkin.morning.step4.why" = "Aydınlatma, yaşlanma karşıtı veya nemlendirme gibi belirli sorunları hedefleyen konsantre aktif bileşenler sunar";
+"templates.routine.koreanGlassSkin.morning.step4.how" = "Yüzünüze ve boynunuza 2-3 damla uygulayın. Çekiştirmeden nazikçe bastırarak yedirin. Bir sonraki adıma geçmeden 60 saniye bekleyin.";
+
+"templates.routine.koreanGlassSkin.morning.step5.title" = "Nemlendirici";
+"templates.routine.koreanGlassSkin.morning.step5.why" = "Önceki tüm nemlendirme katmanlarını cilde hapseder ve transepidermal su kaybını önlemek için koruyucu bir bariyer oluşturur";
+"templates.routine.koreanGlassSkin.morning.step5.how" = "Bir miktar ürünü avuçlarınız arasında ısıtın. Yüz ve boyun bölgesine nazikçe yukarı ve dışa doğru hareketlerle uygulayın. Boynunuzu unutmayın!";
+
+"templates.routine.koreanGlassSkin.morning.step6.title" = "Güneş Kremi";
+"templates.routine.koreanGlassSkin.morning.step6.why" = "Gözle görülür yaşlanmanın, koyu lekelerin ve doku sorunlarının %90'ına neden olan UV hasarına karşı cildi korur";
+"templates.routine.koreanGlassSkin.morning.step6.how" = "Maruz kalan tüm bölgelere iki parmak uzunluğunda güneş kremi uygulayın. Güneşe çıkmadan 15 dakika önce sürün. Dışarıdayken her 2 saatte bir yenileyin.";
+
+/* Evening Steps */
+"templates.routine.koreanGlassSkin.evening.step1.title" = "Yağ Bazlı Temizleyici";
+"templates.routine.koreanGlassSkin.evening.step1.why" = "Su bazlı temizleyicilerin etkili bir şekilde çıkaramadığı makyajı, güneş kremini ve yağ bazlı kirleri çözer";
+"templates.routine.koreanGlassSkin.evening.step1.how" = "Kuru cilde uygulayın ve 1-2 dakika masaj yapın. Süt kıvamına gelene kadar su ekleyerek emülsiyon haline getirin, ardından ılık suyla iyice durulayın.";
+
+"templates.routine.koreanGlassSkin.evening.step2.title" = "Su Bazlı Temizleyici";
+"templates.routine.koreanGlassSkin.evening.step2.why" = "İkinci temizleme, kalan su bazlı kirleri temizler ve maksimum bakım emilimi için cildin tamamen temiz olmasını sağlar";
+"templates.routine.koreanGlassSkin.evening.step2.how" = "Nemli cilde uygulayın ve dairesel hareketlerle 60 saniye nazikçe masaj yapın. Ilık suyla iyice durulayın ve hafifçe kurulayın.";
+
+"templates.routine.koreanGlassSkin.evening.step3.title" = "Peeling/Cilt Yenileyici";
+"templates.routine.koreanGlassSkin.evening.step3.why" = "Donukluğa ve gözenek tıkanıklığına neden olabilen ölü cilt hücrelerini nazikçe temizleyerek daha parlak ve pürüzsüz bir cilt ortaya çıkarır";
+"templates.routine.koreanGlassSkin.evening.step3.how" = "Göz çevresinden kaçınarak temiz ve kuru cilde uygulayın. 10-15 dakika bekletin, ardından durulayın. Her gün değil, haftada 2-3 kez kullanın.";
+
+"templates.routine.koreanGlassSkin.evening.step4.title" = "Kâğıt Maske (Sheet Mask)";
+"templates.routine.koreanGlassSkin.evening.step4.why" = "Yoğun hidrasyon ve besinleri, maksimum ışıltı için derinlemesine nüfuz eden konsantre bir bakım olarak sağlar";
+"templates.routine.koreanGlassSkin.evening.step4.how" = "Maskeyi temiz yüze uygulayın, hava kabarcıklarını düzeltin. 15-20 dakika dinlenin. Çıkarın ve kalan esansı hafifçe cildinize yedirin. Haftada 2-3 kez kullanın.";
+
+"templates.routine.koreanGlassSkin.evening.step5.title" = "Göz Kremi";
+"templates.routine.koreanGlassSkin.evening.step5.why" = "Şişlik, koyu halkalar ve ince çizgileri azaltmak için özel içeriklerle hassas göz bölgesini hedefler";
+"templates.routine.koreanGlassSkin.evening.step5.how" = "Yüzük parmağınızı kullanarak pirinç tanesi büyüklüğünde bir miktarı göz çevresi kemiği etrafına nazikçe uygulayın. İçten dışa doğru tampon hareketler yapın. Asla çekmeyin veya çekiştirmeyin.";
+
+"templates.routine.koreanGlassSkin.evening.step6.title" = "Nemlendirici";
+"templates.routine.koreanGlassSkin.evening.step6.why" = "Katmanlı bakımların tümünü kilitler ve cildiniz onarım modundayken gece boyunca nemlendirme sağlar";
+"templates.routine.koreanGlassSkin.evening.step6.how" = "Yukarı ve dışa doğru hareketlerle cömertçe uygulayın. Akşam nemlendiriciniz sabah kullandığınızdan daha zengin yapıda olabilir.";
+
+/* ===================================
+MARK: - Acne Clear Routine
+=================================== */
+
+"templates.routine.acneClear.title" = "Sivilce Temizleme Rutini";
+"templates.routine.acneClear.description" = "Temiz ve sağlıklı bir cilt için bu hedefe yönelik rutin ile sivilcelere karşı savaşın ve gelecekteki oluşumları önleyin.";
+"templates.routine.acneClear.duration" = "8-12 dk";
+
+/* Tags */
+"templates.routine.acneClear.tag1" = "Sivilce";
+"templates.routine.acneClear.tag2" = "Salisilik Asit";
+"templates.routine.acneClear.tag3" = "Nazik";
+"templates.routine.acneClear.tag4" = "Etkili";
+
+/* Benefits */
+"templates.routine.acneClear.benefit1" = "Aktif sivilceleri azaltır";
+"templates.routine.acneClear.benefit2" = "Yeni sivilceleri önler";
+"templates.routine.acneClear.benefit3" = "Gözenekleri küçültür";
+"templates.routine.acneClear.benefit4" = "İltihabı yatıştırır";
+
+/* Morning Steps */
+"templates.routine.acneClear.morning.step1.title" = "Nazik Temizleyici";
+"templates.routine.acneClear.morning.step1.why" = "Aşırı yağı ve kirleri cildi aşırı kurutmadan temizler, bu da daha fazla yağ üretimine neden olarak sivilceleri kötüleştirebilir";
+"templates.routine.acneClear.morning.step1.how" = "Ilık su kullanın ve 60 saniye nazikçe masaj yapın. Sıcak su ve sert ovalamadan kaçının. Temiz bir havluyla hafifçe kurulayın.";
+
+"templates.routine.acneClear.morning.step2.title" = "Salisilik Asitli Tonik";
+"templates.routine.acneClear.morning.step2.why" = "Yağ ve kirleri çözmek için gözeneklere nüfuz eder, siyah nokta ve sivilcelere yol açan tıkanıklıkları önler";
+"templates.routine.acneClear.morning.step2.how" = "Pamuk ped veya doğrudan avuç içine uygulayın. Yüzünüzde, özellikle sivilce eğilimli bölgelere odaklanarak nazikçe yayın. BHA'ya yeni başlıyorsanız gün aşırı kullanın.";
+
+"templates.routine.acneClear.morning.step3.title" = "Niasinamid Serumu";
+"templates.routine.acneClear.morning.step3.why" = "İltihabı azaltır, yağ üretimini düzenler ve sivilce sonrası izlerin tahriş etmeden solmasına yardımcı olur";
+"templates.routine.acneClear.morning.step3.how" = "Yüzünüze ve boynunuza 2-3 damla uygulayın. Emilmesi için nazikçe tampon hareketler yapın. Nemlendiriciden önce 60 saniye bekleyin. Sabah ve akşam kullanılabilir.";
+
+"templates.routine.acneClear.morning.step4.title" = "Hafif Nemlendirici";
+"templates.routine.acneClear.morning.step4.why" = "Gözenekleri tıkamadan cilt bariyeri sağlığını korur. Yağlı, sivilce eğilimli cilt bile aşırı yağ üretimini önlemek için nemlendirmeye ihtiyaç duyar";
+"templates.routine.acneClear.morning.step4.how" = "Jel veya su bazlı bir nemlendirici kullanın. İnce bir tabaka uygulayın ve tamamen emilmesini bekleyin. 'Komedojenik olmayan' etiketlerini arayın.";
+
+"templates.routine.acneClear.morning.step5.title" = "Güneş Kremi";
+"templates.routine.acneClear.morning.step5.why" = "İyileşen sivilcelerden koyu lekeler oluşmasını engeller ve cildi hasardan korur. Birçok sivilce bakımı güneşe hassasiyeti artırır";
+"templates.routine.acneClear.morning.step5.how" = "Yağsız, komedojenik olmayan SPF 30+ uygulayın. İki parmak uzunluğunda kullanın ve dışarıda zaman geçiriyorsanız yenileyin.";
+
+/* Evening Steps */
+"templates.routine.acneClear.evening.step1.title" = "Nazik Temizleyici";
+"templates.routine.acneClear.evening.step1.why" = "Günün birikmiş yağı, kiri ve bakterileri cildi soymadan veya tahriş etmeden temizler";
+"templates.routine.acneClear.evening.step1.how" = "Ilık suyla 60 saniye masaj yapın. Aktif sivilcelerin etrafına nazik davranın. İyice durulayın ve hafifçe kurulayın.";
+
+"templates.routine.acneClear.evening.step2.title" = "Salisilik Asitli Tonik";
+"templates.routine.acneClear.evening.step2.why" = "Akşam uygulaması, BHA'nın gece boyunca çalışmasını, gözenekleri açmasını ve siz uyurken yeni sivilceleri önlemesini sağlar";
+"templates.routine.acneClear.evening.step2.how" = "Temiz ve kuru cilde uygulayın. T bölgesi ve sivilce eğilimli bölgelere odaklanın. Bu gece retinol gibi başka güçlü aktifler kullanıyorsanız atlayın.";
+
+"templates.routine.acneClear.evening.step3.title" = "Niasinamid Serumu";
+"templates.routine.acneClear.evening.step3.why" = "Günün yorgunluğundan kaynaklanan iltihabı yatıştırır, kızarıklığı azaltır ve sivilceleri kontrol etmek için BHA ile sinerjik çalışır";
+"templates.routine.acneClear.evening.step3.how" = "Tonikten sonra 2-3 damla uygulayın. Nazikçe tampon hareketlerle emdirin. Bir sonraki adımdan önce bir dakika bekleyin.";
+
+"templates.routine.acneClear.evening.step4.title" = "Leke/Sivilce Bakımı (Spot Treatment)";
+"templates.routine.acneClear.evening.step4.why" = "Daha hızlı iyileşme için konsantre sivilce karşıtı bileşenleri doğrudan aktif sivilcelere ulaştırır";
+"templates.routine.acneClear.evening.step4.how" = "Sadece aktif sivilcelere küçük bir miktar uygulayın, tüm yüze değil. Temiz bir parmak veya pamuklu çubuk kullanın. Tamamen kurumasını bekleyin.";
+
+"templates.routine.acneClear.evening.step5.title" = "Hafif Nemlendirici";
+"templates.routine.acneClear.evening.step5.why" = "Bakımları kilitler ve cildin aşırı kurumasını önler, bu da ironik olarak sivilceleri kötüleştirebilir";
+"templates.routine.acneClear.evening.step5.how" = "Leke bakımı kuruduktan sonra uygulayın. İnce bir tabaka kullanın. Sivilce eğilimli ciltler için jel veya su bazlı formülleri seçin.";
+
+/* ===================================
+MARK: - Anti-Aging Essentials
+=================================== */
+
+"templates.routine.antiAging.title" = "Temel Yaşlanma Karşıtı Bakım";
+"templates.routine.antiAging.description" = "Kanıtlanmış yaşlanma karşıtı bileşenler içeren bu güçlü rutin ile yaşlanma belirtileriyle mücadele edin.";
+"templates.routine.antiAging.duration" = "12-15 dk";
+
+/* Tags */
+"templates.routine.antiAging.tag1" = "Retinol";
+"templates.routine.antiAging.tag2" = "C Vitamini";
+"templates.routine.antiAging.tag3" = "Yaşlanma Karşıtı";
+"templates.routine.antiAging.tag4" = "Sıkılaştırıcı";
+
+/* Benefits */
+"templates.routine.antiAging.benefit1" = "İnce çizgileri azaltır";
+"templates.routine.antiAging.benefit2" = "Cilt sıkılığını artırır";
+"templates.routine.antiAging.benefit3" = "Cildi aydınlatır";
+"templates.routine.antiAging.benefit4" = "Kolajeni uyarır";
+
+/* Morning Steps */
+"templates.routine.antiAging.morning.step1.title" = "Nazik Temizleyici";
+"templates.routine.antiAging.morning.step1.why" = "Daha kuru ve hassas olma eğiliminde olan olgun cildi soymadan gece birikmiş kirleri temizler";
+"templates.routine.antiAging.morning.step1.how" = "Ilık suyla krem veya yağ bazlı bir temizleyici kullanın. 60 saniye nazikçe masaj yapın, iyice durulayın ve hafifçe kurulayın.";
+
+"templates.routine.antiAging.morning.step2.title" = "C Vitamini Serumu";
+"templates.routine.antiAging.morning.step2.why" = "Güçlü bir antioksidandır; cildi aydınlatır, tonu eşitler, kolajen üretimini destekler ve UV ile kirlilikten kaynaklanan serbest radikal hasarına karşı korur";
+"templates.routine.antiAging.morning.step2.how" = "Her sabah temiz cilde 3-4 damla uygulayın. Yüzünüze ve boynunuza nazikçe bastırarak yedirin. Bir sonraki adımdan önce 60-90 saniye bekleyin. Serin ve karanlık bir yerde saklayın.";
+
+"templates.routine.antiAging.morning.step3.title" = "Hyaluronik Asit";
+"templates.routine.antiAging.morning.step3.why" = "Ağırlığının 1000 katına kadar su çekip tutar, ince çizgileri dolgunlaştırır ve cildin genç sıçrama özelliğini korur";
+"templates.routine.antiAging.morning.step3.how" = "En iyi emilim için hafif nemli cilde uygulayın. 2-3 damla kullanın ve nemi hapsetmek için hemen ardından nemlendirici sürün.";
+
+"templates.routine.antiAging.morning.step4.title" = "Zengin Nemlendirici";
+"templates.routine.antiAging.morning.step4.why" = "Yaşla birlikte azalan temel lipitleri ve seramidleri sağlar, cilt bariyerini güçlendirir ve nem kaybını önler";
+"templates.routine.antiAging.morning.step4.how" = "Cömert bir miktarı avuçlarınız arasında ısıtın. Yukarı doğru hareketlerle cildinize bastırarak uygulayın. Kuruluk ve çizgi eğilimli bölgelere odaklanın.";
+
+"templates.routine.antiAging.morning.step5.title" = "Güneş Kremi";
+"templates.routine.antiAging.morning.step5.why" = "UV maruziyeti gözle görülür yaşlanmanın %90'ına neden olur. Günlük SPF, uygulayabileceğiniz en etkili yaşlanma karşıtı önlemdir";
+"templates.routine.antiAging.morning.step5.how" = "Son adım olarak geniş spektrumlu SPF 50 uygulayın. İki parmak uzunluğunda kullanın ve dışarıdaysanız her 2 saatte bir yenileyin. Bulutlu günlerde bile atlamayın.";
+
+/* Evening Steps */
+"templates.routine.antiAging.evening.step1.title" = "Nazik Temizleyici";
+"templates.routine.antiAging.evening.step1.why" = "Cildinizin koruyucu bariyerini bozmadan günün güneş kremini, kirliliğini ve makyajını temizler";
+"templates.routine.antiAging.evening.step1.how" = "Güneş kremi kullandıysanız çift temizleme yapın: önce yağ bazlı temizleyici, ardından su bazlı. Her biri için 60 saniye masaj yapın, ılık suyla durulayın.";
+
+"templates.routine.antiAging.evening.step2.title" = "Retinol Bakımı";
+"templates.routine.antiAging.evening.step2.why" = "Hücre yenilenmesini artıran, kolajeni destekleyen, kırışıklıkları azaltan ve cilt tonunu eşitleyen, yaşlanma karşıtı altın standart bileşendir";
+"templates.routine.antiAging.evening.step2.how" = "Göz çevresinden kaçınarak kuru cilde bezelye büyüklüğünde uygulayın. Haftada 2 kez başlayın, kademeli olarak artırın. Ertesi gün daima güneş kremi kullanın. Nemlendiriciden önce 20 dakika bekleyin.";
+
+"templates.routine.antiAging.evening.step3.title" = "Peptit Serumu";
+"templates.routine.antiAging.evening.step3.why" = "Peptitler, cilde daha fazla kolajen ve elastin üretmesi için sinyal göndererek sıkılığı artırır ve ince çizgilerin görünümünü azaltır";
+"templates.routine.antiAging.evening.step3.how" = "Retinol emildikten sonra 2-3 damla uygulayın. Yüzünüze ve boynunuza nazikçe tampon hareketler yapın. Peptitler, gelişmiş sonuçlar için retinol ile iyi çalışır.";
+
+"templates.routine.antiAging.evening.step4.title" = "Göz Kremi";
+"templates.routine.antiAging.evening.step4.why" = "Göz çevresi cildi daha incedir ve yaşlanma belirtilerini ilk gösterir. Özel içerikler kaz ayaklarını, koyu halkaları ve ince çizgileri hedefler";
+"templates.routine.antiAging.evening.step4.how" = "Yüzük parmağınızı kullanarak pirinç tanesi miktarını göz çevresi kemiği etrafına nazikçe tampon hareketlerle uygulayın. İçten dışa doğru uygulayın. Asla çekiştirmeyin.";
+
+"templates.routine.antiAging.evening.step5.title" = "Zengin Nemlendirici";
+"templates.routine.antiAging.evening.step5.why" = "Gece, cildin kendini onardığı zamandır. Zengin bir nemlendirici, besleyici içerikler ve derin hidrasyon ile bu süreci destekler";
+"templates.routine.antiAging.evening.step5.how" = "Tüm bakımları hapsetmek için son adım olarak cömertçe uygulayın. Sabah nemlendiricisinden biraz daha zengin olabilir. Boyun ve göğsü unutmayın.";
+
+/* ===================================
+MARK: - Minimalist Daily
+=================================== */
+
+"templates.routine.minimalist.title" = "Minimalist Günlük Rutin";
+"templates.routine.minimalist.description" = "Yoğun sabahlar ve akşamlar için sadece temel unsurlarla basit tutun.";
+"templates.routine.minimalist.duration" = "3-5 dk";
+
+/* Tags */
+"templates.routine.minimalist.tag1" = "Hızlı";
+"templates.routine.minimalist.tag2" = "Basit";
+"templates.routine.minimalist.tag3" = "Temel";
+"templates.routine.minimalist.tag4" = "Başlangıç";
+
+/* Benefits */
+"templates.routine.minimalist.benefit1" = "Hızlı ve kolay";
+"templates.routine.minimalist.benefit2" = "Yeni başlayanlar için mükemmel";
+"templates.routine.minimalist.benefit3" = "Temelleri kapsar";
+"templates.routine.minimalist.benefit4" = "Zaman açısından verimli";
+
+/* Morning Steps */
+"templates.routine.minimalist.morning.step1.title" = "Nazik Temizleyici";
+"templates.routine.minimalist.morning.step1.why" = "Gece biriken yağı temizler ve cildi güne hazırlar. Sabahları çoğu kişinin ihtiyacı olan tek şey basit bir temizliktir";
+"templates.routine.minimalist.morning.step1.how" = "Yüzü ıslatın, temizleyiciyi uygulayın, 30 saniye masaj yapın, ılık suyla durulayın, hafifçe kurulayın. Hepsi bu!";
+
+"templates.routine.minimalist.morning.step2.title" = "Nemlendirici";
+"templates.routine.minimalist.morning.step2.why" = "Cilt bariyerinizi nemlendirir ve korur. Yağlı cilde sahip olsanız bile tüm cilt tipleri için gereklidir";
+"templates.routine.minimalist.morning.step2.how" = "Daha iyi emilim için cilt hafif nemliyken yüz ve boyun bölgesine bir miktar uygulayın. Emilmesini bekleyin.";
+
+"templates.routine.minimalist.morning.step3.title" = "Güneş Kremi";
+"templates.routine.minimalist.morning.step3.why" = "En önemli yaşlanma karşıtı adımdır. Kırışıklıklara, lekelere ve cilt kanserine neden olan UV hasarından korur";
+"templates.routine.minimalist.morning.step3.how" = "Son sabah adımı olarak SPF 30+ uygulayın. Yüz ve boyun için yaklaşık iki parmak uzunluğu kullanın. Uzun süre dışarıdaysanız yenileyin.";
+
+/* Evening Steps */
+"templates.routine.minimalist.evening.step1.title" = "Nazik Temizleyici";
+"templates.routine.minimalist.evening.step1.why" = "Cildinizin gece nefes alıp onarılabilmesi için günün birikmiş yağı, kiri, teri ve güneş kremini temizler";
+"templates.routine.minimalist.evening.step1.how" = "Güneş kremi ve kirleri iyice temizlemek için 60 saniye masaj yapın. Ilık suyla iyice durulayın ve hafifçe kurulayın.";
+
+"templates.routine.minimalist.evening.step2.title" = "Nemlendirici";
+"templates.routine.minimalist.evening.step2.why" = "Gece nemlendirmesi, siz uyurken cildinizin doğal onarım sürecini destekler. Sabah versiyonundan biraz daha zengin olabilir";
+"templates.routine.minimalist.evening.step2.how" = "Temiz, hafif nemli cilde uygulayın. Nazik, yukarı doğru hareketler kullanın. Cildinizin besinleri emmesi için mükemmel bir zamandır.";
+
+/* ===================================
+MARK: - Sensitive Skin Soother
+=================================== */
+
+"templates.routine.sensitive.title" = "Hassas Cilt Yatıştırıcı";
+"templates.routine.sensitive.description" = "Hassas ve reaktif cilt tipleri için tasarlanmış nazik, sakinleştirici bir rutin.";
+"templates.routine.sensitive.duration" = "6-8 dk";
+
+/* Tags */
+"templates.routine.sensitive.tag1" = "Nazik";
+"templates.routine.sensitive.tag2" = "Yatıştırıcı";
+"templates.routine.sensitive.tag3" = "Parfümsüz";
+"templates.routine.sensitive.tag4" = "Hassas";
+
+/* Benefits */
+"templates.routine.sensitive.benefit1" = "Tahrişi azaltır";
+"templates.routine.sensitive.benefit2" = "Cilt bariyerini güçlendirir";
+"templates.routine.sensitive.benefit3" = "Hassas ciltte nazik";
+"templates.routine.sensitive.benefit4" = "Sakinleştirici içerikler";
+
+/* Morning Steps */
+"templates.routine.sensitive.morning.step1.title" = "Krem Temizleyici";
+"templates.routine.sensitive.morning.step1.why" = "Hassas cildi soymadan veya tahriş etmeden temizler. Krem formüller, bariyeri bozabilen köpürenlerden daha naziktir";
+"templates.routine.sensitive.morning.step1.how" = "Ilık (sıcak değil) su kullanın. Sert ovuşturmadan nazikçe masaj yapın. İyice durulayın ve yumuşak bir havluyla hafifçe kurulayın (ovalamayın).";
+
+"templates.routine.sensitive.morning.step2.title" = "Yatıştırıcı Tonik";
+"templates.routine.sensitive.morning.step2.why" = "Hafif nemlendirme sağlarken iltihabı ve kızarıklığı yatıştırır. Centella, yeşil çay veya kolloidal yulaf ezmesi içerenleri arayın";
+"templates.routine.sensitive.morning.step2.how" = "Sürtünmeye ve tahrişe neden olabilecek pamuk ped kullanmaktan kaçının. Temiz ellerinizle nazikçe tampon hareketlerle cilde uygulayın.";
+
+"templates.routine.sensitive.morning.step3.title" = "Hyaluronik Asit";
+"templates.routine.sensitive.morning.step3.why" = "Nazik, tahriş etmeyen hidrasyon sağlar. Hassasiyet veya sivilce riski olmadan tüm cilt tipleri için uygundur";
+"templates.routine.sensitive.morning.step3.how" = "Maksimum emilim için nemli cilde uygulayın. Nazik tampon hareketler kullanın. Nemi hapsetmek için ardından nemlendirici sürün.";
+
+"templates.routine.sensitive.morning.step4.title" = "Bariyer Onarıcı Krem";
+"templates.routine.sensitive.morning.step4.why" = "Seramid ve niasinamid ile bozulmuş cilt bariyerini güçlendirir. Zamanla hassasiyeti azaltır ve tahriş edicilere karşı korur";
+"templates.routine.sensitive.morning.step4.how" = "Önceki ürünleri kilitlemek için cömert bir katman uygulayın. Seramid içeren parfümsüz formülleri arayın. Sabah ve akşam kullanın.";
+
+"templates.routine.sensitive.morning.step5.title" = "Mineral Güneş Kremi";
+"templates.routine.sensitive.morning.step5.why" = "Çinko oksit veya titanyum dioksit içeren fiziksel güneş kremleri, kimyasal filtrelere göre tahrişe daha az neden olur";
+"templates.routine.sensitive.morning.step5.how" = "Son adım olarak SPF 30+ uygulayın. Mineral güneş kremleri cilde nüfuz etmek yerine üzerinde kalır, bu da onları hassas cilt için ideal yapar.";
+
+/* Evening Steps */
+"templates.routine.sensitive.evening.step1.title" = "Krem Temizleyici";
+"templates.routine.sensitive.evening.step1.why" = "Günün birikmiş kirlerini cildi tahriş etmeden veya koruyucu bariyerini tehlikeye atmadan nazikçe temizler";
+"templates.routine.sensitive.evening.step1.how" = "Güneş kremi kullandıysanız çift temizleme yapın: önce yağ bazlı temizleyici, ardından krem temizleyici. Tahriş olmuş bölgelerin etrafında ekstra nazik olun.";
+
+"templates.routine.sensitive.evening.step2.title" = "Yatıştırıcı Tonik";
+"templates.routine.sensitive.evening.step2.why" = "Akşam uygulaması, gündüz oluşan tahrişi sakinleştirmeye yardımcı olur ve onarıcı bileşenlerin daha iyi emilmesi için cildi hazırlar";
+"templates.routine.sensitive.evening.step2.how" = "Temiz cilde nazikçe tampon hareketlerle uygulayın. Gündüzden kaynaklanan kızarıklığı azaltmak için soğutucu, yatıştırıcı bileşenler kullanmanın tam zamanıdır.";
+
+"templates.routine.sensitive.evening.step3.title" = "Hyaluronik Asit";
+"templates.routine.sensitive.evening.step3.why" = "Gece hidrasyonu, tahriş veya hassasiyet riski olmadan siz uyurken bariyer onarımını destekler";
+"templates.routine.sensitive.evening.step3.how" = "Hafif nemli cilde uygulayın. Maksimum nemlendirme ve gece boyunca iyileşme için bariyer kreminizin altına katmanlayın.";
+
+"templates.routine.sensitive.evening.step4.title" = "Bariyer Onarıcı Krem";
+"templates.routine.sensitive.evening.step4.why" = "Cilt, gece kendini onarır. Zengin bir bariyer kremi seramidler, kolesterol ve yağ asitleriyle bu süreci destekler";
+"templates.routine.sensitive.evening.step4.how" = "Son adım olarak cömertçe uygulayın. Sabahkinden daha kalın bir katman kullanabilirsiniz. Daha sakin, daha güçlü bir ciltle uyanın.";
+
+/* ===================================
+MARK: - Oily Skin Control
+=================================== */
+
+"templates.routine.oily.title" = "Yağlı Cilt Kontrol Rutini";
+"templates.routine.oily.description" = "Sağlıklı, dengeli bir cilt sağlarken aşırı yağı ve parlamayı yönetin.";
+"templates.routine.oily.duration" = "8-10 dk";
+
+/* Tags */
+"templates.routine.oily.tag1" = "Yağ Kontrolü";
+"templates.routine.oily.tag2" = "Matlaştırıcı";
+"templates.routine.oily.tag3" = "Gözenek Bakımı";
+"templates.routine.oily.tag4" = "Hafif Yapı";
+
+/* Benefits */
+"templates.routine.oily.benefit1" = "Aşırı yağı kontrol eder";
+"templates.routine.oily.benefit2" = "Gözenekleri küçültür";
+"templates.routine.oily.benefit3" = "Parlamayı azaltır";
+"templates.routine.oily.benefit4" = "Sivilce oluşumunu önler";
+
+/* Morning Steps */
+"templates.routine.oily.morning.step1.title" = "Jel Temizleyici";
+"templates.routine.oily.morning.step1.why" = "Daha fazla yağ üretimine yol açabilecek aşırı kurumaya neden olmadan fazla sebumu ve gece biriken yağı temizler";
+"templates.routine.oily.morning.step1.how" = "Nazik bir jel veya köpüren temizleyici kullanın. Ilık suyla 60 saniye masaj yapın. Yağ bezlerini uyaran sıcak sudan kaçının.";
+
+"templates.routine.oily.morning.step2.title" = "BHA Tonik";
+"templates.routine.oily.morning.step2.why" = "Salisilik asit, yağa doymuş gözeneklere nüfuz ederek tıkanıklıkları ve sivilceleri önlerken parlamayı kontrol eder";
+"templates.routine.oily.morning.step2.how" = "Temiz cilde pamuk ped veya ellerinizle uygulayın. T bölgesine odaklanın. Tahrişi önlemek için BHA'ya yeni başlıyorsanız gün aşırı başlayın.";
+
+"templates.routine.oily.morning.step3.title" = "Niasinamid Serumu";
+"templates.routine.oily.morning.step3.why" = "Yağ üretimini %50'ye kadar düzenlediği klinik olarak kanıtlanmıştır ve gözenek görünümünü azaltır";
+"templates.routine.oily.morning.step3.how" = "Tüm yüze 2-3 damla uygulayın. BHA ile iyi uyum sağlar. 4-8 hafta boyunca tutarlı günlük kullanımla en iyi sonucu verir.";
+
+"templates.routine.oily.morning.step4.title" = "Hafif Nemlendirici";
+"templates.routine.oily.morning.step4.why" = "Yağlı cilt bile nemlendirmeye ihtiyaç duyar. Nemlendiriciyi atlamak, cildin telafi etmek için DAHA FAZLA yağ üretmesine neden olur";
+"templates.routine.oily.morning.step4.how" = "Jel veya su bazlı formül kullanın. Cilt hafif nemliyken ince bir tabaka uygulayın. Yağsız, komedojenik olmayan etiketlerini arayın.";
+
+"templates.routine.oily.morning.step5.title" = "Yağsız Güneş Kremi";
+"templates.routine.oily.morning.step5.why" = "Yağ eklemeden koruma sağlar. Birçok sivilce bakımı güneşe hassasiyeti artırdığı için SPF hayati önem taşır";
+"templates.routine.oily.morning.step5.how" = "Matlaştırıcı veya jel yapılı güneş kremlerini tercih edin. Son adım olarak SPF 30+ uygulayın. Dışarıdaysanız yenileyin.";
+
+/* Evening Steps */
+"templates.routine.oily.evening.step1.title" = "Jel Temizleyici";
+"templates.routine.oily.evening.step1.why" = "Günün yağı, güneş kremi ve kirlerini temizler, gece boyunca gözenekleri tıkamalarını ve sivilceye neden olmalarını önler";
+"templates.routine.oily.evening.step1.how" = "Yoğun güneş kremi kullandıysanız çift temizleme yapın: önce yağ bazlı temizleyici, ardından jel temizleyici. 60 saniye boyunca iyice masaj yapın.";
+
+"templates.routine.oily.evening.step2.title" = "BHA Tonik";
+"templates.routine.oily.evening.step2.why" = "Akşam uygulaması, salisilik asidin gece boyunca çalışmasını, gözenekleri açmasını ve sabah parlamasını önlemesini sağlar";
+"templates.routine.oily.evening.step2.how" = "Temiz ve kuru cilde uygulayın. Cilt tolerans gösterirse akşamları günlük olarak kullanılabilir. Aynı gece retinol kullanıyorsanız atlayın.";
+
+"templates.routine.oily.evening.step3.title" = "Niasinamid Serumu";
+"templates.routine.oily.evening.step3.why" = "Cilt onarım halindeyken gece niasinamid, yağ üretimini ve iltihabı azaltır";
+"templates.routine.oily.evening.step3.how" = "Tonikten sonra uygulayın. BHA ile güvenle katmanlanabilir. Gündüz yağlanmasını kontrol etmek için geceleri kullanın.";
+
+"templates.routine.oily.evening.step4.title" = "Hafif Nemlendirici";
+"templates.routine.oily.evening.step4.why" = "Gece boyunca nem kaybını önler, bu da ertesi gün aşırı yağ üretimine yol açabilir";
+"templates.routine.oily.evening.step4.how" = "İnce bir tabaka uygulayın. Akşam nemlendiricisi sabahkiyle aynı olabilir veya gerekiyorsa biraz daha nemlendirici olabilir.";
+
+"templates.routine.oily.evening.step5.title" = "Kil Maskesi";
+"templates.routine.oily.evening.step5.why" = "Haftalık derin bakım, fazla yağı emer, gözenekleri açar ve daha temiz bir cilt için derinlemesine temizlik sağlar";
+"templates.routine.oily.evening.step5.how" = "Temizledikten sonra haftada 1-2 kez kullanın. İnce bir tabaka uygulayın, 10-15 dakika bekletin. Tamamen kurutmayın. İyice durulayın.";
+
+/* ===================================
+MARK: - Dry Skin Hydration
+=================================== */
+
+"templates.routine.dry.title" = "Kuru Cilt Nemlendirme Rutini";
+"templates.routine.dry.description" = "Susuz, kuru cildi yatıştırmak ve nem bariyerini onarmak için yoğun hidrasyon rutini.";
+"templates.routine.dry.duration" = "10-12 dk";
+
+/* Tags */
+"templates.routine.dry.tag1" = "Nemlendirme";
+"templates.routine.dry.tag2" = "Nem Bariyeri";
+"templates.routine.dry.tag3" = "Zengin Doku";
+"templates.routine.dry.tag4" = "Besleyici";
+
+/* Benefits */
+"templates.routine.dry.benefit1" = "Derin nemlendirme";
+"templates.routine.dry.benefit2" = "Nem bariyerini onarır";
+"templates.routine.dry.benefit3" = "Kuruluğu yatıştırır";
+"templates.routine.dry.benefit4" = "Uzun süreli nem";
+
+/* Morning Steps */
+"templates.routine.dry.morning.step1.title" = "Krem Temizleyici";
+"templates.routine.dry.morning.step1.why" = "Nemlendirici krem formülü, kuru cildin şiddetle ihtiyaç duyduğu doğal yağları soymadan temizler";
+"templates.routine.dry.morning.step1.how" = "Krem temizleyiciyi kuru veya nemli cilde 60 saniye masaj yaparak uygulayın. Durulamak için ılık su kullanın. Nazikçe kurulayın - asla ovuşturmayın.";
+
+"templates.routine.dry.morning.step2.title" = "Nemlendirici Tonik";
+"templates.routine.dry.morning.step2.why" = "İlk nemlendirme katmanını sağlar ve cildi sonraki ürünlerden daha fazla nemi emmeye hazırlar";
+"templates.routine.dry.morning.step2.how" = "Ellerinizle tampon hareketler yaparak nemli cilde uygulayın. Gliserin, hyaluronik asit veya seramid arayın. Çok kuruysa birden fazla katman uygulayın.";
+
+"templates.routine.dry.morning.step3.title" = "Hyaluronik Asit";
+"templates.routine.dry.morning.step3.why" = "Ağırlığının 1000 katına kadar su çeker, kuru ve pul pul dökülen cildi dolgunlaştıran yoğun hidrasyon sağlar";
+"templates.routine.dry.morning.step3.how" = "Maksimum etkinlik için nemli cilde uygulayın. 2-3 damla kullanın. Çektiği suyu hapsetmek için hemen ardından nemlendirici sürün.";
+
+"templates.routine.dry.morning.step4.title" = "Zengin Serum";
+"templates.routine.dry.morning.step4.why" = "Kuru, susuz kalmış cilde derinlemesine nüfuz eden konsantre besleyici bileşenler sunar";
+"templates.routine.dry.morning.step4.how" = "Hyaluronik asitten sonra 3-4 damla uygulayın. Seramidler, peptitler veya besleyici yağlar arayın. Emilmesi için nazikçe tampon hareketler yapın.";
+
+"templates.routine.dry.morning.step5.title" = "Yoğun Nemlendirici";
+"templates.routine.dry.morning.step5.why" = "Kuru cildin ana nedeni olan transepidermal su kaybını önlemek için koruyucu bir bariyer oluşturur";
+"templates.routine.dry.morning.step5.how" = "Cilt hala nemliyken cömertçe uygulayın. Seramid, shea yağı veya skualan içeren kalın kremleri arayın. Cömert davranın!";
+
+"templates.routine.dry.morning.step6.title" = "Güneş Kremi";
+"templates.routine.dry.morning.step6.why" = "UV hasarı cilt bariyerini yıkar ve kuruluğu kötüleştirir. Nemlendirici SPF formüllerini seçin";
+"templates.routine.dry.morning.step6.how" = "Krem bazlı SPF 30+ kullanın, jel formüllerden kaçının. Cömertçe uygulayın. Birçok nemlendirici güneş kremi ekstra hidrasyon görevi de görebilir.";
+
+/* Evening Steps */
+"templates.routine.dry.evening.step1.title" = "Krem Temizleyici";
+"templates.routine.dry.evening.step1.why" = "Akşam temizliği, kuru cildinizin gece boyunca ihtiyaç duyduğu temel nemi korurken günün birikmiş kirlerini temizler";
+"templates.routine.dry.evening.step1.how" = "Güneş kremi için önce yağ bazlı temizleyici, ardından krem temizleyici kullanın. Ekstra nazik olun - kuru cilt tahrişe daha yatkındır.";
+
+"templates.routine.dry.evening.step2.title" = "Nemlendirici Tonik";
+"templates.routine.dry.evening.step2.why" = "Gece toniği hidrasyon sağlar ve zengin bakımların maksimum emilimi için cildi hazırlar";
+"templates.routine.dry.evening.step2.how" = "Ekstra hidrasyon için birden fazla katman uygulayın ('7 cilt' yöntemi). Bir sonraki katmanı eklemeden önce her katmanın emilmesini bekleyin.";
+
+"templates.routine.dry.evening.step3.title" = "Hyaluronik Asit";
+"templates.routine.dry.evening.step3.why" = "Cilt onarım modundayken gece hidrasyonu, sabah daha dolgun ve ışıltılı bir ciltle uyanmanızı sağlar";
+"templates.routine.dry.evening.step3.how" = "Nemli cilde uygulayın. Çok kuru ciltler için, ekstra destek için nemlendiricinizle bir damla karıştırın.";
+
+"templates.routine.dry.evening.step4.title" = "Zengin Serum";
+"templates.routine.dry.evening.step4.why" = "Gece, cildin kendini onardığı zamandır. Zengin serumlar bu süreci desteklemek için besin ve nem sağlar";
+"templates.routine.dry.evening.step4.how" = "Hyaluronik asitten sonra cömertçe uygulayın. Sabahkinden daha fazla miktarda kullanabilirsiniz. Ekstra kuru bölgelere odaklanın.";
+
+"templates.routine.dry.evening.step5.title" = "Yoğun Nemlendirici";
+"templates.routine.dry.evening.step5.why" = "Gece boyunca nem kaybını önleyen kapatıcı nemlendirici, kuru cilt için en kritik zamandır";
+"templates.routine.dry.evening.step5.how" = "Yağdan önceki son adım olarak kalın bir tabaka uygulayın. Özellikle kuru ciltler için uyku maskeleri veya gece kremleri arayın.";
+
+"templates.routine.dry.evening.step6.title" = "Yüz Yağı";
+"templates.routine.dry.evening.step6.why" = "Her şeyi besleyici yağlarla mühürler. Son adım, gece boyunca maksimum nem tutulmasını sağlar";
+"templates.routine.dry.evening.step6.how" = "3-5 damlayı avuçlarınız arasında ısıtın. Yüz ve boyun bölgesine nazikçe bastırarak uygulayın. Jojoba, argan veya kuşburnu yağı kullanın.";
+
+/* ===================================
+MARK: - Combination Skin Balance
+=================================== */
+
+"templates.routine.combination.title" = "Karma Cilt Dengeleme";
+"templates.routine.combination.description" = "Yüzünüzdeki farklı ihtiyaçları ele alın - yağlı T bölgesi ve kuru yanaklar.";
+"templates.routine.combination.duration" = "8-10 dk";
+
+/* Tags */
+"templates.routine.combination.tag1" = "Dengeleyici";
+"templates.routine.combination.tag2" = "Çok Bölgeli";
+"templates.routine.combination.tag3" = "Uyarlanabilir";
+"templates.routine.combination.tag4" = "Çok Yönlü";
+
+/* Benefits */
+"templates.routine.combination.benefit1" = "Farklı bölgeleri dengeler";
+"templates.routine.combination.benefit2" = "Birden fazla sorunu ele alır";
+"templates.routine.combination.benefit3" = "Çok yönlü yaklaşım";
+"templates.routine.combination.benefit4" = "Özelleştirilebilir uygulama";
+
+/* Morning Steps */
+"templates.routine.combination.morning.step1.title" = "Dengeleyici Temizleyici";
+"templates.routine.combination.morning.step1.why" = "Yağlı T bölgesini aşırı kurutmadan temizler. Anahtar, orta yol formülleri bulmaktır";
+"templates.routine.combination.morning.step1.how" = "Jel-krem hibrit temizleyici kullanın. Yağlı bölgelerde daha fazla zaman harcayın, kuru bölgelerde nazik olun. Sadece ılık su kullanın.";
+
+"templates.routine.combination.morning.step2.title" = "Tonik";
+"templates.routine.combination.morning.step2.why" = "Farklı bölgelerde pH'ı dengeler ve cildi hedefe yönelik bakımlara hazırlar";
+"templates.routine.combination.morning.step2.how" = "Tüm yüze uygulayın. Kuru bölgelere ekstra katman uygulayabilir veya yanaklara nemlendirici, T bölgesine matlaştırıcı tonik uygulayarak çoklu maskeleme yaklaşımını kullanabilirsiniz.";
+
+"templates.routine.combination.morning.step3.title" = "Hafif Serum";
+"templates.routine.combination.morning.step3.why" = "Yağlı bölgeleri aşırı yüklemeden veya kuru bölgeleri susuz bırakmadan tedavi faydaları sağlar";
+"templates.routine.combination.morning.step3.how" = "Tüm yüze eşit olarak uygulayın. Niasinamid, hem yağı dengelediği hem de nemlendirdiği için karma ciltler için harikadır.";
+
+"templates.routine.combination.morning.step4.title" = "Uyarlanabilir Nemlendirici";
+"templates.routine.combination.morning.step4.why" = "Modern formüller, yüzünüzdeki farklı nem seviyelerine uyum sağlar, her bölgenin ihtiyacı olanı sunar";
+"templates.routine.combination.morning.step4.how" = "T bölgesine ince bir tabaka, yanaklara daha cömert uygulayın. Veya iki ürün kullanın: yağlı bölgelere jel, kuru bölgelere krem.";
+
+"templates.routine.combination.morning.step5.title" = "Geniş Spektrumlu Güneş Kremi";
+"templates.routine.combination.morning.step5.why" = "Tüm bölgeler eşit UV korumasına ihtiyaç duyar. Hem yağlı hem de kuru bölgelere uygun bir formül seçin";
+"templates.routine.combination.morning.step5.how" = "Hafif, yağsız SPF 30+ kullanın. Jel veya akışkan formüller en iyisidir. Tüm bölgelere eşit olarak uygulayın.";
+
+/* Evening Steps */
+"templates.routine.combination.evening.step1.title" = "Dengeleyici Temizleyici";
+"templates.routine.combination.evening.step1.why" = "Günün değişken birikimini temizler - T bölgesinden fazla yağı, kuru bölgelerden çevresel stresi";
+"templates.routine.combination.evening.step1.how" = "Gerekirse çift temizleme yapın. Yağ temizleyici güneş kremini, ardından dengeleyici temizleyiciyi temizler. Her bölgenin ihtiyaçlarına odaklanın.";
+
+"templates.routine.combination.evening.step2.title" = "Tonik";
+"templates.routine.combination.evening.step2.why" = "Akşam toniği daha hedefe yönelik olabilir - gerekirse farklı bölgeler için farklı tonikler kullanın";
+"templates.routine.combination.evening.step2.how" = "Ellerinizle veya pamuk pedle uygulayın. Çoklu maskeleme için harika bir zamandır: yanaklara nemlendirici tonik, T bölgesine BHA.";
+
+"templates.routine.combination.evening.step3.title" = "Hafif Serum";
+"templates.routine.combination.evening.step3.why" = "Gece serumu, herhangi bir bölgeyi bunaltmadan tüm bölgelerdeki sorunları ele alır";
+"templates.routine.combination.evening.step3.how" = "Tüm yüze uygulayın. Retinol veya niasinamid, karma cildin çeşitli ihtiyaçları için iyi çalışır.";
+
+"templates.routine.combination.evening.step4.title" = "Bölgesel Bakım";
+"templates.routine.combination.evening.step4.why" = "Burası özelleştirme yaptığınız yerdir - yağlı T bölgesi sorunlarını VE kuru yanak ihtiyaçlarını ayrı ayrı ele alın";
+"templates.routine.combination.evening.step4.how" = "Yağlı/sivilce eğilimli bölgelere BHA veya leke bakımı uygulayın. Kuru bölgelere nemlendirici serum veya yağ kullanın. İhtiyaçlarınıza göre özelleştirin.";
+
+"templates.routine.combination.evening.step5.title" = "Uyarlanabilir Nemlendirici";
+"templates.routine.combination.evening.step5.why" = "Aşırı yağlanmaya veya kuruluğa neden olmayacak dengeli nemlendirme sağlarken bakımları hapseder";
+"templates.routine.combination.evening.step5.how" = "Her bölgenin ihtiyacına göre uygulayın. T bölgesine ince bir tabaka, yanaklara daha zengin. Cildinizin geri bildirimini dinleyin.";
+
+/* ===================================
+MARK: - Advanced Korean Routine
+=================================== */
+
+"templates.routine.advancedKorean.title" = "İleri Kore Rutini";
+"templates.routine.advancedKorean.description" = "Nihai cilt dönüşümü için eksiksiz Kore cilt bakımı ritüeli.";
+"templates.routine.advancedKorean.duration" = "25-30 dk";
+
+/* Tags */
+"templates.routine.advancedKorean.tag1" = "Eksiksiz";
+"templates.routine.advancedKorean.tag2" = "Lüks";
+"templates.routine.advancedKorean.tag3" = "Kapsamlı";
+"templates.routine.advancedKorean.tag4" = "İleri Seviye";
+
+/* Benefits */
+"templates.routine.advancedKorean.benefit1" = "Tam cilt dönüşümü";
+"templates.routine.advancedKorean.benefit2" = "Maksimum nemlendirme";
+"templates.routine.advancedKorean.benefit3" = "Gelişmiş yaşlanma karşıtı bakım";
+"templates.routine.advancedKorean.benefit4" = "Lüks deneyim";
+
+/* Morning Steps */
+"templates.routine.advancedKorean.morning.step1.title" = "Su Bazlı Temizleyici";
+"templates.routine.advancedKorean.morning.step1.why" = "Sabah ikinci temizleme, gece biriken yağları temizler ve cildi birden fazla bakım katmanına hazırlar";
+"templates.routine.advancedKorean.morning.step1.how" = "Nazik, düşük pH'lı temizleyici kullanın. 60 saniye masaj yapın. Başarılı katmanlamanın temeli temiz bir ciltle başlar.";
+
+"templates.routine.advancedKorean.morning.step2.title" = "Tonik";
+"templates.routine.advancedKorean.morning.step2.why" = "pH'ı dengeler ve takip edecek birçok bakım katmanı için optimal ortamı yaratır";
+"templates.routine.advancedKorean.morning.step2.how" = "İstenirse '7 cilt' yöntemi kullanılarak toniği ellerle cilde yedirin. Bu çok adımlı ritüeldeki ilk hidrasyon katmanıdır.";
+
+"templates.routine.advancedKorean.morning.step3.title" = "Esans";
+"templates.routine.advancedKorean.morning.step3.why" = "K-güzelliğinin çekirdeği: sonraki ürünlerin emilimini artıran hafif nemlendirme sağlar";
+"templates.routine.advancedKorean.morning.step3.how" = "Avuç içlerine dökün ve cilde nazikçe bastırın. Bu sulu katman, o cam cilt ışıltısının anahtarıdır.";
+
+"templates.routine.advancedKorean.morning.step4.title" = "Bakım Esansı (Treatment Essence)";
+"templates.routine.advancedKorean.morning.step4.why" = "Cilt yenileme ve aydınlatma için fermente edilmiş bileşenler ve aktif bileşenler içerir";
+"templates.routine.advancedKorean.morning.step4.how" = "Yüzünüze 2-3 damla uygulayın. Bakım esansları normal esanslara göre daha konsantredir. Premium K-güzellik sırrıdır.";
+
+"templates.routine.advancedKorean.morning.step5.title" = "Serum";
+"templates.routine.advancedKorean.morning.step5.why" = "Belirli sorunlar için hedefe yönelik bakım - aydınlatma, yaşlanma karşıtı veya hidrasyon";
+"templates.routine.advancedKorean.morning.step5.how" = "2-3 damla uygulayın. Emilmesi için bastırın ve tampon hareketler yapın. Farklı sorunlar için birden fazla serum kullanabilirsiniz.";
+
+"templates.routine.advancedKorean.morning.step6.title" = "Ampul";
+"templates.routine.advancedKorean.morning.step6.why" = "Maksimum sonuçlar için en yüksek aktif bileşen seviyelerine sahip en konsantre bakım ürünüdür";
+"templates.routine.advancedKorean.morning.step6.how" = "Sadece 1-2 damla kullanın - çok güçlüdür. Nazikçe yedirin. Ana sorunlar için ayırın. Genellikle özel günler veya bakımlar için kullanılır.";
+
+"templates.routine.advancedKorean.morning.step7.title" = "Göz Kremi";
+"templates.routine.advancedKorean.morning.step7.why" = "Hassas göz çevresi, yüz nemlendiricisinden önce özel bir bakıma ihtiyaç duyar";
+"templates.routine.advancedKorean.morning.step7.how" = "Yüzük parmağınızı kullanarak yörünge kemiği çevresine küçük bir miktar nazikçe dokunun. Hassas cildi asla çekmeyin veya çekiştirmeyin.";
+
+"templates.routine.advancedKorean.morning.step8.title" = "Nemlendirici";
+"templates.routine.advancedKorean.morning.step8.why" = "Tüm bakım katmanlarını mühürler ve gün boyunca kalıcı hidrasyon sağlar";
+"templates.routine.advancedKorean.morning.step8.how" = "Önceki tüm adımları kilitlemek için uygulayın. Kore nemlendiricileri genellikle hafif bir bitiş için jel bazlıdır.";
+
+"templates.routine.advancedKorean.morning.step9.title" = "Güneş Kremi";
+"templates.routine.advancedKorean.morning.step9.why" = "Son adım, tüm bu cilt bakımı yatırımını korur. K-güzelliği, dünyanın en kozmetik açıdan zarif güneş kremlerine sahiptir";
+"templates.routine.advancedKorean.morning.step9.how" = "Son adım olarak cömertçe uygulayın. Kore güneş kremleri, makyaj altında iyi çalışan zarif, yağsız bitişleriyle ünlüdür.";
+
+/* Evening Steps */
+"templates.routine.advancedKorean.evening.step1.title" = "Yağ Bazlı Temizleyici";
+"templates.routine.advancedKorean.evening.step1.why" = "İlk temizleme, makyajı, güneş kremini ve yağ bazlı kirleri çözer. Çift temizleme yönteminin temelidir";
+"templates.routine.advancedKorean.evening.step1.how" = "Kuru cilde 1-2 dakika masaj yapın. Süt kıvamına gelene kadar su ekleyerek emülsiyon haline getirin, ardından iyice durulayın.";
+
+"templates.routine.advancedKorean.evening.step2.title" = "Su Bazlı Temizleyici";
+"templates.routine.advancedKorean.evening.step2.why" = "İkinci temizleme, mükemmel temiz bir cilt için kalan su bazlı kirleri temizler";
+"templates.routine.advancedKorean.evening.step2.how" = "Islak cilde masaj yapın. Çift temizleme, gerçekten temiz, ürüne hazır bir cilt için K-güzelliğinde olmazsa olmazdır.";
+
+"templates.routine.advancedKorean.evening.step3.title" = "Peeling/Cilt Yenileyici";
+"templates.routine.advancedKorean.evening.step3.why" = "Tüm bakım ürünlerinin etkili bir şekilde nüfuz edebilmesi için ölü cilt hücrelerini temizler";
+"templates.routine.advancedKorean.evening.step3.how" = "Kimyasal peeling (AHA/BHA) uygulayın. 10-15 dakika bekletin, durulayın. Her gün değil, haftada 2-3 kez kullanın.";
+
+"templates.routine.advancedKorean.evening.step4.title" = "Tonik";
+"templates.routine.advancedKorean.evening.step4.why" = "Peeling sonrası pH'ı dengeler ve bakım katmanları için hazırlar";
+"templates.routine.advancedKorean.evening.step4.how" = "Cömertçe cilde yedirin. Birden fazla katman yapabilirsiniz. Akşam rutini sabahtan daha fazla katman içerir.";
+
+"templates.routine.advancedKorean.evening.step5.title" = "Esans";
+"templates.routine.advancedKorean.evening.step5.why" = "Yeni peeling yapılmış cilde ilk hidrasyon dalgasını ve bakım bileşenlerini ulaştırır";
+"templates.routine.advancedKorean.evening.step5.how" = "Cilde nazikçe bastırın. Yeni peeling yapılmış cilt, gelişmiş sonuçlar için esansı daha etkili bir şekilde emer.";
+
+"templates.routine.advancedKorean.evening.step6.title" = "Bakım Esansı (Treatment Essence)";
+"templates.routine.advancedKorean.evening.step6.why" = "Cildin onarım döngüsü sırasında bakım esanslarının yenilenme sihrini yapması için gece optimal zamandır";
+"templates.routine.advancedKorean.evening.step6.how" = "Yüzünüze 2-3 damla uygulayın. Bunlar siz uyurken çalışarak sabah ışıltısını sağlar.";
+
+"templates.routine.advancedKorean.evening.step7.title" = "Serum";
+"templates.routine.advancedKorean.evening.step7.why" = "Akşam serumları daha yoğun olabilir - gece onarımı için retinol, peptitler veya yoğun hidrasyon içerir";
+"templates.routine.advancedKorean.evening.step7.how" = "Hedefe yönelik serum uygulayın. Sabahkinden farklı bir serum kullanabilirsiniz. Gece, yaşlanma karşıtı aktifler içindir.";
+
+"templates.routine.advancedKorean.evening.step8.title" = "Ampul";
+"templates.routine.advancedKorean.evening.step8.why" = "Konsantre bakım, cilt en yoğun onarım modundayken gece boyunca çalışır";
+"templates.routine.advancedKorean.evening.step8.how" = "En güçlü bakımınızdan 1-2 damla kullanın. Bu, özel cilt ihtiyaçları için premium adımınızdır.";
+
+"templates.routine.advancedKorean.evening.step9.title" = "Kâğıt Maske (Sheet Mask)";
+"templates.routine.advancedKorean.evening.step9.why" = "Yoğun hidrasyon ve tedaviyi rahatlatıcı bir ritüel içinde sağlayan haftalık bakım. K-güzelliğinin imzası niteliğindedir";
+"templates.routine.advancedKorean.evening.step9.how" = "Esans/serumlardan sonra, nemlendiriciden önce uygulayın. 15-20 dakika rahatlayın. Kalan esansı cilde yedirin. Haftada 2-3 kez kullanın.";
+
+"templates.routine.advancedKorean.evening.step10.title" = "Göz Kremi";
+"templates.routine.advancedKorean.evening.step10.why" = "Gece göz kremi, gece boyunca yenilenme için yoğun içeriklerle daha zengin olabilir";
+"templates.routine.advancedKorean.evening.step10.how" = "Tüm göz çevresi bölgesine nazikçe dokunun. Sabahtan daha cömert miktarda kullanabilirsiniz. İnce çizgiler gibi sorunlara odaklanın.";
+
+"templates.routine.advancedKorean.evening.step11.title" = "Nemlendirici";
+"templates.routine.advancedKorean.evening.step11.why" = "Son kapatıcı katman, tüm bakımları mühürler ve gece boyunca hidrasyon sağlar";
+"templates.routine.advancedKorean.evening.step11.how" = "Cömertçe uygulayın. Ekstra gece desteği için haftada 2-3 kez uyku maskesi kullanabilirsiniz. Işıl ışıl bir ciltle uyanın.";
+
+/* ===================================
+MARK: - Teen Acne Fighter
+=================================== */
+
+"templates.routine.teenAcne.title" = "Genç Sivilce Savaşçısı";
+"templates.routine.teenAcne.description" = "Özellikle genç ciltler ve hormonal sivilceler için tasarlanmış nazik ama etkili bir rutin.";
+"templates.routine.teenAcne.duration" = "6-8 dk";
+
+/* Tags */
+"templates.routine.teenAcne.tag1" = "Genç";
+"templates.routine.teenAcne.tag2" = "Hormonal";
+"templates.routine.teenAcne.tag3" = "Nazik";
+"templates.routine.teenAcne.tag4" = "Önleyici";
+
+/* Benefits */
+"templates.routine.teenAcne.benefit1" = "Genç sivilcelerini önler";
+"templates.routine.teenAcne.benefit2" = "Genç ciltte nazik";
+"templates.routine.teenAcne.benefit3" = "İyi alışkanlıklar kazandırır";
+"templates.routine.teenAcne.benefit4" = "Takibi kolay";
+
+/* Morning Steps */
+"templates.routine.teenAcne.morning.step1.title" = "Nazik Köpüren Temizleyici";
+"templates.routine.teenAcne.morning.step1.why" = "Genç cildi tahriş edebilecek ve daha fazla sivilceyi tetikleyebilecek sert içerikler olmadan sabah yağını temizler";
+"templates.routine.teenAcne.morning.step1.how" = "Yüzü ılık suyla ıslatın. Temizleyiciyi uygulayın, 30-60 saniye masaj yapın. İyice durulayın ve hafifçe kurulayın. Bunu HER sabah yapın!";
+
+"templates.routine.teenAcne.morning.step2.title" = "Salisilik Asitli Tonik";
+"templates.routine.teenAcne.morning.step2.why" = "Gözenekleri temiz tutar ve sivilceye dönüşen siyah nokta ve beyaz noktaları önler";
+"templates.routine.teenAcne.morning.step2.how" = "Pamuk ped veya ellerle uygulayın. Cildin alışması için gün aşırı başlayın. Cilt tolerans gösterdiğinde günlük kullanabilirsiniz.";
+
+"templates.routine.teenAcne.morning.step3.title" = "Hafif Nemlendirici";
+"templates.routine.teenAcne.morning.step3.why" = "Evet, yağlı genç cilt bile neme ihtiyaç duyar! Atlamak, cildin telafi etmek için DAHA FAZLA yağ üretmesine neden olur";
+"templates.routine.teenAcne.morning.step3.how" = "Jel veya su bazlı nemlendirici kullanın. İnce bir tabaka uygulayın. Yağsız ve komedojenik değilse sivilce yapmaz.";
+
+"templates.routine.teenAcne.morning.step4.title" = "Yağsız Güneş Kremi";
+"templates.routine.teenAcne.morning.step4.why" = "Cildi korur ve iyileşen sivilcelerden koyu lekeler oluşmasını engeller. Birçok sivilce ürünü güneşe hassasiyeti artırır";
+"templates.routine.teenAcne.morning.step4.how" = "Her sabah SPF 30+ uygulayın. Yağsız formülleri seçin. Bu, sivilce izlerinin koyulaşmasını önler!";
+
+/* Evening Steps */
+"templates.routine.teenAcne.evening.step1.title" = "Nazik Köpüren Temizleyici";
+"templates.routine.teenAcne.evening.step1.why" = "Günün yağı, teri, kiri ve güneş kremini temizler, böylece gece boyunca gözenekleri tıkamasını önler";
+"templates.routine.teenAcne.evening.step1.how" = "Akşamları tam 60 saniye yıkayın - güneş kremini temizlemeniz gerekir! Ilık su ve nazik dairesel hareketler kullanın.";
+
+"templates.routine.teenAcne.evening.step2.title" = "Salisilik Asitli Tonik";
+"templates.routine.teenAcne.evening.step2.why" = "Siz uyurken gözenekleri açmak ve yarının sivilcelerini önlemek için gece boyunca çalışır";
+"templates.routine.teenAcne.evening.step2.how" = "Temizledikten sonra uygulayın. Nemlendiriciden önce bir dakika kurumasını bekleyin. Bu, sivilce önleme adımınızdır!";
+
+"templates.routine.teenAcne.evening.step3.title" = "Hafif Nemlendirici";
+"templates.routine.teenAcne.evening.step3.why" = "Gece nemlendirmesi, sabah cildinizin aşırı yağ üretmesini önler";
+"templates.routine.teenAcne.evening.step3.how" = "Daha iyi emilim için hafif nemli cilde uygulayın. Yağlı cildiniz olsa bile bunu atlamayın!";
+
+"templates.routine.teenAcne.evening.step4.title" = "Leke/Sivilce Bakımı (Spot Treatment)";
+"templates.routine.teenAcne.evening.step4.why" = "Aktif sivilceleri konsantre içeriklerle hedefleyerek daha hızlı kaybolmalarını sağlar";
+"templates.routine.teenAcne.evening.step4.how" = "SADECE aktif sivilcelere uygulayın, tüm yüzünüze değil. Temiz eller veya pamuklu çubuk kullanın. Yüzünüze dokunmadan önce kurumasını bekleyin.";
+
+/* ===================================
+MARK: - Mature Skin Revival
+=================================== */
+
+"templates.routine.matureSkin.title" = "Olgun Cilt Canlandırma Rutini";
+"templates.routine.matureSkin.description" = "Olgun ciltler için birden fazla yaşlanma belirtisini hedefleyen kapsamlı bir rutin.";
+"templates.routine.matureSkin.duration" = "15-18 dk";
+
+/* Tags */
+"templates.routine.matureSkin.tag1" = "Olgun Cilt";
+"templates.routine.matureSkin.tag2" = "Kapsamlı";
+"templates.routine.matureSkin.tag3" = "Lüks";
+"templates.routine.matureSkin.tag4" = "İleri Seviye";
+
+/* Benefits */
+"templates.routine.matureSkin.benefit1" = "Birden fazla yaşlanma belirtisini hedefler";
+"templates.routine.matureSkin.benefit2" = "Cilt dokusunu iyileştirir";
+"templates.routine.matureSkin.benefit3" = "Sıkılığı geri kazandırır";
+"templates.routine.matureSkin.benefit4" = "Kapsamlı bakım";
+
+/* Morning Steps */
+"templates.routine.matureSkin.morning.step1.title" = "Nazik Temizleyici";
+"templates.routine.matureSkin.morning.step1.why" = "Olgun cilt, yaşla birlikte azalan doğal yağları soymayan nazik temizlik gerektirir";
+"templates.routine.matureSkin.morning.step1.how" = "Zengin krem veya yağ bazlı temizleyici kullanın. Ilık suyla 60 saniye nazikçe masaj yapın. Olgun cilt daha hassastır.";
+
+"templates.routine.matureSkin.morning.step2.title" = "C Vitamini Serumu";
+"templates.routine.matureSkin.morning.step2.why" = "Yaşlılık lekelerini aydınlatan, kolajeni destekleyen ve çevresel hasara karşı koruyan antioksidan gücü";
+"templates.routine.matureSkin.morning.step2.how" = "Her sabah temiz cilde 4-5 damla uygulayın. Maksimum etkinlik için L-askorbik asit formülü kullanın. Serin ve karanlık yerde saklayın.";
+
+"templates.routine.matureSkin.morning.step3.title" = "Hyaluronik Asit";
+"templates.routine.matureSkin.morning.step3.why" = "Olgun cilt doğal olarak daha az hyaluronik asit üretir. Takviye etmek ince çizgileri dolgunlaştırır ve genç nemi geri kazandırır";
+"templates.routine.matureSkin.morning.step3.how" = "Maksimum su bağlama için nemli cilde uygulayın. 3-4 damla kullanın. Nemi hapsetmek için hemen ardından nemlendirici sürün.";
+
+"templates.routine.matureSkin.morning.step4.title" = "Zengin Göz Kremi";
+"templates.routine.matureSkin.morning.step4.why" = "Göz çevresi yaşlanmayı ilk gösterir ve kaz ayakları, çukurluk ve kırışıklıklar için özel zengin bakıma ihtiyaç duyar";
+"templates.routine.matureSkin.morning.step4.how" = "Yüzük parmağınızı kullanarak tüm göz çevresine cömert miktarda nazikçe dokunun. Cimrilik yapmayın - olgun gözler daha fazla ürüne ihtiyaç duyar.";
+
+"templates.routine.matureSkin.morning.step5.title" = "Lüks Nemlendirici";
+"templates.routine.matureSkin.morning.step5.why" = "Seramid ve peptit içeren zengin nemlendirici, yaşla birlikte zayıflayan bariyeri yeniden inşa eder, temel beslenmeyi sağlar";
+"templates.routine.matureSkin.morning.step5.how" = "Yüz, boyun ve göğüs bölgesine cömertçe uygulayın. Bu bölgeler de yaşlanma belirtileri gösterir! Olgun cilt, genç cilde göre daha zengin formüllere ihtiyaç duyar.";
+
+"templates.routine.matureSkin.morning.step6.title" = "Yaşlanma Karşıtı Güneş Kremi";
+"templates.routine.matureSkin.morning.step6.why" = "SPF, EN önemli yaşlanma karşıtı adımdır. İlerideki hasarı önler ve cilt kanseri riskine karşı korur";
+"templates.outine.matureSkin.morning.step6.how" = "SPF 50 geniş spektrumlu uygulayın. Yüz ve boyun için üç parmak uzunluğu kullanın. Dışarıda her 2 saatte bir yenileyin. Pazarlık kabul etmez!";
+
+/* Evening Steps */
+"templates.routine.matureSkin.evening.step1.title" = "Nazik Temizleyici";
+"templates.routine.matureSkin.evening.step1.why" = "Akşam temizliği, günün çevresel hasarını temizler ve cildi güçlü gece bakımlarına hazırlar";
+"templates.routine.matureSkin.evening.step1.how" = "Çift temizleme yapın: güneş kremi için önce yağ bazlı temizleyici, ardından krem temizleyici. Ekstra nazik olun - olgun cilt daha kolay morarır.";
+
+"templates.routine.matureSkin.evening.step2.title" = "Retinol Bakımı";
+"templates.routine.matureSkin.evening.step2.why" = "Yaşlanma karşıtı altın standart içerik. Hücre yenilenmesini artırır, kolajeni destekler, doku ve tonu iyileştirir";
+"templates.routine.matureSkin.evening.step2.how" = "Retinole yeni başlıyorsanız %0,25 ile başlayın. Kuru cilde bezelye büyüklüğünde uygulayın. Nemlendiriciden önce 20 dakika bekleyin. Başlangıçta haftada 3-4 kez kullanın.";
+
+"templates.routine.matureSkin.evening.step3.title" = "Peptit Kompleksi";
+"templates.routine.matureSkin.evening.step3.why" = "Peptitler, cilde daha fazla kolajen ve elastin üretmesi için sinyal göndererek sıkılık ve yapı kaybını doğrudan hedefler";
+"templates.routine.matureSkin.evening.step3.how" = "Retinol emildikten sonra 2-3 damla uygulayın. Peptitler, gelişmiş yaşlanma karşıtı faydalar için retinol ile sinerjik çalışır.";
+
+"templates.routine.matureSkin.evening.step4.title" = "Hyaluronik Asit";
+"templates.routine.matureSkin.evening.step4.why" = "Cilt onarım modundayken gece hidrasyonu. Çizgileri dolgunlaştırır ve olgun cildin kaybettiği esnekliği geri kazandırır";
+"templates.routine.matureSkin.evening.step4.how" = "Hafif nemli cilde uygulayın. Sabahtan daha fazla miktarda kullanabilirsiniz. Olgun cildin nem ihtiyacı için esastır.";
+
+"templates.routine.matureSkin.evening.step5.title" = "Zengin Göz Kremi";
+"templates.routine.matureSkin.evening.step5.why" = "Retinol veya peptit içeren gece göz kremi, uyku sırasında kaz ayaklarını azaltmak ve hassas bölgeyi sıkılaştırmak için çalışır";
+"templates.routine.matureSkin.evening.step5.how" = "Üst göz kapağı dahil tüm göz çevresine cömertçe uygulayın. Gece, bu içeriklerin sihrini gösterdiği zamandır.";
+
+"templates.routine.matureSkin.evening.step6.title" = "Lüks Nemlendirici";
+"templates.routine.matureSkin.evening.step6.why" = "Zengin gece kremi, seramidler, peptitler ve olgun cildin istediği besleyici yağlarla gece onarımını destekler";
+"templates.routine.matureSkin.evening.step6.how" = "Yüz, boyun ve göğüs bölgesine kalın bir tabaka uygulayın. Ekstra beslenme için üzerine yüz yağı kullanabilirsiniz. Yenilenmiş bir ciltle uyanın.";

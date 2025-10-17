@@ -232,15 +232,15 @@ struct RoutineCreatorFlow: View {
             case .loading:
                 RoutineLoadingView(
                     statuses: [
-                        "Thinking...",
-                        "Analyzing your skin type…",
-                        "Processing your concerns…",
-                        "Evaluating your main goal…",
-                        "Assessing environmental factors…",
-                        "Preparing routine results…",
-                        "Creating product slots…",
-                        "Optimizing for your preferences…",
-                        "Almost done! Finalizing your results…"
+                        L10n.Onboarding.Loading.thinking,
+                        L10n.Onboarding.Loading.analyzingSkinType,
+                        L10n.Onboarding.Loading.processingConcerns,
+                        L10n.Onboarding.Loading.evaluatingGoal,
+                        L10n.Onboarding.Loading.assessingEnvironment,
+                        L10n.Onboarding.Loading.preparingResults,
+                        L10n.Onboarding.Loading.creatingSlots,
+                        L10n.Onboarding.Loading.optimizing,
+                        L10n.Onboarding.Loading.finalizing
                     ],
                     stepInterval: 2.0,
                     autoFinish: false,
@@ -622,7 +622,9 @@ struct RoutineCreatorFlow: View {
 
         backgroundGenerationTask = Task {
             do {
-                // Use preferences if already selected, otherwise nil
+                // NOTE: Onboarding routine generation has NO premium limits
+                // This is the user's initial essential routine - always allowed
+                // Premium limits only apply to creating ADDITIONAL routines later
                 let savedRoutine = try await routineService.generateAndSaveInitialRoutine(
                     skinType: skinType,
                     concerns: selectedConcerns,
@@ -1148,17 +1150,17 @@ private struct ProgressIndicator: View {
 
     private var stepTitle: String {
         switch currentStep {
-        case .skinType: return "Skin Type"
-        case .concerns: return "Concerns"
-        case .mainGoal: return "Main Goal"
-        case .fitzpatrickSkinTone: return "Skin Tone"
-        case .ageRange: return "Age Range"
-        case .region: return "Region"
-        case .routineDepth: return "Routine Level"
-        case .cycleSetup: return "Cycle Setup"
-        case .preferences: return "Preferences"
-        case .loading: return "Analyzing"
-        case .results: return "Results"
+        case .skinType: return L10n.Onboarding.Flow.stepSkinType
+        case .concerns: return L10n.Onboarding.Flow.stepConcerns
+        case .mainGoal: return L10n.Onboarding.Flow.stepMainGoal
+        case .fitzpatrickSkinTone: return L10n.Onboarding.Flow.stepSkinTone
+        case .ageRange: return L10n.Onboarding.Flow.stepAgeRange
+        case .region: return L10n.Onboarding.Flow.stepRegion
+        case .routineDepth: return L10n.Onboarding.Flow.stepRoutineLevel
+        case .cycleSetup: return L10n.Onboarding.Flow.stepCycleSetup
+        case .preferences: return L10n.Onboarding.Flow.stepPreferences
+        case .loading: return L10n.Onboarding.Flow.stepAnalyzing
+        case .results: return L10n.Onboarding.Flow.stepResults
         }
     }
 
@@ -1182,7 +1184,7 @@ private struct ProgressIndicator: View {
             Spacer()
 
             // Progress text
-            Text("\(stepNumber) of 11")
+            Text(L10n.Onboarding.Flow.stepProgress(current: stepNumber, total: 11))
                 .font(ThemeManager.shared.theme.typo.caption)
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
         }

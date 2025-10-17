@@ -525,13 +525,13 @@ class RoutineEditingService: ObservableObject {
     private func getDefaultTitle(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
-            return "Gentle Cleanser"
+            return L10n.Routines.EditingService.DefaultTitle.cleanser
         case .faceSerum:
-            return "Face Serum"
+            return L10n.Routines.EditingService.DefaultTitle.faceSerum
         case .moisturizer:
-            return "Moisturizer"
+            return L10n.Routines.EditingService.DefaultTitle.moisturizer
         case .sunscreen:
-            return "Sunscreen SPF 30+"
+            return L10n.Routines.EditingService.DefaultTitle.sunscreen
         default:
             return stepType.displayName
         }
@@ -540,13 +540,13 @@ class RoutineEditingService: ObservableObject {
     private func getDefaultDescription(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
-            return "Removes dirt, oil, and makeup without stripping skin"
+            return L10n.Routines.EditingService.DefaultDesc.cleanser
         case .faceSerum:
-            return "Targeted treatment for your specific skin concerns"
+            return L10n.Routines.EditingService.DefaultDesc.faceSerum
         case .moisturizer:
-            return "Provides essential hydration and skin barrier support"
+            return L10n.Routines.EditingService.DefaultDesc.moisturizer
         case .sunscreen:
-            return "Protects against UV damage and premature aging"
+            return L10n.Routines.EditingService.DefaultDesc.sunscreen
         default:
             return ""
         }
@@ -555,13 +555,13 @@ class RoutineEditingService: ObservableObject {
     private func getDefaultWhy(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
-            return "Essential for removing daily buildup and preparing skin for other products"
+            return L10n.Routines.EditingService.DefaultWhy.cleanser
         case .faceSerum:
-            return "Provides targeted benefits for your specific skin concerns"
+            return L10n.Routines.EditingService.DefaultWhy.faceSerum
         case .moisturizer:
-            return "Maintains skin hydration and supports the skin barrier"
+            return L10n.Routines.EditingService.DefaultWhy.moisturizer
         case .sunscreen:
-            return "Prevents UV damage, premature aging, and skin cancer"
+            return L10n.Routines.EditingService.DefaultWhy.sunscreen
         default:
             return ""
         }
@@ -570,13 +570,13 @@ class RoutineEditingService: ObservableObject {
     private func getDefaultHow(for stepType: ProductType) -> String {
         switch stepType {
         case .cleanser:
-            return "Apply to damp skin, massage gently for 30 seconds, rinse thoroughly"
+            return L10n.Routines.EditingService.DefaultHow.cleanser
         case .faceSerum:
-            return "Apply 2-3 drops to clean skin, pat gently until absorbed"
+            return L10n.Routines.EditingService.DefaultHow.faceSerum
         case .moisturizer:
-            return "Apply a pea-sized amount, massage in upward circular motions"
+            return L10n.Routines.EditingService.DefaultHow.moisturizer
         case .sunscreen:
-            return "Apply generously 15 minutes before sun exposure, reapply every 2 hours"
+            return L10n.Routines.EditingService.DefaultHow.sunscreen
         default:
             return ""
         }
@@ -589,17 +589,17 @@ class RoutineEditingService: ObservableObject {
         if product.tagging.productType == step.stepType {
             message = CoachMessage(
                 type: .encouragement,
-                title: "Perfect Match!",
-                message: "Great choice! \(product.displayName) is a perfect match for your \(step.title) step.",
+                title: L10n.Routines.EditingService.Coach.perfectMatch,
+                message: L10n.Routines.EditingService.Coach.perfectMatchMessage(product: product.displayName, step: step.title),
                 actionTitle: nil,
                 action: nil
             )
         } else {
             message = CoachMessage(
                 type: .suggestion,
-                title: "Product Type Mismatch",
-                message: "\(product.displayName) is a \(product.tagging.productType.displayName), but this step is for \(step.stepType.displayName). Consider using a product that matches the step type.",
-                actionTitle: "Find Compatible Product",
+                title: L10n.Routines.EditingService.Coach.typeMismatch,
+                message: L10n.Routines.EditingService.Coach.typeMismatchMessage(product: product.displayName, productType: product.tagging.productType.displayName, stepType: step.stepType.displayName),
+                actionTitle: L10n.Routines.EditingService.Coach.findCompatible,
                 action: {
                     // This would open a product selection view
                 }

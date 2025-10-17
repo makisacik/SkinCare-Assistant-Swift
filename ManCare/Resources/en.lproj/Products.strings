@@ -1,0 +1,180 @@
+/*
+  Products.strings (English)
+  ManCare - Products tab related strings
+*/
+
+/* General */
+"products.title" = "My Products";
+"products.subtitle" = "Store and manage your skincare collection";
+"products.empty.title" = "No Products Yet";
+"products.empty.subtitle" = "Add your first product to get started";
+
+/* Add Product */
+"products.add.title" = "Add New Product";
+"products.add.subtitle" = "Add a product to your collection";
+"products.add.scanOption" = "Scan Product";
+"products.add.scanDescription" = "Take a photo to automatically extract product information";
+"products.add.manualOption" = "Add Manually";
+"products.add.manualDescription" = "Enter product details manually for full control";
+"products.add.getStarted" = "Get Started";
+
+/* Product Form */
+"products.form.basicInfo" = "Basic Information";
+"products.form.productName" = "Product Name";
+"products.form.productNamePlaceholder" = "e.g., Gentle Foaming Cleanser";
+"products.form.brand" = "Brand";
+"products.form.brandPlaceholder" = "e.g., CeraVe";
+"products.form.size" = "Size";
+"products.form.sizePlaceholder" = "e.g., 150";
+"products.form.productCategory" = "Product Category";
+"products.form.ingredients" = "Ingredients";
+"products.form.addIngredient" = "Add ingredient";
+"products.form.productClaims" = "Product Claims";
+"products.form.description" = "Description";
+"products.form.productDescription" = "Product Description";
+"products.form.descriptionPlaceholder" = "e.g., Key benefits, texture, how it feels, any notable notes...";
+"products.form.characterCount" = "%d/150";
+"products.form.unitMilliliters" = "mL";
+"products.form.unitOunces" = "oz";
+
+/* Product Type */
+"products.type.title" = "Product Type";
+"products.type.tapToChange" = "Tap to change product type";
+"products.type.selectType" = "Select Product Type";
+"products.type.searchPlaceholder" = "Search product types...";
+
+/* Product Scanning */
+"products.scan.title" = "Scan Product";
+"products.scan.instruction" = "Position the product label within the frame";
+"products.scan.photoCapture" = "Photo captured!";
+"products.scan.processing" = "Processing...";
+"products.scan.extracted" = "Extracted: %@";
+"products.scan.success" = "Product Added Successfully!";
+"products.scan.byBrand" = "by %@";
+"products.scan.retakePhoto" = "Retake Photo";
+"products.scan.done" = "Done";
+
+/* Product Scanning Steps */
+"products.scan.step.extractedText" = "Extracted Text";
+"products.scan.step.reviewText" = "Review and edit the text before continuing";
+"products.scan.step.productInfo" = "Product Information";
+"products.scan.step.normalizedProduct" = "Normalized Product";
+"products.scan.step.brand" = "Brand:";
+"products.scan.step.name" = "Name:";
+"products.scan.step.type" = "Type:";
+"products.scan.step.confidence" = "Confidence:";
+"products.scan.step.normalizationError" = "Normalization Error: %@";
+"products.scan.step.normalizeWithGPT" = "Normalize with GPT";
+"products.scan.step.normalizing" = "Normalizing with GPT...";
+"products.scan.step.continueNormalized" = "Continue with Normalized Product";
+"products.scan.step.continueRaw" = "Continue with Raw Text";
+"products.scan.step.cancel" = "Cancel";
+"products.scan.step.unknown" = "Unknown";
+"products.scan.step1" = "Step 1: Extracting text from image...";
+"products.scan.step2" = "Step 2: Normalizing with GPT...";
+"products.scan.step3" = "Step 3: Creating and adding product...";
+"products.scan.step3Database" = "Step 3: Searching Open Beauty Facts database...";
+
+/* Product Scanning Status Messages */
+"products.scan.status.ocrFailed" = "OCR failed";
+"products.scan.status.normalizationFailed" = "GPT normalization failed";
+"products.scan.status.noData" = "No normalized product data";
+"products.scan.status.lookupCompleted" = "Product lookup completed!";
+"products.scan.status.productAdded" = "Product added successfully!";
+
+/* Product Detail */
+"products.detail.description" = "Description";
+"products.detail.editProduct" = "Edit Product";
+"products.detail.updateInfo" = "Update product information";
+"products.detail.close" = "Close";
+"products.detail.ingredients" = "Ingredients (INCI)";
+"products.detail.productType" = "Product Type";
+"products.detail.size" = "Size";
+"products.detail.deleteProduct" = "Delete Product";
+"products.detail.deleteConfirmTitle" = "Delete Product";
+"products.detail.deleteConfirmMessage" = "Are you sure you want to delete \"%@\"? This action cannot be undone.";
+"products.detail.ingredientBullet" = "• %@";
+"products.detail.ingredientNumber" = "%d";
+"products.detail.sizeBullet" = "• %@";
+"products.detail.keyIngredients" = "Key ingredients: %@";
+
+/* Product Summary */
+"products.summary.title" = "Product Summary";
+"products.summary.subtitle" = "Review and edit the extracted product information";
+
+/* Product Confirmation */
+"products.confirm.noneOfThese" = "None of these";
+"products.confirm.title" = "Pick your product";
+
+/* Actions */
+"products.action.cancel" = "Cancel";
+"products.action.save" = "Save";
+"products.action.edit" = "Edit";
+"products.action.delete" = "Delete";
+"products.action.adding" = "Adding...";
+"products.action.confirmProduct" = "Confirm Product";
+
+/* Product Slot Edit */
+"products.slot.edit.title" = "Edit Product Slot";
+"products.slot.edit.subtitle" = "This feature will allow you to edit the product slot: %@";
+"products.slot.edit.navTitle" = "Edit Slot";
+
+/* Product Claims */
+"products.claim.fragranceFree" = "Fragrance Free";
+"products.claim.sensitiveSafe" = "Sensitive Safe";
+"products.claim.vegan" = "Vegan";
+"products.claim.crueltyFree" = "Cruelty Free";
+"products.claim.dermatologistTested" = "Dermatologist Tested";
+"products.claim.nonComedogenic" = "Non-Comedogenic";
+"products.claim.parabenFree" = "Paraben Free";
+"products.claim.sulfateFree" = "Sulfate Free";
+"products.claim.oilFree" = "Oil Free";
+
+/* Product Type Names */
+"products.type.cleanser" = "Cleanser";
+"products.type.moisturizer" = "Moisturizer";
+"products.type.sunscreen" = "Sunscreen";
+"products.type.toner" = "Toner";
+"products.type.faceSerum" = "Face Serum";
+"products.type.essence" = "Essence";
+"products.type.exfoliator" = "Exfoliator";
+"products.type.faceMask" = "Face Mask";
+"products.type.facialOil" = "Facial Oil";
+"products.type.facialMist" = "Facial Mist & Sprays";
+"products.type.eyeCream" = "Eye Cream";
+"products.type.spotTreatment" = "Spot Treatment";
+"products.type.retinol" = "Retinol";
+"products.type.vitaminC" = "Vitamin C";
+"products.type.niacinamide" = "Niacinamide";
+"products.type.faceSunscreen" = "Face Sunscreen";
+"products.type.bodySunscreen" = "Body Sunscreen";
+"products.type.lipBalm" = "Lip Balm";
+"products.type.shaveCream" = "Shave Cream";
+"products.type.aftershave" = "Aftershave";
+"products.type.shaveGel" = "Shave Gel";
+"products.type.bodyLotion" = "Body Lotion";
+"products.type.bodyWash" = "Body Wash";
+"products.type.handCream" = "Hand Cream";
+"products.type.shampoo" = "Shampoo";
+"products.type.conditioner" = "Conditioner";
+"products.type.hairOil" = "Hair Oil";
+"products.type.hairMask" = "Hair Mask";
+"products.type.chemicalPeel" = "Chemical Peel";
+"products.type.micellarWater" = "Micellar Water";
+"products.type.makeupRemover" = "Makeup Remover";
+"products.type.faceWash" = "Face Wash";
+"products.type.cleansingOil" = "Cleansing Oil";
+"products.type.cleansingBalm" = "Cleansing Balm";
+
+/* Product Categories */
+"products.category.cleansing" = "Cleansing";
+"products.category.toning" = "Toning";
+"products.category.treatment" = "Treatment";
+"products.category.moisturizing" = "Moisturizing";
+"products.category.sunProtection" = "Sun Protection";
+"products.category.masks" = "Masks";
+"products.category.shaving" = "Shaving";
+"products.category.bodyCare" = "Body Care";
+"products.category.hairCare" = "Hair Care";
+
+

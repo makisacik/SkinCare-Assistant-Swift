@@ -57,7 +57,7 @@ struct FreshRoutineCard: View {
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.leading)
                                 
-                                Text("\(routine.stepCount) steps • \(routine.duration)")
+                                Text(L10n.Discover.FreshDrops.stepsAndDuration(steps: routine.stepCount, duration: routine.duration))
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(.white.opacity(0.9))
                             }

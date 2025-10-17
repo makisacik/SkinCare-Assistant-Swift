@@ -227,8 +227,8 @@ class NotificationService: NSObject, ObservableObject {
     
     func scheduleTimerNotification(seconds: Int, stepTitle: String) {
         let content = UNMutableNotificationContent()
-        content.title = "Timer Complete"
-        content.body = "Time to apply \(stepTitle)"
+        content.title = L10n.Routines.Companion.Notification.timerComplete
+        content.body = L10n.Routines.Companion.Notification.timeToApply(stepTitle)
         content.sound = .default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(seconds), repeats: false)

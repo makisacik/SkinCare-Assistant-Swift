@@ -40,7 +40,7 @@ struct PremiumJourneyPreview: View {
 
             // "More on journal" text if more than 3 entries
             if store.totalEntries > 3 {
-                Text("More on journal")
+                Text(L10n.SkinJournal.Journey.moreOnJournal)
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     .padding(.top, 4)
@@ -52,7 +52,7 @@ struct PremiumJourneyPreview: View {
                 onJournalRequest()
             } label: {
                 HStack(spacing: 8) {
-                    Text("View Journal")
+                    Text(L10n.SkinJournal.Journey.viewJournal)
                         .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
 
                     Image(systemName: "arrow.right")
@@ -111,7 +111,7 @@ struct PremiumJourneyPreview: View {
                         Text(mood)
                             .font(.system(size: 20))
 
-                        Text("Mood")
+                        Text(L10n.SkinJournal.Journey.mood)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
@@ -136,11 +136,11 @@ struct PremiumJourneyPreview: View {
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted.opacity(0.6))
             
             VStack(spacing: 4) {
-                Text("Add More Entries")
+                Text(L10n.SkinJournal.Journey.addMoreEntries)
                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
-                Text("Add at least 2 photos to start comparing")
+                Text(L10n.SkinJournal.Journey.addAtLeastTwoPhotos)
                     .font(ThemeManager.shared.theme.typo.caption)
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)

@@ -46,17 +46,17 @@ struct MenstruationCycleCard: View {
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
-                        Text("• \(currentPhase.description)")
+                        Text("\(L10n.Common.bullet) \(currentPhase.description)")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                     
                     HStack(spacing: 4) {
-                        Text("Day \(currentDay)")
+                        Text(L10n.Routines.CycleCard.dayNumber(currentDay))
                             .font(.system(size: 14, weight: .bold))
                             .foregroundColor(currentPhase.mainColor)
                         
-                        Text("of \(totalDays)")
+                        Text(L10n.Routines.CycleCard.ofTotal(totalDays))
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
@@ -170,7 +170,7 @@ struct CycleWheelView: View {
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundColor(phase.mainColor)
                 
-                Text("day")
+                Text(L10n.Routines.CycleCard.day)
                     .font(.system(size: 9, weight: .medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             }

@@ -12,7 +12,7 @@ struct LanguagePickerView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Language")
+            Text(L10n.Settings.language)
                 .font(.headline)
                 .foregroundColor(.primary)
             

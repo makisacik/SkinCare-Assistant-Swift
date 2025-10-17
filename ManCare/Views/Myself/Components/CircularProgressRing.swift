@@ -44,7 +44,7 @@ struct CircularProgressRing: View {
                 .rotationEffect(.degrees(-90))
             
             // Percentage text
-            Text("\(Int(animatedPercentage))%")
+            Text(L10n.Myself.Completion.percentage(Int(animatedPercentage)))
                 .font(.system(size: size * 0.25, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
         }

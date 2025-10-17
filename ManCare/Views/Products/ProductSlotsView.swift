@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProductSlotsView: View {
     @ObservedObject private var productService = ProductService.shared
+    @EnvironmentObject private var localizationManager: LocalizationManager
     
     // Callbacks for sheet presentation (handled at root level)
     let onAddProductTapped: () -> Void
@@ -21,11 +22,11 @@ struct ProductSlotsView: View {
             VStack(spacing: 12) {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("My Products")
+                        Text(L10n.Products.title)
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("Store and manage your skincare collection")
+                        Text(L10n.Products.subtitle)
                             .font(.system(size: 16))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -58,7 +59,7 @@ struct ProductSlotsView: View {
             Spacer()
 
             VStack(spacing: 20) {
-                Text("Add New Product")
+                Text(L10n.Products.Add.title)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -79,11 +80,11 @@ struct ProductSlotsView: View {
                             }
 
                             VStack(spacing: 4) {
-                                Text("Scan Product")
+                                Text(L10n.Products.Add.scanOption)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                                Text("Take a photo to automatically extract product information")
+                                Text(L10n.Products.Add.scanDescription)
                                     .font(.system(size: 12))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     .multilineTextAlignment(.center)
@@ -91,7 +92,7 @@ struct ProductSlotsView: View {
                             }
 
                             HStack(spacing: 4) {
-                                Text("Get Started")
+                                Text(L10n.Products.Add.getStarted)
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(ThemeManager.shared.theme.palette.primary)
                                 Image(systemName: "arrow.right")
@@ -142,11 +143,11 @@ struct ProductSlotsView: View {
                             }
 
                             VStack(spacing: 4) {
-                                Text("Add Manually")
+                                Text(L10n.Products.Add.manualOption)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                                Text("Enter product details manually for full control")
+                                Text(L10n.Products.Add.manualDescription)
                                     .font(.system(size: 12))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     .multilineTextAlignment(.center)
@@ -154,7 +155,7 @@ struct ProductSlotsView: View {
                             }
 
                             HStack(spacing: 4) {
-                                Text("Get Started")
+                                Text(L10n.Products.Add.getStarted)
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(ThemeManager.shared.theme.palette.secondary)
                                 Image(systemName: "arrow.right")

@@ -34,19 +34,19 @@ struct MainTabView: View {
                             routineService: ServiceFactory.shared.createRoutineService()
                         )
                     } label: {
-                        Label("Routines", systemImage: "list.bullet.rectangle")
+                        Label(L10n.Tabs.routines, systemImage: "list.bullet.rectangle")
                     }
 
                     Tab(value: CurrentTab.discover) {
                         DiscoverView()
                     } label: {
-                        Label("Discover", systemImage: "sparkles")
+                        Label(L10n.Tabs.discover, systemImage: "sparkles")
                     }
 
                     Tab(value: CurrentTab.products) {
                         productsContent
                     } label: {
-                        Label("My Products", systemImage: "bag.fill")
+                        Label(L10n.Tabs.products, systemImage: "bag.fill")
                     }
 
                     Tab(value: CurrentTab.myself) {
@@ -58,7 +58,7 @@ struct MainTabView: View {
                             }
                         )
                     } label: {
-                        Label("Myself", systemImage: "person.crop.circle")
+                        Label(L10n.Tabs.myself, systemImage: "person.crop.circle")
                     }
                 }
                 .tint(ThemeManager.shared.theme.palette.secondary)
@@ -134,21 +134,21 @@ private struct LegacyTabView: View {
             )
             .tabItem {
                 Image(systemName: MainTabView.CurrentTab.routines.icon)
-                Text(MainTabView.CurrentTab.routines.rawValue)
+                Text(L10n.Tabs.routines)
             }
             .tag(MainTabView.CurrentTab.routines)
 
             DiscoverView()
                 .tabItem {
                     Image(systemName: MainTabView.CurrentTab.discover.icon)
-                    Text(MainTabView.CurrentTab.discover.rawValue)
+                    Text(L10n.Tabs.discover)
                 }
                 .tag(MainTabView.CurrentTab.discover)
 
             productsContent
                 .tabItem {
                     Image(systemName: MainTabView.CurrentTab.products.icon)
-                    Text(MainTabView.CurrentTab.products.rawValue)
+                    Text(L10n.Tabs.products)
                 }
                 .tag(MainTabView.CurrentTab.products)
 
@@ -161,7 +161,7 @@ private struct LegacyTabView: View {
             )
             .tabItem {
                 Image(systemName: MainTabView.CurrentTab.myself.icon)
-                Text(MainTabView.CurrentTab.myself.rawValue)
+                Text(L10n.Tabs.myself)
             }
             .tag(MainTabView.CurrentTab.myself)
         }

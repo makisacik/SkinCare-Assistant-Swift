@@ -150,8 +150,8 @@ final class LanguageService {
 
     private func languageName(for code: String) -> String {
         switch code {
-        case "en": return "English"
-        case "tr": return "Turkish"
+        case "en": return L10n.Language.english
+        case "tr": return L10n.Language.turkish
         default: return code
         }
     }

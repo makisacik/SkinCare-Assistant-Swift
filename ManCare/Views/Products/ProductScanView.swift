@@ -57,7 +57,7 @@ struct ProductScanView: View {
 
                         Spacer()
 
-                        Text("Scan Product")
+                        Text(L10n.Products.Scan.title)
                             .font(.headline)
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .padding(.horizontal, 16)
@@ -123,7 +123,7 @@ struct ProductScanView: View {
 
                     // Scanning Frame
                     VStack(spacing: 20) {
-                        Text("Position the product label within the frame")
+                        Text(L10n.Products.Scan.instruction)
                             .font(.subheadline)
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .multilineTextAlignment(.center)
@@ -216,7 +216,7 @@ struct ProductScanView: View {
                                             .stroke(ThemeManager.shared.theme.palette.textInverse, lineWidth: 2)
                                     )
 
-                                Text("Photo captured!")
+                                Text(L10n.Products.Scan.photoCapture)
                                     .font(.caption)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                                     .padding(.horizontal, 8)
@@ -248,13 +248,13 @@ struct ProductScanView: View {
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
 
                             VStack(spacing: 12) {
-                                Text(currentStep.isEmpty ? "Processing..." : currentStep)
+                                Text(currentStep.isEmpty ? L10n.Products.Scan.processing : currentStep)
                                     .font(.title2.weight(.semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                                     .multilineTextAlignment(.center)
 
                                 if !extractedText.isEmpty {
-                                    Text("Extracted: \(extractedText)")
+                                    Text(L10n.Products.Scan.extracted(extractedText))
                                         .font(.caption)
                                         .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
                                         .multilineTextAlignment(.center)
@@ -291,7 +291,7 @@ struct ProductScanView: View {
                                 .scaleEffect(1.0)
                                 .animation(.spring(response: 0.6, dampingFraction: 0.8), value: showingSuccess)
 
-                            Text("Product Added Successfully!")
+                            Text(L10n.Products.Scan.success)
                                 .font(.title2.weight(.bold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
 
@@ -307,7 +307,7 @@ struct ProductScanView: View {
                                         .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.8))
 
                                     if let brand = product.brand {
-                                        Text("by \(brand)")
+                                        Text(L10n.Products.Scan.byBrand(brand))
                                             .font(.caption)
                                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.6))
                                     }
@@ -323,7 +323,7 @@ struct ProductScanView: View {
                                 )
                             }
 
-                            Button("Done") {
+                            Button(L10n.Products.Scan.done) {
                                 dismiss()
                             }
                             .font(.headline.weight(.semibold))
@@ -484,7 +484,7 @@ struct ProductScanView: View {
         
         // Skip OCR step and go directly to GPT normalization
         isProcessing = true
-        currentStep = "Step 2: Normalizing with GPT..."
+        currentStep = L10n.Products.Scan.Step.step2
         normalizeWithGPT()
     }
 
@@ -552,7 +552,7 @@ struct ProductScanView: View {
 
         print("🚀 Starting automatic processing flow...")
         isProcessing = true
-        currentStep = "Step 1: Extracting text from image..."
+        currentStep = L10n.Products.Scan.Step.step1
 
         // Step 1: OCR Text Extraction
         OCRService.extractText(from: image) { result in
@@ -562,7 +562,7 @@ struct ProductScanView: View {
                     print("✅ Step 1 Complete - OCR Success!")
                     print("   Extracted text: '\(text)'")
                     self.extractedText = text
-                    self.currentStep = "Step 2: Normalizing with GPT..."
+                    self.currentStep = L10n.Products.Scan.Step.step2
 
                     // Step 2: GPT Normalization
                     self.normalizeWithGPT()
@@ -571,7 +571,7 @@ struct ProductScanView: View {
                     print("❌ Step 1 Failed - OCR Error: \(error.localizedDescription)")
                     self.processingError = "OCR failed: \(error.localizedDescription)"
                     self.isProcessing = false
-                    self.currentStep = "OCR failed"
+                    self.currentStep = L10n.Products.Scan.Status.ocrFailed
                 }
             }
         }
@@ -594,7 +594,7 @@ struct ProductScanView: View {
                     print("   Confidence: \(response.confidence)")
 
                     self.normalizedProduct = response
-                    self.currentStep = "Step 3: Creating and adding product..."
+                    self.currentStep = L10n.Products.Scan.Step.step3
 
                     // Step 3: Create and Add Product
                     self.createAndAddProduct()
@@ -605,7 +605,7 @@ struct ProductScanView: View {
                     print("❌ Step 2 Failed - GPT Normalization failed: \(error)")
                     self.processingError = "GPT normalization failed: \(error.localizedDescription)"
                     self.isProcessing = false
-                    self.currentStep = "GPT normalization failed"
+                    self.currentStep = L10n.Products.Scan.Status.normalizationFailed
                 }
             }
         }
@@ -614,13 +614,13 @@ struct ProductScanView: View {
     private func createAndAddProduct() {
         guard let normalized = normalizedProduct else {
             print("❌ No normalized product data available")
-            processingError = "No normalized product data"
+            processingError = L10n.Products.Scan.Status.noData
             isProcessing = false
             return
         }
 
         print("🔹 Step 3 — Looking up product in Open Beauty Facts...")
-        currentStep = "Step 3: Searching Open Beauty Facts database..."
+        currentStep = L10n.Products.Scan.Step.step3Database
 
         // Create ProductGuess from normalized data
         let guess = ProductGuess(
@@ -639,7 +639,7 @@ struct ProductScanView: View {
             
             await MainActor.run {
                 self.isProcessing = false
-                self.currentStep = "Product lookup completed!"
+                self.currentStep = L10n.Products.Scan.Status.lookupCompleted
                 
                 // Don't dismiss immediately - let the confirmation sheet handle it
                 // or wait for the scanManager to trigger navigation
@@ -650,7 +650,7 @@ struct ProductScanView: View {
 
     private func createFallbackProduct(from normalized: ProductNormalizationResponse) {
         print("🔄 Creating fallback product from normalized data...")
-        currentStep = "Creating product from normalized data..."
+        currentStep = L10n.Products.Scan.Step.step3
 
         // Create product using the existing ProductService method
         let product = productService.createProductFromName(
@@ -667,7 +667,7 @@ struct ProductScanView: View {
         productService.addUserProduct(product)
 
         isProcessing = false
-        currentStep = "Product added successfully!"
+        currentStep = L10n.Products.Scan.Status.productAdded
 
         // Show success and dismiss
         createdProduct = product
@@ -808,11 +808,11 @@ struct TextResultView: View {
                         .font(.system(size: 40, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
 
-                    Text("Extracted Text")
+                    Text(L10n.Products.Scan.Step.extractedText)
                         .font(ThemeManager.shared.theme.typo.h2)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Review and edit the text before continuing")
+                    Text(L10n.Products.Scan.Step.reviewText)
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -821,7 +821,7 @@ struct TextResultView: View {
 
                 // Text Editor
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Product Information")
+                    Text(L10n.Products.Scan.Step.productInfo)
                         .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
@@ -843,34 +843,34 @@ struct TextResultView: View {
                 // Normalized Product Results
                 if let normalized = normalizedProduct {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Normalized Product")
+                        Text(L10n.Products.Scan.Step.normalizedProduct)
                             .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Text("Brand:")
+                                Text(L10n.Products.Scan.Step.brand)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))
-                                Text(normalized.brand ?? "Unknown")
+                                Text(normalized.brand ?? L10n.Products.Scan.Step.unknown)
                                     .font(ThemeManager.shared.theme.typo.body)
                             }
 
                             HStack {
-                                Text("Name:")
+                                Text(L10n.Products.Scan.Step.name)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                                 Text(normalized.productName)
                                     .font(ThemeManager.shared.theme.typo.body)
                             }
 
                             HStack {
-                                Text("Type:")
+                                Text(L10n.Products.Scan.Step.type)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                                 Text(normalized.productType)
                                     .font(ThemeManager.shared.theme.typo.body)
                             }
 
                             HStack {
-                                Text("Confidence:")
+                                Text(L10n.Products.Scan.Step.confidence)
                                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                                 Text(String(format: "%.1f%%", normalized.confidence * 100))
                                     .font(ThemeManager.shared.theme.typo.body)
@@ -890,7 +890,7 @@ struct TextResultView: View {
 
                 // Error Message
                 if let error = normalizationError {
-                    Text("Normalization Error: \(error)")
+                    Text(L10n.Products.Scan.Step.normalizationError(error))
                         .font(ThemeManager.shared.theme.typo.caption)
                         .foregroundColor(ThemeManager.shared.theme.palette.error)
                         .padding(.horizontal, 20)
@@ -905,7 +905,7 @@ struct TextResultView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "brain.head.profile")
-                                Text("Normalize with GPT")
+                                Text(L10n.Products.Scan.Step.normalizeWithGPT)
                             }
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
@@ -921,7 +921,7 @@ struct TextResultView: View {
                         HStack {
                             ProgressView()
                                 .scaleEffect(0.8)
-                            Text("Normalizing with GPT...")
+                            Text(L10n.Products.Scan.Step.normalizing)
                                 .font(ThemeManager.shared.theme.typo.body)
                         }
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -939,7 +939,7 @@ struct TextResultView: View {
                             onContinue(extractedText)
                         }
                     } label: {
-                        Text(normalizedProduct != nil ? "Continue with Normalized Product" : "Continue with Raw Text")
+                        Text(normalizedProduct != nil ? L10n.Products.Scan.Step.continueNormalized : L10n.Products.Scan.Step.continueRaw)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .frame(maxWidth: .infinity)
@@ -952,7 +952,7 @@ struct TextResultView: View {
                     Button {
                         onRetake()
                     } label: {
-                        Text("Retake Photo")
+                        Text(L10n.Products.Scan.retakePhoto)
                             .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                             .frame(maxWidth: .infinity)
@@ -974,7 +974,7 @@ struct TextResultView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(L10n.Products.Scan.Step.cancel) {
                         dismiss()
                     }
                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))

@@ -37,11 +37,11 @@ struct ProductSelectionView: View {
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 12) {
-                    Text("Attach Product")
+                    Text(L10n.Routines.ProductSelection.title)
                         .font(ThemeManager.shared.theme.typo.h1)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
-                    Text("Choose a product for your \(step.title) step")
+                    Text(L10n.Routines.ProductSelection.subtitle(step.title))
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -55,7 +55,7 @@ struct ProductSelectionView: View {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     
-                    TextField("Search products...", text: $searchText)
+                    TextField(L10n.Routines.ProductSelection.searchPlaceholder, text: $searchText)
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 }
@@ -110,7 +110,7 @@ struct ProductSelectionView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "link")
                                     .font(.system(size: 16, weight: .semibold))
-                                Text("Attach \(selectedProduct.displayName)")
+                                Text(L10n.Routines.ProductSelection.attach(selectedProduct.displayName))
                                     .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             }
                             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
@@ -128,7 +128,7 @@ struct ProductSelectionView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "plus")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Add New Product")
+                            Text(L10n.Routines.ProductSelection.addNew)
                                 .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                         }
                         .foregroundColor(ThemeManager.shared.theme.palette.secondary)
@@ -206,7 +206,7 @@ private struct ProductSelectionCard: View {
                             .cornerRadius(6)
                         
                         if product.tagging.productType == step.stepType {
-                            Text("Perfect Match")
+                            Text(L10n.Routines.ProductSelection.perfectMatch)
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)
                                 .padding(.horizontal, 8)
@@ -251,11 +251,11 @@ private struct EmptyProductsState: View {
                 .font(.system(size: 48, weight: .light))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("No Compatible Products")
+            Text(L10n.Routines.ProductSelection.noCompatible)
                 .font(ThemeManager.shared.theme.typo.h3)
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
-            Text("You don't have any \(step.stepType.displayName.lowercased()) products in your collection yet. Add one to attach it to this step.")
+            Text(L10n.Routines.ProductSelection.noCompatibleDescription(step.stepType.displayName.lowercased()))
                 .font(ThemeManager.shared.theme.typo.body)
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 .multilineTextAlignment(.center)
@@ -266,7 +266,7 @@ private struct EmptyProductsState: View {
                 HStack(spacing: 8) {
                     Image(systemName: "plus")
                         .font(.system(size: 16, weight: .semibold))
-                    Text("Add \(step.stepType.displayName)")
+                    Text(L10n.Routines.ProductSelection.addType(step.stepType.displayName))
                         .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                 }
                                 .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)

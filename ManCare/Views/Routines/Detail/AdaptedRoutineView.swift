@@ -28,7 +28,7 @@ struct AdaptedRoutineView: View {
                 // Morning Steps
                 if !snapshot.morningSteps.isEmpty {
                     stepSection(
-                        title: "Morning Routine",
+                        title: L10n.Routines.morningRoutine,
                         steps: snapshot.morningSteps,
                         icon: "sunrise.fill"
                     )
@@ -37,7 +37,7 @@ struct AdaptedRoutineView: View {
                 // Evening Steps
                 if !snapshot.eveningSteps.isEmpty {
                     stepSection(
-                        title: "Evening Routine",
+                        title: L10n.Routines.eveningRoutine,
                         steps: snapshot.eveningSteps,
                         icon: "moon.stars.fill"
                     )
@@ -46,7 +46,7 @@ struct AdaptedRoutineView: View {
                 // Weekly Steps
                 if !snapshot.weeklySteps.isEmpty {
                     stepSection(
-                        title: "Weekly Routine",
+                        title: L10n.Routines.weeklyRoutine,
                         steps: snapshot.weeklySteps,
                         icon: "calendar"
                     )
@@ -55,7 +55,7 @@ struct AdaptedRoutineView: View {
             .padding(.vertical)
         }
         .background(theme.theme.palette.background.ignoresSafeArea())
-        .navigationTitle("Adapted Routine")
+        .navigationTitle(L10n.Routines.Detail.adaptedRoutine)
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $showingWhyModal) {
             if let step = selectedStep {
@@ -80,7 +80,7 @@ struct AdaptedRoutineView: View {
 
                 Spacer()
 
-                Text("\(steps.filter { $0.shouldShow }.count) steps")
+                Text(L10n.Routines.stepsCount(steps.filter { $0.shouldShow }.count))
                     .font(.caption)
                     .foregroundColor(theme.theme.palette.textSecondary)
             }
@@ -171,7 +171,7 @@ struct AdaptedStepRow: View {
                             Image(systemName: "questionmark.circle")
                                 .font(.caption)
 
-                            Text("Why this?")
+                            Text(L10n.Routines.Detail.whyThis)
                                 .font(.caption)
                         }
                         .foregroundColor(theme.theme.palette.primary)
@@ -235,7 +235,7 @@ struct WhyThisAdaptationModal: View {
                     if let adaptation = adaptedStep.adaptation {
                         // Emphasis Level
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Adaptation Level")
+                            Text(L10n.Routines.Detail.adaptationLevel)
                                 .font(.headline)
                                 .foregroundColor(theme.theme.palette.textPrimary)
 
@@ -259,7 +259,7 @@ struct WhyThisAdaptationModal: View {
                         // Guidance
                         if let guidance = adaptation.guidance, !guidance.isEmpty {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Guidance")
+                                Text(L10n.Routines.Detail.guidance)
                                     .font(.headline)
                                     .foregroundColor(theme.theme.palette.textPrimary)
 
@@ -271,7 +271,7 @@ struct WhyThisAdaptationModal: View {
 
                         // Origin
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Source")
+                            Text(L10n.Routines.Detail.source)
                                 .font(.headline)
                                 .foregroundColor(theme.theme.palette.textPrimary)
 
@@ -288,7 +288,7 @@ struct WhyThisAdaptationModal: View {
                         // Warnings
                         if !adaptation.warnings.isEmpty {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Warnings")
+                                Text(L10n.Routines.Detail.warnings)
                                     .font(.headline)
                                     .foregroundColor(theme.theme.palette.textPrimary)
 
@@ -316,7 +316,7 @@ struct WhyThisAdaptationModal: View {
                     // Original Instructions
                     if let how = adaptedStep.baseStep.how, !how.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Original Instructions")
+                            Text(L10n.Routines.Detail.originalInstructions)
                                 .font(.headline)
                                 .foregroundColor(theme.theme.palette.textPrimary)
 
@@ -329,11 +329,11 @@ struct WhyThisAdaptationModal: View {
                 .padding()
             }
             .background(theme.theme.palette.background)
-            .navigationTitle("Why This?")
+            .navigationTitle(L10n.Routines.Detail.whyThis)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(L10n.Common.done) {
                         dismiss()
                     }
                 }
@@ -396,7 +396,8 @@ struct WhyThisAdaptationModal: View {
             benefits: [],
             isFeatured: false,
             isPremium: false,
-            imageName: "routine-minimalist"
+            imageName: "routine-minimalist",
+            translations: nil
         )
     )
 
@@ -408,7 +409,7 @@ struct WhyThisAdaptationModal: View {
         briefing: sampleBriefing
     )
 
-    return NavigationView {
+    NavigationView {
         AdaptedRoutineView(snapshot: snapshot)
             .environmentObject(ThemeManager.shared)
     }

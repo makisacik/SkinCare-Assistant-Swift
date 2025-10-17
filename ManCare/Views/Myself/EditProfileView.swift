@@ -34,49 +34,49 @@ struct EditProfileView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Skin") {
-                    Picker("Skin Type", selection: Binding(get: { draft.skinType ?? .normal }, set: { draft.skinType = $0 })) {
+                Section(L10n.Myself.EditProfile.skin) {
+                    Picker(L10n.Myself.EditProfile.skinType, selection: Binding(get: { draft.skinType ?? .normal }, set: { draft.skinType = $0 })) {
                         ForEach(SkinType.allCases) { Text($0.title).tag($0) }
                     }
 
-                    Picker("Fitzpatrick Tone", selection: Binding(get: { draft.fitzpatrickSkinTone ?? .type3 }, set: { draft.fitzpatrickSkinTone = $0 })) {
+                    Picker(L10n.Myself.EditProfile.fitzpatrickTone, selection: Binding(get: { draft.fitzpatrickSkinTone ?? .type3 }, set: { draft.fitzpatrickSkinTone = $0 })) {
                         ForEach(FitzpatrickSkinTone.allCases) { Text($0.title).tag($0) }
                     }
 
-                    NavigationLink("Concerns") {
+                    NavigationLink(L10n.Myself.EditProfile.concerns) {
                         ConcernsEditor(selections: $draft.concerns)
                     }
                 }
 
-                Section("Goal & Preferences") {
-                    Picker("Main Goal", selection: Binding(get: { draft.mainGoal ?? .healthierOverall }, set: { draft.mainGoal = $0 })) {
+                Section(L10n.Myself.EditProfile.goalAndPreferences) {
+                    Picker(L10n.Myself.EditProfile.mainGoal, selection: Binding(get: { draft.mainGoal ?? .healthierOverall }, set: { draft.mainGoal = $0 })) {
                         ForEach(MainGoal.allCases) { Text($0.title).tag($0) }
                     }
 
                     PreferencesEditor(preferences: Binding(get: { draft.preferences ?? Preferences(fragranceFreeOnly: false, suitableForSensitiveSkin: false, naturalIngredients: false, crueltyFree: false, veganFriendly: false) }, set: { draft.preferences = $0 }))
                 }
 
-                Section("Demographics & Climate") {
-                    Picker("Age Range", selection: Binding(get: { draft.ageRange ?? .twenties }, set: { draft.ageRange = $0 })) {
+                Section(L10n.Myself.EditProfile.demographics) {
+                    Picker(L10n.Myself.EditProfile.ageRange, selection: Binding(get: { draft.ageRange ?? .twenties }, set: { draft.ageRange = $0 })) {
                         ForEach(AgeRange.allCases) { Text($0.title).tag($0) }
                     }
 
-                    Picker("Region/Climate", selection: Binding(get: { draft.region ?? .temperate }, set: { draft.region = $0 })) {
+                    Picker(L10n.Myself.EditProfile.regionClimate, selection: Binding(get: { draft.region ?? .temperate }, set: { draft.region = $0 })) {
                         ForEach(Region.allCases) { Text($0.title).tag($0) }
                     }
                 }
 
-                Section("Menstruation Cycle") {
-                    DatePicker("Last Period Start",
+                Section(L10n.Myself.EditProfile.menstruationCycle) {
+                    DatePicker(L10n.Myself.EditProfile.lastPeriodStart,
                               selection: $lastPeriodStartDate,
                               in: ...Date(),
                               displayedComponents: .date)
 
-                    Stepper("Cycle Length: \(averageCycleLength) days",
+                    Stepper(L10n.Myself.EditProfile.cycleLength(averageCycleLength),
                            value: $averageCycleLength,
                            in: 21...45)
 
-                    Stepper("Period Length: \(periodLength) days",
+                    Stepper(L10n.Myself.EditProfile.periodLength(periodLength),
                            value: $periodLength,
                            in: 2...10)
 
@@ -91,9 +91,9 @@ struct EditProfileView: View {
                         Image(systemName: phase.iconName)
                             .foregroundColor(phase.mainColor)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Current Phase: \(phase.title)")
+                            Text(L10n.Myself.EditProfile.currentPhase(phase.title))
                                 .font(.subheadline)
-                            Text("Day \(dayInCycle) of \(averageCycleLength)")
+                            Text(L10n.Myself.EditProfile.dayOfCycle(day: dayInCycle, total: averageCycleLength))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -101,7 +101,7 @@ struct EditProfileView: View {
                     .padding(.vertical, 4)
                 }
             }
-            .navigationTitle("Edit Profile")
+            .navigationTitle(L10n.Myself.EditProfile.title)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -112,7 +112,7 @@ struct EditProfileView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button(L10n.Myself.EditProfile.save) {
                         if let p = draft.toProfile() {
                             // Save profile
                             onSave(p)
@@ -154,7 +154,7 @@ private struct ConcernsEditor: View {
                 }
             }
         }
-        .navigationTitle("Concerns")
+        .navigationTitle(L10n.Myself.EditProfile.concerns)
     }
 }
 
@@ -179,11 +179,11 @@ private struct PreferencesEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Toggle("Fragrance-free", isOn: Binding(get: { preferences.fragranceFreeOnly }, set: { preferences = Preferences(fragranceFreeOnly: $0, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: preferences.naturalIngredients, crueltyFree: preferences.crueltyFree, veganFriendly: preferences.veganFriendly) }))
-            Toggle("Suitable for sensitive skin", isOn: Binding(get: { preferences.suitableForSensitiveSkin }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: $0, naturalIngredients: preferences.naturalIngredients, crueltyFree: preferences.crueltyFree, veganFriendly: preferences.veganFriendly) }))
-            Toggle("Natural ingredients", isOn: Binding(get: { preferences.naturalIngredients }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: $0, crueltyFree: preferences.crueltyFree, veganFriendly: preferences.veganFriendly) }))
-            Toggle("Cruelty-free", isOn: Binding(get: { preferences.crueltyFree }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: preferences.naturalIngredients, crueltyFree: $0, veganFriendly: preferences.veganFriendly) }))
-            Toggle("Vegan-friendly", isOn: Binding(get: { preferences.veganFriendly }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: preferences.naturalIngredients, crueltyFree: preferences.crueltyFree, veganFriendly: $0) }))
+            Toggle(L10n.Myself.EditProfile.Preferences.fragranceFree, isOn: Binding(get: { preferences.fragranceFreeOnly }, set: { preferences = Preferences(fragranceFreeOnly: $0, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: preferences.naturalIngredients, crueltyFree: preferences.crueltyFree, veganFriendly: preferences.veganFriendly) }))
+            Toggle(L10n.Myself.EditProfile.Preferences.sensitiveSkin, isOn: Binding(get: { preferences.suitableForSensitiveSkin }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: $0, naturalIngredients: preferences.naturalIngredients, crueltyFree: preferences.crueltyFree, veganFriendly: preferences.veganFriendly) }))
+            Toggle(L10n.Myself.EditProfile.Preferences.natural, isOn: Binding(get: { preferences.naturalIngredients }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: $0, crueltyFree: preferences.crueltyFree, veganFriendly: preferences.veganFriendly) }))
+            Toggle(L10n.Myself.EditProfile.Preferences.crueltyFree, isOn: Binding(get: { preferences.crueltyFree }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: preferences.naturalIngredients, crueltyFree: $0, veganFriendly: preferences.veganFriendly) }))
+            Toggle(L10n.Myself.EditProfile.Preferences.vegan, isOn: Binding(get: { preferences.veganFriendly }, set: { preferences = Preferences(fragranceFreeOnly: preferences.fragranceFreeOnly, suitableForSensitiveSkin: preferences.suitableForSensitiveSkin, naturalIngredients: preferences.naturalIngredients, crueltyFree: preferences.crueltyFree, veganFriendly: $0) }))
         }
     }
 }

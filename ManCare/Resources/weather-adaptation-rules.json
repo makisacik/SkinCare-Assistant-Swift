@@ -104,6 +104,9 @@
       },
       "effects": {
         "suppress": true,
+        "i18n": {
+          "noteKey": "weather.uv_extreme.exfoliant_skip.note"
+        },
         "note": "Skip exfoliants in morning—extreme UV will damage sensitized skin.",
         "priority": 160,
         "userOverrideAllowed": false
@@ -122,6 +125,9 @@
           "title": "Sunscreen SPF 50+"
         },
         "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.uv_high.sunscreen.note"
+        },
         "note": "UV is high. Use SPF 50+ and reapply every 2 hours. Add antioxidant serum.",
         "priority": 120,
         "userOverrideAllowed": false
@@ -140,6 +146,9 @@
           "title": "Antioxidant Serum"
         },
         "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.uv_high.antioxidant.note"
+        },
         "note": "Antioxidants protect against UV damage. Apply before sunscreen.",
         "priority": 110,
         "userOverrideAllowed": true
@@ -154,6 +163,9 @@
       },
       "effects": {
         "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.uv_high.retinoid_reduce.note"
+        },
         "note": "Avoid retinoids in morning routine when UV is high—use in PM instead.",
         "priority": 130,
         "userOverrideAllowed": true
@@ -168,6 +180,9 @@
       },
       "effects": {
         "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.uv_high.exfoliant_reduce.note"
+        },
         "note": "Reduce exfoliant use in morning—high UV can damage sensitized skin.",
         "priority": 130,
         "userOverrideAllowed": true
@@ -182,6 +197,9 @@
       },
       "effects": {
         "emphasis": "normal",
+        "i18n": {
+          "noteKey": "weather.uv_moderate.sunscreen.note"
+        },
         "note": "UV is moderate. SPF 30-50 recommended. Reapply if outdoors.",
         "priority": 80,
         "userOverrideAllowed": true
@@ -195,6 +213,9 @@
         "kinds": ["faceSerum", "serum_antioxidant"]
       },
       "effects": {
+        "i18n": {
+          "noteKey": "weather.uv_moderate.antioxidant.note"
+        },
         "note": "Antioxidant serum is beneficial for moderate UV protection.",
         "priority": 70,
         "userOverrideAllowed": true
@@ -209,6 +230,9 @@
       },
       "effects": {
         "emphasis": "normal",
+        "i18n": {
+          "noteKey": "weather.uv_low.sunscreen.note"
+        },
         "note": "UV is low. SPF 30 is sufficient. Safe to use actives like retinoids.",
         "priority": 50,
         "userOverrideAllowed": true
@@ -241,6 +265,9 @@
       },
       "effects": {
         "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.low_humidity.hydration.note"
+        },
         "note": "Add hydrating toner or HA serum to combat dry air.",
         "priority": 85,
         "userOverrideAllowed": true
@@ -255,6 +282,9 @@
       },
       "effects": {
         "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.low_humidity.exfoliant_caution.note"
+        },
         "note": "Avoid over-exfoliating in dry conditions—can compromise barrier.",
         "priority": 100,
         "userOverrideAllowed": true
@@ -270,6 +300,9 @@
       "effects": {
         "emphasis": "reduce",
         "weightHint": "gel",
+        "i18n": {
+          "noteKey": "weather.high_humidity.moisturizer.note"
+        },
         "note": "Humid conditions. Use lighter gel moisturizer instead of heavy creams.",
         "priority": 75,
         "userOverrideAllowed": true
@@ -284,6 +317,9 @@
       },
       "effects": {
         "suppress": true,
+        "i18n": {
+          "noteKey": "weather.high_humidity.occlusive_skip.note"
+        },
         "note": "Skip thick occlusives or heavy oils in humid weather.",
         "priority": 80,
         "userOverrideAllowed": true
@@ -299,6 +335,9 @@
       "effects": {
         "emphasis": "emphasize",
         "weightHint": "balm",
+        "i18n": {
+          "noteKey": "weather.windy.barrier.note"
+        },
         "note": "Windy conditions strip moisture. Apply barrier cream or balm.",
         "priority": 110,
         "userOverrideAllowed": true
@@ -313,6 +352,9 @@
       },
       "effects": {
         "suppress": true,
+        "i18n": {
+          "noteKey": "weather.windy.exfoliant_skip.note"
+        },
         "note": "Skip harsh peels today—wind can irritate sensitized skin.",
         "priority": 120,
         "userOverrideAllowed": false
@@ -327,6 +369,9 @@
       },
       "effects": {
         "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.windy.retinoid_caution.note"
+        },
         "note": "Wind can irritate skin. Reduce strength of retinoids today.",
         "priority": 100,
         "userOverrideAllowed": true
@@ -342,6 +387,9 @@
       "effects": {
         "emphasis": "emphasize",
         "weightHint": "cream",
+        "i18n": {
+          "noteKey": "weather.cold.moisturizer.note"
+        },
         "note": "Cold weather requires richer protection. Use heavier moisturizer with ceramides or squalane.",
         "priority": 90,
         "userOverrideAllowed": true
@@ -355,6 +403,9 @@
         "kinds": ["faceSerum", "essence"]
       },
       "effects": {
+        "i18n": {
+          "noteKey": "weather.cold.barrier.note"
+        },
         "note": "Add barrier-supporting ingredients (ceramides, squalane, niacinamide).",
         "priority": 85,
         "userOverrideAllowed": true
@@ -370,6 +421,9 @@
       "effects": {
         "emphasis": "reduce",
         "weightHint": "gel",
+        "i18n": {
+          "noteKey": "weather.hot.moisturizer.note"
+        },
         "note": "Hot weather calls for lighter products. Use oil-free, mattifying formulations.",
         "priority": 75,
         "userOverrideAllowed": true
@@ -384,6 +438,9 @@
       },
       "effects": {
         "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.hot.spf_mattifying.note"
+        },
         "note": "Hot weather increases sun exposure. Use mattifying sunscreen and reapply frequently due to sweat.",
         "priority": 110,
         "userOverrideAllowed": false
@@ -399,6 +456,9 @@
       "effects": {
         "emphasis": "emphasize",
         "weightHint": "gel",
+        "i18n": {
+          "noteKey": "weather.hot_humid.combo_spf.note"
+        },
         "note": "Hot and humid. Choose gel-based SPF for comfort. Reapply every 2 hours.",
         "priority": 115,
         "userOverrideAllowed": false
@@ -417,6 +477,9 @@
           "title": "Sunscreen SPF 50+"
         },
         "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.snow.spf_extreme.note"
+        },
         "note": "Snow reflects up to 80% of UV rays—double exposure. Treat as extreme UV day.",
         "priority": 150,
         "userOverrideAllowed": false
@@ -431,6 +494,9 @@
       },
       "effects": {
         "suppress": true,
+        "i18n": {
+          "noteKey": "weather.snow.retinoid_caution.note"
+        },
         "note": "Skip morning retinoids—snow reflection doubles UV exposure.",
         "priority": 145,
         "userOverrideAllowed": false

@@ -1,0 +1,135 @@
+/*
+SkinJournal.strings (Turkish)
+ManCare - Cilt Günlüğü özelliği
+*/
+
+/* Daily Mood Tracking Card */
+"skinJournal.dailyLog.title" = "Günlük Cilt Kaydı";
+"skinJournal.dailyLog.capture" = "Bugün cildinizi kaydedin";
+"skinJournal.dailyLog.completed" = "Bugün için tamamlandı";
+
+/* Skin Journey Card */
+"skinJournal.journey.title" = "Cilt Yolculuğu";
+"skinJournal.journey.titleBadge" = "CİLT YOLCULUĞU";
+"skinJournal.journey.tagline" = "Işıltınızın gelişimini görün";
+"skinJournal.journey.trackProgress" = "Cilt ilerlemenizi takip edin";
+"skinJournal.journey.trackProgressWithSelfies" = "Selfie ve notlarla cilt ilerlemenizi takip edin";
+"skinJournal.journey.moreOnJournal" = "Günlük hakkında daha fazla";
+"skinJournal.journey.mood" = "Ruh Hali";
+"skinJournal.journey.viewJournal" = "Günlüğü Görüntüle";
+"skinJournal.journey.startTracking" = "Cildinizi takip etmeye başlayın";
+"skinJournal.journey.takeProgressSelfies" = "İlerleme selfieleri ve günlük kayıtları ekleyin";
+"skinJournal.journey.addFirstEntry" = "İlk Kaydı Ekle";
+"skinJournal.journey.entriesCount" = "%d kay%@";
+"skinJournal.journey.entrySuffix" = "ıt";
+"skinJournal.journey.entriesSuffix" = "ıt";
+"skinJournal.journey.addMoreEntries" = "Daha Fazla Kayıt Ekle";
+"skinJournal.journey.addAtLeastTwoPhotos" = "Karşılaştırmaya başlamak için en az 2 fotoğraf ekleyin";
+
+/* Premium Features */
+"skinJournal.premium.title" = "Premium Özellik";
+"skinJournal.premium.description" = "İlerleme fotoğrafları ve detaylı kayıtlarla cilt yolculuğunuzu takip edin";
+"skinJournal.premium.upgrade" = "Premium'a Yükselt";
+"skinJournal.premium.tryFree" = "7 Gün Ücretsiz Dene";
+
+/* Timeline Features */
+"skinJournal.timeline.title" = "Cilt Yolculuğu";
+"skinJournal.timeline.compare" = "Karşılaştır";
+"skinJournal.timeline.startJourney" = "Cilt Yolculuğunuza Başlayın";
+"skinJournal.timeline.entries" = "Kayıtlar";
+"skinJournal.timeline.dayStreak" = "Günlük Seri";
+"skinJournal.timeline.searchNotes" = "Notlarda ara...";
+"skinJournal.timeline.before" = "Önce";
+"skinJournal.timeline.after" = "Sonra";
+"skinJournal.timeline.selectEntry" = "Kayıt Seç";
+
+/* Comparison Demo */
+"skinJournal.demo.visualTimeline" = "Değişimlerin görsel zaman çizelgesi";
+"skinJournal.demo.moodCorrelation" = "Ruh hali ve cilt korelasyonu";
+
+/* Add Entry View */
+"skinJournal.addEntry.title" = "Kayıt Ekle";
+"skinJournal.addEntry.back" = "Geri";
+"skinJournal.addEntry.save" = "Kaydet";
+"skinJournal.addEntry.yourPhoto" = "Fotoğrafınız";
+"skinJournal.addEntry.howAreYouFeeling" = "Nasıl hissediyorsunuz?";
+"skinJournal.addEntry.selectMood" = "Bugünkü ruh halinizi seçin";
+"skinJournal.addEntry.skinFeel" = "Cilt Hissi";
+"skinJournal.addEntry.describeSkinFeel" = "Cildinizin nasıl hissettiğini açıklayın";
+"skinJournal.addEntry.analyzingPhoto" = "Fotoğrafınız analiz ediliyor...";
+"skinJournal.addEntry.takingAMoment" = "Bu biraz zaman alabilir";
+"skinJournal.addEntry.noPhotoCaptured" = "Fotoğraf yakalanmadı";
+"skinJournal.addEntry.tagPrefix" = "+%d";
+
+/* Comparison View */
+"skinJournal.comparison.title" = "Gelişimi Karşılaştır";
+"skinJournal.comparison.close" = "Kapat";
+"skinJournal.comparison.view" = "Görüntüle";
+"skinJournal.comparison.daysApart" = "Arada %d gün var";
+"skinJournal.comparison.daySuffix" = "";
+"skinJournal.comparison.daysSuffix" = "";
+"skinJournal.comparison.skinFeel" = "Cilt Hissi";
+"skinJournal.comparison.before" = "Önce";
+"skinJournal.comparison.after" = "Sonra";
+"skinJournal.comparison.noTags" = "Etiket yok";
+"skinJournal.comparison.selectEntries" = "Karşılaştırmak için kayıtları seçin";
+"skinJournal.comparison.tagBullet" = "• %@";
+
+/* Camera View */
+"skinJournal.camera.initializing" = "Kamera başlatılıyor...";
+"skinJournal.camera.analyzing" = "Fotoğraf analiz ediliyor...";
+"skinJournal.camera.alignFace" = "Yüzünüzü kılavuzla hizalayın";
+"skinJournal.camera.keepCentered" = "Yüzünüzü ovalin ortasında tutun";
+"skinJournal.camera.hideGuide" = "Kılavuzu Gizle";
+"skinJournal.camera.showGuide" = "Kılavuzu Göster";
+
+/* Skin Feel Tags */
+"skinJournal.tag.oily" = "Yağlı";
+"skinJournal.tag.dry" = "Kuru";
+"skinJournal.tag.smooth" = "Pürüzsüz";
+"skinJournal.tag.rough" = "Pürüzlü";
+"skinJournal.tag.irritated" = "Tahriş Olmuş";
+"skinJournal.tag.calm" = "Sakin";
+"skinJournal.tag.glowing" = "Işıltılı";
+"skinJournal.tag.dull" = "Donuk";
+"skinJournal.tag.sensitive" = "Hassas";
+"skinJournal.tag.wrinkles" = "Kırışıklıklar";
+"skinJournal.tag.dryness" = "Kuruluk";
+
+/* Mood Tags */
+"skinJournal.mood.sleep" = "Uyku";
+"skinJournal.mood.sun" = "Güneş";
+"skinJournal.mood.diet" = "Beslenme";
+"skinJournal.mood.hydration" = "Sıvı Tüketimi";
+"skinJournal.mood.stress" = "Stres";
+"skinJournal.mood.exercise" = "Egzersiz";
+"skinJournal.mood.newProduct" = "Yeni Ürün";
+"skinJournal.mood.sleepQuality" = "Uyku Kalitesi";
+
+/* Image Analysis Results */
+"skinJournal.analysis.notAnalyzed" = "Analiz edilmedi";
+"skinJournal.analysis.darkerAppearance" = "Daha koyu görünüm";
+"skinJournal.analysis.moderateTone" = "Orta ton";
+"skinJournal.analysis.brightAppearance" = "Parlak görünüm";
+"skinJournal.analysis.veryBright" = "Çok parlak";
+"skinJournal.analysis.normal" = "Normal";
+"skinJournal.analysis.unableToAnalyze" = "Analiz edilemiyor";
+"skinJournal.analysis.noFaceDetected" = "Yüz algılanmadı - lütfen fotoğrafın yüzünüzü net gösterdiğinden emin olun";
+"skinJournal.analysis.evenSkinTone" = "Eşit cilt tonu";
+"skinJournal.analysis.mostlyEvenSkinTone" = "Çoğunlukla eşit, ufak farklılıklar var";
+"skinJournal.analysis.someUnevenness" = "Bir miktar eşitsizlik algılandı";
+"skinJournal.analysis.significantVariation" = "Belirgin farklılık - olası kızarıklık veya renk değişimi";
+"skinJournal.analysis.similarBrightness" = "Benzer parlaklık";
+"skinJournal.analysis.slightlyBrighter" = "Biraz daha parlak";
+"skinJournal.analysis.noticeablyBrighter" = "Fark edilir derecede parlak";
+"skinJournal.analysis.muchBrighter" = "Çok daha parlak";
+"skinJournal.analysis.slightlyDarker" = "Biraz daha koyu";
+"skinJournal.analysis.noticeablyDarker" = "Fark edilir derecede koyu";
+"skinJournal.analysis.muchDarker" = "Çok daha koyu";
+
+/* Errors */
+"skinJournal.error.photoSaveFailed" = "Fotoğraf kaydedilemedi";
+"skinJournal.error.saveFailed" = "Günlük kaydı kaydedilemedi";
+"skinJournal.error.updateFailed" = "Günlük kaydı güncellenemedi";
+"skinJournal.error.deleteFailed" = "Günlük kaydı silinemedi";
+"skinJournal.error.entryNotFound" = "Günlük kaydı bulunamadı";

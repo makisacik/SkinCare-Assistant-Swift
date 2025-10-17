@@ -62,13 +62,13 @@ enum UVLevel: String, Codable {
     var displayName: String {
         switch self {
         case .low:
-            return "Low"
+            return L10n.Routines.Weather.UVLevel.low
         case .moderate:
-            return "Moderate"
+            return L10n.Routines.Weather.UVLevel.moderate
         case .high:
-            return "High"
+            return L10n.Routines.Weather.UVLevel.high
         case .extreme:
-            return "Extreme"
+            return L10n.Routines.Weather.UVLevel.extreme
         }
     }
 
@@ -128,7 +128,7 @@ struct WeatherRecommendation: Equatable {
     }
 
     static func from(weatherData: WeatherData) -> WeatherRecommendation {
-        var spfLevel = "SPF 30"
+        var spfLevel = L10n.Routines.Weather.SPF.spf30
         var textureAdjustment: String?
         var warnings: [String] = []
         var tips: [String] = []
@@ -136,56 +136,56 @@ struct WeatherRecommendation: Equatable {
         // UV Index recommendations
         switch weatherData.uvLevel {
         case .low:
-            spfLevel = "SPF 30"
-            tips.append("Actives like retinoids are safe to use")
+            spfLevel = L10n.Routines.Weather.SPF.spf30
+            tips.append(L10n.Routines.Weather.Tip.activeSafe)
         case .moderate:
-            spfLevel = "SPF 30-50"
-            tips.append("Antioxidant serum recommended")
+            spfLevel = L10n.Routines.Weather.SPF.spf3050
+            tips.append(L10n.Routines.Weather.Tip.antioxidant)
         case .high:
-            spfLevel = "SPF 50+"
-            warnings.append("Avoid retinoids and acids in morning routine")
-            tips.append("Reapply sunscreen every 2 hours")
-            tips.append("Add antioxidant serum (Vit C, EGCG)")
+            spfLevel = L10n.Routines.Weather.SPF.spf50Plus
+            warnings.append(L10n.Routines.Weather.Warning.avoidMorningActives)
+            tips.append(L10n.Routines.Weather.Tip.reapply2h)
+            tips.append(L10n.Routines.Weather.Tip.addAntioxidant)
         case .extreme:
-            spfLevel = "SPF 50+"
-            warnings.append("Skip retinoids and strong acids today")
-            warnings.append("Reapply sunscreen every 1-2 hours")
-            tips.append("Stay in shade during peak hours (10am-4pm)")
-            tips.append("Wear protective clothing")
+            spfLevel = L10n.Routines.Weather.SPF.spf50Plus
+            warnings.append(L10n.Routines.Weather.Warning.skipActives)
+            warnings.append(L10n.Routines.Weather.Warning.reapply)
+            tips.append(L10n.Routines.Weather.Tip.stayInShade)
+            tips.append(L10n.Routines.Weather.Tip.protectiveClothing)
         }
 
         // Humidity adjustments
         if weatherData.humidity < 35 {
-            textureAdjustment = "Use heavier moisturizers and occlusives"
-            tips.append("Add hydrating toner or HA serum")
-            warnings.append("Avoid over-exfoliating in dry conditions")
+            textureAdjustment = L10n.Routines.Weather.Texture.heavyMoisturizers
+            tips.append(L10n.Routines.Weather.Tip.addHydratingToner)
+            warnings.append(L10n.Routines.Weather.Warning.avoidOverExfoliating)
         } else if weatherData.humidity > 70 {
-            textureAdjustment = "Use lighter gel moisturizers"
-            tips.append("Avoid thick occlusives or heavy oils")
+            textureAdjustment = L10n.Routines.Weather.Texture.lightGel
+            tips.append(L10n.Routines.Weather.Tip.avoidHeavyOils)
         }
 
         // Wind adjustments
         if weatherData.windSpeed > 25 {
-            tips.append("Apply barrier cream or balm")
-            warnings.append("Skip harsh peels and strong retinoids")
+            tips.append(L10n.Routines.Weather.Tip.barrierCream)
+            warnings.append(L10n.Routines.Weather.Warning.skipHarshPeels)
         }
 
         // Temperature adjustments
         if weatherData.temperature < 8 {
             if textureAdjustment == nil {
-                textureAdjustment = "Use richer, more protective moisturizers"
+                textureAdjustment = L10n.Routines.Weather.Texture.richProtective
             }
-            tips.append("Add ceramide or squalane for barrier support")
+            tips.append(L10n.Routines.Weather.Tip.addCeramide)
         } else if weatherData.temperature > 30 {
             if textureAdjustment == nil {
-                textureAdjustment = "Use lighter, mattifying products"
+                textureAdjustment = L10n.Routines.Weather.Texture.lightMattifying
             }
-            tips.append("Choose oil-free formulations")
+            tips.append(L10n.Routines.Weather.Tip.oilFree)
         }
 
         // Snow reflection
         if weatherData.hasSnow {
-            warnings.append("Snow reflects UV rays - treat as high UV day")
+            warnings.append(L10n.Routines.Weather.Warning.snowReflection)
         }
 
         return WeatherRecommendation(

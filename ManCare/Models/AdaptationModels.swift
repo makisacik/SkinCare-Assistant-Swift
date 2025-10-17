@@ -18,22 +18,22 @@ enum AdaptationType: String, Codable, CaseIterable {
     var displayName: String {
         switch self {
         case .cycle:
-            return "Cycle Tracking"
+            return L10n.Routines.Adaptation.AdaptationType.cycleTracking
         case .seasonal:
-            return "Seasonal"
+            return L10n.Routines.Adaptation.AdaptationType.seasonal
         case .skinState:
-            return "Skin State"
+            return L10n.Routines.Adaptation.AdaptationType.skinState
         }
     }
 
     var description: String {
         switch self {
         case .cycle:
-            return "Adapt routine based on your menstruation cycle phase"
+            return L10n.Routines.Adaptation.TypeDesc.cycle
         case .seasonal:
-            return "Adapt routine based on weather and season"
+            return L10n.Routines.Adaptation.TypeDesc.seasonal
         case .skinState:
-            return "Adapt routine based on current skin condition"
+            return L10n.Routines.Adaptation.TypeDesc.skinState
         }
     }
 }
@@ -49,13 +49,13 @@ enum StepEmphasis: String, Codable {
     var displayName: String {
         switch self {
         case .skip:
-            return "Skip"
+            return L10n.Routines.AdaptationBadge.skip
         case .reduce:
-            return "Reduce"
+            return L10n.Routines.AdaptationBadge.reduce
         case .normal:
-            return "Normal"
+            return L10n.Routines.AdaptationBadge.normal
         case .emphasize:
-            return "Emphasize"
+            return L10n.Routines.AdaptationBadge.emphasize
         }
     }
 
@@ -96,11 +96,11 @@ enum AdaptationOrigin: String, Codable {
     var displayName: String {
         switch self {
         case .default:
-            return "Default"
+            return L10n.Routines.Adaptation.Origin.default
         case .gpt:
-            return "AI Recommended"
+            return L10n.Routines.Adaptation.Origin.aiRecommended
         case .user:
-            return "Custom"
+            return L10n.Routines.Adaptation.Origin.custom
         }
     }
 

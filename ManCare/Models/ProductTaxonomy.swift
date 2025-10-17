@@ -103,54 +103,54 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         // Most commonly used
-        case .cleanser: return "Cleanser"
-        case .moisturizer: return "Moisturizer"
-        case .sunscreen: return "Sunscreen"
-        case .toner: return "Toner"
+        case .cleanser: return L10n.Products.TypeName.cleanser
+        case .moisturizer: return L10n.Products.TypeName.moisturizer
+        case .sunscreen: return L10n.Products.TypeName.sunscreen
+        case .toner: return L10n.Products.TypeName.toner
 
         // Treatment products
-        case .faceSerum: return "Face Serum"
-        case .essence: return "Essence"
-        case .exfoliator: return "Exfoliator"
-        case .faceMask: return "Face Mask"
-        case .facialOil: return "Facial Oil"
+        case .faceSerum: return L10n.Products.TypeName.faceSerum
+        case .essence: return L10n.Products.TypeName.essence
+        case .exfoliator: return L10n.Products.TypeName.exfoliator
+        case .faceMask: return L10n.Products.TypeName.faceMask
+        case .facialOil: return L10n.Products.TypeName.facialOil
 
         // Specialized products
-        case .facialMist: return "Facial Mist & Sprays"
-        case .eyeCream: return "Eye Cream"
-        case .spotTreatment: return "Spot Treatment"
-        case .retinol: return "Retinol"
-        case .vitaminC: return "Vitamin C"
-        case .niacinamide: return "Niacinamide"
+        case .facialMist: return L10n.Products.TypeName.facialMist
+        case .eyeCream: return L10n.Products.TypeName.eyeCream
+        case .spotTreatment: return L10n.Products.TypeName.spotTreatment
+        case .retinol: return L10n.Products.TypeName.retinol
+        case .vitaminC: return L10n.Products.TypeName.vitaminC
+        case .niacinamide: return L10n.Products.TypeName.niacinamide
 
         // Sun protection variations
-        case .faceSunscreen: return "Face Sunscreen"
-        case .bodySunscreen: return "Body Sunscreen"
-        case .lipBalm: return "Lip Balm"
+        case .faceSunscreen: return L10n.Products.TypeName.faceSunscreen
+        case .bodySunscreen: return L10n.Products.TypeName.bodySunscreen
+        case .lipBalm: return L10n.Products.TypeName.lipBalm
 
         // Shaving products
-        case .shaveCream: return "Shave Cream"
-        case .aftershave: return "Aftershave"
-        case .shaveGel: return "Shave Gel"
+        case .shaveCream: return L10n.Products.TypeName.shaveCream
+        case .aftershave: return L10n.Products.TypeName.aftershave
+        case .shaveGel: return L10n.Products.TypeName.shaveGel
 
         // Body care
-        case .bodyLotion: return "Body Lotion"
-        case .bodyWash: return "Body Wash"
-        case .handCream: return "Hand Cream"
+        case .bodyLotion: return L10n.Products.TypeName.bodyLotion
+        case .bodyWash: return L10n.Products.TypeName.bodyWash
+        case .handCream: return L10n.Products.TypeName.handCream
 
         // Hair care
-        case .shampoo: return "Shampoo"
-        case .conditioner: return "Conditioner"
-        case .hairOil: return "Hair Oil"
-        case .hairMask: return "Hair Mask"
+        case .shampoo: return L10n.Products.TypeName.shampoo
+        case .conditioner: return L10n.Products.TypeName.conditioner
+        case .hairOil: return L10n.Products.TypeName.hairOil
+        case .hairMask: return L10n.Products.TypeName.hairMask
 
         // Specialized treatments
-        case .chemicalPeel: return "Chemical Peel"
-        case .micellarWater: return "Micellar Water"
-        case .makeupRemover: return "Makeup Remover"
-        case .faceWash: return "Face Wash"
-        case .cleansingOil: return "Cleansing Oil"
-        case .cleansingBalm: return "Cleansing Balm"
+        case .chemicalPeel: return L10n.Products.TypeName.chemicalPeel
+        case .micellarWater: return L10n.Products.TypeName.micellarWater
+        case .makeupRemover: return L10n.Products.TypeName.makeupRemover
+        case .faceWash: return L10n.Products.TypeName.faceWash
+        case .cleansingOil: return L10n.Products.TypeName.cleansingOil
+        case .cleansingBalm: return L10n.Products.TypeName.cleansingBalm
         }
     }
 
@@ -277,6 +277,20 @@ enum ProductCategory: String, CaseIterable {
     case bodyCare = "Body Care"
     case hairCare = "Hair Care"
 
+    var displayName: String {
+        switch self {
+        case .cleansing: return L10n.Products.Category.cleansing
+        case .toning: return L10n.Products.Category.toning
+        case .treatment: return L10n.Products.Category.treatment
+        case .moisturizing: return L10n.Products.Category.moisturizing
+        case .sunProtection: return L10n.Products.Category.sunProtection
+        case .masks: return L10n.Products.Category.masks
+        case .shaving: return L10n.Products.Category.shaving
+        case .bodyCare: return L10n.Products.Category.bodyCare
+        case .hairCare: return L10n.Products.Category.hairCare
+        }
+    }
+
     var iconName: String {
         switch self {
         case .cleansing: return ProductIconManager.getIconName(for: .cleanser)
@@ -305,21 +319,21 @@ enum Frequency: Codable, Equatable {
 
     var displayName: String {
         switch self {
-        case .dailyAM: return "Daily (AM)"
-        case .dailyPM: return "Daily (PM)"
-        case .both: return "Daily (AM & PM)"
-        case .weekly(let times): return "\(times)x per week"
-        case .custom(let days): return "Custom (\(days.joined(separator: ", ")))"
+        case .dailyAM: return L10n.Routines.Frequency.dailyAM
+        case .dailyPM: return L10n.Routines.Frequency.dailyPM
+        case .both: return L10n.Routines.Frequency.both
+        case .weekly(let times): return L10n.Routines.Frequency.weekly(times)
+        case .custom(let days): return L10n.Routines.Frequency.custom(days.joined(separator: ", "))
         }
     }
 
     var description: String {
         switch self {
-        case .dailyAM: return "Use every morning"
-        case .dailyPM: return "Use every evening"
-        case .both: return "Use morning and evening"
-        case .weekly(let times): return "Use \(times) times per week"
-        case .custom(let days): return "Use on \(days.joined(separator: ", "))"
+        case .dailyAM: return L10n.Routines.Frequency.Description.dailyAM
+        case .dailyPM: return L10n.Routines.Frequency.Description.dailyPM
+        case .both: return L10n.Routines.Frequency.Description.both
+        case .weekly(let times): return L10n.Routines.Frequency.Description.weekly(times)
+        case .custom(let days): return L10n.Routines.Frequency.Description.custom(days.joined(separator: ", "))
         }
     }
 }

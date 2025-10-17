@@ -46,7 +46,7 @@ struct AdaptationBriefingCard: View {
             // Tips
             if !briefing.tips.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Tips")
+                    Text(L10n.Routines.AdaptationBriefing.tips)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(theme.theme.palette.textPrimary)

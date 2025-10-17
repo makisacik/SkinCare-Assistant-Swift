@@ -1,0 +1,323 @@
+/*
+Onboarding.strings (Turkish)
+ManCare - Onboarding and routine creation flow
+*/
+
+/* Welcome Screen */
+"onboarding.welcome.appName" = "Glowie";
+"onboarding.welcome.description" = "Kişiselleştirilmiş önerilerle cilt bakımı rutininizi dönüştürün";
+"onboarding.welcome.getStarted" = "Hemen Başlayın";
+"onboarding.welcome.skipToHome" = "Ana Sayfaya Atla";
+
+/* Create Routine Page */
+"onboarding.createRoutine.title" = "Rutininizi Oluşturun";
+"onboarding.createRoutine.description" = "Glowie; sabah ve akşam rutinlerinizi cilt tipinize ve çevrenize göre kişiselleştirir.";
+"onboarding.createRoutine.next" = "İleri";
+
+/* Add Products Page */
+"onboarding.addProducts.title" = "Ürünleri Ekleyin veya Taratın";
+"onboarding.addProducts.description" = "Cilt bakım ürünlerinizi yükleyin veya fotoğrafını çekin — Glowie onları tanımlar ve içeriğini açıklar.";
+"onboarding.addProducts.next" = "İleri";
+
+/* Discover & Track Page */
+"onboarding.discoverTrack.title" = "Keşfet & Takip Et";
+"onboarding.discoverTrack.description" = "Yeni cilt bakım rutinleri bulun, başkalarından ilham alın ve ışıltınızın zamanla gelişimini izleyin.";
+"onboarding.discoverTrack.getStarted" = "Hemen Başlayın";
+
+/* Skin Type Selection */
+"onboarding.skinType.title" = "Cilt tipiniz nedir?";
+"onboarding.skinType.subtitle" = "Basit bir rutin oluşturmak için temel tipinizi seçin.";
+"onboarding.skinType.continue" = "Devam Et";
+"onboarding.skinType.tapToSelect" = "Seçmek için dokunun";
+
+/* Skin Type Options */
+"onboarding.skinType.oily" = "Yağlı";
+"onboarding.skinType.oily.subtitle" = "Parlak, genişlemiş gözenekler";
+"onboarding.skinType.dry" = "Kuru";
+"onboarding.skinType.dry.subtitle" = "Gerginlik, pullanma";
+"onboarding.skinType.combination" = "Karma";
+"onboarding.skinType.combination.subtitle" = "Yağlı T bölgesi, kuru yanaklar";
+"onboarding.skinType.normal" = "Normal";
+"onboarding.skinType.normal.subtitle" = "Dengeli cilt";
+
+/* Concern Selection */
+"onboarding.concerns.title" = "Sizi endişelendiren nedir?";
+"onboarding.concerns.subtitle" = "Odaklanmak istediklerinizi seçin.";
+"onboarding.concerns.continue" = "Devam Et";
+"onboarding.concerns.customPlaceholder" = "Kendi endişenizi yazın...";
+
+/* Concern Options */
+"onboarding.concerns.acne" = "Akne";
+"onboarding.concerns.acne.subtitle" = "Sivilce, beyaz noktalar";
+"onboarding.concerns.redness" = "Kızarıklık";
+"onboarding.concerns.redness.subtitle" = "Hassasiyet, yüz kızarması";
+"onboarding.concerns.blackheads" = "Siyah Noktalar";
+"onboarding.concerns.blackheads.subtitle" = "Tıkanmış gözenekler, yağ birikimi";
+"onboarding.concerns.largePores" = "Geniş Gözenekler";
+"onboarding.concerns.largePores.subtitle" = "Doku, belirgin gözenekler";
+"onboarding.concerns.sensitive" = "Hassas";
+"onboarding.concerns.sensitive.subtitle" = "Kolayca tahriş olan cilt";
+"onboarding.concerns.wrinkles" = "Kırışıklıklar";
+"onboarding.concerns.wrinkles.subtitle" = "İnce çizgiler, yaşlanma belirtileri";
+"onboarding.concerns.dryness" = "Kuruluk";
+"onboarding.concerns.dryness.subtitle" = "Pullanma, nemsiz cilt";
+"onboarding.concerns.none" = "Hiçbiri";
+"onboarding.concerns.none.subtitle" = "Özel bir endişe yok";
+
+/* Main Goal Selection */
+"onboarding.mainGoal.title" = "Ana hedefiniz nedir?";
+"onboarding.mainGoal.subtitle" = "Cilt bakımı rutininizin birincil odağını seçin.";
+"onboarding.mainGoal.continue" = "Devam Et";
+"onboarding.mainGoal.customPlaceholder" = "Kendi hedefinizi yazın...";
+
+/* Main Goal Options */
+"onboarding.mainGoal.healthierOverall" = "Genel olarak daha sağlıklı cilt";
+"onboarding.mainGoal.healthierOverall.subtitle" = "Daha iyi bir cilt için sağlam bir temel oluşturun";
+"onboarding.mainGoal.reduceBreakouts" = "Sivilceleri azaltmak";
+"onboarding.mainGoal.reduceBreakouts.subtitle" = "Akneleri temizleyin ve gelecekteki sivilceleri önleyin";
+"onboarding.mainGoal.sootheIrritation" = "Tahrişi yatıştırmak";
+"onboarding.mainGoal.sootheIrritation.subtitle" = "Kızarıklığı ve hassasiyeti dindirin";
+"onboarding.mainGoal.preventAging" = "Güneş hasarını önlemek";
+"onboarding.mainGoal.preventAging.subtitle" = "UV hasarına ve yaşlanmaya karşı koruyun";
+"onboarding.mainGoal.ageSlower" = "Daha yavaş yaşlanmak";
+"onboarding.mainGoal.ageSlower.subtitle" = "Hedeflenen bakımla yaşlanmayı yavaşlatın";
+"onboarding.mainGoal.shinySkin" = "Parlak, ışıltılı cilt";
+"onboarding.mainGoal.shinySkin.subtitle" = "Işıldayan, sağlıklı bir parlaklık elde edin";
+
+/* Fitzpatrick Skin Tone */
+"onboarding.fitzpatrick.title" = "Cilt tonunuz nedir?";
+"onboarding.fitzpatrick.subtitle" = "Bu, cildiniz için doğru SPF ve UV korumasını önermemize yardımcı olur.";
+"onboarding.fitzpatrick.continue" = "Devam Et";
+
+/* Fitzpatrick Skin Tone Options */
+"onboarding.fitzpatrick.type1" = "Tip I - Çok Açık";
+"onboarding.fitzpatrick.type1.description" = "Her zaman yanar, asla bronzlaşmaz";
+"onboarding.fitzpatrick.type1.uvSensitivity" = "Aşırı yüksek";
+"onboarding.fitzpatrick.type2" = "Tip II - Açık";
+"onboarding.fitzpatrick.type2.description" = "Genellikle yanar, çok az bronzlaşır";
+"onboarding.fitzpatrick.type2.uvSensitivity" = "Yüksek";
+"onboarding.fitzpatrick.type3" = "Tip III - Hafif Zeytuni";
+"onboarding.fitzpatrick.type3.description" = "Bazen yanar, yavaş yavaş bronzlaşır";
+"onboarding.fitzpatrick.type3.uvSensitivity" = "Orta";
+"onboarding.fitzpatrick.type4" = "Tip IV - Orta Kahverengi";
+"onboarding.fitzpatrick.type4.description" = "Nadiren yanar, kolayca bronzlaşır";
+"onboarding.fitzpatrick.type4.uvSensitivity" = "Düşük";
+"onboarding.fitzpatrick.type5" = "Tip V - Koyu Kahverengi";
+"onboarding.fitzpatrick.type5.description" = "Çok nadiren yanar, çok kolay bronzlaşır";
+"onboarding.fitzpatrick.type5.uvSensitivity" = "Çok düşük";
+"onboarding.fitzpatrick.type6" = "Tip VI - Çok Koyu";
+"onboarding.fitzpatrick.type6.description" = "Asla yanmaz, çok kolay bronzlaşır";
+"onboarding.fitzpatrick.type6.uvSensitivity" = "Minimal";
+
+/* Age Range */
+"onboarding.ageRange.title" = "Yaş aralığınız nedir?";
+"onboarding.ageRange.subtitle" = "Bu, rutini cildinizin mevcut ihtiyaçlarına göre uyarlamamıza yardımcı olur.";
+"onboarding.ageRange.continue" = "Devam Et";
+
+/* Age Range Options */
+"onboarding.ageRange.teens" = "Gençler (13-19)";
+"onboarding.ageRange.teens.description" = "Korunma ve nazik bakıma odaklanın";
+"onboarding.ageRange.twenties" = "20'ler";
+"onboarding.ageRange.twenties.description" = "Sağlıklı alışkanlıklar edinin ve erken yaşlanmayı önleyin";
+"onboarding.ageRange.thirties" = "30'lar";
+"onboarding.ageRange.thirties.description" = "İlk yaşlanma belirtilerini hedef alın";
+"onboarding.ageRange.forties" = "40'lar";
+"onboarding.ageRange.forties.description" = "İnce çizgileri ve cilt dokusunu hedef alın";
+"onboarding.ageRange.fifties" = "50'ler";
+"onboarding.ageRange.fifties.description" = "Daha derin kırışıklıklar ve sıkılık kaybıyla mücadele edin";
+"onboarding.ageRange.sixtiesPlus" = "60+";
+"onboarding.ageRange.sixtiesPlus.description" = "Cilt sağlığını ve nem dengesini koruyun";
+
+/* Region/Climate */
+"onboarding.region.title" = "İkliminiz nasıl?";
+"onboarding.region.subtitle" = "Çevreniz, cildinizin UV maruziyetini ve nem ihtiyacını etkiler.";
+"onboarding.region.continue" = "Devam Et";
+
+/* Region Options */
+"onboarding.region.tropical" = "Tropikal";
+"onboarding.region.tropical.description" = "Yıl boyunca sıcak, nemli iklim";
+"onboarding.region.subtropical" = "Subtropikal";
+"onboarding.region.subtropical.description" = "Sıcak, nemli yazlar, ılıman kışlar";
+"onboarding.region.temperate" = "Ilıman";
+"onboarding.region.temperate.description" = "Orta sıcaklıklar, dört mevsim";
+"onboarding.region.continental" = "Karasal";
+"onboarding.region.continental.description" = "Sıcak yazlar, soğuk kışlar";
+"onboarding.region.mediterranean" = "Akdeniz";
+"onboarding.region.mediterranean.description" = "Sıcak, kuru yazlar, ılıman kışlar";
+"onboarding.region.arctic" = "Arktik/Soğuk";
+"onboarding.region.arctic.description" = "Çok soğuk, kuru iklim";
+"onboarding.region.desert" = "Çöl";
+"onboarding.region.desert.description" = "Düşük nemli, sıcak, kuru iklim";
+"onboarding.region.mountain" = "Dağ/Yüksek Rakım";
+"onboarding.region.mountain.description" = "Yüksek rakım, yoğun UV maruziyeti";
+
+/* Region UV Index */
+"onboarding.region.tropical.uvIndex" = "Çok Yüksek (8-11)";
+"onboarding.region.subtropical.uvIndex" = "Yüksek (6-8)";
+"onboarding.region.temperate.uvIndex" = "Orta (3-6)";
+"onboarding.region.continental.uvIndex" = "Orta ila Yüksek (4-7)";
+"onboarding.region.mediterranean.uvIndex" = "Yüksek (6-9)";
+"onboarding.region.arctic.uvIndex" = "Düşük ila Orta (1-4)";
+"onboarding.region.desert.uvIndex" = "Çok Yüksek (8-11)";
+"onboarding.region.mountain.uvIndex" = "Aşırı (9-12)";
+
+/* Region Humidity Level */
+"onboarding.region.tropical.humidity" = "Çok Yüksek";
+"onboarding.region.subtropical.humidity" = "Yüksek";
+"onboarding.region.temperate.humidity" = "Orta";
+"onboarding.region.continental.humidity" = "Düşük ila Orta";
+"onboarding.region.mediterranean.humidity" = "Düşük";
+"onboarding.region.arctic.humidity" = "Çok Düşük";
+"onboarding.region.desert.humidity" = "Çok Düşük";
+"onboarding.region.mountain.humidity" = "Düşük";
+
+/* Region Temperature Level */
+"onboarding.region.tropical.temperature" = "Sıcak ve Nemli";
+"onboarding.region.subtropical.temperature" = "Ilık ve Nemli";
+"onboarding.region.temperate.temperature" = "Ilıman";
+"onboarding.region.continental.temperature" = "Sıcak/Soğuk";
+"onboarding.region.mediterranean.temperature" = "Ilık ve Kuru";
+"onboarding.region.arctic.temperature" = "Çok Soğuk";
+"onboarding.region.desert.temperature" = "Sıcak ve Kuru";
+"onboarding.region.mountain.temperature" = "Serin ve Kuru";
+
+/* Routine Depth */
+"onboarding.routineDepth.title" = "Rutin Seviyesi";
+"onboarding.routineDepth.subtitle" = "Cilt bakımı rutininizin ne kadar detaylı olmasını istersiniz?";
+"onboarding.routineDepth.continue" = "Devam Et";
+
+/* Routine Depth Options */
+"onboarding.routineDepth.simple" = "Basit";
+"onboarding.routineDepth.simple.subtitle" = "Hızlı ve temel";
+"onboarding.routineDepth.simple.description" = "Yoğun sabahlar için mükemmel.";
+"onboarding.routineDepth.simple.stepCount" = "3-4 adım";
+"onboarding.routineDepth.simple.timeEstimate" = "~~3-5 dakika";
+"onboarding.routineDepth.simple.stepGuidance" = "3-4 temel adımla (temizleyici, nemlendirici, sadece sabahları güneş kremi ve gerekirse bir hedefe yönelik bakım) minimum bir rutin oluşturun";
+"onboarding.routineDepth.intermediate" = "Orta";
+"onboarding.routineDepth.intermediate.subtitle" = "Dengeli yaklaşım";
+"onboarding.routineDepth.intermediate.description" = "Dengeli bir rutin.";
+"onboarding.routineDepth.intermediate.stepCount" = "5-6 adım";
+"onboarding.routineDepth.intermediate.timeEstimate" = "~~6-8 dakika";
+"onboarding.routineDepth.intermediate.stepGuidance" = "Temizleyici, tonik/öz, serum, göz kremi (isteğe bağlı), nemlendirici ve güneş kremi (sadece sabahları) dahil 5-6 adımlı dengeli bir rutin oluşturun";
+"onboarding.routineDepth.advanced" = "İleri Düzey";
+"onboarding.routineDepth.advanced.subtitle" = "Kapsamlı bakım";
+"onboarding.routineDepth.advanced.description" = "Detaylı rutinleri sevenler için.";
+"onboarding.routineDepth.advanced.stepCount" = "7-9 adım";
+"onboarding.routineDepth.advanced.timeEstimate" = "~~10-15 dakika";
+"onboarding.routineDepth.advanced.stepGuidance" = "Çift temizleme (akşam), tonik, öz, birden fazla serum/bakım, göz kremi, nemlendirici, uyku maskesi/yağ (akşam) ve güneş kremi (sadece sabahları) dahil 7-9 adımlı kapsamlı bir rutin oluşturun";
+
+/* Preferences */
+"onboarding.preferences.title" = "Herhangi bir tercihiniz var mı?";
+"onboarding.preferences.subtitle" = "Bunlar isteğe bağlıdır ancak rutininizi daha iyi kişiselleştirmemize yardımcı olur.";
+"onboarding.preferences.continueWithPreferences" = "Tercihlerle Devam Et";
+"onboarding.preferences.skipForNow" = "Şimdilik Atla";
+"onboarding.preferences.continueWithoutAPI" = "API Çağrısı Olmadan Devam Et";
+
+/* Preference Toggles */
+"onboarding.preferences.fragranceFree.title" = "Sadece Parfümsüz";
+"onboarding.preferences.fragranceFree.subtitle" = "Eklenmiş koku içeren ürünlerden kaçının";
+"onboarding.preferences.sensitiveSkin.title" = "Hassas Cilde Uygun";
+"onboarding.preferences.sensitiveSkin.subtitle" = "Nazik, tahriş etmeyen formüller";
+"onboarding.preferences.natural.title" = "Doğal İçerikler";
+"onboarding.preferences.natural.subtitle" = "Bitki bazlı ve doğal bileşenleri tercih edin";
+"onboarding.preferences.crueltyFree.title" = "Hayvanlar Üzerinde Test Edilmemiştir";
+"onboarding.preferences.crueltyFree.subtitle" = "Hayvanlar üzerinde test yapılmayan ürünler";
+"onboarding.preferences.vegan.title" = "Vegan Dostu";
+"onboarding.preferences.vegan.subtitle" = "Hayvansal kaynaklı içerik içermez";
+
+/* Cycle Setup */
+"onboarding.cycle.title" = "Döngünüzü Takip Edin";
+"onboarding.cycle.subtitle" = "Cilt bakımınız sizinle birlikte gelişir — rutinler her faza uyum sağlar.";
+"onboarding.cycle.lastPeriodQuestion" = "Son adet döneminiz ne zaman başladı?";
+"onboarding.cycle.averageCycleLength" = "Ortalama döngü uzunluğu";
+"onboarding.cycle.cycleLengthValue" = "%d gün";
+"onboarding.cycle.cycleLengthRange" = "Tipik aralık: 21-35 gün";
+"onboarding.cycle.periodLength" = "Adet süresi";
+"onboarding.cycle.periodLengthValue" = "%d gün";
+"onboarding.cycle.periodLengthRange" = "Tipik aralık: 3-7 gün";
+"onboarding.cycle.privacyNote" = "Döngü verileriniz cihazınızda özel kalır";
+"onboarding.cycle.enableAdaptive" = "Döngüye Uyumlu Rutinleri Etkinleştir";
+"onboarding.cycle.skipForNow" = "Şimdilik Atla";
+"onboarding.cycle.selectDate" = "Tarih Seç";
+
+/* Cycle Setup Alert */
+"onboarding.cycle.alert.title" = "Varsayılan Ortalamalar Kullanılsın mı?";
+"onboarding.cycle.alert.message" = "Bu varsayılan ortalamaları (28 günlük döngü, 5 günlük adet süresi) kullanmak ister misiniz, yoksa döngünüze uyması için önce güncellemek mi istersiniz?";
+"onboarding.cycle.alert.editFirst" = "Önce Düzenle";
+"onboarding.cycle.alert.continue" = "Devam Et";
+
+/* Lifestyle Questions */
+"onboarding.lifestyle.title" = "Yaşam Tarzı Soruları";
+"onboarding.lifestyle.subtitle" = "Daha kişiselleştirilmiş bir rutin oluşturmak için günlük alışkanlıklarınızı ve tercihlerinizi anlamamıza yardımcı olun.";
+"onboarding.lifestyle.back" = "Geri";
+
+/* Lifestyle Sections */
+"onboarding.lifestyle.section.lifestyle" = "Yaşam Tarzı";
+"onboarding.lifestyle.section.skinHabits" = "Cilt Alışkanlıkları ve Hedefleri";
+"onboarding.lifestyle.section.productPreferences" = "Ürün Tercihleri";
+"onboarding.lifestyle.section.sensitivity" = "Hassasiyet ve Güneş";
+
+/* Lifestyle Questions */
+"onboarding.lifestyle.question.sleepQuality" = "Uyku Kalitesi";
+"onboarding.lifestyle.question.outdoorHours" = "Dışarıda Geçirilen Süre (saat/gün)";
+"onboarding.lifestyle.question.smoke" = "Sigara kullanıyor musunuz?";
+"onboarding.lifestyle.question.alcohol" = "Alkol kullanıyor musunuz?";
+"onboarding.lifestyle.question.exercise" = "Egzersiz Sıklığı";
+"onboarding.lifestyle.question.routineDepth" = "İstenen Rutin Derinliği";
+"onboarding.lifestyle.question.fragranceFree" = "Sadece Parfümsüz";
+"onboarding.lifestyle.question.naturalPreference" = "Doğal/Temiz formülleri tercih etme";
+"onboarding.lifestyle.question.sensitiveSkin" = "Hassas cilt";
+"onboarding.lifestyle.question.sunResponse" = "Güneşte cildiniz...";
+
+/* Sleep Quality Options */
+"onboarding.lifestyle.sleepQuality.poor" = "Kötü";
+"onboarding.lifestyle.sleepQuality.average" = "Ortalama";
+"onboarding.lifestyle.sleepQuality.good" = "İyi";
+
+/* Exercise Frequency Options */
+"onboarding.lifestyle.exerciseFreq.none" = "Hiçbiri";
+"onboarding.lifestyle.exerciseFreq.oneToTwo" = "Haftada 1–2";
+"onboarding.lifestyle.exerciseFreq.threeToFour" = "Haftada 3–4";
+"onboarding.lifestyle.exerciseFreq.fivePlus" = "Haftada 5+";
+
+/* Routine Depth Options */
+"onboarding.lifestyle.routineDepth.minimal" = "2–3 adım";
+"onboarding.lifestyle.routineDepth.standard" = "3–4 adım";
+"onboarding.lifestyle.routineDepth.detailed" = "4–5 adım";
+
+/* Sun Response Options */
+"onboarding.lifestyle.sunResponse.rarely" = "Nadiren yanar";
+"onboarding.lifestyle.sunResponse.sometimes" = "Bazen yanar";
+"onboarding.lifestyle.sunResponse.easily" = "Kolayca yanar";
+
+/* Routine Loading */
+"onboarding.loading.thinking" = "Düşünüyoruz...";
+"onboarding.loading.analyzingSkinType" = "Cilt tipiniz analiz ediliyor…";
+"onboarding.loading.processingConcerns" = "Endişeleriniz işleniyor…";
+"onboarding.loading.evaluatingGoal" = "Ana hedefiniz değerlendiriliyor…";
+"onboarding.loading.assessingEnvironment" = "Çevresel faktörler değerlendiriliyor…";
+"onboarding.loading.preparingResults" = "Rutin sonuçlarınız hazırlanıyor…";
+"onboarding.loading.creatingSlots" = "Ürün slotları oluşturuluyor…";
+"onboarding.loading.optimizing" = "Tercihlerinize göre optimize ediliyor…";
+"onboarding.loading.finalizing" = "Neredeyse bitti! Sonuçlarınız tamamlanıyor…";
+
+/* Common Actions */
+"onboarding.common.continue" = "Devam Et";
+"onboarding.common.next" = "İleri";
+"onboarding.common.skip" = "Atla";
+"onboarding.common.back" = "Geri";
+"onboarding.common.getStarted" = "Hemen Başlayın";
+
+/* Flow Progress */
+"onboarding.flow.stepProgress" = "%d / %d";
+"onboarding.flow.stepSkinType" = "Cilt Tipi";
+"onboarding.flow.stepConcerns" = "Kaygılar";
+"onboarding.flow.stepMainGoal" = "Ana Hedef";
+"onboarding.flow.stepSkinTone" = "Cilt Tonu";
+"onboarding.flow.stepAgeRange" = "Yaş Aralığı";
+"onboarding.flow.stepRegion" = "Bölge";
+"onboarding.flow.stepRoutineLevel" = "Rutin Seviyesi";
+"onboarding.flow.stepCycleSetup" = "Döngü Kurulumu";
+"onboarding.flow.stepPreferences" = "Tercihler";
+"onboarding.flow.stepAnalyzing" = "Analiz Ediliyor";
+"onboarding.flow.stepResults" = "Sonuçlar";

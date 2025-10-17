@@ -1,26 +1,25 @@
-/* 
-  Completions.strings (Turkish)
-  ManCare - Tamamlama görünümleri ve zaman çizelgesi
+/* Completions.strings (Turkish)
+ManCare - Completion views and timeline
 */
 
 /* General */
-"completions.productsUsed" = "Kullanılan ürünler";
-"completions.routinesCompleted" = "Tamamlanan rutinler";
+"completions.productsUsed" = "Kullanılan Ürünler";
+"completions.routinesCompleted" = "Tamamlanan Rutinler";
 "completions.morningRoutine" = "Sabah rutini";
 "completions.eveningRoutine" = "Akşam rutini";
-"completions.noProductsUsed" = "Kullanılan ürün yok";
-"completions.noRoutinesCompleted" = "Tamamlanan rutin yok";
-"completions.completeStepsToSee" = "Adımları tamamlayın ve burada görün";
+"completions.noProductsUsed" = "Henüz ürün kullanılmadı";
+"completions.noRoutinesCompleted" = "Henüz rutin tamamlanmadı";
+"completions.completeStepsToSee" = "Adımları tamamladığınızda burada görebilirsiniz";
 
 /* Timeline */
 "completions.timeline" = "Zaman Çizelgesi";
-"completions.journal" = "Günlük";
-"completions.insights" = "İçgörüler";
+"completions.journal" = "Cilt Günlüğü";
+"completions.insights" = "Analizler";
 
 /* Insights */
-"completions.yourInsights" = "İçgörüleriniz";
+"completions.yourInsights" = "Analizleriniz";
 "completions.lastNDays" = "Son 30 gün";
-"completions.currentStreak" = "Mevcut Seri";
+"completions.currentStreak" = "Güncel Seri";
 "completions.dayInRow" = "Gün üst üste";
 "completions.daysInRow" = "Gün üst üste";
 "completions.weekly" = "Haftalık";
@@ -28,13 +27,12 @@
 "completions.morning" = "Sabah";
 "completions.evening" = "Akşam";
 "completions.daysCompleted" = "gün tamamlandı";
-"completions.loadingInsights" = "İçgörüler yükleniyor...";
-"completions.consistencyInsight" = "Tutarlılık İçgörüsü";
+"completions.loadingInsights" = "Analizler yükleniyor...";
+"completions.consistencyInsight" = "Süreklilik Analizi";
 "completions.adaptationImpact" = "Adaptasyon Etkisi";
-"completions.thisWeekVsLastWeek" = "bu hafta vs geçen hafta";
+"completions.thisWeekVsLastWeek" = "bu hafta geçen haftaya göre";
 
 /* Journal */
 "completions.skinJournal" = "Cilt Günlüğü";
-"completions.seeYourSkinGlowEvolve" = "Cilt parlaklığınızın gelişimini görün";
-"completions.discoverPatterns" = "Cilt bakım yolculuğunuzda kalıpları ve trendleri keşfedin";
-
+"completions.seeYourSkinGlowEvolve" = "Cildinizin ışıltısının nasıl geliştiğini izleyin";
+"completions.discoverPatterns" = "Cilt bakımı yolculuğunuzdaki desenleri ve trendleri keşfedin";

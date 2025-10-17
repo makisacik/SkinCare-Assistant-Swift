@@ -26,7 +26,7 @@ struct CreateRoutineView: View {
                         // Spacer removed - now handled by page indicator in OnboardingFlowView
                         
                         // Main headline
-                        Text("Create Your Routine")
+                        Text(L10n.Onboarding.CreateRoutine.title)
                             .font(.system(size: 32, weight: .bold, design: .serif))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .multilineTextAlignment(.center)
@@ -47,7 +47,7 @@ struct CreateRoutineView: View {
                         .padding(.horizontal, 20)
                     
                     // Descriptive text below image
-                    Text("Glowie personalizes your morning and night routines based on your skin type and environment.")
+                    Text(L10n.Onboarding.CreateRoutine.description)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                         .multilineTextAlignment(.center)
@@ -64,7 +64,7 @@ struct CreateRoutineView: View {
                         onNext()
                     } label: {
                         HStack(spacing: 8) {
-                            Text("Next")
+                            Text(L10n.Onboarding.CreateRoutine.next)
                                 .font(ThemeManager.shared.theme.typo.title.weight(.semibold))
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 16, weight: .semibold))

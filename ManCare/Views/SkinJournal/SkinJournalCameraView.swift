@@ -38,7 +38,7 @@ struct SkinJournalCameraView: View {
                         .scaleEffect(1.5)
                         .tint(.white)
 
-                    Text("Initializing camera...")
+                    Text(L10n.SkinJournal.Camera.initializing)
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(.white)
                 }
@@ -60,7 +60,7 @@ struct SkinJournalCameraView: View {
                         .scaleEffect(1.5)
                         .tint(.white)
 
-                    Text("Analyzing photo...")
+                    Text(L10n.SkinJournal.Camera.analyzing)
                         .font(ThemeManager.shared.theme.typo.body)
                         .foregroundColor(.white)
                 }
@@ -106,7 +106,7 @@ struct SkinJournalCameraView: View {
                         HStack(spacing: 8) {
                             Image(systemName: showGhostOverlay ? "eye.slash.fill" : "eye.fill")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text(showGhostOverlay ? "Hide Guide" : "Show Guide")
+                            Text(showGhostOverlay ? L10n.SkinJournal.Camera.hideGuide : L10n.SkinJournal.Camera.showGuide)
                                 .font(ThemeManager.shared.theme.typo.caption.weight(.semibold))
                         }
                         .foregroundColor(.white)
@@ -127,12 +127,12 @@ struct SkinJournalCameraView: View {
                             .font(.system(size: 32))
                             .foregroundColor(.white)
                         
-                        Text("Align your face with the guide")
+                        Text(L10n.SkinJournal.Camera.alignFace)
                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
                         
-                        Text("Keep your face centered in the oval")
+                        Text(L10n.SkinJournal.Camera.keepCentered)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(.white.opacity(0.8))
                             .multilineTextAlignment(.center)

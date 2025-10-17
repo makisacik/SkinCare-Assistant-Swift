@@ -166,7 +166,7 @@ struct GuideDetailView: View {
                         Image(systemName: "clock")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        Text("\(guide.readMinutes) min read")
+                        Text(L10n.Discover.Guides.minRead(guide.readMinutes))
                             .font(.subheadline)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -271,7 +271,7 @@ struct GuideDetailView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     ForEach(items, id: \.self) { item in
                         HStack(alignment: .firstTextBaseline, spacing: 12) {
-                            Text("•")
+                            Text(L10n.Discover.Detail.listBullet)
                                 .font(.body)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             Text(LocalizedStringKey(item))

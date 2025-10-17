@@ -1,0 +1,136 @@
+/* 
+  SkinJournal.strings (English)
+  ManCare - Skin Journal feature
+*/
+
+/* Daily Mood Tracking Card */
+"skinJournal.dailyLog.title" = "Daily Skin Log";
+"skinJournal.dailyLog.capture" = "Capture your skin today";
+"skinJournal.dailyLog.completed" = "Completed for today";
+
+/* Skin Journey Card */
+"skinJournal.journey.title" = "Skin Journey";
+"skinJournal.journey.titleBadge" = "SKIN JOURNEY";
+"skinJournal.journey.tagline" = "See your glow evolve";
+"skinJournal.journey.trackProgress" = "Track your skin progress";
+"skinJournal.journey.trackProgressWithSelfies" = "Track your skin progress with selfies and notes";
+"skinJournal.journey.moreOnJournal" = "More on journal";
+"skinJournal.journey.mood" = "Mood";
+"skinJournal.journey.viewJournal" = "View Journal";
+"skinJournal.journey.startTracking" = "Start tracking your skin";
+"skinJournal.journey.takeProgressSelfies" = "Take progress selfies and journal entries";
+"skinJournal.journey.addFirstEntry" = "Add First Entry";
+"skinJournal.journey.entriesCount" = "%d entr%@";
+"skinJournal.journey.entrySuffix" = "y";
+"skinJournal.journey.entriesSuffix" = "ies";
+"skinJournal.journey.addMoreEntries" = "Add More Entries";
+"skinJournal.journey.addAtLeastTwoPhotos" = "Add at least 2 photos to start comparing";
+
+/* Premium Features */
+"skinJournal.premium.title" = "Premium Feature";
+"skinJournal.premium.description" = "Track your skin journey with progress photos and detailed entries";
+"skinJournal.premium.upgrade" = "Upgrade to Premium";
+"skinJournal.premium.tryFree" = "Try Premium Free for 7 Days";
+
+/* Timeline Features */
+"skinJournal.timeline.title" = "Skin Journey";
+"skinJournal.timeline.compare" = "Compare";
+"skinJournal.timeline.startJourney" = "Start Your Skin Journey";
+"skinJournal.timeline.entries" = "Entries";
+"skinJournal.timeline.dayStreak" = "Day Streak";
+"skinJournal.timeline.searchNotes" = "Search notes...";
+"skinJournal.timeline.before" = "Before";
+"skinJournal.timeline.after" = "After";
+"skinJournal.timeline.selectEntry" = "Select Entry";
+
+/* Comparison Demo */
+"skinJournal.demo.visualTimeline" = "Visual timeline of changes";
+"skinJournal.demo.moodCorrelation" = "Mood & skin correlation";
+
+/* Add Entry View */
+"skinJournal.addEntry.title" = "Add Entry";
+"skinJournal.addEntry.back" = "Back";
+"skinJournal.addEntry.save" = "Save";
+"skinJournal.addEntry.yourPhoto" = "Your Photo";
+"skinJournal.addEntry.howAreYouFeeling" = "How are you feeling?";
+"skinJournal.addEntry.selectMood" = "Select your mood for today";
+"skinJournal.addEntry.skinFeel" = "Skin Feel";
+"skinJournal.addEntry.describeSkinFeel" = "Describe how your skin feels";
+"skinJournal.addEntry.analyzingPhoto" = "Analyzing your photo...";
+"skinJournal.addEntry.takingAMoment" = "This may take a moment";
+"skinJournal.addEntry.noPhotoCaptured" = "No photo captured";
+"skinJournal.addEntry.tagPrefix" = "+%d";
+
+/* Comparison View */
+"skinJournal.comparison.title" = "Compare Progress";
+"skinJournal.comparison.close" = "Close";
+"skinJournal.comparison.view" = "View";
+"skinJournal.comparison.daysApart" = "%d day%@ apart";
+"skinJournal.comparison.daySuffix" = "";
+"skinJournal.comparison.daysSuffix" = "s";
+"skinJournal.comparison.skinFeel" = "Skin Feel";
+"skinJournal.comparison.before" = "Before";
+"skinJournal.comparison.after" = "After";
+"skinJournal.comparison.noTags" = "No tags";
+"skinJournal.comparison.selectEntries" = "Select entries to compare";
+"skinJournal.comparison.tagBullet" = "• %@";
+
+/* Camera View */
+"skinJournal.camera.initializing" = "Initializing camera...";
+"skinJournal.camera.analyzing" = "Analyzing photo...";
+"skinJournal.camera.alignFace" = "Align your face with the guide";
+"skinJournal.camera.keepCentered" = "Keep your face centered in the oval";
+"skinJournal.camera.hideGuide" = "Hide Guide";
+"skinJournal.camera.showGuide" = "Show Guide";
+
+/* Skin Feel Tags */
+"skinJournal.tag.oily" = "Oily";
+"skinJournal.tag.dry" = "Dry";
+"skinJournal.tag.smooth" = "Smooth";
+"skinJournal.tag.rough" = "Rough";
+"skinJournal.tag.irritated" = "Irritated";
+"skinJournal.tag.calm" = "Calm";
+"skinJournal.tag.glowing" = "Glowing";
+"skinJournal.tag.dull" = "Dull";
+"skinJournal.tag.sensitive" = "Sensitive";
+"skinJournal.tag.wrinkles" = "Wrinkles";
+"skinJournal.tag.dryness" = "Dryness";
+
+/* Mood Tags */
+"skinJournal.mood.sleep" = "Sleep";
+"skinJournal.mood.sun" = "Sun";
+"skinJournal.mood.diet" = "Diet";
+"skinJournal.mood.hydration" = "Hydration";
+"skinJournal.mood.stress" = "Stress";
+"skinJournal.mood.exercise" = "Exercise";
+"skinJournal.mood.newProduct" = "New Product";
+"skinJournal.mood.sleepQuality" = "Sleep Quality";
+
+/* Image Analysis Results */
+"skinJournal.analysis.notAnalyzed" = "Not analyzed";
+"skinJournal.analysis.darkerAppearance" = "Darker appearance";
+"skinJournal.analysis.moderateTone" = "Moderate tone";
+"skinJournal.analysis.brightAppearance" = "Bright appearance";
+"skinJournal.analysis.veryBright" = "Very bright";
+"skinJournal.analysis.normal" = "Normal";
+"skinJournal.analysis.unableToAnalyze" = "Unable to analyze";
+"skinJournal.analysis.noFaceDetected" = "No face detected - ensure photo shows face clearly";
+"skinJournal.analysis.evenSkinTone" = "Even skin tone";
+"skinJournal.analysis.mostlyEvenSkinTone" = "Mostly even with minor variations";
+"skinJournal.analysis.someUnevenness" = "Some unevenness detected";
+"skinJournal.analysis.significantVariation" = "Significant variation - possible redness or discoloration";
+"skinJournal.analysis.similarBrightness" = "Similar brightness";
+"skinJournal.analysis.slightlyBrighter" = "Slightly brighter";
+"skinJournal.analysis.noticeablyBrighter" = "Noticeably brighter";
+"skinJournal.analysis.muchBrighter" = "Much brighter";
+"skinJournal.analysis.slightlyDarker" = "Slightly darker";
+"skinJournal.analysis.noticeablyDarker" = "Noticeably darker";
+"skinJournal.analysis.muchDarker" = "Much darker";
+
+/* Errors */
+"skinJournal.error.photoSaveFailed" = "Failed to save photo";
+"skinJournal.error.saveFailed" = "Failed to save journal entry";
+"skinJournal.error.updateFailed" = "Failed to update journal entry";
+"skinJournal.error.deleteFailed" = "Failed to delete journal entry";
+"skinJournal.error.entryNotFound" = "Journal entry not found";
+

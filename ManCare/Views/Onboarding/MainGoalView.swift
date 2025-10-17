@@ -13,23 +13,23 @@ enum MainGoal: String, CaseIterable, Identifiable, Codable {
     
     var title: String {
         switch self {
-        case .healthierOverall: return "Healthier skin overall"
-        case .reduceBreakouts: return "Reduce breakouts"
-        case .sootheIrritation: return "Soothe irritation"
-        case .preventAging: return "Prevent sun damage"
-        case .ageSlower: return "Age slower"
-        case .shinySkin: return "Shiny, glowing skin"
+        case .healthierOverall: return L10n.Onboarding.MainGoalTypes.healthierOverall
+        case .reduceBreakouts: return L10n.Onboarding.MainGoalTypes.reduceBreakouts
+        case .sootheIrritation: return L10n.Onboarding.MainGoalTypes.sootheIrritation
+        case .preventAging: return L10n.Onboarding.MainGoalTypes.preventAging
+        case .ageSlower: return L10n.Onboarding.MainGoalTypes.ageSlower
+        case .shinySkin: return L10n.Onboarding.MainGoalTypes.shinySkin
         }
     }
     
     var subtitle: String {
         switch self {
-        case .healthierOverall: return "Build a solid foundation for better skin"
-        case .reduceBreakouts: return "Clear acne and prevent future breakouts"
-        case .sootheIrritation: return "Calm redness and sensitivity"
-        case .preventAging: return "Protect against UV damage and aging"
-        case .ageSlower: return "Slow down aging with targeted care"
-        case .shinySkin: return "Achieve a radiant, healthy glow"
+        case .healthierOverall: return L10n.Onboarding.MainGoalTypes.healthierOverallSubtitle
+        case .reduceBreakouts: return L10n.Onboarding.MainGoalTypes.reduceBreakoutsSubtitle
+        case .sootheIrritation: return L10n.Onboarding.MainGoalTypes.sootheIrritationSubtitle
+        case .preventAging: return L10n.Onboarding.MainGoalTypes.preventAgingSubtitle
+        case .ageSlower: return L10n.Onboarding.MainGoalTypes.ageSlowerSubtitle
+        case .shinySkin: return L10n.Onboarding.MainGoalTypes.shinySkinSubtitle
         }
     }
     
@@ -72,10 +72,10 @@ struct MainGoalView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Title section
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("What's your main goal?")
+                        Text(L10n.Onboarding.MainGoal.title)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        Text("Choose the primary focus for your skincare routine.")
+                        Text(L10n.Onboarding.MainGoal.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -96,7 +96,7 @@ struct MainGoalView: View {
                                 }
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel(Text(goal.title))
-                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityHint(Text(L10n.Onboarding.SkinType.tapToSelect))
                                 .accessibilityAddTraits(selection == goal ? .isSelected : [])
                         }
                     }
@@ -107,7 +107,7 @@ struct MainGoalView: View {
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(isEditingCustomGoal || !customGoal.isEmpty ? ThemeManager.shared.theme.palette.primary : ThemeManager.shared.theme.palette.secondary)
                         
-                    TextField("Type your own goal...", text: $customGoal, onEditingChanged: { editing in
+                    TextField(L10n.Onboarding.MainGoal.customPlaceholder, text: $customGoal, onEditingChanged: { editing in
                         isEditingCustomGoal = editing
                         // Clear card selection when text field is tapped
                         if editing {
@@ -149,7 +149,7 @@ struct MainGoalView: View {
                     // If a card is selected, it overrides the custom text
                     onContinue(selection, customGoal.trimmingCharacters(in: .whitespacesAndNewlines))
                 } label: {
-                    Text("Continue")
+                    Text(L10n.Onboarding.MainGoal.continue)
                 }
                 .buttonStyle(PrimaryButtonStyle())
                 .disabled(!isContinueEnabled)

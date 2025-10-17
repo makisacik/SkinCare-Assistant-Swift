@@ -15,18 +15,18 @@ struct RoutineResultSummaryCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Your Profile Summary")
+            Text(L10n.Routines.ResultSummary.title)
                 .font(.system(size: 24, weight: .bold))
                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
             
             VStack(spacing: 12) {
-                ProfileRow(title: "Skin Type", value: skinType.title, iconName: skinType.iconName)
-                ProfileRow(title: "Main Goal", value: mainGoal.title, iconName: mainGoal.iconName)
+                ProfileRow(title: L10n.Routines.ResultSummary.skinType, value: skinType.title, iconName: skinType.iconName)
+                ProfileRow(title: L10n.Routines.ResultSummary.mainGoal, value: mainGoal.title, iconName: mainGoal.iconName)
                 
                 if !concerns.isEmpty {
                     ProfileRow(
-                        title: "Focus Areas",
-                        value: "\(concerns.count) selected",
+                        title: L10n.Routines.ResultSummary.focusAreas,
+                        value: L10n.Routines.ResultSummary.selectedCount(concerns.count),
                         iconName: "target"
                     )
                 }

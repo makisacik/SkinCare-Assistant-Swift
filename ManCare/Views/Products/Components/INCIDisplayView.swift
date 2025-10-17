@@ -15,14 +15,14 @@ struct INCIDisplayView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Ingredients (INCI)")
+            Text(L10n.Products.Detail.ingredients)
                 .font(.headline)
                 .foregroundColor(.primary)
             
             ForEach(Array(inciEntries.enumerated()), id: \.offset) { index, entry in
                 HStack(alignment: .top, spacing: 12) {
                     // Ingredient number
-                    Text("\(index + 1)")
+                    Text(L10n.Products.Detail.ingredientNumber(index + 1))
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .frame(width: 20, alignment: .center)
@@ -46,7 +46,7 @@ struct INCIDisplayView: View {
                         if let concerns = entry.concerns, !concerns.isEmpty {
                             VStack(alignment: .leading, spacing: 2) {
                                 ForEach(concerns, id: \.self) { concern in
-                                    Text("• \(concern)")
+                                    Text(L10n.Products.Detail.ingredientBullet(concern))
                                         .font(.caption2)
                                         .foregroundColor(.orange)
                                 }

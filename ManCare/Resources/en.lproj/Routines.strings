@@ -7,8 +7,59 @@
 "routines.title" = "Routines";
 "routines.morning" = "Morning Routine";
 "routines.evening" = "Evening Routine";
+"routines.weekly" = "Weekly Routine";
+"routines.morningOnly" = "Morning";
+"routines.eveningOnly" = "Evening";
+"routines.weeklyOnly" = "Weekly";
 "routines.create" = "Create New Routine";
 "routines.noRoutines" = "No routines yet";
+"routines.yourDailyRoutine" = "Your daily routine";
+"routines.myRoutines" = "My routines";
+"routines.tapToComplete" = "Tap on a routine to complete";
+"routines.today" = "Today";
+"routines.chooseRoutine" = "Choose Routine";
+"routines.selectActiveRoutine" = "Select your active routine";
+"routines.noSavedRoutines" = "No saved routines";
+"routines.saveFromDiscover" = "Save routines from the Discover tab to see them here";
+"routines.progressFormat" = "%d/%d %@";
+"routines.progressPercentage" = "%d%%";
+"routines.sectionSubtitleBullet" = "• %@";
+
+/* Steps */
+"routines.steps" = "Steps";
+"routines.completed" = "completed";
+"routines.stepsCount" = "%d steps";
+"routines.stepsCountSingle" = "%d step";
+"routines.products" = "products";
+"routines.productsCount" = "%d products";
+"routines.stepsCompleted" = "%d of %d steps completed";
+"routines.stepCompleted" = "Done";
+"routines.stepTapToComplete" = "Tap to complete";
+
+/* Step Frequency */
+"routines.frequency.daily" = "Daily";
+"routines.frequency.everyOtherDay" = "Every other day";
+"routines.frequency.twiceWeekly" = "2x per week";
+"routines.frequency.weekly" = "Weekly";
+"routines.frequency.custom" = "Custom";
+
+/* Step Frequency Descriptions */
+"routines.frequency.daily.description" = "Use every day";
+"routines.frequency.everyOtherDay.description" = "Use every other day";
+"routines.frequency.twiceWeekly.description" = "Use twice per week";
+"routines.frequency.weekly.description" = "Use once per week";
+"routines.frequency.custom.description" = "Set custom frequency";
+
+/* Generation Errors */
+"routines.generation.error.noRoutineToSave" = "No routine available to save";
+"routines.generation.error.missingSkinType" = "Please select your skin type";
+"routines.generation.error.missingConcerns" = "Please select at least one skin concern";
+"routines.generation.error.missingMainGoal" = "Please select your main skincare goal";
+"routines.generation.error.missingSkinTone" = "Please select your skin tone";
+"routines.generation.error.missingAgeRange" = "Please select your age range";
+"routines.generation.error.missingRegion" = "Please select your region";
+"routines.generation.error.generationFailed" = "Failed to generate routine";
+"routines.generation.error.saveFailed" = "Failed to save routine";
 
 /* Product Types / Step Titles */
 "routines.step.cleanser" = "Cleanser";
@@ -24,3 +75,520 @@
 "routines.step.eyeCream" = "Eye Cream";
 "routines.step.facialOil" = "Facial Oil";
 
+/* Routine Results */
+"routines.result.personalizedRoutine" = "YOUR PERSONALIZED ROUTINE";
+"routines.result.basedOnProfile" = "Based on your skin type and selected concerns";
+"routines.result.morningRoutine" = "Morning Routine";
+"routines.result.eveningRoutine" = "Evening Routine";
+"routines.result.loadingRoutine" = "Loading your routine...";
+"routines.result.startJourney" = "Start Your Journey";
+"routines.result.stepsCount" = "%d steps";
+"routines.result.stepsCountSingle" = "%d step";
+
+/* Adaptation */
+"routines.adaptation.cycleAdaptive" = "Cycle-Adaptive Routine";
+"routines.adaptation.automaticallyAdapts" = "Automatically adapts daily";
+"routines.adaptation.howItAdapts" = "How your routine adapts:";
+"routines.adaptation.adaptedToCycle" = "Routine adapted to your cycle";
+"routines.adaptation.enableCycleAdaptive" = "Enable Cycle-Adaptive Routines";
+"routines.adaptation.adaptiveMode" = "Adaptive Mode";
+"routines.adaptation.autoAdjust" = "Automatically adjust routine based on context";
+"routines.adaptation.adaptation" = "Adaptation";
+"routines.adaptation.whenEnabled" = "When enabled, your routine will adapt based on the selected context type.";
+"routines.adaptation.type" = "Type";
+"routines.adaptation.preview" = "Preview";
+"routines.adaptation.todaysAdaptation" = "Today's Adaptation";
+
+/* Cycle Adaptation Info */
+"routines.adaptation.cycle.info" = "Your routine will automatically adapt based on your cycle phase.\n\nCurrent Phase: %@ (Day %d)";
+"routines.adaptation.cycle.description" = "Your routine will adapt based on your menstruation cycle phase.";
+
+/* Cycle Phase Descriptions (for RoutineResultView) */
+"routines.adaptation.cycle.menstrualPhase" = "Menstrual Phase: Gentle care, skip harsh products";
+"routines.adaptation.cycle.follicularPhase" = "Follicular Phase: Perfect for treatments & new products";
+"routines.adaptation.cycle.ovulationPhase" = "Ovulation Phase: Maintain your routine, natural glow";
+"routines.adaptation.cycle.lutealPhase" = "Luteal Phase: Oil control & breakout prevention";
+
+/* Weather Adaptation Info */
+"routines.adaptation.weather.description" = "Your routine will adapt based on real-time weather including UV index, humidity, wind, and temperature. Location permission required.";
+
+/* Skin State Adaptation Info */
+"routines.adaptation.skinState.description" = "Your routine will adapt based on your current skin condition.";
+
+/* Adaptation Settings */
+"routines.adaptationSettings.title" = "Adaptation Settings";
+"routines.adaptationSettings.adaptationType" = "Adaptation Type";
+"routines.adaptationSettings.cancel" = "Cancel";
+"routines.adaptationSettings.save" = "Save";
+"routines.adaptationSettings.error" = "Error";
+"routines.adaptationSettings.ok" = "OK";
+"routines.adaptationSettings.cyclePreview" = "Your routine will be customized based on your current cycle phase, with emphasis on gentle care during sensitive phases and intensive treatments during resilient phases.";
+"routines.adaptationSettings.weatherPreview" = "Your routine will adapt based on real-time weather conditions including UV index, humidity, wind, and temperature. Get SPF recommendations, texture adjustments, and active ingredient warnings tailored to today's weather.";
+"routines.adaptationSettings.skinStatePreview" = "Your routine will respond to your current skin condition, adapting to breakouts, dryness, or sensitivity.";
+"routines.adaptationSettings.premiumRequired" = "Cycle adaptation requires a premium subscription";
+
+/* Detail View */
+"routines.detail.routineComplete" = "Routine Complete! 🎉";
+"routines.detail.greatJob" = "Great job taking care of your skin today!";
+"routines.detail.back" = "Back";
+
+/* Adaptation Detail */
+"routines.adaptationDetail.whyThis" = "Why this?";
+"routines.adaptationDetail.adaptationLevel" = "Adaptation Level";
+"routines.adaptationDetail.guidance" = "Guidance";
+"routines.adaptationDetail.source" = "Source";
+"routines.adaptationDetail.warnings" = "Warnings";
+"routines.adaptationDetail.originalInstructions" = "Original Instructions";
+
+/* Routine Detail */
+"routines.detail.stepDetails" = "Step Details";
+"routines.detail.adaptedRoutine" = "Adapted Routine";
+"routines.detail.whyThis" = "Why This?";
+
+/* Phase Briefing */
+"routines.phaseBriefing.dayOfTotal" = "Day %d of %d";
+"routines.phaseBriefing.cycleAdaptiveRoutines" = "Cycle-Adaptive Routines";
+"routines.phaseBriefing.personalizeForEachPhase" = "Personalize your routine for each phase";
+"routines.phaseBriefing.premium" = "Premium";
+
+/* Products */
+"routines.products.noProductAdded" = "No %@ Added";
+"routines.products.noProductsYet" = "You don't have any %@ products yet. Add one to get started!";
+"routines.products.scanProduct" = "Scan Product";
+"routines.products.scanDescription" = "Take a photo to automatically extract product information";
+"routines.products.addManually" = "Add Manually";
+"routines.products.addManuallyDescription" = "Enter product details manually";
+"routines.products.addNew" = "Add New %@";
+
+/* Editing */
+"routines.edit.title" = "Edit step details";
+"routines.edit.stepName" = "Step Name";
+"routines.edit.description" = "Description";
+"routines.edit.enterDescription" = "Enter step description...";
+"routines.edit.addNewStep" = "Add New Step";
+"routines.edit.addStepDescription" = "Add a new step to your %@ routine";
+"routines.edit.enterStepName" = "Enter step name";
+"routines.edit.editStep" = "Edit Step";
+"routines.edit.editedRoutineTitle" = "Edited Routine";
+"routines.edit.editedRoutineOneLiner" = "Your customized skincare routine";
+
+/* Mood Tracking */
+"routines.mood.title" = "How are you feeling today?";
+"routines.mood.description" = "Select your mood to track your skin journey";
+
+/* UV Index */
+"routines.uv.question" = "Do you want to see daily UV index here?";
+"routines.uv.description" = "See crucial information about the UV levels based on your location and skin characteristics.";
+"routines.uv.recommended" = "Recommended 50 SPF";
+
+/* Routine Editing */
+"routines.editing.title" = "Edit Routine";
+"routines.editing.save" = "Save";
+"routines.editing.add" = "Add";
+"routines.editing.noStepsYet" = "No Steps Yet";
+"routines.editing.addFirstStepDescription" = "Add your first step to build your %@ routine";
+"routines.editing.addFirstStep" = "Add First Step";
+"routines.editing.routineTitle" = "%@ Routine";
+"routines.editing.editedRoutineTitle" = "Edited Routine";
+"routines.editing.editedRoutineOneLiner" = "Your customized skincare routine";
+
+/* Routine Preview */
+"routines.preview.title" = "Preview Your Changes";
+"routines.preview.subtitle" = "Review your customized routine before saving";
+"routines.preview.saveChanges" = "Save Changes";
+"routines.preview.cancel" = "Cancel";
+"routines.preview.activeSteps" = "active steps";
+"routines.preview.amPm" = "AM & PM";
+"routines.preview.am" = "AM";
+"routines.preview.pm" = "PM";
+
+/* Weather Adaptation */
+"routines.weather.autoAdapt" = "Auto-adapt by weather/UV";
+"routines.weather.description" = "Get personalized recommendations based on real-time weather conditions in your area.";
+"routines.weather.uv" = "UV";
+"routines.weather.humidity" = "Humidity";
+"routines.weather.wind" = "Wind";
+"routines.weather.temp" = "Temp";
+"routines.weather.enableInSettings" = "Enable in Settings";
+"routines.weather.enableAdaptation" = "Enable Weather Adaptation";
+"routines.weather.adaptedRoutine" = "Weather-Adapted Routine";
+"routines.weather.currentConditions" = "Current conditions";
+"routines.weather.unableToEnable" = "Unable to enable: %@";
+"routines.weather.recommendedSPF" = "Recommended SPF";
+"routines.weather.temperature" = "Temperature";
+"routines.weather.windSpeed" = "Wind Speed";
+"routines.weather.details" = "Weather Details";
+"routines.weather.snow" = "Snow";
+"routines.weather.snowWarning" = "Yes - UV reflection risk";
+"routines.weather.uvIndex" = "UV Index: %d";
+"routines.weather.uvIndexTitle" = "UV Index";
+"routines.weather.environmentalConditions" = "Environmental Conditions";
+"routines.weather.todaysTips" = "Today's Tips";
+"routines.weather.level" = "Level: %d";
+"routines.weather.uvLevelDisplay" = "(%@)";
+"routines.weather.warnings" = "⚠️ Warnings";
+"routines.weather.warningBullet" = "• %@";
+"routines.weather.tipBullet" = "•";
+
+/* Completion View */
+"routines.completion.or" = "Or";
+"routines.completion.addYourProduct" = "+ Add your own product";
+"routines.completion.cycleAdapted" = "• Cycle Adapted";
+"routines.completion.basedOnWeather" = "• Based on Weather";
+
+/* Product Selection */
+"routines.productSelection.title" = "Attach Product";
+"routines.productSelection.subtitle" = "Choose a product for your %@ step";
+"routines.productSelection.searchPlaceholder" = "Search products...";
+"routines.productSelection.attach" = "Attach %@";
+"routines.productSelection.addNew" = "Add New Product";
+"routines.productSelection.perfectMatch" = "Perfect Match";
+"routines.productSelection.noCompatible" = "No Compatible Products";
+"routines.productSelection.noCompatibleDescription" = "You don't have any %@ products in your collection yet. Add one to attach it to this step.";
+"routines.productSelection.addType" = "Add %@";
+
+/* Companion Mode */
+"routines.companion.preparing" = "Preparing Companion Mode...";
+"routines.companion.loadingStep" = "Loading step...";
+"routines.companion.instructions" = "Instructions";
+"routines.companion.startTimer" = "Start Timer (%ds)";
+"routines.companion.done" = "Done";
+"routines.companion.skip" = "Skip";
+"routines.companion.pause" = "Pause";
+"routines.companion.resume" = "Resume";
+"routines.companion.proTips" = "Pro Tips";
+"routines.companion.adjust" = "Adjust";
+"routines.companion.complete" = "Routine Complete! 🎉";
+"routines.companion.stepsCompleted" = "You completed %d of %d steps";
+"routines.companion.doneForToday" = "This routine is done for today";
+"routines.companion.doAgain" = "Wanna do again?";
+"routines.companion.doAgainButton" = "Do Again";
+"routines.companion.totalTime" = "Total Time";
+"routines.companion.stepsSkipped" = "Steps Skipped";
+"routines.companion.completionRate" = "Completion Rate";
+"routines.companion.notification.timerComplete" = "Timer Complete";
+"routines.companion.notification.timeToApply" = "Time to apply %@";
+
+/* Cycle Promotion Banner */
+"routines.cyclePromotion.title" = "Adapt Your Routine to Your Cycle";
+"routines.cyclePromotion.subtitlePremium" = "Get personalized skincare for each phase";
+"routines.cyclePromotion.subtitleNonPremium" = "Premium feature - Upgrade to unlock";
+"routines.cyclePromotion.phaseGentle" = "Gentle";
+"routines.cyclePromotion.phaseActive" = "Active";
+"routines.cyclePromotion.phaseBalanced" = "Balanced";
+"routines.cyclePromotion.phaseControl" = "Control";
+"routines.cyclePromotion.enableCycleTracking" = "Enable Cycle Tracking";
+"routines.cyclePromotion.upgradeToPremium" = "Upgrade to Premium";
+"routines.cyclePromotion.alertTitle" = "Enable Cycle-Adaptive Routine?";
+
+/* Adaptation Briefing */
+"routines.adaptationBriefing.tips" = "Tips";
+
+/* Routine Result Summary */
+"routines.resultSummary.title" = "Your Profile Summary";
+"routines.resultSummary.skinType" = "Skin Type";
+"routines.resultSummary.mainGoal" = "Main Goal";
+"routines.resultSummary.focusAreas" = "Focus Areas";
+"routines.resultSummary.selectedCount" = "%d selected";
+
+/* Step Adaptation Badge */
+"routines.adaptationBadge.skip" = "Skip";
+"routines.adaptationBadge.reduce" = "Reduce";
+"routines.adaptationBadge.normal" = "Normal";
+"routines.adaptationBadge.emphasize" = "Emphasize";
+
+/* Cycle Card */
+"routines.cycleCard.dayNumber" = "Day %d";
+"routines.cycleCard.ofTotal" = "of %d";
+"routines.cycleCard.day" = "day";
+
+/* Default Product Type Descriptions */
+"routines.productType.description.cleanser" = "Removes dirt, oil, and makeup without stripping skin";
+"routines.productType.description.faceSerum" = "Targeted treatment for your specific skin concerns";
+"routines.productType.description.essence" = "Lightweight hydrating treatment that boosts absorption";
+"routines.productType.description.moisturizer" = "Provides essential hydration and skin barrier support";
+"routines.productType.description.sunscreen" = "Protects against UV damage and premature aging";
+"routines.productType.description.toner" = "Balances skin pH and preps for next steps";
+"routines.productType.description.exfoliator" = "Gently removes dead skin cells for smoother texture";
+"routines.productType.description.faceMask" = "Intensive treatment for deep nourishment";
+"routines.productType.description.eyeCream" = "Targets fine lines and dark circles around eyes";
+"routines.productType.description.facialOil" = "Nourishes and seals in moisture";
+"routines.productType.description.spotTreatment" = "Targets blemishes and problem areas";
+"routines.productType.description.retinol" = "Anti-aging treatment that promotes cell turnover";
+"routines.productType.description.vitaminC" = "Brightens and evens skin tone";
+"routines.productType.description.niacinamide" = "Minimizes pores and improves skin texture";
+"routines.productType.description.cleansingOil" = "Dissolves makeup and sunscreen effectively";
+"routines.productType.description.cleansingBalm" = "Melts away makeup and impurities";
+"routines.productType.description.micellarWater" = "Gentle no-rinse cleanser for sensitive skin";
+"routines.productType.description.makeupRemover" = "Removes makeup quickly and effectively";
+"routines.productType.description.faceWash" = "Daily facial cleanser for fresh clean skin";
+"routines.productType.description.faceSunscreen" = "Lightweight sun protection for face";
+"routines.productType.description.lipBalm" = "Keeps lips moisturized and protected";
+"routines.productType.description.shaveCream" = "Provides smooth glide for comfortable shaving";
+"routines.productType.description.aftershave" = "Soothes skin after shaving";
+"routines.productType.description.shaveGel" = "Cushions skin during shaving";
+"routines.productType.description.bodyLotion" = "Hydrates and softens body skin";
+"routines.productType.description.bodyWash" = "Cleanses and refreshes body";
+"routines.productType.description.bodySunscreen" = "Full body sun protection";
+"routines.productType.description.handCream" = "Moisturizes and protects hands";
+"routines.productType.description.facialMist" = "Refreshes and hydrates throughout the day";
+"routines.productType.description.chemicalPeel" = "Deep exfoliation for skin renewal";
+"routines.productType.description.shampoo" = "Cleanses hair and scalp";
+"routines.productType.description.conditioner" = "Softens and detangles hair";
+"routines.productType.description.hairOil" = "Nourishes and adds shine to hair";
+"routines.productType.description.hairMask" = "Deep conditioning treatment for hair";
+
+/* Default Product Type Why */
+"routines.productType.why.default" = "Essential step in your skincare routine";
+
+/* Default Product Type How */
+"routines.productType.how.default" = "Apply as directed on product packaging";
+
+/* Weather - UV Levels */
+"routines.weather.uvLevel.low" = "Low";
+"routines.weather.uvLevel.moderate" = "Moderate";
+"routines.weather.uvLevel.high" = "High";
+"routines.weather.uvLevel.extreme" = "Extreme";
+
+/* Weather - SPF Recommendations */
+"routines.weather.spf.30" = "SPF 30";
+"routines.weather.spf.3050" = "SPF 30-50";
+"routines.weather.spf.50plus" = "SPF 50+";
+
+/* Weather - Tips */
+"routines.weather.tip.activeSafe" = "Actives like retinoids are safe to use";
+"routines.weather.tip.antioxidant" = "Antioxidant serum recommended";
+"routines.weather.tip.reapply2h" = "Reapply sunscreen every 2 hours";
+"routines.weather.tip.addAntioxidant" = "Add antioxidant serum (Vit C, EGCG)";
+"routines.weather.tip.stayInShade" = "Stay in shade during peak hours (10am-4pm)";
+"routines.weather.tip.protectiveClothing" = "Wear protective clothing";
+"routines.weather.tip.addHydratingToner" = "Add hydrating toner or HA serum";
+"routines.weather.tip.avoidHeavyOils" = "Avoid thick occlusives or heavy oils";
+"routines.weather.tip.barrierCream" = "Apply barrier cream or balm";
+"routines.weather.tip.addCeramide" = "Add ceramide or squalane for barrier support";
+"routines.weather.tip.oilFree" = "Choose oil-free formulations";
+
+/* Weather - Warnings */
+"routines.weather.warning.avoidMorningActives" = "Avoid retinoids and acids in morning routine";
+"routines.weather.warning.skipActives" = "Skip retinoids and strong acids today";
+"routines.weather.warning.reapply" = "Reapply sunscreen every 1-2 hours";
+"routines.weather.warning.avoidOverExfoliating" = "Avoid over-exfoliating in dry conditions";
+"routines.weather.warning.skipHarshPeels" = "Skip harsh peels and strong retinoids";
+"routines.weather.warning.snowReflection" = "Snow reflects UV rays - treat as high UV day";
+
+/* Weather - Texture Adjustments */
+"routines.weather.texture.heavyMoisturizers" = "Use heavier moisturizers and occlusives";
+"routines.weather.texture.lightGel" = "Use lighter gel moisturizers";
+"routines.weather.texture.richProtective" = "Use richer, more protective moisturizers";
+"routines.weather.texture.lightMattifying" = "Use lighter, mattifying products";
+"routines.weather.productTexture" = "Product Texture";
+
+/* Cycle Phases */
+"routines.cycle.phase.menstrual" = "Menstrual";
+"routines.cycle.phase.follicular" = "Follicular";
+"routines.cycle.phase.ovulation" = "Ovulation";
+"routines.cycle.phase.luteal" = "Luteal";
+
+/* Cycle Phase Descriptions */
+"routines.cycle.phaseDesc.menstrual" = "Days 1-5";
+"routines.cycle.phaseDesc.follicular" = "Days 6-13";
+"routines.cycle.phaseDesc.ovulation" = "Days 14-16";
+"routines.cycle.phaseDesc.luteal" = "Days 17-28";
+
+/* Cycle Phase Skincare Tips */
+"routines.cycle.tip.menstrual" = "Your skin may be more sensitive. Focus on gentle, hydrating products and avoid harsh treatments.";
+"routines.cycle.tip.follicular" = "Your skin is glowing! This is a great time to try new products or treatments.";
+"routines.cycle.tip.ovulation" = "Skin looks its best! Maintain your routine and enjoy your natural glow.";
+"routines.cycle.tip.luteal" = "Oil production increases. Use lighter moisturizers and add clay masks to control shine.";
+
+/* Adaptation Types */
+"routines.adaptation.type.cycleTracking" = "Cycle Tracking";
+"routines.adaptation.type.seasonal" = "Seasonal";
+"routines.adaptation.type.skinState" = "Skin State";
+
+/* Adaptation Type Descriptions */
+"routines.adaptation.typeDesc.cycle" = "Adapt routine based on your menstruation cycle phase";
+"routines.adaptation.typeDesc.seasonal" = "Adapt routine based on weather and season";
+"routines.adaptation.typeDesc.skinState" = "Adapt routine based on current skin condition";
+
+/* Adaptation Origin */
+"routines.adaptation.origin.default" = "Default";
+"routines.adaptation.origin.aiRecommended" = "AI Recommended";
+"routines.adaptation.origin.custom" = "Custom";
+
+/* Session Status */
+"routines.companion.status.active" = "Active";
+"routines.companion.status.paused" = "Paused";
+"routines.companion.status.completed" = "Completed";
+"routines.companion.status.abandoned" = "Abandoned";
+
+/* Step Types */
+"routines.companion.stepType.instruction" = "Instruction";
+"routines.companion.stepType.timed" = "Timed";
+
+/* Tip Categories */
+"routines.tips.category.application" = "Application";
+"routines.tips.category.technique" = "Technique";
+"routines.tips.category.timing" = "Timing";
+"routines.tips.category.benefits" = "Benefits";
+"routines.tips.category.commonMistakes" = "Common Mistakes";
+"routines.tips.category.proTips" = "Pro Tips";
+
+/* Product Tips - Cleanser */
+"routines.tips.cleanser.gentleCircular.title" = "Gentle Circular Motion";
+"routines.tips.cleanser.gentleCircular.content" = "Use gentle circular motions when massaging your cleanser. This helps remove dirt and oil without irritating your skin.";
+"routines.tips.cleanser.dampSkin.title" = "Damp Skin First";
+"routines.tips.cleanser.dampSkin.content" = "Always apply cleanser to damp skin. This helps the product spread evenly and work more effectively.";
+"routines.tips.cleanser.thirtySecond.title" = "30-Second Rule";
+"routines.tips.cleanser.thirtySecond.content" = "Massage your cleanser for at least 30 seconds. This gives it time to break down makeup, sunscreen, and impurities.";
+"routines.tips.cleanser.avoidEye.title" = "Avoid Eye Area";
+"routines.tips.cleanser.avoidEye.content" = "Be careful around the delicate eye area. Use a separate gentle eye makeup remover for that region.";
+"routines.tips.cleanser.lukewarm.title" = "Lukewarm Water";
+"routines.tips.cleanser.lukewarm.content" = "Rinse with lukewarm water. Hot water can strip your skin of natural oils, while cold water won't remove the cleanser effectively.";
+
+/* Product Tips - Face Serum */
+"routines.tips.serum.patDontRub.title" = "Pat, Don't Rub";
+"routines.tips.serum.patDontRub.content" = "Gently pat your serum into your skin rather than rubbing. This helps the active ingredients penetrate better.";
+"routines.tips.serum.waitAbsorption.title" = "Wait for Absorption";
+"routines.tips.serum.waitAbsorption.content" = "Wait 1-2 minutes for your serum to fully absorb before applying moisturizer. This prevents pilling and ensures maximum effectiveness.";
+"routines.tips.serum.lessMore.title" = "Less is More";
+"routines.tips.serum.lessMore.content" = "Use only 2-3 drops of serum. More product doesn't mean better results and can cause irritation.";
+"routines.tips.serum.targetAreas.title" = "Target Problem Areas";
+"routines.tips.serum.targetAreas.content" = "Focus on areas that need the most attention, like fine lines, dark spots, or areas of concern.";
+"routines.tips.serum.morningEvening.title" = "Morning vs Evening";
+"routines.tips.serum.morningEvening.content" = "Use vitamin C serums in the morning and retinol serums at night for optimal results.";
+
+/* Product Tips - Moisturizer */
+"routines.tips.moisturizer.upward.title" = "Upward Motion";
+"routines.tips.moisturizer.upward.content" = "Apply moisturizer using upward, outward motions. This helps fight gravity and keeps your skin looking lifted.";
+"routines.tips.moisturizer.peaSized.title" = "Pea-Sized Amount";
+"routines.tips.moisturizer.peaSized.content" = "A pea-sized amount is usually enough for your face. Too much can clog pores and feel heavy.";
+"routines.tips.moisturizer.neckDeco.title" = "Neck and Décolletage";
+"routines.tips.moisturizer.neckDeco.content" = "Don't forget your neck and décolletage! These areas show signs of aging just like your face.";
+"routines.tips.moisturizer.lockMoisture.title" = "Lock in Moisture";
+"routines.tips.moisturizer.lockMoisture.content" = "Apply moisturizer while your skin is still slightly damp from cleansing. This helps lock in extra moisture.";
+"routines.tips.moisturizer.morningNight.title" = "Morning vs Night";
+"routines.tips.moisturizer.morningNight.content" = "Use lighter moisturizers in the morning and richer ones at night when your skin repairs itself.";
+
+/* Product Tips - Sunscreen */
+"routines.tips.sunscreen.quarter.title" = "Quarter Teaspoon Rule";
+"routines.tips.sunscreen.quarter.content" = "Use about a quarter teaspoon of sunscreen for your face. This ensures you get the full SPF protection.";
+"routines.tips.sunscreen.reapply.title" = "Reapply Every 2 Hours";
+"routines.tips.sunscreen.reapply.content" = "Reapply sunscreen every 2 hours when outdoors. Even water-resistant formulas need regular reapplication.";
+"routines.tips.sunscreen.ears.title" = "Don't Forget Ears";
+"routines.tips.sunscreen.ears.content" = "Apply sunscreen to your ears, neck, and any exposed skin. These areas are often forgotten but still need protection.";
+"routines.tips.sunscreen.waitMakeup.title" = "Wait Before Makeup";
+"routines.tips.sunscreen.waitMakeup.content" = "Wait 2-3 minutes after applying sunscreen before putting on makeup. This prevents pilling and ensures even coverage.";
+"routines.tips.sunscreen.yearRound.title" = "Year-Round Protection";
+"routines.tips.sunscreen.yearRound.content" = "Wear sunscreen every day, even in winter and on cloudy days. UV rays can penetrate clouds and cause damage.";
+
+/* Product Tips - Face Sunscreen */
+"routines.tips.faceSunscreen.gentle.title" = "Gentle Application";
+"routines.tips.faceSunscreen.gentle.content" = "Use gentle patting motions when applying face sunscreen. This prevents tugging on delicate facial skin.";
+"routines.tips.faceSunscreen.underMakeup.title" = "Under Makeup";
+"routines.tips.faceSunscreen.underMakeup.content" = "Face sunscreen works great under makeup. Look for formulas labeled 'primer' or 'makeup-friendly'.";
+"routines.tips.faceSunscreen.tzone.title" = "T-Zone Focus";
+"routines.tips.faceSunscreen.tzone.content" = "Pay extra attention to your T-zone (forehead, nose, chin) as these areas tend to be oilier and need more protection.";
+"routines.tips.faceSunscreen.nonComedogenic.title" = "Non-Comedogenic";
+"routines.tips.faceSunscreen.nonComedogenic.content" = "Choose non-comedogenic face sunscreens to avoid clogging pores and causing breakouts.";
+"routines.tips.faceSunscreen.hairline.title" = "Blend to Hairline";
+"routines.tips.faceSunscreen.hairline.content" = "Blend sunscreen all the way to your hairline and jawline. Don't stop at obvious boundaries.";
+
+/* Fallback Routine Titles */
+"routines.fallback.title.morningCleanser" = "Gentle Cleanser";
+"routines.fallback.title.morningToner" = "Toner";
+"routines.fallback.title.morningMoisturizer" = "Moisturizer";
+"routines.fallback.title.morningSunscreen" = "Sunscreen";
+"routines.fallback.title.eveningCleanser" = "Gentle Cleanser";
+"routines.fallback.title.eveningSerum" = "Face Serum";
+"routines.fallback.title.eveningMoisturizer" = "Night Moisturizer";
+
+/* Fallback Routine Descriptions */
+"routines.fallback.desc.morningCleanser" = "Oil-free gel cleanser – reduces shine, clears pores";
+"routines.fallback.desc.morningToner" = "Balances pH and prepares skin for next steps";
+"routines.fallback.desc.morningMoisturizer" = "Lightweight gel moisturizer – hydrates without greasiness";
+"routines.fallback.desc.morningSunscreen" = "SPF 30+ broad spectrum – protects against sun damage";
+"routines.fallback.desc.eveningCleanser" = "Oil-free gel cleanser – removes daily buildup";
+"routines.fallback.desc.eveningSerum" = "Targeted serum for your skin concerns";
+"routines.fallback.desc.eveningMoisturizer" = "Rich cream moisturizer – repairs while you sleep";
+
+/* Fallback Routine Why */
+"routines.fallback.why.morningCleanser" = "Removes overnight oil buildup and prepares skin for treatments";
+"routines.fallback.why.morningToner" = "Restores skin's natural pH balance and enhances product absorption";
+"routines.fallback.why.morningMoisturizer" = "Provides essential hydration and creates a protective barrier";
+"routines.fallback.why.morningSunscreen" = "Prevents UV damage, premature aging, and skin cancer";
+"routines.fallback.why.eveningCleanser" = "Removes makeup, sunscreen, and daily pollutants";
+"routines.fallback.why.eveningSerum" = "Active ingredients work best overnight when skin is in repair mode";
+"routines.fallback.why.eveningMoisturizer" = "Provides deep hydration and supports overnight skin repair";
+
+/* Fallback Routine How */
+"routines.fallback.how.morningCleanser" = "Apply to damp skin, massage gently for 30 seconds, rinse with lukewarm water";
+"routines.fallback.how.morningToner" = "Apply with cotton pad or hands, pat gently until absorbed";
+"routines.fallback.how.morningMoisturizer" = "Apply a pea-sized amount, massage in upward circular motions";
+"routines.fallback.how.morningSunscreen" = "Apply generously 15 minutes before sun exposure, reapply every 2 hours";
+"routines.fallback.how.eveningCleanser" = "Apply to dry skin first, then add water and massage, rinse thoroughly";
+"routines.fallback.how.eveningSerum" = "Apply 2-3 drops, pat gently until absorbed, avoid eye area";
+"routines.fallback.how.eveningMoisturizer" = "Apply generously, massage in upward motions, let absorb before bed";
+
+/* Routine Editing Service - Default Titles */
+"routines.editing.defaultTitle.cleanser" = "Gentle Cleanser";
+"routines.editing.defaultTitle.faceSerum" = "Face Serum";
+"routines.editing.defaultTitle.moisturizer" = "Moisturizer";
+"routines.editing.defaultTitle.sunscreen" = "Sunscreen SPF 30+";
+
+/* Routine Editing Service - Default Descriptions */
+"routines.editing.defaultDesc.cleanser" = "Removes dirt, oil, and makeup without stripping skin";
+"routines.editing.defaultDesc.faceSerum" = "Targeted treatment for your specific skin concerns";
+"routines.editing.defaultDesc.moisturizer" = "Provides essential hydration and skin barrier support";
+"routines.editing.defaultDesc.sunscreen" = "Protects against UV damage and premature aging";
+
+/* Routine Editing Service - Default Why */
+"routines.editing.defaultWhy.cleanser" = "Essential for removing daily buildup and preparing skin for other products";
+"routines.editing.defaultWhy.faceSerum" = "Provides targeted benefits for your specific skin concerns";
+"routines.editing.defaultWhy.moisturizer" = "Maintains skin hydration and supports the skin barrier";
+"routines.editing.defaultWhy.sunscreen" = "Prevents UV damage, premature aging, and skin cancer";
+
+/* Routine Editing Service - Default How */
+"routines.editing.defaultHow.cleanser" = "Apply to damp skin, massage gently for 30 seconds, rinse thoroughly";
+"routines.editing.defaultHow.faceSerum" = "Apply 2-3 drops to clean skin, pat gently until absorbed";
+"routines.editing.defaultHow.moisturizer" = "Apply a pea-sized amount, massage in upward circular motions";
+"routines.editing.defaultHow.sunscreen" = "Apply generously 15 minutes before sun exposure, reapply every 2 hours";
+
+/* Routine Editing Service - Coach Messages */
+"routines.editing.coach.perfectMatch" = "Perfect Match!";
+"routines.editing.coach.perfectMatchMessage" = "Great choice! %@ is a perfect match for your %@ step.";
+"routines.editing.coach.typeMismatch" = "Product Type Mismatch";
+"routines.editing.coach.typeMismatchMessage" = "%@ is a %@, but this step is for %@. Consider using a product that matches the step type.";
+"routines.editing.coach.findCompatible" = "Find Compatible Product";
+
+/* Coach Tips - Morning */
+"routines.coach.morning.hydration" = "Today's focus: hydration — don't skip your moisturizer 💧";
+"routines.coach.morning.spf" = "It's sunny outside, SPF is your best defense ☀️";
+"routines.coach.morning.refresh" = "Start your day with clean, refreshed skin ✨";
+"routines.coach.morning.tone" = "Your morning routine sets the tone for the day 🌅";
+
+/* Coach Tips - Evening */
+"routines.coach.evening.unwind" = "Time to unwind and treat your skin 🌙";
+"routines.coach.evening.repair" = "Your skin repairs while you sleep — give it the best care 💤";
+"routines.coach.evening.recovery" = "Evening routine is your skin's recovery time 🛌";
+"routines.coach.evening.ritual" = "End the day with a relaxing skincare ritual 🧴";
+
+/* Adaptation Detail View */
+"routines.adaptationDetail.cycleAdaptation" = "Cycle Adaptation";
+"routines.adaptationDetail.weatherAdaptation" = "Weather Adaptation";
+"routines.adaptationDetail.basedOnCycle" = "Based on your cycle";
+"routines.adaptationDetail.basedOnWeather" = "Based on weather";
+
+/* Frequency Display Names */
+"routines.frequency.dailyAM" = "Daily (AM)";
+"routines.frequency.dailyPM" = "Daily (PM)";
+"routines.frequency.both" = "Daily (AM & PM)";
+"routines.frequency.weekly" = "%dx per week";
+"routines.frequency.custom" = "Custom (%@)";
+
+/* Frequency Descriptions */
+"routines.frequency.description.dailyAM" = "Use every morning";
+"routines.frequency.description.dailyPM" = "Use every evening";
+"routines.frequency.description.both" = "Use morning and evening";
+"routines.frequency.description.weekly" = "Use %d times per week";
+"routines.frequency.description.custom" = "Use on %@";

@@ -1,0 +1,185 @@
+/*
+  Discover.strings (Turkish)
+  ManCare - Discover tab related strings
+*/
+
+/* General */
+"discover.title" = "Keşfet";
+"discover.subtitle" = "Uzman onaylı rutinler ve trend olan favoriler";
+"discover.allRoutines" = "Tüm Rutinler";
+"discover.viewAll" = "Tümünü Gör";
+
+/* Error Handling */
+"discover.error" = "Hata";
+"discover.retry" = "Tekrar Dene";
+"discover.dismiss" = "Kapat";
+
+/* Fresh Drops Section */
+"discover.freshDrops.title" = "Taze Rutinler";
+"discover.freshDrops.subtitle" = "Birkaç günde bir güncellenir — favorilerinizi kaydedin";
+"discover.freshDrops.empty" = "Taze rutinler için yakında tekrar kontrol edin!";
+"discover.freshDrops.stepsAndDuration" = "%d adım • %@";
+
+/* Routine Metrics */
+"discover.metrics.steps" = "adım";
+
+/* Personalized Routine */
+"discover.personalized.title" = "Kişiselleştirilmiş rutininizi oluşturun";
+"discover.personalized.subtitle" = "Size özel akıllı rutin oluşturma";
+"discover.personalized.createTitle" = "Kişiselleştirilmiş Rutininizi Oluşturun";
+"discover.personalized.customizeInstructions" = "Tercihlerinizi aşağıdan özelleştirin veya değiştirmek istemediğiniz bölümleri atlayın. Genişletmek için bir bölüm kartına herhangi bir yere dokunun.";
+"discover.personalized.saveRoutine" = "Rutini Kaydet";
+"discover.personalized.generateRoutine" = "Rutinimi Oluştur";
+"discover.personalized.routineName" = "Rutin Adı";
+"discover.personalized.defaultName" = "Benim Rutinim";
+"discover.personalized.defaultNameNumbered" = "Benim Rutinim %d";
+"discover.personalized.routineNamePlaceholder" = "Rutin adını girin";
+
+/* Personalized Routine Sections */
+"discover.personalized.skinType" = "Cilt Tipi";
+"discover.personalized.currently" = "Mevcut: %@";
+"discover.personalized.skinConcerns" = "Cilt Kaygıları";
+"discover.personalized.mainGoal" = "Ana Hedef";
+"discover.personalized.routineComplexity" = "Rutin Karmaşıklığı";
+"discover.personalized.additionalDetails" = "Ek Detaylar";
+"discover.personalized.shareDetails" = "Özel kaygıları, alerjileri veya tercihleri paylaşın";
+"discover.personalized.detailsPlaceholder" = "Örn: Hassas bir cildim var, doğal ürünleri tercih ederim veya parfüme alerjim var...";
+"discover.personalized.characterCount" = "%d/100";
+"discover.personalized.selected" = "Seçilen: %@";
+"discover.personalized.selectedNone" = "Seçilen: Yok";
+"discover.personalized.notSelected" = "Seçilmedi";
+"discover.personalized.customNotes" = "Özel notlar: %@";
+"discover.personalized.customNotesNone" = "Özel notlar: Yok";
+"discover.personalized.customNotesCount" = "Özel notlar: %d karakter";
+
+/* Mini Guides */
+"discover.guides.title" = "Mini Rehberler";
+"discover.guides.subtitle" = "Cilt bakımı temellerine dair hızlı okumalar";
+"discover.guides.minutes" = "%d DK";
+"discover.guides.minRead" = "%d dk okuma";
+
+/* Inspirational Quotes */
+"discover.quotes.title" = "GÜNLÜK İLHAM DOZU";
+
+/* Community Heat */
+"discover.community.title" = "Topluluk Popülerleri";
+"discover.community.subtitle" = "İnsanların en çok kaydettikleri";
+"discover.community.updated" = "Güncellendi %@";
+"discover.community.empty" = "Henüz popüler veri yok";
+"discover.community.increase" = "%%%d";
+
+/* Routine Detail */
+"discover.detail.tags" = "Etiketler";
+"discover.detail.routineSteps" = "Rutin Adımları";
+"discover.detail.benefits" = "Faydaları";
+"discover.detail.morning" = "Sabah";
+"discover.detail.evening" = "Akşam";
+"discover.detail.stepNumber" = "%d";
+"discover.detail.listBullet" = "•";
+"discover.detail.stepDescription" = "%@ rutininizin %d. adımı";
+
+/* Time of Day */
+"discover.timeOfDay.morning" = "Sabah";
+"discover.timeOfDay.evening" = "Akşam";
+
+/* Routine Badges */
+"discover.badge.new" = "Yeni";
+"discover.badge.updated" = "Güncellendi";
+"discover.badge.trending" = "Trend";
+
+/* Trending Period */
+"discover.trending.thisWeek" = "Bu hafta";
+"discover.trending.thisMonth" = "Bu ay";
+
+/* Refresh Time */
+"discover.refresh.justNow" = "Şimdi güncellendi • her sabah yeni ipuçları ☀️";
+"discover.refresh.minutesAgo" = "%d dk önce güncellendi • her sabah yeni ipuçları ☀️";
+"discover.refresh.hoursAgo" = "%d saat%@ önce güncellendi";
+"discover.refresh.daysAgo" = "%d gün%@ önce güncellendi";
+"discover.refresh.hoursSuffix" = ""; // Turkish does not need plural suffix for time units after a number (saat)
+"discover.refresh.daysSuffix" = ""; // Turkish does not need plural suffix for time units after a number (gün)
+
+/* Ticker Stats */
+"discover.ticker.newThisWeek" = "Bu hafta yeni: +%d rutin · +%d rehber";
+
+/* Personalized Routine Loading Statuses */
+"discover.personalized.loading.analyzing" = "Tercihleriniz analiz ediliyor...";
+"discover.personalized.loading.processing" = "Özel detaylar işleniyor...";
+"discover.personalized.loading.generating" = "Kişiselleştirilmiş rutin oluşturuluyor...";
+"discover.personalized.loading.optimizing" = "Cilt tipinize göre optimize ediliyor...";
+"discover.personalized.loading.finalizing" = "Öneriler sonlandırılıyor...";
+
+/* Inspirational Quotes */
+"discover.quotes.shareFooter" = "ManCare'den paylaşıldı";
+"discover.quotes.fallback.text" = "Güzellik, kendin olmaya karar verdiğin an başlar.";
+"discover.quotes.fallback.author" = "Coco Chanel";
+"discover.quotes.fallback.category" = "Güzellik";
+
+/* Individual Quotes */
+"discover.quotes.quote1.text" = "Güzellik yüzde değildir; güzellik, kalpte yanan bir ışıktır.";
+"discover.quotes.quote1.author" = "Kahlil Gibran";
+"discover.quotes.quote1.category" = "Felsefe";
+
+"discover.quotes.quote2.text" = "Cildin en büyük organındır. Ona sevgi ve sabırla bak.";
+"discover.quotes.quote2.author" = "Dr. Howard Murad";
+"discover.quotes.quote2.category" = "Cilt Bakımı";
+
+"discover.quotes.quote3.text" = "Gerçek güzellik mükemmellik hakkında değil, kendine özgü benliğini kucaklamakla ilgilidir.";
+"discover.quotes.quote3.author" = "Alicia Keys";
+"discover.quotes.quote3.category" = "Öz Sevgi";
+
+"discover.quotes.quote4.text" = "Cildine bakımın sessizliğiyle nefes aldır, parlaklığın kendine güven fısıldasın.";
+"discover.quotes.quote4.author" = "Bilinmiyor";
+"discover.quotes.quote4.category" = "Cilt Bakımı";
+
+"discover.quotes.quote5.text" = "Güzellik, nezaket anlarında yaşar — yumuşak bir dokunuş, sakin bir nefes, sabırlı bir kalp.";
+"discover.quotes.quote5.author" = "Bilinmiyor";
+"discover.quotes.quote5.category" = "Güzellik";
+
+"discover.quotes.quote6.text" = "Cildine bir hatıraya davrandığın gibi davran — şefkatle, acele etmeden, sevgiyle.";
+"discover.quotes.quote6.author" = "Bilinmiyor";
+"discover.quotes.quote6.category" = "Felsefe";
+
+"discover.quotes.quote7.text" = "Vücudunu dinlemeyi öğrendiğinde sessizce çiçek açarsın.";
+"discover.quotes.quote7.author" = "Bilinmiyor";
+"discover.quotes.quote7.category" = "Öz Sevgi";
+
+"discover.quotes.quote8.text" = "Işıltı, acele etmekten değil, dinlenmekten doğar.";
+"discover.quotes.quote8.author" = "Bilinmiyor";
+"discover.quotes.quote8.category" = "Güzellik";
+
+"discover.quotes.quote9.text" = "Cildine bakarken, zamanı yavaşlatma sanatını uygularsın.";
+"discover.quotes.quote9.author" = "Bilinmiyor";
+"discover.quotes.quote9.category" = "Cilt Bakımı";
+
+"discover.quotes.quote10.text" = "Aradığın ışıltı, koruduğun huzurdur.";
+"discover.quotes.quote10.author" = "Bilinmiyor";
+"discover.quotes.quote10.category" = "Öz Sevgi";
+
+"discover.quotes.quote11.text" = "Güzellik görülmeyi istemez — sadece yumuşakça var olur.";
+"discover.quotes.quote11.author" = "Bilinmiyor";
+"discover.quotes.quote11.category" = "Felsefe";
+
+"discover.quotes.quote12.text" = "Her bakım ritüeli, kendinle sessiz bir konuşmadır.";
+"discover.quotes.quote12.author" = "Bilinmiyor";
+"discover.quotes.quote12.category" = "Cilt Bakımı";
+
+"discover.quotes.quote13.text" = "Yansıman, gördüğün değil, ne kadar nazik baktığındır.";
+"discover.quotes.quote13.author" = "Bilinmiyor";
+"discover.quotes.quote13.category" = "Öz Sevgi";
+
+"discover.quotes.quote14.text" = "Mutluluk en iyi makyajdır. Önce iç parlaklığına bak.";
+"discover.quotes.quote14.author" = "Drew Barrymore";
+"discover.quotes.quote14.category" = "Öz Sevgi";
+
+"discover.quotes.quote15.text" = "Kendine güven, güzellik doğurur. İyi hissettiğinde, daha da güzel görünürsün.";
+"discover.quotes.quote15.author" = "Blake Lively";
+"discover.quotes.quote15.category" = "Güzellik";
+
+"discover.quotes.quote16.text" = "Cildine bakmak, onu örtmekten daha önemlidir.";
+"discover.quotes.quote16.author" = "Bilinmiyor";
+"discover.quotes.quote16.category" = "Cilt Bakımı";
+
+"discover.quotes.quote17.text" = "Öz bakım, gücünü geri almanın yoludur.";
+"discover.quotes.quote17.author" = "Lalah Delia";
+"discover.quotes.quote17.category" = "Öz Sevgi";

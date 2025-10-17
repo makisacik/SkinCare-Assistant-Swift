@@ -56,6 +56,22 @@ enum SkinFeelTag: String, CaseIterable, Codable {
     case wrinkles = "Wrinkles"
     case dryness = "Dryness"
     
+    var displayName: String {
+        switch self {
+        case .oily: return L10n.SkinJournal.Tag.oily
+        case .dry: return L10n.SkinJournal.Tag.dry
+        case .smooth: return L10n.SkinJournal.Tag.smooth
+        case .rough: return L10n.SkinJournal.Tag.rough
+        case .irritated: return L10n.SkinJournal.Tag.irritated
+        case .calm: return L10n.SkinJournal.Tag.calm
+        case .glowing: return L10n.SkinJournal.Tag.glowing
+        case .dull: return L10n.SkinJournal.Tag.dull
+        case .sensitive: return L10n.SkinJournal.Tag.sensitive
+        case .wrinkles: return L10n.SkinJournal.Tag.wrinkles
+        case .dryness: return L10n.SkinJournal.Tag.dryness
+        }
+    }
+
     var emoji: String {
         switch self {
         case .oily: return "💧"
@@ -95,16 +111,18 @@ struct MoodTag {
     let emoji: String
     let label: String
     
-    static let allTags: [MoodTag] = [
-        MoodTag(emoji: "💤", label: "Sleep"),
-        MoodTag(emoji: "☀️", label: "Sun"),
-        MoodTag(emoji: "🍫", label: "Diet"),
-        MoodTag(emoji: "💧", label: "Hydration"),
-        MoodTag(emoji: "😰", label: "Stress"),
-        MoodTag(emoji: "🏋️", label: "Exercise"),
-        MoodTag(emoji: "🧴", label: "New Product"),
-        MoodTag(emoji: "🌙", label: "Sleep Quality")
-    ]
+    static var allTags: [MoodTag] {
+        return [
+            MoodTag(emoji: "💤", label: L10n.SkinJournal.Mood.sleep),
+            MoodTag(emoji: "☀️", label: L10n.SkinJournal.Mood.sun),
+            MoodTag(emoji: "🍫", label: L10n.SkinJournal.Mood.diet),
+            MoodTag(emoji: "💧", label: L10n.SkinJournal.Mood.hydration),
+            MoodTag(emoji: "😰", label: L10n.SkinJournal.Mood.stress),
+            MoodTag(emoji: "🏋️", label: L10n.SkinJournal.Mood.exercise),
+            MoodTag(emoji: "🧴", label: L10n.SkinJournal.Mood.newProduct),
+            MoodTag(emoji: "🌙", label: L10n.SkinJournal.Mood.sleepQuality)
+        ]
+    }
 }
 
 // MARK: - Image Analysis Result
@@ -116,26 +134,26 @@ struct ImageAnalysisResult: Codable {
     
     init(
         brightness: Double = 0.5,
-        overallTone: String = "Not analyzed",
+        overallTone: String? = nil,
         analyzedAt: Date = Date()
     ) {
         self.brightness = brightness
-        self.overallTone = overallTone
+        self.overallTone = overallTone ?? L10n.SkinJournal.Analysis.notAnalyzed
         self.analyzedAt = analyzedAt
     }
     
     var brightnessDescription: String {
         switch brightness {
         case 0.0..<0.3:
-            return "Darker appearance"
+            return L10n.SkinJournal.Analysis.darkerAppearance
         case 0.3..<0.5:
-            return "Moderate tone"
+            return L10n.SkinJournal.Analysis.moderateTone
         case 0.5..<0.7:
-            return "Bright appearance"
+            return L10n.SkinJournal.Analysis.brightAppearance
         case 0.7...1.0:
-            return "Very bright"
+            return L10n.SkinJournal.Analysis.veryBright
         default:
-            return "Normal"
+            return L10n.SkinJournal.Analysis.normal
         }
     }
     
@@ -163,7 +181,7 @@ extension SkinJournalEntryModel {
 
         let imageAnalysis = ImageAnalysisResult(
             brightness: entity.brightness,
-            overallTone: entity.overallTone ?? "Not analyzed",
+            overallTone: entity.overallTone,
             analyzedAt: createdAt
         )
 

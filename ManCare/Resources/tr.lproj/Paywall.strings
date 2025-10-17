@@ -1,0 +1,26 @@
+/*
+Paywall.strings (Turkish)
+ManCare - Premium paywall and subscription
+*/
+
+/* Badge & Title */
+"paywall.premium" = "PREMIUM";
+"paywall.title" = "Ücretsiz Deneyin";
+
+/* Pricing */
+"paywall.pricing.trial" = "7 gün ücretsiz deneyin, sonrasında yalnızca yıllık ₺199,99";
+"paywall.pricing.monthly" = "Aylık sadece ₺16,66'ya gelir, yıllık olarak faturalandırılır.";
+
+/* Features */
+"paywall.features.freeWeek" = "İlk haftanızın keyfini ücretsiz çıkarın!";
+"paywall.features.cancelAnytime" = "İstediğiniz zaman kolayca iptal edin";
+"paywall.features.createRoutines" = "Sınırsız cilt bakımı rutini oluşturma ve takip etme";
+"paywall.features.syncCycle" = "Rutinleri döngünüzle senkronize etme (adaptif bakım)";
+"paywall.features.noLimits" = "Tüm içerik, sınırsız kullanım ve reklamsız deneyim";
+
+/* Actions */
+"paywall.action.startFreeTrial" = "Ücretsiz haftamı başlat";
+"paywall.action.processing" = "İşleniyor...";
+
+/* Footer */
+"paywall.footer.secure" = "App Store tarafından güvence altındadır. İstediğiniz zaman iptal edebilirsiniz.";

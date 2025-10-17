@@ -13,19 +13,19 @@ enum SkinType: String, CaseIterable, Identifiable, Codable {
 
     var title: String {
         switch self {
-        case .oily: return "Oily"
-        case .dry: return "Dry"
-        case .combination: return "Combination"
-        case .normal: return "Normal"
+        case .oily: return L10n.Onboarding.SkinType.oily
+        case .dry: return L10n.Onboarding.SkinType.dry
+        case .combination: return L10n.Onboarding.SkinType.combination
+        case .normal: return L10n.Onboarding.SkinType.normal
         }
     }
 
     var subtitle: String {
         switch self {
-        case .oily: return "Shiny, enlarged pores"
-        case .dry: return "Tightness, flakiness"
-        case .combination: return "Oily T-zone, dry cheeks"
-        case .normal: return "Balanced skin"
+        case .oily: return L10n.Onboarding.SkinType.oilySubtitle
+        case .dry: return L10n.Onboarding.SkinType.drySubtitle
+        case .combination: return L10n.Onboarding.SkinType.combinationSubtitle
+        case .normal: return L10n.Onboarding.SkinType.normalSubtitle
         }
     }
 
@@ -62,11 +62,11 @@ struct SkinTypeSelectionView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Title section
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("What's your skin type?")
+                        Text(L10n.Onboarding.SkinType.title)
                             .font(ThemeManager.shared.theme.typo.h1)
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .padding(.top, 44) // Add top padding to align with pages that have back button
-                        Text("Select your base type to build a simple routine.")
+                        Text(L10n.Onboarding.SkinType.subtitle)
                             .font(ThemeManager.shared.theme.typo.sub)
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
@@ -83,7 +83,7 @@ struct SkinTypeSelectionView: View {
                                 }
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel(Text(type.title))
-                                .accessibilityHint(Text("Tap to select"))
+                                .accessibilityHint(Text(L10n.Onboarding.SkinType.tapToSelect))
                                 .accessibilityAddTraits(selection == type ? .isSelected : [])
                         }
                     }
@@ -96,7 +96,7 @@ struct SkinTypeSelectionView: View {
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                         onContinue(picked)
                     } label: {
-                        Text("Continue")
+                        Text(L10n.Onboarding.SkinType.continue)
                     }
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(selection == nil)

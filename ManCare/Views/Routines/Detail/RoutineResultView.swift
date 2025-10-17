@@ -30,7 +30,7 @@ struct RoutineResultView: View {
                         .scaleEffect(1.5)
                         .tint(ThemeManager.shared.theme.palette.primary)
 
-                    Text("Loading your routine...")
+                    Text(L10n.Routines.Result.loadingRoutine)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -107,7 +107,7 @@ struct RoutineResultView: View {
                 VStack(spacing: 16) {
                     // Title and decorations
                     HStack {
-                        Text("YOUR PERSONALIZED ROUTINE")
+                        Text(L10n.Routines.Result.personalizedRoutine)
                             .font(.system(size: 24, weight: .black))
                             .foregroundColor(ThemeManager.shared.theme.palette.textInverse)
                             .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.3), radius: 2, x: 0, y: 1)
@@ -125,7 +125,7 @@ struct RoutineResultView: View {
                     .padding(.top, 8)
 
                     // Subtitle
-                    Text("Based on your skin type and selected concerns")
+                    Text(L10n.Routines.Result.basedOnProfile)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textInverse.opacity(0.9))
                         .multilineTextAlignment(.center)
@@ -145,11 +145,11 @@ struct RoutineResultView: View {
                 // Section header
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Morning Routine")
+                        Text(L10n.Routines.Result.morningRoutine)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("\(generateMorningRoutine().count) steps")
+                        Text(L10n.Routines.Result.stepsCount(generateMorningRoutine().count))
                             .font(.system(size: 16))
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
@@ -172,11 +172,11 @@ struct RoutineResultView: View {
                 // Section header
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Evening Routine")
+                        Text(L10n.Routines.Result.eveningRoutine)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text("\(generateNightRoutine().count) steps")
+                        Text(L10n.Routines.Result.stepsCount(generateNightRoutine().count))
                             .font(.system(size: 16))
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
@@ -216,11 +216,11 @@ struct RoutineResultView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Cycle-Adaptive Routine")
+                    Text(L10n.Routines.Adaptation.cycleAdaptive)
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                    Text("Automatically adapts daily")
+                    Text(L10n.Routines.Adaptation.automaticallyAdapts)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -236,32 +236,32 @@ struct RoutineResultView: View {
 
             // Explanation
             VStack(alignment: .leading, spacing: 12) {
-                Text("How your routine adapts:")
+                Text(L10n.Routines.Adaptation.howItAdapts)
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 adaptationPoint(
                     icon: "drop.fill",
                     color: ThemeManager.shared.theme.palette.error,
-                    text: "Menstrual Phase: Gentle care, skip harsh products"
+                    text: L10n.Routines.Adaptation.menstrualPhase
                 )
 
                 adaptationPoint(
                     icon: "sparkles",
                     color: ThemeManager.shared.theme.palette.success,
-                    text: "Follicular Phase: Perfect for treatments & new products"
+                    text: L10n.Routines.Adaptation.follicularPhase
                 )
 
                 adaptationPoint(
                     icon: "sun.max.fill",
                     color: ThemeManager.shared.theme.palette.warning,
-                    text: "Ovulation Phase: Maintain your routine, natural glow"
+                    text: L10n.Routines.Adaptation.ovulationPhase
                 )
 
                 adaptationPoint(
                     icon: "moon.fill",
                     color: ThemeManager.shared.theme.palette.primary,
-                    text: "Luteal Phase: Oil control & breakout prevention"
+                    text: L10n.Routines.Adaptation.lutealPhase
                 )
             }
         }
@@ -295,7 +295,7 @@ struct RoutineResultView: View {
             onContinue()
         } label: {
             HStack(spacing: 8) {
-                Text("Start Your Journey")
+                Text(L10n.Routines.Result.startJourney)
                     .font(.system(size: 18, weight: .semibold))
             }
             .foregroundColor(ThemeManager.shared.theme.palette.onPrimary)

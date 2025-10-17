@@ -20,7 +20,7 @@ struct FreshDropsSection: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 6) {
-                        Text("Fresh Drops")
+                        Text(L10n.Discover.FreshDrops.title)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         
@@ -29,14 +29,14 @@ struct FreshDropsSection: View {
                             .foregroundColor(ThemeManager.shared.theme.palette.primary)
                     }
                     
-                    Text("Updated every few days — save your favorites")
+                    Text(L10n.Discover.FreshDrops.subtitle)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
                 
                 Spacer()
                 
-                Button("View All") {
+                Button(L10n.Discover.viewAll) {
                     onViewAll()
                 }
                 .font(.system(size: 14, weight: .semibold))
@@ -77,7 +77,7 @@ struct FreshDropsSection: View {
                 .font(.system(size: 32))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("Check back soon for fresh routines!")
+            Text(L10n.Discover.FreshDrops.empty)
                 .font(.system(size: 15, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
         }

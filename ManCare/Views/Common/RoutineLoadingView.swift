@@ -82,7 +82,7 @@ struct RoutineLoadingView: View {
                 VStack(spacing: 12) {
                     // (Optional) Cancel
                     if onCancel != nil {
-                        Button("Cancel") {
+                        Button(L10n.Common.cancel) {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             stopTimer()
                             onCancel?()
@@ -93,7 +93,7 @@ struct RoutineLoadingView: View {
 
                     // (Optional) Back
                     if onBack != nil {
-                        Button("Back") {
+                        Button(L10n.Common.back) {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             stopTimer()
                             onBack?()
@@ -114,17 +114,17 @@ struct RoutineLoadingView: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text(currentStatus))
-        .accessibilityHint(Text("Please wait while we prepare your results"))
+        .accessibilityHint(Text(L10n.Common.pleaseWait))
     }
 
     private var currentStatus: String {
-        guard !statuses.isEmpty else { return "Loading…" }
+        guard !statuses.isEmpty else { return L10n.Common.loading }
         return statuses[max(0, min(idx, statuses.count - 1))]
     }
 
     private var hintText: String {
         // a subtle, consistent helper line
-        "This may take a few seconds."
+        L10n.Common.thisMayTakeAFewSeconds
     }
 
     // MARK: Lifecycle

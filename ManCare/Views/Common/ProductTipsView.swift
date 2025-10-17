@@ -45,7 +45,7 @@ struct ProductTipsView: View {
                 .font(.system(size: 24))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
             
-            Text("No tips available")
+            Text(L10n.Common.noTipsAvailable)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
         }
@@ -114,7 +114,7 @@ struct ProductTipsView: View {
                     Spacer()
                     
                     // Tip counter
-                    Text("\(tipsService.currentTipIndex + 1) of \(tipsService.getTipsCount(for: productType))")
+                    Text(L10n.Common.tipCounter(current: tipsService.currentTipIndex + 1, total: tipsService.getTipsCount(for: productType)))
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     

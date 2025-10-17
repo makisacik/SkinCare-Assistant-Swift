@@ -17,11 +17,11 @@ enum TimeOfDay: String, Codable, CaseIterable {
     var displayName: String {
         switch self {
         case .morning:
-            return "Morning"
+            return L10n.Routines.morningOnly
         case .evening:
-            return "Evening"
+            return L10n.Routines.eveningOnly
         case .weekly:
-            return "Weekly"
+            return L10n.Routines.weeklyOnly
         }
     }
 }

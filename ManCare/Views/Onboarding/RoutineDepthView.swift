@@ -18,50 +18,50 @@ enum RoutineDepth: String, CaseIterable, Identifiable, Codable {
     
     var title: String {
         switch self {
-        case .simple: return "Simple"
-        case .intermediate: return "Intermediate"
-        case .advanced: return "Advanced"
+        case .simple: return L10n.Onboarding.RoutineDepthTypes.simple
+        case .intermediate: return L10n.Onboarding.RoutineDepthTypes.intermediate
+        case .advanced: return L10n.Onboarding.RoutineDepthTypes.advanced
         }
     }
     
     var subtitle: String {
         switch self {
-        case .simple: return "Quick & essential"
-        case .intermediate: return "Balanced approach"
-        case .advanced: return "Comprehensive care"
+        case .simple: return L10n.Onboarding.RoutineDepthTypes.simpleSubtitle
+        case .intermediate: return L10n.Onboarding.RoutineDepthTypes.intermediateSubtitle
+        case .advanced: return L10n.Onboarding.RoutineDepthTypes.advancedSubtitle
         }
     }
     
     var description: String {
         switch self {
         case .simple:
-            return "Perfect for busy mornings."
+            return L10n.Onboarding.RoutineDepthTypes.simpleDescription
         case .intermediate:
-            return "A balanced routine."
+            return L10n.Onboarding.RoutineDepthTypes.intermediateDescription
         case .advanced:
-            return "For those who love detailed routines."
+            return L10n.Onboarding.RoutineDepthTypes.advancedDescription
         }
     }
     
     var stepCountDescription: String {
         switch self {
         case .simple:
-            return "3-4 steps"
+            return L10n.Onboarding.RoutineDepthTypes.simpleStepCount
         case .intermediate:
-            return "5-6 steps"
+            return L10n.Onboarding.RoutineDepthTypes.intermediateStepCount
         case .advanced:
-            return "7-9 steps"
+            return L10n.Onboarding.RoutineDepthTypes.advancedStepCount
         }
     }
     
     var timeEstimate: String {
         switch self {
         case .simple:
-            return "~3-5 minutes"
+            return L10n.Onboarding.RoutineDepthTypes.simpleTimeEstimate
         case .intermediate:
-            return "~6-8 minutes"
+            return L10n.Onboarding.RoutineDepthTypes.intermediateTimeEstimate
         case .advanced:
-            return "~10-15 minutes"
+            return L10n.Onboarding.RoutineDepthTypes.advancedTimeEstimate
         }
     }
     
@@ -85,11 +85,11 @@ enum RoutineDepth: String, CaseIterable, Identifiable, Codable {
     var stepGuidance: String {
         switch self {
         case .simple:
-            return "Generate a minimal routine with 3-4 essential steps (cleanser, moisturizer, sunscreen AM only, and one targeted treatment if needed)"
+            return L10n.Onboarding.RoutineDepthTypes.simpleStepGuidance
         case .intermediate:
-            return "Generate a balanced routine with 5-6 steps including cleanser, toner/essence, serum, eye cream (optional), moisturizer, and sunscreen (AM only)"
+            return L10n.Onboarding.RoutineDepthTypes.intermediateStepGuidance
         case .advanced:
-            return "Generate a comprehensive routine with 7-9 steps including double cleanse (PM), toner, essence, multiple serums/treatments, eye cream, moisturizer, sleeping mask/oil (PM), and sunscreen (AM only)"
+            return L10n.Onboarding.RoutineDepthTypes.advancedStepGuidance
         }
     }
 }
@@ -112,10 +112,10 @@ struct RoutineDepthView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Title section
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Routine Level")
+                    Text(L10n.Onboarding.RoutineDepth.title)
                         .font(ThemeManager.shared.theme.typo.h1)
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    Text("How detailed would you like your skincare routine to be?")
+                    Text(L10n.Onboarding.RoutineDepth.subtitle)
                         .font(ThemeManager.shared.theme.typo.sub)
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -147,7 +147,7 @@ struct RoutineDepthView: View {
                         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                         onContinue(depth)
                     } label: {
-                        Text("Continue")
+                        Text(L10n.Onboarding.RoutineDepth.continue)
                     }
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(selectedDepth == nil)
