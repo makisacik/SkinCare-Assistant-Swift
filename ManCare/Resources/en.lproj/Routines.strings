@@ -592,3 +592,9 @@
 "routines.frequency.description.both" = "Use morning and evening";
 "routines.frequency.description.weekly" = "Use %d times per week";
 "routines.frequency.description.custom" = "Use on %@";
+
+// MARK: - Review Prompt
+"routines.review.title" = "Loving Glowie?";
+"routines.review.message" = "Your feedback helps us improve and reach more people. Would you mind taking a moment to rate us?";
+"routines.review.rateNow" = "Rate Glowie";
+"routines.review.notNow" = "Not Now";

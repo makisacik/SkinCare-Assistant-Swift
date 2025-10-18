@@ -882,6 +882,14 @@ struct L10n {
             static var weekly: String { manager.localizedString("routines.frequency.weekly", table: "Routines") }
             static var custom: String { manager.localizedString("routines.frequency.custom", table: "Routines") }
         }
+
+        // Review Prompt
+        struct Review {
+            static var title: String { manager.localizedString("routines.review.title", table: "Routines") }
+            static var message: String { manager.localizedString("routines.review.message", table: "Routines") }
+            static var rateNow: String { manager.localizedString("routines.review.rateNow", table: "Routines") }
+            static var notNow: String { manager.localizedString("routines.review.notNow", table: "Routines") }
+        }
     }
 
     // MARK: - Adaptations

@@ -592,3 +592,9 @@ ManCare - Rutinler ile ilgili metinler
 "routines.tips.faceSunscreen.nonComedogenic.content" = "Choose non-comedogenic face sunscreens to avoid clogging pores and causing breakouts.";
 "routines.tips.faceSunscreen.hairline.title" = "Blend to Hairline";
 "routines.tips.faceSunscreen.hairline.content" = "Blend sunscreen all the way to your hairline and jawline. Don't stop at obvious boundaries.";
+
+// MARK: - Review Prompt
+"routines.review.title" = "Glowie'yi Beğendiniz mi?";
+"routines.review.message" = "Geri bildiriminiz, gelişmemize ve daha fazla insana ulaşmamıza yardımcı oluyor. Bizi değerlendirmek için bir dakikanızı ayırır mısınız?";
+"routines.review.rateNow" = "Glowie'yi Değerlendir";
+"routines.review.notNow" = "Şimdi Değil";

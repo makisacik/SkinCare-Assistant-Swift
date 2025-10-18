@@ -14,6 +14,7 @@ struct RoutineHomeView: View {
 
     @StateObject private var routineViewModel: RoutineHomeViewModel
     @StateObject private var cycleStore = CycleStore()
+    @StateObject private var reviewPromptManager = ReviewPromptManager()
     @EnvironmentObject private var localizationManager: LocalizationManager
     @State private var selectedDate = Date()
 
@@ -52,6 +53,9 @@ struct RoutineHomeView: View {
 
                 // Load routines (they are already saved to Core Data from onboarding flow)
                 routineViewModel.onAppear()
+
+                // Record visit for review prompt
+                reviewPromptManager.recordVisit()
 
                 // TEMPORARY DEBUG: Check for problematic active routine
                 if let activeRoutine = routineViewModel.activeRoutine {
@@ -146,6 +150,23 @@ struct RoutineHomeView: View {
                 RoutineSwitcherView(routineViewModel: routineViewModel)
             }
         }
+        .overlay {
+            if reviewPromptManager.shouldShowPrompt {
+                ReviewPromptView(
+                    onRateNow: {
+                        reviewPromptManager.requestReview()
+                    },
+                    onDismiss: {
+                        withAnimation {
+                            reviewPromptManager.shouldShowPrompt = false
+                            reviewPromptManager.markReviewPromptShown()
+                        }
+                    }
+                )
+                .transition(.opacity.combined(with: .scale))
+            }
+        }
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: reviewPromptManager.shouldShowPrompt)
     }
     @ViewBuilder
     private var routineTabContent: some View {
