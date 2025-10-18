@@ -13,6 +13,7 @@ struct FreshDropsSection: View {
     let onRoutineTap: (RoutineTemplate) -> Void
     let onSaveTap: (RoutineTemplate) -> Void
     let onViewAll: () -> Void
+    let listViewModel: RoutineListViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -60,7 +61,8 @@ struct FreshDropsSection: View {
                                     },
                                     onSave: {
                                         onSaveTap(template)
-                                    }
+                                    },
+                                    listViewModel: listViewModel
                                 )
                             }
                         }
@@ -87,12 +89,16 @@ struct FreshDropsSection: View {
 }
 
 #Preview {
-    FreshDropsSection(
+    let routineService = ServiceFactory.shared.createRoutineService()
+    let listViewModel = RoutineListViewModel(routineService: routineService)
+
+    return FreshDropsSection(
         freshRoutines: [],
         getRoutineTemplate: { _ in nil },
         onRoutineTap: { _ in },
         onSaveTap: { _ in },
-        onViewAll: {}
+        onViewAll: {},
+        listViewModel: listViewModel
     )
 }
 

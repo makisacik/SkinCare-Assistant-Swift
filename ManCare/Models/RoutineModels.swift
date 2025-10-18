@@ -290,7 +290,18 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
 
         // Add morning steps
         for (index, step) in template.morningSteps.enumerated() {
-            let stepType = ProductAliasMapping.normalize(step.title)
+            // CRITICAL: Use step.productType (English) if available, otherwise fall back to normalizing title
+            // This fixes the localization issue where Turkish/localized titles can't be matched
+            let stepType: ProductType
+            if let productTypeString = step.productType, let enumType = ProductType(rawValue: productTypeString) {
+                stepType = enumType
+                print("✅ Using explicit productType: '\(productTypeString)' for step '\(step.title)'")
+            } else {
+                // Fallback: Try to normalize the title (this works for English templates without productType field)
+                stepType = ProductAliasMapping.normalize(step.title)
+                print("⚠️ Fallback: Normalized '\(step.title)' -> '\(stepType.rawValue)'")
+            }
+
             let stepTranslation = (stepTranslations != nil && stepTranslationIndex < stepTranslations!.count) ? stepTranslations![stepTranslationIndex] : nil
 
             allStepDetails.append(SavedStepDetailModel(
@@ -308,7 +319,18 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
 
         // Add evening steps
         for (index, step) in template.eveningSteps.enumerated() {
-            let stepType = ProductAliasMapping.normalize(step.title)
+            // CRITICAL: Use step.productType (English) if available, otherwise fall back to normalizing title
+            // This fixes the localization issue where Turkish/localized titles can't be matched
+            let stepType: ProductType
+            if let productTypeString = step.productType, let enumType = ProductType(rawValue: productTypeString) {
+                stepType = enumType
+                print("✅ Using explicit productType: '\(productTypeString)' for step '\(step.title)'")
+            } else {
+                // Fallback: Try to normalize the title (this works for English templates without productType field)
+                stepType = ProductAliasMapping.normalize(step.title)
+                print("⚠️ Fallback: Normalized '\(step.title)' -> '\(stepType.rawValue)'")
+            }
+
             let stepTranslation = (stepTranslations != nil && stepTranslationIndex < stepTranslations!.count) ? stepTranslations![stepTranslationIndex] : nil
 
             allStepDetails.append(SavedStepDetailModel(

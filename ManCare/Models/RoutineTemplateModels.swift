@@ -64,12 +64,14 @@ struct TemplateRoutineStep: Codable, Equatable {
     let title: String
     let why: String
     let how: String
+    let productType: String?  // English product type identifier (e.g., "cleanser", "sunscreen")
     let translations: TemplateStepTranslations?
 
-    init(title: String, why: String, how: String, translations: TemplateStepTranslations? = nil) {
+    init(title: String, why: String, how: String, productType: String? = nil, translations: TemplateStepTranslations? = nil) {
         self.title = title
         self.why = why
         self.how = how
+        self.productType = productType
         self.translations = translations
     }
 }
@@ -156,12 +158,13 @@ extension RoutineTemplate {
     static let teenAcneId = UUID(uuidString: "AA111111-1111-1111-1111-111111111111")!
     static let matureSkinId = UUID(uuidString: "AB111111-1111-1111-1111-111111111111")!
 
-    // Helper method to create localized step
-    private static func localizedStep(routineId: String, timeOfDay: String, index: Int) -> TemplateRoutineStep {
+    // Helper method to create localized step with product type
+    private static func localizedStep(routineId: String, timeOfDay: String, index: Int, productType: String) -> TemplateRoutineStep {
         TemplateRoutineStep(
             title: L10n.Templates.Routine.stepTitle(routineId, timeOfDay: timeOfDay, index: index),
             why: L10n.Templates.Routine.stepWhy(routineId, timeOfDay: timeOfDay, index: index),
-            how: L10n.Templates.Routine.stepHow(routineId, timeOfDay: timeOfDay, index: index)
+            how: L10n.Templates.Routine.stepHow(routineId, timeOfDay: timeOfDay, index: index),
+            productType: productType
         )
     }
 
@@ -185,20 +188,20 @@ extension RoutineTemplate {
             difficulty: .intermediate,
             tags: localizedTags(routineId: "koreanGlassSkin", count: 4),
             morningSteps: [
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 5),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 6)
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 3, productType: "essence"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 4, productType: "serum"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 5, productType: "moisturizer"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "morning", index: 6, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 5),
-                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 6)
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 1, productType: "cleanser_oil"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 2, productType: "cleanser"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 3, productType: "exfoliator"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 4, productType: "mask"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 5, productType: "eye_cream"),
+                localizedStep(routineId: "koreanGlassSkin", timeOfDay: "evening", index: 6, productType: "night_cream")
             ],
             benefits: localizedBenefits(routineId: "koreanGlassSkin", count: 4),
             isFeatured: true,
@@ -215,18 +218,18 @@ extension RoutineTemplate {
             difficulty: .beginner,
             tags: localizedTags(routineId: "acneClear", count: 4),
             morningSteps: [
-                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 5)
+                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 3, productType: "serum"),
+                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 4, productType: "moisturizer"),
+                localizedStep(routineId: "acneClear", timeOfDay: "morning", index: 5, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 5)
+                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 2, productType: "toner"),
+                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 3, productType: "serum"),
+                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 4, productType: "treatment"),
+                localizedStep(routineId: "acneClear", timeOfDay: "evening", index: 5, productType: "moisturizer")
             ],
             benefits: localizedBenefits(routineId: "acneClear", count: 4),
             isFeatured: true,
@@ -243,18 +246,18 @@ extension RoutineTemplate {
             difficulty: .intermediate,
             tags: localizedTags(routineId: "antiAging", count: 4),
             morningSteps: [
-                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 5)
+                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 2, productType: "serum"),
+                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 3, productType: "serum"),
+                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 4, productType: "moisturizer"),
+                localizedStep(routineId: "antiAging", timeOfDay: "morning", index: 5, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 5)
+                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 2, productType: "treatment"),
+                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 3, productType: "serum"),
+                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 4, productType: "eye_cream"),
+                localizedStep(routineId: "antiAging", timeOfDay: "evening", index: 5, productType: "moisturizer")
             ],
             benefits: localizedBenefits(routineId: "antiAging", count: 4),
             isFeatured: true,
@@ -275,13 +278,13 @@ extension RoutineTemplate {
             difficulty: .beginner,
             tags: localizedTags(routineId: "minimalist", count: 4),
             morningSteps: [
-                localizedStep(routineId: "minimalist", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "minimalist", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "minimalist", timeOfDay: "morning", index: 3)
+                localizedStep(routineId: "minimalist", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "minimalist", timeOfDay: "morning", index: 2, productType: "moisturizer"),
+                localizedStep(routineId: "minimalist", timeOfDay: "morning", index: 3, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "minimalist", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "minimalist", timeOfDay: "evening", index: 2)
+                localizedStep(routineId: "minimalist", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "minimalist", timeOfDay: "evening", index: 2, productType: "moisturizer")
             ],
             benefits: localizedBenefits(routineId: "minimalist", count: 4),
             isFeatured: false,
@@ -298,17 +301,17 @@ extension RoutineTemplate {
             difficulty: .beginner,
             tags: localizedTags(routineId: "sensitive", count: 4),
             morningSteps: [
-                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 5)
+                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 3, productType: "serum"),
+                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 4, productType: "moisturizer"),
+                localizedStep(routineId: "sensitive", timeOfDay: "morning", index: 5, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 4)
+                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 2, productType: "toner"),
+                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 3, productType: "serum"),
+                localizedStep(routineId: "sensitive", timeOfDay: "evening", index: 4, productType: "moisturizer")
             ],
             benefits: localizedBenefits(routineId: "sensitive", count: 4),
             isFeatured: false,
@@ -325,18 +328,18 @@ extension RoutineTemplate {
             difficulty: .beginner,
             tags: localizedTags(routineId: "oily", count: 4),
             morningSteps: [
-                localizedStep(routineId: "oily", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "oily", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "oily", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "oily", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "oily", timeOfDay: "morning", index: 5)
+                localizedStep(routineId: "oily", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "oily", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "oily", timeOfDay: "morning", index: 3, productType: "serum"),
+                localizedStep(routineId: "oily", timeOfDay: "morning", index: 4, productType: "moisturizer"),
+                localizedStep(routineId: "oily", timeOfDay: "morning", index: 5, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "oily", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "oily", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "oily", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "oily", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "oily", timeOfDay: "evening", index: 5)
+                localizedStep(routineId: "oily", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "oily", timeOfDay: "evening", index: 2, productType: "toner"),
+                localizedStep(routineId: "oily", timeOfDay: "evening", index: 3, productType: "serum"),
+                localizedStep(routineId: "oily", timeOfDay: "evening", index: 4, productType: "moisturizer"),
+                localizedStep(routineId: "oily", timeOfDay: "evening", index: 5, productType: "mask")
             ],
             benefits: localizedBenefits(routineId: "oily", count: 4),
             isFeatured: false,
@@ -353,20 +356,20 @@ extension RoutineTemplate {
             difficulty: .beginner,
             tags: localizedTags(routineId: "dry", count: 4),
             morningSteps: [
-                localizedStep(routineId: "dry", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "dry", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "dry", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "dry", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "dry", timeOfDay: "morning", index: 5),
-                localizedStep(routineId: "dry", timeOfDay: "morning", index: 6)
+                localizedStep(routineId: "dry", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "dry", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "dry", timeOfDay: "morning", index: 3, productType: "serum"),
+                localizedStep(routineId: "dry", timeOfDay: "morning", index: 4, productType: "serum"),
+                localizedStep(routineId: "dry", timeOfDay: "morning", index: 5, productType: "moisturizer"),
+                localizedStep(routineId: "dry", timeOfDay: "morning", index: 6, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "dry", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "dry", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "dry", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "dry", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "dry", timeOfDay: "evening", index: 5),
-                localizedStep(routineId: "dry", timeOfDay: "evening", index: 6)
+                localizedStep(routineId: "dry", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "dry", timeOfDay: "evening", index: 2, productType: "toner"),
+                localizedStep(routineId: "dry", timeOfDay: "evening", index: 3, productType: "serum"),
+                localizedStep(routineId: "dry", timeOfDay: "evening", index: 4, productType: "serum"),
+                localizedStep(routineId: "dry", timeOfDay: "evening", index: 5, productType: "moisturizer"),
+                localizedStep(routineId: "dry", timeOfDay: "evening", index: 6, productType: "face_oil")
             ],
             benefits: localizedBenefits(routineId: "dry", count: 4),
             isFeatured: false,
@@ -383,18 +386,18 @@ extension RoutineTemplate {
             difficulty: .intermediate,
             tags: localizedTags(routineId: "combination", count: 4),
             morningSteps: [
-                localizedStep(routineId: "combination", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "combination", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "combination", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "combination", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "combination", timeOfDay: "morning", index: 5)
+                localizedStep(routineId: "combination", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "combination", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "combination", timeOfDay: "morning", index: 3, productType: "serum"),
+                localizedStep(routineId: "combination", timeOfDay: "morning", index: 4, productType: "moisturizer"),
+                localizedStep(routineId: "combination", timeOfDay: "morning", index: 5, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "combination", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "combination", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "combination", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "combination", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "combination", timeOfDay: "evening", index: 5)
+                localizedStep(routineId: "combination", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "combination", timeOfDay: "evening", index: 2, productType: "toner"),
+                localizedStep(routineId: "combination", timeOfDay: "evening", index: 3, productType: "serum"),
+                localizedStep(routineId: "combination", timeOfDay: "evening", index: 4, productType: "treatment"),
+                localizedStep(routineId: "combination", timeOfDay: "evening", index: 5, productType: "moisturizer")
             ],
             benefits: localizedBenefits(routineId: "combination", count: 4),
             isFeatured: false,
@@ -411,28 +414,28 @@ extension RoutineTemplate {
             difficulty: .advanced,
             tags: localizedTags(routineId: "advancedKorean", count: 4),
             morningSteps: [
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 5),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 6),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 7),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 8),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 9)
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 3, productType: "essence"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 4, productType: "essence"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 5, productType: "serum"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 6, productType: "ampoule"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 7, productType: "eye_cream"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 8, productType: "moisturizer"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "morning", index: 9, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 5),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 6),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 7),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 8),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 9),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 10),
-                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 11)
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 1, productType: "cleanser_oil"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 2, productType: "cleanser"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 3, productType: "exfoliator"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 4, productType: "toner"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 5, productType: "essence"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 6, productType: "essence"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 7, productType: "serum"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 8, productType: "ampoule"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 9, productType: "mask"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 10, productType: "eye_cream"),
+                localizedStep(routineId: "advancedKorean", timeOfDay: "evening", index: 11, productType: "night_cream")
             ],
             benefits: localizedBenefits(routineId: "advancedKorean", count: 4),
             isFeatured: false,
@@ -449,16 +452,16 @@ extension RoutineTemplate {
             difficulty: .beginner,
             tags: localizedTags(routineId: "teenAcne", count: 4),
             morningSteps: [
-                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 4)
+                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 2, productType: "toner"),
+                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 3, productType: "moisturizer"),
+                localizedStep(routineId: "teenAcne", timeOfDay: "morning", index: 4, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 4)
+                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 2, productType: "toner"),
+                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 3, productType: "moisturizer"),
+                localizedStep(routineId: "teenAcne", timeOfDay: "evening", index: 4, productType: "treatment")
             ],
             benefits: localizedBenefits(routineId: "teenAcne", count: 4),
             isFeatured: false,
@@ -475,20 +478,20 @@ extension RoutineTemplate {
             difficulty: .advanced,
             tags: localizedTags(routineId: "matureSkin", count: 4),
             morningSteps: [
-                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 1),
-                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 2),
-                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 3),
-                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 4),
-                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 5),
-                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 6)
+                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 2, productType: "serum"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 3, productType: "serum"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 4, productType: "eye_cream"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 5, productType: "moisturizer"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "morning", index: 6, productType: "sunscreen")
             ],
             eveningSteps: [
-                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 1),
-                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 2),
-                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 3),
-                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 4),
-                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 5),
-                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 6)
+                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 1, productType: "cleanser"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 2, productType: "treatment"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 3, productType: "serum"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 4, productType: "serum"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 5, productType: "eye_cream"),
+                localizedStep(routineId: "matureSkin", timeOfDay: "evening", index: 6, productType: "moisturizer")
             ],
             benefits: localizedBenefits(routineId: "matureSkin", count: 4),
             isFeatured: false,

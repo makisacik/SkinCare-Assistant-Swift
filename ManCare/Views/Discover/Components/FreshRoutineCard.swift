@@ -12,6 +12,7 @@ struct FreshRoutineCard: View {
     let badge: RoutineBadge
     let onTap: () -> Void
     let onSave: () -> Void
+    let listViewModel: RoutineListViewModel
     
     @State private var isSaved: Bool = false
     @State private var badgeScale: CGFloat = 1.0
@@ -66,10 +67,7 @@ struct FreshRoutineCard: View {
                             
                             // Save button
                             Button(action: {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                                    isSaved.toggle()
-                                }
-                                onSave()
+                                handleSaveToggle()
                             }) {
                                 Image(systemName: isSaved ? "heart.fill" : "heart")
                                     .font(.system(size: 20, weight: .semibold))
@@ -95,9 +93,42 @@ struct FreshRoutineCard: View {
             if badge == .new {
                 startBadgePulse()
             }
+            // Check if routine is already saved
+            checkSavedState()
+        }
+        .onChange(of: listViewModel.savedRoutines) { _ in
+            // Update saved state when the list of saved routines changes
+            checkSavedState()
         }
     }
-    
+
+    private func checkSavedState() {
+        Task {
+            do {
+                let saved = try await listViewModel.routineService.isRoutineSaved(routine)
+                await MainActor.run {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        isSaved = saved
+                    }
+                }
+            } catch {
+                print("❌ Failed to check if routine is saved: \(error)")
+            }
+        }
+    }
+
+    private func handleSaveToggle() {
+        if isSaved {
+            // Unsave the routine
+            listViewModel.removeRoutineTemplate(routine)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.warning)
+        } else {
+            // Save the routine
+            onSave()
+        }
+    }
+
     private func startBadgePulse() {
         Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
             withAnimation(.easeInOut(duration: 0.6)) {
@@ -139,27 +170,33 @@ struct BadgeView: View {
 }
 
 #Preview {
-    ScrollView(.horizontal) {
+    let routineService = ServiceFactory.shared.createRoutineService()
+    let listViewModel = RoutineListViewModel(routineService: routineService)
+
+    return ScrollView(.horizontal) {
         HStack(spacing: 16) {
             FreshRoutineCard(
                 routine: RoutineTemplate.featuredRoutines[0],
                 badge: .new,
                 onTap: {},
-                onSave: {}
+                onSave: {},
+                listViewModel: listViewModel
             )
             
             FreshRoutineCard(
                 routine: RoutineTemplate.featuredRoutines[1],
                 badge: .trending,
                 onTap: {},
-                onSave: {}
+                onSave: {},
+                listViewModel: listViewModel
             )
             
             FreshRoutineCard(
                 routine: RoutineTemplate.featuredRoutines[2],
                 badge: .updated,
                 onTap: {},
-                onSave: {}
+                onSave: {},
+                listViewModel: listViewModel
             )
         }
         .padding()

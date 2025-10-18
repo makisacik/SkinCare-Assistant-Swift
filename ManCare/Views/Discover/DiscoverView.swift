@@ -182,7 +182,8 @@ struct DiscoverView: View {
             },
             onViewAll: {
                 navigationPath.append(AllRoutinesDestination())
-            }
+            },
+            listViewModel: listViewModel
         )
     }
 
