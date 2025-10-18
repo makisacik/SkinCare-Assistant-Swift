@@ -379,6 +379,7 @@ struct WhyThisAdaptationModal: View {
     let routine = SavedRoutineModel(
         from: RoutineTemplate(
             id: UUID(),
+            routineId: nil,
             title: "Test",
             description: "Test",
             category: .all,
@@ -389,7 +390,8 @@ struct WhyThisAdaptationModal: View {
                 TemplateRoutineStep(
                     title: "Cleanser",
                     why: "Test why",
-                    how: "Test how"
+                    how: "Test how",
+                    productType: "cleanser"
                 )
             ],
             eveningSteps: [],

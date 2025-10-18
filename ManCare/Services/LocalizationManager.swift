@@ -107,6 +107,22 @@ final class LocalizationManager: ObservableObject {
         Locale.characterDirection(forLanguage: currentLanguage) == .rightToLeft
     }
     
+    /// Get localized string from SPECIFIC language bundle (not current language)
+    func localizedString(_ key: String, table: String? = nil, forLanguage language: String) -> String? {
+        guard let path = Bundle.main.path(forResource: language, ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            print("⚠️ LocalizationManager: Could not find bundle for language: \(language)")
+            return nil
+        }
+        
+        let localized = bundle.localizedString(forKey: key, value: nil, table: table)
+        // If the key itself is returned, it means no translation exists
+        if localized == key {
+            return nil
+        }
+        return localized
+    }
+    
     // MARK: - Private Methods
     
     private func updateCurrentBundle() {

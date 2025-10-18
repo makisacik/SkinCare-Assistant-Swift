@@ -169,7 +169,7 @@
         "i18n": {
           "guidanceKey": "cycle.follicular.faceSerum.guidance"
         },
-        "guidanceTemplate": "Perfect time for vitamin C, retinol, or peptide serums. Your skin can handle stronger actives now.",
+        "guidanceTemplate": "Great time for serum treatments. Your skin can handle actives and absorbs products optimally now.",
         "orderPriority": 4,
         "warnings": []
       }
@@ -542,6 +542,507 @@
         "guidanceTemplate": "Use sparingly or skip if feeling oily. Your natural sebum production is higher.",
         "orderPriority": null,
         "warnings": ["Increased natural oil production - may cause congestion"]
+      }
+    },
+    {
+      "id": "menstrual-cleansingoil",
+      "productType": "cleansingOil",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.cleansingOil.guidance"
+        },
+        "guidanceTemplate": "Use gentle, circular motions. Great for removing makeup without stripping during this sensitive time.",
+        "orderPriority": 1,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-ampoule",
+      "productType": "ampoule",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.ampoule.guidance"
+        },
+        "guidanceTemplate": "Choose hydrating or soothing ampoules with ceramides or panthenol. Apply 2-3 drops, gently pat in.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-vitaminc",
+      "productType": "vitaminC",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.vitaminC.guidance",
+          "warningKeys": ["cycle.menstrual.vitaminC.warning"]
+        },
+        "guidanceTemplate": "If using, opt for lower concentration (10-15%). May cause irritation on compromised barrier.",
+        "orderPriority": 3,
+        "warnings": [
+          "Vitamin C can be irritating on sensitive menstrual phase skin"
+        ]
+      }
+    },
+    {
+      "id": "menstrual-niacinamide",
+      "productType": "niacinamide",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.niacinamide.guidance"
+        },
+        "guidanceTemplate": "Excellent choice! Niacinamide supports barrier repair and reduces inflammation. Use 5-10% concentration.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-facialmist",
+      "productType": "facialMist",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.facialMist.guidance"
+        },
+        "guidanceTemplate": "Refreshing and soothing. Spray throughout the day for extra hydration boost.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-chemicalpeel",
+      "productType": "chemicalPeel",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "skip",
+        "i18n": {
+          "warningKeys": ["cycle.menstrual.chemicalPeel.warning"]
+        },
+        "guidanceTemplate": null,
+        "orderPriority": null,
+        "warnings": [
+          "Way too harsh for sensitive menstrual phase skin. Skip entirely."
+        ]
+      }
+    },
+    {
+      "id": "menstrual-night-cream",
+      "productType": "moisturizer",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.nightCream.guidance"
+        },
+        "guidanceTemplate": "Use a rich, nourishing night cream. Extra barrier support is crucial during this phase.",
+        "orderPriority": 5,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-cleansingoil",
+      "productType": "cleansingOil",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.cleansingOil.guidance"
+        },
+        "guidanceTemplate": "Perfect for double cleansing! Your skin can handle thorough cleansing now.",
+        "orderPriority": 1,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-ampoule",
+      "productType": "ampoule",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.ampoule.guidance"
+        },
+        "guidanceTemplate": "Great time for intensive ampoule treatments with high-concentration actives. 3-5 drops recommended.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-vitaminc",
+      "productType": "vitaminC",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.vitaminC.guidance"
+        },
+        "guidanceTemplate": "Perfect time for vitamin C! Use 15-20% concentration. Your skin can handle stronger formulations.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-niacinamide",
+      "productType": "niacinamide",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.niacinamide.guidance"
+        },
+        "guidanceTemplate": "Excellent time for niacinamide. Can use up to 10% concentration for maximum brightening.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-chemicalpeel",
+      "productType": "chemicalPeel",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.chemicalPeel.guidance"
+        },
+        "guidanceTemplate": "Ideal time for chemical peels! Skin is resilient and recovers quickly during this phase.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-facialmist",
+      "productType": "facialMist",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.facialMist.guidance"
+        },
+        "guidanceTemplate": "Use as desired. Your skin is balanced and responds well to everything now.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-night-cream",
+      "productType": "moisturizer",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.nightCream.guidance"
+        },
+        "guidanceTemplate": "Your regular night cream works perfectly. Skin absorbs everything beautifully.",
+        "orderPriority": 5,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-cleansingoil",
+      "productType": "cleansingOil",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.cleansingOil.guidance"
+        },
+        "guidanceTemplate": "Continue your regular double cleansing routine. Skin is well-balanced.",
+        "orderPriority": 1,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-ampoule",
+      "productType": "ampoule",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.ampoule.guidance"
+        },
+        "guidanceTemplate": "Your skin is at its best. Continue regular ampoule application.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-vitaminc",
+      "productType": "vitaminC",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.vitaminC.guidance"
+        },
+        "guidanceTemplate": "Your natural glow is enhanced by vitamin C. Continue regular use.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-niacinamide",
+      "productType": "niacinamide",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.niacinamide.guidance"
+        },
+        "guidanceTemplate": "Keep up your niacinamide routine. Skin is luminous and even-toned.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-facialmist",
+      "productType": "facialMist",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.facialMist.guidance"
+        },
+        "guidanceTemplate": "Use as desired to maintain your radiant, dewy glow.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-night-cream",
+      "productType": "moisturizer",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.nightCream.guidance"
+        },
+        "guidanceTemplate": "Continue your regular night cream routine. Skin is well-balanced.",
+        "orderPriority": 5,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-cleansingoil",
+      "productType": "cleansingOil",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.cleansingOil.guidance"
+        },
+        "guidanceTemplate": "Essential for removing excess sebum and makeup. Massage for 60+ seconds for thorough cleansing.",
+        "orderPriority": 1,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-ampoule",
+      "productType": "ampoule",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.ampoule.guidance",
+          "warningKeys": ["cycle.luteal.ampoule.warning"]
+        },
+        "guidanceTemplate": "Use lighter formulas. Heavy ampoules may feel too rich as oil production increases.",
+        "orderPriority": 3,
+        "warnings": [
+          "Switch to oil-control or mattifying ampoules if feeling greasy"
+        ]
+      }
+    },
+    {
+      "id": "luteal-vitaminc",
+      "productType": "vitaminC",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.vitaminC.guidance",
+          "warningKeys": ["cycle.luteal.vitaminC.warning"]
+        },
+        "guidanceTemplate": "Consider reducing to lower concentration (10-15%) if noticing sensitivity.",
+        "orderPriority": 3,
+        "warnings": ["May cause irritation as hormones shift"]
+      }
+    },
+    {
+      "id": "luteal-niacinamide",
+      "productType": "niacinamide",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.niacinamide.guidance"
+        },
+        "guidanceTemplate": "Excellent choice! Niacinamide helps control oil and reduce inflammation from breakouts.",
+        "orderPriority": 3,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-facialmist",
+      "productType": "facialMist",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.facialMist.guidance"
+        },
+        "guidanceTemplate": "Choose mattifying or oil-control mists. Helps combat shine throughout the day.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-chemicalpeel",
+      "productType": "chemicalPeel",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.chemicalPeel.guidance",
+          "warningKeys": ["cycle.luteal.chemicalPeel.warning"]
+        },
+        "guidanceTemplate": "Use with caution. Skin may be more reactive. Consider milder formulations or skip.",
+        "orderPriority": 2,
+        "warnings": ["Increased sensitivity - may cause irritation"]
+      }
+    },
+    {
+      "id": "luteal-night-cream",
+      "productType": "moisturizer",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.nightCream.guidance",
+          "warningKeys": ["cycle.luteal.nightCream.warning"]
+        },
+        "guidanceTemplate": "Consider switching to a lighter night cream or gel-based moisturizer if feeling oily.",
+        "orderPriority": 5,
+        "warnings": ["Heavy creams may cause congestion during this phase"]
+      }
+    },
+    {
+      "id": "follicular-hyaluronicAcid",
+      "productType": "hyaluronicAcid",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.hyaluronicAcid.guidance"
+        },
+        "guidanceTemplate": "Perfect time for hyaluronic acid! Your skin is in its prime hydration phase. Apply to damp skin for maximum absorption.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "follicular-peptide",
+      "productType": "peptide",
+      "contextKey": "follicular",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.follicular.peptide.guidance"
+        },
+        "guidanceTemplate": "Excellent time for peptides! Your skin's collagen production is naturally higher. Use regularly for best anti-aging results.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-hyaluronicAcid",
+      "productType": "hyaluronicAcid",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.hyaluronicAcid.guidance"
+        },
+        "guidanceTemplate": "Hydration is key during this phase. Apply hyaluronic acid to damp skin and seal with moisturizer immediately.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "menstrual-peptide",
+      "productType": "peptide",
+      "contextKey": "menstrual",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.menstrual.peptide.guidance"
+        },
+        "guidanceTemplate": "Peptides are gentle and suitable for sensitive menstrual phase skin. Continue as usual.",
+        "orderPriority": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-hyaluronicAcid",
+      "productType": "hyaluronicAcid",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.hyaluronicAcid.guidance"
+        },
+        "guidanceTemplate": "Your skin is at peak glow! Hyaluronic acid enhances your natural radiance. Apply morning and evening.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ovulation-peptide",
+      "productType": "peptide",
+      "contextKey": "ovulation",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.ovulation.peptide.guidance"
+        },
+        "guidanceTemplate": "Perfect time to maximize peptide benefits! Your skin is most receptive to firming and plumping ingredients.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-hyaluronicAcid",
+      "productType": "hyaluronicAcid",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.hyaluronicAcid.guidance"
+        },
+        "guidanceTemplate": "Combat increased oil with hydrating (not oily) ingredients. Hyaluronic acid provides moisture without greasiness.",
+        "orderPriority": 2,
+        "warnings": []
+      }
+    },
+    {
+      "id": "luteal-peptide",
+      "productType": "peptide",
+      "contextKey": "luteal",
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "cycle.luteal.peptide.guidance"
+        },
+        "guidanceTemplate": "Peptides are non-comedogenic and safe to use. Continue your anti-aging routine even during breakout-prone phase.",
+        "orderPriority": null,
+        "warnings": []
       }
     }
   ],

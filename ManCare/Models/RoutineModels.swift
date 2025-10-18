@@ -290,59 +290,61 @@ struct SavedRoutineModel: Identifiable, Codable, Equatable {
 
         // Add morning steps
         for (index, step) in template.morningSteps.enumerated() {
-            // CRITICAL: Use step.productType (English) if available, otherwise fall back to normalizing title
-            // This fixes the localization issue where Turkish/localized titles can't be matched
-            let stepType: ProductType
-            if let productTypeString = step.productType, let enumType = ProductType(rawValue: productTypeString) {
-                stepType = enumType
-                print("✅ Using explicit productType: '\(productTypeString)' for step '\(step.title)'")
-            } else {
-                // Fallback: Try to normalize the title (this works for English templates without productType field)
-                stepType = ProductAliasMapping.normalize(step.title)
-                print("⚠️ Fallback: Normalized '\(step.title)' -> '\(stepType.rawValue)'")
+            // CRITICAL: Template steps MUST have explicit productType (English enum value)
+            // This ensures deterministic business logic independent of localization
+            guard let enumType = ProductType(rawValue: step.productType) else {
+                print("❌ CRITICAL: Invalid productType '\(step.productType)' for step '\(step.title)'")
+                assertionFailure("Template step missing valid productType")
+                continue
             }
+
+            print("✅ [TEMPLATE_SAVE] Morning step \(index+1): '\(step.title)' -> productType: '\(step.productType)' ✅")
 
             let stepTranslation = (stepTranslations != nil && stepTranslationIndex < stepTranslations!.count) ? stepTranslations![stepTranslationIndex] : nil
 
-            allStepDetails.append(SavedStepDetailModel(
+            let savedStep = SavedStepDetailModel(
                 title: step.title,
                 stepDescription: step.why,
-                stepType: stepType.rawValue,
+                stepType: enumType.rawValue,  // Guaranteed English enum value
                 timeOfDay: "morning",
                 why: step.why,
                 how: step.how,
                 order: index,
                 translations: stepTranslation
-            ))
+            )
+
+            print("   📝 Saved as: stepType='\(savedStep.stepType)' (English, deterministic)")
+            allStepDetails.append(savedStep)
             stepTranslationIndex += 1
         }
 
         // Add evening steps
         for (index, step) in template.eveningSteps.enumerated() {
-            // CRITICAL: Use step.productType (English) if available, otherwise fall back to normalizing title
-            // This fixes the localization issue where Turkish/localized titles can't be matched
-            let stepType: ProductType
-            if let productTypeString = step.productType, let enumType = ProductType(rawValue: productTypeString) {
-                stepType = enumType
-                print("✅ Using explicit productType: '\(productTypeString)' for step '\(step.title)'")
-            } else {
-                // Fallback: Try to normalize the title (this works for English templates without productType field)
-                stepType = ProductAliasMapping.normalize(step.title)
-                print("⚠️ Fallback: Normalized '\(step.title)' -> '\(stepType.rawValue)'")
+            // CRITICAL: Template steps MUST have explicit productType (English enum value)
+            // This ensures deterministic business logic independent of localization
+            guard let enumType = ProductType(rawValue: step.productType) else {
+                print("❌ CRITICAL: Invalid productType '\(step.productType)' for step '\(step.title)'")
+                assertionFailure("Template step missing valid productType")
+                continue
             }
+
+            print("✅ [TEMPLATE_SAVE] Evening step \(index+1): '\(step.title)' -> productType: '\(step.productType)' ✅")
 
             let stepTranslation = (stepTranslations != nil && stepTranslationIndex < stepTranslations!.count) ? stepTranslations![stepTranslationIndex] : nil
 
-            allStepDetails.append(SavedStepDetailModel(
+            let savedStep = SavedStepDetailModel(
                 title: step.title,
                 stepDescription: step.why,
-                stepType: stepType.rawValue,
+                stepType: enumType.rawValue,  // Guaranteed English enum value
                 timeOfDay: "evening",
                 why: step.why,
                 how: step.how,
                 order: index + template.morningSteps.count,
                 translations: stepTranslation
-            ))
+            )
+
+            print("   📝 Saved as: stepType='\(savedStep.stepType)' (English, deterministic)")
+            allStepDetails.append(savedStep)
             stepTranslationIndex += 1
         }
 

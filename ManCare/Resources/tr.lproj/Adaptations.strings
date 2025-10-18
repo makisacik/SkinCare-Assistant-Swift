@@ -39,6 +39,28 @@ ManCare - Cycle and weather adaptation guidance
 /* Menstrual Phase - Facial Oil */
 "cycle.menstrual.facialOil.guidance" = "Bariyer desteği için faydalı olabilir. 2-3 damladan fazla kullanmayın.";
 
+/* Menstrual Phase - Cleansing Oil */
+"cycle.menstrual.cleansingOil.guidance" = "Dairesel ve nazik hareketler kullanın. Bu hassas dönemde makyajı çıkarmak için harika, cildi de yormaz.";
+
+/* Menstrual Phase - Ampoule */
+"cycle.menstrual.ampoule.guidance" = "Seramid veya panthenol içeren nemlendirici veya yatıştırıcı ampuller seçin. 2-3 damla uygulayın ve nazikçe tamponlayın.";
+
+/* Menstrual Phase - Vitamin C */
+"cycle.menstrual.vitaminC.guidance" = "Kullanıyorsanız daha düşük konsantrasyonu (%10-15) tercih edin. Hassaslaşan bariyerde tahrişe neden olabilir.";
+"cycle.menstrual.vitaminC.warning" = "C vitamini hassas adet dönemi cildinde tahriş edici olabilir";
+
+/* Menstrual Phase - Niacinamide */
+"cycle.menstrual.niacinamide.guidance" = "Mükemmel bir seçim! Niasinamid bariyer onarımını destekler ve iltihaplanmayı azaltır. %5-10 konsantrasyon kullanın.";
+
+/* Menstrual Phase - Facial Mist */
+"cycle.menstrual.facialMist.guidance" = "Ferahlatıcı ve yatıştırıcı. Ekstra nem takviyesi için gün boyunca spreyleyin.";
+
+/* Menstrual Phase - Chemical Peel */
+"cycle.menstrual.chemicalPeel.warning" = "Hassas adet dönemi cildi için çok sert. Tamamen atlayın.";
+
+/* Menstrual Phase - Night Cream */
+"cycle.menstrual.nightCream.guidance" = "Zengin, besleyici bir gece kremi kullanın. Bu dönemde ekstra bariyer desteği kritik önem taşır.";
+
 /* Follicular Phase - Cleanser */
 "cycle.follicular.cleanser.guidance" = "Cildiniz artık daha dirençli! Normal temizleme tekniğinizi kullanın.";
 
@@ -49,7 +71,7 @@ ManCare - Cycle and weather adaptation guidance
 "cycle.follicular.retinol.guidance" = "Tam dozajınızı kullanmak için mükemmel bir zaman. Cilt emilimi şu anda optimum düzeyde.";
 
 /* Follicular Phase - Face Serum */
-"cycle.follicular.faceSerum.guidance" = "C vitamini, retinol veya peptit serumlar için ideal zaman. Cildiniz şimdi daha güçlü aktif içerikleri tolere edebilir.";
+"cycle.follicular.faceSerum.guidance" = "Serum tedavileri için harika bir zaman. Cildiniz aktifleri tolere eder ve ürünleri en iyi şekilde emiyor.";
 
 /* Follicular Phase - Essence */
 "cycle.follicular.essence.guidance" = "Yoğun esans bakımları için mükemmel bir zaman. Cildiniz besinleri en iyi şekilde emiyor.";
@@ -68,6 +90,27 @@ ManCare - Cycle and weather adaptation guidance
 
 /* Follicular Phase - Facial Oil */
 "cycle.follicular.facialOil.guidance" = "Yüz yağlarını kullanmak için harika bir zaman. Cilt şimdi onları harika bir şekilde emiyor.";
+
+/* Follicular Phase - Cleansing Oil */
+"cycle.follicular.cleansingOil.guidance" = "Çift temizleme için mükemmel! Cildiniz artık kapsamlı temizliği kaldırabilir.";
+
+/* Follicular Phase - Ampoule */
+"cycle.follicular.ampoule.guidance" = "Yüksek konsantrasyonlu aktifler içeren yoğun ampul tedavileri için harika bir zaman. 3-5 damla önerilir.";
+
+/* Follicular Phase - Vitamin C */
+"cycle.follicular.vitaminC.guidance" = "C vitamini için mükemmel bir zaman! %15-20 konsantrasyon kullanın. Cildiniz daha güçlü formülasyonları kaldırabilir.";
+
+/* Follicular Phase - Niacinamide */
+"cycle.follicular.niacinamide.guidance" = "Niasinamid için mükemmel bir zaman. Maksimum aydınlatma için %10 konsantrasyona kadar kullanabilirsiniz.";
+
+/* Follicular Phase - Chemical Peel */
+"cycle.follicular.chemicalPeel.guidance" = "Kimyasal peelingler için ideal zaman! Cilt bu dönemde dirençli ve hızlı iyileşir.";
+
+/* Follicular Phase - Facial Mist */
+"cycle.follicular.facialMist.guidance" = "İstediğiniz gibi kullanın. Cildiniz dengeli ve şu anda her şeye iyi yanıt veriyor.";
+
+/* Follicular Phase - Night Cream */
+"cycle.follicular.nightCream.guidance" = "Normal gece kreminiz mükemmel çalışıyor. Cilt her şeyi harika şekilde emiyor.";
 
 /* Ovulation Phase - Cleanser */
 "cycle.ovulation.cleanser.guidance" = "Rutininizi sürdürün. Cildiniz en iyi halinde!";
@@ -92,6 +135,24 @@ ManCare - Cycle and weather adaptation guidance
 
 /* Ovulation Phase - Facial Oil */
 "cycle.ovulation.facialOil.guidance" = "Normal kullanıma devam edin. Cildiniz dengeli ve ışıltılı.";
+
+/* Ovulation Phase - Cleansing Oil */
+"cycle.ovulation.cleansingOil.guidance" = "Normal çift temizleme rutininize devam edin. Cilt iyi dengelenmiş.";
+
+/* Ovulation Phase - Ampoule */
+"cycle.ovulation.ampoule.guidance" = "Cildiniz en iyi halinde. Normal ampul uygulamanıza devam edin.";
+
+/* Ovulation Phase - Vitamin C */
+"cycle.ovulation.vitaminC.guidance" = "Doğal ışıltınız C vitamini ile geliştirilir. Normal kullanıma devam edin.";
+
+/* Ovulation Phase - Niacinamide */
+"cycle.ovulation.niacinamide.guidance" = "Niasinamid rutininizi sürdürün. Cilt parlak ve eşit tonlu.";
+
+/* Ovulation Phase - Facial Mist */
+"cycle.ovulation.facialMist.guidance" = "Işıltılı, çiy gibi görünümünüzü korumak için istediğiniz gibi kullanın.";
+
+/* Ovulation Phase - Night Cream */
+"cycle.ovulation.nightCream.guidance" = "Normal gece kremi rutininize devam edin. Cilt iyi dengelenmiş.";
 
 /* Luteal Phase - Cleanser */
 "cycle.luteal.cleanser.guidance" = "Makyaj yapıyorsanız çift temizleme yapın. Bu fazda yağ üretimi artar.";
@@ -128,6 +189,31 @@ ManCare - Cycle and weather adaptation guidance
 "cycle.luteal.facialOil.guidance" = "Yağlı hissediyorsanız az kullanın veya atlayın. Doğal sebum üretiminiz daha yüksektir.";
 "cycle.luteal.facialOil.warning" = "Artan doğal yağ üretimi - tıkanıklığa neden olabilir";
 
+/* Luteal Phase - Cleansing Oil */
+"cycle.luteal.cleansingOil.guidance" = "Aşırı sebum ve makyajı çıkarmak için esastır. Kapsamlı temizlik için 60+ saniye masaj yapın.";
+
+/* Luteal Phase - Ampoule */
+"cycle.luteal.ampoule.guidance" = "Daha hafif formüller kullanın. Yağ üretimi arttıkça ağır ampuller çok zengin gelebilir.";
+"cycle.luteal.ampoule.warning" = "Yağlı hissediyorsanız yağ kontrollü veya matlaştırıcı ampullere geçin";
+
+/* Luteal Phase - Vitamin C */
+"cycle.luteal.vitaminC.guidance" = "Hassasiyet fark ediyorsanız daha düşük konsantrasyona (%10-15) geçmeyi düşünün.";
+"cycle.luteal.vitaminC.warning" = "Hormonlar değişirken tahrişe neden olabilir";
+
+/* Luteal Phase - Niacinamide */
+"cycle.luteal.niacinamide.guidance" = "Mükemmel bir seçim! Niasinamid yağı kontrol eder ve sivilce iltihabını azaltır.";
+
+/* Luteal Phase - Facial Mist */
+"cycle.luteal.facialMist.guidance" = "Matlaştırıcı veya yağ kontrollü spreyler seçin. Gün boyunca parlamayı kontrol etmeye yardımcı olur.";
+
+/* Luteal Phase - Chemical Peel */
+"cycle.luteal.chemicalPeel.guidance" = "Dikkatli kullanın. Cilt daha reaktif olabilir. Daha hafif formülasyonlar düşünün veya atlayın.";
+"cycle.luteal.chemicalPeel.warning" = "Artan hassasiyet - tahrişe neden olabilir";
+
+/* Luteal Phase - Night Cream */
+"cycle.luteal.nightCream.guidance" = "Yağlı hissediyorsanız daha hafif bir gece kremine veya jel bazlı nemlendiriciye geçmeyi düşünün.";
+"cycle.luteal.nightCream.warning" = "Ağır kremler bu dönemde tıkanıklığa neden olabilir";
+
 /* ====== WEATHER ADAPTATIONS (HAVA ADAPTASYONLARI) ====== */
 
 /* UV Extreme */
@@ -135,6 +221,11 @@ ManCare - Cycle and weather adaptation guidance
 "weather.uv_extreme.antioxidant.note" = "Aşırı UV hasarına karşı antioksidan koruma ekleyin.";
 "weather.uv_extreme.retinoid_skip.note" = "Sabah rutininizde retinoidleri atlayın—aşırı UV, ışığa duyarlılığı artırır.";
 "weather.uv_extreme.exfoliant_skip.note" = "Sabah peelinglerini atlayın—aşırı UV, hassaslaşan cilde zarar verir.";
+"weather.uv_extreme.essence.note" = "Hızlıca uygulayın ve SPF ile takip edin. Aşırı UV günlerinde esansa ekstra zaman harcamayın.";
+"weather.uv_extreme.moisturizer.note" = "Hafif formül kullanın. SPF 50+ altında ağır nemlendiriciler çok kalın hissedebilir.";
+"weather.uv_extreme.eyecream.note" = "Göz çevresi için SPF korumasını unutmayın. Dışarıda güneş gözlüğü takın.";
+"weather.uv_extreme.niacinamide.note" = "Niasinamid UV hasarını ve hiperpigmentasyonu önlemeye yardımcı olur. Güneş kreminden önce uygulayın.";
+"weather.uv_extreme.vitaminc.note" = "C vitamini SPF altında katmanlandığında güneş korumasını artırır. %15-20 konsantrasyon kullanın.";
 
 /* UV High */
 "weather.uv_high.sunscreen.note" = "UV yüksek seviyede. SPF 50+ kullanın ve her 2 saatte bir yenileyin. Antioksidan serum ekleyin.";
@@ -152,24 +243,45 @@ ManCare - Cycle and weather adaptation guidance
 /* Low Humidity */
 "weather.low_humidity.moisturizer.note" = "Hava kuru. Daha yoğun nemlendirici kullanın veya oklüzif (bariyer) bir katman ekleyin.";
 "weather.low_humidity.hydration.note" = "Kuru havayla mücadele etmek için nemlendirici bir tonik veya HA (hyaluronik asit) serum ekleyin.";
-"weather.low_humidity.exfoliant_caution.note" = "Kuru koşullarda aşırı peelingden kaçının—bariyeri zayıflatabilir.";
+"weather.low_humidity.exfoliant_caution.note" = "Peeling sıklığını azaltın. Kuru hava cildi asitlere karşı daha hassas hale getirir.";
+"weather.low_humidity.essence.note" = "Esans kuru havada kritik nemlendirme katmanı sağlar. Cömertçe uygulayın ve iyice tamponlayın.";
+"weather.low_humidity.faceserum.note" = "Hyaluronik asit veya gliserin içeren nemlendirici serumlar seçin. Gerekirse birden fazla serum katmanlayın.";
+"weather.low_humidity.eyecream.note" = "Göz çevresi kuruluk belirtilerini ilk gösteren alan. Ekstra ürün uygulayın ve gerekirse gün boyunca tekrarlayın.";
+"weather.low_humidity.facialoil.note" = "Yüz yağı nem kaybını önler ve içerideki nemi kilitler. Son adım olarak 3-5 damla uygulayın.";
+"weather.low_humidity.toner.note" = "Sıkılaştırıcı değil, nemlendirici tonik kullanın. Ekstra nemlendirme için çoklu katmanlar (7-skin metodu) uygulayın.";
+"weather.low_humidity.facialmist.note" = "Kurulukla mücadele için gün boyunca spreyleyin. Nemi kilitlemek için hafif nemlendirici ile takip edin.";
 
 /* High Humidity */
-"weather.high_humidity.moisturizer.note" = "Nemli koşullar. Ağır kremler yerine daha hafif jel nemlendirici kullanın.";
+"weather.high_humidity.moisturizer.note" = "Jel veya hafif formüle geçin. Ağır kremler nemli havalarda boğucu hissettirebilir.";
 "weather.high_humidity.occlusive_skip.note" = "Nemli havalarda kalın oklüzifleri veya ağır yağları atlayın.";
+"weather.high_humidity.essence.note" = "Sadece su bazlı esans kullanın. Yağlılık hissini önlemek için ağır, yağ bazlı esansları atlayın.";
+"weather.high_humidity.facialoil.note" = "Nemli havalarda yüz yağını atlayın. Doğal yağ üretimi zaten yüksektir.";
+"weather.high_humidity.toner.note" = "Matlaştırıcı veya gözenek sıkılaştırıcı tonik kullanın. Parlamayı kontrol etmeye ve yağ üretimini minimize etmeye yardımcı olur.";
+"weather.high_humidity.facialmist.note" = "Parlamayı kontrol etmek için matlaştırıcı sprey kullanın. Gün boyunca gerektiğinde spreyleyin.";
+"weather.high_humidity.niacinamide.note" = "Niasinamid nemli havalarda sebum üretimini düzenlemeye yardımcı olur. %10 konsantrasyon kullanın.";
 
 /* Windy */
 "weather.windy.barrier.note" = "Rüzgarlı koşullar nemi ciltten çeker. Bariyer krem veya balm uygulayın.";
 "weather.windy.exfoliant_skip.note" = "Bugün sert peelingleri atlayın—rüzgar hassaslaşan cildi tahriş edebilir.";
 "weather.windy.retinoid_caution.note" = "Rüzgar cildi tahriş edebilir. Bugün retinoidlerin gücünü azaltın.";
+"weather.windy.moisturizer.note" = "Seramid içeren bariyer onarıcı krem kullanın. Rüzgar cilt bariyerine hızla zarar verir.";
+"weather.windy.facialoil.note" = "Rüzgar hasarına karşı koruyucu bariyer oluşturmak için yüz yağı uygulayın.";
+"weather.windy.exfoliant.note" = "Peeling yapmayın. Peeling yapılmış cilde rüzgar maruziyeti ciddi tahrişe neden olur.";
 
 /* Cold */
-"weather.cold.moisturizer.note" = "Soğuk hava daha zengin bir koruma gerektirir. Seramid veya skualan içeren daha yoğun nemlendirici kullanın.";
+"weather.cold.moisturizer.note" = "Daha kalın, daha zengin krem kullanın. Soğuk hava ciltten nemi hızla çeker.";
 "weather.cold.barrier.note" = "Bariyeri destekleyen içerikler (seramid, skualan, niasinamid) ekleyin.";
+"weather.cold.eyecream.note" = "Göz çevresine ekstra ürün uygulayın. Soğuk rüzgar gözlerin etrafında kuruluk ve tahrişe neden olur.";
+"weather.cold.facialoil.note" = "Soğuk havaya karşı ekstra koruma bariyeri için nemlendirici üzerine yüz yağı katmanlayın.";
+"weather.cold.cleanser.note" = "Nazik, krem bazlı temizleyici kullanın. Doğal yağları soyup alan köpüren temizleyicilerden kaçının.";
+"weather.cold.exfoliant.note" = "Sıklığı haftada maksimum 1-2 kez azaltın. Soğuk hava cilt bariyerini zayıflatır.";
 
 /* Hot */
-"weather.hot.moisturizer.note" = "Sıcak hava daha hafif ürünler gerektirir. Yağsız, matlaştırıcı formülasyonlar kullanın.";
+"weather.hot.moisturizer.note" = "Jel bazlı veya su-krem formüle geçin. Ağır kremler sıcakta rahatsız edici hissedilir.";
 "weather.hot.spf_mattifying.note" = "Sıcak hava güneşe maruziyeti artırır. Matlaştırıcı güneş kremi kullanın ve terleme nedeniyle sık sık yenileyin.";
+"weather.hot.cleanser.note" = "Terliyorsanız daha sık temizleyin. Aşırı yağ ve teri çıkarmak için nazik köpüren temizleyici kullanın.";
+"weather.hot.facialmist.note" = "Soğutma etkisi için buzdolabında saklayın. Tazelemek ve nemlendirmek için sık sık spreyleyin.";
+"weather.hot.essence.note" = "Sadece sulu esans kullanın. Sıcakta ağır hissedilen kalın, viskoz formülleri atlayın.";
 
 /* Hot + Humid */
 "weather.hot_humid.combo_spf.note" = "Sıcak ve nemli. Konfor için jel bazlı SPF seçin. Her 2 saatte bir yenileyin.";
@@ -177,6 +289,10 @@ ManCare - Cycle and weather adaptation guidance
 /* Snow */
 "weather.snow.spf_extreme.note" = "Kar, UV ışınlarının %80'ine kadarını yansıtır—bu çifte maruziyet demektir. Aşırı UV günü gibi davranın.";
 "weather.snow.retinoid_caution.note" = "Sabah retinoidlerini atlayın—kar yansıması UV maruziyetini iki katına çıkarır.";
+"weather.snow.moisturizer.note" = "Sahip olduğunuz en zengin kremi kullanın. Kar UV'yi yansıtır ve soğuk hava aşırı kuruluk yaratır.";
+"weather.snow.sunscreen.note" = "KRİTİK: Kar, UV ışınlarının %80'ini yansıtır. SPF 50+ kullanın ve dışarıda her 2 saatte bir yenileyin.";
+"weather.snow.facialoil.note" = "Nemlendirici üzerine cömertçe katmanlayın. Sert koşullara karşı hayati koruyucu bariyer oluşturur.";
+"weather.snow.exfoliant.note" = "Karlı koşullarda peeling YAPMAYIN. Soğuk + UV yansıması kombinasyonu bariyere zarar verir.";
 
 /* ====== ENSURE TITLES (Ürün Önerileri) ====== */
 "ensure.sunscreen_spf50" = "Güneş Kremi SPF 50+";
@@ -324,3 +440,26 @@ ManCare - Cycle and weather adaptation guidance
 "briefing.snow.tip.3" = "Gözleri korumak için güneş gözlüğü takın";
 "briefing.snow.tip.4" = "Güneş kremini sık sık yenileyin";
 "briefing.snow.warning.1" = "Kar, UV ışınlarının %80'ine kadarını yansıtır";
+
+/* Cycle - Hyaluronic Acid */
+"cycle.follicular.hyaluronicAcid.guidance" = "Hyaluronik asit için mükemmel zaman! Cildiniz en iyi nem fazında. Maksimum emilim için nemli cilde uygulayın.";
+"cycle.menstrual.hyaluronicAcid.guidance" = "Bu fazda nem anahtardır. Hyaluronik asidi nemli cilde uygulayın ve hemen nemlendirici ile mühürleyin.";
+"cycle.ovulation.hyaluronicAcid.guidance" = "Cildiniz en parlak döneminde! Hyaluronik asit doğal ışıltınızı artırır. Sabah ve akşam uygulayın.";
+"cycle.luteal.hyaluronicAcid.guidance" = "Artan yağlanmaya karşı nemlendirici (yağlı olmayan) bileşenler kullanın. Hyaluronik asit yağsız nem sağlar.";
+
+/* Cycle - Peptide */
+"cycle.follicular.peptide.guidance" = "Peptitler için mükemmel zaman! Cildinizin kolajen üretimi doğal olarak daha yüksek. Düzenli kullanın.";
+"cycle.menstrual.peptide.guidance" = "Peptitler nazik ve hassas adet fazı cildi için uygundur. Normalde devam edin.";
+"cycle.ovulation.peptide.guidance" = "Peptit faydalarını maksimuma çıkarmak için mükemmel zaman! Cildiniz sıkılaştırıcı ve dolgunlaştırıcı bileşenlere en açık.";
+"cycle.luteal.peptide.guidance" = "Peptitler komedojenik değildir ve güvenle kullanılabilir. Sivilceye eğilimli fazda bile yaşlanma karşıtı rutininize devam edin.";
+
+/* Weather - Hyaluronic Acid */
+"weather.hotDry.hyaluronicAcid.guidance" = "Kuru sıcakta çok önemli! Temizlemeden hemen sonra nemli cilde uygulayın. Buharlaşmayı önlemek için tıkayıcı nemlendiriciyle katmanlayın.";
+"weather.hotDry.hyaluronicAcid.warning" = "Hava çok kuru ise HA ciltten nemi çekebilir - her zaman nemlendiriciyle mühürleyin";
+"weather.hotHumid.hyaluronicAcid.guidance" = "Yüksek nem doğal nemlendirme sağlar. Daha az miktarda kullanabilir veya cilt yeterince nemli hissediyorsa atlayabilirsiniz.";
+"weather.cold.hyaluronicAcid.guidance" = "Soğuk hava nemlendirmesi için kritik! Nemli cilde uygulayın ve hemen mühürleyin. Soğuk, kuru havadan nem kaybını önler.";
+"weather.cold.hyaluronicAcid.warning" = "Her zaman üstüne nemlendirici uygulayın - soğuk havada HA mühürlenmelidir";
+
+/* Weather - Peptide */
+"weather.general.peptide.guidance" = "Peptitler tüm hava koşullarında kararlıdır. Yaşlanma karşıtı faydalar için düzenli kullanıma devam edin.";
+"weather.hotDry.peptide.guidance" = "Peptitler için mükemmel zaman! Kuru sıcak peptit etkinliğini etkilemez. Bariyer onarımını desteklemek için kullanın.";

@@ -1875,6 +1875,8 @@ struct L10n {
             static var retinol: String { manager.localizedString("products.type.retinol", table: "Products") }
             static var vitaminC: String { manager.localizedString("products.type.vitaminC", table: "Products") }
             static var niacinamide: String { manager.localizedString("products.type.niacinamide", table: "Products") }
+            static var hyaluronicAcid: String { manager.localizedString("products.type.hyaluronicAcid", table: "Products") }
+            static var peptide: String { manager.localizedString("products.type.peptide", table: "Products") }
             static var faceSunscreen: String { manager.localizedString("products.type.faceSunscreen", table: "Products") }
             static var bodySunscreen: String { manager.localizedString("products.type.bodySunscreen", table: "Products") }
             static var lipBalm: String { manager.localizedString("products.type.lipBalm", table: "Products") }

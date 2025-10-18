@@ -184,8 +184,9 @@ class MockRoutineService: RoutineServiceProtocol {
 
     func saveInitialRoutine(from routineResponse: RoutineResponse) async throws -> SavedRoutineModel {
         // Convert RoutineResponse to RoutineTemplate first
-        let template = RoutineTemplate(
+        let template =         RoutineTemplate(
             id: UUID(),
+            routineId: nil,
             title: routineResponse.summary.title,
             description: routineResponse.summary.oneLiner,
             category: .all,
@@ -196,14 +197,16 @@ class MockRoutineService: RoutineServiceProtocol {
                 TemplateRoutineStep(
                     title: step.name,
                     why: step.why,
-                    how: step.how
+                    how: step.how,
+                    productType: step.step.rawValue  // Use English enum from API response
                 )
             },
             eveningSteps: routineResponse.routine.evening.map { step in
                 TemplateRoutineStep(
                     title: step.name,
                     why: step.why,
-                    how: step.how
+                    how: step.how,
+                    productType: step.step.rawValue  // Use English enum from API response
                 )
             },
             benefits: ["Mock benefit"],

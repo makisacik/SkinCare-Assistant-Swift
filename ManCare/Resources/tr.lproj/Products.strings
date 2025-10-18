@@ -146,6 +146,8 @@ ManCare - Ürünler sekmesi ile ilgili metinler
 "products.type.retinol" = "Retinol";
 "products.type.vitaminC" = "C Vitamini Serumu";
 "products.type.niacinamide" = "Niasinamid Serumu";
+"products.type.hyaluronicAcid" = "Hyaluronik Asit";
+"products.type.peptide" = "Peptit Kompleksi";
 "products.type.faceSunscreen" = "Yüz Güneş Kremi";
 "products.type.bodySunscreen" = "Vücut Güneş Kremi";
 "products.type.lipBalm" = "Dudak Balsamı";

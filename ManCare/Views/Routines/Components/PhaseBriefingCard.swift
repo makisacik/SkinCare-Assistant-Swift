@@ -190,6 +190,7 @@ struct PhaseBriefingCard: View {
     let routine = SavedRoutineModel(
         from: RoutineTemplate(
             id: UUID(),
+            routineId: nil,
             title: "Test",
             description: "Test",
             category: .all,
@@ -200,7 +201,8 @@ struct PhaseBriefingCard: View {
                 TemplateRoutineStep(
                     title: "Cleanser",
                     why: "Test why",
-                    how: "Test how"
+                    how: "Test how",
+                    productType: "cleanser"
                 )
             ],
             eveningSteps: [],

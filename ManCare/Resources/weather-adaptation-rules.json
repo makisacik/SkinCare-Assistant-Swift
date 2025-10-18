@@ -501,6 +501,676 @@
         "priority": 145,
         "userOverrideAllowed": false
       }
+    },
+    {
+      "id": "uv_extreme_essence",
+      "appliesTo": "am",
+      "when": ["uv_extreme"],
+      "target": {
+        "kinds": ["essence"]
+      },
+      "effects": {
+        "emphasis": "normal",
+        "i18n": {
+          "noteKey": "weather.uv_extreme.essence.note"
+        },
+        "note": "Apply quickly and follow with SPF. Don't spend extra time on essence during extreme UV days.",
+        "priority": 70,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "uv_extreme_moisturizer",
+      "appliesTo": "am",
+      "when": ["uv_extreme"],
+      "target": {
+        "kinds": ["moisturizer"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.uv_extreme.moisturizer.note"
+        },
+        "note": "Use lightweight formula. Heavy moisturizers under SPF 50+ can feel too thick.",
+        "priority": 75,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "uv_extreme_eyecream",
+      "appliesTo": "am",
+      "when": ["uv_extreme"],
+      "target": {
+        "kinds": ["eyeCream", "eye_cream"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.uv_extreme.eyecream.note"
+        },
+        "note": "Don't forget SPF-protection for eye area. Wear sunglasses outdoors.",
+        "priority": 85,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "uv_extreme_niacinamide",
+      "appliesTo": "am",
+      "when": ["uv_extreme"],
+      "target": {
+        "kinds": ["niacinamide"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.uv_extreme.niacinamide.note"
+        },
+        "note": "Niacinamide helps prevent UV damage and hyperpigmentation. Apply before sunscreen.",
+        "priority": 135,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "uv_extreme_vitaminc",
+      "appliesTo": "am",
+      "when": ["uv_extreme"],
+      "target": {
+        "kinds": ["vitaminC", "vitamin_c"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.uv_extreme.vitaminc.note"
+        },
+        "note": "Vitamin C boosts sun protection when layered under SPF. Use 15-20% concentration.",
+        "priority": 145,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "low_humidity_essence",
+      "appliesTo": "both",
+      "when": ["low_humidity"],
+      "target": {
+        "kinds": ["essence"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.low_humidity.essence.note"
+        },
+        "note": "Essence provides crucial hydration layer in dry air. Apply generously and pat in thoroughly.",
+        "priority": 100,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "low_humidity_faceserum",
+      "appliesTo": "both",
+      "when": ["low_humidity"],
+      "target": {
+        "kinds": ["faceSerum", "serum"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.low_humidity.faceserum.note"
+        },
+        "note": "Choose hydrating serums with hyaluronic acid or glycerin. Layer multiple serums if needed.",
+        "priority": 105,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "low_humidity_eyecream",
+      "appliesTo": "both",
+      "when": ["low_humidity"],
+      "target": {
+        "kinds": ["eyeCream", "eye_cream"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.low_humidity.eyecream.note"
+        },
+        "note": "Eye area shows dryness first. Apply extra product and reapply throughout day if needed.",
+        "priority": 95,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "low_humidity_facialoil",
+      "appliesTo": "both",
+      "when": ["low_humidity"],
+      "target": {
+        "kinds": ["facialOil", "face_oil", "facial_oil"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.low_humidity.facialoil.note"
+        },
+        "note": "Facial oil seals in moisture and prevents water loss. Apply as last step, 3-5 drops.",
+        "priority": 110,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "low_humidity_toner",
+      "appliesTo": "both",
+      "when": ["low_humidity"],
+      "target": {
+        "kinds": ["toner"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.low_humidity.toner.note"
+        },
+        "note": "Use hydrating toner, not astringent. Apply multiple layers (7-skin method) for extra hydration.",
+        "priority": 90,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "low_humidity_facialmist",
+      "appliesTo": "both",
+      "when": ["low_humidity"],
+      "target": {
+        "kinds": ["facialMist", "facial_mist"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.low_humidity.facialmist.note"
+        },
+        "note": "Mist throughout the day to combat dryness. Follow with light moisturizer to seal in moisture.",
+        "priority": 85,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "low_humidity_exfoliant_caution",
+      "appliesTo": "both",
+      "when": ["low_humidity"],
+      "target": {
+        "kinds": ["exfoliant", "exfoliator", "peel"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.low_humidity.exfoliant_caution.note"
+        },
+        "note": "Reduce exfoliation frequency. Dry air makes skin more sensitive to acids.",
+        "priority": 80,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "high_humidity_moisturizer_light",
+      "appliesTo": "both",
+      "when": ["high_humidity"],
+      "target": {
+        "kinds": ["moisturizer"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.high_humidity.moisturizer.note"
+        },
+        "note": "Switch to gel or lightweight formula. Heavy creams may feel suffocating in humid weather.",
+        "priority": 70,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "high_humidity_essence_light",
+      "appliesTo": "both",
+      "when": ["high_humidity"],
+      "target": {
+        "kinds": ["essence"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.high_humidity.essence.note"
+        },
+        "note": "Use water-based essence only. Skip heavy, oil-based essences to avoid greasiness.",
+        "priority": 65,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "high_humidity_facialoil_skip",
+      "appliesTo": "both",
+      "when": ["high_humidity"],
+      "target": {
+        "kinds": ["facialOil", "face_oil", "facial_oil"]
+      },
+      "effects": {
+        "emphasis": "skip",
+        "i18n": {
+          "noteKey": "weather.high_humidity.facialoil.note"
+        },
+        "note": "Skip facial oil in humid weather. Natural oil production is already elevated.",
+        "priority": 75,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "high_humidity_toner_mattify",
+      "appliesTo": "both",
+      "when": ["high_humidity"],
+      "target": {
+        "kinds": ["toner"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.high_humidity.toner.note"
+        },
+        "note": "Use mattifying or pore-refining toner. Helps control shine and minimize oil production.",
+        "priority": 85,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "high_humidity_facialmist_mattify",
+      "appliesTo": "both",
+      "when": ["high_humidity"],
+      "target": {
+        "kinds": ["facialMist", "facial_mist"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.high_humidity.facialmist.note"
+        },
+        "note": "Use mattifying mist to control shine. Mist throughout day as needed.",
+        "priority": 80,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "high_humidity_niacinamide",
+      "appliesTo": "both",
+      "when": ["high_humidity"],
+      "target": {
+        "kinds": ["niacinamide"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.high_humidity.niacinamide.note"
+        },
+        "note": "Niacinamide helps regulate sebum production in humid weather. Use 10% concentration.",
+        "priority": 90,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "cold_moisturizer_rich",
+      "appliesTo": "both",
+      "when": ["cold"],
+      "target": {
+        "kinds": ["moisturizer"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.cold.moisturizer.note"
+        },
+        "note": "Use thicker, richer cream. Cold air strips moisture from skin rapidly.",
+        "priority": 100,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "cold_eyecream",
+      "appliesTo": "both",
+      "when": ["cold"],
+      "target": {
+        "kinds": ["eyeCream", "eye_cream"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.cold.eyecream.note"
+        },
+        "note": "Apply extra to eye area. Cold wind causes dryness and irritation around eyes.",
+        "priority": 95,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "cold_facialoil",
+      "appliesTo": "both",
+      "when": ["cold"],
+      "target": {
+        "kinds": ["facialOil", "face_oil", "facial_oil"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.cold.facialoil.note"
+        },
+        "note": "Layer facial oil over moisturizer for extra protection barrier against cold air.",
+        "priority": 105,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "cold_cleanser_gentle",
+      "appliesTo": "both",
+      "when": ["cold"],
+      "target": {
+        "kinds": ["cleanser"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.cold.cleanser.note"
+        },
+        "note": "Use gentle, cream-based cleanser. Avoid foaming cleansers that strip natural oils.",
+        "priority": 90,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "cold_exfoliant_caution",
+      "appliesTo": "both",
+      "when": ["cold"],
+      "target": {
+        "kinds": ["exfoliant", "exfoliator", "peel"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.cold.exfoliant.note"
+        },
+        "note": "Reduce frequency to 1-2x/week max. Cold weather compromises skin barrier.",
+        "priority": 85,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "hot_moisturizer_light",
+      "appliesTo": "both",
+      "when": ["hot"],
+      "target": {
+        "kinds": ["moisturizer"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.hot.moisturizer.note"
+        },
+        "note": "Switch to gel-based or water-cream formula. Heavy creams feel uncomfortable in heat.",
+        "priority": 75,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "hot_cleanser",
+      "appliesTo": "both",
+      "when": ["hot"],
+      "target": {
+        "kinds": ["cleanser"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.hot.cleanser.note"
+        },
+        "note": "Cleanse more frequently if sweating. Use gentle foaming cleanser to remove excess oil and sweat.",
+        "priority": 85,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "hot_facialmist",
+      "appliesTo": "both",
+      "when": ["hot"],
+      "target": {
+        "kinds": ["facialMist", "facial_mist"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.hot.facialmist.note"
+        },
+        "note": "Keep in fridge for cooling effect. Mist frequently to refresh and hydrate.",
+        "priority": 90,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "hot_essence_light",
+      "appliesTo": "both",
+      "when": ["hot"],
+      "target": {
+        "kinds": ["essence"]
+      },
+      "effects": {
+        "emphasis": "reduce",
+        "i18n": {
+          "noteKey": "weather.hot.essence.note"
+        },
+        "note": "Use watery essence only. Skip thick, viscous formulas that feel heavy in heat.",
+        "priority": 70,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "windy_moisturizer_barrier",
+      "appliesTo": "both",
+      "when": ["windy"],
+      "target": {
+        "kinds": ["moisturizer"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.windy.moisturizer.note"
+        },
+        "note": "Use barrier-repair cream with ceramides. Wind damages skin barrier rapidly.",
+        "priority": 100,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "windy_facialoil",
+      "appliesTo": "both",
+      "when": ["windy"],
+      "target": {
+        "kinds": ["facialOil", "face_oil", "facial_oil"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.windy.facialoil.note"
+        },
+        "note": "Apply facial oil to create protective barrier against wind damage.",
+        "priority": 105,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "windy_exfoliant_avoid",
+      "appliesTo": "both",
+      "when": ["windy"],
+      "target": {
+        "kinds": ["exfoliant", "exfoliator", "peel"]
+      },
+      "effects": {
+        "emphasis": "skip",
+        "i18n": {
+          "noteKey": "weather.windy.exfoliant.note"
+        },
+        "note": "Skip exfoliation. Wind exposure on exfoliated skin causes severe irritation.",
+        "priority": 110,
+        "userOverrideAllowed": false
+      }
+    },
+    {
+      "id": "snow_moisturizer_intense",
+      "appliesTo": "both",
+      "when": ["snow"],
+      "target": {
+        "kinds": ["moisturizer"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.snow.moisturizer.note"
+        },
+        "note": "Use richest cream you have. Snow reflects UV and cold air causes extreme dryness.",
+        "priority": 120,
+        "userOverrideAllowed": false
+      }
+    },
+    {
+      "id": "snow_sunscreen_mandatory",
+      "appliesTo": "am",
+      "when": ["snow"],
+      "target": {
+        "kinds": ["sunscreen", "spf", "faceSunscreen"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.snow.sunscreen.note"
+        },
+        "note": "CRITICAL: Snow reflects 80% of UV rays. Use SPF 50+ and reapply every 2 hours outdoors.",
+        "priority": 150,
+        "userOverrideAllowed": false
+      }
+    },
+    {
+      "id": "snow_facialoil_barrier",
+      "appliesTo": "both",
+      "when": ["snow"],
+      "target": {
+        "kinds": ["facialOil", "face_oil", "facial_oil"]
+      },
+      "effects": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "noteKey": "weather.snow.facialoil.note"
+        },
+        "note": "Layer generously over moisturizer. Creates essential protective barrier in harsh conditions.",
+        "priority": 115,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "snow_exfoliant_forbidden",
+      "appliesTo": "both",
+      "when": ["snow"],
+      "target": {
+        "kinds": ["exfoliant", "exfoliator", "peel"]
+      },
+      "effects": {
+        "suppress": true,
+        "i18n": {
+          "noteKey": "weather.snow.exfoliant.note"
+        },
+        "note": "Do NOT exfoliate during snow conditions. Combination of cold + UV reflection will damage barrier.",
+        "priority": 140,
+        "userOverrideAllowed": false
+      }
+    },
+    {
+      "id": "hotDry-hyaluronicAcid",
+      "productTypes": ["hyaluronicAcid"],
+      "conditions": {
+        "tempRange": ["hot"],
+        "humidityRange": ["dry"]
+      },
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "weather.hotDry.hyaluronicAcid.guidance",
+          "warningKeys": ["weather.hotDry.hyaluronicAcid.warning"]
+        },
+        "guidance": "Essential in dry heat! Apply to damp skin immediately after cleansing. Layer with occlusive moisturizer to prevent evaporation.",
+        "warnings": [
+          "HA can pull moisture FROM skin if air is too dry - always seal with moisturizer"
+        ],
+        "priority": 50,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "hotHumid-hyaluronicAcid",
+      "productTypes": ["hyaluronicAcid"],
+      "conditions": {
+        "tempRange": ["hot"],
+        "humidityRange": ["humid"]
+      },
+      "action": {
+        "emphasis": "reduce",
+        "i18n": {
+          "guidanceKey": "weather.hotHumid.hyaluronicAcid.guidance"
+        },
+        "guidance": "High humidity provides natural hydration. You may use lighter amounts or skip if skin feels sufficiently hydrated.",
+        "warnings": [],
+        "priority": 30,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "cold-hyaluronicAcid",
+      "productTypes": ["hyaluronicAcid"],
+      "conditions": {
+        "tempRange": ["cold", "veryCold"]
+      },
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "weather.cold.hyaluronicAcid.guidance",
+          "warningKeys": ["weather.cold.hyaluronicAcid.warning"]
+        },
+        "guidance": "Critical for cold weather hydration! Apply to damp skin and seal immediately. Prevents moisture loss from cold, dry air.",
+        "warnings": [
+          "Always apply moisturizer on top - HA needs to be sealed in cold weather"
+        ],
+        "priority": 60,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "general-peptide",
+      "productTypes": ["peptide"],
+      "conditions": {},
+      "action": {
+        "emphasis": "normal",
+        "i18n": {
+          "guidanceKey": "weather.general.peptide.guidance"
+        },
+        "guidance": "Peptides are stable in all weather conditions. Continue regular use for anti-aging benefits.",
+        "warnings": [],
+        "priority": 10,
+        "userOverrideAllowed": true
+      }
+    },
+    {
+      "id": "hotDry-peptide",
+      "productTypes": ["peptide"],
+      "conditions": {
+        "tempRange": ["hot"],
+        "humidityRange": ["dry"]
+      },
+      "action": {
+        "emphasis": "emphasize",
+        "i18n": {
+          "guidanceKey": "weather.hotDry.peptide.guidance"
+        },
+        "guidance": "Excellent time for peptides! Dry heat doesn't affect peptide efficacy. Use to support barrier repair.",
+        "warnings": [],
+        "priority": 40,
+        "userOverrideAllowed": true
+      }
     }
   ],
   "briefings": [

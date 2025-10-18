@@ -630,70 +630,128 @@ final class RoutineService: RoutineServiceProtocol {
         return (routine: routineTranslations, steps: allStepTranslations)
     }
 
-    /// Create translation objects for a routine template, including both English and device locale
+    /// Create translation objects for a routine template, including both English and device language
     private func createTemplateTranslations(from template: RoutineTemplate) async throws -> (routine: RoutineTranslations, steps: [StepTranslations]) {
-        // IMPORTANT: Premade templates should NOT call translation APIs
-        // For now, we only store English until we add proper template translations to JSON
-        print("📦 Creating template translations (English-only, no API calls)")
+        // CRITICAL: Templates must store BOTH English AND device language
+        // This matches GPS routine behavior where we always have en + device language
+        print("📦 Creating template translations (fetching from BOTH en + device language bundles)")
 
         let deviceLanguage = LocalizationUtils.deviceLocaleLanguage()
-
-        // Start with English versions (from the template)
-        var routineTitleTranslations: [String: String] = ["en": template.title]
-        var routineDescTranslations: [String: String] = ["en": template.description]
-        var benefitsTranslations: [String: [String]] = ["en": template.benefits]
-        var tagsTranslations: [String: [String]] = ["en": template.tags]
-
-        // Merge embedded translations if available (NO API calls)
-        if let templateTrans = template.translations {
-            for (lang, title) in templateTrans.title {
-                routineTitleTranslations[lang] = title
-            }
-            for (lang, desc) in templateTrans.description {
-                routineDescTranslations[lang] = desc
-            }
-            for (lang, benefits) in templateTrans.benefits {
-                benefitsTranslations[lang] = benefits
-            }
-            for (lang, tags) in templateTrans.tags {
-                tagsTranslations[lang] = tags
-            }
-            print("✅ Found embedded translations for: \(templateTrans.title.keys.sorted())")
+        guard let routineId = template.routineId else {
+            print("❌ Template missing routineId - cannot fetch translations")
+            // Fallback to current language only
+            return (
+                routine: RoutineTranslations(
+                    title: [deviceLanguage: template.title],
+                    description: [deviceLanguage: template.description],
+                    benefits: [deviceLanguage: template.benefits],
+                    tags: [deviceLanguage: template.tags]
+                ),
+                steps: []
+            )
         }
+        
+        let locManager = LocalizationManager.shared
+        
+        // Fetch routine translations for BOTH languages
+        var routineTitleTranslations: [String: String] = [:]
+        var routineDescTranslations: [String: String] = [:]
+        var benefitsTranslations: [String: [String]] = [:]
+        var tagsTranslations: [String: [String]] = [:]
+        
+        // Always fetch English
+        if let enTitle = locManager.localizedString("templates.routine.\(routineId).title", table: "Templates", forLanguage: "en") {
+            routineTitleTranslations["en"] = enTitle
+        }
+        if let enDesc = locManager.localizedString("templates.routine.\(routineId).description", table: "Templates", forLanguage: "en") {
+            routineDescTranslations["en"] = enDesc
+        }
+        
+        // Fetch device language if different from English
+        if deviceLanguage != "en" {
+            if let deviceTitle = locManager.localizedString("templates.routine.\(routineId).title", table: "Templates", forLanguage: deviceLanguage) {
+                routineTitleTranslations[deviceLanguage] = deviceTitle
+            }
+            if let deviceDesc = locManager.localizedString("templates.routine.\(routineId).description", table: "Templates", forLanguage: deviceLanguage) {
+                routineDescTranslations[deviceLanguage] = deviceDesc
+            }
+        }
+        
+        // Fetch benefits and tags from BOTH languages
+        var enBenefits: [String] = []
+        var deviceBenefits: [String] = []
+        var enTags: [String] = []
+        var deviceTags: [String] = []
+        
+        // Determine how many benefits and tags (from template)
+        let benefitCount = template.benefits.count
+        let tagCount = template.tags.count
+        
+        for i in 1...benefitCount {
+            if let enBenefit = locManager.localizedString("templates.routine.\(routineId).benefit\(i)", table: "Templates", forLanguage: "en") {
+                enBenefits.append(enBenefit)
+            }
+            if deviceLanguage != "en", let deviceBenefit = locManager.localizedString("templates.routine.\(routineId).benefit\(i)", table: "Templates", forLanguage: deviceLanguage) {
+                deviceBenefits.append(deviceBenefit)
+            }
+        }
+        
+        for i in 1...tagCount {
+            if let enTag = locManager.localizedString("templates.routine.\(routineId).tag\(i)", table: "Templates", forLanguage: "en") {
+                enTags.append(enTag)
+            }
+            if deviceLanguage != "en", let deviceTag = locManager.localizedString("templates.routine.\(routineId).tag\(i)", table: "Templates", forLanguage: deviceLanguage) {
+                deviceTags.append(deviceTag)
+            }
+        }
+        
+        if !enBenefits.isEmpty {
+            benefitsTranslations["en"] = enBenefits
+        }
+        if !enTags.isEmpty {
+            tagsTranslations["en"] = enTags
+        }
+        if deviceLanguage != "en" && !deviceBenefits.isEmpty {
+            benefitsTranslations[deviceLanguage] = deviceBenefits
+        }
+        if deviceLanguage != "en" && !deviceTags.isEmpty {
+            tagsTranslations[deviceLanguage] = deviceTags
+        }
+        
+        print("✅ Fetched routine translations for: \(routineTitleTranslations.keys.sorted())")
+        print("✅ Benefits in: \(benefitsTranslations.keys.sorted()), Tags in: \(tagsTranslations.keys.sorted())")
 
-        // Create step translations
+        // Create step translations for BOTH languages
         var allStepTranslations: [StepTranslations] = []
 
-        // Process morning steps with embedded translations
-        for step in template.morningSteps {
-            var titleTrans: [String: String] = ["en": step.title]
-            var whyTrans: [String: String] = ["en": step.why]
-            var howTrans: [String: String] = ["en": step.how]
-
-            if let stepTrans = step.translations {
-                for (lang, title) in stepTrans.title { titleTrans[lang] = title }
-                for (lang, why) in stepTrans.why { whyTrans[lang] = why }
-                for (lang, how) in stepTrans.how { howTrans[lang] = how }
+        // Process morning steps - fetch from BOTH language bundles
+        for (index, step) in template.morningSteps.enumerated() {
+            var titleTrans: [String: String] = [:]
+            var whyTrans: [String: String] = [:]
+            var howTrans: [String: String] = [:]
+            
+            // Fetch English translations
+            if let enTitle = locManager.localizedString("templates.routine.\(routineId).morning.step\(index+1).title", table: "Templates", forLanguage: "en") {
+                titleTrans["en"] = enTitle
             }
-
-            allStepTranslations.append(StepTranslations(
-                title: titleTrans,
-                stepDescription: whyTrans, // Use why as description
-                why: whyTrans,
-                how: howTrans
-            ))
-        }
-
-        // Process evening steps with embedded translations
-        for step in template.eveningSteps {
-            var titleTrans: [String: String] = ["en": step.title]
-            var whyTrans: [String: String] = ["en": step.why]
-            var howTrans: [String: String] = ["en": step.how]
-
-            if let stepTrans = step.translations {
-                for (lang, title) in stepTrans.title { titleTrans[lang] = title }
-                for (lang, why) in stepTrans.why { whyTrans[lang] = why }
-                for (lang, how) in stepTrans.how { howTrans[lang] = how }
+            if let enWhy = locManager.localizedString("templates.routine.\(routineId).morning.step\(index+1).why", table: "Templates", forLanguage: "en") {
+                whyTrans["en"] = enWhy
+            }
+            if let enHow = locManager.localizedString("templates.routine.\(routineId).morning.step\(index+1).how", table: "Templates", forLanguage: "en") {
+                howTrans["en"] = enHow
+            }
+            
+            // Fetch device language if different from English
+            if deviceLanguage != "en" {
+                if let deviceTitle = locManager.localizedString("templates.routine.\(routineId).morning.step\(index+1).title", table: "Templates", forLanguage: deviceLanguage) {
+                    titleTrans[deviceLanguage] = deviceTitle
+                }
+                if let deviceWhy = locManager.localizedString("templates.routine.\(routineId).morning.step\(index+1).why", table: "Templates", forLanguage: deviceLanguage) {
+                    whyTrans[deviceLanguage] = deviceWhy
+                }
+                if let deviceHow = locManager.localizedString("templates.routine.\(routineId).morning.step\(index+1).how", table: "Templates", forLanguage: deviceLanguage) {
+                    howTrans[deviceLanguage] = deviceHow
+                }
             }
 
             allStepTranslations.append(StepTranslations(
@@ -703,6 +761,46 @@ final class RoutineService: RoutineServiceProtocol {
                 how: howTrans
             ))
         }
+
+        // Process evening steps - fetch from BOTH language bundles
+        for (index, step) in template.eveningSteps.enumerated() {
+            var titleTrans: [String: String] = [:]
+            var whyTrans: [String: String] = [:]
+            var howTrans: [String: String] = [:]
+            
+            // Fetch English translations
+            if let enTitle = locManager.localizedString("templates.routine.\(routineId).evening.step\(index+1).title", table: "Templates", forLanguage: "en") {
+                titleTrans["en"] = enTitle
+            }
+            if let enWhy = locManager.localizedString("templates.routine.\(routineId).evening.step\(index+1).why", table: "Templates", forLanguage: "en") {
+                whyTrans["en"] = enWhy
+            }
+            if let enHow = locManager.localizedString("templates.routine.\(routineId).evening.step\(index+1).how", table: "Templates", forLanguage: "en") {
+                howTrans["en"] = enHow
+            }
+            
+            // Fetch device language if different from English
+            if deviceLanguage != "en" {
+                if let deviceTitle = locManager.localizedString("templates.routine.\(routineId).evening.step\(index+1).title", table: "Templates", forLanguage: deviceLanguage) {
+                    titleTrans[deviceLanguage] = deviceTitle
+                }
+                if let deviceWhy = locManager.localizedString("templates.routine.\(routineId).evening.step\(index+1).why", table: "Templates", forLanguage: deviceLanguage) {
+                    whyTrans[deviceLanguage] = deviceWhy
+                }
+                if let deviceHow = locManager.localizedString("templates.routine.\(routineId).evening.step\(index+1).how", table: "Templates", forLanguage: deviceLanguage) {
+                    howTrans[deviceLanguage] = deviceHow
+                }
+            }
+
+            allStepTranslations.append(StepTranslations(
+                title: titleTrans,
+                stepDescription: whyTrans,
+                why: whyTrans,
+                how: howTrans
+            ))
+        }
+        
+        print("✅ Created translations for \(allStepTranslations.count) steps with languages: \(allStepTranslations.first?.title.keys.sorted() ?? [])")
 
         let routineTranslations = RoutineTranslations(
             title: routineTitleTranslations,

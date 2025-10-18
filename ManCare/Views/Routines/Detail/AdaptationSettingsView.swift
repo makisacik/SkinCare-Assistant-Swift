@@ -193,6 +193,7 @@ struct AdaptationSettingsView: View {
     let mockRoutine = SavedRoutineModel(
         from: RoutineTemplate(
             id: UUID(),
+            routineId: nil,
             title: "Morning Glow",
             description: "Start your day fresh",
             category: .all,
@@ -200,9 +201,9 @@ struct AdaptationSettingsView: View {
             difficulty: .beginner,
             tags: ["hydrating"],
             morningSteps: [
-                TemplateRoutineStep(title: "Cleanser", why: "Cleanse skin", how: "Apply gently"),
-                TemplateRoutineStep(title: "Serum", why: "Treat skin", how: "Pat in"),
-                TemplateRoutineStep(title: "Moisturizer", why: "Hydrate skin", how: "Apply evenly")
+                TemplateRoutineStep(title: "Cleanser", why: "Cleanse skin", how: "Apply gently", productType: "cleanser"),
+                TemplateRoutineStep(title: "Serum", why: "Treat skin", how: "Pat in", productType: "faceSerum"),
+                TemplateRoutineStep(title: "Moisturizer", why: "Hydrate skin", how: "Apply evenly", productType: "moisturizer")
             ],
             eveningSteps: [],
             benefits: ["Hydrated skin"],

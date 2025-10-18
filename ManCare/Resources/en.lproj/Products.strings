@@ -146,6 +146,8 @@
 "products.type.retinol" = "Retinol";
 "products.type.vitaminC" = "Vitamin C";
 "products.type.niacinamide" = "Niacinamide";
+"products.type.hyaluronicAcid" = "Hyaluronic Acid";
+"products.type.peptide" = "Peptide Complex";
 "products.type.faceSunscreen" = "Face Sunscreen";
 "products.type.bodySunscreen" = "Body Sunscreen";
 "products.type.lipBalm" = "Lip Balm";

@@ -40,6 +40,28 @@
 /* Menstrual Phase - Facial Oil */
 "cycle.menstrual.facialOil.guidance" = "Can be beneficial for barrier support. Use 2-3 drops, not more.";
 
+/* Menstrual Phase - Cleansing Oil */
+"cycle.menstrual.cleansingOil.guidance" = "Use gentle, circular motions. Great for removing makeup without stripping during this sensitive time.";
+
+/* Menstrual Phase - Ampoule */
+"cycle.menstrual.ampoule.guidance" = "Choose hydrating or soothing ampoules with ceramides or panthenol. Apply 2-3 drops, gently pat in.";
+
+/* Menstrual Phase - Vitamin C */
+"cycle.menstrual.vitaminC.guidance" = "If using, opt for lower concentration (10-15%). May cause irritation on compromised barrier.";
+"cycle.menstrual.vitaminC.warning" = "Vitamin C can be irritating on sensitive menstrual phase skin";
+
+/* Menstrual Phase - Niacinamide */
+"cycle.menstrual.niacinamide.guidance" = "Excellent choice! Niacinamide supports barrier repair and reduces inflammation. Use 5-10% concentration.";
+
+/* Menstrual Phase - Facial Mist */
+"cycle.menstrual.facialMist.guidance" = "Refreshing and soothing. Spray throughout the day for extra hydration boost.";
+
+/* Menstrual Phase - Chemical Peel */
+"cycle.menstrual.chemicalPeel.warning" = "Way too harsh for sensitive menstrual phase skin. Skip entirely.";
+
+/* Menstrual Phase - Night Cream */
+"cycle.menstrual.nightCream.guidance" = "Use a rich, nourishing night cream. Extra barrier support is crucial during this phase.";
+
 /* Follicular Phase - Cleanser */
 "cycle.follicular.cleanser.guidance" = "Your skin is resilient! Use your regular cleansing technique.";
 
@@ -50,7 +72,7 @@
 "cycle.follicular.retinol.guidance" = "Perfect time to use your full dosage. Skin absorption is optimal.";
 
 /* Follicular Phase - Face Serum */
-"cycle.follicular.faceSerum.guidance" = "Perfect time for vitamin C, retinol, or peptide serums. Your skin can handle stronger actives now.";
+"cycle.follicular.faceSerum.guidance" = "Great time for serum treatments. Your skin can handle actives and absorbs products optimally now.";
 
 /* Follicular Phase - Essence */
 "cycle.follicular.essence.guidance" = "Perfect time for intensive essence treatments. Your skin absorbs nutrients optimally now.";
@@ -69,6 +91,27 @@
 
 /* Follicular Phase - Facial Oil */
 "cycle.follicular.facialOil.guidance" = "Great time to use facial oils. Skin absorbs them beautifully now.";
+
+/* Follicular Phase - Cleansing Oil */
+"cycle.follicular.cleansingOil.guidance" = "Perfect for double cleansing! Your skin can handle thorough cleansing now.";
+
+/* Follicular Phase - Ampoule */
+"cycle.follicular.ampoule.guidance" = "Great time for intensive ampoule treatments with high-concentration actives. 3-5 drops recommended.";
+
+/* Follicular Phase - Vitamin C */
+"cycle.follicular.vitaminC.guidance" = "Perfect time for vitamin C! Use 15-20% concentration. Your skin can handle stronger formulations.";
+
+/* Follicular Phase - Niacinamide */
+"cycle.follicular.niacinamide.guidance" = "Excellent time for niacinamide. Can use up to 10% concentration for maximum brightening.";
+
+/* Follicular Phase - Chemical Peel */
+"cycle.follicular.chemicalPeel.guidance" = "Ideal time for chemical peels! Skin is resilient and recovers quickly during this phase.";
+
+/* Follicular Phase - Facial Mist */
+"cycle.follicular.facialMist.guidance" = "Use as desired. Your skin is balanced and responds well to everything now.";
+
+/* Follicular Phase - Night Cream */
+"cycle.follicular.nightCream.guidance" = "Your regular night cream works perfectly. Skin absorbs everything beautifully.";
 
 /* Ovulation Phase - Cleanser */
 "cycle.ovulation.cleanser.guidance" = "Maintain your routine. Your skin is at its best!";
@@ -93,6 +136,24 @@
 
 /* Ovulation Phase - Facial Oil */
 "cycle.ovulation.facialOil.guidance" = "Continue regular use. Your skin is balanced and glowing.";
+
+/* Ovulation Phase - Cleansing Oil */
+"cycle.ovulation.cleansingOil.guidance" = "Continue your regular double cleansing routine. Skin is well-balanced.";
+
+/* Ovulation Phase - Ampoule */
+"cycle.ovulation.ampoule.guidance" = "Your skin is at its best. Continue regular ampoule application.";
+
+/* Ovulation Phase - Vitamin C */
+"cycle.ovulation.vitaminC.guidance" = "Your natural glow is enhanced by vitamin C. Continue regular use.";
+
+/* Ovulation Phase - Niacinamide */
+"cycle.ovulation.niacinamide.guidance" = "Keep up your niacinamide routine. Skin is luminous and even-toned.";
+
+/* Ovulation Phase - Facial Mist */
+"cycle.ovulation.facialMist.guidance" = "Use as desired to maintain your radiant, dewy glow.";
+
+/* Ovulation Phase - Night Cream */
+"cycle.ovulation.nightCream.guidance" = "Continue your regular night cream routine. Skin is well-balanced.";
 
 /* Luteal Phase - Cleanser */
 "cycle.luteal.cleanser.guidance" = "Double cleanse if wearing makeup. Oil production increases during this phase.";
@@ -129,6 +190,31 @@
 "cycle.luteal.facialOil.guidance" = "Use sparingly or skip if feeling oily. Your natural sebum production is higher.";
 "cycle.luteal.facialOil.warning" = "Increased natural oil production - may cause congestion";
 
+/* Luteal Phase - Cleansing Oil */
+"cycle.luteal.cleansingOil.guidance" = "Essential for removing excess sebum and makeup. Massage for 60+ seconds for thorough cleansing.";
+
+/* Luteal Phase - Ampoule */
+"cycle.luteal.ampoule.guidance" = "Use lighter formulas. Heavy ampoules may feel too rich as oil production increases.";
+"cycle.luteal.ampoule.warning" = "Switch to oil-control or mattifying ampoules if feeling greasy";
+
+/* Luteal Phase - Vitamin C */
+"cycle.luteal.vitaminC.guidance" = "Consider reducing to lower concentration (10-15%) if noticing sensitivity.";
+"cycle.luteal.vitaminC.warning" = "May cause irritation as hormones shift";
+
+/* Luteal Phase - Niacinamide */
+"cycle.luteal.niacinamide.guidance" = "Excellent choice! Niacinamide helps control oil and reduce inflammation from breakouts.";
+
+/* Luteal Phase - Facial Mist */
+"cycle.luteal.facialMist.guidance" = "Choose mattifying or oil-control mists. Helps combat shine throughout the day.";
+
+/* Luteal Phase - Chemical Peel */
+"cycle.luteal.chemicalPeel.guidance" = "Use with caution. Skin may be more reactive. Consider milder formulations or skip.";
+"cycle.luteal.chemicalPeel.warning" = "Increased sensitivity - may cause irritation";
+
+/* Luteal Phase - Night Cream */
+"cycle.luteal.nightCream.guidance" = "Consider switching to a lighter night cream or gel-based moisturizer if feeling oily.";
+"cycle.luteal.nightCream.warning" = "Heavy creams may cause congestion during this phase";
+
 /* ====== WEATHER ADAPTATIONS ====== */
 
 /* UV Extreme */
@@ -136,6 +222,11 @@
 "weather.uv_extreme.antioxidant.note" = "Add antioxidant protection against extreme UV damage.";
 "weather.uv_extreme.retinoid_skip.note" = "Skip retinoids in morning routine—extreme UV increases photosensitivity.";
 "weather.uv_extreme.exfoliant_skip.note" = "Skip exfoliants in morning—extreme UV will damage sensitized skin.";
+"weather.uv_extreme.essence.note" = "Apply quickly and follow with SPF. Don't spend extra time on essence during extreme UV days.";
+"weather.uv_extreme.moisturizer.note" = "Use lightweight formula. Heavy moisturizers under SPF 50+ can feel too thick.";
+"weather.uv_extreme.eyecream.note" = "Don't forget SPF-protection for eye area. Wear sunglasses outdoors.";
+"weather.uv_extreme.niacinamide.note" = "Niacinamide helps prevent UV damage and hyperpigmentation. Apply before sunscreen.";
+"weather.uv_extreme.vitaminc.note" = "Vitamin C boosts sun protection when layered under SPF. Use 15-20% concentration.";
 
 /* UV High */
 "weather.uv_high.sunscreen.note" = "UV is high. Use SPF 50+ and reapply every 2 hours. Add antioxidant serum.";
@@ -153,24 +244,45 @@
 /* Low Humidity */
 "weather.low_humidity.moisturizer.note" = "Air is dry. Use heavier moisturizer or add occlusive layer.";
 "weather.low_humidity.hydration.note" = "Add hydrating toner or HA serum to combat dry air.";
-"weather.low_humidity.exfoliant_caution.note" = "Avoid over-exfoliating in dry conditions—can compromise barrier.";
+"weather.low_humidity.exfoliant_caution.note" = "Reduce exfoliation frequency. Dry air makes skin more sensitive to acids.";
+"weather.low_humidity.essence.note" = "Essence provides crucial hydration layer in dry air. Apply generously and pat in thoroughly.";
+"weather.low_humidity.faceserum.note" = "Choose hydrating serums with hyaluronic acid or glycerin. Layer multiple serums if needed.";
+"weather.low_humidity.eyecream.note" = "Eye area shows dryness first. Apply extra product and reapply throughout day if needed.";
+"weather.low_humidity.facialoil.note" = "Facial oil seals in moisture and prevents water loss. Apply as last step, 3-5 drops.";
+"weather.low_humidity.toner.note" = "Use hydrating toner, not astringent. Apply multiple layers (7-skin method) for extra hydration.";
+"weather.low_humidity.facialmist.note" = "Mist throughout the day to combat dryness. Follow with light moisturizer to seal in moisture.";
 
 /* High Humidity */
-"weather.high_humidity.moisturizer.note" = "Humid conditions. Use lighter gel moisturizer instead of heavy creams.";
+"weather.high_humidity.moisturizer.note" = "Switch to gel or lightweight formula. Heavy creams may feel suffocating in humid weather.";
 "weather.high_humidity.occlusive_skip.note" = "Skip thick occlusives or heavy oils in humid weather.";
+"weather.high_humidity.essence.note" = "Use water-based essence only. Skip heavy, oil-based essences to avoid greasiness.";
+"weather.high_humidity.facialoil.note" = "Skip facial oil in humid weather. Natural oil production is already elevated.";
+"weather.high_humidity.toner.note" = "Use mattifying or pore-refining toner. Helps control shine and minimize oil production.";
+"weather.high_humidity.facialmist.note" = "Use mattifying mist to control shine. Mist throughout day as needed.";
+"weather.high_humidity.niacinamide.note" = "Niacinamide helps regulate sebum production in humid weather. Use 10% concentration.";
 
 /* Windy */
 "weather.windy.barrier.note" = "Windy conditions strip moisture. Apply barrier cream or balm.";
 "weather.windy.exfoliant_skip.note" = "Skip harsh peels today—wind can irritate sensitized skin.";
 "weather.windy.retinoid_caution.note" = "Wind can irritate skin. Reduce strength of retinoids today.";
+"weather.windy.moisturizer.note" = "Use barrier-repair cream with ceramides. Wind damages skin barrier rapidly.";
+"weather.windy.facialoil.note" = "Apply facial oil to create protective barrier against wind damage.";
+"weather.windy.exfoliant.note" = "Skip exfoliation. Wind exposure on exfoliated skin causes severe irritation.";
 
 /* Cold */
-"weather.cold.moisturizer.note" = "Cold weather requires richer protection. Use heavier moisturizer with ceramides or squalane.";
+"weather.cold.moisturizer.note" = "Use thicker, richer cream. Cold air strips moisture from skin rapidly.";
 "weather.cold.barrier.note" = "Add barrier-supporting ingredients (ceramides, squalane, niacinamide).";
+"weather.cold.eyecream.note" = "Apply extra to eye area. Cold wind causes dryness and irritation around eyes.";
+"weather.cold.facialoil.note" = "Layer facial oil over moisturizer for extra protection barrier against cold air.";
+"weather.cold.cleanser.note" = "Use gentle, cream-based cleanser. Avoid foaming cleansers that strip natural oils.";
+"weather.cold.exfoliant.note" = "Reduce frequency to 1-2x/week max. Cold weather compromises skin barrier.";
 
 /* Hot */
-"weather.hot.moisturizer.note" = "Hot weather calls for lighter products. Use oil-free, mattifying formulations.";
+"weather.hot.moisturizer.note" = "Switch to gel-based or water-cream formula. Heavy creams feel uncomfortable in heat.";
 "weather.hot.spf_mattifying.note" = "Hot weather increases sun exposure. Use mattifying sunscreen and reapply frequently due to sweat.";
+"weather.hot.cleanser.note" = "Cleanse more frequently if sweating. Use gentle foaming cleanser to remove excess oil and sweat.";
+"weather.hot.facialmist.note" = "Keep in fridge for cooling effect. Mist frequently to refresh and hydrate.";
+"weather.hot.essence.note" = "Use watery essence only. Skip thick, viscous formulas that feel heavy in heat.";
 
 /* Hot + Humid */
 "weather.hot_humid.combo_spf.note" = "Hot and humid. Choose gel-based SPF for comfort. Reapply every 2 hours.";
@@ -178,6 +290,10 @@
 /* Snow */
 "weather.snow.spf_extreme.note" = "Snow reflects up to 80% of UV rays—double exposure. Treat as extreme UV day.";
 "weather.snow.retinoid_caution.note" = "Skip morning retinoids—snow reflection doubles UV exposure.";
+"weather.snow.moisturizer.note" = "Use richest cream you have. Snow reflects UV and cold air causes extreme dryness.";
+"weather.snow.sunscreen.note" = "CRITICAL: Snow reflects 80% of UV rays. Use SPF 50+ and reapply every 2 hours outdoors.";
+"weather.snow.facialoil.note" = "Layer generously over moisturizer. Creates essential protective barrier in harsh conditions.";
+"weather.snow.exfoliant.note" = "Do NOT exfoliate during snow conditions. Combination of cold + UV reflection will damage barrier.";
 
 /* ====== ENSURE TITLES (Product Suggestions) ====== */
 "ensure.sunscreen_spf50" = "Sunscreen SPF 50+";
@@ -326,3 +442,26 @@
 "briefing.snow.tip.4" = "Reapply sunscreen frequently";
 "briefing.snow.warning.1" = "Snow reflects up to 80% of UV rays";
 
+
+/* Cycle - Hyaluronic Acid */
+"cycle.follicular.hyaluronicAcid.guidance" = "Perfect time for hyaluronic acid! Your skin is in its prime hydration phase. Apply to damp skin for maximum absorption.";
+"cycle.menstrual.hyaluronicAcid.guidance" = "Hydration is key during this phase. Apply hyaluronic acid to damp skin and seal with moisturizer immediately.";
+"cycle.ovulation.hyaluronicAcid.guidance" = "Your skin is at peak glow! Hyaluronic acid enhances your natural radiance. Apply morning and evening.";
+"cycle.luteal.hyaluronicAcid.guidance" = "Combat increased oil with hydrating (not oily) ingredients. Hyaluronic acid provides moisture without greasiness.";
+
+/* Cycle - Peptide */
+"cycle.follicular.peptide.guidance" = "Excellent time for peptides! Your skin's collagen production is naturally higher. Use regularly for best anti-aging results.";
+"cycle.menstrual.peptide.guidance" = "Peptides are gentle and suitable for sensitive menstrual phase skin. Continue as usual.";
+"cycle.ovulation.peptide.guidance" = "Perfect time to maximize peptide benefits! Your skin is most receptive to firming and plumping ingredients.";
+"cycle.luteal.peptide.guidance" = "Peptides are non-comedogenic and safe to use. Continue your anti-aging routine even during breakout-prone phase.";
+
+/* Weather - Hyaluronic Acid */
+"weather.hotDry.hyaluronicAcid.guidance" = "Essential in dry heat! Apply to damp skin immediately after cleansing. Layer with occlusive moisturizer to prevent evaporation.";
+"weather.hotDry.hyaluronicAcid.warning" = "HA can pull moisture FROM skin if air is too dry - always seal with moisturizer";
+"weather.hotHumid.hyaluronicAcid.guidance" = "High humidity provides natural hydration. You may use lighter amounts or skip if skin feels sufficiently hydrated.";
+"weather.cold.hyaluronicAcid.guidance" = "Critical for cold weather hydration! Apply to damp skin and seal immediately. Prevents moisture loss from cold, dry air.";
+"weather.cold.hyaluronicAcid.warning" = "Always apply moisturizer on top - HA needs to be sealed in cold weather";
+
+/* Weather - Peptide */
+"weather.general.peptide.guidance" = "Peptides are stable in all weather conditions. Continue regular use for anti-aging benefits.";
+"weather.hotDry.peptide.guidance" = "Excellent time for peptides! Dry heat doesn't affect peptide efficacy. Use to support barrier repair.";

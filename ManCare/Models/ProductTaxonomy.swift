@@ -31,6 +31,8 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
     case retinol
     case vitaminC
     case niacinamide
+    case hyaluronicAcid
+    case peptide
 
     // Sun protection variations
     case faceSunscreen
@@ -122,6 +124,8 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
         case .retinol: return L10n.Products.TypeName.retinol
         case .vitaminC: return L10n.Products.TypeName.vitaminC
         case .niacinamide: return L10n.Products.TypeName.niacinamide
+        case .hyaluronicAcid: return L10n.Products.TypeName.hyaluronicAcid
+        case .peptide: return L10n.Products.TypeName.peptide
 
         // Sun protection variations
         case .faceSunscreen: return L10n.Products.TypeName.faceSunscreen
@@ -182,6 +186,8 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
         case .retinol: return "green"
         case .vitaminC: return "yellow"
         case .niacinamide: return "blue"
+        case .hyaluronicAcid: return "cyan"
+        case .peptide: return "purple"
 
         // Sun protection variations
         case .faceSunscreen: return "yellow"
@@ -229,7 +235,7 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .cleanser, .moisturizer, .sunscreen:
             return .both
-        case .toner, .faceSerum, .essence, .exfoliator, .retinol, .vitaminC, .niacinamide:
+        case .toner, .faceSerum, .essence, .exfoliator, .retinol, .vitaminC, .niacinamide, .hyaluronicAcid, .peptide:
             return .dailyPM
         case .shaveCream, .aftershave, .shaveGel:
             return .dailyAM
@@ -247,7 +253,7 @@ enum ProductType: String, Codable, CaseIterable, Identifiable {
             return .cleansing
         case .toner, .facialMist:
             return .toning
-        case .faceSerum, .essence, .exfoliator, .spotTreatment, .retinol, .vitaminC, .niacinamide, .chemicalPeel:
+        case .faceSerum, .essence, .exfoliator, .spotTreatment, .retinol, .vitaminC, .niacinamide, .hyaluronicAcid, .peptide, .chemicalPeel:
             return .treatment
         case .moisturizer, .eyeCream, .facialOil:
             return .moisturizing
@@ -402,6 +408,13 @@ struct ProductAliasMapping {
         "vitamin c": .vitaminC,
         "ascorbic acid": .vitaminC,
         "niacinamide": .niacinamide,
+        "hyaluronic acid": .hyaluronicAcid,
+        "hyaluronicacid": .hyaluronicAcid,  // camelCase version
+        "ha serum": .hyaluronicAcid,
+        "peptide": .peptide,
+        "peptidecomplex": .peptide,  // camelCase version
+        "peptide complex": .peptide,
+        "peptide serum": .peptide,
 
         // Toner aliases
         "toner": .toner,

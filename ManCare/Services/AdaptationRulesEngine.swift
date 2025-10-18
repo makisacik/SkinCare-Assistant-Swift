@@ -71,6 +71,9 @@ class AdaptationRulesEngine {
         contextKey: String
     ) -> StepAdaptation? {
         print("🔍 [AdaptationRulesEngine] Looking for legacy rule for step: '\(step.title)' (stepType: '\(step.stepType)') in context: '\(contextKey)'")
+        print("   📋 Step ID: \(step.id)")
+        print("   📋 Title (may be localized): '\(step.title)'")
+        print("   📋 StepType (MUST BE ENGLISH): '\(step.stepType)' ⚠️ CHECK THIS")
 
         // Find matching rule for this step's product type and context
         guard let matchingRule = rules.first(where: { rule in
@@ -142,6 +145,9 @@ class AdaptationRulesEngine {
         timeOfDay: TimeOfDay
     ) -> StepAdaptation? {
         print("🔍 [AdaptationRulesEngine] Looking for new format rules for step: '\(step.title)' (stepType: '\(step.stepType)') in contexts: \(activeContexts)")
+        print("   📋 Step ID: \(step.id)")
+        print("   📋 Title (may be localized): '\(step.title)'")
+        print("   📋 StepType (MUST BE ENGLISH): '\(step.stepType)' ⚠️ CHECK THIS")
 
         // Find all matching rules
         let matchingRules = rules.filter { rule in
