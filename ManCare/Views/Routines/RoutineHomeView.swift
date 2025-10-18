@@ -30,6 +30,9 @@ struct RoutineHomeView: View {
     @State private var showingEveningRoutineCompletion = false
     @State private var showingRoutineSwitcher = false
 
+    // Notification permission
+    @AppStorage("hasRequestedNotificationPermission") private var hasRequestedNotificationPermission = false
+
     // MARK: - Initialization
 
 
@@ -56,6 +59,20 @@ struct RoutineHomeView: View {
 
                 // Record visit for review prompt
                 reviewPromptManager.recordVisit()
+
+                // Request notification permission on first visit
+                if !hasRequestedNotificationPermission {
+                    NotificationService.shared.requestPermissionIfNeeded()
+                    hasRequestedNotificationPermission = true
+                    print("🔔 Requested notification permission")
+
+                    // Record app open for notification state
+                    Task { @MainActor in
+                        NotificationStateStore.shared.updateState { state in
+                            state.recordAppOpen()
+                        }
+                    }
+                }
 
                 // TEMPORARY DEBUG: Check for problematic active routine
                 if let activeRoutine = routineViewModel.activeRoutine {

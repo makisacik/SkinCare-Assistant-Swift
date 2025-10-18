@@ -17,6 +17,8 @@ struct MyselfView: View {
     @State private var selectedTab = 0
     @State private var selectedDate = DateUtils.todayStartOfDay
     @StateObject private var completionViewModel = RoutineCompletionViewModel(routineService: ServiceFactory.shared.createRoutineService())
+    @State private var notificationsEnabled = false
+    @State private var notificationsAuthorized = false
 
     let routineService: RoutineServiceProtocol
     let onRoutineGenerated: (RoutineResponse) -> Void
@@ -44,6 +46,9 @@ struct MyselfView: View {
         .navigationBarHidden(true)
         .onAppear {
             completionViewModel.onAppear()
+            Task {
+                await loadNotificationStatus()
+            }
         }
     }
 
@@ -146,6 +151,25 @@ struct MyselfView: View {
                 showingEdit = true
             } label: {
                 Label(L10n.Settings.editProfile, systemImage: "person.circle")
+            }
+
+            // Notifications toggle
+            if notificationsAuthorized {
+                Button {
+                    notificationsEnabled.toggle()
+                    NotificationService.shared.setNotificationsEnabled(notificationsEnabled)
+                } label: {
+                    Label(
+                        notificationsEnabled ? L10n.Notifications.Settings.enabled : L10n.Notifications.Settings.disabled,
+                        systemImage: notificationsEnabled ? "bell.fill" : "bell.slash.fill"
+                    )
+                }
+            } else {
+                Button {
+                    NotificationService.shared.openAppSettings()
+                } label: {
+                    Label(L10n.Notifications.Settings.openSettings, systemImage: "bell.badge.fill")
+                }
             }
 
             // Language picker (English + device locale only)
@@ -371,6 +395,16 @@ struct MyselfView: View {
         // This would check if there are any completed steps or activities for this date
         // For now, we'll simulate with a simple check
         return Calendar.current.isDate(date, inSameDayAs: Date())
+    }
+
+    // MARK: - Notification Settings
+
+    private func loadNotificationStatus() async {
+        let status = await NotificationService.shared.getNotificationStatus()
+        await MainActor.run {
+            notificationsAuthorized = status.isAuthorized
+            notificationsEnabled = status.isEnabled
+        }
     }
 
     // MARK: - Old Code (Kept for reference if needed)

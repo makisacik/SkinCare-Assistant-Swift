@@ -14,21 +14,21 @@ import UIKit
 @MainActor
 class SessionStore: ObservableObject {
     static let shared = SessionStore()
-    
+
     @Published var currentSession: CompanionSession?
     @Published var sessionHistory: [SessionResult] = []
-    
+
     private let userDefaults = UserDefaults.standard
     private let sessionKey = "current_companion_session"
     private let historyKey = "companion_session_history"
-    
+
     private init() {
         loadSessionHistory()
         loadCurrentSession()
     }
-    
+
     // MARK: - Session Management
-    
+
     func startSession(routineId: String, routineName: String, steps: [CompanionStep]) {
         let session = CompanionSession(
             routineId: routineId,
@@ -38,7 +38,7 @@ class SessionStore: ObservableObject {
         currentSession = session
         saveCurrentSession()
     }
-    
+
     func updateSession(_ session: CompanionSession) {
         print("🔄 updateSession: Updating session \(session.id)")
         print("📊 Session has \(session.stepsCompleted.count) completed steps")
@@ -47,45 +47,59 @@ class SessionStore: ObservableObject {
         saveCurrentSession()
         print("💾 Session saved to UserDefaults")
     }
-    
+
     func completeSession() {
         guard var session = currentSession else { return }
         session.completeSession()
-        
+
         let result = SessionResult(session: session)
         sessionHistory.append(result)
-        
+
         currentSession = nil
         saveCurrentSession()
         saveSessionHistory()
+
+        // Trigger notification system updates
+        Task { @MainActor in
+            // Cancel any pending routine reminder notifications
+            NotificationService.shared.cancelSmartNotifications()
+
+            // Learn patterns if we have enough data
+            await NotificationPatternLearner.shared.learnPatternsIfNeeded()
+
+            // Re-evaluate and schedule next notification
+            await NotificationScheduler.shared.evaluateAndScheduleNext()
+
+            print("✅ Notification system updated after session completion")
+        }
     }
-    
+
     func abandonSession() {
         guard var session = currentSession else { return }
         session.status = .abandoned
         session.completeSession()
-        
+
         let result = SessionResult(session: session)
         sessionHistory.append(result)
-        
+
         currentSession = nil
         saveCurrentSession()
         saveSessionHistory()
     }
-    
+
     func resumeSession() -> CompanionSession? {
         return currentSession
     }
-    
+
     // MARK: - Persistence
-    
+
     private func saveCurrentSession() {
         guard let session = currentSession else {
             print("🗑️ saveCurrentSession: No session to save, removing from UserDefaults")
             userDefaults.removeObject(forKey: sessionKey)
             return
         }
-        
+
         do {
             let data = try JSONEncoder().encode(session)
             userDefaults.set(data, forKey: sessionKey)
@@ -95,13 +109,13 @@ class SessionStore: ObservableObject {
             print("❌ Error saving current session: \(error)")
         }
     }
-    
+
     private func loadCurrentSession() {
         guard let data = userDefaults.data(forKey: sessionKey) else {
             print("📭 loadCurrentSession: No saved session found in UserDefaults")
             return
         }
-        
+
         do {
             let session = try JSONDecoder().decode(CompanionSession.self, from: data)
             currentSession = session
@@ -112,7 +126,7 @@ class SessionStore: ObservableObject {
             print("❌ Error loading current session: \(error)")
         }
     }
-    
+
     private func saveSessionHistory() {
         do {
             let data = try JSONEncoder().encode(sessionHistory)
@@ -121,39 +135,39 @@ class SessionStore: ObservableObject {
             print("Error saving session history: \(error)")
         }
     }
-    
+
     private func loadSessionHistory() {
         guard let data = userDefaults.data(forKey: historyKey) else { return }
-        
+
         do {
             sessionHistory = try JSONDecoder().decode([SessionResult].self, from: data)
         } catch {
             print("Error loading session history: \(error)")
         }
     }
-    
+
     // MARK: - Statistics
-    
+
     func getCompletionRate() -> Double {
         guard !sessionHistory.isEmpty else { return 0 }
         let totalRate = sessionHistory.reduce(0) { $0 + $1.completionRate }
         return totalRate / Double(sessionHistory.count)
     }
-    
+
     func getAverageDuration() -> TimeInterval {
         guard !sessionHistory.isEmpty else { return 0 }
         let totalDuration = sessionHistory.reduce(0) { $0 + $1.totalDurationSeconds }
         return Double(totalDuration) / Double(sessionHistory.count)
     }
-    
+
     func getStreak() -> Int {
         let calendar = Calendar.current
         var streak = 0
         var currentDate = calendar.startOfDay(for: Date())
-        
+
         // Sort sessions by completion date (most recent first)
         let sortedSessions = sessionHistory.sorted { $0.completedAt > $1.completedAt }
-        
+
         for session in sortedSessions {
             let sessionDate = calendar.startOfDay(for: session.completedAt)
             if calendar.isDate(sessionDate, inSameDayAs: currentDate) {
@@ -163,7 +177,7 @@ class SessionStore: ObservableObject {
                 break
             }
         }
-        
+
         return streak
     }
 }
@@ -172,35 +186,35 @@ class SessionStore: ObservableObject {
 
 class HapticsService {
     static let shared = HapticsService()
-    
+
     private init() {}
-    
+
     func stepCompleted() {
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
     }
-    
+
     func timerTick() {
         let selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.selectionChanged()
     }
-    
+
     func timerComplete() {
         let notificationFeedback = UINotificationFeedbackGenerator()
         notificationFeedback.notificationOccurred(.success)
     }
-    
+
     func routineComplete() {
         let notificationFeedback = UINotificationFeedbackGenerator()
         notificationFeedback.notificationOccurred(.success)
-        
+
         // Add a second haptic for celebration
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
             impactFeedback.impactOccurred()
         }
     }
-    
+
     func buttonTap() {
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
         impactFeedback.impactOccurred()
@@ -211,12 +225,12 @@ class HapticsService {
 
 class NotificationService: NSObject, ObservableObject {
     static let shared = NotificationService()
-    
+
     private override init() {
         super.init()
         requestPermission()
     }
-    
+
     private func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
@@ -224,36 +238,160 @@ class NotificationService: NSObject, ObservableObject {
             }
         }
     }
-    
+
     func scheduleTimerNotification(seconds: Int, stepTitle: String) {
         let content = UNMutableNotificationContent()
         content.title = L10n.Routines.Companion.Notification.timerComplete
         content.body = L10n.Routines.Companion.Notification.timeToApply(stepTitle)
         content.sound = .default
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(seconds), repeats: false)
         let request = UNNotificationRequest(
             identifier: "companion_timer_\(Date().timeIntervalSince1970)",
             content: content,
             trigger: trigger
         )
-        
+
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
                 print("Error scheduling notification: \(error)")
             }
         }
     }
-    
+
     func cancelAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
-    
+
     func cancelTimerNotifications() {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             let timerRequests = requests.filter { $0.identifier.hasPrefix("companion_timer_") }
             let identifiers = timerRequests.map { $0.identifier }
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+        }
+    }
+
+    // MARK: - Smart Notifications
+
+    func requestPermissionIfNeeded() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            if settings.authorizationStatus == .notDetermined {
+                self.requestPermission()
+            }
+        }
+    }
+
+    func scheduleSmartNotification(
+        category: NotificationCategory,
+        title: String,
+        body: String,
+        deliveryDate: Date
+    ) async -> Bool {
+        // Check guardrails
+        let state = await NotificationStateStore.shared.state
+
+        guard state.canSendNotification(category: category) else {
+            print("🚫 Guardrails prevented \(category.rawValue) notification")
+            return false
+        }
+
+        // Get context for suppression rules
+        let context = await NotificationContextProvider.shared.gatherContext()
+        guard !state.shouldSuppressNotifications(lastCompletionDate: context.lastCompletionDate) else {
+            print("🚫 Suppression rules prevented notification")
+            return false
+        }
+
+        // Apply fatigue probability
+        let fatigueProbability = state.applyFatigueProbability()
+        if fatigueProbability < 1.0 && Double.random(in: 0...1) > fatigueProbability {
+            print("🚫 Fatigue filter prevented notification")
+            return false
+        }
+
+        // Create notification
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+        content.badge = 1
+
+        // Calculate trigger
+        let timeInterval = deliveryDate.timeIntervalSince(Date())
+        guard timeInterval > 0 else {
+            print("⚠️ Delivery date is in the past")
+            return false
+        }
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+        let identifier = "smart_\(category.rawValue)_\(Date().timeIntervalSince1970)"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+        do {
+            try await UNUserNotificationCenter.current().add(request)
+
+            // Record the notification
+            await NotificationStateStore.shared.updateState { state in
+                state.recordSentNotification(category: category, date: deliveryDate)
+            }
+
+            print("✅ Scheduled \(category.rawValue) notification for \(deliveryDate)")
+            return true
+        } catch {
+            print("❌ Failed to schedule notification: \(error)")
+            return false
+        }
+    }
+
+    func cancelSmartNotifications() {
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            let smartRequests = requests.filter { $0.identifier.hasPrefix("smart_") }
+            let identifiers = smartRequests.map { $0.identifier }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+            print("🗑️ Cancelled \(identifiers.count) smart notifications")
+        }
+    }
+
+    func getPendingSmartNotifications() async -> [UNNotificationRequest] {
+        let requests = await UNUserNotificationCenter.current().pendingNotificationRequests()
+        return requests.filter { $0.identifier.hasPrefix("smart_") }
+    }
+
+    // MARK: - Notification Settings
+
+    func getNotificationStatus() async -> (isAuthorized: Bool, isEnabled: Bool) {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        let isAuthorized = settings.authorizationStatus == .authorized
+        let isEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
+
+        // If authorized but user preference not set, default to enabled
+        if isAuthorized && !UserDefaults.standard.bool(forKey: "notificationsEnabledSet") {
+            UserDefaults.standard.set(true, forKey: "notificationsEnabled")
+            UserDefaults.standard.set(true, forKey: "notificationsEnabledSet")
+            return (true, true)
+        }
+
+        return (isAuthorized, isEnabled)
+    }
+
+    func setNotificationsEnabled(_ enabled: Bool) {
+        UserDefaults.standard.set(enabled, forKey: "notificationsEnabled")
+        UserDefaults.standard.set(true, forKey: "notificationsEnabledSet")
+
+        if enabled {
+            // Re-evaluate and schedule notifications
+            Task { @MainActor in
+                await NotificationScheduler.shared.evaluateAndScheduleNext()
+            }
+        } else {
+            // Cancel all pending smart notifications
+            cancelSmartNotifications()
+        }
+    }
+
+    func openAppSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
         }
     }
 }
@@ -262,9 +400,9 @@ class NotificationService: NSObject, ObservableObject {
 
 class CompanionAnalyticsService {
     static let shared = CompanionAnalyticsService()
-    
+
     private init() {}
-    
+
     func trackEvent(_ event: CompanionAnalyticsEvent) {
         // In a real app, you would send this to your analytics service
         print("Analytics Event: \(event.name) - \(event.parameters)")
@@ -274,7 +412,7 @@ class CompanionAnalyticsService {
 struct CompanionAnalyticsEvent {
     let name: String
     let parameters: [String: Any]
-    
+
     static func companionStart(routineId: String, stepCount: Int) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "companion_start",
@@ -284,7 +422,7 @@ struct CompanionAnalyticsEvent {
             ]
         )
     }
-    
+
     static func stepView(stepId: String, stepOrder: Int, stepType: String) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "step_view",
@@ -295,7 +433,7 @@ struct CompanionAnalyticsEvent {
             ]
         )
     }
-    
+
     static func timerStart(stepId: String, plannedWait: Int) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "timer_start",
@@ -305,7 +443,7 @@ struct CompanionAnalyticsEvent {
             ]
         )
     }
-    
+
     static func timerPause(stepId: String, remainingSeconds: Int) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "timer_pause",
@@ -315,7 +453,7 @@ struct CompanionAnalyticsEvent {
             ]
         )
     }
-    
+
     static func timerSkip(stepId: String, remainingSeconds: Int) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "timer_skip",
@@ -325,7 +463,7 @@ struct CompanionAnalyticsEvent {
             ]
         )
     }
-    
+
     static func stepComplete(stepId: String, actualWait: Int, wasSkipped: Bool) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "step_complete",
@@ -336,7 +474,7 @@ struct CompanionAnalyticsEvent {
             ]
         )
     }
-    
+
     static func companionComplete(routineId: String, totalDuration: Int, skips: Int, completionRate: Double) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "companion_complete",
@@ -348,7 +486,7 @@ struct CompanionAnalyticsEvent {
             ]
         )
     }
-    
+
     static func companionAbandon(routineId: String, currentStep: Int, totalSteps: Int) -> CompanionAnalyticsEvent {
         return CompanionAnalyticsEvent(
             name: "companion_abandon",

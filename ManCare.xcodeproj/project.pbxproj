@@ -29,9 +29,22 @@
 		329182EF2E66ADE50052C41D /* ManCareUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ManCareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		325430B52EA3B2B100369190 /* Exceptions for "ManCare" folder in "ManCare" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 329182D22E66ADE30052C41D /* ManCare */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		329182D52E66ADE30052C41D /* ManCare */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				325430B52EA3B2B100369190 /* Exceptions for "ManCare" folder in "ManCare" target */,
+			);
 			path = ManCare;
 			sourceTree = "<group>";
 		};
@@ -403,6 +416,7 @@
 				DEVELOPMENT_TEAM = FYS62UHY46;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManCare/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to scan product labels and automatically extract product information for your skincare routine.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to provide weather-adapted skincare recommendations based on UV index, humidity, and temperature in your area.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to select product images for scanning and extracting product information.";
@@ -438,6 +452,7 @@
 				DEVELOPMENT_TEAM = FYS62UHY46;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ManCare/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to scan product labels and automatically extract product information for your skincare routine.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to provide weather-adapted skincare recommendations based on UV index, humidity, and temperature in your area.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to select product images for scanning and extracting product information.";

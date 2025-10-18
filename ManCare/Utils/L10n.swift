@@ -892,6 +892,76 @@ struct L10n {
         }
     }
 
+    // MARK: - Notifications
+
+    struct Notifications {
+        // Streaks
+        struct Streak {
+            static var title: String { manager.localizedString("notifications.streak.title", table: "Routines") }
+            static var threeDays: String { manager.localizedString("notifications.streak.threeDays", table: "Routines") }
+            static var sevenDays: String { manager.localizedString("notifications.streak.sevenDays", table: "Routines") }
+            static var fourteenDays: String { manager.localizedString("notifications.streak.fourteenDays", table: "Routines") }
+            static var general: String { manager.localizedString("notifications.streak.general", table: "Routines") }
+        }
+
+        // Reminders
+        struct Reminder {
+            static var title: String { manager.localizedString("notifications.reminder.title", table: "Routines") }
+            static var routineTitle: String { manager.localizedString("notifications.reminder.routineTitle", table: "Routines") }
+            static var morning: String { manager.localizedString("notifications.reminder.morning", table: "Routines") }
+            static var afternoon: String { manager.localizedString("notifications.reminder.afternoon", table: "Routines") }
+            static var evening: String { manager.localizedString("notifications.reminder.evening", table: "Routines") }
+            static var weekend: String { manager.localizedString("notifications.reminder.weekend", table: "Routines") }
+            static var missedTitle: String { manager.localizedString("notifications.reminder.missedTitle", table: "Routines") }
+            static var missedBody: String { manager.localizedString("notifications.reminder.missedBody", table: "Routines") }
+            static var general: String { manager.localizedString("notifications.reminder.general", table: "Routines") }
+        }
+
+        // Weather
+        struct Weather {
+            static var title: String { manager.localizedString("notifications.weather.title", table: "Routines") }
+            static var dryAir: String { manager.localizedString("notifications.weather.dryAir", table: "Routines") }
+            static var humid: String { manager.localizedString("notifications.weather.humid", table: "Routines") }
+            static var cold: String { manager.localizedString("notifications.weather.cold", table: "Routines") }
+            static var sunny: String { manager.localizedString("notifications.weather.sunny", table: "Routines") }
+            static var rainy: String { manager.localizedString("notifications.weather.rainy", table: "Routines") }
+            static var seasonal: String { manager.localizedString("notifications.weather.seasonal", table: "Routines") }
+        }
+
+        // Cycle
+        struct Cycle {
+            static var title: String { manager.localizedString("notifications.cycle.title", table: "Routines") }
+        }
+
+        // Skin Goals
+        struct SkinGoal {
+            static var title: String { manager.localizedString("notifications.skinGoal.title", table: "Routines") }
+            static var acne: String { manager.localizedString("notifications.skinGoal.acne", table: "Routines") }
+            static var dryness: String { manager.localizedString("notifications.skinGoal.dryness", table: "Routines") }
+            static var sensitivity: String { manager.localizedString("notifications.skinGoal.sensitivity", table: "Routines") }
+            static var radiance: String { manager.localizedString("notifications.skinGoal.radiance", table: "Routines") }
+        }
+
+        // Motivation
+        struct Motivation {
+            static var title: String { manager.localizedString("notifications.motivation.title", table: "Routines") }
+            static var general: String { manager.localizedString("notifications.motivation.general", table: "Routines") }
+            static var selfCare: String { manager.localizedString("notifications.motivation.selfCare", table: "Routines") }
+            static var weekEnd: String { manager.localizedString("notifications.motivation.weekEnd", table: "Routines") }
+            static var lowActivity: String { manager.localizedString("notifications.motivation.lowActivity", table: "Routines") }
+            static var celebration: String { manager.localizedString("notifications.motivation.celebration", table: "Routines") }
+        }
+
+        // Settings
+        struct Settings {
+            static var title: String { manager.localizedString("notifications.settings.title", table: "Routines") }
+            static var enabled: String { manager.localizedString("notifications.settings.enabled", table: "Routines") }
+            static var disabled: String { manager.localizedString("notifications.settings.disabled", table: "Routines") }
+            static var openSettings: String { manager.localizedString("notifications.settings.openSettings", table: "Routines") }
+            static var permissionDenied: String { manager.localizedString("notifications.settings.permissionDenied", table: "Routines") }
+        }
+    }
+
     // MARK: - Adaptations
 
     struct Adaptations {
@@ -2288,49 +2358,49 @@ struct L10n {
         static func guideCategory(_ guideId: String) -> String {
             manager.localizedString("guides.\(guideId).category", table: "Guides")
         }
-        
+
         // Guide content accessors
         static func intro(_ guideId: String) -> String {
             manager.localizedString("guides.\(guideId).intro", table: "Guides")
         }
-        
+
         static func heading(_ guideId: String, level: String, index: Int) -> String {
             manager.localizedString("guides.\(guideId).\(level)_\(index)", table: "Guides")
         }
-        
+
         static func paragraph(_ guideId: String, index: Int) -> String {
             manager.localizedString("guides.\(guideId).p\(index)", table: "Guides")
         }
-        
+
         static func tip(_ guideId: String, index: Int) -> String {
             manager.localizedString("guides.\(guideId).tip\(index)", table: "Guides")
         }
-        
+
         static func listItem(_ guideId: String, listIndex: Int, itemIndex: Int) -> String {
             manager.localizedString("guides.\(guideId).list\(listIndex)_item\(itemIndex)", table: "Guides")
         }
-        
+
         // Default content
         static func defaultIntro(_ category: String) -> String {
             String(format: manager.localizedString("guides.default.intro", table: "Guides"), category)
         }
-        
+
         static func defaultParagraph(_ index: Int) -> String {
             manager.localizedString("guides.default.p\(index)", table: "Guides")
         }
-        
+
         static func defaultHeading(_ level: String, index: Int) -> String {
             manager.localizedString("guides.default.\(level)_\(index)", table: "Guides")
         }
-        
+
         static func defaultListItem(_ listIndex: Int, itemIndex: Int) -> String {
             manager.localizedString("guides.default.list\(listIndex)_item\(itemIndex)", table: "Guides")
         }
-        
+
         static var defaultDisclaimer: String {
             manager.localizedString("guides.default.disclaimer", table: "Guides")
         }
-        
+
         static func content(_ guideId: String, section: String, key: String) -> String {
             manager.localizedString("guides.\(guideId).\(section).\(key)", table: "Guides")
         }

@@ -598,3 +598,55 @@
 "routines.review.message" = "Your feedback helps us improve and reach more people. Would you mind taking a moment to rate us?";
 "routines.review.rateNow" = "Rate Glowie";
 "routines.review.notNow" = "Not Now";
+
+// MARK: - Notifications - Streaks
+"notifications.streak.title" = "Streak Achievement! 🌟";
+"notifications.streak.threeDays" = "3 days of care — that's a habit in bloom 🌸";
+"notifications.streak.sevenDays" = "7 days strong! Your skin is loving the consistency 💫";
+"notifications.streak.fourteenDays" = "Two glowing weeks! You're becoming your own skincare muse ✨";
+"notifications.streak.general" = "You're on a roll! Keep that glow going ✨";
+
+// MARK: - Notifications - Reminders
+"notifications.reminder.title" = "Routine Time ☀️";
+"notifications.reminder.routineTitle" = "Time for Your Glow";
+"notifications.reminder.morning" = "A fresh morning glow awaits ☀️ Let's start with your cleanser.";
+"notifications.reminder.afternoon" = "A quick refresh can brighten your day 🌤";
+"notifications.reminder.evening" = "Wind down with care 🌙 Your nighttime routine = your skin's reset.";
+"notifications.reminder.weekend" = "Slow morning, gentle skincare ☕💧";
+"notifications.reminder.missedTitle" = "We Missed You!";
+"notifications.reminder.missedBody" = "You're usually glowing around this time — shall we?";
+"notifications.reminder.general" = "Your skin is ready for some care 💫";
+
+// MARK: - Notifications - Weather
+"notifications.weather.title" = "Weather Update 🌤";
+"notifications.weather.dryAir" = "Dry air alert 🔔 Add a richer moisturizer to keep the glow.";
+"notifications.weather.humid" = "Humidity's high — go light today 🌿";
+"notifications.weather.cold" = "Cold breeze outside 🥶 Don't skip your barrier cream.";
+"notifications.weather.sunny" = "Sunny & bright ☀️ SPF is your best glow filter.";
+"notifications.weather.rainy" = "Rain calls for cozy care 🌧 Gentle cleansing, deep hydration.";
+"notifications.weather.seasonal" = "Season shift ahead 🍂 Adjust your routine for the new weather.";
+
+// MARK: - Notifications - Cycle
+"notifications.cycle.title" = "Cycle Care 🌸";
+
+// MARK: - Notifications - Skin Goals
+"notifications.skinGoal.title" = "Skin Tip 💡";
+"notifications.skinGoal.acne" = "Consistency beats breakouts — today's care keeps tomorrow clearer 💪";
+"notifications.skinGoal.dryness" = "Your skin's a bit thirsty — time to lock in that moisture 💦";
+"notifications.skinGoal.sensitivity" = "Gentle hands, calm skin 🫶 Take it slow today.";
+"notifications.skinGoal.radiance" = "Your glow's building up beautifully ✨ Stay steady, stay kind.";
+
+// MARK: - Notifications - Motivation
+"notifications.motivation.title" = "You've Got This! 💖";
+"notifications.motivation.general" = "A little glow goes a long way ✨ You're doing great.";
+"notifications.motivation.selfCare" = "Taking 2 minutes for yourself isn't selfish — it's powerful 💕";
+"notifications.motivation.weekEnd" = "You made it through the week 🌷 Treat your skin (and yourself).";
+"notifications.motivation.lowActivity" = "It's been a while 🌸 Ready for a tiny restart?";
+"notifications.motivation.celebration" = "You showed up for yourself again today 🌼 That's real progress.";
+
+// MARK: - Notifications - Settings
+"notifications.settings.title" = "Notifications";
+"notifications.settings.enabled" = "Notifications Enabled";
+"notifications.settings.disabled" = "Notifications Disabled";
+"notifications.settings.openSettings" = "Enable Notifications";
+"notifications.settings.permissionDenied" = "Notification permission is denied. Enable in Settings to receive reminders.";

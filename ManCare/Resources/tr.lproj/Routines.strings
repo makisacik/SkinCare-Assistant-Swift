@@ -598,3 +598,55 @@ ManCare - Rutinler ile ilgili metinler
 "routines.review.message" = "Geri bildiriminiz, gelişmemize ve daha fazla insana ulaşmamıza yardımcı oluyor. Bizi değerlendirmek için bir dakikanızı ayırır mısınız?";
 "routines.review.rateNow" = "Glowie'yi Değerlendir";
 "routines.review.notNow" = "Şimdi Değil";
+
+// MARK: - Notifications - Streaks
+"notifications.streak.title" = "Seri Başarısı! 🌟";
+"notifications.streak.threeDays" = "3 gündür cildine özen gösteriyorsun 🌸 alışkanlık şekilleniyor.";
+"notifications.streak.sevenDays" = "7 gündür düzenli gidiyorsun! Cildin bu istikrarı çok sevdi 💫";
+"notifications.streak.fourteenDays" = "İki ışıltılı hafta! Artık kendi bakım ilhamın oldun ✨";
+"notifications.streak.general" = "Harika gidiyorsun! Işıltını korumaya devam et ✨";
+
+// MARK: - Notifications - Reminders
+"notifications.reminder.title" = "Rutin Zamanı ☀️";
+"notifications.reminder.routineTitle" = "Işıltın İçin Zaman";
+"notifications.reminder.morning" = "Yeni bir sabah ışıltısı seni bekliyor ☀️ Hadi temizleyiciyle başlayalım.";
+"notifications.reminder.afternoon" = "Hızlı bir tazeleme günü aydınlatabilir 🌤";
+"notifications.reminder.evening" = "Günü sevgiyle kapat 🌙 Gece rutinin cildine yeniden doğuş.";
+"notifications.reminder.weekend" = "Yavaş bir sabah, nazik bir bakım ☕💧";
+"notifications.reminder.missedTitle" = "Seni Özledik!";
+"notifications.reminder.missedBody" = "Bu saatlerde genelde ışıltılı oluyorsun — başlayalım mı?";
+"notifications.reminder.general" = "Cildin biraz özen bekliyor 💫";
+
+// MARK: - Notifications - Weather
+"notifications.weather.title" = "Hava Durumu Güncellemesi 🌤";
+"notifications.weather.dryAir" = "Hava kuru 🔔 Işıltını korumak için yoğun bir nemlendirici ekle.";
+"notifications.weather.humid" = "Nem oranı yüksek — bugün hafif ürünler seç 🌿";
+"notifications.weather.cold" = "Dışarısı soğuk 🥶 Bariyer kremini atlama.";
+"notifications.weather.sunny" = "Güneşli ve parlak ☀️ En iyi ışıltı filtresi: GKF.";
+"notifications.weather.rainy" = "Yağmur günü, huzurlu bakım zamanı 🌧 Nazik temizleme, derin nem.";
+"notifications.weather.seasonal" = "Mevsim değişimi yaklaşıyor 🍂 Rutini yeni havaya göre güncelle.";
+
+// MARK: - Notifications - Cycle
+"notifications.cycle.title" = "Döngü Bakımı 🌸";
+
+// MARK: - Notifications - Skin Goals
+"notifications.skinGoal.title" = "Cilt İpucu 💡";
+"notifications.skinGoal.acne" = "Düzenli bakım, sivilcelerin en güçlü ilacı 💪 bugünkü adım yarını aydınlatır.";
+"notifications.skinGoal.dryness" = "Cildin biraz susamış 💦 şimdi nemi hapsetme zamanı.";
+"notifications.skinGoal.sensitivity" = "Nazik dokunuşlar, sakin bir cilt 🫶 Bugün yavaşla.";
+"notifications.skinGoal.radiance" = "Işıltın güzelce birikiyor ✨ Sadece devam et, nazik ol.";
+
+// MARK: - Notifications - Motivation
+"notifications.motivation.title" = "Sen Başarırsın! 💖";
+"notifications.motivation.general" = "Küçük bir ışıltı bile çok şey değiştirir ✨ Harika gidiyorsun.";
+"notifications.motivation.selfCare" = "Kendine 2 dakika ayırmak bencillik değil, güç göstergesi 💕";
+"notifications.motivation.weekEnd" = "Haftayı tamamladın 🌷 Şimdi hem cildini hem kendini ödüllendir.";
+"notifications.motivation.lowActivity" = "Bir süredir sessizdin 🌸 Küçük bir başlangıca ne dersin?";
+"notifications.motivation.celebration" = "Bugün yine kendin için buradasın 🌼 Gerçek ilerleme bu.";
+
+// MARK: - Notifications - Settings
+"notifications.settings.title" = "Bildirimler";
+"notifications.settings.enabled" = "Bildirimler Açık";
+"notifications.settings.disabled" = "Bildirimler Kapalı";
+"notifications.settings.openSettings" = "Bildirimleri Etkinleştir";
+"notifications.settings.permissionDenied" = "Bildirim izni reddedildi. Hatırlatıcılar almak için Ayarlar'dan etkinleştirin.";
