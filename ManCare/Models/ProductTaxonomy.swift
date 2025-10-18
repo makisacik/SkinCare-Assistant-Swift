@@ -409,10 +409,8 @@ struct ProductAliasMapping {
         "ascorbic acid": .vitaminC,
         "niacinamide": .niacinamide,
         "hyaluronic acid": .hyaluronicAcid,
-        "hyaluronicacid": .hyaluronicAcid,  // camelCase version
         "ha serum": .hyaluronicAcid,
         "peptide": .peptide,
-        "peptidecomplex": .peptide,  // camelCase version
         "peptide complex": .peptide,
         "peptide serum": .peptide,
 
@@ -464,12 +462,26 @@ struct ProductAliasMapping {
     static func normalize(_ productName: String) -> ProductType {
         let normalized = productName.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // Direct match
+        // Try direct match first
         if let productType = aliases[normalized] {
             return productType
         }
 
-        // Partial match - find the best match
+        // CRITICAL FIX: Try removing spaces/underscores for camelCase handling
+        // e.g., "hyaluronicAcid" -> "hyaluronicacid" matches "hyaluronic acid" -> "hyaluronicacid"
+        let normalizedNoSpaces = normalized.replacingOccurrences(of: " ", with: "")
+                                          .replacingOccurrences(of: "_", with: "")
+        
+        // Check if any alias (with spaces removed) matches
+        for (alias, productType) in aliases {
+            let aliasNoSpaces = alias.replacingOccurrences(of: " ", with: "")
+                                    .replacingOccurrences(of: "_", with: "")
+            if normalizedNoSpaces == aliasNoSpaces {
+                return productType
+            }
+        }
+
+        // Partial match - find the best match (only as fallback)
         for (alias, productType) in aliases {
             if normalized.contains(alias) || alias.contains(normalized) {
                 return productType
