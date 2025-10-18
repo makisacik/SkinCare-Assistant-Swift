@@ -70,8 +70,25 @@ struct MorningRoutineCompletionView: View {
     // MARK: - Cycle Tracking Helpers
 
     private var shouldShowCycleBanner: Bool {
+        // Only show to non-premium users
+        guard !premiumManager.isPremium else { return false }
+
         guard let routine = activeRoutine else { return false }
-        return !routine.adaptationEnabled && showCyclePromotion && cycleBannerDismissCount < 3
+
+        // Don't show if adaptation is already enabled
+        guard !routine.adaptationEnabled else { return false }
+
+        // Don't show if user dismissed it
+        guard showCyclePromotion else { return false }
+
+        let visitCount = morningCompletionVisitCount
+
+        // Only show on exactly the 20th and 30th visit
+        return visitCount == 20 || visitCount == 30
+    }
+
+    private var morningCompletionVisitCount: Int {
+        UserDefaults.standard.integer(forKey: "morningCompletionVisitCount")
     }
 
     private var cycleBannerDismissCount: Int {
@@ -148,6 +165,11 @@ struct MorningRoutineCompletionView: View {
             }
             .toolbarBackground(.hidden, for: .navigationBar)
             .onAppear {
+                // Increment visit count for banner logic
+                let currentCount = UserDefaults.standard.integer(forKey: "morningCompletionVisitCount")
+                UserDefaults.standard.set(currentCount + 1, forKey: "morningCompletionVisitCount")
+                print("🔢 Morning completion visit count: \(currentCount + 1)")
+
                 // Load completion state from RoutineManager
                 Task {
                     completedSteps = await completionViewModel.getCompletedSteps(for: selectedDate)

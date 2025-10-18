@@ -12,6 +12,7 @@ struct CyclePromotionBanner: View {
     let onDismiss: () -> Void
 
     @State private var isVisible = false
+    @State private var showPaywall = false
     @ObservedObject private var premiumManager = PremiumManager.shared
 
     var body: some View {
@@ -20,6 +21,18 @@ struct CyclePromotionBanner: View {
             EmptyView()
         } else {
             bannerContent
+                .sheet(isPresented: $showPaywall) {
+                    PaywallView(
+                        onSubscribe: {
+                            showPaywall = false
+                            // After successful subscription, enable cycle tracking
+                            onEnable()
+                        },
+                        onClose: {
+                            showPaywall = false
+                        }
+                    )
+                }
         }
     }
 
@@ -77,8 +90,12 @@ struct CyclePromotionBanner: View {
             // Enable button
             Button {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                if premiumManager.canUseCycleAdaptation() {
+                if premiumManager.isPremium {
+                    // Premium users can enable directly
                     onEnable()
+                } else {
+                    // Non-premium users see paywall
+                    showPaywall = true
                 }
             } label: {
                 HStack(spacing: 8) {

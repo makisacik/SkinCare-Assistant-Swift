@@ -42,7 +42,6 @@ struct EveningRoutineCompletionView: View {
     // MARK: - Cycle Tracking State
     @State private var activeRoutine: SavedRoutineModel?
     @State private var routineSnapshot: RoutineSnapshot?
-    @State private var showCyclePromotion = true
     @State private var showCycleSetup = false
     @State private var showEnableConfirmation = false
     @State private var showPaywall = false
@@ -68,15 +67,6 @@ struct EveningRoutineCompletionView: View {
     }
 
     // MARK: - Cycle Tracking Helpers
-
-    private var shouldShowCycleBanner: Bool {
-        guard let routine = activeRoutine else { return false }
-        return !routine.adaptationEnabled && showCyclePromotion && cycleBannerDismissCount < 3
-    }
-
-    private var cycleBannerDismissCount: Int {
-        UserDefaults.standard.integer(forKey: "cycleBannerDismissCount")
-    }
 
     private var currentCycleDay: Int {
         cycleStore.cycleData.currentDayInCycle(for: selectedDate)
@@ -113,20 +103,6 @@ struct EveningRoutineCompletionView: View {
                     // Content
                     ScrollView {
                         VStack(spacing: 24) {
-                            // Cycle Promotion Banner
-                            if shouldShowCycleBanner {
-                                CyclePromotionBanner(
-                                    onEnable: {
-                                        enableCycleTracking()
-                                    },
-                                    onDismiss: {
-                                        showCyclePromotion = false
-                                        let count = cycleBannerDismissCount + 1
-                                        UserDefaults.standard.set(count, forKey: "cycleBannerDismissCount")
-                                    }
-                                )
-                            }
-
                             // Steps Section
                             stepsSection
 
@@ -688,9 +664,6 @@ struct EveningRoutineCompletionView: View {
         if cycleAlreadyEnabled {
             print("ℹ️ [EveningCompletion] Cycle adaptation already enabled, skipping update")
             await MainActor.run {
-                withAnimation {
-                    showCyclePromotion = false
-                }
                 UINotificationFeedbackGenerator().notificationOccurred(.success)
             }
             return
@@ -718,11 +691,8 @@ struct EveningRoutineCompletionView: View {
                 print("❌ Error reloading routine: \(error)")
             }
 
-            // Hide banner and provide success feedback
+            // Provide success feedback
             await MainActor.run {
-                withAnimation {
-                    showCyclePromotion = false
-                }
                 UINotificationFeedbackGenerator().notificationOccurred(.success)
             }
         } catch {
