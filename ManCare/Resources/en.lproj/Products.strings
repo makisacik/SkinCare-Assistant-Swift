@@ -6,6 +6,10 @@
 /* General */
 "products.title" = "My Products";
 "products.subtitle" = "Store and manage your skincare collection";
+/* Filters */
+"products.filters.filter" = "Filter";
+"products.filters.change" = "Change";
+"products.filters.clear" = "Clear";
 "products.empty.title" = "No Products Yet";
 "products.empty.subtitle" = "Add your first product to get started";
 
@@ -178,5 +182,18 @@
 "products.category.shaving" = "Shaving";
 "products.category.bodyCare" = "Body Care";
 "products.category.hairCare" = "Hair Care";
+
+/* Product Recommendations */
+"products.recommendations.title" = "Recommended Products";
+"products.recommendations.subtitle" = "Personalized picks for your routine";
+"products.recommendations.viewAll" = "View All";
+"products.recommendations.loading.title" = "Preparing Your Recommendations";
+"products.recommendations.loading.subtitle" = "We're finding the best products for your routine...";
+"products.recommendations.whyRecommend" = "Why We Recommend";
+"products.recommendations.about" = "About";
+"products.recommendations.keyIngredients" = "Key Ingredients";
+"products.recommendations.viewProduct" = "View Product";
+"products.recommendations.addToProducts" = "Add to My Products";
+"products.recommendations.added" = "Added!";
 
 

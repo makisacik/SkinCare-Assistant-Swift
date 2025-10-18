@@ -13,6 +13,7 @@ struct RecommendedProductDetailSheet: View {
     
     let product: RecommendedProduct
     let onAddProduct: (RecommendedProduct) -> Void
+    var showCloseButton: Bool = true // Show close button by default (for sheet presentation)
     
     @State private var showingAddedConfirmation = false
     
@@ -34,164 +35,194 @@ struct RecommendedProductDetailSheet: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    // Product Header
-                    VStack(alignment: .leading, spacing: 12) {
-                        // Product Icon with rounded corners (matching ProductCard)
-                        Image(product.productType.customIconName)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 80, height: 80)
-                            .background(productColor.opacity(0.15))
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        // Brand & Price Tier
-                        HStack {
-                            Text(product.brand)
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                VStack(spacing: 16) {
+                    // Compact Product Header Card
+                    VStack(spacing: 16) {
+                        // Icon and Basic Info
+                        HStack(alignment: .top, spacing: 16) {
+                            // Product Icon
+                            Image(product.productType.customIconName)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 60, height: 60)
+                                .background(productColor.opacity(0.15))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
                             
-                            Spacer()
-                            
-                            // Product type badge (inline style)
-                            Text(product.productType.displayName)
-                                .font(.system(size: 9, weight: .medium))
-                                .foregroundColor(productColor)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .fill(productColor.opacity(0.1))
-                                )
+                            // Product Info
+                            VStack(alignment: .leading, spacing: 6) {
+                                // Brand and Badge
+                                HStack {
+                                    Text(product.brand)
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    
+                                    Spacer()
+                                    
+                                    // Product type badge
+                                    Text(product.productType.displayName)
+                                        .font(.system(size: 9, weight: .medium))
+                                        .foregroundColor(productColor)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 4)
+                                                .fill(productColor.opacity(0.1))
+                                        )
+                                }
+                                
+                                // Product Name
+                                Text(product.localizedDisplayName)
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                    .lineLimit(2)
+                                
+                                // Size
+                                if let size = product.size {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "cube.box")
+                                            .font(.system(size: 10))
+                                        Text(size)
+                                            .font(.system(size: 12))
+                                    }
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                                }
+                            }
                         }
-                        
-                        // Product Name
-                        Text(product.localizedDisplayName)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                        
-                        // Size
-                        if let size = product.size {
-                            Text(size)
-                                .font(.system(size: 14))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                        }
-                        
-                        // Product Type
-                        HStack(spacing: 6) {
-                            Image(systemName: "tag")
-                                .font(.system(size: 12))
-                            
-                            Text(product.productType.displayName)
-                                .font(.system(size: 14))
-                        }
-                        .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     }
-                    .padding(.horizontal, 20)
+                    .padding(16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(ThemeManager.shared.theme.palette.surface)
+                            .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.05), radius: 8, x: 0, y: 2)
+                    )
+                    .padding(.horizontal, 16)
                     
-                    Divider()
-                        .padding(.horizontal, 20)
-                    
-                    // Why We Recommend
-                    VStack(alignment: .leading, spacing: 8) {
+                    // Why We Recommend - Compact Card
+                    VStack(alignment: .leading, spacing: 10) {
                         HStack(spacing: 6) {
-                            Image(systemName: "lightbulb.fill")
-                                .font(.system(size: 16))
-                                .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(productColor)
                             
-                            Text("Why We Recommend This")
-                                .font(.system(size: 18, weight: .bold))
+                            Text(L10n.Products.Recommendations.whyRecommend)
+                                .font(.system(size: 15, weight: .semibold))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                         }
                         
                         Text(product.localizedRecommendationReason)
-                            .font(.system(size: 15))
+                            .font(.system(size: 14))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            .lineSpacing(4)
+                            .lineSpacing(3)
                     }
-                    .padding(.horizontal, 20)
+                    .padding(16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(productColor.opacity(0.08))
+                    )
+                    .padding(.horizontal, 16)
                     
-                    // Description
+                    // Description - Compact Card
                     if let description = product.localizedDescription {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("About This Product")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                            
-                            Text(description)
-                                .font(.system(size: 15))
-                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                .lineSpacing(4)
-                        }
-                        .padding(.horizontal, 20)
-                    }
-                    
-                    // Key Ingredients
-                    if !product.ingredients.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 10) {
                             HStack(spacing: 6) {
-                                Image(systemName: "leaf.fill")
-                                    .font(.system(size: 16))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.success)
+                                Image(systemName: "info.circle.fill")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 
-                                Text("Key Ingredients")
-                                    .font(.system(size: 18, weight: .bold))
+                                Text(L10n.Products.Recommendations.about)
+                                    .font(.system(size: 15, weight: .semibold))
                                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             }
                             
-                            VStack(alignment: .leading, spacing: 8) {
+                            Text(description)
+                                .font(.system(size: 14))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                .lineSpacing(3)
+                        }
+                        .padding(16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(ThemeManager.shared.theme.palette.surface)
+                        )
+                        .padding(.horizontal, 16)
+                    }
+                    
+                    // Key Ingredients - Compact Card
+                    if !product.ingredients.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "leaf.fill")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.success)
+                                
+                                Text(L10n.Products.Recommendations.keyIngredients)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            }
+                            
+                            // Ingredients list
+                            VStack(alignment: .leading, spacing: 6) {
                                 ForEach(product.localizedIngredients, id: \.self) { ingredient in
                                     HStack(spacing: 8) {
                                         Circle()
-                                            .fill(ThemeManager.shared.theme.palette.primary)
-                                            .frame(width: 6, height: 6)
+                                            .fill(ThemeManager.shared.theme.palette.success)
+                                            .frame(width: 5, height: 5)
                                         
                                         Text(ingredient)
-                                            .font(.system(size: 14))
+                                            .font(.system(size: 13))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     }
                                 }
                             }
                         }
-                        .padding(.horizontal, 20)
+                        .padding(16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(ThemeManager.shared.theme.palette.surface)
+                        )
+                        .padding(.horizontal, 16)
                     }
                     
                     // Purchase Link Button
                     if let purchaseLink = product.purchaseLink, let url = URL(string: purchaseLink) {
                         Link(destination: url) {
-                            HStack {
-                                Image(systemName: "cart.fill")
+                            HStack(spacing: 8) {
+                                Image(systemName: "link.circle.fill")
                                     .font(.system(size: 16, weight: .semibold))
                                 
-                                Text("View on Store")
-                                    .font(.system(size: 16, weight: .semibold))
+                                Text(L10n.Products.Recommendations.viewProduct)
+                                    .font(.system(size: 15, weight: .semibold))
                             }
-                            .foregroundColor(ThemeManager.shared.theme.palette.primary)
+                            .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
+                            .padding(.vertical, 12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(ThemeManager.shared.theme.palette.primary, lineWidth: 2)
+                                    .fill(productColor)
                             )
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 16)
                     }
                 }
-                .padding(.vertical, 20)
+                .padding(.top, 16)
+                .padding(.bottom, 8)
             }
             .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 28))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                            .symbolRenderingMode(.hierarchical)
+                if showCloseButton {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        }
                     }
                 }
             }
@@ -210,7 +241,7 @@ struct RecommendedProductDetailSheet: View {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 18, weight: .semibold))
                             
-                            Text(showingAddedConfirmation ? "Added to Products!" : "Add to My Products")
+                            Text(showingAddedConfirmation ? L10n.Products.Recommendations.added : L10n.Products.Recommendations.addToProducts)
                                 .font(.system(size: 17, weight: .semibold))
                         }
                         .foregroundColor(.white)

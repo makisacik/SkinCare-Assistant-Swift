@@ -171,6 +171,7 @@ private struct RecommendedProductCard: View {
     let onAdd: () -> Void
     
     @State private var isExpanded = false
+    @State private var showingAddedConfirmation = false
     
     private var productColor: Color {
         switch product.productType {
@@ -189,8 +190,14 @@ private struct RecommendedProductCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header - Always Visible
-            Button(action: onTap) {
+            // Header - Always Visible - NavigationLink
+            NavigationLink(destination: RecommendedProductDetailSheet(
+                product: product,
+                onAddProduct: { product in
+                    onAdd()
+                },
+                showCloseButton: false // Don't show close button when pushed in nav stack
+            )) {
                 HStack(spacing: 12) {
                     // Product Icon with rounded corners (matching ProductCard)
                     Image(product.productType.customIconName)
@@ -244,7 +251,7 @@ private struct RecommendedProductCard: View {
             // Key Ingredients
             if !product.ingredients.isEmpty {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Key Ingredients:")
+                    Text(L10n.Products.Recommendations.keyIngredients + ":")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
                     
@@ -270,12 +277,24 @@ private struct RecommendedProductCard: View {
             Button {
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 onAdd()
+                
+                // Show confirmation
+                withAnimation {
+                    showingAddedConfirmation = true
+                }
+                
+                // Reset after 2 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    withAnimation {
+                        showingAddedConfirmation = false
+                    }
+                }
             } label: {
                 HStack {
-                    Image(systemName: "plus.circle.fill")
+                    Image(systemName: showingAddedConfirmation ? "checkmark.circle.fill" : "plus.circle.fill")
                         .font(.system(size: 16, weight: .semibold))
                     
-                    Text("Add to My Products")
+                    Text(showingAddedConfirmation ? L10n.Products.Recommendations.added : L10n.Products.Recommendations.addToProducts)
                         .font(.system(size: 15, weight: .semibold))
                 }
                 .foregroundColor(.white)
@@ -283,9 +302,10 @@ private struct RecommendedProductCard: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(ThemeManager.shared.theme.palette.primary)
+                        .fill(showingAddedConfirmation ? ThemeManager.shared.theme.palette.success : ThemeManager.shared.theme.palette.primary)
                 )
             }
+            .disabled(showingAddedConfirmation)
         }
         .padding(16)
         .background(

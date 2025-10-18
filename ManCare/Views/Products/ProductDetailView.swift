@@ -18,96 +18,201 @@ struct ProductDetailView: View {
     @State private var showingEditView = false
     @State private var showingDeleteAlert = false
     
+    private var productColor: Color {
+        switch product.tagging.productType {
+        case .cleanser: return ThemeManager.shared.theme.palette.info
+        case .faceSerum: return ThemeManager.shared.theme.palette.primary
+        case .moisturizer: return ThemeManager.shared.theme.palette.success
+        case .sunscreen: return ThemeManager.shared.theme.palette.warning
+        case .faceSunscreen: return ThemeManager.shared.theme.palette.warning
+        case .toner: return ThemeManager.shared.theme.palette.secondary
+        case .exfoliator: return ThemeManager.shared.theme.palette.error
+        case .faceMask: return ThemeManager.shared.theme.palette.primary
+        case .facialOil: return ThemeManager.shared.theme.palette.warning
+        default: return ThemeManager.shared.theme.palette.textMuted
+        }
+    }
+    
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(spacing: 24) {
-                    // Header
-                    VStack(spacing: 12) {
-                        Image(product.tagging.productType.customIconName)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 80, height: 80)
-                            .background(ThemeManager.shared.theme.palette.secondary.opacity(0.1))
-                            .clipShape(Circle())
-                        
-                        VStack(spacing: 4) {
-                            Text(product.localizedDisplayName)
-                                .font(ThemeManager.shared.theme.typo.h2)
-                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                                .multilineTextAlignment(.center)
+                VStack(spacing: 16) {
+                    // Compact Product Header Card
+                    VStack(spacing: 16) {
+                        // Icon and Basic Info
+                        HStack(alignment: .top, spacing: 16) {
+                            // Product Icon
+                            Image(product.tagging.productType.customIconName)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 60, height: 60)
+                                .background(productColor.opacity(0.15))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
                             
-                            if let brand = product.localizedBrand {
-                                Text(brand)
-                                    .font(ThemeManager.shared.theme.typo.title)
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                            // Product Info
+                            VStack(alignment: .leading, spacing: 6) {
+                                // Brand and Badge
+                                HStack {
+                                    if let brand = product.localizedBrand {
+                                        Text(brand)
+                                            .font(.system(size: 13, weight: .medium))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    // Product type badge
+                                    Text(product.tagging.productType.displayName)
+                                        .font(.system(size: 9, weight: .medium))
+                                        .foregroundColor(productColor)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 4)
+                                                .fill(productColor.opacity(0.1))
+                                        )
+                                }
+                                
+                                // Product Name
+                                Text(product.localizedDisplayName)
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                    .lineLimit(2)
+                                
+                                // Size
+                                if let size = product.size {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "cube.box")
+                                            .font(.system(size: 10))
+                                        Text(size)
+                                            .font(.system(size: 12))
+                                    }
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
+                                }
                             }
                         }
                     }
-                    .padding(.top, 20)
+                    .padding(16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(ThemeManager.shared.theme.palette.surface)
+                            .shadow(color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.05), radius: 8, x: 0, y: 2)
+                    )
+                    .padding(.horizontal, 16)
                     
-                    VStack(spacing: 20) {
-                        // Basic Information
-                        ProductDetailSection(title: L10n.Products.Form.basicInfo) {
-                            VStack(spacing: 12) {
-                                DetailRow(label: L10n.Products.Detail.productType, value: product.tagging.productType.displayName)
+                    // Description Card
+                    if let description = product.localizedDescription {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "info.circle.fill")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.info)
                                 
-                                if let size = product.size {
-                                    DetailRow(label: L10n.Products.Detail.size, value: size)
-                                }
+                                Text(L10n.Products.Detail.description)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            }
+                            
+                            Text(description)
+                                .font(.system(size: 14))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                .lineSpacing(3)
+                        }
+                        .padding(16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(ThemeManager.shared.theme.palette.surface)
+                        )
+                        .padding(.horizontal, 16)
+                    }
+                    
+                    // Ingredients Card
+                    if !product.tagging.ingredients.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "leaf.fill")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.success)
                                 
-                                if let description = product.localizedDescription {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text(L10n.Products.Detail.description)
-                                            .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
-                                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                                Text(L10n.Products.Form.ingredients)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            }
+                            
+                            // Ingredients list
+                            VStack(alignment: .leading, spacing: 6) {
+                                ForEach(product.tagging.ingredients, id: \.self) { ingredient in
+                                    HStack(spacing: 8) {
+                                        Circle()
+                                            .fill(ThemeManager.shared.theme.palette.success)
+                                            .frame(width: 5, height: 5)
                                         
-                                        Text(description)
-                                            .font(ThemeManager.shared.theme.typo.body)
+                                        Text(ingredient)
+                                            .font(.system(size: 13))
                                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                                     }
                                 }
                             }
                         }
-                        
-                        // Ingredients
-                        if !product.tagging.ingredients.isEmpty {
-                            ProductDetailSection(title: L10n.Products.Form.ingredients) {
-                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 8) {
-                                    ForEach(product.tagging.ingredients, id: \.self) { ingredient in
-                                        IngredientTag(ingredient: ingredient) {
-                                            // Read-only in detail view
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        
-                        // Claims
-                        if !product.tagging.claims.isEmpty {
-                            ProductDetailSection(title: L10n.Products.Form.productClaims) {
-                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 8) {
-                                    ForEach(product.tagging.claims, id: \.self) { claim in
-                                        ClaimToggle(claim: claim, isSelected: true) {
-                                            // Read-only in detail view
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        .padding(16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(ThemeManager.shared.theme.palette.surface)
+                        )
+                        .padding(.horizontal, 16)
                     }
-                    .padding(.horizontal, 20)
+                    
+                    // Claims Card
+                    if !product.tagging.claims.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "checkmark.seal.fill")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(productColor)
+                                
+                                Text(L10n.Products.Form.productClaims)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+                            }
+                            
+                            // Claims list
+                            VStack(alignment: .leading, spacing: 6) {
+                                ForEach(product.tagging.claims, id: \.self) { claim in
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(productColor)
+                                        
+                                        Text(claim)
+                                            .font(.system(size: 13))
+                                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                                    }
+                                }
+                            }
+                        }
+                        .padding(16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(productColor.opacity(0.08))
+                        )
+                        .padding(.horizontal, 16)
+                    }
                 }
+                .padding(.top, 16)
+                .padding(.bottom, 8)
             }
-            .background(ThemeManager.shared.theme.palette.accentBackground.ignoresSafeArea())
+            .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         dismiss()
                     } label: {
-                        Text(L10n.Products.Detail.close)
-                            .font(ThemeManager.shared.theme.typo.body.weight(.medium))
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     }
                 }
@@ -132,6 +237,8 @@ struct ProductDetailView: View {
                     }
                 }
             }
+            .toolbarBackground(ThemeManager.shared.theme.palette.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
         .sheet(isPresented: $showingEditView) {
             EditProductView(

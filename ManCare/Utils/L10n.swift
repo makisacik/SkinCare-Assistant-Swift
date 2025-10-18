@@ -1669,6 +1669,13 @@ struct L10n {
         static var title: String { manager.localizedString("products.title", table: "Products") }
         static var subtitle: String { manager.localizedString("products.subtitle", table: "Products") }
 
+        // Filters
+        struct Filters {
+            static var filter: String { manager.localizedString("products.filters.filter", table: "Products") }
+            static var change: String { manager.localizedString("products.filters.change", table: "Products") }
+            static var clear: String { manager.localizedString("products.filters.clear", table: "Products") }
+        }
+
         // Empty State
         struct Empty {
             static var title: String { manager.localizedString("products.empty.title", table: "Products") }
@@ -1909,6 +1916,24 @@ struct L10n {
             static var shaving: String { manager.localizedString("products.category.shaving", table: "Products") }
             static var bodyCare: String { manager.localizedString("products.category.bodyCare", table: "Products") }
             static var hairCare: String { manager.localizedString("products.category.hairCare", table: "Products") }
+        }
+
+        // Product Recommendations
+        struct Recommendations {
+            static var title: String { manager.localizedString("products.recommendations.title", table: "Products") }
+            static var subtitle: String { manager.localizedString("products.recommendations.subtitle", table: "Products") }
+            static var viewAll: String { manager.localizedString("products.recommendations.viewAll", table: "Products") }
+            static var whyRecommend: String { manager.localizedString("products.recommendations.whyRecommend", table: "Products") }
+            static var about: String { manager.localizedString("products.recommendations.about", table: "Products") }
+            static var keyIngredients: String { manager.localizedString("products.recommendations.keyIngredients", table: "Products") }
+            static var viewProduct: String { manager.localizedString("products.recommendations.viewProduct", table: "Products") }
+            static var addToProducts: String { manager.localizedString("products.recommendations.addToProducts", table: "Products") }
+            static var added: String { manager.localizedString("products.recommendations.added", table: "Products") }
+
+            struct Loading {
+                static var title: String { manager.localizedString("products.recommendations.loading.title", table: "Products") }
+                static var subtitle: String { manager.localizedString("products.recommendations.loading.subtitle", table: "Products") }
+            }
         }
     }
 

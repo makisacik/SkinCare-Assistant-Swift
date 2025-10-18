@@ -6,6 +6,10 @@ ManCare - Ürünler sekmesi ile ilgili metinler
 /* General */
 "products.title" = "Ürünlerim";
 "products.subtitle" = "Cilt bakımı koleksiyonunuzu depolayın ve yönetin";
+/* Filters */
+"products.filters.filter" = "Filtrele";
+"products.filters.change" = "Değiştir";
+"products.filters.clear" = "Temizle";
 "products.empty.title" = "Henüz Ürün Yok";
 "products.empty.subtitle" = "Başlamak için ilk ürününüzü ekleyin";
 
@@ -178,3 +182,16 @@ ManCare - Ürünler sekmesi ile ilgili metinler
 "products.category.shaving" = "Tıraş";
 "products.category.bodyCare" = "Vücut Bakımı";
 "products.category.hairCare" = "Saç Bakımı";
+
+/* Product Recommendations */
+"products.recommendations.title" = "Önerilen Ürünler";
+"products.recommendations.subtitle" = "Rutininiz için kişiselleştirilmiş seçimler";
+"products.recommendations.viewAll" = "Tümünü Gör";
+"products.recommendations.loading.title" = "Önerileriniz Hazırlanıyor";
+"products.recommendations.loading.subtitle" = "Rutininiz için en iyi ürünleri buluyoruz...";
+"products.recommendations.whyRecommend" = "Neden Öneriyoruz";
+"products.recommendations.about" = "Hakkında";
+"products.recommendations.keyIngredients" = "Önemli İçerikler";
+"products.recommendations.viewProduct" = "Ürünü Görüntüle";
+"products.recommendations.addToProducts" = "Ürünlerime Ekle";
+"products.recommendations.added" = "Eklendi!";

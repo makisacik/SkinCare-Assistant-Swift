@@ -18,11 +18,11 @@ struct RecommendationsPreviewCard: View {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Recommended Products")
+                    Text(L10n.Products.Recommendations.title)
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                     
-                    Text("Budget & premium options for each step")
+                    Text(L10n.Products.Recommendations.subtitle)
                         .font(.system(size: 14))
                         .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                 }
@@ -49,7 +49,7 @@ struct RecommendationsPreviewCard: View {
                 onViewAll()
             } label: {
                 HStack {
-                    Text("View All")
+                    Text(L10n.Products.Recommendations.viewAll)
                         .font(.system(size: 16, weight: .semibold))
                     
                     Spacer()
@@ -222,11 +222,11 @@ struct RecommendationsLoadingCard: View {
             
             // Text
             VStack(spacing: 8) {
-                Text("Preparing Your Recommendations")
+                Text(L10n.Products.Recommendations.Loading.title)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                 
-                Text("We're finding the best products for your routine...")
+                Text(L10n.Products.Recommendations.Loading.subtitle)
                     .font(.system(size: 14))
                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
                     .multilineTextAlignment(.center)
