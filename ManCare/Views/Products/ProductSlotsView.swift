@@ -9,193 +9,194 @@ import SwiftUI
 
 struct ProductSlotsView: View {
     @ObservedObject private var productService = ProductService.shared
+    @ObservedObject private var recommendationService = ProductRecommendationService.shared
     @EnvironmentObject private var localizationManager: LocalizationManager
-    
+
     // Callbacks for sheet presentation (handled at root level)
     let onAddProductTapped: () -> Void
     let onScanProductTapped: () -> Void
     let onProductTapped: (Product) -> Void
 
+    // State for recommendations
+    @State private var showAllRecommendations = false
+    @State private var selectedRecommendation: RecommendedProduct?
+    @State private var showRecommendationDetail = false
+
+    // Notification observer for recommendations completion
+    @State private var notificationObserver: NSObjectProtocol?
+
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            VStack(spacing: 12) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L10n.Products.title)
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
+        ZStack {
+            VStack(spacing: 0) {
+                // Header
+                VStack(spacing: 12) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(L10n.Products.title)
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
-                        Text(L10n.Products.subtitle)
-                            .font(.system(size: 16))
-                            .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                    }
+                            Text(L10n.Products.subtitle)
+                                .font(.system(size: 16))
+                                .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
+                        }
 
-                    Spacer()
-                    
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 20)
+                        Spacer()
 
-            // Products List
-            if productService.userProducts.isEmpty {
-                EmptyProductsView()
-            } else {
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        ForEach(productService.userProducts, id: \.id) { product in
-                            ProductCard(product: product) {
-                                onProductTapped(product)
+                        // Add Product Menu Button
+                        Menu {
+                            Button {
+                                onScanProductTapped()
+                            } label: {
+                                Label(L10n.Products.Add.scanOption, systemImage: "camera.viewfinder")
+                            }
+
+                            Button {
+                                onAddProductTapped()
+                            } label: {
+                                Label(L10n.Products.Add.manualOption, systemImage: "plus.circle")
+                            }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(ThemeManager.shared.theme.palette.primary)
+                                    .frame(width: 44, height: 44)
+
+                                Image(systemName: "plus")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundColor(.white)
                             }
                         }
                     }
-                    .padding(.horizontal, 20)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 20)
+
+                // Products List + Recommendations
+                ScrollView {
+                    LazyVStack(spacing: 20) {
+                        // User's Products Section
+                        if productService.userProducts.isEmpty {
+                            EmptyProductsView()
+                                .padding(.horizontal, 20)
+                        } else {
+                            ForEach(productService.userProducts, id: \.id) { product in
+                                ProductCard(product: product) {
+                                    onProductTapped(product)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                        }
+
+                        // Recommendations Section
+                        if recommendationService.isGenerating {
+                            RecommendationsLoadingCard()
+                                .padding(.horizontal, 20)
+                                .padding(.top, 12)
+                        } else if !recommendationService.recommendations.isEmpty {
+                            let previewProducts = recommendationService.previewRecommendations()
+                            RecommendationsPreviewCard(
+                                products: previewProducts,
+                                totalCount: recommendationService.recommendations.count,
+                                onViewAll: {
+                                    showAllRecommendations = true
+                                },
+                                onProductTapped: { product in
+                                    selectedRecommendation = product
+                                    showRecommendationDetail = true
+                                }
+                            )
+                            .padding(.horizontal, 20)
+                            .padding(.top, 12)
+                        }
+                    }
                     .padding(.bottom, 20)
                 }
             }
-
-            Spacer()
-
-            VStack(spacing: 20) {
-                Text(L10n.Products.Add.title)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 20)
-                HStack(spacing: 16) {
-                    // Scan Product Card
-                    Button {
-                        onScanProductTapped()
-                    } label: {
-                        VStack(spacing: 12) {
-                            ZStack {
-                                Circle()
-                                    .fill(ThemeManager.shared.theme.palette.primary.opacity(0.15))
-                                    .frame(width: 50, height: 50)
-                                Image(systemName: "camera.viewfinder")
-                                    .font(.system(size: 24, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                            }
-
-                            VStack(spacing: 4) {
-                                Text(L10n.Products.Add.scanOption)
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                                Text(L10n.Products.Add.scanDescription)
-                                    .font(.system(size: 12))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(3)
-                            }
-
-                            HStack(spacing: 4) {
-                                Text(L10n.Products.Add.getStarted)
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.primary)
-                            }
-                        }
-                        .padding(20)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            ThemeManager.shared.theme.palette.surface,
-                                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
-                                        ]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(ThemeManager.shared.theme.palette.primary.opacity(0.2), lineWidth: 1)
-                                )
-                                .shadow(
-                                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.05),
-                                    radius: 8,
-                                    x: 0,
-                                    y: 2
-                                )
-                        )
-                    }
-                    .buttonStyle(PlainButtonStyle())
-
-                    // Add Manually Card
-                    Button {
-                        onAddProductTapped()
-                    } label: {
-                        VStack(spacing: 12) {
-                            ZStack {
-                                Circle()
-                                    .fill(ThemeManager.shared.theme.palette.secondary.opacity(0.15))
-                                    .frame(width: 50, height: 50)
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 24, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                            }
-
-                            VStack(spacing: 4) {
-                                Text(L10n.Products.Add.manualOption)
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
-
-                                Text(L10n.Products.Add.manualDescription)
-                                    .font(.system(size: 12))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(3)
-                            }
-
-                            HStack(spacing: 4) {
-                                Text(L10n.Products.Add.getStarted)
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(ThemeManager.shared.theme.palette.secondary)
-                            }
-                        }
-                        .padding(20)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            ThemeManager.shared.theme.palette.surface,
-                                            ThemeManager.shared.theme.palette.surface.opacity(0.8)
-                                        ]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(ThemeManager.shared.theme.palette.secondary.opacity(0.2), lineWidth: 1)
-                                )
-                                .shadow(
-                                    color: ThemeManager.shared.theme.palette.textPrimary.opacity(0.05),
-                                    radius: 8,
-                                    x: 0,
-                                    y: 2
-                                )
-                        )
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                .padding(.horizontal, 20)
-            }
-            .padding(.bottom, 30)
+            .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
         }
-        .background(ThemeManager.shared.theme.palette.background.ignoresSafeArea())
+        .sheet(isPresented: $showAllRecommendations) {
+            ProductRecommendationsView(
+                recommendations: recommendationService.recommendations,
+                onProductTapped: { product in
+                    showAllRecommendations = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        selectedRecommendation = product
+                        showRecommendationDetail = true
+                    }
+                },
+                onAddProduct: { product in
+                    addRecommendedProductToList(product)
+                }
+            )
+        }
+        .sheet(item: $selectedRecommendation) { product in
+            RecommendedProductDetailSheet(
+                product: product,
+                onAddProduct: { product in
+                    addRecommendedProductToList(product)
+                }
+            )
+        }
+        .onAppear {
+            setupNotificationListener()
+            loadRecommendations()
+        }
+        .onDisappear {
+            removeNotificationListener()
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func setupNotificationListener() {
+        // Remove existing observer if any
+        removeNotificationListener()
+
+        // Listen for recommendation completion notifications
+        notificationObserver = NotificationCenter.default.addObserver(
+            forName: .productRecommendationsGenerated,
+            object: nil,
+            queue: .main
+        ) { _ in
+            print("🔔 Received notification: Recommendations generated, refreshing UI...")
+            loadRecommendations()
+        }
+    }
+
+    private func removeNotificationListener() {
+        if let observer = notificationObserver {
+            NotificationCenter.default.removeObserver(observer)
+            notificationObserver = nil
+        }
+    }
+
+    private func loadRecommendations() {
+        Task {
+            // Try to fetch existing recommendations from routine store
+            let routineStore = RoutineStore()
+            do {
+                if let activeRoutine = try await routineStore.fetchActiveRoutine() {
+                    print("📦 Checking for recommendations for routine: \(activeRoutine.title)")
+                    let hasRecs = try await recommendationService.hasRecommendations(for: activeRoutine)
+                    if hasRecs {
+                        print("✅ Found recommendations, loading...")
+                        _ = try await recommendationService.fetchRecommendations(for: activeRoutine)
+                    } else {
+                        print("ℹ️ No recommendations found yet")
+                    }
+                }
+            } catch {
+                print("❌ Failed to load recommendations: \(error)")
+            }
+        }
+    }
+
+    private func addRecommendedProductToList(_ recommendation: RecommendedProduct) {
+        let product = recommendation.toProduct()
+        productService.addUserProduct(product)
+        print("✅ Added recommended product to list: \(product.displayName)")
     }
 }
 

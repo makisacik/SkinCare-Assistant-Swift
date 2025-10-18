@@ -18,12 +18,12 @@ struct SimpleProductRow: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 24, height: 24)
             VStack(alignment: .leading, spacing: 2) {
-                Text(product.displayName)
+                Text(product.localizedDisplayName)
                     .font(ThemeManager.shared.theme.typo.body.weight(.medium))
                     .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
 
                 HStack(spacing: 8) {
-                    if let brand = product.brand {
+                    if let brand = product.localizedBrand {
                         Text(brand)
                             .font(ThemeManager.shared.theme.typo.caption)
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)

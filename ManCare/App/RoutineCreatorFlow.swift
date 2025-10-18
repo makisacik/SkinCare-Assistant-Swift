@@ -215,7 +215,10 @@ struct RoutineCreatorFlow: View {
                         Task {
                             let mockRoutine = createMockRoutineResponse()
                             // Save to Core Data immediately
-                            _ = try? await routineService.saveInitialRoutine(from: mockRoutine)
+                            if let savedRoutine = try? await routineService.saveInitialRoutine(from: mockRoutine) {
+                                // Start background product recommendation generation for mock too
+                                BackgroundRecommendationManager.shared.startGeneration(for: savedRoutine)
+                            }
                             await MainActor.run {
                                 withAnimation(.easeInOut(duration: 0.3)) {
                                     currentStep = .results
@@ -506,7 +509,7 @@ struct RoutineCreatorFlow: View {
                 print("   - Morning Steps: \(routine.routine.morning.count)")
                 print("   - Evening Steps: \(routine.routine.evening.count)")
                 print("   - Weekly Steps: \(routine.routine.weekly?.count ?? 0)")
-                print("   - Product Slots: \(routine.productSlots.count)")
+                print("   - Product Slots: \(routine.productSlots?.count ?? 0)")
 
                 // Print detailed routine steps
                 print("🌅 Morning Routine:")
@@ -544,8 +547,11 @@ struct RoutineCreatorFlow: View {
 
                 // Save to Core Data immediately - this is our single source of truth
                 do {
-                    _ = try await routineService.saveInitialRoutine(from: routine)
+                    let savedRoutine = try await routineService.saveInitialRoutine(from: routine)
                     print("✅ Routine saved to Core Data")
+
+                    // Start background product recommendation generation
+                    BackgroundRecommendationManager.shared.startGeneration(for: savedRoutine)
                 } catch {
                     print("❌ Error saving routine to Core Data: \(error)")
                 }
@@ -575,8 +581,11 @@ struct RoutineCreatorFlow: View {
                 // Create a fallback routine and save to Core Data
                 let fallbackRoutine = self.createFallbackRoutine(for: request)
                 do {
-                    _ = try await routineService.saveInitialRoutine(from: fallbackRoutine)
+                    let savedRoutine = try await routineService.saveInitialRoutine(from: fallbackRoutine)
                     print("✅ Fallback routine saved to Core Data")
+
+                    // Start background product recommendation generation even for fallback
+                    BackgroundRecommendationManager.shared.startGeneration(for: savedRoutine)
                 } catch {
                     print("❌ Error saving fallback routine: \(error)")
                 }
@@ -643,6 +652,9 @@ struct RoutineCreatorFlow: View {
                     self.generatedRoutine = savedRoutine
                     self.routineError = nil
                 }
+
+                // Start background product recommendation generation
+                BackgroundRecommendationManager.shared.startGeneration(for: savedRoutine)
 
                 return savedRoutine
             } catch {

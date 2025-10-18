@@ -152,13 +152,9 @@ final class RoutineService: RoutineServiceProtocol {
         let userLanguage = LocalizationManager.shared.currentLanguage
         print("🌍 User language: \(userLanguage)")
 
-        // Create the request using the convenience method
-        // Ask GPT to return batched translations (en + device language if different)
-        let i18nLangs: [String] = {
-            var langs = ["en"]
-            if userLanguage != "en" { langs.append(userLanguage) }
-            return langs
-        }()
+        // Always request i18n data (even for English users, GPT will duplicate data in i18n["en"])
+        let i18nLangs = LocalizationUtils.i18nLanguagesForGPT(currentLanguage: userLanguage)
+        print("🌍 Requesting i18n data for languages: \(i18nLangs)")
 
         let request = GPTService.createRequest(
             skinType: skinType,
@@ -174,8 +170,8 @@ final class RoutineService: RoutineServiceProtocol {
             i18nLanguages: i18nLangs
         )
 
-        // Generate routine with batched translations from GPT
-        print("📝 Generating routine with batched i18n: \(i18nLangs)")
+        // Generate routine with i18n data from GPT
+        print("📝 Generating routine with i18n for: \(i18nLangs.joined(separator: ", "))")
         print("⏱️ Timeout set to: 40 seconds")
         print("🤖 Using model: gpt-3.5-turbo")
         let startTime = Date()
@@ -582,6 +578,7 @@ final class RoutineService: RoutineServiceProtocol {
         }
 
         // Fallback to translation service if i18n is unavailable
+        // Only translate if device language exists in app AND is not English
         let deviceLanguage = LocalizationUtils.deviceLocaleLanguage()
         var routineTitleTranslations: [String: String] = ["en": response.summary.title]
         var routineDescTranslations: [String: String] = ["en": response.summary.oneLiner]
@@ -591,23 +588,23 @@ final class RoutineService: RoutineServiceProtocol {
         var tagsTranslations: [String: [String]] = ["en": tagsEn]
         var allStepTranslations: [StepTranslations] = []
 
-        if deviceLanguage != "en" {
-            print("🌍 Creating translations for device language (fallback): \(deviceLanguage)")
+        if let deviceLang = deviceLanguage, deviceLang != "en" {
+            print("🌍 Creating translations for device language (fallback): \(deviceLang)")
             let languageService = LanguageService.shared
-            do { routineTitleTranslations[deviceLanguage] = try await languageService.translateFromEnglish(response.summary.title, to: deviceLanguage) } catch { }
-            do { routineDescTranslations[deviceLanguage] = try await languageService.translateFromEnglish(response.summary.oneLiner, to: deviceLanguage) } catch { }
-            do { benefitsTranslations[deviceLanguage] = try await languageService.translateArray(benefitsEn, from: "en", to: deviceLanguage) } catch { }
-            do { tagsTranslations[deviceLanguage] = try await languageService.translateArray(tagsEn, from: "en", to: deviceLanguage) } catch { }
+            do { routineTitleTranslations[deviceLang] = try await languageService.translateFromEnglish(response.summary.title, to: deviceLang) } catch { }
+            do { routineDescTranslations[deviceLang] = try await languageService.translateFromEnglish(response.summary.oneLiner, to: deviceLang) } catch { }
+            do { benefitsTranslations[deviceLang] = try await languageService.translateArray(benefitsEn, from: "en", to: deviceLang) } catch { }
+            do { tagsTranslations[deviceLang] = try await languageService.translateArray(tagsEn, from: "en", to: deviceLang) } catch { }
 
             for step in response.routine.morning {
                 var t: [String: String] = ["en": step.name]
                 var d: [String: String] = ["en": "\(step.why) - \(step.how)"]
                 var w: [String: String] = ["en": step.why]
                 var h: [String: String] = ["en": step.how]
-                do { t[deviceLanguage] = try await languageService.translateFromEnglish(step.name, to: deviceLanguage) } catch { }
-                do { d[deviceLanguage] = try await languageService.translateFromEnglish("\(step.why) - \(step.how)", to: deviceLanguage) } catch { }
-                do { w[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage) } catch { }
-                do { h[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage) } catch { }
+                do { t[deviceLang] = try await languageService.translateFromEnglish(step.name, to: deviceLang) } catch { }
+                do { d[deviceLang] = try await languageService.translateFromEnglish("\(step.why) - \(step.how)", to: deviceLang) } catch { }
+                do { w[deviceLang] = try await languageService.translateFromEnglish(step.why, to: deviceLang) } catch { }
+                do { h[deviceLang] = try await languageService.translateFromEnglish(step.how, to: deviceLang) } catch { }
                 allStepTranslations.append(StepTranslations(title: t, stepDescription: d, why: w, how: h))
             }
             for step in response.routine.evening {
@@ -615,10 +612,10 @@ final class RoutineService: RoutineServiceProtocol {
                 var d: [String: String] = ["en": "\(step.why) - \(step.how)"]
                 var w: [String: String] = ["en": step.why]
                 var h: [String: String] = ["en": step.how]
-                do { t[deviceLanguage] = try await languageService.translateFromEnglish(step.name, to: deviceLanguage) } catch { }
-                do { d[deviceLanguage] = try await languageService.translateFromEnglish("\(step.why) - \(step.how)", to: deviceLanguage) } catch { }
-                do { w[deviceLanguage] = try await languageService.translateFromEnglish(step.why, to: deviceLanguage) } catch { }
-                do { h[deviceLanguage] = try await languageService.translateFromEnglish(step.how, to: deviceLanguage) } catch { }
+                do { t[deviceLang] = try await languageService.translateFromEnglish(step.name, to: deviceLang) } catch { }
+                do { d[deviceLang] = try await languageService.translateFromEnglish("\(step.why) - \(step.how)", to: deviceLang) } catch { }
+                do { w[deviceLang] = try await languageService.translateFromEnglish(step.why, to: deviceLang) } catch { }
+                do { h[deviceLang] = try await languageService.translateFromEnglish(step.how, to: deviceLang) } catch { }
                 allStepTranslations.append(StepTranslations(title: t, stepDescription: d, why: w, how: h))
             }
         } else {
@@ -636,7 +633,7 @@ final class RoutineService: RoutineServiceProtocol {
         // This matches GPS routine behavior where we always have en + device language
         print("📦 Creating template translations (fetching from BOTH en + device language bundles)")
 
-        let deviceLanguage = LocalizationUtils.deviceLocaleLanguage()
+        let deviceLanguage = LocalizationUtils.deviceLocaleLanguage() ?? "en"
         guard let routineId = template.routineId else {
             print("❌ Template missing routineId - cannot fetch translations")
             // Fallback to current language only

@@ -16,7 +16,7 @@ struct RoutineResponse: Codable {
     let routine: Routine
     let guardrails: Guardrails
     let adaptation: Adaptation
-    let productSlots: [ProductSlot]
+    let productSlots: [ProductSlot]?  // Optional - GPT may not include this field
     let i18n: RoutineI18nPayload?
 
     enum CodingKeys: String, CodingKey {

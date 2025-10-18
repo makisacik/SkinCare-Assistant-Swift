@@ -172,23 +172,26 @@ struct MyselfView: View {
                 }
             }
 
-            // Language picker (English + device locale only)
-            Menu {
-                ForEach(LocalizationUtils.availableLanguagesForPicker()) { lang in
-                    Button {
-                        localizationManager.setLanguage(lang)
-                    } label: {
-                        HStack {
-                            Text(lang.nativeName)
-                            Spacer()
-                            if localizationManager.currentLanguage == lang.rawValue {
-                                Image(systemName: "checkmark")
+            // Language picker (only shown if device locale is not English AND exists in app)
+            let availableLanguages = LocalizationUtils.availableLanguagesForPicker()
+            if !availableLanguages.isEmpty {
+                Menu {
+                    ForEach(availableLanguages) { lang in
+                        Button {
+                            localizationManager.setLanguage(lang)
+                        } label: {
+                            HStack {
+                                Text(lang.nativeName)
+                                Spacer()
+                                if localizationManager.currentLanguage == lang.rawValue {
+                                    Image(systemName: "checkmark")
+                                }
                             }
                         }
                     }
+                } label: {
+                    Label(L10n.Settings.language, systemImage: "globe")
                 }
-            } label: {
-                Label(L10n.Settings.language, systemImage: "globe")
             }
 
             Button {

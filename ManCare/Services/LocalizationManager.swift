@@ -57,15 +57,18 @@ final class LocalizationManager: ObservableObject {
     // MARK: - Initialization
     
     private init() {
-        // Load saved language or use device language as fallback
+        // Load saved language or use initial app language based on business logic
         let savedLanguage = UserDefaults.standard.string(forKey: Constants.languageKey)
         
         if let saved = savedLanguage, Language(rawValue: saved) != nil {
+            // User has explicitly chosen a language before
             self.currentLanguage = saved
+            print("🌍 Using saved language: \(saved)")
         } else {
-            // Try to match device language
-            let deviceLanguage = Locale.current.language.languageCode?.identifier ?? "en"
-            self.currentLanguage = Language(rawValue: deviceLanguage)?.rawValue ?? defaultLanguage.rawValue
+            // First launch: use device locale if it exists in app, otherwise English
+            let initialLanguage = LocalizationUtils.initialAppLanguage()
+            self.currentLanguage = initialLanguage
+            print("🌍 First launch: using device locale language: \(initialLanguage)")
         }
         
         updateCurrentBundle()

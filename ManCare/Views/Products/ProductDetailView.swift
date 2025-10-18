@@ -32,12 +32,12 @@ struct ProductDetailView: View {
                             .clipShape(Circle())
                         
                         VStack(spacing: 4) {
-                            Text(product.displayName)
+                            Text(product.localizedDisplayName)
                                 .font(ThemeManager.shared.theme.typo.h2)
                                 .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                                 .multilineTextAlignment(.center)
                             
-                            if let brand = product.brand {
+                            if let brand = product.localizedBrand {
                                 Text(brand)
                                     .font(ThemeManager.shared.theme.typo.title)
                                     .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -56,7 +56,7 @@ struct ProductDetailView: View {
                                     DetailRow(label: L10n.Products.Detail.size, value: size)
                                 }
                                 
-                                if let description = product.description {
+                                if let description = product.localizedDescription {
                                     VStack(alignment: .leading, spacing: 8) {
                                         Text(L10n.Products.Detail.description)
                                             .font(ThemeManager.shared.theme.typo.body.weight(.semibold))
@@ -149,7 +149,7 @@ struct ProductDetailView: View {
                 dismiss()
             }
         } message: {
-            Text(L10n.Products.Detail.deleteConfirmMessage(product.displayName))
+            Text(L10n.Products.Detail.deleteConfirmMessage(product.localizedDisplayName))
         }
     }
 }

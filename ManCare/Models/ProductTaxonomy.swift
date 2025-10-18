@@ -518,24 +518,59 @@ struct ProductAliasMapping {
 struct Product: Codable, Identifiable, Equatable {
     var id: String
     var displayName: String
+    var displayNameLocale: String?  // Localized display name for user-facing text
     var tagging: ProductTagging
     var brand: String?
+    var brandLocale: String?        // Localized brand name for user-facing text
     var link: URL?
     var imageURL: URL?
     var size: String?
     var description: String?
+    var descriptionLocale: String?  // Localized description for user-facing text
     var enrichedINCI: [INCIEntry]?
 
-    init(id: String, displayName: String, tagging: ProductTagging, brand: String? = nil, link: URL? = nil, imageURL: URL? = nil, size: String? = nil, description: String? = nil, enrichedINCI: [INCIEntry]? = nil) {
+    init(id: String, displayName: String, displayNameLocale: String? = nil, tagging: ProductTagging, brand: String? = nil, brandLocale: String? = nil, link: URL? = nil, imageURL: URL? = nil, size: String? = nil, description: String? = nil, descriptionLocale: String? = nil, enrichedINCI: [INCIEntry]? = nil) {
         self.id = id
         self.displayName = displayName
+        self.displayNameLocale = displayNameLocale
         self.tagging = tagging
         self.brand = brand
+        self.brandLocale = brandLocale
         self.link = link
         self.imageURL = imageURL
         self.size = size
         self.description = description
+        self.descriptionLocale = descriptionLocale
         self.enrichedINCI = enrichedINCI
+    }
+    
+    // MARK: - Localized Properties
+    
+    /// Get the localized display name for user-facing text
+    var localizedDisplayName: String {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        if currentLanguage != "en", let localeVersion = displayNameLocale {
+            return localeVersion
+        }
+        return displayName
+    }
+    
+    /// Get the localized brand name for user-facing text
+    var localizedBrand: String? {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        if currentLanguage != "en", let localeVersion = brandLocale {
+            return localeVersion
+        }
+        return brand
+    }
+    
+    /// Get the localized description for user-facing text
+    var localizedDescription: String? {
+        let currentLanguage = LocalizationManager.shared.currentLanguage
+        if currentLanguage != "en", let localeVersion = descriptionLocale {
+            return localeVersion
+        }
+        return description
     }
 
     /// Create a product from a product name with automatic tagging

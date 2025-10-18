@@ -58,7 +58,7 @@ struct ProductCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     // Header with name and type badge
                     HStack {
-                        Text(product.displayName)
+                        Text(product.localizedDisplayName)
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(ThemeManager.shared.theme.palette.textPrimary)
                             .lineLimit(1)
@@ -79,7 +79,7 @@ struct ProductCard: View {
                     
                     // Brand and size
                     HStack(spacing: 6) {
-                        if let brand = product.brand {
+                        if let brand = product.localizedBrand {
                             Text(brand)
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(ThemeManager.shared.theme.palette.textSecondary)
@@ -93,7 +93,7 @@ struct ProductCard: View {
                     }
                     
                     // Description or key ingredients
-                    if let description = product.description {
+                    if let description = product.localizedDescription {
                         Text(description)
                             .font(.system(size: 12))
                             .foregroundColor(ThemeManager.shared.theme.palette.textMuted)
